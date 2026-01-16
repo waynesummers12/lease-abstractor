@@ -3,13 +3,9 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-<h1 className="text-6xl font-extrabold text-blue-600">
-  AI Lease Abstractor
-</h1>
-
 type LeaseResult = {
-  tenant_name: string | null;
-  landlord_name: string | null;
+  tenant: string | null;
+  landlord: string | null;
   premises: string | null;
   lease_start: string | null;
   lease_end: string | null;
@@ -18,22 +14,24 @@ type LeaseResult = {
   confidence: string;
 };
 
-export default function Home() {
+export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<string>("");
   const [result, setResult] = useState<LeaseResult | null>(null);
 
-  const handleUpload = async () => {
+  async function handleUploadAndAnalyze() {
     if (!file) return;
 
     setStatus("Uploading lease…");
     setResult(null);
 
-    const filePath = `${Date.now()}-${file.name}`;
+    const objectPath = `leases/${crypto.randomUUID()}.pdf`;
 
     const { error: uploadError } = await supabase.storage
       .from("leases")
-      .upload(filePath, file);
+      .upload(objectPath, file, {
+        contentType: "application/pdf",
+      });
 
     if (uploadError) {
       setStatus(uploadError.message);
@@ -42,73 +40,98 @@ export default function Home() {
 
     setStatus("Analyzing lease…");
 
-    const res = await fetch("/api/ingest/lease/pdf", {
+    const res = await fetch("http://localhost:8000/ingest/lease/pdf", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ objectPath: filePath }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-lease-worker-key": "local-dev-secret",
+      },
+      body: JSON.stringify({ objectPath }),
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      setStatus(data.error || "Analysis failed");
+      setStatus(data?.error || "Lease analysis failed");
       return;
     }
 
-    setResult(data.result);
+    setResult(data);
     setStatus("Analysis complete ✅");
-  };
+  }
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto p-10 space-y-6">
-        <h1 className="text-3xl font-bold">AI Lease Abstractor</h1>
+    <main style={{ padding: 32, maxWidth: 800, margin: "0 auto" }}>
+      <h1 style={{ fontSize: 32, fontWeight: 700 }}>
+        AI Lease Abstractor
+      </h1>
 
-        <div className="bg-white border rounded-lg p-6 space-y-4">
-          <input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-          />
-
-          <button
-            onClick={handleUpload}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
-          >
-            Upload & Analyze
-          </button>
-
-          {status && <p className="text-sm text-gray-600">{status}</p>}
-        </div>
-
-        {result && (
-          <div className="bg-white border rounded-lg p-6 space-y-2">
-            <h2 className="text-xl font-semibold">Lease Summary</h2>
-            <Field label="Tenant" value={result.tenant_name} />
-            <Field label="Landlord" value={result.landlord_name} />
-            <Field label="Premises" value={result.premises} />
-            <Field label="Lease Start" value={result.lease_start} />
-            <Field label="Lease End" value={result.lease_end} />
-            <Field
-              label="Base Rent"
-              value={
-                result.base_rent
-                  ? `$${result.base_rent.toLocaleString()} / month`
-                  : null
-              }
-            />
-            <Field
-              label="Term"
-              value={
-                result.term_months
-                  ? `${result.term_months} months`
-                  : null
-              }
-            />
-            <Field label="Confidence" value={result.confidence} />
-          </div>
-        )}
+      <div style={{ marginTop: 24 }}>
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
       </div>
+
+      <div style={{ marginTop: 16 }}>
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
+          style={{
+            padding: "10px 16px",
+            background: "#000",
+            color: "#fff",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          Upload & Analyze
+        </button>
+      </div>
+
+      {status && (
+        <p style={{ marginTop: 16, color: "#555" }}>{status}</p>
+      )}
+
+      {result && (
+        <div
+          style={{
+            marginTop: 32,
+            padding: 20,
+            border: "1px solid #ddd",
+            borderRadius: 8,
+            background: "#fafafa",
+          }}
+        >
+          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12 }}>
+            Lease Summary
+          </h2>
+
+          <Field label="Tenant" value={result.tenant} />
+          <Field label="Landlord" value={result.landlord} />
+          <Field label="Premises" value={result.premises} />
+          <Field label="Lease Start" value={result.lease_start} />
+          <Field label="Lease End" value={result.lease_end} />
+          <Field
+            label="Base Rent"
+            value={
+              result.base_rent
+                ? `$${result.base_rent.toLocaleString()} / month`
+                : null
+            }
+          />
+          <Field
+            label="Term"
+            value={
+              result.term_months
+                ? `${result.term_months} months`
+                : null
+            }
+          />
+          <Field label="Confidence" value={result.confidence} />
+        </div>
+      )}
     </main>
   );
 }
@@ -121,8 +144,8 @@ function Field({
   value: string | number | null;
 }) {
   return (
-    <div className="flex gap-3">
-      <span className="w-32 font-medium text-gray-700">{label}</span>
+    <div style={{ display: "flex", marginBottom: 6 }}>
+      <strong style={{ width: 140 }}>{label}:</strong>
       <span>{value ?? "—"}</span>
     </div>
   );
