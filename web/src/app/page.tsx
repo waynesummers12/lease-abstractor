@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
+<h1 className="text-6xl font-extrabold text-blue-600">
+  AI Lease Abstractor
+</h1>
+
 type LeaseResult = {
   tenant_name: string | null;
   landlord_name: string | null;
