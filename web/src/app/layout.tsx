@@ -1,9 +1,8 @@
+// app/layout.tsx
 import "./globals.css";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "AI Lease Abstractor",
-  description: "Extract key lease terms instantly using AI",
 };
 
 export default function RootLayout({
@@ -13,9 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-neutral-950 text-neutral-100">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
+
