@@ -12,7 +12,7 @@ export default function Home() {
 
     setStatus("Uploading...");
 
-    const filePath = `leases/${Date.now()}-${file.name}`;
+    const filePath = `${Date.now()}-${file.name}`;
 
     const { error: uploadError } = await supabase.storage
       .from("leases")
