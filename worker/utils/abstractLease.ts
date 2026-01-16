@@ -50,14 +50,13 @@ function parseTermMonths(text: string): number | null {
 export function abstractLease(text: string) {
   const t = normalize(text);
 
-  // Strong section isolation
   const tenant = extract(
-    /Tenant:\s*([^,\n]+(?:,?\s*Inc\.|LLC|Ltd)?)/i,
+    /Tenant:\s*([^,\n]+(?:,?\s*(?:Inc\.|LLC|Ltd))?)/i,
     t
   );
 
   const landlord = extract(
-    /Landlord:\s*([^,\n]+(?:,?\s*LLC|Inc\.|Ltd)?)/i,
+    /Landlord:\s*([^,\n]+(?:,?\s*(?:Inc\.|LLC|Ltd))?)/i,
     t
   );
 
@@ -66,15 +65,25 @@ export function abstractLease(text: string) {
     t
   );
 
-  const commencement = extract(
-    /Commencement Date.*?([A-Za-z]+\s+\d{1,2},\s+\d{4})/i,
+  // 🔑 ISOLATE LEASE TERM SECTION
+  const leaseTermSection = extract(
+    /Lease Term(.+?)Base Rent/i,
     t
   );
 
-  const expiration = extract(
-    /Expiration Date.*?([A-Za-z]+\s+\d{1,2},\s+\d{4})/i,
-    t
-  );
+  let leaseStart: string | null = null;
+  let leaseEnd: string | null = null;
+
+  if (leaseTermSection) {
+    const dates = leaseTermSection.match(
+      /([A-Za-z]+\s+\d{1,2},\s+\d{4})/g
+    );
+
+    if (dates && dates.length >= 2) {
+      leaseStart = parseDate(dates[0]);
+      leaseEnd = parseDate(dates[1]);
+    }
+  }
 
   const baseRentRaw = extract(
     /\$([\d,]+(?:\.\d{2})?)\s*per\s*month/i,
@@ -86,8 +95,8 @@ export function abstractLease(text: string) {
     landlord_name: landlord,
     premises,
 
-    lease_start: parseDate(commencement),
-    lease_end: parseDate(expiration),
+    lease_start: leaseStart,
+    lease_end: leaseEnd,
 
     base_rent: parseMoney(baseRentRaw),
     term_months: parseTermMonths(t),
@@ -96,3 +105,4 @@ export function abstractLease(text: string) {
     confidence: text.length > 500 ? "high" : "low",
   };
 }
+
