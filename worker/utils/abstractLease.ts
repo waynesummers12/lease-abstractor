@@ -22,14 +22,9 @@ function extract(regex: RegExp, text: string): string | null {
   return m?.[1]?.trim() ?? null;
 }
 
-function parseDateLoose(raw: string | null): string | null {
+function parseDate(raw: string | null): string | null {
   if (!raw) return null;
-
-  // Pull first valid date-looking phrase
-  const m = raw.match(/[A-Za-z]+\s+\d{1,2},\s+\d{4}/);
-  if (!m) return null;
-
-  const d = new Date(m[0]);
+  const d = new Date(raw);
   return isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
 }
 
@@ -41,7 +36,6 @@ function parseMoney(raw: string | null): number | null {
 }
 
 function parseTermMonths(text: string): number | null {
-  // Handles: five (5) years, 5 years, five years
   const numeric = text.match(/(\d+)\s*\(?\d*\)?\s*years?/i);
   if (numeric) return parseInt(numeric[1], 10) * 12;
 
@@ -56,27 +50,28 @@ function parseTermMonths(text: string): number | null {
 export function abstractLease(text: string) {
   const t = normalize(text);
 
+  // Strong section isolation
   const tenant = extract(
-    /Tenant:\s*(.+?)(?:Landlord:|Premises:|Lease Term)/i,
+    /Tenant:\s*([^,\n]+(?:,?\s*Inc\.|LLC|Ltd)?)/i,
     t
   );
 
   const landlord = extract(
-    /Landlord:\s*(.+?)(?:Tenant:|Premises:|Lease Term)/i,
+    /Landlord:\s*([^,\n]+(?:,?\s*LLC|Inc\.|Ltd)?)/i,
     t
   );
 
   const premises = extract(
-    /Premises.*?located at\s*(.+?)(?:Lease Term|Base Rent)/i,
+    /located at\s*([^()]+)\s*\(“?Premises”?\)/i,
     t
   );
 
-  const leaseStartRaw = extract(
+  const commencement = extract(
     /Commencement Date.*?([A-Za-z]+\s+\d{1,2},\s+\d{4})/i,
     t
   );
 
-  const leaseEndRaw = extract(
+  const expiration = extract(
     /Expiration Date.*?([A-Za-z]+\s+\d{1,2},\s+\d{4})/i,
     t
   );
@@ -86,18 +81,16 @@ export function abstractLease(text: string) {
     t
   );
 
-  const termMonths = parseTermMonths(t);
-
   return {
     tenant_name: tenant,
     landlord_name: landlord,
     premises,
 
-    lease_start: parseDateLoose(leaseStartRaw),
-    lease_end: parseDateLoose(leaseEndRaw),
+    lease_start: parseDate(commencement),
+    lease_end: parseDate(expiration),
 
     base_rent: parseMoney(baseRentRaw),
-    term_months: termMonths,
+    term_months: parseTermMonths(t),
 
     raw_text_length: text.length,
     confidence: text.length > 500 ? "high" : "low",
