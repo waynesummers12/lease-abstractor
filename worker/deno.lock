@@ -37,6 +37,7 @@
     "https://esm.sh/iceberg-js@0.8.1?target=denonext": "58c849d7fe2bf4eca4a84eb501e83c161a7d8c34ca1bec15a962b3bec3062633",
     "https://esm.sh/pdfjs-dist@4.0.379": "3b57584909049d38405d41d0d79cc0c4d5303837745247d98e1d84cce60f7a76",
     "https://esm.sh/pdfjs-dist@4.0.379/denonext/legacy/build/pdf.mjs": "0a8f6e1c50af16e5d89079d783b4b6ff4937465471e1c85a37f34d514ba31766",
+    "https://esm.sh/pdfjs-dist@4.0.379/denonext/legacy/build/pdf.worker.mjs": "83ee6584ed3bc02b3235003c0008e93275bbacc602d5d8a1fc941eea1041d81b",
     "https://esm.sh/pdfjs-dist@4.0.379/denonext/pdfjs-dist.mjs": "7d2859befd72d600d202aabe77c844d0219599a2ff8ace7e7e80aad32d5dbf88",
     "https://esm.sh/pdfjs-dist@4.0.379/legacy/build/pdf.mjs": "a7a7d616eaaab221fafed91a25f19812712bd969f2fbe607a556d966758aab39",
     "https://esm.sh/tslib@2.8.1/denonext/tslib.mjs": "c38da5dd6da6281964435002ce204cd586634fe3bdfb24a0ee116f48cf3292e9"
