@@ -3,7 +3,7 @@ export function abstractLease(text: string) {
   const normalize = (s: string) =>
     s.replace(/\s+/g, " ").toLowerCase();
 
-  const t = normalize(text);
+  const _t = normalize(text);
 
   const extract = (regex: RegExp) => {
     const match = text.match(regex);
