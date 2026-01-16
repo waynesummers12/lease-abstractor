@@ -1,4 +1,14 @@
 // src/app/api/ingest/lease/pdf/route.ts
+//
+// Purpose:
+// - Trigger lease parsing after a PDF is uploaded to Supabase Storage
+// - Forward the storage object path to the Deno worker
+//
+// Constraints:
+// - This route does NOT parse PDFs
+// - This route does NOT read file contents
+// - This route only signals the worker to process the uploaded file
+
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +19,7 @@ export async function POST(req: NextRequest) {
     const WORKER_KEY = process.env.LEASE_WORKER_KEY;
 
     if (!WORKER_URL || !WORKER_KEY) {
+      console.error("❌ Missing worker config");
       return NextResponse.json(
         { error: "Server misconfigured" },
         { status: 500 }
@@ -25,7 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const res = await fetch(`${WORKER_URL}/ingest/lease/pdf`, {
+    const workerRes = await fetch(`${WORKER_URL}/ingest/lease/pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,20 +45,21 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ objectPath }),
     });
 
-    const data = await res.json();
+    const data = await workerRes.json();
 
-    if (!res.ok) {
+    if (!workerRes.ok) {
+      console.error("❌ Worker lease ingest failed:", data);
       return NextResponse.json(
         { error: data?.error || "Lease ingest failed" },
-        { status: res.status }
+        { status: workerRes.status }
       );
     }
 
     return NextResponse.json(data);
   } catch (err: any) {
-    console.error("❌ lease ingest error:", err);
+    console.error("❌ /api/ingest/lease/pdf error:", err);
     return NextResponse.json(
-      { error: err?.message || "Unexpected error" },
+      { error: err?.message || "Unexpected server error" },
       { status: 500 }
     );
   }
