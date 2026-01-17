@@ -25,7 +25,8 @@ type LeaseHealth = {
     code: string;
     label: string;
     severity: "low" | "medium" | "high";
-    recommendation: string; // 👈 ADDED
+    recommendation: string;
+    estimated_impact: string; // 👈 ADD
   }[];
 };
 
@@ -141,61 +142,47 @@ export default function HomePage() {
           </section>
 
           {/* ---------- LEASE HEALTH ---------- */}
-          {result.health && (
-            <section style={cardStyle}>
-              <h2 style={sectionTitle}>Lease Health Score</h2>
+{result.health && (
+  <section style={cardStyle}>
+    <h2 style={sectionTitle}>Lease Health Score</h2>
 
-              <div style={{ marginBottom: 12 }}>
-                <strong>Score:</strong>{" "}
-                <span
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 700,
-                    color:
-                      result.health.score >= 80
-                        ? "green"
-                        : result.health.score >= 60
-                        ? "orange"
-                        : "red",
-                  }}
-                >
-                  {result.health.score}
-                </span>
-                /100
-              </div>
+    <div style={{ marginBottom: 12 }}>
+      <strong>Score:</strong>{" "}
+      <span
+        style={{
+          fontSize: 24,
+          fontWeight: 700,
+          color:
+            result.health.score >= 80
+              ? "green"
+              : result.health.score >= 60
+              ? "orange"
+              : "red",
+        }}
+      >
+        {result.health.score}
+      </span>
+      /100
+    </div>
 
-              <ul>
-                {result.health.flags.map((flag) => (
-                  <li key={flag.code} style={{ marginBottom: 12 }}>
-                    <div>
-                      <strong
-                        style={{
-                          color:
-                            flag.severity === "high"
-                              ? "red"
-                              : flag.severity === "medium"
-                              ? "orange"
-                              : "gray",
-                        }}
-                      >
-                        {flag.severity.toUpperCase()}
-                      </strong>{" "}
-                      — {flag.label}
-                    </div>
-                    <div
-                      style={{
-                        marginLeft: 12,
-                        marginTop: 4,
-                        color: "#555",
-                      }}
-                    >
-                      👉 {flag.recommendation}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+    <ul>
+      {result.health.flags.map((flag) => (
+        <li key={flag.code} style={{ marginBottom: 14 }}>
+          <div>
+            <strong>{flag.severity.toUpperCase()}</strong> — {flag.label}
+          </div>
+          <div style={{ marginLeft: 12, color: "#555" }}>
+            👉 {flag.recommendation}
+          </div>
+          <div style={{ marginLeft: 12, color: "#0a6" }}>
+            💰 {flag.estimated_impact}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
 
           {/* ---------- RENT & ESCALATION ---------- */}
           <section style={cardStyle}>
