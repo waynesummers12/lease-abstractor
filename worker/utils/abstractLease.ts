@@ -168,12 +168,13 @@ function buildRentSchedule(
   return rows;
 }
 
-/* -------------------- LEASE HEALTH -------------------- */
+/* -------------------- LEASE HEALTH + RECOMMENDATIONS -------------------- */
 
 type LeaseRiskFlag = {
   code: string;
   label: string;
   severity: "low" | "medium" | "high";
+  recommendation: string;
 };
 
 type LeaseHealth = {
@@ -195,6 +196,8 @@ function computeLeaseHealth(input: {
       code: "MISSING_DATES",
       label: "Lease start or end date missing",
       severity: "high",
+      recommendation:
+        "Request a fully executed lease or estoppel certificate confirming lease term.",
     });
     score -= 25;
   }
@@ -204,6 +207,8 @@ function computeLeaseHealth(input: {
       code: "SHORT_TERM",
       label: "Lease term under 24 months",
       severity: "medium",
+      recommendation:
+        "Begin renewal discussions 9–12 months early to preserve leverage.",
     });
     score -= 15;
   }
@@ -213,6 +218,8 @@ function computeLeaseHealth(input: {
       code: "PERCENT_ESCALATION",
       label: "Annual percentage rent escalation",
       severity: "medium",
+      recommendation:
+        "Negotiate a lower escalation rate or a fixed dollar increase.",
     });
     score -= 10;
   }
@@ -222,6 +229,8 @@ function computeLeaseHealth(input: {
       code: "CPI_ESCALATION",
       label: "CPI-based rent escalation (unbounded)",
       severity: "high",
+      recommendation:
+        "Negotiate a CPI cap (e.g. 3–4%) or convert to fixed escalation.",
     });
     score -= 25;
   }
@@ -231,6 +240,8 @@ function computeLeaseHealth(input: {
       code: "NO_ESCALATION_DEFINED",
       label: "No rent escalation clause detected",
       severity: "low",
+      recommendation:
+        "Confirm whether rent remains flat or escalation language is missing.",
     });
     score -= 5;
   }
@@ -304,8 +315,4 @@ export function abstractLease(rawText: string) {
     raw_preview: text.slice(0, 1500),
   };
 }
-
-
-
-
 
