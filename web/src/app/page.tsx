@@ -3,12 +3,20 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
+/* ---------- TYPES ---------- */
+
 type Rent = {
   base_rent: number | null;
   frequency: "monthly" | "annual" | null;
   escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
   escalation_value: number | null;
   escalation_interval: "annual" | "other" | null;
+};
+
+type RentScheduleRow = {
+  year: number;
+  annual_rent: number;
+  monthly_rent: number;
 };
 
 type LeaseResult = {
@@ -19,9 +27,12 @@ type LeaseResult = {
   lease_end: string | null;
   term_months: number | null;
   rent: Rent;
+  rent_schedule?: RentScheduleRow[];
   confidence: Record<string, string>;
   raw_preview: string;
 };
+
+/* ---------- PAGE ---------- */
 
 export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
@@ -166,6 +177,44 @@ export default function HomePage() {
             )}
           </section>
 
+          {/* ---------- RENT SCHEDULE ---------- */}
+          {result.rent_schedule && result.rent_schedule.length > 0 && (
+            <section style={cardStyle}>
+              <h2 style={sectionTitle}>
+                Rent Schedule (Year-by-Year)
+              </h2>
+
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  marginTop: 12,
+                }}
+              >
+                <thead>
+                  <tr>
+                    <th style={th}>Year</th>
+                    <th style={th}>Annual Rent</th>
+                    <th style={th}>Monthly Rent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {result.rent_schedule.map((row) => (
+                    <tr key={row.year}>
+                      <td style={td}>Year {row.year}</td>
+                      <td style={td}>
+                        ${row.annual_rent.toLocaleString()}
+                      </td>
+                      <td style={td}>
+                        ${row.monthly_rent.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+
           {/* ---------- RAW TEXT DEBUG ---------- */}
           <details style={{ marginTop: 24 }}>
             <summary style={{ cursor: "pointer" }}>
@@ -219,3 +268,13 @@ const sectionTitle: React.CSSProperties = {
   marginBottom: 12,
 };
 
+const th: React.CSSProperties = {
+  textAlign: "left",
+  borderBottom: "1px solid #ccc",
+  padding: 8,
+};
+
+const td: React.CSSProperties = {
+  padding: 8,
+  borderBottom: "1px solid #eee",
+};
