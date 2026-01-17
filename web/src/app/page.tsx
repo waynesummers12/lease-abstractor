@@ -25,6 +25,7 @@ type LeaseHealth = {
     code: string;
     label: string;
     severity: "low" | "medium" | "high";
+    recommendation: string; // 👈 ADDED
   }[];
 };
 
@@ -165,9 +166,31 @@ export default function HomePage() {
 
               <ul>
                 {result.health.flags.map((flag) => (
-                  <li key={flag.code}>
-                    <strong>{flag.severity.toUpperCase()}</strong> —{" "}
-                    {flag.label}
+                  <li key={flag.code} style={{ marginBottom: 12 }}>
+                    <div>
+                      <strong
+                        style={{
+                          color:
+                            flag.severity === "high"
+                              ? "red"
+                              : flag.severity === "medium"
+                              ? "orange"
+                              : "gray",
+                        }}
+                      >
+                        {flag.severity.toUpperCase()}
+                      </strong>{" "}
+                      — {flag.label}
+                    </div>
+                    <div
+                      style={{
+                        marginLeft: 12,
+                        marginTop: 4,
+                        color: "#555",
+                      }}
+                    >
+                      👉 {flag.recommendation}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -323,4 +346,5 @@ const td: React.CSSProperties = {
   padding: 8,
   borderBottom: "1px solid #eee",
 };
+
 
