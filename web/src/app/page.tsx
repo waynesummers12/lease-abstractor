@@ -19,6 +19,15 @@ type RentScheduleRow = {
   monthly_rent: number;
 };
 
+type LeaseHealth = {
+  score: number;
+  flags: {
+    code: string;
+    label: string;
+    severity: "low" | "medium" | "high";
+  }[];
+};
+
 type LeaseResult = {
   tenant: string | null;
   landlord: string | null;
@@ -28,6 +37,7 @@ type LeaseResult = {
   term_months: number | null;
   rent: Rent;
   rent_schedule?: RentScheduleRow[];
+  health?: LeaseHealth;
   confidence: Record<string, string>;
   raw_preview: string;
 };
@@ -128,6 +138,41 @@ export default function HomePage() {
               }
             />
           </section>
+
+          {/* ---------- LEASE HEALTH ---------- */}
+          {result.health && (
+            <section style={cardStyle}>
+              <h2 style={sectionTitle}>Lease Health Score</h2>
+
+              <div style={{ marginBottom: 12 }}>
+                <strong>Score:</strong>{" "}
+                <span
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                    color:
+                      result.health.score >= 80
+                        ? "green"
+                        : result.health.score >= 60
+                        ? "orange"
+                        : "red",
+                  }}
+                >
+                  {result.health.score}
+                </span>
+                /100
+              </div>
+
+              <ul>
+                {result.health.flags.map((flag) => (
+                  <li key={flag.code}>
+                    <strong>{flag.severity.toUpperCase()}</strong> —{" "}
+                    {flag.label}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           {/* ---------- RENT & ESCALATION ---------- */}
           <section style={cardStyle}>
@@ -278,3 +323,4 @@ const td: React.CSSProperties = {
   padding: 8,
   borderBottom: "1px solid #eee",
 };
+
