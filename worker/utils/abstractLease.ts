@@ -58,10 +58,7 @@ function extractPremises(text: string): string | null {
 
 /* -------------------- DATE EXTRACTION -------------------- */
 
-function extractDate(
-  type: "start" | "end",
-  text: string
-): string | null {
+function extractDate(type: "start" | "end", text: string): string | null {
   if (type === "start") {
     return extractWithPatterns(text, [
       /commence(?:s|ment)? on ([A-Za-z]+ \d{1,2}, \d{4})/i,
@@ -153,8 +150,8 @@ function extractEscalation(text: string): Rent {
     };
   }
 
-  if (/Year\s+2:.*\$|Year\s+3:.*\$/i.test(text)) {
-    const inferred = inferFixedEscalationFromText(text);
+  const inferred = inferFixedEscalationFromText(text);
+  if (inferred !== null) {
     return {
       base_rent: null,
       frequency: null,
@@ -217,7 +214,7 @@ function buildRentSchedule(
 
 /* -------------------- CAM / NNN EXTRACTION -------------------- */
 
-type CamNnn = {
+export type CamNnn = {
   monthly_amount: number | null;
   annual_amount: number | null;
   total_exposure: number | null;
@@ -231,11 +228,7 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
   ]);
 
   if (!monthly) {
-    return {
-      monthly_amount: null,
-      annual_amount: null,
-      total_exposure: null,
-    };
+    return { monthly_amount: null, annual_amount: null, total_exposure: null };
   }
 
   const monthlyAmount = Number(monthly.replace(/,/g, ""));
@@ -257,7 +250,7 @@ export type LeaseRiskFlag = {
   label: string;
   severity: "low" | "medium" | "high";
   recommendation: string;
-  estimated_impact: string;
+  estimated_impact?: string;
 };
 
 export type LeaseHealth = {
@@ -281,46 +274,39 @@ function computeLeaseHealth(input: {
       ? input.term_months / 12
       : 1;
 
-  const baseAnnual =
-    input.rent_schedule[0]?.annual_rent ?? 0;
+  const baseAnnual = input.rent_schedule[0]?.annual_rent ?? 0;
 
-  /* ---- Missing dates ---- */
   if (!input.lease_start || !input.lease_end) {
     flags.push({
       code: "MISSING_DATES",
       label: "Lease start or end date missing",
       severity: "high",
       recommendation:
-        "Request a fully executed lease or estoppel certificate confirming lease term.",
-      estimated_impact:
-        "Legal and audit exposure; disputes exceeding $25k",
+        "Request a fully executed lease or estoppel certificate.",
+      estimated_impact: "Dispute exposure $25k+",
     });
     score -= 25;
   }
 
-  /* ---- Percent escalation ---- */
   if (input.rent.escalation_type === "fixed_percent") {
     flags.push({
       code: "PERCENT_ESCALATION",
       label: "Annual percentage rent escalation",
       severity: "medium",
-      recommendation:
-        "Negotiate lower escalation or convert to fixed increase.",
+      recommendation: "Negotiate lower escalation.",
       estimated_impact: `~${formatMoney(
         baseAnnual * 0.01 * years
-      )} savings by reducing escalation 1%`,
+      )} savings`,
     });
     score -= 10;
   }
 
-  /* ---- CPI escalation ---- */
   if (input.rent.escalation_type === "cpi") {
     flags.push({
       code: "CPI_ESCALATION",
       label: "CPI-based escalation (uncapped)",
       severity: "high",
-      recommendation:
-        "Negotiate CPI cap or convert to fixed escalation.",
+      recommendation: "Negotiate CPI cap.",
       estimated_impact: `Exposure ${formatMoney(
         baseAnnual * 0.03 * years
       )}+`,
@@ -328,27 +314,21 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
-  /* ---- CAM / NNN exposure ---- */
   if (input.cam_nnn.monthly_amount) {
     flags.push({
       code: "CAM_NNN",
-      label: "NNN / CAM charges billed outside base rent",
+      label: "CAM / NNN charges outside base rent",
       severity: "medium",
-      recommendation:
-        "Audit reconciliation clauses and negotiate caps or exclusions.",
-      estimated_impact: `Estimated exposure ${formatMoney(
+      recommendation: "Audit CAM reconciliation.",
+      estimated_impact: `Exposure ${formatMoney(
         input.cam_nnn.total_exposure ?? 0
       )}`,
     });
     score -= 15;
   }
 
-  return {
-    score: Math.max(score, 0),
-    flags,
-  };
+  return { score: Math.max(score, 0), flags };
 }
-
 
 /* -------------------- MAIN EXPORT -------------------- */
 
@@ -391,10 +371,8 @@ export function abstractLease(rawText: string) {
     term_months
   );
 
-  // ✅ ADD THIS (THIS WAS MISSING)
   const cam_nnn = extractCamNnn(text, term_months);
 
-  // ✅ PASS cam_nnn INTO HEALTH
   const health = computeLeaseHealth({
     lease_start,
     lease_end,
@@ -413,14 +391,14 @@ export function abstractLease(rawText: string) {
     term_months,
     rent,
     rent_schedule,
-    cam_nnn, // ✅ expose for UI
+    cam_nnn,
     health,
     confidence: {
       base_rent: confidence(base_rent),
-      escalation:
-        rent.escalation_type === "none" ? "low" : "high",
+      escalation: rent.escalation_type === "none" ? "low" : "high",
     },
     raw_preview: text.slice(0, 1500),
   };
 }
+
 
