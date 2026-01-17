@@ -59,7 +59,7 @@ function extractDate(label: string, text: string): string | null {
   ]);
 }
 
-/* -------------------- RENT + ESCALATION -------------------- */
+/* -------------------- RENT & ESCALATION -------------------- */
 
 type Rent = {
   base_rent: number | null;
@@ -83,7 +83,7 @@ function extractFrequency(text: string): Rent["frequency"] {
   return null;
 }
 
-function extractEscalation(text: string): Pick<Rent, "escalation_type" | "escalation_value" | "escalation_interval"> {
+function extractEscalation(text: string) {
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
     /annual increase of (\d+(?:\.\d+)?)%/i,
@@ -91,9 +91,9 @@ function extractEscalation(text: string): Pick<Rent, "escalation_type" | "escala
 
   if (pct) {
     return {
-      escalation_type: "fixed_percent",
+      escalation_type: "fixed_percent" as const,
       escalation_value: Number(pct),
-      escalation_interval: "annual",
+      escalation_interval: "annual" as const,
     };
   }
 
@@ -104,22 +104,22 @@ function extractEscalation(text: string): Pick<Rent, "escalation_type" | "escala
 
   if (fixed) {
     return {
-      escalation_type: "fixed_amount",
+      escalation_type: "fixed_amount" as const,
       escalation_value: Number(fixed.replace(/,/g, "")),
-      escalation_interval: "annual",
+      escalation_interval: "annual" as const,
     };
   }
 
   if (/CPI|Consumer Price Index/i.test(text)) {
     return {
-      escalation_type: "cpi",
+      escalation_type: "cpi" as const,
       escalation_value: null,
-      escalation_interval: "annual",
+      escalation_interval: "annual" as const,
     };
   }
 
   return {
-    escalation_type: "none",
+    escalation_type: "none" as const,
     escalation_value: null,
     escalation_interval: null,
   };
@@ -143,10 +143,10 @@ function buildRentSchedule(
   if (!baseRent || !frequency || !termMonths) return [];
 
   const years = Math.ceil(termMonths / 12);
-  const schedule: RentScheduleRow[] = [];
-
   let annualRent =
     frequency === "monthly" ? baseRent * 12 : baseRent;
+
+  const rows: RentScheduleRow[] = [];
 
   for (let y = 1; y <= years; y++) {
     if (y > 1) {
@@ -156,17 +156,89 @@ function buildRentSchedule(
       if (escalationType === "fixed_amount" && escalationValue) {
         annualRent += escalationValue;
       }
-      // CPI intentionally left unchanged (unknown future)
     }
 
-    schedule.push({
+    rows.push({
       year: y,
       annual_rent: Math.round(annualRent),
       monthly_rent: Math.round(annualRent / 12),
     });
   }
 
-  return schedule;
+  return rows;
+}
+
+/* -------------------- LEASE HEALTH -------------------- */
+
+type LeaseRiskFlag = {
+  code: string;
+  label: string;
+  severity: "low" | "medium" | "high";
+};
+
+type LeaseHealth = {
+  score: number;
+  flags: LeaseRiskFlag[];
+};
+
+function computeLeaseHealth(input: {
+  lease_start: string | null;
+  lease_end: string | null;
+  term_months: number | null;
+  rent: Rent;
+}): LeaseHealth {
+  const flags: LeaseRiskFlag[] = [];
+  let score = 100;
+
+  if (!input.lease_start || !input.lease_end) {
+    flags.push({
+      code: "MISSING_DATES",
+      label: "Lease start or end date missing",
+      severity: "high",
+    });
+    score -= 25;
+  }
+
+  if (input.term_months !== null && input.term_months < 24) {
+    flags.push({
+      code: "SHORT_TERM",
+      label: "Lease term under 24 months",
+      severity: "medium",
+    });
+    score -= 15;
+  }
+
+  if (input.rent.escalation_type === "fixed_percent") {
+    flags.push({
+      code: "PERCENT_ESCALATION",
+      label: "Annual percentage rent escalation",
+      severity: "medium",
+    });
+    score -= 10;
+  }
+
+  if (input.rent.escalation_type === "cpi") {
+    flags.push({
+      code: "CPI_ESCALATION",
+      label: "CPI-based rent escalation (unbounded)",
+      severity: "high",
+    });
+    score -= 25;
+  }
+
+  if (input.rent.escalation_type === "none") {
+    flags.push({
+      code: "NO_ESCALATION_DEFINED",
+      label: "No rent escalation clause detected",
+      severity: "low",
+    });
+    score -= 5;
+  }
+
+  return {
+    score: Math.max(score, 0),
+    flags,
+  };
 }
 
 /* -------------------- MAIN EXPORT -------------------- */
@@ -207,6 +279,13 @@ export function abstractLease(rawText: string) {
     term_months
   );
 
+  const health = computeLeaseHealth({
+    lease_start,
+    lease_end,
+    term_months,
+    rent,
+  });
+
   return {
     tenant,
     landlord,
@@ -216,13 +295,16 @@ export function abstractLease(rawText: string) {
     term_months,
     rent,
     rent_schedule,
+    health,
     confidence: {
       base_rent: confidence(base_rent),
-      escalation: escalation.escalation_type === "none" ? "low" : "high",
+      escalation:
+        escalation.escalation_type === "none" ? "low" : "high",
     },
     raw_preview: text.slice(0, 1500),
   };
 }
+
 
 
 
