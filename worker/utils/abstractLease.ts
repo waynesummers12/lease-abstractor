@@ -1,5 +1,3 @@
-// worker/utils/abstractLease.ts
-
 /* -------------------- NORMALIZATION -------------------- */
 
 function normalizeText(raw: string): string {
@@ -59,12 +57,9 @@ function extractPremises(text: string): string | null {
 function extractDate(label: string, text: string): string | null {
   return extractWithPatterns(text, [
     new RegExp(`${label}[:\\s]+([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
-    new RegExp(`\\(${label}\\)[^A-Za-z]*(?:on )?([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
-    new RegExp(`([A-Za-z]+ \\d{1,2}, \\d{4})\\s*\\(“?${label}”?\\)`, "i"),
     new RegExp(`(?:commence|commencing|expiring)[^A-Za-z]*([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
   ]);
 }
-
 
 /* -------------------- RENT & ESCALATION -------------------- */
 
@@ -84,18 +79,14 @@ function extractBaseRent(text: string): number | null {
   return v ? Number(v.replace(/,/g, "")) : null;
 }
 
-function extractFrequency(
-  text: string | null
-): Rent["frequency"] {
+function extractFrequency(text: string | null): Rent["frequency"] {
   if (!text) return null;
-
   if (/per\s+month|monthly/i.test(text)) return "monthly";
   if (/per\s+year|annual/i.test(text)) return "annual";
   return null;
 }
 
 function extractEscalation(text: string) {
-  /* ---- explicit % escalation ---- */
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
     /annual increase of (\d+(?:\.\d+)?)%/i,
@@ -109,7 +100,6 @@ function extractEscalation(text: string) {
     };
   }
 
-  /* ---- explicit $ escalation ---- */
   const fixed = extractWithPatterns(text, [
     /increase(?:s)? by \$([\d,]+)/i,
     /annual increase of \$([\d,]+)/i,
@@ -123,7 +113,6 @@ function extractEscalation(text: string) {
     };
   }
 
-  /* ---- CPI escalation ---- */
   if (/CPI|Consumer Price Index/i.test(text)) {
     return {
       escalation_type: "cpi" as const,
@@ -132,16 +121,14 @@ function extractEscalation(text: string) {
     };
   }
 
-  /* ---- IMPLICIT rent ladder (Year 2 / Year 3 / Year 4…) ---- */
-  if (/Year\s+2:.*\$|Year\s+3:.*\$|Year\s+4:.*\$/i.test(text)) {
+  if (/Year\s+2:.*\$|Year\s+3:.*\$/i.test(text)) {
     return {
       escalation_type: "fixed_amount" as const,
-      escalation_value: null, // derived later from schedule
+      escalation_value: null, // inferred later
       escalation_interval: "annual" as const,
     };
   }
 
-  /* ---- none detected ---- */
   return {
     escalation_type: "none" as const,
     escalation_value: null,
@@ -149,6 +136,19 @@ function extractEscalation(text: string) {
   };
 }
 
+/* -------- INFER IMPLICIT ESCALATION -------- */
+
+function inferFixedEscalationFromText(text: string): number | null {
+  const year1 = extractWithPatterns(text, [/Year\s*1:\s*\$([\d,]+)/i]);
+  const year2 = extractWithPatterns(text, [/Year\s*2:\s*\$([\d,]+)/i]);
+
+  if (!year1 || !year2) return null;
+
+  const y1 = Number(year1.replace(/,/g, ""));
+  const y2 = Number(year2.replace(/,/g, ""));
+
+  return y2 > y1 ? y2 - y1 : null;
+}
 
 /* -------------------- RENT SCHEDULE -------------------- */
 
@@ -168,19 +168,13 @@ function buildRentSchedule(
   if (!baseRent || !frequency || !termMonths) return [];
 
   const years = Math.ceil(termMonths / 12);
-  let annualRent =
-    frequency === "monthly" ? baseRent * 12 : baseRent;
+  let annualRent = frequency === "monthly" ? baseRent * 12 : baseRent;
 
   const rows: RentScheduleRow[] = [];
 
   for (let y = 1; y <= years; y++) {
-    if (y > 1) {
-      if (escalationType === "fixed_percent" && escalationValue) {
-        annualRent *= 1 + escalationValue / 100;
-      }
-      if (escalationType === "fixed_amount" && escalationValue) {
-        annualRent += escalationValue;
-      }
+    if (y > 1 && escalationType === "fixed_amount" && escalationValue) {
+      annualRent += escalationValue * 12;
     }
 
     rows.push({
@@ -218,94 +212,22 @@ function computeLeaseHealth(input: {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
 
-  const yearsRemaining = input.term_months
-    ? input.term_months / 12
-    : 1;
+  const years = input.term_months ? input.term_months / 12 : 1;
+  const y1 = input.rent_schedule[0]?.annual_rent ?? 0;
+  const yEnd = input.rent_schedule.at(-1)?.annual_rent ?? y1;
 
-  const yearOneRent =
-    input.rent_schedule[0]?.annual_rent ?? 0;
-
-  if (!input.lease_start || !input.lease_end) {
+  if (yEnd > y1) {
     flags.push({
-      code: "MISSING_DATES",
-      label: "Lease start or end date missing",
-      severity: "high",
-      recommendation:
-        "Request a fully executed lease or estoppel certificate confirming lease term.",
-      estimated_impact:
-        "Legal and audit exposure; potential disputes exceeding $25k",
-    });
-    score -= 25;
-  }
-
-  if (input.term_months !== null && input.term_months < 24) {
-    flags.push({
-      code: "SHORT_TERM",
-      label: "Lease term under 24 months",
+      code: "RENT_ESCALATION_COST",
+      label: "Rent escalation increases total lease cost",
       severity: "medium",
-      recommendation:
-        "Begin renewal discussions 9–12 months early to preserve leverage.",
-      estimated_impact: `Renewal premium risk of ${formatMoney(
-        yearOneRent * 0.05
-      )}`,
+      recommendation: "Negotiate capped or fixed escalation.",
+      estimated_impact: `Avoidable increase of ${formatMoney(yEnd - y1)} per year`,
     });
     score -= 15;
   }
 
-  if (
-    input.rent.escalation_type === "fixed_percent" &&
-    input.rent.escalation_value
-  ) {
-    const savings =
-      yearOneRent * 0.01 * yearsRemaining;
-
-    flags.push({
-      code: "PERCENT_ESCALATION",
-      label: "Annual percentage rent escalation",
-      severity: "medium",
-      recommendation:
-        "Negotiate a lower escalation rate or a fixed dollar increase.",
-      estimated_impact: `~${formatMoney(
-        savings
-      )} savings by reducing escalation 1%`,
-    });
-    score -= 10;
-  }
-
-  if (input.rent.escalation_type === "cpi") {
-    const exposure =
-      yearOneRent * 0.03 * yearsRemaining;
-
-    flags.push({
-      code: "CPI_ESCALATION",
-      label: "CPI-based rent escalation (unbounded)",
-      severity: "high",
-      recommendation:
-        "Negotiate a CPI cap (e.g. 3–4%) or convert to fixed escalation.",
-      estimated_impact: `Estimated exposure ${formatMoney(
-        exposure
-      )}+`,
-    });
-    score -= 25;
-  }
-
-  if (input.rent.escalation_type === "none") {
-    flags.push({
-      code: "NO_ESCALATION_DEFINED",
-      label: "No rent escalation clause detected",
-      severity: "low",
-      recommendation:
-        "Confirm whether rent remains flat or escalation language is missing.",
-      estimated_impact:
-        "Billing ambiguity risk of $5k–$15k",
-    });
-    score -= 5;
-  }
-
-  return {
-    score: Math.max(score, 0),
-    flags,
-  };
+  return { score: Math.max(score, 0), flags };
 }
 
 /* -------------------- MAIN EXPORT -------------------- */
@@ -322,21 +244,30 @@ export function abstractLease(rawText: string) {
   const term_months =
     lease_start && lease_end
       ? Math.round(
-          (new Date(lease_end).getTime() -
-            new Date(lease_start).getTime()) /
+          (new Date(lease_end).getTime() - new Date(lease_start).getTime()) /
             (1000 * 60 * 60 * 24 * 30)
         )
       : null;
 
   const base_rent = extractBaseRent(text);
   const frequency = extractFrequency(text);
-  const escalation = extractEscalation(text);
+  let escalation = extractEscalation(text);
 
-  const rent: Rent = {
-    base_rent,
-    frequency,
-    ...escalation,
-  };
+  if (
+  escalation.escalation_type === "fixed_amount" &&
+  escalation.escalation_value === null
+) {
+  const inferred = inferFixedEscalationFromText(text);
+  if (inferred !== null) {
+    escalation = {
+      ...escalation,
+      escalation_value: inferred,
+    };
+  }
+}
+
+
+  const rent: Rent = { base_rent, frequency, ...escalation };
 
   const rent_schedule = buildRentSchedule(
     base_rent,
@@ -366,10 +297,7 @@ export function abstractLease(rawText: string) {
     health,
     confidence: {
       base_rent: confidence(base_rent),
-      escalation:
-        escalation.escalation_type === "none"
-          ? "low"
-          : "high",
+      escalation: escalation.escalation_type === "none" ? "low" : "high",
     },
     raw_preview: text.slice(0, 1500),
   };
