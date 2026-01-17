@@ -56,10 +56,16 @@ function extractPremises(text: string): string | null {
 
 function extractDate(label: string, text: string): string | null {
   return extractWithPatterns(text, [
+    // Explicit labels
     new RegExp(`${label}[:\\s]+([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
-    new RegExp(`(?:commence|commencing|expiring)[^A-Za-z]*([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
+
+    // Semantic language (real leases)
+    /commence(?:s|ment)? on ([A-Za-z]+ \d{1,2}, \d{4})/i,
+    /commencing on ([A-Za-z]+ \d{1,2}, \d{4})/i,
+    /expir(?:e|ing) on ([A-Za-z]+ \d{1,2}, \d{4})/i,
   ]);
 }
+
 
 /* -------------------- RENT & ESCALATION -------------------- */
 
@@ -212,7 +218,7 @@ function computeLeaseHealth(input: {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
 
-  const years = input.term_months ? input.term_months / 12 : 1;
+  const _years = input.term_months ? input.term_months / 12 : 1;
   const y1 = input.rent_schedule[0]?.annual_rent ?? 0;
   const yEnd = input.rent_schedule.at(-1)?.annual_rent ?? y1;
 
