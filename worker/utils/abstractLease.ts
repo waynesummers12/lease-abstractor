@@ -215,6 +215,41 @@ function buildRentSchedule(
   return rows;
 }
 
+/* -------------------- CAM / NNN EXTRACTION -------------------- */
+
+type CamNnn = {
+  monthly_amount: number | null;
+  annual_amount: number | null;
+  total_exposure: number | null;
+};
+
+function extractCamNnn(text: string, termMonths: number | null): CamNnn {
+  const monthly = extractWithPatterns(text, [
+    /NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
+    /CAM charges[^$]*\$([\d,]+)\s+per\s+month/i,
+    /estimated NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
+  ]);
+
+  if (!monthly) {
+    return {
+      monthly_amount: null,
+      annual_amount: null,
+      total_exposure: null,
+    };
+  }
+
+  const monthlyAmount = Number(monthly.replace(/,/g, ""));
+  const annualAmount = monthlyAmount * 12;
+  const totalExposure =
+    termMonths !== null ? annualAmount * (termMonths / 12) : null;
+
+  return {
+    monthly_amount: monthlyAmount,
+    annual_amount: annualAmount,
+    total_exposure: totalExposure,
+  };
+}
+
 /* -------------------- LEASE HEALTH + $ IMPACT -------------------- */
 
 export type LeaseRiskFlag = {
@@ -236,6 +271,7 @@ function computeLeaseHealth(input: {
   term_months: number | null;
   rent: Rent;
   rent_schedule: RentScheduleRow[];
+  cam_nnn: CamNnn;
 }): LeaseHealth {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
@@ -248,6 +284,7 @@ function computeLeaseHealth(input: {
   const baseAnnual =
     input.rent_schedule[0]?.annual_rent ?? 0;
 
+  /* ---- Missing dates ---- */
   if (!input.lease_start || !input.lease_end) {
     flags.push({
       code: "MISSING_DATES",
@@ -261,6 +298,7 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
+  /* ---- Percent escalation ---- */
   if (input.rent.escalation_type === "fixed_percent") {
     flags.push({
       code: "PERCENT_ESCALATION",
@@ -275,13 +313,14 @@ function computeLeaseHealth(input: {
     score -= 10;
   }
 
+  /* ---- CPI escalation ---- */
   if (input.rent.escalation_type === "cpi") {
     flags.push({
       code: "CPI_ESCALATION",
       label: "CPI-based escalation (uncapped)",
       severity: "high",
       recommendation:
-        "Negotiate CPI cap or fixed escalation.",
+        "Negotiate CPI cap or convert to fixed escalation.",
       estimated_impact: `Exposure ${formatMoney(
         baseAnnual * 0.03 * years
       )}+`,
@@ -289,11 +328,27 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
+  /* ---- CAM / NNN exposure ---- */
+  if (input.cam_nnn.monthly_amount) {
+    flags.push({
+      code: "CAM_NNN",
+      label: "NNN / CAM charges billed outside base rent",
+      severity: "medium",
+      recommendation:
+        "Audit reconciliation clauses and negotiate caps or exclusions.",
+      estimated_impact: `Estimated exposure ${formatMoney(
+        input.cam_nnn.total_exposure ?? 0
+      )}`,
+    });
+    score -= 15;
+  }
+
   return {
     score: Math.max(score, 0),
     flags,
   };
 }
+
 
 /* -------------------- MAIN EXPORT -------------------- */
 
@@ -336,12 +391,17 @@ export function abstractLease(rawText: string) {
     term_months
   );
 
+  // ✅ ADD THIS (THIS WAS MISSING)
+  const cam_nnn = extractCamNnn(text, term_months);
+
+  // ✅ PASS cam_nnn INTO HEALTH
   const health = computeLeaseHealth({
     lease_start,
     lease_end,
     term_months,
     rent,
     rent_schedule,
+    cam_nnn,
   });
 
   return {
@@ -353,6 +413,7 @@ export function abstractLease(rawText: string) {
     term_months,
     rent,
     rent_schedule,
+    cam_nnn, // ✅ expose for UI
     health,
     confidence: {
       base_rent: confidence(base_rent),
@@ -362,3 +423,4 @@ export function abstractLease(rawText: string) {
     raw_preview: text.slice(0, 1500),
   };
 }
+
