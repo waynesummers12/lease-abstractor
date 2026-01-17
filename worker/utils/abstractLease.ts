@@ -59,9 +59,12 @@ function extractPremises(text: string): string | null {
 function extractDate(label: string, text: string): string | null {
   return extractWithPatterns(text, [
     new RegExp(`${label}[:\\s]+([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
-    new RegExp(`${label}[:\\s]+(\\d{1,2}/\\d{1,2}/\\d{4})`, "i"),
+    new RegExp(`\\(${label}\\)[^A-Za-z]*(?:on )?([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
+    new RegExp(`([A-Za-z]+ \\d{1,2}, \\d{4})\\s*\\(“?${label}”?\\)`, "i"),
+    new RegExp(`(?:commence|commencing|expiring)[^A-Za-z]*([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
   ]);
 }
+
 
 /* -------------------- RENT & ESCALATION -------------------- */
 
@@ -92,6 +95,7 @@ function extractFrequency(
 }
 
 function extractEscalation(text: string) {
+  /* ---- explicit % escalation ---- */
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
     /annual increase of (\d+(?:\.\d+)?)%/i,
@@ -105,6 +109,7 @@ function extractEscalation(text: string) {
     };
   }
 
+  /* ---- explicit $ escalation ---- */
   const fixed = extractWithPatterns(text, [
     /increase(?:s)? by \$([\d,]+)/i,
     /annual increase of \$([\d,]+)/i,
@@ -118,6 +123,7 @@ function extractEscalation(text: string) {
     };
   }
 
+  /* ---- CPI escalation ---- */
   if (/CPI|Consumer Price Index/i.test(text)) {
     return {
       escalation_type: "cpi" as const,
@@ -126,12 +132,23 @@ function extractEscalation(text: string) {
     };
   }
 
+  /* ---- IMPLICIT rent ladder (Year 2 / Year 3 / Year 4…) ---- */
+  if (/Year\s+2:.*\$|Year\s+3:.*\$|Year\s+4:.*\$/i.test(text)) {
+    return {
+      escalation_type: "fixed_amount" as const,
+      escalation_value: null, // derived later from schedule
+      escalation_interval: "annual" as const,
+    };
+  }
+
+  /* ---- none detected ---- */
   return {
     escalation_type: "none" as const,
     escalation_value: null,
     escalation_interval: null,
   };
 }
+
 
 /* -------------------- RENT SCHEDULE -------------------- */
 
