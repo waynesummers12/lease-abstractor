@@ -29,6 +29,10 @@ function confidence(value: unknown): "high" | "medium" | "low" {
   return "medium";
 }
 
+function formatMoney(n: number) {
+  return `$${Math.round(n).toLocaleString()}`;
+}
+
 /* -------------------- CORE FIELDS -------------------- */
 
 function extractTenant(text: string): string | null {
@@ -77,7 +81,11 @@ function extractBaseRent(text: string): number | null {
   return v ? Number(v.replace(/,/g, "")) : null;
 }
 
-function extractFrequency(text: string): Rent["frequency"] {
+function extractFrequency(
+  text: string | null
+): Rent["frequency"] {
+  if (!text) return null;
+
   if (/per\s+month|monthly/i.test(text)) return "monthly";
   if (/per\s+year|annual/i.test(text)) return "annual";
   return null;
@@ -168,13 +176,14 @@ function buildRentSchedule(
   return rows;
 }
 
-/* -------------------- LEASE HEALTH + RECOMMENDATIONS -------------------- */
+/* -------------------- LEASE HEALTH + $ IMPACT -------------------- */
 
 type LeaseRiskFlag = {
   code: string;
   label: string;
   severity: "low" | "medium" | "high";
   recommendation: string;
+  estimated_impact: string;
 };
 
 type LeaseHealth = {
@@ -187,9 +196,17 @@ function computeLeaseHealth(input: {
   lease_end: string | null;
   term_months: number | null;
   rent: Rent;
+  rent_schedule: RentScheduleRow[];
 }): LeaseHealth {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
+
+  const yearsRemaining = input.term_months
+    ? input.term_months / 12
+    : 1;
+
+  const yearOneRent =
+    input.rent_schedule[0]?.annual_rent ?? 0;
 
   if (!input.lease_start || !input.lease_end) {
     flags.push({
@@ -198,6 +215,8 @@ function computeLeaseHealth(input: {
       severity: "high",
       recommendation:
         "Request a fully executed lease or estoppel certificate confirming lease term.",
+      estimated_impact:
+        "Legal and audit exposure; potential disputes exceeding $25k",
     });
     score -= 25;
   }
@@ -209,28 +228,46 @@ function computeLeaseHealth(input: {
       severity: "medium",
       recommendation:
         "Begin renewal discussions 9–12 months early to preserve leverage.",
+      estimated_impact: `Renewal premium risk of ${formatMoney(
+        yearOneRent * 0.05
+      )}`,
     });
     score -= 15;
   }
 
-  if (input.rent.escalation_type === "fixed_percent") {
+  if (
+    input.rent.escalation_type === "fixed_percent" &&
+    input.rent.escalation_value
+  ) {
+    const savings =
+      yearOneRent * 0.01 * yearsRemaining;
+
     flags.push({
       code: "PERCENT_ESCALATION",
       label: "Annual percentage rent escalation",
       severity: "medium",
       recommendation:
         "Negotiate a lower escalation rate or a fixed dollar increase.",
+      estimated_impact: `~${formatMoney(
+        savings
+      )} savings by reducing escalation 1%`,
     });
     score -= 10;
   }
 
   if (input.rent.escalation_type === "cpi") {
+    const exposure =
+      yearOneRent * 0.03 * yearsRemaining;
+
     flags.push({
       code: "CPI_ESCALATION",
       label: "CPI-based rent escalation (unbounded)",
       severity: "high",
       recommendation:
         "Negotiate a CPI cap (e.g. 3–4%) or convert to fixed escalation.",
+      estimated_impact: `Estimated exposure ${formatMoney(
+        exposure
+      )}+`,
     });
     score -= 25;
   }
@@ -242,6 +279,8 @@ function computeLeaseHealth(input: {
       severity: "low",
       recommendation:
         "Confirm whether rent remains flat or escalation language is missing.",
+      estimated_impact:
+        "Billing ambiguity risk of $5k–$15k",
     });
     score -= 5;
   }
@@ -295,6 +334,7 @@ export function abstractLease(rawText: string) {
     lease_end,
     term_months,
     rent,
+    rent_schedule,
   });
 
   return {
@@ -310,9 +350,10 @@ export function abstractLease(rawText: string) {
     confidence: {
       base_rent: confidence(base_rent),
       escalation:
-        escalation.escalation_type === "none" ? "low" : "high",
+        escalation.escalation_type === "none"
+          ? "low"
+          : "high",
     },
     raw_preview: text.slice(0, 1500),
   };
 }
-
