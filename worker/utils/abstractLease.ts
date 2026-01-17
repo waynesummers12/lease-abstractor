@@ -1,108 +1,122 @@
 // worker/utils/abstractLease.ts
 
-const NUMBER_WORDS: Record<string, number> = {
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-  six: 6,
-  seven: 7,
-  eight: 8,
-  nine: 9,
-  ten: 10,
-};
-
-function normalize(text: string) {
-  return text.replace(/\s+/g, " ").trim();
+function normalizeText(raw: string): string {
+  return raw
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{2,}/g, "\n")
+    .replace(/-\n/g, "")
+    .replace(/\n/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }
 
-function extract(regex: RegExp, text: string): string | null {
-  const m = text.match(regex);
-  return m?.[1]?.trim() ?? null;
-}
-
-function parseDate(raw: string | null): string | null {
-  if (!raw) return null;
-  const d = new Date(raw);
-  return isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
-}
-
-function parseMoney(raw: string | null): number | null {
-  if (!raw) return null;
-  const cleaned = raw.replace(/[^0-9.]/g, "");
-  const n = Number(cleaned);
-  return isNaN(n) ? null : n;
-}
-
-function parseTermMonths(text: string): number | null {
-  const numeric = text.match(/(\d+)\s*\(?\d*\)?\s*years?/i);
-  if (numeric) return parseInt(numeric[1], 10) * 12;
-
-  const word = text.match(
-    new RegExp(`(${Object.keys(NUMBER_WORDS).join("|")})\\s*\\(?\\d*\\)?\\s*years?`, "i")
-  );
-  if (word) return NUMBER_WORDS[word[1].toLowerCase()] * 12;
-
+function extractWithPatterns(
+  text: string,
+  patterns: RegExp[]
+): string | null {
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) {
+      return match[1].trim();
+    }
+  }
   return null;
 }
 
-export function abstractLease(text: string) {
-  const t = normalize(text);
+function extractTenant(text: string): string | null {
+  return extractWithPatterns(text, [
+    /Tenant[:\s]+([^,.;]+)/i,
+    /Lessee[:\s]+([^,.;]+)/i,
+    /between .*? and ([^,.;]+)\s+\("Tenant"\)/i,
+  ]);
+}
 
-  const tenant = extract(
-    /Tenant:\s*([^,\n]+(?:,?\s*(?:Inc\.|LLC|Ltd))?)/i,
-    t
+function extractLandlord(text: string): string | null {
+  return extractWithPatterns(text, [
+    /Landlord[:\s]+([^,.;]+)/i,
+    /Lessor[:\s]+([^,.;]+)/i,
+    /between ([^,.;]+)\s+and .*?Tenant/i,
+  ]);
+}
+
+function extractPremises(text: string): string | null {
+  return extractWithPatterns(text, [
+    /Premises[:\s]+([^.;]+)/i,
+    /located at ([^.;]+)/i,
+  ]);
+}
+
+function extractDate(
+  label: string,
+  text: string
+): string | null {
+  const patterns = [
+    new RegExp(`${label}[:\\s]+([A-Za-z]+ \\d{1,2}, \\d{4})`, "i"),
+    new RegExp(`${label}[:\\s]+(\\d{1,2}/\\d{1,2}/\\d{4})`, "i"),
+  ];
+
+  return extractWithPatterns(text, patterns);
+}
+
+function extractBaseRent(text: string): number | null {
+  const patterns = [
+    /\$([\d,]+)\s+per\s+month/i,
+    /Base Rent[:\s]+\$([\d,]+)/i,
+  ];
+
+  const value = extractWithPatterns(text, patterns);
+  return value ? Number(value.replace(/,/g, "")) : null;
+}
+
+function confidence(value: unknown): "high" | "medium" | "low" {
+  if (!value) return "low";
+  if (typeof value === "string" && value.length > 6) return "high";
+  return "medium";
+}
+
+export function abstractLease(rawText: string) {
+  const text = normalizeText(rawText);
+
+  const tenant = extractTenant(text);
+  const landlord = extractLandlord(text);
+  const premises = extractPremises(text);
+  const lease_start = extractDate(
+    "Commencement Date|Lease Start",
+    text
   );
-
-  const landlord = extract(
-    /Landlord:\s*([^,\n]+(?:,?\s*(?:Inc\.|LLC|Ltd))?)/i,
-    t
+  const lease_end = extractDate(
+    "Expiration Date|Lease End",
+    text
   );
+  const base_rent = extractBaseRent(text);
 
-  const premises = extract(
-    /located at\s*([^()]+)\s*\(“?Premises”?\)/i,
-    t
-  );
-
-  // 🔑 ISOLATE LEASE TERM SECTION
-  const leaseTermSection = extract(
-    /Lease Term(.+?)Base Rent/i,
-    t
-  );
-
-  let leaseStart: string | null = null;
-  let leaseEnd: string | null = null;
-
-  if (leaseTermSection) {
-    const dates = leaseTermSection.match(
-      /([A-Za-z]+\s+\d{1,2},\s+\d{4})/g
-    );
-
-    if (dates && dates.length >= 2) {
-      leaseStart = parseDate(dates[0]);
-      leaseEnd = parseDate(dates[1]);
-    }
-  }
-
-  const baseRentRaw = extract(
-    /\$([\d,]+(?:\.\d{2})?)\s*per\s*month/i,
-    t
-  );
+  const term_months =
+    lease_start && lease_end
+      ? Math.round(
+          (new Date(lease_end).getTime() -
+            new Date(lease_start).getTime()) /
+            (1000 * 60 * 60 * 24 * 30)
+        )
+      : null;
 
   return {
-    tenant_name: tenant,
-    landlord_name: landlord,
+    tenant,
+    landlord,
     premises,
-
-    lease_start: leaseStart,
-    lease_end: leaseEnd,
-
-    base_rent: parseMoney(baseRentRaw),
-    term_months: parseTermMonths(t),
-
-    raw_text_length: text.length,
-    confidence: text.length > 500 ? "high" : "low",
+    lease_start,
+    lease_end,
+    base_rent,
+    term_months,
+    confidence: {
+      tenant: confidence(tenant),
+      landlord: confidence(landlord),
+      premises: confidence(premises),
+      lease_start: confidence(lease_start),
+      lease_end: confidence(lease_end),
+      base_rent: confidence(base_rent),
+    },
+    raw_preview: text.slice(0, 1500),
   };
 }
+
 

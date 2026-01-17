@@ -6,9 +6,6 @@ import { abstractLease } from "./utils/abstractLease.ts";
 
 const WORKER_KEY = Deno.env.get("LEASE_WORKER_KEY");
 
-/**
- * CORS headers for browser access from Next.js
- */
 function corsHeaders() {
   return {
     "Access-Control-Allow-Origin": "http://localhost:3000",
@@ -18,7 +15,6 @@ function corsHeaders() {
 }
 
 serve(async (req) => {
-  // 🔹 Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, {
       status: 204,
@@ -33,7 +29,6 @@ serve(async (req) => {
     });
   }
 
-  // 🔹 Auth check (matches frontend header)
   if (req.headers.get("x-lease-worker-key") !== WORKER_KEY) {
     return new Response("Unauthorized", {
       status: 401,
@@ -43,7 +38,6 @@ serve(async (req) => {
 
   try {
     const { objectPath } = await req.json();
-
     if (!objectPath) {
       return new Response("Missing objectPath", {
         status: 400,
@@ -52,25 +46,18 @@ serve(async (req) => {
     }
 
     const pdfBytes = await fetchPdfFromStorage(objectPath);
-    const text = await extractTextFromPdf(pdfBytes);
-    const result = abstractLease(text);
+    const rawText = await extractTextFromPdf(pdfBytes);
+    const result = abstractLease(rawText);
 
     await saveLeaseAbstract(objectPath, result);
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        objectPath,
-        result,
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders(),
-        },
-      }
-    );
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders(),
+      },
+    });
   } catch (err) {
     console.error("❌ Worker error:", err);
     return new Response("Worker error", {
@@ -79,4 +66,5 @@ serve(async (req) => {
     });
   }
 });
+
 

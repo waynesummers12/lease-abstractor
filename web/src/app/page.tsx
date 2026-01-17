@@ -11,12 +11,13 @@ type LeaseResult = {
   lease_end: string | null;
   base_rent: number | null;
   term_months: number | null;
-  confidence: string;
+  confidence: Record<string, string>;
+  raw_preview: string;
 };
 
 export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState("");
   const [result, setResult] = useState<LeaseResult | null>(null);
 
   async function handleUploadAndAnalyze() {
@@ -27,14 +28,14 @@ export default function HomePage() {
 
     const objectPath = `leases/${crypto.randomUUID()}.pdf`;
 
-    const { error: uploadError } = await supabase.storage
+    const { error } = await supabase.storage
       .from("leases")
       .upload(objectPath, file, {
         contentType: "application/pdf",
       });
 
-    if (uploadError) {
-      setStatus(uploadError.message);
+    if (error) {
+      setStatus(error.message);
       return;
     }
 
@@ -49,104 +50,64 @@ export default function HomePage() {
       body: JSON.stringify({ objectPath }),
     });
 
-    const data = await res.json();
-
     if (!res.ok) {
-      setStatus(data?.error || "Lease analysis failed");
+      setStatus("Analysis failed");
       return;
     }
 
+    const data = await res.json();
     setResult(data);
     setStatus("Analysis complete ✅");
   }
 
   return (
-    <main style={{ padding: 32, maxWidth: 800, margin: "0 auto" }}>
+    <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
       <h1 style={{ fontSize: 32, fontWeight: 700 }}>
         AI Lease Abstractor
       </h1>
 
-      <div style={{ marginTop: 24 }}>
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
-      </div>
+      <input
+        type="file"
+        accept="application/pdf"
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
+      />
 
-      <div style={{ marginTop: 16 }}>
-        <button
-          onClick={handleUploadAndAnalyze}
-          disabled={!file}
-          style={{
-            padding: "10px 16px",
-            background: "#000",
-            color: "#fff",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          Upload & Analyze
-        </button>
-      </div>
+      <br />
+      <br />
 
-      {status && (
-        <p style={{ marginTop: 16, color: "#555" }}>{status}</p>
-      )}
+      <button
+        onClick={handleUploadAndAnalyze}
+        disabled={!file}
+        style={{
+          padding: "10px 16px",
+          background: "#000",
+          color: "#fff",
+          borderRadius: 6,
+        }}
+      >
+        Upload & Analyze
+      </button>
+
+      {status && <p>{status}</p>}
 
       {result && (
-        <div
-          style={{
-            marginTop: 32,
-            padding: 20,
-            border: "1px solid #ddd",
-            borderRadius: 8,
-            background: "#fafafa",
-          }}
-        >
-          <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 12 }}>
-            Lease Summary
-          </h2>
+        <>
+          <h2>Lease Summary</h2>
+          {Object.entries(result.confidence).map(([k, v]) => (
+            <p key={k}>
+              <strong>{k}</strong>: {result[k as keyof LeaseResult] ?? "—"} (
+              {v})
+            </p>
+          ))}
 
-          <Field label="Tenant" value={result.tenant} />
-          <Field label="Landlord" value={result.landlord} />
-          <Field label="Premises" value={result.premises} />
-          <Field label="Lease Start" value={result.lease_start} />
-          <Field label="Lease End" value={result.lease_end} />
-          <Field
-            label="Base Rent"
-            value={
-              result.base_rent
-                ? `$${result.base_rent.toLocaleString()} / month`
-                : null
-            }
-          />
-          <Field
-            label="Term"
-            value={
-              result.term_months
-                ? `${result.term_months} months`
-                : null
-            }
-          />
-          <Field label="Confidence" value={result.confidence} />
-        </div>
+          <details style={{ marginTop: 16 }}>
+            <summary>Raw Extracted Text (Debug)</summary>
+            <pre style={{ whiteSpace: "pre-wrap" }}>
+              {result.raw_preview}
+            </pre>
+          </details>
+        </>
       )}
     </main>
-  );
-}
-
-function Field({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number | null;
-}) {
-  return (
-    <div style={{ display: "flex", marginBottom: 6 }}>
-      <strong style={{ width: 140 }}>{label}:</strong>
-      <span>{value ?? "—"}</span>
-    </div>
   );
 }
