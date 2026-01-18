@@ -351,19 +351,18 @@ function computeLeaseHealth(input: {
   }
 
 /* ---- CAM / NNN exposure ---- */
-if (input.cam_nnn.monthly_amount) {
-  flags.push({
-    code: "CAM_BASE",
-    label: "CAM / NNN charges billed outside base rent",
-    severity: "medium",
-    recommendation:
-      "Audit expense categories and confirm allocation methodology.",
-    estimated_impact: `Baseline exposure ${formatMoney(
-      input.cam_nnn.total_exposure ?? 0
-    )}`,
-  });
-
-  score -= 10;
+  if (input.cam_nnn.monthly_amount) {
+    flags.push({
+      code: "CAM_NNN",
+      label: "NNN / CAM charges billed outside base rent",
+      severity: "medium",
+      recommendation:
+        "Audit reconciliation clauses and negotiate caps or exclusions.",
+      estimated_impact: `Estimated exposure ${formatMoney(
+        input.cam_nnn.total_exposure ?? 0
+      )}`,
+    });
+    score -= 15;
 
   if (input.cam_nnn.is_uncapped && input.cam_nnn.escalation_exposure) {
     flags.push({
