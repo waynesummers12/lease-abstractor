@@ -219,11 +219,11 @@ export type CamNnn = {
   annual_amount: number | null;
   total_exposure: number | null;
 
-  // additive metadata — does NOT break existing usage
-  is_uncapped?: boolean;
-  reconciliation?: boolean;
-  pro_rata?: boolean;
-  escalation_exposure?: number | null;
+  // additive metadata — safe & optional
+  is_uncapped: boolean;
+  reconciliation: boolean;
+  pro_rata: boolean;
+  escalation_exposure: number | null;
 };
 
 function extractCamNnn(text: string, termMonths: number | null): CamNnn {
@@ -262,7 +262,7 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
 
   const totalExposure = annualAmount * years;
 
-  // conservative 2026 assumption: 6% CAM growth if uncapped
+  // conservative assumption: 6% CAM growth if uncapped
   const escalationExposure = is_uncapped
     ? annualAmount * 0.06 * years
     : null;
