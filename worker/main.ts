@@ -1,5 +1,4 @@
 // worker/main.ts
-
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 
@@ -54,11 +53,9 @@ app.use(router.allowedMethods());
 app.use(ingestLeasePdfRoutes.routes());
 app.use(ingestLeasePdfRoutes.allowedMethods());
 
-export default app;
-
+/* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
-
 console.log(`🚀 Lease Abstractor Worker running on http://localhost:${PORT}`);
-
 await app.listen({ port: PORT });
+
 
