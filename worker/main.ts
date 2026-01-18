@@ -1,6 +1,7 @@
 // worker/main.ts
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import stripeCheckoutRoutes from "./routes/checkout.ts";
+import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 
 const app = new Application();
 const router = new Router();
@@ -50,6 +51,8 @@ router.get("/", (ctx) => {
 });
 
 /* -------------------- ROUTES -------------------- */
+app.use(ingestLeasePdfRoutes.routes());
+app.use(ingestLeasePdfRoutes.allowedMethods());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
