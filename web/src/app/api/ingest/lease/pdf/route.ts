@@ -9,6 +9,7 @@
 // - This route does NOT read file contents
 // - This route only signals the worker to process the uploaded file
 
+
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -26,8 +27,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json();
-    const { objectPath } = body;
+    const { objectPath } = await req.json();
 
     if (!objectPath) {
       return NextResponse.json(
@@ -40,7 +40,8 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-worker-key": WORKER_KEY,
+        // ✅ FIXED HEADER
+        "x-lease-worker-key": WORKER_KEY,
       },
       body: JSON.stringify({ objectPath }),
     });
