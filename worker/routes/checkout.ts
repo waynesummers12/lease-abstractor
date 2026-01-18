@@ -1,11 +1,12 @@
 // worker/routes/checkout.ts
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 
 const stripe = new Stripe(
   Deno.env.get("STRIPE_SECRET_KEY")!,
   {
-    // ❗️DO NOT set apiVersion — Stripe v20 enforces it internally
+    // Stripe v20 enforces API version internally — do NOT set apiVersion
   }
 );
 
@@ -15,25 +16,25 @@ const router = new Router({
 
 router.post("/create", async (ctx) => {
   try {
+    const priceId = Deno.env.get("STRIPE_PRICE_STARTER");
+    const baseUrl = Deno.env.get("BASE_URL");
+
+    if (!priceId || !baseUrl) {
+      ctx.response.status = 500;
+      ctx.response.body = { error: "Server misconfigured" };
+      return;
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card"],
       line_items: [
         {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "One-time CAM / NNN Audit Summary",
-              description:
-                "Lease abstraction. Total avoidable exposure. Escalation risk. Audit guidance. PDF download. Delivered instantly.",
-            },
-            unit_amount: 14999, // $149.99
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
-      success_url: `${Deno.env.get("BASE_URL")}/success`,
-      cancel_url: `${Deno.env.get("BASE_URL")}`,
+      success_url: `${baseUrl}/success`,
+      cancel_url: `${baseUrl}`,
     });
 
     ctx.response.status = 200;
@@ -46,5 +47,3 @@ router.post("/create", async (ctx) => {
 });
 
 export default router;
-
-
