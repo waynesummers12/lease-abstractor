@@ -1,15 +1,13 @@
 // worker/main.ts
-import { Application } from "npm:@oak/oak";
-import Router from "npm:@oak/oak/router";
-
+import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import stripeCheckoutRoutes from "./routes/checkout.ts";
 
 const app = new Application();
 const router = new Router();
 
-const WORKER_KEY = Deno.env.get("LEASE_WORKER_KEY");
+const WORKER_KEY = Deno.env.get("LEASE_WORKER_KEY") ?? "";
 
-/* -------------------- MIDDLEWARE -------------------- */
+/* -------------------- CORS + AUTH -------------------- */
 
 app.use(async (ctx, next) => {
   ctx.response.headers.set(
@@ -30,10 +28,13 @@ app.use(async (ctx, next) => {
     return;
   }
 
-  if (
-    ctx.request.headers.get("x-lease-worker-key") !== WORKER_KEY &&
-    ctx.request.url.pathname.startsWith("/checkout") === false
-  ) {
+  // Stripe checkout is PUBLIC
+  if (ctx.request.url.pathname.startsWith("/checkout")) {
+    await next();
+    return;
+  }
+
+  if (ctx.request.headers.get("x-lease-worker-key") !== WORKER_KEY) {
     ctx.response.status = 401;
     ctx.response.body = "Unauthorized";
     return;
@@ -42,24 +43,22 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-/* -------------------- ROUTES -------------------- */
+/* -------------------- BASE ROUTE -------------------- */
 
 router.get("/", (ctx) => {
   ctx.response.body = "Lease Abstractor Worker Running";
 });
 
+/* -------------------- ROUTES -------------------- */
+
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-/* ---- STRIPE CHECKOUT ROUTES ---- */
 app.use(stripeCheckoutRoutes.routes());
 app.use(stripeCheckoutRoutes.allowedMethods());
 
-/* -------------------- START SERVER -------------------- */
+/* -------------------- START -------------------- */
 
 const PORT = 8000;
 console.log(`🚀 Worker listening on http://localhost:${PORT}`);
 await app.listen({ port: PORT });
-
-
-
