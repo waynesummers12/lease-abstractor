@@ -445,7 +445,7 @@ export function abstractLease(rawText: string) {
     cam_nnn,
   });
 
-  return {
+    return {
     tenant,
     landlord,
     premises,
@@ -455,10 +455,17 @@ export function abstractLease(rawText: string) {
     rent,
     rent_schedule,
     cam_nnn,
+
+    // ✅ ADD THIS LINE (TOTAL CAM + ESCALATION ROLL-UP)
+    cam_total_avoidable_exposure:
+      (cam_nnn.total_exposure ?? 0) +
+      (cam_nnn.escalation_exposure ?? 0),
+
     health,
     confidence: {
       base_rent: confidence(base_rent),
-      escalation: rent.escalation_type === "none" ? "low" : "high",
+      escalation:
+        rent.escalation_type === "none" ? "low" : "high",
     },
     raw_preview: text.slice(0, 1500),
   };
