@@ -1,5 +1,6 @@
 // worker/routes/ingestLeasePdf.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { abstractLease } from "../utils/abstractLease.ts";
 
 const router = new Router({
   prefix: "/ingest/lease",
@@ -7,7 +8,7 @@ const router = new Router({
 
 router.post("/pdf", async (ctx) => {
   try {
-    // ✅ Oak v12+ correct JSON parsing
+    // ✅ Oak v12+ JSON parsing
     const body = await ctx.request.body().value;
     const { objectPath } = body ?? {};
 
@@ -19,13 +20,13 @@ router.post("/pdf", async (ctx) => {
 
     console.log("📄 Ingesting lease PDF:", objectPath);
 
-    // TODO (next step): call abstractLease()
-    // await abstractLease(objectPath)
+    // 🔑 Run lease abstraction
+    const analysis = await abstractLease(objectPath);
 
     ctx.response.status = 200;
     ctx.response.body = {
       success: true,
-      objectPath,
+      analysis,
     };
   } catch (err) {
     console.error("❌ Lease ingest error:", err);
@@ -35,4 +36,6 @@ router.post("/pdf", async (ctx) => {
 });
 
 export default router;
+
+
 
