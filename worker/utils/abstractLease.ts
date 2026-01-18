@@ -350,37 +350,29 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
-  /* ---- CAM / NNN base exposure ---- */
+  /* ---- CAM / NNN TOTAL AVOIDABLE EXPOSURE ---- */
   if (input.cam_nnn.monthly_amount) {
+    const baseExposure = input.cam_nnn.total_exposure ?? 0;
+    const escalationExposure = input.cam_nnn.escalation_exposure ?? 0;
+    const totalAvoidable = baseExposure + escalationExposure;
+
     flags.push({
-      code: "CAM_NNN_BASE",
-      label: "CAM / NNN charges billed outside base rent",
-      severity: "medium",
+      code: "CAM_TOTAL_EXPOSURE",
+      label: "CAM / NNN charges with escalation risk",
+      severity:
+        escalationExposure > 0 ? "high" : "medium",
       recommendation:
-        "Audit expense categories and confirm allocation methodology.",
-      estimated_impact: `Baseline exposure ${formatMoney(
-        input.cam_nnn.total_exposure ?? 0
+        "Audit CAM categories, enforce reconciliation rights, and negotiate annual caps (3–6%).",
+      estimated_impact: `Total avoidable exposure ${formatMoney(
+        totalAvoidable
       )}`,
     });
-    score -= 10;
+
+    // scoring logic
+    score -= escalationExposure > 0 ? 25 : 15;
   }
 
-  /* ---- Uncapped CAM escalation risk ---- */
-  if (input.cam_nnn.is_uncapped && input.cam_nnn.escalation_exposure) {
-    flags.push({
-      code: "CAM_ESCALATION",
-      label: "Uncapped CAM / NNN escalation risk",
-      severity: "high",
-      recommendation:
-        "Negotiate an annual CAM cap (3–6%) and exclude capital items.",
-      estimated_impact: `Avoidable escalation exposure ${formatMoney(
-        input.cam_nnn.escalation_exposure
-      )}`,
-    });
-    score -= 15;
-  }
-
-  /* ---- CAM reconciliation risk ---- */
+  /* ---- CAM reconciliation risk (secondary) ---- */
   if (input.cam_nnn.reconciliation) {
     flags.push({
       code: "CAM_RECONCILIATION",
@@ -391,8 +383,10 @@ function computeLeaseHealth(input: {
       estimated_impact:
         "Reconciliation errors commonly exceed $10k–$50k",
     });
-    score -= 10;
+
+    score -= 5;
   }
+
 
 
 
