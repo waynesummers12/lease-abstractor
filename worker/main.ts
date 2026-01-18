@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { fetchPdfFromStorage, saveLeaseAbstract } from "./utils/storage.ts";
 import { extractTextFromPdf } from "./utils/pdf.ts";
 import { abstractLease } from "./utils/abstractLease.ts";
+import { createCheckoutSession } from "./routes/checkout.ts";
 
 const WORKER_KEY = Deno.env.get("LEASE_WORKER_KEY");
 
@@ -13,6 +14,7 @@ function corsHeaders() {
     "Access-Control-Allow-Headers": "Content-Type, x-lease-worker-key",
   };
 }
+router.post("/checkout/create", createCheckoutSession);
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
