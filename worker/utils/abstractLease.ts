@@ -350,35 +350,37 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
-/* ---- CAM / NNN exposure ---- */
+  /* ---- CAM / NNN base exposure ---- */
   if (input.cam_nnn.monthly_amount) {
     flags.push({
-      code: "CAM_NNN",
-      label: "NNN / CAM charges billed outside base rent",
+      code: "CAM_NNN_BASE",
+      label: "CAM / NNN charges billed outside base rent",
       severity: "medium",
       recommendation:
-        "Audit reconciliation clauses and negotiate caps or exclusions.",
-      estimated_impact: `Estimated exposure ${formatMoney(
+        "Audit expense categories and confirm allocation methodology.",
+      estimated_impact: `Baseline exposure ${formatMoney(
         input.cam_nnn.total_exposure ?? 0
       )}`,
     });
-    score -= 15;
+    score -= 10;
+  }
 
+  /* ---- Uncapped CAM escalation risk ---- */
   if (input.cam_nnn.is_uncapped && input.cam_nnn.escalation_exposure) {
     flags.push({
-      code: "UNCAPPED_CAM",
+      code: "CAM_ESCALATION",
       label: "Uncapped CAM / NNN escalation risk",
       severity: "high",
       recommendation:
         "Negotiate an annual CAM cap (3–6%) and exclude capital items.",
-      estimated_impact: `Avoidable escalation exposure ~${formatMoney(
+      estimated_impact: `Avoidable escalation exposure ${formatMoney(
         input.cam_nnn.escalation_exposure
       )}`,
     });
-
-    score -= 20;
+    score -= 15;
   }
 
+  /* ---- CAM reconciliation risk ---- */
   if (input.cam_nnn.reconciliation) {
     flags.push({
       code: "CAM_RECONCILIATION",
@@ -389,10 +391,9 @@ function computeLeaseHealth(input: {
       estimated_impact:
         "Reconciliation errors commonly exceed $10k–$50k",
     });
-
     score -= 10;
   }
-}
+
 
 
   return { score: Math.max(score, 0), flags };
