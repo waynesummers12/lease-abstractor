@@ -1,18 +1,22 @@
 {
   "compilerOptions": {
-    "lib": ["deno.ns", "deno.window", "esnext"]
+    "lib": ["deno.ns", "deno.window", "esnext"],
+    "strict": true
   },
+
+  "imports": {
+    "@oak/oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
+    "stripe": "npm:stripe@20.2.0"
+  },
+
   "lint": {
     "rules": {
       "tags": ["recommended"]
     }
   },
+
   "fmt": {
     "useTabs": false,
     "lineWidth": 100
   }
 }
-
-
-
-

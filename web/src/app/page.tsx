@@ -52,6 +52,7 @@ export default function HomePage() {
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<LeaseResult | null>(null);
 
+  /* ---------- UPLOAD + ANALYZE ---------- */
   async function handleUploadAndAnalyze() {
     if (!file) return;
 
@@ -92,6 +93,31 @@ export default function HomePage() {
     setStatus("Analysis complete ✅");
   }
 
+  /* ---------- STRIPE CHECKOUT ---------- */
+  async function handleCheckout() {
+    setStatus("Redirecting to secure checkout…");
+
+    const res = await fetch("http://localhost:8000/checkout/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      setStatus("Checkout failed");
+      return;
+    }
+
+    const data = await res.json();
+
+    if (data?.url) {
+      window.location.href = data.url;
+    } else {
+      setStatus("Checkout unavailable");
+    }
+  }
+
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
       {/* ---------- HEADER ---------- */}
@@ -99,15 +125,15 @@ export default function HomePage() {
         CAM & NNN Audit Risk — Estimated Tenant Recovery
       </h1>
 
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 mb-2">
         Upload your commercial lease to identify CAM / NNN overcharges,
         escalation risk, and recoverable dollars — before reconciliation
         deadlines.
       </p>
 
-<p className="text-xs text-gray-500 mt-2">
-  One-time audit summary · Typically recovers $10k–$50k+
-</p>
+      <p className="text-xs text-gray-500 mb-6">
+        One-time audit summary · Typically recovers $10k–$50k+
+      </p>
 
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
@@ -130,13 +156,12 @@ export default function HomePage() {
           type="file"
           accept="application/pdf"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="block text-sm text-gray-700"
         />
 
         <button
           onClick={handleUploadAndAnalyze}
           disabled={!file}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition ${
+          className={`px-4 py-2 rounded-md text-sm font-medium ${
             file
               ? "bg-black text-white hover:bg-gray-800"
               : "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -160,11 +185,7 @@ export default function HomePage() {
             <Field label="Lease End" value={result.lease_end} />
             <Field
               label="Term"
-              value={
-                result.term_months
-                  ? `${result.term_months} months`
-                  : null
-              }
+              value={result.term_months ? `${result.term_months} months` : null}
             />
           </section>
 
@@ -195,11 +216,9 @@ export default function HomePage() {
               <ul>
                 {result.health.flags.map((flag) => (
                   <li key={flag.code} style={{ marginBottom: 14 }}>
-                    <div>
-                      <strong>{flag.severity.toUpperCase()}</strong> —{" "}
-                      {flag.label}
-                    </div>
-                    <div style={{ marginLeft: 12, color: "#555" }}>
+                    <strong>{flag.severity.toUpperCase()}</strong> —{" "}
+                    {flag.label}
+                    <div style={{ marginLeft: 12 }}>
                       👉 {flag.recommendation}
                     </div>
                     <div style={{ marginLeft: 12, color: "#0a6" }}>
@@ -210,34 +229,25 @@ export default function HomePage() {
               </ul>
             </section>
           )}
-{/* ---------- PRIMARY CTA ---------- */}
-<div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
-  <p className="text-sm font-medium text-green-900 mb-1">
-    💰 You may be entitled to recover thousands in CAM / NNN overcharges
-  </p>
 
-  <p className="text-sm text-green-800 mb-3">
-    Most tenants miss these recoveries due to missed deadlines or lack of audit tools.
-    We can prepare a full audit-ready report in minutes.
-  </p>
+          {/* ---------- PRIMARY CTA ---------- */}
+          <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
+            <p className="text-sm font-medium text-green-900 mb-1">
+              💰 You may be entitled to recover thousands in CAM / NNN
+              overcharges
+            </p>
 
-  <button
-    className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
-  >
-    Get My CAM Audit Summary
-  </button>
-</div>
+            <p className="text-sm text-green-800 mb-3">
+              We’ll generate a full audit-ready CAM report instantly.
+            </p>
 
-<p className="text-xs text-gray-500 mt-2">
-  Includes CAM categories, escalation exposure, and audit recommendations.
-</p>
-
-<ul className="mt-4 text-sm text-gray-700 list-disc pl-5 space-y-1">
-  <li>📄 CAM / NNN audit summary (PDF)</li>
-  <li>📊 Total avoidable exposure breakdown</li>
-  <li>⚖️ Reconciliation + dispute guidance</li>
-  <li>⏱️ Delivered in under 2 minutes</li>
-</ul>
+            <button
+              onClick={handleCheckout}
+              className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
+            >
+              Get My CAM Audit Summary — $149.99
+            </button>
+          </div>
 
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
@@ -251,92 +261,12 @@ export default function HomePage() {
                   : null
               }
             />
-
             <Field label="Billing Frequency" value={result.rent.frequency} />
-
             <Field
               label="Escalation Type"
-              value={
-                result.rent.escalation_type === "none"
-                  ? "None"
-                  : result.rent.escalation_type
-                      .replace("_", " ")
-                      .toUpperCase()
-              }
+              value={result.rent.escalation_type}
             />
-
-            {result.rent.escalation_value !== null && (
-              <Field
-                label="Escalation Value"
-                value={
-                  result.rent.escalation_type === "fixed_percent"
-                    ? `${result.rent.escalation_value}%`
-                    : `$${result.rent.escalation_value.toLocaleString()}`
-                }
-              />
-            )}
-
-            {result.rent.escalation_interval && (
-              <Field
-                label="Escalation Interval"
-                value={result.rent.escalation_interval}
-              />
-            )}
           </section>
-
-          {/* ---------- RENT SCHEDULE ---------- */}
-          {result.rent_schedule && result.rent_schedule.length > 0 && (
-            <section style={cardStyle}>
-              <h2 style={sectionTitle}>Rent Schedule (Year-by-Year)</h2>
-
-              <table
-                style={{
-                  width: "100%",
-                  borderCollapse: "collapse",
-                  marginTop: 12,
-                }}
-              >
-                <thead>
-                  <tr>
-                    <th style={th}>Year</th>
-                    <th style={th}>Annual Rent</th>
-                    <th style={th}>Monthly Rent</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {result.rent_schedule.map((row) => (
-                    <tr key={row.year}>
-                      <td style={td}>Year {row.year}</td>
-                      <td style={td}>
-                        ${row.annual_rent.toLocaleString()}
-                      </td>
-                      <td style={td}>
-                        ${row.monthly_rent.toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </section>
-          )}
-
-          {/* ---------- DEBUG ---------- */}
-          <details style={{ marginTop: 24 }}>
-            <summary style={{ cursor: "pointer" }}>
-              Raw Extracted Text (Debug)
-            </summary>
-            <pre
-              style={{
-                whiteSpace: "pre-wrap",
-                marginTop: 12,
-                background: "#f6f6f6",
-                padding: 12,
-                borderRadius: 6,
-              }}
-            >
-              {result.raw_preview}
-            </pre>
-          </details>
         </>
       )}
     </main>
@@ -373,13 +303,3 @@ const sectionTitle: React.CSSProperties = {
   marginBottom: 12,
 };
 
-const th: React.CSSProperties = {
-  textAlign: "left",
-  borderBottom: "1px solid #ccc",
-  padding: 8,
-};
-
-const td: React.CSSProperties = {
-  padding: 8,
-  borderBottom: "1px solid #eee",
-};
