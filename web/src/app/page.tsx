@@ -6,28 +6,48 @@ import { supabase } from "@/lib/supabaseClient";
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
 type Analysis = {
-  lease?: {
-    startDate?: string;
-    endDate?: string;
-    squareFeet?: number;
+  tenant: string | null;
+  landlord: string | null;
+  premises: string | null;
+  lease_start: string | null;
+  lease_end: string | null;
+  term_months: number | null;
+
+  rent: {
+    base_rent: number | null;
+    frequency: "monthly" | "annual" | null;
+    escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
+    escalation_value: number | null;
+    escalation_interval: "annual" | null;
   };
-  rent?: {
-    baseRent?: number;
-    escalationType?: "fixed" | "percent" | "unknown";
-    escalationValue?: number;
+
+  rent_schedule?: {
+    year: number;
+    annual_rent: number;
+    monthly_rent: number;
+  }[];
+
+  cam_nnn?: {
+    monthly_amount: number | null;
+    annual_amount: number | null;
+    total_exposure: number | null;
+    is_uncapped: boolean;
+    reconciliation: boolean;
+    pro_rata: boolean;
+    includes_capex: boolean;
+    cam_cap_percent: number | null;
+    escalation_exposure: number | null;
   };
-  cam?: {
-    isNNN: boolean;
-    estimatedAnnualExposure?: number;
-  };
-  audit?: {
-    auditRight: boolean;
-    auditWindowMonths?: number;
-  };
-  healthScore?: {
+
+  health?: {
     score: number;
-    riskLevel: "low" | "medium" | "high";
-    estimatedRecoverableDollars?: number;
+    flags: {
+      code: string;
+      label: string;
+      severity: "low" | "medium" | "high";
+      recommendation: string;
+      estimated_impact?: string;
+    }[];
   };
 };
 
@@ -36,6 +56,7 @@ type ApiResult = {
   analysis?: Analysis;
 };
 
+
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
@@ -43,7 +64,8 @@ export default function HomePage() {
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
 
-  const analysis = result?.analysis;
+  const analysis =
+  result && result.success && result.analysis ? result.analysis : null;
 
   /* ---------- UPLOAD + ANALYZE ---------- */
   async function handleUploadAndAnalyze() {
@@ -156,89 +178,123 @@ export default function HomePage() {
       </div>
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
+<pre style={{ marginTop: 24, fontSize: 12 }}>
+  {JSON.stringify(result, null, 2)}
+</pre>
 
-      {analysis && (
+      {analysis !== null && (
         <>
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
-            <h2 style={sectionTitle}>Lease Summary</h2>
-            <Field label="Lease Start" value={analysis.lease?.startDate} />
-            <Field label="Lease End" value={analysis.lease?.endDate} />
-            <Field
-              label="Square Feet"
-              value={analysis.lease?.squareFeet}
-            />
-          </section>
+  <h2 style={sectionTitle}>Lease Summary</h2>
+  <Field label="Tenant" value={analysis.tenant} />
+  <Field label="Landlord" value={analysis.landlord} />
+  <Field label="Premises" value={analysis.premises} />
+  <Field label="Lease Start" value={analysis.lease_start} />
+  <Field label="Lease End" value={analysis.lease_end} />
+  <Field
+    label="Term"
+    value={analysis.term_months ? `${analysis.term_months} months` : null}
+  />
+</section>
+
 
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Rent & Escalations</h2>
 
             <Field
-              label="Base Rent"
-              value={
-                analysis.rent?.baseRent != null
-                  ? `$${analysis.rent.baseRent.toLocaleString()}`
-                  : null
-              }
-            />
+  label="Base Rent"
+  value={
+    analysis.rent.base_rent != null
+      ? `$${analysis.rent.base_rent.toLocaleString()}`
+      : null
+  }
+/>
 
-            <Field
-              label="Escalation Type"
-              value={analysis.rent?.escalationType}
-            />
+<Field label="Billing Frequency" value={analysis.rent.frequency} />
 
-            <Field
-              label="Escalation Value"
-              value={
-                analysis.rent?.escalationValue != null
-                  ? `${analysis.rent.escalationValue}${
-                      analysis.rent.escalationType === "percent" ? "%" : ""
-                    }`
-                  : null
-              }
-            />
+<Field label="Escalation Type" value={analysis.rent.escalation_type} />
+
+<Field
+  label="Escalation Value"
+  value={
+    analysis.rent.escalation_value != null
+      ? `$${analysis.rent.escalation_value.toLocaleString()}`
+      : null
+  }
+/>
+
           </section>
 
           {/* ---------- CAM / NNN ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>CAM / NNN Exposure</h2>
             <Field
-              label="Lease Type"
-              value={analysis.cam?.isNNN ? "NNN" : "Non-NNN"}
-            />
-            <Field
-              label="Estimated Annual Exposure"
-              value={
-                analysis.cam?.estimatedAnnualExposure != null
-                  ? `$${analysis.cam.estimatedAnnualExposure.toLocaleString()}`
-                  : null
-              }
-            />
+  label="Monthly CAM / NNN"
+  value={
+    analysis.cam_nnn?.monthly_amount != null
+      ? `$${analysis.cam_nnn.monthly_amount.toLocaleString()}`
+      : null
+  }
+/>
+
+<Field
+  label="Annual CAM / NNN"
+  value={
+    analysis.cam_nnn?.annual_amount != null
+      ? `$${analysis.cam_nnn.annual_amount.toLocaleString()}`
+      : null
+  }
+/>
+
+<Field
+  label="Uncapped Charges"
+  value={analysis.cam_nnn?.is_uncapped ? "Yes" : "No"}
+/>
+
           </section>
 
           {/* ---------- HEALTH ---------- */}
-          {analysis.healthScore && (
-            <section style={cardStyle}>
-              <h2 style={sectionTitle}>Lease Health Score</h2>
-              <Field
-                label="Score"
-                value={`${analysis.healthScore.score}/100`}
-              />
-              <Field
-                label="Risk Level"
-                value={analysis.healthScore.riskLevel}
-              />
-              <Field
-                label="Estimated Recoverable Dollars"
-                value={
-                  analysis.healthScore.estimatedRecoverableDollars != null
-                    ? `$${analysis.healthScore.estimatedRecoverableDollars.toLocaleString()}`
-                    : null
-                }
-              />
-            </section>
+          {analysis.health && (
+  <section style={cardStyle}>
+    <h2 style={sectionTitle}>Lease Health Score</h2>
+
+    <div style={{ marginBottom: 12 }}>
+      <strong>Score:</strong>{" "}
+      <span
+        style={{
+          fontSize: 24,
+          fontWeight: 700,
+          color:
+            analysis.health.score >= 80
+              ? "green"
+              : analysis.health.score >= 60
+              ? "orange"
+              : "red",
+        }}
+      >
+        {analysis.health.score}
+      </span>
+      /100
+    </div>
+
+    <ul>
+      {analysis.health.flags.map((flag) => (
+        <li key={flag.code} style={{ marginBottom: 14 }}>
+          <strong>{flag.severity.toUpperCase()}</strong> — {flag.label}
+          <div style={{ marginLeft: 12 }}>👉 {flag.recommendation}</div>
+          {flag.estimated_impact && (
+            <div style={{ marginLeft: 12, color: "#0a6" }}>
+              💰 {flag.estimated_impact}
+            </div>
           )}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
 
           {/* ---------- CTA ---------- */}
           <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
