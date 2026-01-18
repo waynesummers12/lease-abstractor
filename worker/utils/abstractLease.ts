@@ -22,13 +22,6 @@ function extractWithPatterns(text: string, patterns: RegExp[]): string | null {
   return null;
 }
 
-function confidence(value: unknown): "high" | "medium" | "low" {
-  if (!value) return "low";
-  if (typeof value === "number") return "high";
-  if (typeof value === "string" && value.length > 6) return "high";
-  return "medium";
-}
-
 function formatMoney(n: number): string {
   return `$${Math.round(n).toLocaleString()}`;
 }
@@ -90,8 +83,7 @@ function extractBaseRent(text: string): number | null {
   return v ? Number(v.replace(/,/g, "")) : null;
 }
 
-function extractFrequency(text: string | null): Rent["frequency"] {
-  if (!text) return null;
+function extractFrequency(text: string): Rent["frequency"] {
   if (/per\s+month|monthly/i.test(text)) return "monthly";
   if (/per\s+year|annual/i.test(text)) return "annual";
   return null;
@@ -207,19 +199,17 @@ function buildRentSchedule(
   return rows;
 }
 
-/* -------------------- CAM / NNN EXTRACTION -------------------- */
+/* -------------------- CAM / NNN -------------------- */
 
 export type CamNnn = {
   monthly_amount: number | null;
   annual_amount: number | null;
   total_exposure: number | null;
-
   is_uncapped: boolean;
   reconciliation: boolean;
   pro_rata: boolean;
   includes_capex: boolean;
   cam_cap_percent: number | null;
-
   escalation_exposure: number | null;
 };
 
@@ -279,7 +269,7 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
     pro_rata,
     includes_capex,
     cam_cap_percent: capPct ? Number(capPct) : null,
-    escalation_exposure: escalationExposure, // ✅ FIXED NAME
+    escalation_exposure: escalationExposure,
   };
 }
 
@@ -302,8 +292,6 @@ function computeLeaseHealth(input: {
   lease_start: string | null;
   lease_end: string | null;
   term_months: number | null;
-  rent: Rent;
-  rent_schedule: RentScheduleRow[];
   cam_nnn: CamNnn;
 }): LeaseHealth {
   const flags: LeaseRiskFlag[] = [];
@@ -374,7 +362,6 @@ export function abstractLease(rawText: string) {
 
   const escalation = extractEscalation(text);
 
-  // ✅ FIX: no duplicate base_rent / frequency
   const rent: Rent = {
     base_rent: extractBaseRent(text),
     frequency: extractFrequency(text),
@@ -397,8 +384,6 @@ export function abstractLease(rawText: string) {
     lease_start,
     lease_end,
     term_months,
-    rent,
-    rent_schedule,
     cam_nnn,
   });
 
@@ -412,13 +397,11 @@ export function abstractLease(rawText: string) {
     rent,
     rent_schedule,
     cam_nnn,
-
-    // ✅ FINAL ROLL-UP
     cam_total_avoidable_exposure:
       (cam_nnn.total_exposure ?? 0) +
       (cam_nnn.escalation_exposure ?? 0),
-
     health,
     raw_preview: text.slice(0, 1500),
   };
 }
+
