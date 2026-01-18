@@ -17,7 +17,7 @@ app.use(async (ctx, next) => {
   );
   ctx.response.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, x-lease-worker-key"
+    "Content-Type, x-worker-key"
   );
   ctx.response.headers.set(
     "Access-Control-Allow-Methods",
@@ -35,7 +35,8 @@ app.use(async (ctx, next) => {
     return;
   }
 
-  if (ctx.request.headers.get("x-lease-worker-key") !== WORKER_KEY) {
+  // All other routes require worker key
+  if (ctx.request.headers.get("x-worker-key") !== WORKER_KEY) {
     ctx.response.status = 401;
     ctx.response.body = "Unauthorized";
     return;
@@ -51,14 +52,18 @@ router.get("/", (ctx) => {
 });
 
 /* -------------------- ROUTES -------------------- */
+
+// Ingest lease PDFs
 app.use(ingestLeasePdfRoutes.routes());
 app.use(ingestLeasePdfRoutes.allowedMethods());
 
-app.use(router.routes());
-app.use(router.allowedMethods());
-
+// Stripe checkout (PUBLIC)
 app.use(stripeCheckoutRoutes.routes());
 app.use(stripeCheckoutRoutes.allowedMethods());
+
+// Base router last
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 /* -------------------- START -------------------- */
 
