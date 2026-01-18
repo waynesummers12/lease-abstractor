@@ -178,9 +178,6 @@ export default function HomePage() {
       </div>
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
-<pre style={{ marginTop: 24, fontSize: 12 }}>
-  {JSON.stringify(result, null, 2)}
-</pre>
 
       {analysis !== null && (
         <>
