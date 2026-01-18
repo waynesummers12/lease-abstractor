@@ -1,8 +1,8 @@
 // worker/routes/ingestLeasePdf.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import pdfParse from "npm:pdf-parse";
+import pdfParse from "npm:pdf-parse@1.1.1";
 import { abstractLease } from "../utils/abstractLease.ts";
-import { supabase } from "../lib/supabase.ts"; // adjust path if needed
+import { supabase } from "../lib/supabase.ts";
 
 const router = new Router({
   prefix: "/ingest/lease",
