@@ -3,46 +3,37 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-/* ---------- TYPES ---------- */
+/* ---------- TYPES (MATCH BACKEND) ---------- */
 
-type Rent = {
-  base_rent: number | null;
-  frequency: "monthly" | "annual" | null;
-  escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
-  escalation_value: number | null;
-  escalation_interval: "annual" | null;
+type Analysis = {
+  lease?: {
+    startDate?: string;
+    endDate?: string;
+    squareFeet?: number;
+  };
+  rent?: {
+    baseRent?: number;
+    escalationType?: "fixed" | "percent" | "unknown";
+    escalationValue?: number;
+  };
+  cam?: {
+    isNNN: boolean;
+    estimatedAnnualExposure?: number;
+  };
+  audit?: {
+    auditRight: boolean;
+    auditWindowMonths?: number;
+  };
+  healthScore?: {
+    score: number;
+    riskLevel: "low" | "medium" | "high";
+    estimatedRecoverableDollars?: number;
+  };
 };
 
-type RentScheduleRow = {
-  year: number;
-  annual_rent: number;
-  monthly_rent: number;
-};
-
-type LeaseHealthFlag = {
-  code: string;
-  label: string;
-  severity: "low" | "medium" | "high";
-  recommendation: string;
-  estimated_impact: string;
-};
-
-type LeaseHealth = {
-  score: number;
-  flags: LeaseHealthFlag[];
-};
-
-type LeaseResult = {
-  tenant: string | null;
-  landlord: string | null;
-  premises: string | null;
-  lease_start: string | null;
-  lease_end: string | null;
-  term_months: number | null;
-  rent: Rent;
-  rent_schedule?: RentScheduleRow[];
-  health?: LeaseHealth;
-  raw_preview: string;
+type ApiResult = {
+  success: boolean;
+  analysis?: Analysis;
 };
 
 /* ---------- PAGE ---------- */
@@ -50,7 +41,7 @@ type LeaseResult = {
 export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
-  const [result, setResult] = useState<LeaseResult | null>(null);
+  const [result, setResult] = useState<ApiResult | null>(null);
 
   /* ---------- UPLOAD + ANALYZE ---------- */
   async function handleUploadAndAnalyze() {
@@ -78,7 +69,7 @@ export default function HomePage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-lease-worker-key": "local-dev-secret",
+        "X-Lease-Worker-Key": "local-dev-secret",
       },
       body: JSON.stringify({ objectPath }),
     });
@@ -99,9 +90,7 @@ export default function HomePage() {
 
     const res = await fetch("http://localhost:8000/checkout/create", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!res.ok) {
@@ -110,45 +99,21 @@ export default function HomePage() {
     }
 
     const data = await res.json();
-
-    if (data?.url) {
-      window.location.href = data.url;
-    } else {
-      setStatus("Checkout unavailable");
-    }
+    if (data?.url) window.location.href = data.url;
   }
+
+  const analysis = result?.analysis;
 
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-      {/* ---------- HEADER ---------- */}
       <h1 className="text-4xl font-bold mb-2">
         CAM & NNN Audit Risk — Estimated Tenant Recovery
       </h1>
 
-      <p className="text-gray-600 mb-2">
+      <p className="text-gray-600 mb-6">
         Upload your commercial lease to identify CAM / NNN overcharges,
-        escalation risk, and recoverable dollars — before reconciliation
-        deadlines.
+        escalation risk, and recoverable dollars.
       </p>
-
-      <p className="text-xs text-gray-500 mb-6">
-        One-time audit summary · Typically recovers $10k–$50k+
-      </p>
-
-      {/* ---------- AUDIT URGENCY ---------- */}
-      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-        <p className="text-sm font-medium text-amber-900 mb-1">
-          ⚠️ CAM / NNN Audit Deadline Risk
-        </p>
-        <p className="text-sm text-amber-800">
-          Most commercial leases allow tenants{" "}
-          <span className="font-medium">30–120 days</span> after receiving the
-          annual CAM reconciliation to dispute overcharges.{" "}
-          <span className="font-medium">
-            Miss the window, and recovery rights are often waived.
-          </span>
-        </p>
-      </div>
 
       {/* ---------- UPLOAD ---------- */}
       <div className="flex items-center gap-4 mb-4">
@@ -173,72 +138,93 @@ export default function HomePage() {
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
 
-      {result && (
+      {analysis && (
         <>
-          {/* ---------- LEASE SUMMARY ---------- */}
+          {/* ---------- LEASE ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Lease Summary</h2>
-            <Field label="Tenant" value={result.tenant} />
-            <Field label="Landlord" value={result.landlord} />
-            <Field label="Premises" value={result.premises} />
-            <Field label="Lease Start" value={result.lease_start} />
-            <Field label="Lease End" value={result.lease_end} />
+            <Field label="Lease Start" value={analysis.lease?.startDate} />
+            <Field label="Lease End" value={analysis.lease?.endDate} />
             <Field
-              label="Term"
-              value={result.term_months ? `${result.term_months} months` : null}
+              label="Square Feet"
+              value={analysis.lease?.squareFeet}
+            />
+          </section>
+
+          {/* ---------- RENT ---------- */}
+          <section style={cardStyle}>
+            <h2 style={sectionTitle}>Rent & Escalations</h2>
+
+            <Field
+              label="Base Rent"
+              value={
+                analysis.rent?.baseRent != null
+                  ? `$${analysis.rent.baseRent.toLocaleString()}`
+                  : null
+              }
+            />
+
+            <Field
+              label="Escalation Type"
+              value={analysis.rent?.escalationType}
+            />
+
+            <Field
+              label="Escalation Value"
+              value={
+                analysis.rent?.escalationValue != null
+                  ? `${analysis.rent.escalationValue}${
+                      analysis.rent.escalationType === "percent" ? "%" : ""
+                    }`
+                  : null
+              }
+            />
+          </section>
+
+          {/* ---------- CAM / NNN ---------- */}
+          <section style={cardStyle}>
+            <h2 style={sectionTitle}>CAM / NNN Exposure</h2>
+            <Field
+              label="Lease Type"
+              value={analysis.cam?.isNNN ? "NNN" : "Non-NNN"}
+            />
+            <Field
+              label="Estimated Annual Exposure"
+              value={
+                analysis.cam?.estimatedAnnualExposure != null
+                  ? `$${analysis.cam.estimatedAnnualExposure.toLocaleString()}`
+                  : null
+              }
             />
           </section>
 
           {/* ---------- HEALTH ---------- */}
-          {result.health && (
+          {analysis.healthScore && (
             <section style={cardStyle}>
               <h2 style={sectionTitle}>Lease Health Score</h2>
-
-              <div style={{ marginBottom: 12 }}>
-                <strong>Score:</strong>{" "}
-                <span
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 700,
-                    color:
-                      result.health.score >= 80
-                        ? "green"
-                        : result.health.score >= 60
-                        ? "orange"
-                        : "red",
-                  }}
-                >
-                  {result.health.score}
-                </span>
-                /100
-              </div>
-
-              <ul>
-                {result.health.flags.map((flag) => (
-                  <li key={flag.code} style={{ marginBottom: 14 }}>
-                    <strong>{flag.severity.toUpperCase()}</strong> —{" "}
-                    {flag.label}
-                    <div style={{ marginLeft: 12 }}>
-                      👉 {flag.recommendation}
-                    </div>
-                    <div style={{ marginLeft: 12, color: "#0a6" }}>
-                      💰 {flag.estimated_impact}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <Field
+                label="Score"
+                value={`${analysis.healthScore.score}/100`}
+              />
+              <Field
+                label="Risk Level"
+                value={analysis.healthScore.riskLevel}
+              />
+              <Field
+                label="Estimated Recoverable Dollars"
+                value={
+                  analysis.healthScore.estimatedRecoverableDollars != null
+                    ? `$${analysis.healthScore.estimatedRecoverableDollars.toLocaleString()}`
+                    : null
+                }
+              />
             </section>
           )}
 
-          {/* ---------- PRIMARY CTA ---------- */}
+          {/* ---------- CTA ---------- */}
           <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
-            <p className="text-sm font-medium text-green-900 mb-1">
-              💰 You may be entitled to recover thousands in CAM / NNN
-              overcharges
-            </p>
-
-            <p className="text-sm text-green-800 mb-3">
-              We’ll generate a full audit-ready CAM report instantly.
+            <p className="text-sm font-medium text-green-900 mb-3">
+              💰 You may be entitled to recover thousands in CAM / NNN overcharges
             </p>
 
             <button
@@ -248,25 +234,6 @@ export default function HomePage() {
               Get My CAM Audit Summary — $149.99
             </button>
           </div>
-
-          {/* ---------- RENT ---------- */}
-          <section style={cardStyle}>
-            <h2 style={sectionTitle}>Rent & Escalations</h2>
-
-            <Field
-              label="Base Rent"
-              value={
-                result.rent.base_rent
-                  ? `$${result.rent.base_rent.toLocaleString()}`
-                  : null
-              }
-            />
-            <Field label="Billing Frequency" value={result.rent.frequency} />
-            <Field
-              label="Escalation Type"
-              value={result.rent.escalation_type}
-            />
-          </section>
         </>
       )}
     </main>
@@ -280,11 +247,11 @@ function Field({
   value,
 }: {
   label: string;
-  value: string | number | null;
+  value: string | number | null | undefined;
 }) {
   return (
     <div style={{ display: "flex", marginBottom: 8 }}>
-      <strong style={{ width: 180 }}>{label}:</strong>
+      <strong style={{ width: 220 }}>{label}:</strong>
       <span>{value ?? "—"}</span>
     </div>
   );
@@ -302,4 +269,3 @@ const sectionTitle: React.CSSProperties = {
   fontWeight: 600,
   marginBottom: 12,
 };
-
