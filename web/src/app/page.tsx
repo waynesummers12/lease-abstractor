@@ -93,15 +93,20 @@ export default function HomePage() {
 
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-      <h1 className="text-4xl font-bold mb-2">
-  CAM & NNN Audit Risk — Estimated Tenant Recovery
-</h1>
+      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+  <p className="text-sm font-medium text-amber-900 mb-1">
+    ⚠️ CAM / NNN Audit Deadline Risk
+  </p>
 
-<p className="text-gray-600 mb-6 max-w-2xl">
-  Upload your commercial lease to identify CAM / NNN overcharges, uncapped
-  escalation risk, and <span className="font-medium">recoverable dollars</span> —
-  before annual reconciliation deadlines expire.
-</p>
+  <p className="text-sm text-amber-800">
+    Most commercial leases allow tenants <span className="font-medium">30–120 days</span> after
+    receiving the annual CAM reconciliation to dispute overcharges.
+    <span className="font-medium">
+      Miss the window, and your right to recover errors is often waived.
+    </span>
+  </p>
+</div>
+
 
 <div className="flex items-center gap-4">
   <input
