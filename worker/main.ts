@@ -1,6 +1,7 @@
 // worker/main.ts
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
+import checkoutRoutes from "./routes/checkout.ts"; // ✅ ADD THIS
 
 const app = new Application();
 const router = new Router();
@@ -30,7 +31,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-/* -------------------- AUTH -------------------- */
+/* -------------------- AUTH (INGEST ONLY) -------------------- */
 app.use(async (ctx, next) => {
   if (ctx.request.url.pathname.startsWith("/ingest")) {
     const key = ctx.request.headers.get("X-Lease-Worker-Key");
@@ -50,12 +51,14 @@ router.get("/", (ctx) => {
 
 app.use(router.routes());
 app.use(router.allowedMethods());
+
 app.use(ingestLeasePdfRoutes.routes());
 app.use(ingestLeasePdfRoutes.allowedMethods());
+
+app.use(checkoutRoutes.routes());          // ✅ ADD THIS
+app.use(checkoutRoutes.allowedMethods());  // ✅ ADD THIS
 
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
 console.log(`🚀 Lease Abstractor Worker running on http://localhost:${PORT}`);
 await app.listen({ port: PORT });
-
-
