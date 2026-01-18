@@ -218,6 +218,12 @@ export type CamNnn = {
   monthly_amount: number | null;
   annual_amount: number | null;
   total_exposure: number | null;
+
+  // additive metadata — does NOT break existing usage
+  is_uncapped?: boolean;
+  reconciliation?: boolean;
+  pro_rata?: boolean;
+  escalation_exposure?: number | null;
 };
 
 function extractCamNnn(text: string, termMonths: number | null): CamNnn {
@@ -227,21 +233,51 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
     /estimated NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
   ]);
 
+  const is_uncapped =
+    /no cap|without limitation|all operating expenses/i.test(text);
+
+  const reconciliation =
+    /annual reconciliation|subject to reconciliation/i.test(text);
+
+  const pro_rata =
+    /pro\s*rata\s*share|tenant['’]s share/i.test(text);
+
   if (!monthly) {
-    return { monthly_amount: null, annual_amount: null, total_exposure: null };
+    return {
+      monthly_amount: null,
+      annual_amount: null,
+      total_exposure: null,
+      is_uncapped,
+      reconciliation,
+      pro_rata,
+      escalation_exposure: null,
+    };
   }
 
   const monthlyAmount = Number(monthly.replace(/,/g, ""));
   const annualAmount = monthlyAmount * 12;
-  const totalExposure =
-    termMonths !== null ? annualAmount * (termMonths / 12) : null;
+
+  const years =
+    termMonths && termMonths > 0 ? termMonths / 12 : 1;
+
+  const totalExposure = annualAmount * years;
+
+  // conservative 2026 assumption: 6% CAM growth if uncapped
+  const escalationExposure = is_uncapped
+    ? annualAmount * 0.06 * years
+    : null;
 
   return {
     monthly_amount: monthlyAmount,
     annual_amount: annualAmount,
     total_exposure: totalExposure,
+    is_uncapped,
+    reconciliation,
+    pro_rata,
+    escalation_exposure: escalationExposure,
   };
 }
+
 
 /* -------------------- LEASE HEALTH + $ IMPACT -------------------- */
 
@@ -314,18 +350,51 @@ function computeLeaseHealth(input: {
     score -= 25;
   }
 
-  if (input.cam_nnn.monthly_amount) {
+/* ---- CAM / NNN exposure ---- */
+if (input.cam_nnn.monthly_amount) {
+  flags.push({
+    code: "CAM_BASE",
+    label: "CAM / NNN charges billed outside base rent",
+    severity: "medium",
+    recommendation:
+      "Audit expense categories and confirm allocation methodology.",
+    estimated_impact: `Baseline exposure ${formatMoney(
+      input.cam_nnn.total_exposure ?? 0
+    )}`,
+  });
+
+  score -= 10;
+
+  if (input.cam_nnn.is_uncapped && input.cam_nnn.escalation_exposure) {
     flags.push({
-      code: "CAM_NNN",
-      label: "CAM / NNN charges outside base rent",
-      severity: "medium",
-      recommendation: "Audit CAM reconciliation.",
-      estimated_impact: `Exposure ${formatMoney(
-        input.cam_nnn.total_exposure ?? 0
+      code: "UNCAPPED_CAM",
+      label: "Uncapped CAM / NNN escalation risk",
+      severity: "high",
+      recommendation:
+        "Negotiate an annual CAM cap (3–6%) and exclude capital items.",
+      estimated_impact: `Avoidable escalation exposure ~${formatMoney(
+        input.cam_nnn.escalation_exposure
       )}`,
     });
-    score -= 15;
+
+    score -= 20;
   }
+
+  if (input.cam_nnn.reconciliation) {
+    flags.push({
+      code: "CAM_RECONCILIATION",
+      label: "CAM subject to annual reconciliation",
+      severity: "medium",
+      recommendation:
+        "Ensure audit rights and strict reconciliation deadlines.",
+      estimated_impact:
+        "Reconciliation errors commonly exceed $10k–$50k",
+    });
+
+    score -= 10;
+  }
+}
+
 
   return { score: Math.max(score, 0), flags };
 }
