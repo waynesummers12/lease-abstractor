@@ -105,6 +105,10 @@ export default function HomePage() {
         deadlines.
       </p>
 
+<p className="text-xs text-gray-500 mt-2">
+  One-time audit summary · Typically recovers $10k–$50k+
+</p>
+
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
         <p className="text-sm font-medium text-amber-900 mb-1">
@@ -206,6 +210,34 @@ export default function HomePage() {
               </ul>
             </section>
           )}
+{/* ---------- PRIMARY CTA ---------- */}
+<div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
+  <p className="text-sm font-medium text-green-900 mb-1">
+    💰 You may be entitled to recover thousands in CAM / NNN overcharges
+  </p>
+
+  <p className="text-sm text-green-800 mb-3">
+    Most tenants miss these recoveries due to missed deadlines or lack of audit tools.
+    We can prepare a full audit-ready report in minutes.
+  </p>
+
+  <button
+    className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
+  >
+    Get My CAM Audit Summary
+  </button>
+</div>
+
+<p className="text-xs text-gray-500 mt-2">
+  Includes CAM categories, escalation exposure, and audit recommendations.
+</p>
+
+<ul className="mt-4 text-sm text-gray-700 list-disc pl-5 space-y-1">
+  <li>📄 CAM / NNN audit summary (PDF)</li>
+  <li>📊 Total avoidable exposure breakdown</li>
+  <li>⚖️ Reconciliation + dispute guidance</li>
+  <li>⏱️ Delivered in under 2 minutes</li>
+</ul>
 
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
