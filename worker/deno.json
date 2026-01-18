@@ -6,6 +6,7 @@
 
   "imports": {
     "@oak/oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
+    "pdf-parse": "npm:pdf-parse@^2.4.5",
     "stripe": "npm:stripe@20.2.0"
   },
 
