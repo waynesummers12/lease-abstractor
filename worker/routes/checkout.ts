@@ -1,23 +1,32 @@
 // worker/routes/checkout.ts
-import Router from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import Stripe from "npm:stripe@20.2.0";
+
+import { Router, Context } from "@oak/oak";
+import Stripe from "stripe";
+
+/* ---------------- STRIPE CLIENT ---------------- */
 
 const stripe = new Stripe(
   Deno.env.get("STRIPE_SECRET_KEY")!,
   {
-    apiVersion: "2025-01-27.acacia", // ← REQUIRED for Stripe v20
+    // ✅ MUST be a released API version
+    apiVersion: "2024-06-20",
   }
 );
+
+/* ---------------- ROUTER ---------------- */
 
 const router = new Router({
   prefix: "/checkout",
 });
 
-router.post("/create", async (ctx) => {
+/* ---------------- CREATE CHECKOUT SESSION ---------------- */
+
+router.post("/create", async (ctx: Context) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
+
       line_items: [
         {
           price_data: {
@@ -27,22 +36,31 @@ router.post("/create", async (ctx) => {
               description:
                 "Lease abstraction. Total avoidable exposure. Escalation risk. Audit guidance. PDF download. Delivered instantly.",
             },
-            unit_amount: 14999,
+            unit_amount: 14999, // $149.99
           },
           quantity: 1,
         },
       ],
+
       success_url: "http://localhost:3000/success",
       cancel_url: "http://localhost:3000",
     });
 
     ctx.response.status = 200;
-    ctx.response.body = { url: session.url };
+    ctx.response.body = {
+      url: session.url,
+    };
   } catch (err) {
-    console.error("Stripe checkout error:", err);
+    console.error("❌ Stripe checkout error:", err);
+
     ctx.response.status = 500;
-    ctx.response.body = { error: "Checkout session failed" };
+    ctx.response.body = {
+      error: "Checkout session failed",
+    };
   }
 });
 
+/* ---------------- EXPORT ---------------- */
+
 export default router;
+
