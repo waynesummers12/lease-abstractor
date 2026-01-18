@@ -97,37 +97,43 @@ export default function HomePage() {
   CAM & NNN Audit Risk — Estimated Tenant Recovery
 </h1>
 
-<p className="text-gray-600 mb-6">
-  Upload your commercial lease to identify CAM / NNN overcharges, escalation risk,
-  and recoverable dollars — before reconciliation deadlines.
+<p className="text-gray-600 mb-6 max-w-2xl">
+  Upload your commercial lease to identify CAM / NNN overcharges, uncapped
+  escalation risk, and <span className="font-medium">recoverable dollars</span> —
+  before annual reconciliation deadlines expire.
 </p>
 
-      <input
-        type="file"
-        accept="application/pdf"
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
-      />
+<div className="flex items-center gap-4">
+  <input
+    type="file"
+    accept="application/pdf"
+    onChange={(e) => setFile(e.target.files?.[0] || null)}
+    className="block text-sm text-gray-700"
+  />
 
-      <br />
-      <br />
+  <button
+    onClick={handleUploadAndAnalyze}
+    disabled={!file}
+    className={`px-4 py-2 rounded-md text-sm font-medium transition
+      ${
+        file
+          ? "bg-black text-white hover:bg-gray-800"
+          : "bg-gray-200 text-gray-500 cursor-not-allowed"
+      }`}
+  >
+    Analyze CAM / NNN Risk
+  </button>
+</div>
 
-      <button
-        onClick={handleUploadAndAnalyze}
-        disabled={!file}
-        style={{
-          padding: "10px 16px",
-          background: "#000",
-          color: "#fff",
-          borderRadius: 6,
-        }}
-      >
-        Analyze CAM / NNN Risk
-      </button>
+{status && (
+  <p className="mt-4 text-sm text-gray-600">
+    {status}
+  </p>
+)}
 
-      {status && <p style={{ marginTop: 12 }}>{status}</p>}
+{result && (
+  <>
 
-      {result && (
-        <>
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Lease Summary</h2>
