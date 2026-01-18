@@ -93,9 +93,14 @@ export default function HomePage() {
 
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 32, fontWeight: 700 }}>
-        AI Lease Abstractor
-      </h1>
+      <h1 className="text-4xl font-bold mb-2">
+  CAM & NNN Audit Risk — Estimated Tenant Recovery
+</h1>
+
+<p className="text-gray-600 mb-6">
+  Upload your commercial lease to identify CAM / NNN overcharges, escalation risk,
+  and recoverable dollars — before reconciliation deadlines.
+</p>
 
       <input
         type="file"
@@ -144,7 +149,7 @@ export default function HomePage() {
           {/* ---------- LEASE HEALTH ---------- */}
 {result.health && (
   <section style={cardStyle}>
-    <h2 style={sectionTitle}>Lease Health Score</h2>
+    <h2 style={sectionTitle}>CAM / NNN Risk Score</h2>
 
     <div style={{ marginBottom: 12 }}>
       <strong>Score:</strong>{" "}

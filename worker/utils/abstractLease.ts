@@ -319,7 +319,7 @@ function computeLeaseHealth(input: {
       label: "CAM / NNN charges with escalation risk",
       severity: input.cam_nnn.is_uncapped ? "high" : "medium",
       recommendation:
-        "Audit CAM categories, cap annual growth, and exclude capital items.",
+        "Audit CAM categories, cap annual growth (3–6%), and exclude capital items.",
       estimated_impact: `Most tenants recover ${formatMoney(
         Math.max(totalCam * 0.25, 10000)
       )}`,
