@@ -10,7 +10,7 @@ type Rent = {
   frequency: "monthly" | "annual" | null;
   escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
   escalation_value: number | null;
-  escalation_interval: "annual" | "other" | null;
+  escalation_interval: "annual" | null;
 };
 
 type RentScheduleRow = {
@@ -19,15 +19,17 @@ type RentScheduleRow = {
   monthly_rent: number;
 };
 
+type LeaseHealthFlag = {
+  code: string;
+  label: string;
+  severity: "low" | "medium" | "high";
+  recommendation: string;
+  estimated_impact: string;
+};
+
 type LeaseHealth = {
   score: number;
-  flags: {
-    code: string;
-    label: string;
-    severity: "low" | "medium" | "high";
-    recommendation: string;
-    estimated_impact: string; // 👈 ADD
-  }[];
+  flags: LeaseHealthFlag[];
 };
 
 type LeaseResult = {
@@ -40,7 +42,6 @@ type LeaseResult = {
   rent: Rent;
   rent_schedule?: RentScheduleRow[];
   health?: LeaseHealth;
-  confidence: Record<string, string>;
   raw_preview: string;
 };
 
@@ -93,52 +94,58 @@ export default function HomePage() {
 
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+      {/* ---------- HEADER ---------- */}
+      <h1 className="text-4xl font-bold mb-2">
+        CAM & NNN Audit Risk — Estimated Tenant Recovery
+      </h1>
+
+      <p className="text-gray-600 mb-6">
+        Upload your commercial lease to identify CAM / NNN overcharges,
+        escalation risk, and recoverable dollars — before reconciliation
+        deadlines.
+      </p>
+
+      {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-  <p className="text-sm font-medium text-amber-900 mb-1">
-    ⚠️ CAM / NNN Audit Deadline Risk
-  </p>
+        <p className="text-sm font-medium text-amber-900 mb-1">
+          ⚠️ CAM / NNN Audit Deadline Risk
+        </p>
+        <p className="text-sm text-amber-800">
+          Most commercial leases allow tenants{" "}
+          <span className="font-medium">30–120 days</span> after receiving the
+          annual CAM reconciliation to dispute overcharges.{" "}
+          <span className="font-medium">
+            Miss the window, and recovery rights are often waived.
+          </span>
+        </p>
+      </div>
 
-  <p className="text-sm text-amber-800">
-    Most commercial leases allow tenants <span className="font-medium">30–120 days</span> after
-    receiving the annual CAM reconciliation to dispute overcharges.
-    <span className="font-medium">
-      Miss the window, and your right to recover errors is often waived.
-    </span>
-  </p>
-</div>
+      {/* ---------- UPLOAD ---------- */}
+      <div className="flex items-center gap-4 mb-4">
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          className="block text-sm text-gray-700"
+        />
 
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
+          className={`px-4 py-2 rounded-md text-sm font-medium transition ${
+            file
+              ? "bg-black text-white hover:bg-gray-800"
+              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Analyze CAM / NNN Risk
+        </button>
+      </div>
 
-<div className="flex items-center gap-4">
-  <input
-    type="file"
-    accept="application/pdf"
-    onChange={(e) => setFile(e.target.files?.[0] || null)}
-    className="block text-sm text-gray-700"
-  />
+      {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
 
-  <button
-    onClick={handleUploadAndAnalyze}
-    disabled={!file}
-    className={`px-4 py-2 rounded-md text-sm font-medium transition
-      ${
-        file
-          ? "bg-black text-white hover:bg-gray-800"
-          : "bg-gray-200 text-gray-500 cursor-not-allowed"
-      }`}
-  >
-    Analyze CAM / NNN Risk
-  </button>
-</div>
-
-{status && (
-  <p className="mt-4 text-sm text-gray-600">
-    {status}
-  </p>
-)}
-
-{result && (
-  <>
-
+      {result && (
+        <>
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Lease Summary</h2>
@@ -157,50 +164,50 @@ export default function HomePage() {
             />
           </section>
 
-          {/* ---------- LEASE HEALTH ---------- */}
-{result.health && (
-  <section style={cardStyle}>
-    <h2 style={sectionTitle}>CAM / NNN Risk Score</h2>
+          {/* ---------- HEALTH ---------- */}
+          {result.health && (
+            <section style={cardStyle}>
+              <h2 style={sectionTitle}>Lease Health Score</h2>
 
-    <div style={{ marginBottom: 12 }}>
-      <strong>Score:</strong>{" "}
-      <span
-        style={{
-          fontSize: 24,
-          fontWeight: 700,
-          color:
-            result.health.score >= 80
-              ? "green"
-              : result.health.score >= 60
-              ? "orange"
-              : "red",
-        }}
-      >
-        {result.health.score}
-      </span>
-      /100
-    </div>
+              <div style={{ marginBottom: 12 }}>
+                <strong>Score:</strong>{" "}
+                <span
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                    color:
+                      result.health.score >= 80
+                        ? "green"
+                        : result.health.score >= 60
+                        ? "orange"
+                        : "red",
+                  }}
+                >
+                  {result.health.score}
+                </span>
+                /100
+              </div>
 
-    <ul>
-      {result.health.flags.map((flag) => (
-        <li key={flag.code} style={{ marginBottom: 14 }}>
-          <div>
-            <strong>{flag.severity.toUpperCase()}</strong> — {flag.label}
-          </div>
-          <div style={{ marginLeft: 12, color: "#555" }}>
-            👉 {flag.recommendation}
-          </div>
-          <div style={{ marginLeft: 12, color: "#0a6" }}>
-            💰 {flag.estimated_impact}
-          </div>
-        </li>
-      ))}
-    </ul>
-  </section>
-)}
+              <ul>
+                {result.health.flags.map((flag) => (
+                  <li key={flag.code} style={{ marginBottom: 14 }}>
+                    <div>
+                      <strong>{flag.severity.toUpperCase()}</strong> —{" "}
+                      {flag.label}
+                    </div>
+                    <div style={{ marginLeft: 12, color: "#555" }}>
+                      👉 {flag.recommendation}
+                    </div>
+                    <div style={{ marginLeft: 12, color: "#0a6" }}>
+                      💰 {flag.estimated_impact}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-
-          {/* ---------- RENT & ESCALATION ---------- */}
+          {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Rent & Escalations</h2>
 
@@ -213,10 +220,7 @@ export default function HomePage() {
               }
             />
 
-            <Field
-              label="Billing Frequency"
-              value={result.rent.frequency}
-            />
+            <Field label="Billing Frequency" value={result.rent.frequency} />
 
             <Field
               label="Escalation Type"
@@ -251,9 +255,7 @@ export default function HomePage() {
           {/* ---------- RENT SCHEDULE ---------- */}
           {result.rent_schedule && result.rent_schedule.length > 0 && (
             <section style={cardStyle}>
-              <h2 style={sectionTitle}>
-                Rent Schedule (Year-by-Year)
-              </h2>
+              <h2 style={sectionTitle}>Rent Schedule (Year-by-Year)</h2>
 
               <table
                 style={{
@@ -286,7 +288,7 @@ export default function HomePage() {
             </section>
           )}
 
-          {/* ---------- RAW TEXT DEBUG ---------- */}
+          {/* ---------- DEBUG ---------- */}
           <details style={{ marginTop: 24 }}>
             <summary style={{ cursor: "pointer" }}>
               Raw Extracted Text (Debug)
@@ -349,5 +351,3 @@ const td: React.CSSProperties = {
   padding: 8,
   borderBottom: "1px solid #eee",
 };
-
-
