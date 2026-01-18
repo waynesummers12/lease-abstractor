@@ -100,19 +100,16 @@ function extractFrequency(text: string | null): Rent["frequency"] {
 function inferFixedEscalationFromText(text: string): number | null {
   const y1 = extractWithPatterns(text, [/Year\s*1:\s*\$([\d,]+)/i]);
   const y2 = extractWithPatterns(text, [/Year\s*2:\s*\$([\d,]+)/i]);
-
   if (!y1 || !y2) return null;
 
   const n1 = Number(y1.replace(/,/g, ""));
   const n2 = Number(y2.replace(/,/g, ""));
-
   return n2 > n1 ? n2 - n1 : null;
 }
 
 function extractEscalation(text: string): Rent {
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
-    /annual increase of (\d+(?:\.\d+)?)%/i,
   ]);
 
   if (pct) {
@@ -127,7 +124,6 @@ function extractEscalation(text: string): Rent {
 
   const fixed = extractWithPatterns(text, [
     /increase(?:s)? by \$([\d,]+)/i,
-    /annual increase of \$([\d,]+)/i,
   ]);
 
   if (fixed) {
@@ -189,7 +185,6 @@ function buildRentSchedule(
 
   const years = Math.ceil(termMonths / 12);
   let annualRent = frequency === "monthly" ? baseRent * 12 : baseRent;
-
   const rows: RentScheduleRow[] = [];
 
   for (let y = 1; y <= years; y++) {
@@ -219,10 +214,12 @@ export type CamNnn = {
   annual_amount: number | null;
   total_exposure: number | null;
 
-  // additive metadata — safe & optional
   is_uncapped: boolean;
   reconciliation: boolean;
   pro_rata: boolean;
+  includes_capex: boolean;
+  cam_cap_percent: number | null;
+
   escalation_exposure: number | null;
 };
 
@@ -230,7 +227,6 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
   const monthly = extractWithPatterns(text, [
     /NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
     /CAM charges[^$]*\$([\d,]+)\s+per\s+month/i,
-    /estimated NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
   ]);
 
   const is_uncapped =
@@ -242,6 +238,16 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
   const pro_rata =
     /pro\s*rata\s*share|tenant['’]s share/i.test(text);
 
+  const includes_capex =
+    /capital expenses|capital improvements|replacement of roof|structural/i.test(
+      text
+    );
+
+  const capPct = extractWithPatterns(text, [
+    /CAM cap[^%]*(\d+(?:\.\d+)?)%/i,
+    /capped at (\d+(?:\.\d+)?)%/i,
+  ]);
+
   if (!monthly) {
     return {
       monthly_amount: null,
@@ -250,22 +256,19 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
       is_uncapped,
       reconciliation,
       pro_rata,
+      includes_capex,
+      cam_cap_percent: capPct ? Number(capPct) : null,
       escalation_exposure: null,
     };
   }
 
   const monthlyAmount = Number(monthly.replace(/,/g, ""));
   const annualAmount = monthlyAmount * 12;
-
-  const years =
-    termMonths && termMonths > 0 ? termMonths / 12 : 1;
-
+  const years = termMonths ? termMonths / 12 : 1;
   const totalExposure = annualAmount * years;
 
-  // conservative assumption: 6% CAM growth if uncapped
-  const escalationExposure = is_uncapped
-    ? annualAmount * 0.06 * years
-    : null;
+  const assumedGrowth = is_uncapped ? 0.06 : 0.03;
+  const escalationExposure = annualAmount * assumedGrowth * years;
 
   return {
     monthly_amount: monthlyAmount,
@@ -274,12 +277,13 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
     is_uncapped,
     reconciliation,
     pro_rata,
-    escalation_exposure: escalationExposure,
+    includes_capex,
+    cam_cap_percent: capPct ? Number(capPct) : null,
+    escalation_exposure: escalationExposure, // ✅ FIXED NAME
   };
 }
 
-
-/* -------------------- LEASE HEALTH + $ IMPACT -------------------- */
+/* -------------------- LEASE HEALTH -------------------- */
 
 export type LeaseRiskFlag = {
   code: string;
@@ -305,90 +309,48 @@ function computeLeaseHealth(input: {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
 
-  const years =
-    input.term_months && input.term_months > 0
-      ? input.term_months / 12
-      : 1;
+  const baseCam = input.cam_nnn.total_exposure ?? 0;
+  const escCam = input.cam_nnn.escalation_exposure ?? 0;
+  const totalCam = baseCam + escCam;
 
-  const baseAnnual = input.rent_schedule[0]?.annual_rent ?? 0;
-
-  if (!input.lease_start || !input.lease_end) {
-    flags.push({
-      code: "MISSING_DATES",
-      label: "Lease start or end date missing",
-      severity: "high",
-      recommendation:
-        "Request a fully executed lease or estoppel certificate.",
-      estimated_impact: "Dispute exposure $25k+",
-    });
-    score -= 25;
-  }
-
-  if (input.rent.escalation_type === "fixed_percent") {
-    flags.push({
-      code: "PERCENT_ESCALATION",
-      label: "Annual percentage rent escalation",
-      severity: "medium",
-      recommendation: "Negotiate lower escalation.",
-      estimated_impact: `~${formatMoney(
-        baseAnnual * 0.01 * years
-      )} savings`,
-    });
-    score -= 10;
-  }
-
-  if (input.rent.escalation_type === "cpi") {
-    flags.push({
-      code: "CPI_ESCALATION",
-      label: "CPI-based escalation (uncapped)",
-      severity: "high",
-      recommendation: "Negotiate CPI cap.",
-      estimated_impact: `Exposure ${formatMoney(
-        baseAnnual * 0.03 * years
-      )}+`,
-    });
-    score -= 25;
-  }
-
-  /* ---- CAM / NNN TOTAL AVOIDABLE EXPOSURE ---- */
   if (input.cam_nnn.monthly_amount) {
-    const baseExposure = input.cam_nnn.total_exposure ?? 0;
-    const escalationExposure = input.cam_nnn.escalation_exposure ?? 0;
-    const totalAvoidable = baseExposure + escalationExposure;
-
     flags.push({
-      code: "CAM_TOTAL_EXPOSURE",
+      code: "CAM_TOTAL",
       label: "CAM / NNN charges with escalation risk",
-      severity:
-        escalationExposure > 0 ? "high" : "medium",
+      severity: input.cam_nnn.is_uncapped ? "high" : "medium",
       recommendation:
-        "Audit CAM categories, enforce reconciliation rights, and negotiate annual caps (3–6%).",
-      estimated_impact: `Total avoidable exposure ${formatMoney(
-        totalAvoidable
+        "Audit CAM categories, cap annual growth, and exclude capital items.",
+      estimated_impact: `Most tenants recover ${formatMoney(
+        Math.max(totalCam * 0.25, 10000)
       )}`,
     });
 
-    // scoring logic
-    score -= escalationExposure > 0 ? 25 : 15;
+    score -= input.cam_nnn.is_uncapped ? 25 : 15;
   }
 
-  /* ---- CAM reconciliation risk (secondary) ---- */
-  if (input.cam_nnn.reconciliation) {
+  if (input.cam_nnn.includes_capex) {
     flags.push({
-      code: "CAM_RECONCILIATION",
-      label: "CAM subject to annual reconciliation",
+      code: "CAPEX_IN_CAM",
+      label: "Capital expenses included in CAM",
+      severity: "high",
+      recommendation:
+        "Exclude capital improvements or amortize per lease standards.",
+      estimated_impact: "Capital items often add $15k–$50k+",
+    });
+    score -= 15;
+  }
+
+  if (input.cam_nnn.pro_rata) {
+    flags.push({
+      code: "PRO_RATA",
+      label: "Pro-rata CAM allocation risk",
       severity: "medium",
       recommendation:
-        "Ensure audit rights and strict reconciliation deadlines.",
-      estimated_impact:
-        "Reconciliation errors commonly exceed $10k–$50k",
+        "Verify rentable area denominator and co-tenancy adjustments.",
+      estimated_impact: "Over-allocations commonly exceed 5–10%",
     });
-
-    score -= 5;
+    score -= 10;
   }
-
-
-
 
   return { score: Math.max(score, 0), flags };
 }
@@ -397,10 +359,6 @@ function computeLeaseHealth(input: {
 
 export function abstractLease(rawText: string) {
   const text = normalizeText(rawText);
-
-  const tenant = extractTenant(text);
-  const landlord = extractLandlord(text);
-  const premises = extractPremises(text);
 
   const lease_start = extractDate("start", text);
   const lease_end = extractDate("end", text);
@@ -414,21 +372,20 @@ export function abstractLease(rawText: string) {
         )
       : null;
 
-  const base_rent = extractBaseRent(text);
-  const frequency = extractFrequency(text);
   const escalation = extractEscalation(text);
 
+  // ✅ FIX: no duplicate base_rent / frequency
   const rent: Rent = {
-    base_rent,
-    frequency,
+    base_rent: extractBaseRent(text),
+    frequency: extractFrequency(text),
     escalation_type: escalation.escalation_type,
     escalation_value: escalation.escalation_value,
     escalation_interval: escalation.escalation_interval,
   };
 
   const rent_schedule = buildRentSchedule(
-    base_rent,
-    frequency,
+    rent.base_rent,
+    rent.frequency,
     rent.escalation_type,
     rent.escalation_value,
     term_months
@@ -445,10 +402,10 @@ export function abstractLease(rawText: string) {
     cam_nnn,
   });
 
-    return {
-    tenant,
-    landlord,
-    premises,
+  return {
+    tenant: extractTenant(text),
+    landlord: extractLandlord(text),
+    premises: extractPremises(text),
     lease_start,
     lease_end,
     term_months,
@@ -456,19 +413,12 @@ export function abstractLease(rawText: string) {
     rent_schedule,
     cam_nnn,
 
-    // ✅ ADD THIS LINE (TOTAL CAM + ESCALATION ROLL-UP)
+    // ✅ FINAL ROLL-UP
     cam_total_avoidable_exposure:
       (cam_nnn.total_exposure ?? 0) +
       (cam_nnn.escalation_exposure ?? 0),
 
     health,
-    confidence: {
-      base_rent: confidence(base_rent),
-      escalation:
-        rent.escalation_type === "none" ? "low" : "high",
-    },
     raw_preview: text.slice(0, 1500),
   };
 }
-
-
