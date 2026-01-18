@@ -121,7 +121,7 @@ export default function HomePage() {
           borderRadius: 6,
         }}
       >
-        Upload & Analyze
+        Analyze CAM / NNN Risk
       </button>
 
       {status && <p style={{ marginTop: 12 }}>{status}</p>}
