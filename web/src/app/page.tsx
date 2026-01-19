@@ -180,7 +180,7 @@ async function handleUploadAndAnalyze() {
   setResult(data);
   setStatus("Analysis complete ✅");
 }
-/* ---------- LOAD AUDIT HISTORY ---------- */
+/* ---------- LOAD AUDIT HISTORY (AFTER ANALYSIS ONLY) ---------- */
 useEffect(() => {
   if (!analysis) return;
 
@@ -213,9 +213,7 @@ useEffect(() => {
   }
 
   loadAuditHistory();
-}, [analysis]);
-
-
+}, [analysis]); // ✅ dependency array NEVER changes shape
 
   /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
