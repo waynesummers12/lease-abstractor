@@ -130,6 +130,16 @@ const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
   return "low";
 })();
 
+const exposureRange: { low: number; high: number } | null = (() => {
+  if (totalAvoidableExposure == null) return null;
+
+  return {
+    low: Math.round(totalAvoidableExposure * 0.7),
+    high: Math.round(totalAvoidableExposure * 1.3),
+  };
+})();
+
+
       /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -243,6 +253,7 @@ return (
       background: "#f0fdf4",
     }}
   >
+
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
@@ -263,8 +274,6 @@ return (
 >
   💰 ${totalAvoidableExposure.toLocaleString()}
 </div>
-
-
     <p
       style={{
         marginTop: 6,
@@ -278,6 +287,22 @@ return (
       <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
       overcharges over the next 12 months.
     </p>
+{exposureRange && (
+  <div
+    style={{
+      marginTop: 4,
+      marginBottom: 8,
+      fontSize: 13,
+      color: "#166534",
+    }}
+  >
+    Estimated recovery range:{" "}
+    <strong>
+      ${exposureRange.low.toLocaleString()} – $
+      {exposureRange.high.toLocaleString()}
+    </strong>
+  </div>
+)}
 
     {exposureRiskLabel && (
   <div
@@ -320,6 +345,26 @@ return (
     />
 
     Risk level: {exposureRiskLabel.toUpperCase()}
+    {exposureRiskLabel === "high" && (
+  <div style={{ marginTop: 6, fontSize: 13, color: "#7f1d1d" }}>
+    Significant CAM / NNN exposure detected. Immediate review is recommended
+    before reconciliation or audit deadlines expire.
+  </div>
+)}
+
+{exposureRiskLabel === "medium" && (
+  <div style={{ marginTop: 6, fontSize: 13, color: "#78350f" }}>
+    Material overcharge risk identified. A focused audit could recover
+    meaningful dollars.
+  </div>
+)}
+
+{exposureRiskLabel === "low" && (
+  <div style={{ marginTop: 6, fontSize: 13, color: "#14532d" }}>
+    Lower-risk findings, but review may still yield savings depending on lease
+    interpretation.
+  </div>
+)}
   </div>
 )}
 
