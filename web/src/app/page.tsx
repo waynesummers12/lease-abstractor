@@ -56,6 +56,11 @@ type ApiResult = {
   analysis?: Analysis;
 };
 
+type AnalysisWithMeta = Analysis & {
+  created_at: string;
+};
+
+
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
@@ -64,10 +69,9 @@ export default function HomePage() {
   const [result, setResult] = useState<ApiResult | null>(null);
 
   // Audit selection + history
-  const [selectedAudit, setSelectedAudit] = useState<Analysis | null>(null);
-  const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
-  const [auditHistory, setAuditHistory] = useState<Analysis[]>([]);
-
+  const [selectedAudit, setSelectedAudit] = useState<AnalysisWithMeta | null>(null);
+  const [latestAudit, setLatestAudit] = useState<AnalysisWithMeta | null>(null);
+  const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
 
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
@@ -122,7 +126,7 @@ useEffect(() => {
   async function loadAuditHistory() {
     const { data, error } = await supabase
       .from("lease_audits")
-      .select("id, analysis, created_at")
+      .select("analysis, created_at")
       .order("created_at", { ascending: false });
 
     if (error) {
@@ -131,24 +135,25 @@ useEffect(() => {
     }
 
     if (!data || data.length === 0) {
-      setLatestAudit(null);
       setAuditHistory([]);
+      setLatestAudit(null);
       return;
     }
 
-    // Extract analyses only (safe)
-    const analyses = data
-      .map((row) => row.analysis)
-      .filter((a): a is Analysis => Boolean(a));
+    const analyses: AnalysisWithMeta[] = data
+      .map((row) => ({
+        ...row.analysis,
+        created_at: row.created_at,
+      }))
+      .filter((a): a is AnalysisWithMeta => Boolean(a));
 
     setAuditHistory(analyses);
-
-    // Latest = first row
     setLatestAudit(analyses[0] ?? null);
   }
 
   loadAuditHistory();
 }, []);
+
 
   /* ---------- STRIPE CHECKOUT ---------- */
   async function handleCheckout() {
@@ -236,8 +241,14 @@ useEffect(() => {
 </div>
 
                 <div style={{ fontSize: 12, opacity: 0.7 }}>
-                  Lease ends {audit.lease_end ?? "—"}
-                </div>
+  Lease ends {audit.lease_end ?? "—"}
+</div>
+<div style={{ fontSize: 11, opacity: 0.55, marginTop: 2 }}>
+  Created{" "}
+  {audit.created_at
+    ? new Date(audit.created_at).toLocaleDateString()
+    : "—"}
+</div>
               </button>
             </li>
           ))}
