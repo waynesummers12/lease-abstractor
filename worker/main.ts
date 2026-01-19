@@ -3,6 +3,7 @@ import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import checkoutRoutes from "./routes/checkout.ts"; // ✅ ADD THIS
 import auditPdfRoutes from "./routes/auditPdf.ts";
+import latestAuditRoutes from "./routes/latestAudit.ts";
 
 const app = new Application();
 const router = new Router();
@@ -49,6 +50,8 @@ app.use(async (ctx, next) => {
 router.get("/", (ctx) => {
   ctx.response.body = "Lease Abstractor Worker Running";
 });
+
+router.use(latestAuditRoutes.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
