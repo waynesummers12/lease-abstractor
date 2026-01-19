@@ -1,10 +1,10 @@
-// worker/utils/saveAudit.ts
+// worker/routes/saveAudit.ts
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /**
- * Supabase server client (service role)
- * NOTE: Must use SERVICE ROLE KEY (not anon)
+ * Supabase server client (SERVICE ROLE)
+ * Never use anon key here
  */
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
@@ -41,4 +41,5 @@ export async function savePaidAudit({
 
   return { success: true };
 }
+
 

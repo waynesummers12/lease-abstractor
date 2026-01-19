@@ -244,7 +244,7 @@ useEffect(() => {
 
 
 
-  /* ---------- STRIPE CHECKOUT ---------- */
+/* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
 
 async function handleCheckout() {
@@ -282,6 +282,7 @@ async function handleCheckout() {
     setIsCheckingOut(false);
   }
 }
+
 
   
 return (
