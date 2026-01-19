@@ -110,21 +110,29 @@ export default function HomePage() {
 
   /* ---------- STRIPE CHECKOUT ---------- */
   async function handleCheckout() {
-    setStatus("Redirecting to secure checkout…");
+  if (!analysis) return;
 
-    const res = await fetch("http://localhost:8000/checkout/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+  // ✅ SAVE ANALYSIS BEFORE STRIPE REDIRECT
+  sessionStorage.setItem(
+    "latest_analysis",
+    JSON.stringify(analysis)
+  );
 
-    if (!res.ok) {
-      setStatus("Checkout failed");
-      return;
-    }
+  setStatus("Redirecting to secure checkout…");
 
-    const data = await res.json();
-    if (data?.url) window.location.href = data.url;
+  const res = await fetch("http://localhost:8000/checkout/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    setStatus("Checkout failed");
+    return;
   }
+
+  const data = await res.json();
+  if (data?.url) window.location.href = data.url;
+}
 
   return (
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
