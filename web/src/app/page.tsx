@@ -122,6 +122,14 @@ export default function HomePage() {
   return total > 0 ? Math.round(total) : null;
 })();
 
+const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
+  if (totalAvoidableExposure == null) return null;
+
+  if (totalAvoidableExposure >= 25_000) return "high";
+  if (totalAvoidableExposure >= 10_000) return "medium";
+  return "low";
+})();
+
       /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -249,6 +257,33 @@ return (
         >
           💰 ${totalAvoidableExposure.toLocaleString()}
         </div>
+        {exposureRiskLabel && (
+  <div
+    style={{
+      display: "inline-block",
+      marginTop: 6,
+      padding: "4px 8px",
+      borderRadius: 6,
+      fontSize: 12,
+      fontWeight: 600,
+      background:
+        exposureRiskLabel === "high"
+          ? "#fee2e2"
+          : exposureRiskLabel === "medium"
+          ? "#fef3c7"
+          : "#dcfce7",
+      color:
+        exposureRiskLabel === "high"
+          ? "#991b1b"
+          : exposureRiskLabel === "medium"
+          ? "#92400e"
+          : "#166534",
+    }}
+  >
+    Risk level: {exposureRiskLabel.toUpperCase()}
+  </div>
+)}
+
 
         <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
           Conservative estimate based on identified CAM / NNN risks
