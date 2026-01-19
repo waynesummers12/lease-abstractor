@@ -74,21 +74,21 @@ const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
 
   useEffect(() => {
   async function loadLatestAudit() {
-    const { data, error } = await supabase
-      .from("lease_audits")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
+    const { data: audits, error } = await supabase
+  .from("lease_audits")
+  .select("*")
+  .order("created_at", { ascending: false });
+
+const latestAudit = audits?.[0] ?? null;
 
     if (error) {
       console.error("Failed to load latest audit:", error.message);
       return;
     }
 
-    if (data?.analysis) {
-      setLatestAudit(data.analysis);
-    }
+    if (latestAudit?.analysis) {
+  setLatestAudit(latestAudit.analysis);
+}
   }
 
   loadLatestAudit();
