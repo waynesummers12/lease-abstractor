@@ -182,6 +182,8 @@ async function handleUploadAndAnalyze() {
 }
 /* ---------- LOAD AUDIT HISTORY ---------- */
 useEffect(() => {
+  if (!analysis) return;
+
   async function loadAuditHistory() {
     const { data, error } = await supabase
       .from("lease_audits")
@@ -211,7 +213,8 @@ useEffect(() => {
   }
 
   loadAuditHistory();
-}, []);
+}, [analysis]);
+
 
 
   /* ---------- STRIPE CHECKOUT ---------- */
@@ -412,7 +415,7 @@ return (
 
 
     {/* ---------- AUDIT HISTORY ---------- */}
-    {auditHistory.length > 0 && (
+    {analysis !== null && auditHistory.length > 0 && (
       <section
         style={{
           marginBottom: 24,
@@ -704,14 +707,14 @@ return (
 
   <button
   onClick={handleCheckout}
-  disabled={isCheckingOut}
+  disabled={!analysis}
   className={`px-4 py-2 rounded-md text-sm font-medium ${
-    isCheckingOut
-      ? "bg-gray-400 text-white cursor-not-allowed"
-      : "bg-black text-white hover:bg-gray-800"
+    analysis
+      ? "bg-black text-white hover:bg-gray-800"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
   }`}
 >
-  {isCheckingOut ? "Redirecting to checkout…" : "Get My CAM Audit Summary — $249.99"}
+  Get My CAM Audit Summary — $249.99
 </button>
 
 
