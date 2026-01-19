@@ -215,9 +215,26 @@ useEffect(() => {
                   cursor: "pointer",
                 }}
               >
-                <div style={{ fontWeight: 600 }}>
-                  {audit.tenant ?? "Unknown Tenant"}
-                </div>
+                <div style={{ fontWeight: 600, display: "flex", alignItems: "center" }}>
+  <span>{audit.tenant ?? "Unknown Tenant"}</span>
+
+  {idx === 0 && (
+    <span
+      style={{
+        marginLeft: 8,
+        padding: "2px 6px",
+        fontSize: 10,
+        borderRadius: 4,
+        background: "#e6f4ea",
+        color: "#137333",
+        fontWeight: 600,
+      }}
+    >
+      Most recent
+    </span>
+  )}
+</div>
+
                 <div style={{ fontSize: 12, opacity: 0.7 }}>
                   Lease ends {audit.lease_end ?? "—"}
                 </div>
