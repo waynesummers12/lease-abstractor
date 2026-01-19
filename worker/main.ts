@@ -2,7 +2,7 @@
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import checkoutRoutes from "./routes/checkout.ts"; // ✅ ADD THIS
-import saveAuditRoutes from "./routes/saveAudit.ts";
+import { router as saveAuditRoutes } from "./routes/saveAudit.ts";
 import auditPdfRoutes from "./routes/auditPdf.ts";
 
 const app = new Application();
