@@ -535,7 +535,6 @@ return (
   />
 </section>
 
-
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
             <h2 style={sectionTitle}>Rent & Escalations</h2>
@@ -632,25 +631,99 @@ return (
   </section>
 )}
 
+{/* ---------- CTA ---------- */}
+<section
+  className="mt-6 rounded-lg border p-4"
+  style={{
+    borderColor:
+      exposureRiskLabel === "high"
+        ? "#fecaca"
+        : exposureRiskLabel === "medium"
+        ? "#fde68a"
+        : "#bbf7d0",
+    background:
+      exposureRiskLabel === "high"
+        ? "#fef2f2"
+        : exposureRiskLabel === "medium"
+        ? "#fffbeb"
+        : "#f0fdf4",
+  }}
+>
+  <p
+    className="text-sm font-medium mb-2"
+    style={{
+      color:
+        exposureRiskLabel === "high"
+          ? "#7f1d1d"
+          : exposureRiskLabel === "medium"
+          ? "#78350f"
+          : "#14532d",
+    }}
+  >
+    {exposureRiskLabel === "high" &&
+      "🚨 High-risk CAM / NNN exposure detected — timing matters"}
+    {exposureRiskLabel === "medium" &&
+      "⚠️ Material CAM / NNN overcharge risk identified"}
+    {exposureRiskLabel === "low" &&
+      "✅ Potential CAM / NNN savings identified"}
+  </p>
 
-          {/* ---------- CTA ---------- */}
-          <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
-            <p className="text-sm font-medium text-green-900 mb-3">
-              💰 You may be entitled to recover thousands in CAM / NNN overcharges
-            </p>
+  <p
+    style={{
+      fontSize: 13,
+      marginBottom: 12,
+      color:
+        exposureRiskLabel === "high"
+          ? "#7f1d1d"
+          : exposureRiskLabel === "medium"
+          ? "#78350f"
+          : "#14532d",
+    }}
+  >
+    {exposureRiskLabel === "high" &&
+      "Most leases impose strict audit windows. Missing them can permanently waive recovery rights."}
+    {exposureRiskLabel === "medium" &&
+      "A focused audit often recovers meaningful overcharges with limited effort."}
+    {exposureRiskLabel === "low" &&
+      "Even lower-risk leases frequently contain administrative or escalation errors."}
+  </p>
 
-            <button
-              onClick={handleCheckout}
-              className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
-            >
-              Get My CAM Audit Summary — $149.99
-            </button>
-          </div>
+  <button
+    onClick={handleCheckout}
+    className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
+  >
+    Get My CAM Audit Summary — $249.99
+  </button>
+
+  <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
+    <strong>Why $249.99?</strong>
+
+    <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
+      <li>
+        Comparable CAM / NNN audits typically cost{" "}
+        <strong>$1,500–$5,000+</strong>
+      </li>
+      <li>
+        Tenants frequently recover{" "}
+        <strong>$5,000–$50,000+</strong> from overcharges
+      </li>
+      <li>
+        One missed audit window can lock in years of unrecoverable costs
+      </li>
+    </ul>
+
+    <div style={{ fontStyle: "italic", color: "#4b5563" }}>
+      One-time, tenant-first audit designed to pay for itself many times over.
+    </div>
+  </div>
+</section>
         </>
       )}
-    </main>
-  );
+
+  </main>
+);
 }
+
 
 /* ---------- UI HELPERS ---------- */
 
