@@ -109,6 +109,7 @@ export default function HomePage() {
 
   let total = 0;
 
+
   for (const flag of analysis.health.flags) {
     if (!flag.estimated_impact) continue;
 
@@ -117,42 +118,7 @@ export default function HomePage() {
   }
 
   return total > 0 ? Math.round(total) : null;
-})();
-
-
-
-  {totalAvoidableExposure && (
-  <section
-    style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 10,
-      border: "2px solid #16a34a",
-      background: "#f0fdf4",
-    }}
-  >
-    <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-      Estimated Avoidable Exposure (Next 12 Months)
-    </div>
-
-    <div
-      style={{
-        fontSize: 32,
-        fontWeight: 800,
-        marginTop: 4,
-        color: "#166534",
-      }}
-    >
-      💰 ${totalAvoidableExposure.toLocaleString()}
-    </div>
-
-    <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
-      Conservative estimate based on identified CAM / NNN risks
-    </div>
-  </section>
-)}
-
-
+  })();
       /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -250,11 +216,42 @@ useEffect(() => {
   }
 
   const data = await res.json();
-  if (data?.url) window.location.href = data.url;
+ if (data?.url) window.location.href = data.url;
 }
-
-  return (
+  
+return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+
+    {totalAvoidableExposure && (
+      <section
+        style={{
+          marginBottom: 24,
+          padding: 20,
+          borderRadius: 10,
+          border: "2px solid #16a34a",
+          background: "#f0fdf4",
+        }}
+      >
+        <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
+          Estimated Avoidable Exposure (Next 12 Months)
+        </div>
+
+        <div
+          style={{
+            fontSize: 32,
+            fontWeight: 800,
+            marginTop: 4,
+            color: "#166534",
+          }}
+        >
+          💰 ${totalAvoidableExposure.toLocaleString()}
+        </div>
+
+        <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
+          Conservative estimate based on identified CAM / NNN risks
+        </div>
+      </section>
+    )}
 
     {/* ---------- AUDIT HISTORY ---------- */}
     {auditHistory.length > 0 && (
