@@ -104,21 +104,24 @@ export default function HomePage() {
     return null;
   })();
 
-  const totalAvoidableExposure = (() => {
-  if (!analysis?.health?.flags) return null;
+  const totalAvoidableExposure: number | null = (() => {
+  if (!analysis?.health?.flags?.length) return null;
 
   let total = 0;
 
-
   for (const flag of analysis.health.flags) {
-    if (!flag.estimated_impact) continue;
+    const impact = flag.estimated_impact;
+    if (!impact) continue;
 
-    const value = parseDollarAmount(flag.estimated_impact);
-    if (value) total += value;
+    const value = parseDollarAmount(impact);
+    if (typeof value === "number" && value > 0) {
+      total += value;
+    }
   }
 
   return total > 0 ? Math.round(total) : null;
-  })();
+})();
+
       /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
