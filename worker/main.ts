@@ -2,7 +2,6 @@
 import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import checkoutRoutes from "./routes/checkout.ts"; // ✅ ADD THIS
-import { router as saveAuditRoutes } from "./routes/saveAudit.ts";
 import auditPdfRoutes from "./routes/auditPdf.ts";
 
 const app = new Application();
@@ -59,9 +58,6 @@ app.use(ingestLeasePdfRoutes.allowedMethods());
 
 app.use(checkoutRoutes.routes());          // ✅ ADD THIS
 app.use(checkoutRoutes.allowedMethods());  // ✅ ADD THIS
-
-app.use(saveAuditRoutes.routes());
-app.use(saveAuditRoutes.allowedMethods());
 
 app.use(auditPdfRoutes.routes());
 app.use(auditPdfRoutes.allowedMethods());
