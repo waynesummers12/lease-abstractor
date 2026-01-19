@@ -1,4 +1,34 @@
+"use client";
+
+import { useEffect } from "react";
+
 export default function SuccessPage() {
+  useEffect(() => {
+    async function persistAudit() {
+      const stored = sessionStorage.getItem("latest_analysis");
+      if (!stored) return;
+
+      const analysis = JSON.parse(stored);
+
+      try {
+        await fetch("http://localhost:8000/audit/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            analysis,
+            amountPaid: 14999,
+          }),
+        });
+      } catch (err) {
+        console.error("Failed to persist audit", err);
+      }
+
+      sessionStorage.removeItem("latest_analysis");
+    }
+
+    persistAudit();
+  }, []);
+
   return (
     <main style={{ padding: 40, maxWidth: 800, margin: "0 auto" }}>
       <h1 style={{ fontSize: 32, fontWeight: 700 }}>
