@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -63,10 +64,35 @@ export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
+const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
 
   const analysis =
-  result && result.success && result.analysis ? result.analysis : null;
+  result?.success && result.analysis
+    ? result.analysis
+    : latestAudit;
 
+
+  useEffect(() => {
+  async function loadLatestAudit() {
+    const { data, error } = await supabase
+      .from("lease_audits")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error("Failed to load latest audit:", error.message);
+      return;
+    }
+
+    if (data?.analysis) {
+      setLatestAudit(data.analysis);
+    }
+  }
+
+  loadLatestAudit();
+}, []);
   /* ---------- UPLOAD + ANALYZE ---------- */
   async function handleUploadAndAnalyze() {
     if (!file) return;
