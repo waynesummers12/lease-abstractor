@@ -248,15 +248,22 @@ return (
     </div>
 
     <div
-      style={{
-        fontSize: 32,
-        fontWeight: 800,
-        marginTop: 4,
-        color: "#166534",
-      }}
-    >
-      💰 ${totalAvoidableExposure.toLocaleString()}
-    </div>
+  style={{
+    fontSize: 34,
+    fontWeight: 900,
+    marginTop: 4,
+    letterSpacing: -0.5,
+    color:
+      exposureRiskLabel === "high"
+        ? "#991b1b"
+        : exposureRiskLabel === "medium"
+        ? "#92400e"
+        : "#166534",
+  }}
+>
+  💰 ${totalAvoidableExposure.toLocaleString()}
+</div>
+
 
     <p
       style={{
