@@ -215,30 +215,44 @@ useEffect(() => {
 
 
   /* ---------- STRIPE CHECKOUT ---------- */
-  async function handleCheckout() {
-  if (!analysis) return;
+const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  // ✅ SAVE ANALYSIS BEFORE STRIPE REDIRECT
-  sessionStorage.setItem(
-    "latest_analysis",
-    JSON.stringify(analysis)
-  );
+async function handleCheckout() {
+  if (!analysis || isCheckingOut) return;
 
+  setIsCheckingOut(true);
   setStatus("Redirecting to secure checkout…");
 
-  const res = await fetch("http://localhost:8000/checkout/create", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-  });
+  try {
+    // Save analysis for post-checkout recovery
+    sessionStorage.setItem(
+      "latest_analysis",
+      JSON.stringify(analysis)
+    );
 
-  if (!res.ok) {
-    setStatus("Checkout failed");
-    return;
+    const res = await fetch("http://localhost:8000/checkout/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      throw new Error("Checkout failed");
+    }
+
+    const data = await res.json();
+
+    if (data?.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error("Missing checkout URL");
+    }
+  } catch (err) {
+    console.error(err);
+    setStatus("Checkout failed. Please try again.");
+    setIsCheckingOut(false);
   }
-
-  const data = await res.json();
- if (data?.url) window.location.href = data.url;
 }
+
   
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
@@ -689,11 +703,17 @@ return (
   </p>
 
   <button
-    onClick={handleCheckout}
-    className="px-4 py-2 rounded-md bg-black text-white text-sm font-medium hover:bg-gray-800"
-  >
-    Get My CAM Audit Summary — $249.99
-  </button>
+  onClick={handleCheckout}
+  disabled={isCheckingOut}
+  className={`px-4 py-2 rounded-md text-sm font-medium ${
+    isCheckingOut
+      ? "bg-gray-400 text-white cursor-not-allowed"
+      : "bg-black text-white hover:bg-gray-800"
+  }`}
+>
+  {isCheckingOut ? "Redirecting to checkout…" : "Get My CAM Audit Summary — $249.99"}
+</button>
+
 
   <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
     <strong>Why $249.99?</strong>
