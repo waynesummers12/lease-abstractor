@@ -308,12 +308,11 @@ return (
   <div
     style={{
       display: "inline-flex",
-      alignItems: "center",
+      flexDirection: "column",
       gap: 6,
-      padding: "4px 8px",
-      borderRadius: 6,
-      fontSize: 12,
-      fontWeight: 600,
+      marginTop: 8,
+      padding: "8px 10px",
+      borderRadius: 8,
       background:
         exposureRiskLabel === "high"
           ? "#fee2e2"
@@ -326,47 +325,43 @@ return (
           : exposureRiskLabel === "medium"
           ? "#92400e"
           : "#166534",
+      fontSize: 13,
+      fontWeight: 500,
     }}
   >
-    {/* colored dot */}
-    <span
-      style={{
-        width: 8,
-        height: 8,
-        borderRadius: "50%",
-        background:
-          exposureRiskLabel === "high"
-            ? "#dc2626"
-            : exposureRiskLabel === "medium"
-            ? "#f59e0b"
-            : "#16a34a",
-        display: "inline-block",
-      }}
-    />
+    <div style={{ fontWeight: 700 }}>
+      Risk level: {exposureRiskLabel.toUpperCase()}
+    </div>
 
-    Risk level: {exposureRiskLabel.toUpperCase()}
     {exposureRiskLabel === "high" && (
-  <div style={{ marginTop: 6, fontSize: 13, color: "#7f1d1d" }}>
-    Significant CAM / NNN exposure detected. Immediate review is recommended
-    before reconciliation or audit deadlines expire.
+      <div>
+        Significant CAM / NNN exposure detected. Immediate review is recommended
+        before reconciliation or audit deadlines expire.
+      </div>
+    )}
+
+    {exposureRiskLabel === "medium" && (
+      <div>
+        Material overcharge risk identified. A focused audit could recover
+        meaningful dollars.
+      </div>
+    )}
+
+    {exposureRiskLabel === "low" && (
+      <div>
+        Lower-risk findings, but review may still yield savings depending on lease
+        interpretation.
+      </div>
+    )}
+
+    <div style={{ marginTop: 4, fontSize: 12, opacity: 0.9 }}>
+      ⏱️ Most commercial leases require CAM / NNN disputes within{" "}
+      <strong>30–120 days</strong> of reconciliation. Missing this window often
+      waives recovery rights.
+    </div>
   </div>
 )}
 
-{exposureRiskLabel === "medium" && (
-  <div style={{ marginTop: 6, fontSize: 13, color: "#78350f" }}>
-    Material overcharge risk identified. A focused audit could recover
-    meaningful dollars.
-  </div>
-)}
-
-{exposureRiskLabel === "low" && (
-  <div style={{ marginTop: 6, fontSize: 13, color: "#14532d" }}>
-    Lower-risk findings, but review may still yield savings depending on lease
-    interpretation.
-  </div>
-)}
-  </div>
-)}
 
 
     <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
