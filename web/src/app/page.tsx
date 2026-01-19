@@ -233,35 +233,51 @@ useEffect(() => {
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
-    {totalAvoidableExposure && (
-      <section
-        style={{
-          marginBottom: 24,
-          padding: 20,
-          borderRadius: 10,
-          border: "2px solid #16a34a",
-          background: "#f0fdf4",
-        }}
-      >
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-          Estimated Avoidable Exposure (Next 12 Months)
-        </div>
+    {totalAvoidableExposure != null && (
+  <section
+    style={{
+      marginBottom: 24,
+      padding: 20,
+      borderRadius: 10,
+      border: "2px solid #16a34a",
+      background: "#f0fdf4",
+    }}
+  >
+    <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
+      Estimated Avoidable Exposure (Next 12 Months)
+    </div>
 
-        <div
-          style={{
-            fontSize: 32,
-            fontWeight: 800,
-            marginTop: 4,
-            color: "#166534",
-          }}
-        >
-          💰 ${totalAvoidableExposure.toLocaleString()}
-        </div>
-        {exposureRiskLabel && (
+    <div
+      style={{
+        fontSize: 32,
+        fontWeight: 800,
+        marginTop: 4,
+        color: "#166534",
+      }}
+    >
+      💰 ${totalAvoidableExposure.toLocaleString()}
+    </div>
+
+    <p
+      style={{
+        marginTop: 6,
+        marginBottom: 8,
+        fontSize: 14,
+        color: "#14532d",
+        fontWeight: 500,
+      }}
+    >
+      Based on your lease terms, you may be able to recover up to{" "}
+      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
+      overcharges over the next 12 months.
+    </p>
+
+    {exposureRiskLabel && (
   <div
     style={{
-      display: "inline-block",
-      marginTop: 6,
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 6,
       padding: "4px 8px",
       borderRadius: 6,
       fontSize: 12,
@@ -280,16 +296,33 @@ return (
           : "#166534",
     }}
   >
+    {/* colored dot */}
+    <span
+      style={{
+        width: 8,
+        height: 8,
+        borderRadius: "50%",
+        background:
+          exposureRiskLabel === "high"
+            ? "#dc2626"
+            : exposureRiskLabel === "medium"
+            ? "#f59e0b"
+            : "#16a34a",
+        display: "inline-block",
+      }}
+    />
+
     Risk level: {exposureRiskLabel.toUpperCase()}
   </div>
 )}
 
 
-        <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
-          Conservative estimate based on identified CAM / NNN risks
-        </div>
-      </section>
-    )}
+    <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
+      Conservative estimate based on identified CAM / NNN risks
+    </div>
+  </section>
+)}
+
 
     {/* ---------- AUDIT HISTORY ---------- */}
     {auditHistory.length > 0 && (
