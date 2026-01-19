@@ -361,6 +361,32 @@ return (
     </div>
   </div>
 )}
+<div
+  style={{
+    marginTop: 12,
+    paddingTop: 10,
+    borderTop: "1px dashed #bbf7d0",
+    fontSize: 12,
+    color: "#166534",
+    lineHeight: 1.5,
+  }}
+>
+  <strong>How this estimate was calculated:</strong>
+  <ul style={{ marginTop: 6, paddingLeft: 18 }}>
+    <li>
+      CAM / NNN charges flagged as <strong>uncapped, ambiguous, or escalating</strong>
+    </li>
+    <li>
+      Conservative dollar ranges extracted from lease language (not worst-case)
+    </li>
+    <li>
+      Annualized impact based on current rent and reconciliation rules
+    </li>
+  </ul>
+  <div style={{ marginTop: 6, fontStyle: "italic" }}>
+    Final recovery depends on lease interpretation, audit rights, and timing.
+  </div>
+</div>
 
 
 
