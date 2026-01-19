@@ -73,6 +73,47 @@ export default function HomePage() {
     result?.success && result.analysis
       ? result.analysis
       : latestAudit;
+
+      /* ---------- UPLOAD + ANALYZE ---------- */
+async function handleUploadAndAnalyze() {
+  if (!file) return;
+
+  setStatus("Uploading lease…");
+  setResult(null);
+
+  const objectPath = `leases/${crypto.randomUUID()}.pdf`;
+
+  const { error } = await supabase.storage
+    .from("leases")
+    .upload(objectPath, file, {
+      contentType: "application/pdf",
+    });
+
+  if (error) {
+    setStatus(error.message);
+    return;
+  }
+
+  setStatus("Analyzing lease…");
+
+  const res = await fetch("http://localhost:8000/ingest/lease/pdf", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Lease-Worker-Key": "local-dev-secret",
+    },
+    body: JSON.stringify({ objectPath }),
+  });
+
+  if (!res.ok) {
+    setStatus("Analysis failed");
+    return;
+  }
+
+  const data = (await res.json()) as ApiResult;
+  setResult(data);
+  setStatus("Analysis complete ✅");
+}
 /* ---------- LOAD AUDIT HISTORY ---------- */
 useEffect(() => {
   async function loadAuditHistory() {
