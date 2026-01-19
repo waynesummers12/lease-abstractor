@@ -60,6 +60,29 @@ type AnalysisWithMeta = Analysis & {
   created_at: string;
 };
 
+function parseDollarAmount(value: string): number | null {
+  if (!value) return null;
+
+  // Normalize
+  const text = value.toLowerCase().replace(/,/g, "");
+
+  // Detect monthly
+  const isMonthly = text.includes("month");
+
+  // Extract numbers like 5000, 5k, 15k
+  const matches = text.match(/(\d+(\.\d+)?)(k)?/g);
+  if (!matches || matches.length === 0) return null;
+
+  // Take the LOW end (conservative)
+  const raw = matches[0];
+  let amount = parseFloat(raw.replace("k", ""));
+  if (raw.includes("k")) amount *= 1000;
+
+  if (isNaN(amount)) return null;
+
+  return isMonthly ? amount * 12 : amount;
+}
+
 
 /* ---------- PAGE ---------- */
 
@@ -68,7 +91,7 @@ export default function HomePage() {
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
 
-  // Audit selection + history
+  // Audit selection + history HOOKS
   const [selectedAudit, setSelectedAudit] = useState<AnalysisWithMeta | null>(null);
   const [latestAudit, setLatestAudit] = useState<AnalysisWithMeta | null>(null);
   const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
@@ -80,6 +103,55 @@ export default function HomePage() {
     if (latestAudit) return latestAudit;
     return null;
   })();
+
+  const totalAvoidableExposure = (() => {
+  if (!analysis?.health?.flags) return null;
+
+  let total = 0;
+
+  for (const flag of analysis.health.flags) {
+    if (!flag.estimated_impact) continue;
+
+    const value = parseDollarAmount(flag.estimated_impact);
+    if (value) total += value;
+  }
+
+  return total > 0 ? Math.round(total) : null;
+})();
+
+
+
+  {totalAvoidableExposure && (
+  <section
+    style={{
+      marginBottom: 24,
+      padding: 20,
+      borderRadius: 10,
+      border: "2px solid #16a34a",
+      background: "#f0fdf4",
+    }}
+  >
+    <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
+      Estimated Avoidable Exposure (Next 12 Months)
+    </div>
+
+    <div
+      style={{
+        fontSize: 32,
+        fontWeight: 800,
+        marginTop: 4,
+        color: "#166534",
+      }}
+    >
+      💰 ${totalAvoidableExposure.toLocaleString()}
+    </div>
+
+    <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
+      Conservative estimate based on identified CAM / NNN risks
+    </div>
+  </section>
+)}
+
 
       /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
