@@ -66,18 +66,20 @@ export default function HomePage() {
   const [result, setResult] = useState<ApiResult | null>(null);
 const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
 
-  const analysis =
-  result?.success && result.analysis
-    ? result.analysis
-    : latestAudit;
+const analysis: Analysis | null = (() => {
+  if (result?.success && result.analysis) return result.analysis;
+  if (latestAudit) return latestAudit;
+  return null;
+})();
 
 
   useEffect(() => {
   async function loadLatestAudit() {
     const { data: audits, error } = await supabase
   .from("lease_audits")
-  .select("*")
-  .order("created_at", { ascending: false });
+  .select("analysis")
+.order("created_at", { ascending: false })
+.limit(1);
 
 const latestAudit = audits?.[0] ?? null;
 
