@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { useRef } from "react";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -96,6 +97,9 @@ export default function HomePage() {
   const [latestAudit, setLatestAudit] = useState<AnalysisWithMeta | null>(null);
   const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
   const [hasAnalyzedInSession, setHasAnalyzedInSession] = useState(false);
+
+    // ✅ ADD THIS HERE
+  const resultsRef = useRef<HTMLDivElement | null>(null);
 
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
@@ -268,6 +272,7 @@ return (
 
     {totalAvoidableExposure != null && (
   <section
+    ref={resultsRef}
     style={{
       marginBottom: 24,
       padding: 20,
@@ -276,40 +281,40 @@ return (
       background: "#f0fdf4",
     }}
   >
-
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
 
     <div
-  style={{
-    fontSize: 34,
-    fontWeight: 900,
-    marginTop: 4,
-    letterSpacing: -0.5,
-    color:
-      exposureRiskLabel === "high"
-        ? "#991b1b"
-        : exposureRiskLabel === "medium"
-        ? "#92400e"
-        : "#166534",
-  }}
->
+      style={{
+        fontSize: 34,
+        fontWeight: 900,
+        marginTop: 4,
+        letterSpacing: -0.5,
+        color:
+          exposureRiskLabel === "high"
+            ? "#991b1b"
+            : exposureRiskLabel === "medium"
+            ? "#92400e"
+            : "#166534",
+      }}
+    >
   💰 ${totalAvoidableExposure.toLocaleString()}
 </div>
     <p
-      style={{
-        marginTop: 6,
-        marginBottom: 8,
-        fontSize: 14,
-        color: "#14532d",
-        fontWeight: 500,
-      }}
-    >
-      Based on your lease terms, you may be able to recover up to{" "}
-      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
-      overcharges over the next 12 months.
-    </p>
+  style={{
+    marginTop: 6,
+    marginBottom: 8,
+    fontSize: 14,
+    color: "#14532d",
+    fontWeight: 500,
+  }}
+>
+  Based on your lease terms, you may be able to recover up to{" "}
+  <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
+  overcharges over the next 12 months.
+</p>
+
 {exposureRange && (
   <div
     style={{
