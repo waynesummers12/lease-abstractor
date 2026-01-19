@@ -2,11 +2,33 @@
 
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 
+/* ---------- TYPES (LOCAL ONLY, NO SHARED CONTRACT) ---------- */
+
+type AuditFlag = {
+  label: string;
+  severity: string;
+  recommendation: string;
+  estimated_impact?: string | number;
+};
+
+type AuditAnalysis = {
+  tenant?: string;
+  landlord?: string;
+  premises?: string;
+  lease_start?: string;
+  lease_end?: string;
+  health?: {
+    flags?: AuditFlag[];
+  };
+};
+
+/* ---------- PDF GENERATOR ---------- */
+
 export async function generateAuditPdf(
-  analysis: Record<string, any>
+  analysis: AuditAnalysis
 ): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
-  const page = pdf.addPage([612, 792]); // US Letter
+  let page = pdf.addPage([612, 792]); // US Letter
   const font = await pdf.embedFont(StandardFonts.Helvetica);
 
   let y = 740;
@@ -22,11 +44,20 @@ export async function generateAuditPdf(
     y -= size + 6;
   }
 
-  // ---------- HEADER ----------
+  function newPageIfNeeded() {
+    if (y < 80) {
+      page = pdf.addPage([612, 792]);
+      y = 740;
+    }
+  }
+
+  /* ---------- HEADER ---------- */
+
   line("CAM / NNN Lease Audit Summary", 18);
   y -= 12;
 
-  // ---------- LEASE INFO ----------
+  /* ---------- LEASE INFO ---------- */
+
   line(`Tenant: ${analysis.tenant ?? "—"}`);
   line(`Landlord: ${analysis.landlord ?? "—"}`);
   line(`Premises: ${analysis.premises ?? "—"}`);
@@ -37,28 +68,25 @@ export async function generateAuditPdf(
   line("Risk Findings", 14);
   y -= 6;
 
-  // ---------- FLAGS ----------
-  const flags = analysis.health?.flags ?? [];
+  /* ---------- FLAGS ---------- */
+
+  const flags: AuditFlag[] = analysis.health?.flags ?? [];
 
   if (flags.length === 0) {
     line("No significant CAM / NNN risks detected.");
   }
 
   for (const flag of flags) {
+    newPageIfNeeded();
+
     line(`• ${flag.label} (${flag.severity.toUpperCase()})`);
-    line(`  ${flag.recommendation}`, 10);
+    line(flag.recommendation, 10);
 
     if (flag.estimated_impact) {
-      line(`  Estimated impact: ${flag.estimated_impact}`, 10);
+      line(`Estimated impact: ${flag.estimated_impact}`, 10);
     }
 
     y -= 6;
-
-    // New page if needed
-    if (y < 80) {
-      y = 740;
-      pdf.addPage([612, 792]);
-    }
   }
 
   return await pdf.save();
