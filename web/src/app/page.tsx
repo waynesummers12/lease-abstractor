@@ -57,84 +57,56 @@ type ApiResult = {
   analysis?: Analysis;
 };
 
-
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
-const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
 
-const analysis: Analysis | null = (() => {
-  if (result?.success && result.analysis) return result.analysis;
-  if (latestAudit) return latestAudit;
-  return null;
-})();
+  // ✅ NEW: audit persistence
+  const [latestAudit, setLatestAudit] = useState<Analysis | null>(null);
+  const [auditHistory, setAuditHistory] = useState<Analysis[]>([]);
 
-
-  useEffect(() => {
-  async function loadLatestAudit() {
-    const { data: audits, error } = await supabase
-  .from("lease_audits")
-  .select("analysis")
-.order("created_at", { ascending: false })
-.limit(1);
-
-const latestAudit = audits?.[0] ?? null;
+  // ✅ SINGLE SOURCE OF TRUTH
+  const analysis: Analysis | null =
+    result?.success && result.analysis
+      ? result.analysis
+      : latestAudit;
+/* ---------- LOAD AUDIT HISTORY ---------- */
+useEffect(() => {
+  async function loadAuditHistory() {
+    const { data, error } = await supabase
+      .from("lease_audits")
+      .select("id, analysis, created_at")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Failed to load latest audit:", error.message);
+      console.error("Failed to load audit history:", error.message);
       return;
     }
 
-    if (latestAudit?.analysis) {
-  setLatestAudit(latestAudit.analysis);
-}
+    if (!data || data.length === 0) {
+      setLatestAudit(null);
+      setAuditHistory([]);
+      return;
+    }
+
+    // Extract analyses only (safe)
+    const analyses = data
+      .map((row) => row.analysis)
+      .filter((a): a is Analysis => Boolean(a));
+
+    setAuditHistory(analyses);
+
+    // Latest = first row
+    setLatestAudit(analyses[0] ?? null);
   }
 
-  loadLatestAudit();
+  loadAuditHistory();
 }, []);
-  /* ---------- UPLOAD + ANALYZE ---------- */
-  async function handleUploadAndAnalyze() {
-    if (!file) return;
 
-    setStatus("Uploading lease…");
-    setResult(null);
 
-    const objectPath = `leases/${crypto.randomUUID()}.pdf`;
-
-    const { error } = await supabase.storage
-      .from("leases")
-      .upload(objectPath, file, {
-        contentType: "application/pdf",
-      });
-
-    if (error) {
-      setStatus(error.message);
-      return;
-    }
-
-    setStatus("Analyzing lease…");
-
-    const res = await fetch("http://localhost:8000/ingest/lease/pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Lease-Worker-Key": "local-dev-secret",
-      },
-      body: JSON.stringify({ objectPath }),
-    });
-
-    if (!res.ok) {
-      setStatus("Analysis failed");
-      return;
-    }
-
-    const data = (await res.json()) as ApiResult;
-    setResult(data);
-    setStatus("Analysis complete ✅");
-  }
 
   /* ---------- STRIPE CHECKOUT ---------- */
   async function handleCheckout() {
