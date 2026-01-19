@@ -69,56 +69,6 @@ export default function HomePage() {
   const [auditHistory, setAuditHistory] = useState<Analysis[]>([]);
 
 
-{/* ---------- AUDIT HISTORY ---------- */}
-{auditHistory.length > 0 && (
-  <section
-    style={{
-      marginBottom: 24,
-      padding: 16,
-      border: "1px solid #e5e5e5",
-      borderRadius: 8,
-      background: "#fafafa",
-    }}
-  >
-    <h2 style={{ fontWeight: 600, marginBottom: 12 }}>
-      Previous CAM Audits
-    </h2>
-
-    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-      {auditHistory.map((audit, idx) => {
-        const isSelected = analysis === audit;
-
-        return (
-          <li key={idx} style={{ marginBottom: 8 }}>
-            <button
-              onClick={() => setSelectedAudit(audit)}
-              style={{
-                width: "100%",
-                textAlign: "left",
-                padding: "10px 12px",
-                borderRadius: 6,
-                border: isSelected
-                  ? "2px solid #000"
-                  : "1px solid #ddd",
-                background: isSelected ? "#000" : "#fff",
-                color: isSelected ? "#fff" : "#000",
-                cursor: "pointer",
-              }}
-            >
-              <div style={{ fontWeight: 600 }}>
-                {audit.tenant ?? "Unknown Tenant"}
-              </div>
-              <div style={{ fontSize: 12, opacity: 0.7 }}>
-                Lease ends {audit.lease_end ?? "—"}
-              </div>
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  </section>
-)}
-
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
     if (selectedAudit) return selectedAudit;
