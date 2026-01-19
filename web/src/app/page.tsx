@@ -211,14 +211,15 @@ useEffect(() => {
   }
 
   try {
-    const parsed = JSON.parse(raw) as AnalysisWithMeta[];
+    const parsed: AnalysisWithMeta[] = JSON.parse(raw);
     setAuditHistory(parsed);
     setLatestAudit(parsed[0] ?? null);
   } catch {
     setAuditHistory([]);
     setLatestAudit(null);
   }
-}, []);
+}, []); // ✅ dependency array must ALWAYS exist
+
 
 
 
