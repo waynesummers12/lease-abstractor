@@ -421,7 +421,7 @@ return (
 
 
     {/* ---------- AUDIT HISTORY ---------- */}
-    {analysis !== null && auditHistory.length > 0 && (
+    {hasAnalyzedInSession && auditHistory.length > 0 && (
       <section
         style={{
           marginBottom: 24,
