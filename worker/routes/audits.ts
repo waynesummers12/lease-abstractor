@@ -17,7 +17,7 @@ router.get("/audits", async (ctx) => {
   const audits = await getPaidAudits(userId);
 
   const enriched = await Promise.all(
-    audits.map(async (audit) => ({
+    audits.map(async (audit: any) => ({
       ...audit,
       signedUrl: audit.pdf_path
         ? await createAuditPdfSignedUrl(audit.pdf_path)
@@ -29,3 +29,4 @@ router.get("/audits", async (ctx) => {
 });
 
 export default router;
+
