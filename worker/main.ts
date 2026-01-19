@@ -4,6 +4,7 @@ import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import checkoutRoutes from "./routes/checkout.ts"; // ✅ ADD THIS
 import auditPdfRoutes from "./routes/auditPdf.ts";
 import latestAuditRoutes from "./routes/latestAudit.ts";
+import auditsRoutes from "./routes/audits.ts";
 
 const app = new Application();
 const router = new Router();
@@ -52,6 +53,8 @@ router.get("/", (ctx) => {
 });
 
 router.use(latestAuditRoutes.routes());
+
+router.use(auditsRoutes.routes());
 
 app.use(router.routes());
 app.use(router.allowedMethods());
