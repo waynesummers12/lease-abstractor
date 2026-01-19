@@ -22,7 +22,8 @@ export async function sendAuditEmail({
           Download your audit PDF
         </a>
       </p>
-      <p>This link expires for security.</p>
+      <p>This secure link expires for your protection.</p>
     `,
   });
 }
+
