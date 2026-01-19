@@ -95,6 +95,7 @@ export default function HomePage() {
   const [selectedAudit, setSelectedAudit] = useState<AnalysisWithMeta | null>(null);
   const [latestAudit, setLatestAudit] = useState<AnalysisWithMeta | null>(null);
   const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
+  const [hasAnalyzedInSession, setHasAnalyzedInSession] = useState(false);
 
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
@@ -178,11 +179,12 @@ async function handleUploadAndAnalyze() {
 
   const data = (await res.json()) as ApiResult;
   setResult(data);
+  setHasAnalyzedInSession(true);
   setStatus("Analysis complete ✅");
 }
-/* ---------- LOAD AUDIT HISTORY (AFTER ANALYSIS ONLY) ---------- */
+/* ---------- LOAD AUDIT HISTORY (SESSION-SCOPED) ---------- */
 useEffect(() => {
-  if (!analysis) return;
+  if (!hasAnalyzedInSession) return;
 
   async function loadAuditHistory() {
     const { data, error } = await supabase
@@ -213,7 +215,8 @@ useEffect(() => {
   }
 
   loadAuditHistory();
-}, [analysis]); // ✅ dependency array NEVER changes shape
+}, [hasAnalyzedInSession]);
+
 
   /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
