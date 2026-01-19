@@ -202,6 +202,12 @@ async function handleUploadAndAnalyze() {
 
   setHasAnalyzedInSession(true);
   setStatus("Analysis complete ✅");
+  setTimeout(() => {
+  resultsRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+}, 100);
 }
 
 /* ---------- LOAD SESSION AUDIT HISTORY (OPTION A) ---------- */
