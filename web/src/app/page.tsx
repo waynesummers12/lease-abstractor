@@ -212,23 +212,34 @@ async function handleUploadAndAnalyze() {
 
 /* ---------- LOAD SESSION AUDIT HISTORY (OPTION A) ---------- */
 useEffect(() => {
-  const raw = sessionStorage.getItem("audit_history");
+  async function loadAuditHistory() {
+    const { data, error } = await supabase
+      .from("lease_audits")
+      .select("analysis, created_at")
+      .order("created_at", { ascending: false });
 
-  if (!raw) {
-    setAuditHistory([]);
-    setLatestAudit(null);
-    return;
+    if (error) {
+      console.error("Failed to load audit history:", error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      setAuditHistory([]);
+      setLatestAudit(null);
+      return;
+    }
+
+    const audits = data.map((row) => ({
+      ...row.analysis,
+      created_at: row.created_at,
+    }));
+
+    setAuditHistory(audits);
+    setLatestAudit(audits[0]);
   }
 
-  try {
-    const parsed: AnalysisWithMeta[] = JSON.parse(raw);
-    setAuditHistory(parsed);
-    setLatestAudit(parsed[0] ?? null);
-  } catch {
-    setAuditHistory([]);
-    setLatestAudit(null);
-  }
-}, []); // ✅ dependency array must ALWAYS exist
+  loadAuditHistory();
+}, []);
 
 
 
