@@ -141,7 +141,7 @@ const exposureRange: { low: number; high: number } | null = (() => {
 })();
 
 
-      /* ---------- UPLOAD + ANALYZE ---------- */
+/* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
 
@@ -179,43 +179,47 @@ async function handleUploadAndAnalyze() {
 
   const data = (await res.json()) as ApiResult;
   setResult(data);
+
+  if (data.success && data.analysis) {
+    const entry = {
+      ...data.analysis,
+      created_at: new Date().toISOString(),
+    };
+
+    const existing =
+      JSON.parse(sessionStorage.getItem("audit_history") || "[]");
+
+    const updated = [entry, ...existing];
+
+    sessionStorage.setItem("audit_history", JSON.stringify(updated));
+    setAuditHistory(updated);
+    setLatestAudit(entry);
+  }
+
   setHasAnalyzedInSession(true);
   setStatus("Analysis complete ✅");
 }
-/* ---------- LOAD AUDIT HISTORY (SESSION-SCOPED) ---------- */
+
+/* ---------- LOAD SESSION AUDIT HISTORY (OPTION A) ---------- */
 useEffect(() => {
-  if (!hasAnalyzedInSession) return;
+  const raw = sessionStorage.getItem("audit_history");
 
-  async function loadAuditHistory() {
-    const { data, error } = await supabase
-      .from("lease_audits")
-      .select("analysis, created_at")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Failed to load audit history:", error.message);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      setAuditHistory([]);
-      setLatestAudit(null);
-      return;
-    }
-
-    const analyses: AnalysisWithMeta[] = data
-      .map((row) => ({
-        ...row.analysis,
-        created_at: row.created_at,
-      }))
-      .filter((a): a is AnalysisWithMeta => Boolean(a));
-
-    setAuditHistory(analyses);
-    setLatestAudit(analyses[0] ?? null);
+  if (!raw) {
+    setAuditHistory([]);
+    setLatestAudit(null);
+    return;
   }
 
-  loadAuditHistory();
-}, [hasAnalyzedInSession]);
+  try {
+    const parsed = JSON.parse(raw) as AnalysisWithMeta[];
+    setAuditHistory(parsed);
+    setLatestAudit(parsed[0] ?? null);
+  } catch {
+    setAuditHistory([]);
+    setLatestAudit(null);
+  }
+}, []);
+
 
 
   /* ---------- STRIPE CHECKOUT ---------- */
