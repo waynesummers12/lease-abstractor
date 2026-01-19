@@ -79,3 +79,9 @@ export default function SuccessPage() {
     </div>
   );
 }
+<a
+  href="/dashboard"
+  className="mt-6 inline-block text-sm underline"
+>
+  Go to Dashboard
+</a>
