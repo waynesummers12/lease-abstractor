@@ -1,62 +1,81 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+type AuditResponse = {
+  audit: any | null;
+  signedUrl: string | null;
+};
 
 export default function SuccessPage() {
+  const [data, setData] = useState<AuditResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    async function persistAudit() {
-      const stored = sessionStorage.getItem("latest_analysis");
-      if (!stored) return;
-
-      const analysis = JSON.parse(stored);
-
+    async function fetchAudit() {
       try {
-        await fetch("http://localhost:8000/audit/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            analysis,
-            amountPaid: 14999,
-          }),
-        });
-      } catch (err) {
-        console.error("Failed to persist audit", err);
-      }
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
+          {
+            credentials: "include",
+          }
+        );
 
-      sessionStorage.removeItem("latest_analysis");
+        if (!res.ok) throw new Error("Failed to fetch audit");
+
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        setError("Unable to load your audit");
+      } finally {
+        setLoading(false);
+      }
     }
 
-    persistAudit();
+    fetchAudit();
   }, []);
 
+  if (loading) {
+    return <p className="p-6">Loading your audit…</p>;
+  }
+
+  if (error) {
+    return <p className="p-6 text-red-600">{error}</p>;
+  }
+
+  if (!data || !data.audit) {
+    return (
+      <div className="p-6">
+        <h2 className="text-xl font-semibold">Payment successful</h2>
+        <p>Your audit is still processing. Please refresh shortly.</p>
+      </div>
+    );
+  }
+
   return (
-    <main style={{ padding: 40, maxWidth: 800, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 32, fontWeight: 700 }}>
-        ✅ Payment Successful
-      </h1>
+    <div className="p-6 space-y-4">
+      <h2 className="text-2xl font-semibold">Your Lease Audit is Ready</h2>
 
-      <p style={{ marginTop: 16 }}>
-        Thank you! Your CAM / NNN Audit Summary is being prepared.
-      </p>
+      <div className="rounded border p-4">
+        <p>
+          <strong>Lease:</strong> {data.audit.lease_name}
+        </p>
+        <p>
+          <strong>Estimated Savings:</strong> $
+          {data.audit.avoidable_exposure?.toLocaleString()}
+        </p>
+      </div>
 
-      <p style={{ marginTop: 8, color: "#555" }}>
-        You’ll receive your PDF shortly.
-      </p>
-
-      <a
-        href="/"
-        style={{
-          display: "inline-block",
-          marginTop: 24,
-          padding: "10px 16px",
-          background: "#000",
-          color: "#fff",
-          borderRadius: 6,
-          textDecoration: "none",
-        }}
-      >
-        Back to Dashboard
-      </a>
-    </main>
+      {data.signedUrl && (
+        <a
+          href={data.signedUrl}
+          target="_blank"
+          className="inline-block rounded bg-black px-4 py-2 text-white"
+        >
+          Download Audit PDF
+        </a>
+      )}
+    </div>
   );
 }
