@@ -1,3 +1,11 @@
+import FaqSchema from "../components/FaqSchema";
+
+export const metadata = {
+  title: "CAM & NNN Overcharge Examples | What Lease Audits Find",
+  description:
+    "Learn the most common CAM and NNN overcharges in commercial leases, including admin fees, capital expenses, insurance, and reconciliation errors.",
+};
+
 export default function WhatWeFindPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-12 p-8">
@@ -134,6 +142,27 @@ export default function WhatWeFindPage() {
           Upload a Lease for Review
         </a>
       </section>
+
+      {/* FAQ SCHEMA (SEO) */}
+      <FaqSchema
+        faqs={[
+          {
+            question: "What are common CAM overcharges?",
+            answer:
+              "Common CAM overcharges include excessive administrative fees, capital expenses passed through improperly, insurance markups, and reconciliation errors.",
+          },
+          {
+            question: "Can landlords overcharge NNN expenses?",
+            answer:
+              "Yes. NNN overcharges often occur due to misapplied taxes, insurance premiums, management fees, or incorrect pro-rata calculations.",
+          },
+          {
+            question: "How often do CAM reconciliation errors occur?",
+            answer:
+              "CAM reconciliation errors are common because expenses are estimated throughout the year and later adjusted, often without tenant review.",
+          },
+        ]}
+      />
     </main>
   );
 }
