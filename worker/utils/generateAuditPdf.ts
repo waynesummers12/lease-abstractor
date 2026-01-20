@@ -120,7 +120,7 @@ export async function generateAuditPdf(
 
   /* ---------- EMAIL ---------- */
 
-  if (recipientEmail) {
+ if (recipientEmail && Deno.env.get("RESEND_API_KEY")) {
     const { data: signed, error: signError } =
       await supabase.storage
         .from("leases")
