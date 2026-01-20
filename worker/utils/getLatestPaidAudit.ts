@@ -1,4 +1,4 @@
-// worker/services/getLatestPaidAudit.ts
+// worker/utils/getLatestPaidAudit.ts
 
 import { supabase } from "../lib/supabase.ts";
 
@@ -11,9 +11,7 @@ export type LatestPaidAudit = {
   signed_url: string;
 };
 
-export async function getLatestPaidAudit(
-  tenantId: string
-): Promise<LatestPaidAudit | null> {
+export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
   /**
    * HARD INVARIANT:
    * A paid audit MUST have an object_path.
@@ -23,9 +21,8 @@ export async function getLatestPaidAudit(
   const { data, error } = await supabase
     .from("lease_audits")
     .select("id, created_at, object_path")
-    .eq("tenant_id", tenantId)
     .eq("status", "paid")
-    .not("object_path", "is", null) // <-- critical invariant
+    .not("object_path", "is", null)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -36,7 +33,6 @@ export async function getLatestPaidAudit(
   }
 
   if (!data || !data.object_path) {
-    // Either no paid audits exist OR only corrupted historical rows exist
     return null;
   }
 
@@ -57,3 +53,4 @@ export async function getLatestPaidAudit(
     signed_url: signed.signedUrl,
   };
 }
+
