@@ -1,19 +1,20 @@
 // worker/utils/getPaidAudits.ts
-import { supabase } from "./supabaseClient.ts";
+
+import { supabase } from "../lib/supabase.ts";
 
 export type LeaseAudit = {
   id: string;
-  audit_id: string;
-  pdf_path: string | null;
-  paid: boolean;
+  status: string;
+  object_path: string | null;
   created_at: string;
 };
 
 export async function getPaidAudits(): Promise<LeaseAudit[]> {
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("*")
-    .eq("paid", true)
+    .select("id, status, object_path, created_at")
+    .eq("status", "paid")
+    .not("object_path", "is", null)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -23,4 +24,5 @@ export async function getPaidAudits(): Promise<LeaseAudit[]> {
 
   return data ?? [];
 }
+
 
