@@ -1,5 +1,4 @@
 import { supabase } from "./supabaseClient.ts";
-import type Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { generateAuditPdf } from "./generateAuditPdf.ts";
 
 export async function markAuditPaid(
@@ -8,7 +7,7 @@ export async function markAuditPaid(
   const auditId = session.metadata?.auditId;
 
   if (!auditId) {
-    throw new Error("Missing auditId in Stripe session metadata");
+    throw new Error("Missing auditId in Stripe metadata");
   }
 
   // 1️⃣ Load audit
@@ -19,27 +18,27 @@ export async function markAuditPaid(
     .single();
 
   if (error || !audit) {
-    throw new Error("Audit not found for payment");
+    throw new Error("Audit not found");
   }
 
   // 2️⃣ Generate PDF
-  const pdfBuffer = await generateAuditPdf(audit);
+  const pdfBytes = await generateAuditPdf(audit.analysis_json);
 
-  // 3️⃣ Upload to storage
+  // 3️⃣ Upload PDF
   const objectPath = `audit-pdfs/${auditId}.pdf`;
 
   const { error: uploadError } = await supabase.storage
     .from("leases")
-    .upload(objectPath, pdfBuffer, {
+    .upload(objectPath, pdfBytes, {
       contentType: "application/pdf",
       upsert: true,
     });
 
   if (uploadError) {
-    throw new Error("Failed to upload audit PDF");
+    throw uploadError;
   }
 
-  // 4️⃣ Mark paid + attach object_path
+  // 4️⃣ Mark audit paid + attach PDF
   const { error: updateError } = await supabase
     .from("lease_audits")
     .update({
@@ -50,9 +49,8 @@ export async function markAuditPaid(
     .eq("id", auditId);
 
   if (updateError) {
-    throw new Error("Failed to mark audit paid");
+    throw updateError;
   }
 
   console.log(`✅ Audit ${auditId} marked paid with PDF`);
 }
-
