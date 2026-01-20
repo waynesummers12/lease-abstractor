@@ -216,28 +216,42 @@ async function handleUploadAndAnalyze() {
 }, 100);
 }
 
-/* ---------- LOAD SESSION AUDIT HISTORY (OPTION A) ---------- */
+/* ---------- LOAD LATEST PAID AUDIT ---------- */
 useEffect(() => {
-  async function loadAuditHistory() {
-    const { data, error } = await supabase
-      .from("lease_audits")
-      .select("*")
-      .eq("status", "paid")
-      .order("created_at", { ascending: false });
+  async function loadAudits() {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
+      );
 
-    if (error) {
-      console.error("Failed to load audit history:", error);
+      if (!res.ok) {
+        setAudits([]);
+        setSelected(null);
+        return;
+      }
+
+      const json = await res.json();
+
+      if (json?.audit) {
+        // Backend already returns { audit: { ...audit, signedUrl } }
+        setAudits([json.audit]);
+        setSelected(json.audit);
+      } else {
+        setAudits([]);
+        setSelected(null);
+      }
+    } catch (err) {
+      console.error("Failed to load audits:", err);
       setAudits([]);
       setSelected(null);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setAudits(data ?? []);
-    setSelected(data?.[0] ?? null);
   }
 
-  loadAuditHistory();
+  loadAudits();
 }, []);
+
 
 
 /* ---------- STRIPE CHECKOUT ---------- */
