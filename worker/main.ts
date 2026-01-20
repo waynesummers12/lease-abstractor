@@ -43,31 +43,41 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-/* -------------------- ROUTES -------------------- */
+/* -------------------- HEALTH -------------------- */
 router.get("/", (ctx) => {
   ctx.response.body = "Lease Abstractor Worker Running";
 });
 
+/* -------------------- ROUTES -------------------- */
+/**
+ * Stripe webhook MUST be mounted early
+ */
 router.use(stripeWebhookRoutes.routes());
 router.use(stripeWebhookRoutes.allowedMethods());
 
+/**
+ * Read-only audit APIs
+ */
 router.use(latestAuditRoutes.routes());
 router.use(auditsRoutes.routes());
 
+/**
+ * Mutating / generation routes
+ */
+router.use(ingestLeasePdfRoutes.routes());
+router.use(ingestLeasePdfRoutes.allowedMethods());
+
+router.use(checkoutRoutes.routes());
+router.use(checkoutRoutes.allowedMethods());
+
+router.use(auditPdfRoutes.routes());
+router.use(auditPdfRoutes.allowedMethods());
+
+/* -------------------- APP -------------------- */
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-app.use(ingestLeasePdfRoutes.routes());
-app.use(ingestLeasePdfRoutes.allowedMethods());
-
-app.use(checkoutRoutes.routes());
-app.use(checkoutRoutes.allowedMethods());
-
-app.use(auditPdfRoutes.routes());
-app.use(auditPdfRoutes.allowedMethods());
 
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
 console.log(`🚀 Lease Abstractor Worker running on http://localhost:${PORT}`);
 await app.listen({ port: PORT });
-
