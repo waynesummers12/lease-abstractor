@@ -1,12 +1,11 @@
-// app/layout.tsx
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 export const metadata = {
-  title: "SaveOnLease — CAM & NNN Lease Audits",
+  title: "SaveOnLease — CAM & NNN Audit for Commercial Tenants",
   description:
-    "Identify CAM and NNN overcharges in commercial leases. Upload your lease and receive a clear audit with estimated savings.",
+    "Identify CAM and NNN overcharges in commercial leases with a clear, secure lease audit.",
 };
 
 export default function RootLayout({
@@ -16,14 +15,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col bg-white text-black">
+      <body className="min-h-screen flex flex-col bg-white text-gray-900">
         <Header />
-        <main className="flex-1">{children}</main>
+
+        <main className="flex-1">
+          {children}
+        </main>
+
         <Footer />
       </body>
     </html>
   );
 }
+
 
 
 
