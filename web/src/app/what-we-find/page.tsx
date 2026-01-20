@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function WhatWeFindPage() {
   return (
-    <main className="mx-auto max-w-3xl space-y-12 p-8">
+    <main className="mx-auto max-w-4xl px-6 py-12 space-y-12">
       {/* HERO */}
       <section>
         <h1 className="text-4xl font-bold">

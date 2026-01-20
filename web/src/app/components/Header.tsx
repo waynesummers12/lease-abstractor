@@ -4,53 +4,38 @@ export default function Header() {
   return (
     <header className="border-b">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-2">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3">
           <img
-            src="/icon-192.png"
-            alt="SaveOnLease logo"
-            className="h-8 w-8"
+            src="/icon-512.png"
+            alt="SaveOnLease"
+            className="h-10 w-10"
           />
-          <span className="text-lg font-semibold">
-            SaveOnLease
-          </span>
+          <span className="text-lg font-semibold">SaveOnLease</span>
         </Link>
 
-        {/* NAV */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            href="/what-we-find"
-            className="text-sm text-gray-700 hover:text-black"
-          >
+        {/* Nav */}
+        <nav className="flex items-center gap-6 text-sm">
+          <Link href="/what-we-find" className="hover:underline">
             What We Find
           </Link>
-          <Link
-            href="/how-it-works"
-            className="text-sm text-gray-700 hover:text-black"
-          >
+          <Link href="/how-it-works" className="hover:underline">
             How It Works
           </Link>
-          <Link
-            href="/pricing"
-            className="text-sm text-gray-700 hover:text-black"
-          >
+          <Link href="/pricing" className="hover:underline">
             Pricing
           </Link>
-          <Link
-            href="/security"
-            className="text-sm text-gray-700 hover:text-black"
-          >
+          <Link href="/security" className="hover:underline">
             Security
           </Link>
-        </nav>
 
-        {/* CTA */}
-        <Link
-          href="/"
-          className="rounded bg-black px-4 py-2 text-sm text-white"
-        >
-          Upload Lease
-        </Link>
+          <Link
+            href="/"
+            className="rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+          >
+            Upload Lease
+          </Link>
+        </nav>
       </div>
     </header>
   );
