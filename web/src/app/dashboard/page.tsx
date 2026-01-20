@@ -131,7 +131,7 @@ export default function DashboardPage() {
   /* ---------------- MAIN UI ---------------- */
 
   return (
-    <div className="flex h-full gap-6 p-6">
+  <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
       <aside className="relative z-10 w-72 border-r pr-4">
         <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
