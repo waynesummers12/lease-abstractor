@@ -75,14 +75,18 @@ export default function DashboardPage() {
 
     // 1️⃣ Try normal audits list
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
-      { credentials: "include" }
-    );
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
+  { credentials: "include" }
+);
 
-    if (!res.ok) throw new Error("Failed to load audits");
+let audits: any[] = [];
 
-    const json = await res.json();
-    const audits = json.audits ?? [];
+// ⬇️ DO NOT THROW — allow fallback
+if (res.ok) {
+  const json = await res.json();
+  audits = json.audits ?? [];
+}
+
 
     // 2️⃣ If audits exist → normal path
     if (audits.length > 0) {
