@@ -17,7 +17,7 @@ router.get("/audits", async (ctx) => {
     return;
   }
 
-  const audits = await getPaidAudits(userId);
+  const audits = await getPaidAudits();
 
   const enriched = await Promise.all(
     audits.map(async (audit: any) => ({
