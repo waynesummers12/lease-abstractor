@@ -185,4 +185,10 @@ export default function DashboardPage() {
             rel="noopener noreferrer"
             className="inline-block rounded bg-black px-4 py-2 text-white"
           >
-            Download P
+            Download PDF
+          </a>
+        )}
+      </main>
+    </div>
+  );
+}
