@@ -94,7 +94,6 @@ export default function HomePage() {
 
   // Audit selection + history HOOKS
   const [selectedAudit, setSelectedAudit] = useState<AnalysisWithMeta | null>(null);
-  const [latestAudit, setLatestAudit] = useState<AnalysisWithMeta | null>(null);
   const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
   const [hasAnalyzedInSession, setHasAnalyzedInSession] = useState(false);
 
@@ -103,11 +102,11 @@ export default function HomePage() {
 
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
-    if (selectedAudit) return selectedAudit;
-    if (result?.success && result.analysis) return result.analysis;
-    if (latestAudit) return latestAudit;
-    return null;
-  })();
+  if (selectedAudit) return selectedAudit;
+  if (result?.success && result.analysis) return result.analysis;
+  return null;
+})();
+
 
   const totalAvoidableExposure: number | null = (() => {
   if (!analysis?.health?.flags?.length) return null;
@@ -144,7 +143,6 @@ const exposureRange: { low: number; high: number } | null = (() => {
   };
 })();
 
-
 /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -152,12 +150,18 @@ async function handleUploadAndAnalyze() {
   setStatus("Uploading lease…");
   setResult(null);
 
-  const objectPath = `leases/${crypto.randomUUID()}.pdf`;
+  // 🔒 Generate auditId ONCE
+  const newAuditId = crypto.randomUUID();
+  setAuditId(newAuditId);
+
+  // 🔒 PDF path MUST use auditId
+  const objectPath = `leases/${newAuditId}.pdf`;
 
   const { error } = await supabase.storage
     .from("leases")
     .upload(objectPath, file, {
       contentType: "application/pdf",
+      upsert: true,
     });
 
   if (error) {
@@ -168,19 +172,16 @@ async function handleUploadAndAnalyze() {
   setStatus("Analyzing lease…");
 
   const res = await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-    },
-    body: JSON.stringify({
-      objectPath, // MUST be a string like: "leases/abc.pdf"
-    }),
-  }
-);
-
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+      },
+      body: JSON.stringify({ objectPath }),
+    }
+  );
 
   if (!res.ok) {
     setStatus("Analysis failed");
@@ -203,79 +204,52 @@ async function handleUploadAndAnalyze() {
 
     sessionStorage.setItem("audit_history", JSON.stringify(updated));
     setAuditHistory(updated);
-    setLatestAudit(entry);
   }
 
   setHasAnalyzedInSession(true);
   setStatus("Analysis complete ✅");
+
   setTimeout(() => {
-  resultsRef.current?.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
-  });
-}, 100);
+    resultsRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 100);
 }
-
-/* ---------- LOAD SESSION AUDIT HISTORY (OPTION A) ---------- */
-useEffect(() => {
-  async function loadAuditHistory() {
-    const { data, error } = await supabase
-      .from("lease_audits")
-      .select("analysis, created_at")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Failed to load audit history:", error.message);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      setAuditHistory([]);
-      setLatestAudit(null);
-      return;
-    }
-
-    const audits = data.map((row) => ({
-      ...row.analysis,
-      created_at: row.created_at,
-    }));
-
-    setAuditHistory(audits);
-    setLatestAudit(audits[0]);
-  }
-
-  loadAuditHistory();
-}, []);
-
-
 
 
 /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
+const [auditId, setAuditId] = useState<string | null>(null);
 
 async function handleCheckout() {
   if (!analysis || isCheckingOut) return;
+
+  if (!auditId) {
+    setStatus("Missing audit ID — please re-upload lease.");
+    return;
+  }
 
   setIsCheckingOut(true);
   setStatus("Redirecting to secure checkout…");
 
   try {
-    // Save analysis for post-checkout recovery
     sessionStorage.setItem(
       "latest_analysis",
       JSON.stringify(analysis)
     );
 
     const res = await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-    },
-  }
-);
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: JSON.stringify({ auditId }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Checkout failed");
@@ -284,10 +258,12 @@ async function handleCheckout() {
     const data = await res.json();
 
     if (data?.url) {
-      window.location.href = data.url;
-    } else {
-      throw new Error("Missing checkout URL");
-    }
+  setIsCheckingOut(false); // ✅ safe cleanup before redirect
+  window.location.href = data.url;
+} else {
+  throw new Error("Missing checkout URL");
+}
+
   } catch (err) {
     console.error(err);
     setStatus("Checkout failed. Please try again.");
@@ -295,8 +271,6 @@ async function handleCheckout() {
   }
 }
 
-
-  
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
