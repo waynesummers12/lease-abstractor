@@ -1,7 +1,8 @@
 // worker/routes/latestAudit.ts
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import { getLatestPaidAudit } from "../services/getLatestPaidAudit.ts";
+import { getLatestPaidAudit } from "../utils/getLatestPaidAudit.ts";
+
 
 const router = new Router();
 
