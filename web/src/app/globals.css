@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global resets only */
+/* Global resets */
 * {
   box-sizing: border-box;
 }
@@ -15,9 +15,10 @@ body {
   padding: 0;
 }
 
-/* Use plain CSS for global elements */
+/* Use raw CSS here (NOT @apply) */
 a {
-  color: #111827; /* gray-900 equivalent */
+  color: inherit;
   text-decoration: none;
 }
+
 
