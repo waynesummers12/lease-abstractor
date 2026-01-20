@@ -1,21 +1,28 @@
+// src/app/components/Footer.tsx
+
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-gray-50">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <div className="grid gap-8 md:grid-cols-3">
+    <footer className="border-t bg-white">
+      <div className="mx-auto max-w-6xl px-6 py-12">
+        <div className="grid gap-10 md:grid-cols-3">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3">
-              <img
-                src="/icon-512.png"
+              <Image
+                src="/logo.png"
                 alt="SaveOnLease"
-                className="h-8 w-8"
+                width={36}
+                height={36}
               />
-              <span className="font-semibold">SaveOnLease</span>
+              <span className="text-lg font-semibold text-gray-900">
+                SaveOnLease
+              </span>
             </div>
-            <p className="mt-3 text-sm text-gray-600">
+
+            <p className="mt-4 max-w-sm text-sm text-gray-600">
               Helping commercial tenants identify CAM and NNN overcharges
               through clear, secure lease audits.
             </p>
@@ -23,20 +30,31 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold">Product</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="text-sm font-semibold text-gray-900">
+              Product
+            </h4>
+            <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="/what-we-find" className="hover:underline">
+                <Link
+                  href="/what-we-find"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   What We Find
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works" className="hover:underline">
+                <Link
+                  href="/how-it-works"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:underline">
+                <Link
+                  href="/pricing"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Pricing
                 </Link>
               </li>
@@ -45,20 +63,31 @@ export default function Footer() {
 
           {/* Trust */}
           <div>
-            <h4 className="mb-3 text-sm font-semibold">Trust</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="text-sm font-semibold text-gray-900">
+              Trust
+            </h4>
+            <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="/security" className="hover:underline">
+                <Link
+                  href="/security"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Security
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:underline">
+                <Link
+                  href="/privacy"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Privacy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:underline">
+                <Link
+                  href="/terms"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Terms
                 </Link>
               </li>
@@ -66,7 +95,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t pt-4 text-center text-xs text-gray-500">
+        {/* Bottom bar */}
+        <div className="mt-12 border-t pt-6 text-sm text-gray-500">
           © {new Date().getFullYear()} SaveOnLease. All rights reserved.
         </div>
       </div>
