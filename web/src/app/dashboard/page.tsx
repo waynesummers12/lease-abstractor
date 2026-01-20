@@ -73,8 +73,8 @@ export default function DashboardPage() {
   async function loadAudits() {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
-        {
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
+);
           credentials: "include",
         }
       );
