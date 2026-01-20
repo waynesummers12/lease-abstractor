@@ -12,34 +12,70 @@ const supabase = createClient(
 );
 
 type SavePaidAuditParams = {
-  analysis: Record<string, unknown>;
+  auditId: string;
   stripeSessionId: string;
+  amountPaid?: number;
+  currency?: string;
 };
 
 /**
- * Persist a PAID lease audit
+ * Mark an EXISTING lease audit as PAID
  * Called AFTER successful Stripe checkout
+ *
+ * IMPORTANT:
+ * - Does NOT create a new audit
+ * - Does NOT touch object_path
+ * - Only updates status + payment metadata
  */
 export async function savePaidAudit({
-  analysis,
+  auditId,
   stripeSessionId,
+  amountPaid,
+  currency,
 }: SavePaidAuditParams) {
-  if (!analysis || !stripeSessionId) {
-    throw new Error("Missing analysis or stripeSessionId");
+  if (!auditId || !stripeSessionId) {
+    throw new Error("Missing auditId or stripeSessionId");
   }
 
-  const { error } = await supabase.from("lease_audits").insert({
-    analysis,
-    stripe_session_id: stripeSessionId,
-    paid: true,
-  });
+  // --------------------
+  // 1. Ensure audit exists and has PDF attached
+  // --------------------
+  const { data: audit, error: fetchError } = await supabase
+    .from("lease_audits")
+    .select("id, object_path")
+    .eq("id", auditId)
+    .single();
 
-  if (error) {
-    console.error("❌ Failed to save paid audit:", error.message);
-    throw error;
+  if (fetchError || !audit) {
+    throw new Error(`Audit not found: ${auditId}`);
+  }
+
+  if (!audit.object_path) {
+    throw new Error(
+      `Invariant violation: audit ${auditId} missing object_path`
+    );
+  }
+
+  // --------------------
+  // 2. Mark audit as paid
+  // --------------------
+  const { error: updateError } = await supabase
+    .from("lease_audits")
+    .update({
+      status: "paid",
+      stripe_session_id: stripeSessionId,
+      amount_paid: amountPaid ?? null,
+      currency: currency ?? null,
+    })
+    .eq("id", auditId);
+
+  if (updateError) {
+    console.error("❌ Failed to mark audit as paid:", updateError.message);
+    throw updateError;
   }
 
   return { success: true };
 }
+
 
 
