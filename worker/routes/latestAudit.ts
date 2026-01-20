@@ -1,34 +1,39 @@
 // worker/routes/latestAudit.ts
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import { getLatestPaidAudit } from "../utils/getLatestPaidAudit.ts";
-import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
+import { getLatestPaidAudit } from "../services/getLatestPaidAudit.ts";
 
 const router = new Router();
 
-router.get("/audit/latest", async (ctx) => {
-  try {
-    const audit = await getLatestPaidAudit();
+/**
+ * GET /api/audits/latest
+ *
+ * Headers:
+ *  - x-tenant-id: string
+ *
+ * Response:
+ *  {
+ *    audit: null | {
+ *      id: string
+ *      created_at: string
+ *      object_path: string
+ *      signed_url: string
+ *    }
+ *  }
+ */
+router.get("/api/audits/latest", async (ctx) => {
+  const tenantId = ctx.request.headers.get("x-tenant-id");
 
-    if (!audit) {
-      ctx.response.body = { audit: null };
-      return;
-    }
-
-    const signedUrl = audit.object_path
-      ? await createAuditPdfSignedUrl(audit.object_path)
-      : null;
-
-    ctx.response.body = {
-      audit: {
-        ...audit,
-        signedUrl,
-      },
-    };
-  } catch (err) {
-    console.error("Failed to load latest audit", err);
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Internal server error" };
+  if (!tenantId) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Missing x-tenant-id header" };
+    return;
   }
+
+  const audit = await getLatestPaidAudit(tenantId);
+
+  ctx.response.status = 200;
+  ctx.response.body = { audit };
 });
 
 export default router;
