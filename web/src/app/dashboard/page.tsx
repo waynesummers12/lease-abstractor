@@ -94,6 +94,20 @@ export default function DashboardPage() {
   }
 }
 
+{!loading && audits.length === 0 && (
+  <div className="rounded-lg border border-dashed p-6 text-center text-sm text-gray-600">
+    <p className="font-medium mb-2">No audits yet</p>
+    <p className="mb-4">
+      Upload a lease to generate your first CAM / NNN audit.
+    </p>
+    <Link
+      href="/app"
+      className="inline-block rounded-md bg-black px-4 py-2 text-white text-sm"
+    >
+      Upload Lease
+    </Link>
+  </div>
+)}
 
     loadAudits();
   }, []);

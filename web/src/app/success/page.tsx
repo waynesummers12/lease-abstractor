@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type SuccessData = {
-  audit: any | null;
+  audit: {
+    avoidable_exposure?: number;
+  } | null;
   signedUrl: string | null;
 };
 
@@ -18,10 +21,18 @@ export default function SuccessPage() {
           `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
           { credentials: "include" }
         );
+
+        if (!res.ok) {
+          console.warn("Failed to load latest audit");
+          setData(null);
+          return;
+        }
+
         const json = await res.json();
         setData(json);
       } catch (err) {
-        console.error(err);
+        console.error("Success page load error:", err);
+        setData(null);
       } finally {
         setLoading(false);
       }
@@ -30,12 +41,14 @@ export default function SuccessPage() {
     load();
   }, []);
 
-  /* ---------------- STATES ---------------- */
+  /* ---------------- LOADING ---------------- */
 
   if (loading) {
     return (
       <main className="mx-auto max-w-2xl p-8">
-        <h1 className="text-2xl font-semibold">Finalizing your audit…</h1>
+        <h1 className="text-2xl font-semibold">
+          Finalizing your audit…
+        </h1>
         <p className="mt-2 text-gray-600">
           This usually takes just a few seconds.
         </p>
@@ -49,9 +62,12 @@ export default function SuccessPage() {
     <main className="mx-auto max-w-2xl space-y-8 p-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">✅ Payment Successful</h1>
+        <h1 className="text-3xl font-bold">
+          ✅ Payment successful
+        </h1>
         <p className="mt-2 text-gray-600">
-          Your CAM / NNN lease audit is complete.
+          Your CAM / NNN lease audit has been generated and saved
+          securely.
         </p>
       </div>
 
@@ -67,7 +83,7 @@ export default function SuccessPage() {
       </div>
 
       {/* Value Callout */}
-      {data?.audit?.avoidable_exposure && (
+      {data?.audit?.avoidable_exposure != null && (
         <div className="rounded bg-gray-50 p-6">
           <div className="text-sm text-gray-500">
             Estimated Avoidable Exposure
@@ -76,7 +92,8 @@ export default function SuccessPage() {
             ${data.audit.avoidable_exposure.toLocaleString()}
           </div>
           <div className="mt-1 text-sm text-gray-600">
-            Based on CAM / NNN reconciliation risks in your lease.
+            Based on CAM / NNN reconciliation risks identified in
+            your lease.
           </div>
         </div>
       )}
@@ -87,24 +104,33 @@ export default function SuccessPage() {
           <a
             href={data.signedUrl}
             target="_blank"
-            className="rounded bg-black px-5 py-2 text-white"
+            rel="noreferrer"
+            className="rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
           >
             Download PDF
           </a>
         )}
 
-        <a
+        <Link
           href="/dashboard"
-          className="rounded border px-5 py-2"
+          className="rounded border px-5 py-2 hover:bg-gray-50"
         >
           Go to Dashboard
-        </a>
+        </Link>
+
+        <Link
+          href="/app"
+          className="rounded border px-5 py-2 hover:bg-gray-50"
+        >
+          Upload Another Lease
+        </Link>
       </div>
 
-      {/* Footer */}
+      {/* Footer reassurance */}
       <div className="pt-4 text-sm text-gray-600">
         We’ve also emailed you a secure link to your audit for
-        convenience.
+        convenience. You can access this audit anytime from your
+        dashboard.
       </div>
     </main>
   );
