@@ -6,6 +6,7 @@ import checkoutRoutes from "./routes/checkout.ts";
 import auditPdfRoutes from "./routes/auditPdf.ts";
 import latestAuditRoutes from "./routes/latestAudit.ts";
 import auditsRoutes from "./routes/audits.ts";
+import stripeWebhookRoutes from "./routes/stripeWebhook.ts";
 
 const app = new Application();
 const router = new Router();
@@ -46,6 +47,9 @@ app.use(async (ctx, next) => {
 router.get("/", (ctx) => {
   ctx.response.body = "Lease Abstractor Worker Running";
 });
+
+router.use(stripeWebhookRoutes.routes());
+router.use(stripeWebhookRoutes.allowedMethods());
 
 router.use(latestAuditRoutes.routes());
 router.use(auditsRoutes.routes());
