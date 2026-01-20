@@ -1,4 +1,5 @@
 // worker/utils/storage.ts
+
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
@@ -8,14 +9,36 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing Supabase env vars");
 }
 
+/**
+ * Service-role Supabase client
+ * NOTE:
+ * - Used ONLY for server-side operations
+ * - Never exposed to frontend
+ */
 const supabase = createClient(
   SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY
 );
 
+/**
+ * Fetch an ORIGINAL lease PDF from storage
+ *
+ * IMPORTANT:
+ * - This MUST NOT be used for audit PDFs
+ * - Audit PDFs are handled explicitly in routes/auditPdf.ts
+ */
 export async function fetchPdfFromStorage(
   objectPath: string
 ): Promise<Uint8Array> {
+  if (!objectPath) {
+    throw new Error("Missing objectPath");
+  }
+
+  // Guard: never allow audit PDFs here
+  if (objectPath.includes("audit")) {
+    throw new Error("Audit PDFs cannot be fetched via fetchPdfFromStorage");
+  }
+
   const { data, error } = await supabase.storage
     .from("leases")
     .download(objectPath);
@@ -28,10 +51,22 @@ export async function fetchPdfFromStorage(
   return new Uint8Array(buffer);
 }
 
+/**
+ * Persist a structured lease abstract
+ *
+ * IMPORTANT:
+ * - Uses object_path as the natural key
+ * - Does NOT create audits
+ * - Does NOT upload PDFs
+ */
 export async function saveLeaseAbstract(
   objectPath: string,
   result: Record<string, any>
 ) {
+  if (!objectPath) {
+    throw new Error("Missing objectPath");
+  }
+
   const payload = {
     object_path: objectPath,
     bucket: "leases",
@@ -62,5 +97,3 @@ export async function saveLeaseAbstract(
     throw new Error(`Failed to save lease abstract: ${error.message}`);
   }
 }
-
-
