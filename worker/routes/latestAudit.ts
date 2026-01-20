@@ -7,7 +7,6 @@ const router = new Router();
 
 router.get("/audit/latest", async (ctx) => {
   try {
-    // ✅ MVP: no user auth, just return latest paid audit
     const audit = await getLatestPaidAudit();
 
     if (!audit) {
@@ -33,4 +32,5 @@ router.get("/audit/latest", async (ctx) => {
 });
 
 export default router;
+
 
