@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+console.log("WORKER_URL", process.env.NEXT_PUBLIC_WORKER_URL);
+console.log("WORKER_KEY", process.env.NEXT_PUBLIC_WORKER_KEY);
+
 /* ================== TYPES ================== */
 
 type Audit = {
