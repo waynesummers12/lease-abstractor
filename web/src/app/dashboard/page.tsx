@@ -70,23 +70,30 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function loadAudits() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
-          { credentials: "include" }
-        );
+  try {
+    const res = await fetch("/api/audits");
 
-        if (!res.ok) throw new Error("Failed to load audits");
-
-        const json = await res.json();
-        setAudits(json.audits ?? []);
-        setSelected(json.audits?.[0] ?? null);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+    if (!res.ok) {
+      console.warn("Failed to load audits");
+      setAudits([]);
+      setSelected(null);
+      return;
     }
+
+    const json = await res.json();
+    const audits = json.audits ?? [];
+
+    setAudits(audits);
+    setSelected(audits[0] ?? null);
+  } catch (err) {
+    console.error("Error loading audits:", err);
+    setAudits([]);
+    setSelected(null);
+  } finally {
+    setLoading(false);
+  }
+}
+
 
     loadAudits();
   }, []);
