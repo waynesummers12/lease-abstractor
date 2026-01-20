@@ -75,9 +75,7 @@ export default function DashboardPage() {
       const res = await fetch(
   `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
 );
-          credentials: "include",
-        }
-      );
+
 
       if (!res.ok) {
         setAudits([]);
