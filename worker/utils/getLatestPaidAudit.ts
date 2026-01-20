@@ -5,10 +5,10 @@ export async function getLatestPaidAudit() {
   const { data, error } = await supabase
     .from("lease_audits")
     .select("*")
-    .eq("payment_status", "paid")
+    .eq("status", "paid") // ✅ FIXED COLUMN
     .order("created_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("getLatestPaidAudit error:", error);
@@ -17,5 +17,6 @@ export async function getLatestPaidAudit() {
 
   return data;
 }
+
 
 

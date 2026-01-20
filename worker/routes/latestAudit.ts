@@ -15,14 +15,16 @@ router.get("/audit/latest", async (ctx) => {
       return;
     }
 
-    const signedUrl = audit.pdf_path
-      ? await createAuditPdfSignedUrl(audit.pdf_path)
+    const signedUrl = audit.object_path
+      ? await createAuditPdfSignedUrl(audit.object_path)
       : null;
 
     ctx.response.status = 200;
     ctx.response.body = {
-      audit,
-      signedUrl,
+      audit: {
+        ...audit,
+        signedUrl,
+      },
     };
   } catch (err) {
     console.error("Failed to load latest audit", err);
@@ -32,5 +34,6 @@ router.get("/audit/latest", async (ctx) => {
 });
 
 export default router;
+
 
 
