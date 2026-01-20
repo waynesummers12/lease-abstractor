@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-console.log("WORKER_URL", process.env.NEXT_PUBLIC_WORKER_URL);
-console.log("WORKER_KEY", process.env.NEXT_PUBLIC_WORKER_KEY);
-
 /* ================== TYPES ================== */
 
 type Audit = {
@@ -64,12 +61,6 @@ function StatusChips({ audit }: { audit: Audit }) {
 
 /* ================== PAGE ================== */
 
-"use client";
-
-import { useEffect, useState } from "react";
-
-/* ================== PAGE ================== */
-
 export default function DashboardPage() {
   const [audits, setAudits] = useState<Audit[]>([]);
   const [selected, setSelected] = useState<Audit | null>(null);
@@ -91,7 +82,6 @@ export default function DashboardPage() {
         const json = await res.json();
 
         if (json?.audit) {
-          // ✅ signedUrl already lives on audit
           setAudits([json.audit]);
           setSelected(json.audit);
         } else {
@@ -109,11 +99,6 @@ export default function DashboardPage() {
 
     loadAudits();
   }, []);
-
-  // …rest of component
-}
-
-
 
   /* ---------------- LOADING ---------------- */
 
@@ -143,7 +128,7 @@ export default function DashboardPage() {
   /* ---------------- MAIN UI ---------------- */
 
   return (
-  <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
+    <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
       <aside className="relative z-10 w-72 border-r pr-4">
         <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
@@ -153,10 +138,10 @@ export default function DashboardPage() {
             <li
               key={audit.id}
               onClick={() => setSelected(audit)}
-              className={`relative z-20 cursor-pointer rounded p-3 text-sm transition ${
+              className={`cursor-pointer rounded p-3 text-sm transition ${
                 selected?.id === audit.id
                   ? "bg-gray-200"
-                  : "hover:bg-gray-100 hover:shadow-sm"
+                  : "hover:bg-gray-100"
               }`}
             >
               <div className="font-medium">
@@ -174,16 +159,15 @@ export default function DashboardPage() {
       </aside>
 
       {/* RIGHT — DETAIL */}
-      <main className="relative z-0 flex-1 space-y-6">
-        <div className="pointer-events-none flex items-center justify-between">
-  <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
-  {selected && <HealthBadge score={getHealthScore(selected)} />}
-</div>
-
+      <main className="flex-1 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
+          {selected && <HealthBadge score={getHealthScore(selected)} />}
+        </div>
 
         {selected && <StatusChips audit={selected} />}
 
-        <div className="pointer-events-none rounded border p-6">
+        <div className="rounded border p-6">
           <div className="text-sm text-gray-500">
             Estimated Avoidable Exposure
           </div>
@@ -194,18 +178,11 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="flex gap-3">
-          {selected?.signedUrl && (
-            <a
-              href={selected.signedUrl}
-              target="_blank"
-              className="rounded bg-black px-4 py-2 text-white"
-            >
-              Download PDF
-            </a>
-          )}
-        </div>
-      </main>
-    </div>
-  );
-}
+        {selected?.signedUrl && (
+          <a
+            href={selected.signedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block rounded bg-black px-4 py-2 text-white"
+          >
+            Download P
