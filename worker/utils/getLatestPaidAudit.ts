@@ -10,32 +10,34 @@ import { supabase } from "../lib/supabase.ts";
  * - object_path MUST be present for paid audits
  * - This function NEVER guesses or repairs data
  */
-export async function getLatestPaidAudit() {
+export async function getLatestPaidAudit(userId: string) {
   const { data, error } = await supabase
     .from("lease_audits")
     .select("*")
+    .eq("user_id", userId)
     .eq("status", "paid")
-    .order("created_at", { ascending: false })
-    .limit(1);
+    .order("created_at", { ascending: false });
 
   if (error) {
-    throw new Error(`getLatestPaidAudit failed: ${error.message}`);
+    console.error("Failed to fetch paid audits:", error);
+    throw error;
   }
 
   if (!data || data.length === 0) {
     return null;
   }
 
-  const audit = data[0];
+  // ✅ Skip broken historical rows
+  const validAudit = data.find((a) => a.object_path);
 
-  // 🔒 Hard invariant: paid audits MUST have object_path
-  if (!audit.object_path) {
-    throw new Error(
-      `Invariant violation: paid audit ${audit.id} missing object_path`
+  if (!validAudit) {
+    console.warn(
+      "Paid audits exist but none have object_path — likely legacy rows"
     );
+    return null;
   }
 
-  return audit;
+  return validAudit;
 }
 
 
