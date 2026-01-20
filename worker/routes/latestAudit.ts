@@ -3,14 +3,10 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { getLatestPaidAudit } from "../utils/getLatestPaidAudit.ts";
 
-
 const router = new Router();
 
 /**
  * GET /api/audits/latest
- *
- * Headers:
- *  - x-tenant-id: string
  *
  * Response:
  *  {
@@ -23,18 +19,11 @@ const router = new Router();
  *  }
  */
 router.get("/api/audits/latest", async (ctx) => {
-  const tenantId = ctx.request.headers.get("x-tenant-id");
-
-  if (!tenantId) {
-    ctx.response.status = 400;
-    ctx.response.body = { error: "Missing x-tenant-id header" };
-    return;
-  }
-
-  const audit = await getLatestPaidAudit(tenantId);
+  const audit = await getLatestPaidAudit();
 
   ctx.response.status = 200;
   ctx.response.body = { audit };
 });
 
 export default router;
+
