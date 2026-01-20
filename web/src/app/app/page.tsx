@@ -167,14 +167,17 @@ async function handleUploadAndAnalyze() {
 
   setStatus("Analyzing lease…");
 
-  const res = await fetch("http://localhost:8000/ingest/lease/pdf", {
+  const res = await fetch(
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+  {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Lease-Worker-Key": "local-dev-secret",
+      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
     },
     body: JSON.stringify({ objectPath }),
-  });
+  }
+);
 
   if (!res.ok) {
     setStatus("Analysis failed");
