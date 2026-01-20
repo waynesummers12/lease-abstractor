@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function HowItWorksPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
+    <main className="mx-auto max-w-3xl space-y-10 px-6 py-12">
       {/* HERO */}
       <section>
         <h1 className="text-4xl font-bold">How SaveOnLease Works</h1>
