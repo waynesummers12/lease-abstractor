@@ -1,11 +1,10 @@
 // worker/utils/getLatestPaidAudit.ts
 import { supabase } from "../lib/supabase.ts";
 
-export async function getLatestPaidAudit(userId: string) {
+export async function getLatestPaidAudit() {
   const { data, error } = await supabase
     .from("lease_audits")
     .select("*")
-    .eq("user_id", userId)
     .eq("payment_status", "paid")
     .order("created_at", { ascending: false })
     .limit(1)
@@ -18,3 +17,4 @@ export async function getLatestPaidAudit(userId: string) {
 
   return data;
 }
+

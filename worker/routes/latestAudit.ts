@@ -6,29 +6,31 @@ import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
 const router = new Router();
 
 router.get("/audit/latest", async (ctx) => {
-  const userId = ctx.state.userId;
+  try {
+    // ✅ MVP: no user auth, just return latest paid audit
+    const audit = await getLatestPaidAudit();
 
-  if (!userId) {
-    ctx.response.status = 401;
-    ctx.response.body = { error: "Unauthorized" };
-    return;
+    if (!audit) {
+      ctx.response.status = 200;
+      ctx.response.body = { audit: null };
+      return;
+    }
+
+    const signedUrl = audit.pdf_path
+      ? await createAuditPdfSignedUrl(audit.pdf_path)
+      : null;
+
+    ctx.response.status = 200;
+    ctx.response.body = {
+      audit,
+      signedUrl,
+    };
+  } catch (err) {
+    console.error("Failed to load latest audit", err);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Internal server error" };
   }
-
-  const audit = await getLatestPaidAudit(userId);
-
-  if (!audit) {
-    ctx.response.body = { audit: null };
-    return;
-  }
-
-  const signedUrl = audit.pdf_path
-    ? await createAuditPdfSignedUrl(audit.pdf_path)
-    : null;
-
-  ctx.response.body = {
-    audit,
-    signedUrl,
-  };
 });
 
 export default router;
+
