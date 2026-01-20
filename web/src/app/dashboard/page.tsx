@@ -70,9 +70,13 @@ export default function DashboardPage() {
     async function loadAudits() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
-          { credentials: "include" }
-        );
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
+  {
+    headers: {
+      "x-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+    },
+  }
+);
 
         if (!res.ok) {
           setAudits([]);
