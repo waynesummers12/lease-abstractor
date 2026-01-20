@@ -70,43 +70,42 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadAudits() {
-      try {
-        const res = await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
-  {
-    headers: {
-      "x-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-    },
-  }
-);
-
-        if (!res.ok) {
-          setAudits([]);
-          setSelected(null);
-          return;
+  async function loadAudits() {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
+        {
+          credentials: "include",
         }
+      );
 
-        const json = await res.json();
-
-        if (json?.audit) {
-          setAudits([json.audit]); // single source of truth
-          setSelected(json.audit);
-        } else {
-          setAudits([]);
-          setSelected(null);
-        }
-      } catch (err) {
-        console.error("Dashboard load failed:", err);
+      if (!res.ok) {
         setAudits([]);
         setSelected(null);
-      } finally {
-        setLoading(false);
+        return;
       }
-    }
 
-    loadAudits();
-  }, []);
+      const json = await res.json();
+
+      if (json?.audit) {
+        setAudits([json.audit]);
+        setSelected(json.audit);
+      } else {
+        setAudits([]);
+        setSelected(null);
+      }
+    } catch (err) {
+      console.error("Dashboard load failed:", err);
+      setAudits([]);
+      setSelected(null);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadAudits();
+}, []);
+
 
   /* ---------------- LOADING ---------------- */
 
