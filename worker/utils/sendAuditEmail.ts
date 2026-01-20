@@ -1,15 +1,26 @@
 // worker/utils/sendAuditEmail.ts
+
 import { resend } from "../lib/resend.ts";
+
+/* ---------- TYPES ---------- */
+
+type SendAuditEmailArgs = {
+  to: string;
+  leaseName: string;
+  signedUrl: string;
+};
+
+/* ---------- EMAIL SENDER ---------- */
 
 export async function sendAuditEmail({
   to,
   leaseName,
   signedUrl,
-}: {
-  to: string;
-  leaseName: string;
-  signedUrl: string;
-}) {
+}: SendAuditEmailArgs): Promise<void> {
+  if (!to || !signedUrl) {
+    throw new Error("Missing required email fields");
+  }
+
   await resend.emails.send({
     from: "Lease Abstractor <audits@yourdomain.com>",
     to,
@@ -19,11 +30,14 @@ export async function sendAuditEmail({
       <p><strong>Lease:</strong> ${leaseName}</p>
       <p>
         <a href="${signedUrl}">
-          Download your audit PDF
+          Download your CAM / NNN audit (PDF)
         </a>
       </p>
-      <p>This secure link expires for your protection.</p>
+      <p style="font-size: 12px; color: #666;">
+        This secure link expires in 1 hour for your protection.
+      </p>
     `,
   });
 }
+
 
