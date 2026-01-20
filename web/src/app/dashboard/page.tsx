@@ -70,11 +70,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadAudits() {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
-        );
+    console.log("SELECTED AUDIT STATE:", selected);
+  }, [selected]);
 
         if (!res.ok) {
           setAudits([]);
