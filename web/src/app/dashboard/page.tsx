@@ -85,9 +85,15 @@ export default function DashboardPage() {
         const json = await res.json();
 
         if (json?.audit) {
-          setAudits([json.audit]);
-          setSelected(json.audit);
-        } else {
+  const auditWithUrl = {
+    ...json.audit,
+    signedUrl: json.signedUrl ?? null,
+  };
+
+  setAudits([auditWithUrl]);
+  setSelected(auditWithUrl);
+}
+ else {
           setAudits([]);
           setSelected(null);
         }
