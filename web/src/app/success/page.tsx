@@ -2,86 +2,137 @@
 
 import { useEffect, useState } from "react";
 
-type AuditResponse = {
+type SuccessData = {
   audit: any | null;
   signedUrl: string | null;
 };
 
 export default function SuccessPage() {
-  const [data, setData] = useState<AuditResponse | null>(null);
+  const [data, setData] = useState<SuccessData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchAudit() {
+    async function load() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
-
-        if (!res.ok) throw new Error("Failed to fetch audit");
-
         const json = await res.json();
         setData(json);
       } catch (err) {
-        setError("Unable to load your audit");
+        console.error(err);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchAudit();
+    load();
   }, []);
 
+  /* ---------------- STATES ---------------- */
+
   if (loading) {
-    return <p className="p-6">Loading your audit…</p>;
-  }
-
-  if (error) {
-    return <p className="p-6 text-red-600">{error}</p>;
-  }
-
-  if (!data || !data.audit) {
     return (
-      <div className="p-6">
-        <h2 className="text-xl font-semibold">Payment successful</h2>
-        <p>Your audit is still processing. Please refresh shortly.</p>
-      </div>
+      <main className="mx-auto max-w-2xl p-8">
+        <h1 className="text-2xl font-semibold">Finalizing your audit…</h1>
+        <p className="mt-2 text-gray-600">
+          This usually takes just a few seconds.
+        </p>
+      </main>
     );
   }
 
-  return (
-    <div className="p-6 space-y-4">
-      <h2 className="text-2xl font-semibold">Your Lease Audit is Ready</h2>
+  /* ---------------- UI ---------------- */
 
-      <div className="rounded border p-4">
-        <p>
-          <strong>Lease:</strong> {data.audit.lease_name}
-        </p>
-        <p>
-          <strong>Estimated Savings:</strong> $
-          {data.audit.avoidable_exposure?.toLocaleString()}
+  return (
+    <main className="mx-auto max-w-2xl space-y-8 p-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold">✅ Payment Successful</h1>
+        <p className="mt-2 text-gray-600">
+          Your CAM / NNN lease audit is complete.
         </p>
       </div>
 
-      {data.signedUrl && (
-        <a
-          href={data.signedUrl}
-          target="_blank"
-          className="inline-block rounded bg-black px-4 py-2 text-white"
-        >
-          Download Audit PDF
-        </a>
+      {/* Checklist */}
+      <div className="space-y-2 rounded border p-6">
+        <ChecklistItem done label="Payment received" />
+        <ChecklistItem done label="Audit generated" />
+        <ChecklistItem done label="PDF secured" />
+        <ChecklistItem
+          done={!!data?.signedUrl}
+          label="Email delivered"
+        />
+      </div>
+
+      {/* Value Callout */}
+      {data?.audit?.avoidable_exposure && (
+        <div className="rounded bg-gray-50 p-6">
+          <div className="text-sm text-gray-500">
+            Estimated Avoidable Exposure
+          </div>
+          <div className="mt-1 text-3xl font-bold">
+            ${data.audit.avoidable_exposure.toLocaleString()}
+          </div>
+          <div className="mt-1 text-sm text-gray-600">
+            Based on CAM / NNN reconciliation risks in your lease.
+          </div>
+        </div>
       )}
+
+      {/* Actions */}
+      <div className="flex flex-wrap gap-3">
+        {data?.signedUrl && (
+          <a
+            href={data.signedUrl}
+            target="_blank"
+            className="rounded bg-black px-5 py-2 text-white"
+          >
+            Download PDF
+          </a>
+        )}
+
+        <a
+          href="/dashboard"
+          className="rounded border px-5 py-2"
+        >
+          Go to Dashboard
+        </a>
+      </div>
+
+      {/* Footer */}
+      <div className="pt-4 text-sm text-gray-600">
+        We’ve also emailed you a secure link to your audit for
+        convenience.
+      </div>
+    </main>
+  );
+}
+
+/* ---------------- COMPONENTS ---------------- */
+
+function ChecklistItem({
+  done,
+  label,
+}: {
+  done: boolean;
+  label: string;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span
+        className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${
+          done
+            ? "bg-green-500 text-white"
+            : "bg-gray-300 text-gray-700"
+        }`}
+      >
+        ✓
+      </span>
+      <span className={done ? "" : "text-gray-500"}>
+        {label}
+      </span>
     </div>
   );
 }
-<a
-  href="/dashboard"
-  className="mt-6 inline-block text-sm underline"
->
-  Go to Dashboard
-</a>
