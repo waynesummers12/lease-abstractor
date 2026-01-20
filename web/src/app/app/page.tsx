@@ -425,8 +425,6 @@ return (
     </div>
   </section>
 )}
-
-
     {/* ---------- AUDIT HISTORY ---------- */}
     {hasAnalyzedInSession && auditHistory.length > 0 && (
       <section

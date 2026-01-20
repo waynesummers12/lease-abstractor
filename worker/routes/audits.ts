@@ -5,6 +5,9 @@ import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
 
 const router = new Router();
 
+/* --------------------------------------------------
+   GET ALL PAID AUDITS (LIST)
+-------------------------------------------------- */
 router.get("/audits", async (ctx) => {
   const userId = ctx.state.userId;
 
@@ -25,8 +28,42 @@ router.get("/audits", async (ctx) => {
     }))
   );
 
+  ctx.response.status = 200;
   ctx.response.body = { audits: enriched };
 });
 
-export default router;
+/* --------------------------------------------------
+   GET LATEST PAID AUDIT (DASHBOARD)
+-------------------------------------------------- */
+router.get("/audit/latest", async (ctx) => {
+  const userId = ctx.state.userId;
 
+  if (!userId) {
+    ctx.response.status = 401;
+    ctx.response.body = { error: "Unauthorized" };
+    return;
+  }
+
+  const audits = await getPaidAudits(userId);
+
+  // ✅ No audits yet — valid empty state
+  if (!audits || audits.length === 0) {
+    ctx.response.status = 200;
+    ctx.response.body = { audit: null };
+    return;
+  }
+
+  const latest = audits[0];
+
+  ctx.response.status = 200;
+  ctx.response.body = {
+    audit: {
+      ...latest,
+      signedUrl: latest.pdf_path
+        ? await createAuditPdfSignedUrl(latest.pdf_path)
+        : null,
+    },
+  };
+});
+
+export default router;
