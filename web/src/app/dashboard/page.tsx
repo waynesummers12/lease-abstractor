@@ -2,13 +2,66 @@
 
 import { useEffect, useState } from "react";
 
+/* ================== TYPES ================== */
+
 type Audit = {
   id: string;
   lease_name: string | null;
   created_at: string;
   avoidable_exposure: number | null;
   signedUrl: string | null;
+  email_sent?: boolean;
+  email_sent_at?: string | null;
 };
+
+/* ================== HELPERS ================== */
+
+function getHealthScore(audit: Audit): "A" | "B" | "C" | "D" {
+  const v = audit.avoidable_exposure ?? 0;
+  if (v <= 1000) return "A";
+  if (v <= 5000) return "B";
+  if (v <= 15000) return "C";
+  return "D";
+}
+
+function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
+  const map: Record<typeof score, string> = {
+    A: "bg-green-100 text-green-800",
+    B: "bg-blue-100 text-blue-800",
+    C: "bg-yellow-100 text-yellow-800",
+    D: "bg-red-100 text-red-800",
+  };
+
+  return (
+    <span className={`rounded px-2 py-1 text-xs font-semibold ${map[score]}`}>
+      Health: {score}
+    </span>
+  );
+}
+
+function StatusChips({ audit }: { audit: Audit }) {
+  return (
+    <div className="flex gap-2">
+      <span className="rounded bg-gray-100 px-2 py-1 text-xs">
+        Paid
+      </span>
+
+      {audit.email_sent && (
+        <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
+          Email sent
+        </span>
+      )}
+
+      {audit.signedUrl && (
+        <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
+          PDF ready
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* ================== PAGE ================== */
 
 export default function DashboardPage() {
   const [audits, setAudits] = useState<Audit[]>([]);
@@ -76,6 +129,9 @@ export default function DashboardPage() {
               <div className="text-xs text-gray-500">
                 {new Date(audit.created_at).toLocaleDateString()}
               </div>
+              <div className="mt-1 text-xs text-gray-500">
+                Health {getHealthScore(audit)}
+              </div>
             </li>
           ))}
         </ul>
@@ -83,26 +139,59 @@ export default function DashboardPage() {
 
       {/* RIGHT — DETAIL */}
       <main className="flex-1 space-y-6">
-        <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
+          {selected && <HealthBadge score={getHealthScore(selected)} />}
+        </div>
 
-        <div className="rounded border p-4">
-          <p>
-            <strong>Estimated Avoidable Exposure:</strong>{" "}
+        {selected && <StatusChips audit={selected} />}
+
+        <div className="rounded border p-6">
+          <div className="text-sm text-gray-500">
+            Estimated Avoidable Exposure
+          </div>
+          <div className="mt-2 text-3xl font-bold">
             {selected?.avoidable_exposure
               ? `$${selected.avoidable_exposure.toLocaleString()}`
               : "—"}
-          </p>
+          </div>
+          <div className="mt-2 text-sm text-gray-600">
+            Potential savings from CAM / NNN reconciliation issues.
+          </div>
         </div>
 
-        {selected?.signedUrl && (
-          <a
-            href={selected.signedUrl}
-            target="_blank"
-            className="inline-block rounded bg-black px-4 py-2 text-white"
-          >
-            Download Audit PDF
+        <div className="flex gap-3">
+          {selected?.signedUrl && (
+            <a
+              href={selected.signedUrl}
+              target="_blank"
+              className="rounded bg-black px-4 py-2 text-white"
+            >
+              Download PDF
+            </a>
+          )}
+
+          {selected?.id && (
+            <button
+              onClick={async () => {
+                await fetch(
+                  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/${selected.id}/resend`,
+                  { method: "POST", credentials: "include" }
+                );
+                alert("Email resent");
+              }}
+              className="rounded border px-4 py-2"
+            >
+              Resend email
+            </button>
+          )}
+        </div>
+
+        <div className="pt-4">
+          <a href="/" className="text-sm underline text-gray-700">
+            Upload another lease
           </a>
-        )}
+        </div>
       </main>
     </div>
   );
