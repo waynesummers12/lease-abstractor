@@ -67,37 +67,60 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadAudits() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
-        );
+        const baseUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+
+        if (!baseUrl) {
+          console.error("Missing NEXT_PUBLIC_WORKER_URL");
+          if (!cancelled) {
+            setAudits([]);
+            setSelected(null);
+          }
+          return;
+        }
+
+        const res = await fetch(`${baseUrl}/audit/latest`);
 
         if (!res.ok) {
-          setAudits([]);
-          setSelected(null);
+          if (!cancelled) {
+            setAudits([]);
+            setSelected(null);
+          }
           return;
         }
 
         const json = await res.json();
 
-        if (json?.audit) {
-          setAudits([json.audit]);
-          setSelected(json.audit);
-        } else {
-          setAudits([]);
-          setSelected(null);
+        if (!cancelled) {
+          if (json?.audit) {
+            setAudits([json.audit]);
+            setSelected(json.audit);
+          } else {
+            setAudits([]);
+            setSelected(null);
+          }
         }
       } catch (err) {
         console.error("Dashboard load failed:", err);
-        setAudits([]);
-        setSelected(null);
+        if (!cancelled) {
+          setAudits([]);
+          setSelected(null);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     loadAudits();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   /* ---------------- LOADING ---------------- */
@@ -130,7 +153,7 @@ export default function DashboardPage() {
   return (
     <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
-      <aside className="relative z-10 w-72 border-r pr-4">
+      <aside className="w-72 border-r pr-4">
         <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
 
         <ul className="space-y-2">
