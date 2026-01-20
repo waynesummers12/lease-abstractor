@@ -22,7 +22,7 @@ export default function Header() {
         </Link>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-6 text-sm">
+        <nav className="flex items-center gap-6 text-sm font-medium">
           <Link
             href="/what-we-find"
             className="text-gray-600 hover:text-gray-900"
@@ -51,10 +51,10 @@ export default function Header() {
             Security
           </Link>
 
-          {/* CTA */}
+          {/* Primary CTA → PRODUCT */}
           <Link
-            href="/upload"
-            className="ml-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+            href="/app"
+            className="ml-2 rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
           >
             Upload Lease
           </Link>
