@@ -10,19 +10,14 @@ router.get("/audit/latest", async (ctx) => {
     const audit = await getLatestPaidAudit();
 
     if (!audit) {
-      ctx.response.status = 200;
       ctx.response.body = { audit: null };
       return;
     }
 
-    // 🔐 object_path is the ONLY source of truth
-    let signedUrl: string | null = null;
+    const signedUrl = audit.object_path
+      ? await createAuditPdfSignedUrl(audit.object_path)
+      : null;
 
-    if (audit.object_path) {
-      signedUrl = await createAuditPdfSignedUrl(audit.object_path);
-    }
-
-    ctx.response.status = 200;
     ctx.response.body = {
       audit: {
         ...audit,
@@ -37,4 +32,3 @@ router.get("/audit/latest", async (ctx) => {
 });
 
 export default router;
-
