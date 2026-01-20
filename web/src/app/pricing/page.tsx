@@ -1,9 +1,19 @@
+import FaqSchema from "../components/FaqSchema";
+
+export const metadata = {
+  title: "CAM & NNN Audit Pricing | One-Time Lease Audit",
+  description:
+    "Transparent pricing for CAM and NNN lease audits. One-time $249.99 audit with no subscriptions, retainers, or ongoing fees.",
+};
+
 export default function PricingPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-12 p-8">
       {/* HERO */}
       <section>
-        <h1 className="text-4xl font-bold">Simple, Transparent Pricing</h1>
+        <h1 className="text-4xl font-bold">
+          Simple, Transparent Pricing
+        </h1>
         <p className="mt-4 text-lg text-gray-700">
           One lease. One audit. One clear answer.
         </p>
@@ -15,7 +25,7 @@ export default function PricingPage() {
       {/* PRICE CARD */}
       <section className="rounded border p-8">
         <div className="flex items-baseline gap-2">
-          <div className="text-5xl font-bold">$249</div>
+          <div className="text-5xl font-bold">$249.99</div>
           <div className="text-lg text-gray-600">one-time</div>
         </div>
 
@@ -29,6 +39,8 @@ export default function PricingPage() {
           <li>✔ CAM & NNN risk identification</li>
           <li>✔ Administrative & management fee analysis</li>
           <li>✔ Capital expenditure responsibility review</li>
+          <li>✔ Insurance and tax pass-through review</li>
+          <li>✔ Pro-rata share & allocation checks</li>
           <li>✔ Estimated avoidable exposure (when applicable)</li>
           <li>✔ Secure PDF + email delivery</li>
         </ul>
@@ -52,24 +64,26 @@ export default function PricingPage() {
         </p>
         <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
           <li>Common findings range from $5,000 to $20,000+</li>
-          <li>Administrative fees often exceed lease limits</li>
-          <li>Insurance and tax pass-throughs are frequently misapplied</li>
+          <li>Administrative fees frequently exceed lease limits</li>
+          <li>Insurance and tax pass-throughs are often misapplied</li>
         </ul>
         <p className="mt-3 text-gray-700">
           Many tenants recover the cost of the audit many times over.
         </p>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ (VISIBLE) */}
       <section>
-        <h2 className="text-2xl font-semibold">Common Questions</h2>
+        <h2 className="text-2xl font-semibold">
+          Common Questions
+        </h2>
 
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 space-y-4 text-gray-700">
           <div>
             <h3 className="font-medium">
               Is this a subscription?
             </h3>
-            <p className="text-gray-700">
+            <p>
               No. Pricing is per lease, one-time.
             </p>
           </div>
@@ -78,7 +92,7 @@ export default function PricingPage() {
             <h3 className="font-medium">
               Do you negotiate with my landlord?
             </h3>
-            <p className="text-gray-700">
+            <p>
               No. SaveOnLease provides clarity and documentation so you
               can decide how to proceed.
             </p>
@@ -86,9 +100,9 @@ export default function PricingPage() {
 
           <div>
             <h3 className="font-medium">
-              Is this legal advice?
+              Is this legal or accounting advice?
             </h3>
-            <p className="text-gray-700">
+            <p>
               No. The audit highlights financial and contractual risk
               areas based on lease language.
             </p>
@@ -98,7 +112,7 @@ export default function PricingPage() {
             <h3 className="font-medium">
               What if my lease has no issues?
             </h3>
-            <p className="text-gray-700">
+            <p>
               You’ll still receive a clear summary confirming that no
               significant CAM / NNN risks were identified.
             </p>
@@ -115,6 +129,27 @@ export default function PricingPage() {
           Get Started
         </a>
       </section>
+
+      {/* FAQ SCHEMA (SEO) */}
+      <FaqSchema
+        faqs={[
+          {
+            question: "How much does a CAM or NNN audit cost?",
+            answer:
+              "SaveOnLease offers a one-time CAM and NNN lease audit for $249.99 with no subscription or ongoing fees.",
+          },
+          {
+            question: "Is the CAM audit fee refundable?",
+            answer:
+              "The audit provides a detailed analysis regardless of findings, including confirmation when no significant issues are detected.",
+          },
+          {
+            question: "Do CAM and NNN audits usually save money?",
+            answer:
+              "Many tenants identify thousands of dollars in potential overcharges, though results vary by lease and expense structure.",
+          },
+        ]}
+      />
     </main>
   );
 }
