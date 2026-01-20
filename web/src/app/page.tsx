@@ -175,9 +175,12 @@ async function handleUploadAndAnalyze() {
       "Content-Type": "application/json",
       "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
     },
-    body: JSON.stringify({ objectPath }),
+    body: JSON.stringify({
+      objectPath, // MUST be a string like: "leases/abc.pdf"
+    }),
   }
 );
+
 
   if (!res.ok) {
     setStatus("Analysis failed");
@@ -263,10 +266,16 @@ async function handleCheckout() {
       JSON.stringify(analysis)
     );
 
-    const res = await fetch("http://localhost:8000/checkout/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await fetch(
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+    },
+  }
+);
 
     if (!res.ok) {
       throw new Error("Checkout failed");
