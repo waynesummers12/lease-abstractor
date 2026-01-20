@@ -420,8 +420,6 @@ return (
   </div>
 </div>
 
-
-
     <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
       Conservative estimate based on identified CAM / NNN risks
     </div>
