@@ -1,10 +1,10 @@
-/* app/globals.css */
+/* src/app/globals.css */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Optional global resets / tweaks */
+/* Global resets only */
 * {
   box-sizing: border-box;
 }
@@ -14,6 +14,10 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Use plain CSS for global elements */
 a {
-  @apply text-gray-900 no-underline transition-colors hover:text-gray-700;
+  color: #111827; /* gray-900 equivalent */
+  text-decoration: none;
 }
+
