@@ -548,20 +548,27 @@ return (
   </div>
 )}
       {analysis !== null && (
-        />
-          {/* ---------- LEASE SUMMARY ---------- */}
-          <section style={cardStyle}>
-  <h2 style={sectionTitle}>Lease Summary</h2>
-  <Field label="Tenant" value={analysis.tenant} />
-  <Field label="Landlord" value={analysis.landlord} />
-  <Field label="Premises" value={analysis.premises} />
-  <Field label="Lease Start" value={analysis.lease_start} />
-  <Field label="Lease End" value={analysis.lease_end} />
-  <Field
-    label="Term"
-    value={analysis.term_months ? `${analysis.term_months} months` : null}
-  />
-</section>
+  <>
+    {/* ---------- LEASE SUMMARY ---------- */}
+    <section style={cardStyle}>
+      <h2 style={sectionTitle}>Lease Summary</h2>
+      <Field label="Tenant" value={analysis.tenant} />
+      <Field label="Landlord" value={analysis.landlord} />
+      <Field label="Premises" value={analysis.premises} />
+      <Field label="Lease Start" value={analysis.lease_start} />
+      <Field label="Lease End" value={analysis.lease_end} />
+      <Field
+        label="Term"
+        value={
+          analysis.term_months
+            ? `${analysis.term_months} months`
+            : null
+        }
+      />
+    </section>
+  </>
+)}
+
 
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
