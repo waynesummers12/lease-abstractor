@@ -1,5 +1,7 @@
 import { supabase } from "./supabaseClient.ts";
+import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { generateAuditPdf } from "./generateAuditPdf.ts";
+
 
 export async function markAuditPaid(
   session: Stripe.Checkout.Session
