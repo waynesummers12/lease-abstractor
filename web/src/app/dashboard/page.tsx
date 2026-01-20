@@ -64,49 +64,55 @@ function StatusChips({ audit }: { audit: Audit }) {
 
 /* ================== PAGE ================== */
 
+"use client";
+
+import { useEffect, useState } from "react";
+
+/* ================== PAGE ================== */
+
 export default function DashboardPage() {
   const [audits, setAudits] = useState<Audit[]>([]);
   const [selected, setSelected] = useState<Audit | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  async function loadAudits() {
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
-      );
+    async function loadAudits() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
+        );
 
-      if (!res.ok) {
+        if (!res.ok) {
+          setAudits([]);
+          setSelected(null);
+          return;
+        }
+
+        const json = await res.json();
+
+        if (json?.audit) {
+          // ✅ signedUrl already lives on audit
+          setAudits([json.audit]);
+          setSelected(json.audit);
+        } else {
+          setAudits([]);
+          setSelected(null);
+        }
+      } catch (err) {
+        console.error("Dashboard load failed:", err);
         setAudits([]);
         setSelected(null);
-        return;
+      } finally {
+        setLoading(false);
       }
-
-      const json = await res.json();
-
-      if (json?.audit) {
-        const auditWithUrl = {
-          ...json.audit,
-          signedUrl: json.signedUrl || null,
-        };
-
-        setAudits([auditWithUrl]);
-        setSelected(auditWithUrl);
-      } else {
-        setAudits([]);
-        setSelected(null);
-      }
-    } catch (err) {
-      console.error("Dashboard load failed:", err);
-      setAudits([]);
-      setSelected(null);
-    } finally {
-      setLoading(false);
     }
-  }
 
-  loadAudits();
-}, []);
+    loadAudits();
+  }, []);
+
+  // …rest of component
+}
+
 
 
   /* ---------------- LOADING ---------------- */
