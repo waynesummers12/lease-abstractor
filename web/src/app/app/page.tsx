@@ -488,10 +488,6 @@ return (
       </div>
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
-
-      {analysis !== null && (
-        <>
-
     {totalAvoidableExposure != null && (
   <section
     ref={resultsRef}
@@ -553,7 +549,8 @@ return (
     </strong>
   </div>
 )}
-
+      {analysis !== null && (
+        />
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
   <h2 style={sectionTitle}>Lease Summary</h2>
