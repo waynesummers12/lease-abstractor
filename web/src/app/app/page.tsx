@@ -274,6 +274,68 @@ async function handleCheckout() {
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
+    {totalAvoidableExposure != null && (
+  <section
+    ref={resultsRef}
+    style={{
+      marginBottom: 24,
+      padding: 20,
+      borderRadius: 10,
+      border: "2px solid #16a34a",
+      background: "#f0fdf4",
+    }}
+  >
+    <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
+      Estimated Avoidable Exposure (Next 12 Months)
+    </div>
+
+    <div
+      style={{
+        fontSize: 34,
+        fontWeight: 900,
+        marginTop: 4,
+        letterSpacing: -0.5,
+        color:
+          exposureRiskLabel === "high"
+            ? "#991b1b"
+            : exposureRiskLabel === "medium"
+            ? "#92400e"
+            : "#166534",
+      }}
+    >
+  💰 ${totalAvoidableExposure.toLocaleString()}
+</div>
+    <p
+  style={{
+    marginTop: 6,
+    marginBottom: 8,
+    fontSize: 14,
+    color: "#14532d",
+    fontWeight: 500,
+  }}
+>
+  Based on your lease terms, you may be able to recover up to{" "}
+  <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
+  overcharges over the next 12 months.
+</p>
+
+{exposureRange && (
+  <div
+    style={{
+      marginTop: 4,
+      marginBottom: 8,
+      fontSize: 13,
+      color: "#166534",
+    }}
+  >
+    Estimated recovery range:{" "}
+    <strong>
+      ${exposureRange.low.toLocaleString()} – $
+      {exposureRange.high.toLocaleString()}
+    </strong>
+  </div>
+)}
+
     {exposureRiskLabel && (
   <div
     style={{
@@ -342,11 +404,9 @@ return (
   }}
 >
   <strong>How this estimate was calculated:</strong>
-
   <ul style={{ marginTop: 6, paddingLeft: 18 }}>
     <li>
-      CAM / NNN charges flagged as{" "}
-      <strong>uncapped, ambiguous, or escalating</strong>
+      CAM / NNN charges flagged as <strong>uncapped, ambiguous, or escalating</strong>
     </li>
     <li>
       Conservative dollar ranges extracted from lease language (not worst-case)
@@ -355,15 +415,19 @@ return (
       Annualized impact based on current rent and reconciliation rules
     </li>
   </ul>
-
   <div style={{ marginTop: 6, fontStyle: "italic" }}>
     Final recovery depends on lease interpretation, audit rights, and timing.
   </div>
-
-  <div style={{ marginTop: 6, opacity: 0.9 }}>
-    Conservative estimate based on identified CAM / NNN risks
-  </div>
 </div>
+
+
+
+    <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
+      Conservative estimate based on identified CAM / NNN risks
+    </div>
+  </section>
+)}
+
 
     {/* ---------- AUDIT HISTORY ---------- */}
     {hasAnalyzedInSession && auditHistory.length > 0 && (
@@ -486,89 +550,22 @@ return (
       </div>
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
-    {totalAvoidableExposure != null && (
-  <section
-    ref={resultsRef}
-    style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 10,
-      border: "2px solid #16a34a",
-      background: "#f0fdf4",
-    }}
-  >
-    <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-      Estimated Avoidable Exposure (Next 12 Months)
-    </div>
 
-    <div
-      style={{
-        fontSize: 34,
-        fontWeight: 900,
-        marginTop: 4,
-        letterSpacing: -0.5,
-        color:
-          exposureRiskLabel === "high"
-            ? "#991b1b"
-            : exposureRiskLabel === "medium"
-            ? "#92400e"
-            : "#166534",
-      }}
-    >
-  💰 ${totalAvoidableExposure.toLocaleString()}
-</div>
-    <p
-  style={{
-    marginTop: 6,
-    marginBottom: 8,
-    fontSize: 14,
-    color: "#14532d",
-    fontWeight: 500,
-  }}
->
-  Based on your lease terms, you may be able to recover up to{" "}
-  <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
-  overcharges over the next 12 months.
-</p>
-
-{exposureRange && (
-  <div
-    style={{
-      marginTop: 4,
-      marginBottom: 8,
-      fontSize: 13,
-      color: "#166534",
-    }}
-  >
-    Estimated recovery range:{" "}
-    <strong>
-      ${exposureRange.low.toLocaleString()} – $
-      {exposureRange.high.toLocaleString()}
-    </strong>
-  </div>
-)}
       {analysis !== null && (
-  <>
-    {/* ---------- LEASE SUMMARY ---------- */}
-    <section style={cardStyle}>
-      <h2 style={sectionTitle}>Lease Summary</h2>
-      <Field label="Tenant" value={analysis.tenant} />
-      <Field label="Landlord" value={analysis.landlord} />
-      <Field label="Premises" value={analysis.premises} />
-      <Field label="Lease Start" value={analysis.lease_start} />
-      <Field label="Lease End" value={analysis.lease_end} />
-      <Field
-        label="Term"
-        value={
-          analysis.term_months
-            ? `${analysis.term_months} months`
-            : null
-        }
-      />
-    </section>
-  </>
-)}
-
+        <>
+          {/* ---------- LEASE SUMMARY ---------- */}
+          <section style={cardStyle}>
+  <h2 style={sectionTitle}>Lease Summary</h2>
+  <Field label="Tenant" value={analysis.tenant} />
+  <Field label="Landlord" value={analysis.landlord} />
+  <Field label="Premises" value={analysis.premises} />
+  <Field label="Lease Start" value={analysis.lease_start} />
+  <Field label="Lease End" value={analysis.lease_end} />
+  <Field
+    label="Term"
+    value={analysis.term_months ? `${analysis.term_months} months` : null}
+  />
+</section>
 
           {/* ---------- RENT ---------- */}
           <section style={cardStyle}>
