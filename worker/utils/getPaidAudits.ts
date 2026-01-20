@@ -1,17 +1,20 @@
 // worker/utils/getPaidAudits.ts
 import { supabase } from "./supabaseClient.ts";
 
-/**
- * Returns all PAID audits.
- * NOTE:
- * - We intentionally do NOT filter by user_id
- * - Lease audits are keyed by audit_id + payment status
- */
-export async function getPaidAudits() {
+export type PaidAudit = {
+  id: string;
+  pdf_path: string | null;
+  created_at: string;
+};
+
+export async function getPaidAudits(
+  userId: string
+): Promise<PaidAudit[]> {
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("*")
+    .select("id, pdf_path, created_at")
     .eq("status", "paid")
+    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -21,4 +24,5 @@ export async function getPaidAudits() {
 
   return data ?? [];
 }
+
 
