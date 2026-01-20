@@ -71,28 +71,56 @@ export default function DashboardPage() {
   useEffect(() => {
     async function loadAudits() {
   try {
-    const res = await fetch("/api/audits");
+    setLoading(true);
 
-    if (!res.ok) {
-      console.warn("Failed to load audits");
+    // 1️⃣ Try normal audits list
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
+      { credentials: "include" }
+    );
+
+    if (!res.ok) throw new Error("Failed to load audits");
+
+    const json = await res.json();
+    const audits = json.audits ?? [];
+
+    // 2️⃣ If audits exist → normal path
+    if (audits.length > 0) {
+      setAudits(audits);
+      setSelected(audits[0]);
+      return;
+    }
+
+    // 3️⃣ Fallback: fetch latest audit (post-payment)
+    const latestRes = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
+      { credentials: "include" }
+    );
+
+    if (!latestRes.ok) {
       setAudits([]);
       setSelected(null);
       return;
     }
 
-    const json = await res.json();
-    const audits = json.audits ?? [];
+    const latestJson = await latestRes.json();
 
-    setAudits(audits);
-    setSelected(audits[0] ?? null);
+    if (latestJson?.audit) {
+      setAudits([latestJson.audit]);
+      setSelected(latestJson.audit);
+    } else {
+      setAudits([]);
+      setSelected(null);
+    }
   } catch (err) {
-    console.error("Error loading audits:", err);
+    console.error("Dashboard load failed:", err);
     setAudits([]);
     setSelected(null);
   } finally {
     setLoading(false);
   }
 }
+
 
 {!loading && audits.length === 0 && (
   <div className="rounded-lg border border-dashed p-6 text-center text-sm text-gray-600">
