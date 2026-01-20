@@ -163,14 +163,15 @@ export default function DashboardPage() {
 
       {/* RIGHT — DETAIL */}
       <main className="relative z-0 flex-1 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
-          {selected && <HealthBadge score={getHealthScore(selected)} />}
-        </div>
+        <div className="pointer-events-none flex items-center justify-between">
+  <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
+  {selected && <HealthBadge score={getHealthScore(selected)} />}
+</div>
+
 
         {selected && <StatusChips audit={selected} />}
 
-        <div className="rounded border p-6">
+        <div className="pointer-events-none rounded border p-6">
           <div className="text-sm text-gray-500">
             Estimated Avoidable Exposure
           </div>
