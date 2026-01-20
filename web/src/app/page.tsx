@@ -221,33 +221,23 @@ useEffect(() => {
   async function loadAuditHistory() {
     const { data, error } = await supabase
       .from("lease_audits")
-      .select("analysis, created_at")
+      .select("*")
+      .eq("status", "paid")
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Failed to load audit history:", error.message);
+      console.error("Failed to load audit history:", error);
+      setAudits([]);
+      setSelected(null);
       return;
     }
 
-    if (!data || data.length === 0) {
-      setAuditHistory([]);
-      setLatestAudit(null);
-      return;
-    }
-
-    const audits = data.map((row) => ({
-      ...row.analysis,
-      created_at: row.created_at,
-    }));
-
-    setAuditHistory(audits);
-    setLatestAudit(audits[0]);
+    setAudits(data ?? []);
+    setSelected(data?.[0] ?? null);
   }
 
   loadAuditHistory();
 }, []);
-
-
 
 
 /* ---------- STRIPE CHECKOUT ---------- */
