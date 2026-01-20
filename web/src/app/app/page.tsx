@@ -365,13 +365,6 @@ return (
   </div>
 </div>
 
-<<<<<<< HEAD
-  </section>
-)}
-
-=======
->>>>>>> ca555cd (commit)
-
     {/* ---------- AUDIT HISTORY ---------- */}
     {hasAnalyzedInSession && auditHistory.length > 0 && (
       <section
