@@ -70,40 +70,38 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  async function loadAudits() {
-    try {
-      const res = await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
-);
+    async function loadAudits() {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`
+        );
 
+        if (!res.ok) {
+          setAudits([]);
+          setSelected(null);
+          return;
+        }
 
-      if (!res.ok) {
+        const json = await res.json();
+
+        if (json?.audit) {
+          setAudits([json.audit]);
+          setSelected(json.audit);
+        } else {
+          setAudits([]);
+          setSelected(null);
+        }
+      } catch (err) {
+        console.error("Dashboard load failed:", err);
         setAudits([]);
         setSelected(null);
-        return;
+      } finally {
+        setLoading(false);
       }
-
-      const json = await res.json();
-
-      if (json?.audit) {
-        setAudits([json.audit]);
-        setSelected(json.audit);
-      } else {
-        setAudits([]);
-        setSelected(null);
-      }
-    } catch (err) {
-      console.error("Dashboard load failed:", err);
-      setAudits([]);
-      setSelected(null);
-    } finally {
-      setLoading(false);
     }
-  }
 
-  loadAudits();
-}, []);
-
+    loadAudits();
+  }, []);
 
   /* ---------------- LOADING ---------------- */
 
@@ -116,13 +114,13 @@ export default function DashboardPage() {
   if (!audits.length) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-semibold mb-2">No audits yet</h1>
-        <p className="text-gray-600 mb-4">
+        <h1 className="mb-2 text-2xl font-semibold">No audits yet</h1>
+        <p className="mb-4 text-gray-600">
           Upload a lease to generate your first CAM / NNN audit.
         </p>
         <Link
           href="/app"
-          className="inline-block rounded bg-black px-4 py-2 text-white text-sm"
+          className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
           Upload Lease
         </Link>
@@ -135,7 +133,7 @@ export default function DashboardPage() {
   return (
     <div className="flex h-full gap-6 p-6">
       {/* LEFT — HISTORY */}
-      <aside className="w-72 border-r pr-4">
+      <aside className="relative z-10 w-72 border-r pr-4">
         <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
 
         <ul className="space-y-2">
@@ -143,10 +141,10 @@ export default function DashboardPage() {
             <li
               key={audit.id}
               onClick={() => setSelected(audit)}
-              className={`cursor-pointer rounded p-3 text-sm ${
+              className={`relative z-20 cursor-pointer rounded p-3 text-sm transition ${
                 selected?.id === audit.id
                   ? "bg-gray-200"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-gray-100 hover:shadow-sm"
               }`}
             >
               <div className="font-medium">
