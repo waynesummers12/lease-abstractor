@@ -342,9 +342,11 @@ return (
   }}
 >
   <strong>How this estimate was calculated:</strong>
+
   <ul style={{ marginTop: 6, paddingLeft: 18 }}>
     <li>
-      CAM / NNN charges flagged as <strong>uncapped, ambiguous, or escalating</strong>
+      CAM / NNN charges flagged as{" "}
+      <strong>uncapped, ambiguous, or escalating</strong>
     </li>
     <li>
       Conservative dollar ranges extracted from lease language (not worst-case)
@@ -353,16 +355,16 @@ return (
       Annualized impact based on current rent and reconciliation rules
     </li>
   </ul>
+
   <div style={{ marginTop: 6, fontStyle: "italic" }}>
     Final recovery depends on lease interpretation, audit rights, and timing.
   </div>
+
+  <div style={{ marginTop: 6, opacity: 0.9 }}>
+    Conservative estimate based on identified CAM / NNN risks
+  </div>
 </div>
 
-
-
-    <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
-      Conservative estimate based on identified CAM / NNN risks
-    </div>
   </section>
 )}
 
