@@ -13,14 +13,26 @@ const router = new Router({
 
 /**
  * Create Stripe Checkout Session
- * NOTE:
- * - Analysis is already stored in sessionStorage on frontend
- * - Persistence happens AFTER success (Step 5)
+ *
+ * IMPORTANT INVARIANTS:
+ * - auditId already exists
+ * - PDF is already generated & uploaded
+ * - object_path is already persisted
+ * - This route ONLY starts payment
  */
 router.post("/create", async (ctx) => {
   try {
+    const body = await ctx.request.body({ type: "json" }).value;
+    const { auditId } = body;
+
     const priceId = Deno.env.get("STRIPE_PRICE_STARTER");
     const baseUrl = Deno.env.get("BASE_URL");
+
+    if (!auditId) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Missing auditId" };
+      return;
+    }
 
     if (!priceId || !baseUrl) {
       ctx.response.status = 500;
@@ -38,6 +50,9 @@ router.post("/create", async (ctx) => {
       ],
       success_url: `${baseUrl}/success`,
       cancel_url: `${baseUrl}`,
+      metadata: {
+        auditId, // 🔒 CRITICAL LINK
+      },
     });
 
     ctx.response.status = 200;
