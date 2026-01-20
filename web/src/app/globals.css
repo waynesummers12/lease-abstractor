@@ -14,3 +14,6 @@ body {
   margin: 0;
   padding: 0;
 }
+a {
+  @apply text-gray-900 no-underline transition-colors hover:text-gray-700;
+}

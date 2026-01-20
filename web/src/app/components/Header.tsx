@@ -7,10 +7,10 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <img
-            src="/icon-512.png"
-            alt="SaveOnLease"
-            className="h-10 w-10"
-          />
+  src="/icon-192.png"
+  alt="SaveOnLease"
+  className="h-10 w-10 shrink-0"
+/>
           <span className="text-lg font-semibold">SaveOnLease</span>
         </Link>
 
