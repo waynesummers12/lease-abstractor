@@ -1,30 +1,30 @@
+export const metadata = {
+  title: "How SaveOnLease Works | CAM & NNN Lease Audit",
+  description:
+    "See how SaveOnLease analyzes commercial leases to identify CAM and NNN overcharges quickly and securely.",
+};
+
 export default function HowItWorksPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
-  {/* existing content */}
-</main>
       {/* HERO */}
       <section>
-        <h1 className="text-4xl font-bold">
-          How SaveOnLease Works
-        </h1>
+        <h1 className="text-4xl font-bold">How SaveOnLease Works</h1>
         <p className="mt-4 text-lg text-gray-700">
-          SaveOnLease helps commercial tenants identify CAM and NNN
-          overcharges by analyzing lease language and expense structures —
-          quickly, securely, and without long-term commitments.
+          SaveOnLease helps commercial tenants identify CAM and NNN overcharges
+          by analyzing lease language and expense structures — quickly,
+          securely, and without long-term commitments.
         </p>
       </section>
 
       {/* STEP 1 */}
       <section>
-        <h2 className="text-2xl font-semibold">
-          Step 1: Upload Your Lease
-        </h2>
+        <h2 className="text-2xl font-semibold">Step 1: Upload Your Lease</h2>
         <p className="mt-3 text-gray-700">
-          Upload a copy of your commercial lease agreement. We support
-          standard PDF leases, including amendments and exhibits.
+          Upload a copy of your commercial lease agreement. We support standard
+          PDF leases, including amendments and exhibits.
         </p>
-        <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
+        <ul className="mt-4 list-disc space-y-2 pl-6 text-gray-700">
           <li>No formatting required</li>
           <li>Your document remains private and secure</li>
           <li>Most uploads take less than 30 seconds</li>
@@ -37,11 +37,10 @@ export default function HowItWorksPage() {
           Step 2: Automated CAM / NNN Analysis
         </h2>
         <p className="mt-3 text-gray-700">
-          Our system reviews your lease to understand what expenses are
-          allowed, limited, or excluded — then evaluates where tenants
-          commonly overpay.
+          Our system reviews your lease to understand what expenses are allowed,
+          limited, or excluded — then evaluates where tenants commonly overpay.
         </p>
-        <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
+        <ul className="mt-4 list-disc space-y-2 pl-6 text-gray-700">
           <li>CAM definitions and exclusions</li>
           <li>Administrative and management fee limits</li>
           <li>Capital expenditure responsibility</li>
@@ -59,7 +58,7 @@ export default function HowItWorksPage() {
           You’ll receive a clear summary of potential CAM and NNN risks,
           including estimated avoidable exposure where applicable.
         </p>
-        <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
+        <ul className="mt-4 list-disc space-y-2 pl-6 text-gray-700">
           <li>Plain-English explanations</li>
           <li>Risk flags and recommendations</li>
           <li>Downloadable audit PDF</li>
@@ -73,36 +72,27 @@ export default function HowItWorksPage() {
           Step 4: Decide What to Do Next
         </h2>
         <p className="mt-3 text-gray-700">
-          SaveOnLease does not pressure you into action. The audit gives
-          you clarity so you can decide whether it’s worth pursuing
-          corrections, negotiations, or further review.
+          SaveOnLease does not pressure you into action. The audit gives you
+          clarity so you can decide whether it’s worth pursuing corrections,
+          negotiations, or further review.
         </p>
         <p className="mt-2 text-gray-700">
-          Many tenants use the audit to prepare questions for their
-          landlord, property manager, or advisor.
+          Many tenants use the audit to prepare questions for their landlord,
+          property manager, or advisor.
         </p>
-      </section>
-
-      {/* TRUST */}
-      <section className="rounded bg-gray-50 p-6">
-        <h3 className="text-xl font-semibold">
-          Why Tenants Use SaveOnLease
-        </h3>
-        <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
-          <li>No subscription or long-term commitment</li>
-          <li>Designed specifically for tenants</li>
-          <li>Focused on financial clarity, not legal jargon</li>
-          <li>Typical findings range from thousands to tens of thousands of dollars</li>
-        </ul>
       </section>
 
       {/* CTA */}
-      <section>
+      <section className="rounded bg-gray-50 p-6">
+        <h3 className="text-xl font-semibold">Ready to get started?</h3>
+        <p className="mt-2 text-gray-700">
+          Upload your lease and see what your CAM and NNN charges really allow.
+        </p>
         <a
           href="/"
-          className="inline-block rounded bg-black px-6 py-3 text-white"
+          className="mt-4 inline-block rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
         >
-          Upload a Lease to Get Started
+          Upload a Lease
         </a>
       </section>
     </main>
