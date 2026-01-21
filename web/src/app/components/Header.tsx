@@ -8,7 +8,7 @@ export default function Header() {
     <div className="sticky top-0 z-50 w-full">
       <div className="mx-auto mt-3 w-[95%] max-w-6xl rounded-2xl bg-black px-5 py-3 text-white shadow-lg">
         <div className="flex items-center justify-between">
-          {/* Left */}
+          {/* Left: Logo + Nav */}
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Image
@@ -20,7 +20,7 @@ export default function Header() {
               <span className="text-white">SaveOnLease</span>
             </Link>
 
-            {/* Primary nav */}
+            {/* Main navigation */}
             <nav className="hidden md:flex items-center gap-5 text-sm text-gray-300">
               <Link href="/what-we-find" className="hover:text-white">
                 What We Find
@@ -34,10 +34,13 @@ export default function Header() {
               <Link href="/security" className="hover:text-white">
                 Security
               </Link>
+              <Link href="/privacy" className="hover:text-white">
+                Privacy
+              </Link>
             </nav>
           </div>
 
-          {/* Right */}
+          {/* Right: CTAs */}
           <div className="flex items-center gap-3">
             <Link
               href="/upload"
@@ -58,4 +61,3 @@ export default function Header() {
     </div>
   );
 }
-
