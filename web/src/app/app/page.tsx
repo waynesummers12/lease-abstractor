@@ -501,7 +501,6 @@ return (
     export default function Page() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-16">
-      
       {/* HERO / PAGE INTRO */}
       <section className="mb-10 text-center">
         <h1 className="mb-4 text-4xl font-bold md:text-5xl">
@@ -510,7 +509,8 @@ return (
 
         <p className="mx-auto max-w-2xl text-gray-600">
           Upload your commercial lease to identify CAM / NNN overcharges,
-          escalation risk, and recoverable dollars — before reconciliation deadlines.
+          escalation risk, and recoverable dollars — before reconciliation
+          deadlines.
         </p>
 
         <p className="mt-4 text-sm text-gray-500">
@@ -534,10 +534,10 @@ return (
       <section>
         {/* your upload component stays here */}
       </section>
-
     </main>
   );
 }
+
 
 
       {/* ---------- AUDIT URGENCY ---------- */}
