@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-emerald-900/30 bg-gradient-to-b from-[#0f2f23] to-[#144a36]">
+    <footer className="border-t border-emerald-700/30 bg-gradient-to-b from-[#1f5f48] to-[#2b7a5e]">
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-12 md:grid-cols-3">
           {/* Brand */}
@@ -17,12 +17,12 @@ export default function Footer() {
                 width={36}
                 height={36}
               />
-              <span className="text-lg font-semibold text-emerald-50">
+              <span className="text-lg font-semibold text-[#4aa3ff]">
                 SaveOnLease
               </span>
             </div>
 
-            <p className="mt-4 max-w-sm text-sm text-emerald-100/80">
+            <p className="mt-4 max-w-sm text-sm text-emerald-50/80">
               Helping commercial tenants identify CAM and NNN overcharges
               through clear, secure lease audits.
             </p>
@@ -30,14 +30,14 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h4 className="text-sm font-semibold text-emerald-50">
+            <h4 className="text-sm font-semibold text-[#4aa3ff]">
               Product
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <Link
                   href="/what-we-find"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   What We Find
                 </Link>
@@ -45,7 +45,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/how-it-works"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   How It Works
                 </Link>
@@ -53,7 +53,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/pricing"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   Pricing
                 </Link>
@@ -63,14 +63,14 @@ export default function Footer() {
 
           {/* Trust */}
           <div>
-            <h4 className="text-sm font-semibold text-emerald-50">
+            <h4 className="text-sm font-semibold text-[#4aa3ff]">
               Trust
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <Link
                   href="/security"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   Security
                 </Link>
@@ -78,7 +78,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   Privacy
                 </Link>
@@ -86,7 +86,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-emerald-100/80 hover:text-emerald-50"
+                  className="text-[#4aa3ff]/80 hover:text-[#4aa3ff]"
                 >
                   Terms
                 </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 border-t border-emerald-800/40 pt-6 text-sm text-emerald-200/70">
+        <div className="mt-14 border-t border-emerald-600/40 pt-6 text-sm text-emerald-50/70">
           © {new Date().getFullYear()} SaveOnLease. All rights reserved.
         </div>
       </div>
