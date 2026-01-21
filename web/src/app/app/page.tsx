@@ -523,6 +523,7 @@ export default function Page() {
         <p className="mb-2 font-medium text-amber-900">
           ⚠️ CAM / NNN Audit Deadline Risk
         </p>
+
         <p className="text-sm text-amber-800">
           Most commercial leases allow tenants <strong>30–120 days</strong> after
           receiving the annual CAM reconciliation to dispute overcharges.
@@ -537,9 +538,6 @@ export default function Page() {
     </main>
   );
 }
-
-
-
 
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
