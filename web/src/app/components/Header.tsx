@@ -8,7 +8,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="sticky top-4 z-50 pointer-events-none">
+    <header className="sticky top-4 z-50 pointer-events-none">
       <div className="mx-auto flex justify-center pointer-events-auto">
         <div className="flex items-center gap-6 rounded-full bg-black px-6 py-3 text-white shadow-xl shadow-black/30">
           {/* Logo */}
@@ -76,15 +76,13 @@ export default function Header() {
           </div>
         </div>
       </div>
-      
-<div className="bg-red-500 text-white p-4">
-  TAILWIND TEST
-</div>
 
       {/* Mobile Menu */}
       <div
         className={`md:hidden fixed left-1/2 top-20 w-[90%] -translate-x-1/2 rounded-2xl bg-black px-6 py-4 text-white shadow-xl transition ${
-          open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+          open
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none"
         }`}
       >
         <nav className="flex flex-col gap-4 text-sm text-gray-300">
@@ -101,6 +99,6 @@ export default function Header() {
           ))}
         </nav>
       </div>
-    </div>
+    </header>
   );
 }
