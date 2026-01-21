@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-white">
+    <footer className="bg-[#0f2a1d] text-[#d6eadf]">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-10 md:grid-cols-3">
           {/* Brand */}
@@ -17,12 +17,12 @@ export default function Footer() {
                 width={36}
                 height={36}
               />
-              <span className="text-lg font-semibold text-gray-900">
+              <span className="text-lg font-semibold">
                 SaveOnLease
               </span>
             </div>
 
-            <p className="mt-4 max-w-sm text-sm text-gray-600">
+            <p className="mt-4 max-w-sm text-sm text-[#b7d8c6]">
               Helping commercial tenants identify CAM and NNN overcharges
               through clear, secure lease audits.
             </p>
@@ -30,14 +30,14 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900">
+            <h4 className="text-sm font-semibold">
               Product
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <Link
                   href="/what-we-find"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   What We Find
                 </Link>
@@ -45,7 +45,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/how-it-works"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   How It Works
                 </Link>
@@ -53,7 +53,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/pricing"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   Pricing
                 </Link>
@@ -63,14 +63,14 @@ export default function Footer() {
 
           {/* Trust */}
           <div>
-            <h4 className="text-sm font-semibold text-gray-900">
+            <h4 className="text-sm font-semibold">
               Trust
             </h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
                 <Link
                   href="/security"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   Security
                 </Link>
@@ -78,7 +78,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   Privacy
                 </Link>
@@ -86,7 +86,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-[#b7d8c6] hover:text-white transition"
                 >
                   Terms
                 </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 border-t pt-6 text-sm text-gray-500">
+        <div className="mt-12 border-t border-[#1f4d3a] pt-6 text-sm text-[#9fcab5]">
           © {new Date().getFullYear()} SaveOnLease. All rights reserved.
         </div>
       </div>
