@@ -1,18 +1,19 @@
-// worker/routes/auditById.ts
-
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
+import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
 
 const router = new Router();
 
 /**
- * GET /api/audits/:id
+ * GET /api/audits/:auditId
  *
- * Returns minimal analysis for success page + signed PDF URL
- * Deterministic — no "latest", no tenant lookup
+ * Deterministic audit fetch for success page
+ * NO AUTH
+ * NO SESSION
+ * UUID ONLY
  */
-router.get("/api/audits/:id", async (ctx) => {
-  const auditId = ctx.params.id;
+router.get("/api/audits/:auditId", async (ctx) => {
+  const auditId = ctx.params.auditId;
 
   if (!auditId) {
     ctx.response.status = 400;
@@ -20,26 +21,35 @@ router.get("/api/audits/:id", async (ctx) => {
     return;
   }
 
-  const { data, error } = await supabase
+  const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select("analysis, object_path")
+    .select(
+      `
+      id,
+      status,
+      analysis,
+      pdf_path
+    `
+    )
     .eq("id", auditId)
-    .maybeSingle();
+    .single();
 
-  if (error || !data || !data.object_path) {
+  if (error || !audit) {
     ctx.response.status = 404;
-    ctx.response.body = { error: "Audit not found or not available" };
+    ctx.response.body = { error: "Audit not found" };
     return;
   }
 
-  const { data: signed } = await supabase.storage
-    .from("leases")
-    .createSignedUrl(data.object_path, 60 * 60);
+  let signedUrl: string | null = null;
+
+  if (audit.status === "paid" && audit.pdf_path) {
+    signedUrl = await createAuditPdfSignedUrl(audit.pdf_path);
+  }
 
   ctx.response.status = 200;
   ctx.response.body = {
-    analysis: data.analysis,
-    signedUrl: signed?.signedUrl ?? null,
+    analysis: audit.analysis,
+    signedUrl,
   };
 });
 
