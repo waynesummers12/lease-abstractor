@@ -49,39 +49,41 @@ router.get("/", (ctx) => {
   ctx.response.body = "Lease Abstractor Worker Running";
 });
 
-app.use(router.routes());
-app.use(router.allowedMethods());
-
 /* -------------------- ROUTES -------------------- */
 /**
  * Stripe webhook MUST be mounted early
  */
-app.use(stripeWebhookRoutes.routes());
-app.use(stripeWebhookRoutes.allowedMethods());
+router.use(stripeWebhookRoutes.routes());
+router.use(stripeWebhookRoutes.allowedMethods());
 
 /**
  * Read-only audit APIs
+ * IMPORTANT: auditById MUST come before latest
  */
-app.use(latestAuditRoutes.routes());
-app.use(latestAuditRoutes.allowedMethods());
+router.use(auditByIdRoutes.routes());
+router.use(auditByIdRoutes.allowedMethods());
 
-app.use(auditsRoutes.routes());
-app.use(auditsRoutes.allowedMethods());
+router.use(latestAuditRoutes.routes());
+router.use(latestAuditRoutes.allowedMethods());
+
+router.use(auditsRoutes.routes());
+router.use(auditsRoutes.allowedMethods());
 
 /**
  * Mutating / generation routes
  */
-app.use(ingestLeasePdfRoutes.routes());
-app.use(ingestLeasePdfRoutes.allowedMethods());
+router.use(ingestLeasePdfRoutes.routes());
+router.use(ingestLeasePdfRoutes.allowedMethods());
 
-app.use(checkoutRoutes.routes());
-app.use(checkoutRoutes.allowedMethods());
+router.use(checkoutRoutes.routes());
+router.use(checkoutRoutes.allowedMethods());
 
-app.use(auditPdfRoutes.routes());
-app.use(auditPdfRoutes.allowedMethods());
+router.use(auditPdfRoutes.routes());
+router.use(auditPdfRoutes.allowedMethods());
 
-router.use(auditByIdRoutes.routes());
-
+/* -------------------- APP -------------------- */
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
