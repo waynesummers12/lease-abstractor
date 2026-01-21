@@ -1,10 +1,8 @@
 // worker/utils/generateAuditPdf.ts
 
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
-import { supabase } from "../lib/supabase.ts";
-import { sendAuditEmail } from "./sendAuditEmail.ts";
 
-/* ---------- TYPES ---------- */
+/* ---------- TYPES (LOCAL ONLY, NO SHARED CONTRACT) ---------- */
 
 type AuditFlag = {
   label: string;
@@ -13,7 +11,7 @@ type AuditFlag = {
   estimated_impact?: string | number;
 };
 
-export type AuditAnalysis = {
+type AuditAnalysis = {
   tenant?: string;
   landlord?: string;
   premises?: string;
@@ -24,15 +22,11 @@ export type AuditAnalysis = {
   };
 };
 
-/* ---------- PDF GENERATOR + FINALIZER ---------- */
+/* ---------- PDF GENERATOR ---------- */
 
 export async function generateAuditPdf(
-  auditId: string,
-  analysis: AuditAnalysis,
-  recipientEmail?: string
-): Promise<string> {
-  /* ---------- BUILD PDF ---------- */
-
+  analysis: AuditAnalysis
+): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
   let page = pdf.addPage([612, 792]); // US Letter
   const font = await pdf.embedFont(StandardFonts.Helvetica);
@@ -57,10 +51,12 @@ export async function generateAuditPdf(
     }
   }
 
-  /* ---------- CONTENT ---------- */
+  /* ---------- HEADER ---------- */
 
   line("CAM / NNN Lease Audit Summary", 18);
   y -= 12;
+
+  /* ---------- LEASE INFO ---------- */
 
   line(`Tenant: ${analysis.tenant ?? "—"}`);
   line(`Landlord: ${analysis.landlord ?? "—"}`);
@@ -72,6 +68,8 @@ export async function generateAuditPdf(
   line("Risk Findings", 14);
   y -= 6;
 
+  /* ---------- FLAGS ---------- */
+
   const flags: AuditFlag[] = analysis.health?.flags ?? [];
 
   if (flags.length === 0) {
@@ -80,6 +78,7 @@ export async function generateAuditPdf(
 
   for (const flag of flags) {
     newPageIfNeeded();
+
     line(`• ${flag.label} (${flag.severity.toUpperCase()})`);
     line(flag.recommendation, 10);
 
@@ -90,53 +89,5 @@ export async function generateAuditPdf(
     y -= 6;
   }
 
-  const pdfBytes = await pdf.save();
-
-  /* ---------- UPLOAD ---------- */
-
-  const objectPath = `leases/${auditId}.pdf`;
-
-  const { error: uploadError } = await supabase.storage
-    .from("leases")
-    .upload(objectPath, pdfBytes, {
-      contentType: "application/pdf",
-      upsert: true,
-    });
-
-  if (uploadError) {
-    throw uploadError;
-  }
-
-  /* ---------- DB UPDATE ---------- */
-
-  const { error: updateError } = await supabase
-    .from("lease_audits")
-    .update({ object_path: objectPath })
-    .eq("id", auditId);
-
-  if (updateError) {
-    throw updateError;
-  }
-
-  /* ---------- EMAIL ---------- */
-
- if (recipientEmail && Deno.env.get("RESEND_API_KEY")) {
-    const { data: signed, error: signError } =
-      await supabase.storage
-        .from("leases")
-        .createSignedUrl(objectPath, 60 * 60);
-
-    if (signError || !signed?.signedUrl) {
-      throw signError;
-    }
-
-    await sendAuditEmail({
-      to: recipientEmail,
-      leaseName: "CAM / NNN Lease Audit",
-      signedUrl: signed.signedUrl,
-    });
-  }
-
-  /* ---------- REQUIRED RETURN ---------- */
-  return objectPath;
+  return await pdf.save();
 }
