@@ -7,9 +7,9 @@ export default function Header() {
   return (
     <div className="sticky top-0 z-50 w-full">
       <div className="mx-auto mt-3 w-[95%] max-w-6xl rounded-2xl bg-black px-5 py-3 text-white shadow-lg">
-        <div className="flex items-center justify-between">
-          {/* Left: Logo + Nav */}
-          <div className="flex items-center gap-6">
+        <div className="flex items-center">
+          {/* Left: Logo */}
+          <div className="flex flex-shrink-0 items-center gap-2">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Image
                 src="/logo.png"
@@ -19,29 +19,29 @@ export default function Header() {
               />
               <span className="text-white">SaveOnLease</span>
             </Link>
-
-            {/* Main navigation */}
-            <nav className="hidden md:flex flex-1 justify-center items-center gap-5 text-sm text-black">
-              <Link href="/what-we-find" className="hover:text-white">
-                What We Find
-              </Link>
-              <Link href="/how-it-works" className="hover:text-white">
-                How It Works
-              </Link>
-              <Link href="/pricing" className="hover:text-white">
-                Pricing
-              </Link>
-              <Link href="/security" className="hover:text-white">
-                Security
-              </Link>
-              <Link href="/privacy" className="hover:text-white">
-                Privacy
-              </Link>
-            </nav>
           </div>
 
+          {/* Middle: Main navigation */}
+          <nav className="hidden md:flex flex-1 justify-center items-center gap-5 text-sm text-gray-300">
+            <Link href="/what-we-find" className="hover:text-white">
+              What We Find
+            </Link>
+            <Link href="/how-it-works" className="hover:text-white">
+              How It Works
+            </Link>
+            <Link href="/pricing" className="hover:text-white">
+              Pricing
+            </Link>
+            <Link href="/security" className="hover:text-white">
+              Security
+            </Link>
+            <Link href="/privacy" className="hover:text-white">
+              Privacy
+            </Link>
+          </nav>
+
           {/* Right: CTAs */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-shrink-0 items-center gap-3">
             <Link
               href="/upload"
               className="hidden md:block rounded-lg bg-gray-800 px-3 py-1.5 text-sm hover:bg-gray-700"
