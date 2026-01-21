@@ -22,7 +22,7 @@ export async function sendAuditEmail({
   }
 
   await resend.emails.send({
-    from: "Lease Abstractor <audits@yourdomain.com>",
+    from: "Lease Abstractor <onboarding@resend.dev>",
     to,
     subject: "Your CAM / NNN Lease Audit is Ready",
     html: `
