@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <div className="sticky top-30 z-50 w-full">
+    <div className="sticky top-100 z-50 w-full">
       <div className="mx-auto mt-3 w-[95%] max-w-6xl rounded-2xl bg-black px-5 py-3 text-white shadow-lg">
         <div className="flex items-center justify-between">
           {/* Left: Logo + Nav */}
