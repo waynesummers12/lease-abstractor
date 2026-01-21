@@ -1,6 +1,8 @@
+// worker/routes/auditById.ts
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
-import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
+import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router();
 
@@ -9,7 +11,6 @@ const router = new Router();
  *
  * Deterministic audit fetch for success page
  * NO AUTH
- * NO SESSION
  * UUID ONLY
  */
 router.get("/api/audits/:auditId", async (ctx) => {
@@ -23,16 +24,9 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select(
-      `
-      id,
-      status,
-      analysis,
-      pdf_path
-    `
-    )
+    .select("id, status, analysis, object_path")
     .eq("id", auditId)
-    .single();
+    .maybeSingle();
 
   if (error || !audit) {
     ctx.response.status = 404;
@@ -42,13 +36,16 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   let signedUrl: string | null = null;
 
-  if (audit.status === "paid" && audit.pdf_path) {
-    signedUrl = await createAuditPdfSignedUrl(audit.pdf_path);
+  if (audit.status === "paid" && audit.object_path) {
+    const { data } = await supabase.storage
+      .from("leases")
+      .createSignedUrl(audit.object_path, 60 * 60);
+
+    signedUrl = data?.signedUrl ?? null;
   }
 
   ctx.response.status = 200;
   ctx.response.body = {
-    import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
     analysis: normalizeAuditForSuccess(audit.analysis),
     signedUrl,
   };
