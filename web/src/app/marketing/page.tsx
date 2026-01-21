@@ -18,7 +18,7 @@ export default function HomePage() {
 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Link
-          href="/app"
+          href="/product/app"
           className="rounded-md bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Start CAM Audit
