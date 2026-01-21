@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import DashboardNav from "@/components/dashboard/DashboardNav";
 
 export default function Header() {
   const pathname = usePathname();
