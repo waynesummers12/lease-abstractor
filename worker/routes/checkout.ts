@@ -48,7 +48,7 @@ router.post("/create", async (ctx) => {
           quantity: 1,
         },
       ],
-      success_url: `${baseUrl}/success`,
+      success_url: `${baseUrl}/success?auditId=${auditId}`, // ✅ ANCHOR
       cancel_url: `${baseUrl}`,
       metadata: {
         auditId, // 🔒 CRITICAL LINK
