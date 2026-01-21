@@ -43,7 +43,7 @@ router.post("/pdf", async (ctx) => {
       }
     }
 
-    console.log("📄 Downloading lease PDF:", objectPath);
+    console.info("[ingest] downloading lease pdf", { objectPath });
 
     // --------------------
     // 3. Download PDF from Supabase Storage
@@ -71,7 +71,7 @@ router.post("/pdf", async (ctx) => {
       throw new Error("No text extracted from lease PDF");
     }
 
-    console.log("🧠 Extracted text length:", leaseText.length);
+    console.info("[ingest] extracted lease text", { length: leaseText.length });
 
     // --------------------
     // 6. Run abstraction
