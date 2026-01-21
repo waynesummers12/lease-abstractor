@@ -219,7 +219,6 @@ async function handleUploadAndAnalyze() {
 
 
 /* ---------- STRIPE CHECKOUT ---------- */
-/*
 const [isCheckingOut, setIsCheckingOut] = useState(false);
 const [auditId, setAuditId] = useState<string | null>(null);
 
@@ -426,7 +425,6 @@ return (
     </div>
   </section>
 )}
-*/
 export default function Page() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-16">
