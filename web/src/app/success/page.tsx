@@ -31,17 +31,20 @@ export default function SuccessPage() {
     async function load() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/api/audits/${auditId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
+          { cache: "no-store" }
         );
 
         if (!res.ok) {
-          throw new Error("Audit not found");
+          setData(null);
+          return;
         }
 
         const json = await res.json();
         setData(json);
       } catch (err) {
         console.error("Success page load error:", err);
+        setData(null);
       } finally {
         setLoading(false);
       }
@@ -65,16 +68,18 @@ export default function SuccessPage() {
     );
   }
 
+  /* ---------------- FALLBACK (PRODUCTION-CORRECT) ---------------- */
+
   if (!data) {
     return (
       <main className="mx-auto max-w-2xl p-8">
-        <h1 className="text-2xl font-semibold">
-          Audit unavailable
-        </h1>
-        <p className="mt-2 text-gray-600">
-          We couldn’t load your audit. Please check your email
-          or contact support.
-        </p>
+        <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
+          <p className="font-semibold">Analysis in progress</p>
+          <p className="mt-2">
+            We’re finalizing your lease audit. This usually completes within a
+            few minutes. You can safely close this page or refresh shortly.
+          </p>
+        </div>
       </main>
     );
   }
@@ -99,7 +104,7 @@ export default function SuccessPage() {
         </p>
       </div>
 
-      {/* GREEN VALUE BOX */}
+      {/* VALUE BOX */}
       <div className="rounded border border-green-400 bg-green-50 p-6">
         <div className="text-sm text-green-700">
           Estimated Avoidable Exposure (Next 12 Months)
