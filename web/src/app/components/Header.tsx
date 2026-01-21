@@ -3,36 +3,51 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        {/* Logo */}
-        <Link href="/" className="text-sm font-semibold">
-          SaveOnLease
-        </Link>
-
-        {/* Navigation */}
-        <nav className="flex items-center gap-6 text-sm">
-          <Link href="/marketing/what-we-find" className="hover:underline">
-            What We Find
-          </Link>
-
-          <Link href="/marketing/how-it-works" className="hover:underline">
-            How It Works
-          </Link>
-
-          <Link href="/marketing/pricing" className="hover:underline">
-            Pricing
-          </Link>
-
+    <header className="fixed inset-x-0 top-4 z-50">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="flex h-14 items-center justify-between rounded-2xl bg-black px-6 shadow-lg">
+          {/* Logo */}
           <Link
-            href="/product/app"
-            className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
+            href="/"
+            className="text-sm font-semibold text-white hover:opacity-90"
           >
-            Start Audit
+            SaveOnLease
           </Link>
-        </nav>
+
+          {/* Navigation */}
+          <nav className="flex items-center gap-6 text-sm text-gray-300">
+            <Link
+              href="/marketing/what-we-find"
+              className="hover:text-white"
+            >
+              What We Find
+            </Link>
+
+            <Link
+              href="/marketing/how-it-works"
+              className="hover:text-white"
+            >
+              How It Works
+            </Link>
+
+            <Link
+              href="/marketing/pricing"
+              className="hover:text-white"
+            >
+              Pricing
+            </Link>
+
+            <Link
+              href="/product/app"
+              className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-100"
+            >
+              Start Audit
+            </Link>
+          </nav>
+        </div>
       </div>
     </header>
   );
 }
+
 
