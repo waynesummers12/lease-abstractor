@@ -24,7 +24,7 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select("id, status, analysis, object_path, pdf_path")
+    .select("id, status, analysis, object_path")
     .eq("id", auditId)
     .maybeSingle();
 
@@ -34,16 +34,14 @@ router.get("/api/audits/:auditId", async (ctx) => {
     return;
   }
 
-  // 🔒 HARD INVARIANT:
-  // Paid audits may have legacy `pdf_path` OR newer `object_path`
-  const pdfPath = audit.object_path ?? audit.pdf_path ?? null;
-
   let signedUrl: string | null = null;
 
-  if (audit.status === "paid" && pdfPath) {
+  // 🔒 HARD INVARIANT:
+  // Paid audit MUST have object_path
+  if (audit.status === "paid" && audit.object_path) {
     const { data, error: signError } = await supabase.storage
       .from("leases")
-      .createSignedUrl(pdfPath, 60 * 60);
+      .createSignedUrl(audit.object_path, 60 * 60);
 
     if (!signError && data?.signedUrl) {
       signedUrl = data.signedUrl;
