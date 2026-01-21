@@ -323,8 +323,6 @@ return (
       animation: "fadeSlideIn 0.6s ease-out both",
     }}
   >
-    }}
-  >
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
