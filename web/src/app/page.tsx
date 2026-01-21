@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <main className="flex flex-col items-center px-6 pt-32 text-center">
       <h1 className="mb-4 text-4xl font-bold">
         CAM & NNN Lease Audit — Built for Tenants
       </h1>
