@@ -1,9 +1,9 @@
 import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
-  title: "CAM & NNN Audit Pricing | One-Time Lease Audit",
+  title: "SaveOnLease | CAM & NNN Lease Audit for Commercial Tenants",
   description:
-    "Transparent pricing for CAM and NNN lease audits. One-time $249.99 audit with no subscriptions, retainers, or ongoing fees.",
+    "Upload your commercial lease and identify CAM and NNN overcharges, uncapped expenses, and audit-window risk in minutes.",
 };
 
 export default function PricingPage() {
