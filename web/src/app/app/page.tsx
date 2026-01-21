@@ -403,7 +403,7 @@ return (
             : "#166534",
       }}
     >
-  💰 ${totalAvoidableExposure.toLocaleString()}
+  💰 ${(animatedExposure ?? totalAvoidableExposure)?.toLocaleString()}
 </div>
     <p
   style={{
