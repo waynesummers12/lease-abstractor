@@ -130,37 +130,43 @@ export default function HomePage() {
 })();
 
 useEffect(() => {
-  // Reset animation if there is no exposure
   if (totalAvoidableExposure == null) {
     setAnimatedExposure(null);
     return;
   }
 
-  const DURATION_MS = 900;
-  const START_VALUE = 0;
-  const END_VALUE = totalAvoidableExposure;
-  const startTime = performance.now();
+  // ⏳ micro-delay so it feels "computed"
+  const delayMs = 200;
 
-  function animate(now: number) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / DURATION_MS, 1);
+  const timeoutId = setTimeout(() => {
+    const duration = 900;
+    const startTime = performance.now();
+    const startValue = 0;
+    const endValue = totalAvoidableExposure;
 
-    // Ease-out cubic (smooth, premium feel)
-    const easedProgress = 1 - Math.pow(1 - progress, 3);
+    function tick(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
 
-    const currentValue = Math.round(
-      START_VALUE + easedProgress * END_VALUE
-    );
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - progress, 3);
 
-    setAnimatedExposure(currentValue);
+      setAnimatedExposure(
+        Math.round(startValue + eased * endValue)
+      );
 
-    if (progress < 1) {
-      requestAnimationFrame(animate);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      }
     }
-  }
 
-  requestAnimationFrame(animate);
+    requestAnimationFrame(tick);
+  }, delayMs);
+
+  // 🧹 cleanup if component rerenders
+  return () => clearTimeout(timeoutId);
 }, [totalAvoidableExposure]);
+
 
 
 const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
