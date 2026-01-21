@@ -1,38 +1,47 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
-type SuccessData = {
-  audit: {
+type AuditResponse = {
+  analysis: {
     avoidable_exposure?: number;
-  } | null;
+    risk_level?: "LOW" | "MEDIUM" | "HIGH";
+    flagged_sections?: {
+      section: string;
+      title: string;
+    }[];
+    health_score?: number;
+  };
   signedUrl: string | null;
 };
 
 export default function SuccessPage() {
-  const [data, setData] = useState<SuccessData | null>(null);
+  const [data, setData] = useState<AuditResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const auditId = params.get("auditId");
+
+    if (!auditId) {
+      setLoading(false);
+      return;
+    }
+
     async function load() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/latest`,
-          { credentials: "include" }
+          `${process.env.NEXT_PUBLIC_WORKER_URL}/api/audits/${auditId}`
         );
 
         if (!res.ok) {
-          console.warn("Failed to load latest audit");
-          setData(null);
-          return;
+          throw new Error("Audit not found");
         }
 
         const json = await res.json();
         setData(json);
       } catch (err) {
         console.error("Success page load error:", err);
-        setData(null);
       } finally {
         setLoading(false);
       }
@@ -56,6 +65,25 @@ export default function SuccessPage() {
     );
   }
 
+  if (!data) {
+    return (
+      <main className="mx-auto max-w-2xl p-8">
+        <h1 className="text-2xl font-semibold">
+          Audit unavailable
+        </h1>
+        <p className="mt-2 text-gray-600">
+          We couldn’t load your audit. Please check your email
+          or contact support.
+        </p>
+      </main>
+    );
+  }
+
+  const exposure = data.analysis?.avoidable_exposure;
+  const risk = data.analysis?.risk_level ?? "HIGH";
+  const sections = data.analysis?.flagged_sections ?? [];
+  const score = data.analysis?.health_score ?? 50;
+
   /* ---------------- UI ---------------- */
 
   return (
@@ -63,102 +91,78 @@ export default function SuccessPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">
-          ✅ Payment successful
+          Lease Audit Complete
         </h1>
         <p className="mt-2 text-gray-600">
-          Your CAM / NNN lease audit has been generated and saved
-          securely.
+          We’ve completed an initial CAM / NNN risk review of
+          your lease.
         </p>
       </div>
 
-      {/* Checklist */}
-      <div className="space-y-2 rounded border p-6">
-        <ChecklistItem done label="Payment received" />
-        <ChecklistItem done label="Audit generated" />
-        <ChecklistItem done label="PDF secured" />
-        <ChecklistItem
-          done={!!data?.signedUrl}
-          label="Email delivered"
-        />
+      {/* GREEN VALUE BOX */}
+      <div className="rounded border border-green-400 bg-green-50 p-6">
+        <div className="text-sm text-green-700">
+          Estimated Avoidable Exposure (Next 12 Months)
+        </div>
+
+        {exposure != null && (
+          <div className="mt-1 text-3xl font-bold text-green-800">
+            ${exposure.toLocaleString()}
+          </div>
+        )}
+
+        <div className="mt-3 font-semibold text-red-700">
+          Risk level: {risk}
+        </div>
+
+        {sections.length > 0 && (
+          <div className="mt-3 text-sm text-gray-700">
+            Exposure detected in the following lease sections:
+            <ul className="mt-2 list-disc pl-5">
+              {sections.slice(0, 3).map((s) => (
+                <li key={s.section}>
+                  <strong>{s.section}</strong> — {s.title}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-3 text-sm text-gray-600">
+          Most commercial leases require CAM / NNN disputes within
+          <strong> 30–120 days</strong> of reconciliation.
+        </div>
       </div>
 
-      {/* Value Callout */}
-      {data?.audit?.avoidable_exposure != null && (
-        <div className="rounded bg-gray-50 p-6">
-          <div className="text-sm text-gray-500">
-            Estimated Avoidable Exposure
-          </div>
-          <div className="mt-1 text-3xl font-bold">
-            ${data.audit.avoidable_exposure.toLocaleString()}
-          </div>
-          <div className="mt-1 text-sm text-gray-600">
-            Based on CAM / NNN reconciliation risks identified in
-            your lease.
-          </div>
+      {/* HEALTH SCORE */}
+      <div className="rounded border p-6">
+        <div className="text-sm text-gray-500">
+          Lease Health Score
         </div>
-      )}
+        <div className="mt-1 text-2xl font-bold">
+          {score} / 100
+        </div>
+      </div>
 
-      {/* Actions */}
+      {/* ACTIONS */}
       <div className="flex flex-wrap gap-3">
-        {data?.signedUrl && (
+        {data.signedUrl && (
           <a
             href={data.signedUrl}
             target="_blank"
             rel="noreferrer"
             className="rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
           >
-            Download PDF
+            Download Full Audit (PDF)
           </a>
         )}
-
-        <Link
-          href="/dashboard"
-          className="rounded border px-5 py-2 hover:bg-gray-50"
-        >
-          Go to Dashboard
-        </Link>
-
-        <Link
-          href="/app"
-          className="rounded border px-5 py-2 hover:bg-gray-50"
-        >
-          Upload Another Lease
-        </Link>
       </div>
 
-      {/* Footer reassurance */}
+      {/* REASSURANCE */}
       <div className="pt-4 text-sm text-gray-600">
-        We’ve also emailed you a secure link to your audit for
-        convenience. You can access this audit anytime from your
-        dashboard.
+        We’ve also emailed you a copy of this audit for your
+        records.
       </div>
     </main>
-  );
-}
-
-/* ---------------- COMPONENTS ---------------- */
-
-function ChecklistItem({
-  done,
-  label,
-}: {
-  done: boolean;
-  label: string;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <span
-        className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${
-          done
-            ? "bg-green-500 text-white"
-            : "bg-gray-300 text-gray-700"
-        }`}
-      >
-        ✓
-      </span>
-      <span className={done ? "" : "text-gray-500"}>
-        {label}
-      </span>
-    </div>
   );
 }
