@@ -135,40 +135,28 @@ useEffect(() => {
     return;
   }
 
-  // ⏳ micro-delay so it feels "computed"
-  const delayMs = 200;
+  const DURATION_MS = 900;
+  const startTime = performance.now();
+  const endValue = totalAvoidableExposure;
 
-  const timeoutId = setTimeout(() => {
-    const duration = 900;
-    const startTime = performance.now();
-    const startValue = 0;
-    const endValue = totalAvoidableExposure;
+  function tick(now: number) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / DURATION_MS, 1);
 
-    function tick(now: number) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3);
 
-      // easeOutCubic
-      const eased = 1 - Math.pow(1 - progress, 3);
+    setAnimatedExposure(Math.round(eased * endValue));
 
-      setAnimatedExposure(
-        Math.round(startValue + eased * endValue)
-      );
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      setShowStickyCTA(true); // 👈 CTA appears AFTER count-up
+    }
+  }
 
-      if (progress < 1) {
-  requestAnimationFrame(animate);
-} else {
-  setShowStickyCTA(true); // 👈 ADD THIS
-}
-
-    requestAnimationFrame(tick);
-  }, delayMs);
-
-  // 🧹 cleanup if component rerenders
-  return () => clearTimeout(timeoutId);
+  requestAnimationFrame(tick);
 }, [totalAvoidableExposure]);
-
-
 
 const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
   if (totalAvoidableExposure == null) return null;
