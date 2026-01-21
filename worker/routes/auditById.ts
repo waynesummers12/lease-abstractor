@@ -48,7 +48,8 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   ctx.response.status = 200;
   ctx.response.body = {
-    analysis: audit.analysis,
+    import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
+    analysis: normalizeAuditForSuccess(audit.analysis),
     signedUrl,
   };
 });
