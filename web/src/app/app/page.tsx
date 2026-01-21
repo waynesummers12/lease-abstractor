@@ -273,6 +273,44 @@ async function handleCheckout() {
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
+      {/* ---------- AUDIT URGENCY ---------- */}
+      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <p className="text-sm font-medium text-amber-900 mb-1">
+          ⚠️ CAM / NNN Audit Deadline Risk
+        </p>
+        <p className="text-sm text-amber-800">
+          Most commercial leases allow tenants{" "}
+          <strong>30–120 days</strong> after receiving the annual CAM
+          reconciliation to dispute overcharges.{" "}
+          <strong>Miss the window, and recovery rights are often waived.</strong>
+        </p>
+      </div>
+
+      {/* ---------- UPLOAD ---------- */}
+      <div className="flex items-center gap-4 mb-4">
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
+          className={`px-4 py-2 rounded-md text-sm font-medium ${
+            file
+              ? "bg-black text-white hover:bg-gray-800"
+              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Analyze CAM / NNN Risk
+        </button>
+      </div>
+
+      {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
+
+      {analysis !== null && (
+        <>
     {totalAvoidableExposure != null && (
   <section
     ref={resultsRef}
@@ -282,6 +320,9 @@ return (
       borderRadius: 10,
       border: "2px solid #16a34a",
       background: "#f0fdf4",
+      animation: "fadeSlideIn 0.6s ease-out both",
+    }}
+  >
     }}
   >
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
@@ -425,44 +466,7 @@ return (
   </section>
 )}
 
-      {/* ---------- AUDIT URGENCY ---------- */}
-      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-        <p className="text-sm font-medium text-amber-900 mb-1">
-          ⚠️ CAM / NNN Audit Deadline Risk
-        </p>
-        <p className="text-sm text-amber-800">
-          Most commercial leases allow tenants{" "}
-          <strong>30–120 days</strong> after receiving the annual CAM
-          reconciliation to dispute overcharges.{" "}
-          <strong>Miss the window, and recovery rights are often waived.</strong>
-        </p>
-      </div>
 
-      {/* ---------- UPLOAD ---------- */}
-      <div className="flex items-center gap-4 mb-4">
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
-
-        <button
-          onClick={handleUploadAndAnalyze}
-          disabled={!file}
-          className={`px-4 py-2 rounded-md text-sm font-medium ${
-            file
-              ? "bg-black text-white hover:bg-gray-800"
-              : "bg-gray-200 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          Analyze CAM / NNN Risk
-        </button>
-      </div>
-
-      {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
-
-      {analysis !== null && (
-        <>
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
   <h2 style={sectionTitle}>Lease Summary</h2>
