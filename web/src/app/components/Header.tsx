@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur border-b">
+    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="text-sm font-semibold">
@@ -35,3 +35,4 @@ export default function Header() {
     </header>
   );
 }
+
