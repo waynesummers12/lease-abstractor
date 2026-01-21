@@ -497,19 +497,48 @@ return (
       </section>
     )}
 
-    {/* ---------- HEADER ---------- */}
-    <h1 className="text-4xl font-bold mb-2">
-      CAM & NNN Audit Risk — Estimated Tenant Recovery
-    </h1>
-      <p className="text-gray-600 mb-2">
-        Upload your commercial lease to identify CAM / NNN overcharges,
-        escalation risk, and recoverable dollars — before reconciliation
-        deadlines.
-      </p>
+    {/* ---------- PageIntro ---------- */}
+    export default function Page() {
+  return (
+    <main className="mx-auto max-w-4xl px-4 py-16">
+      
+      {/* HERO / PAGE INTRO */}
+      <section className="mb-10 text-center">
+        <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+          CAM & NNN Audit Risk — Estimated Tenant Recovery
+        </h1>
 
-      <p className="text-xs text-gray-500 mb-6">
-        One-time audit summary · Typically recovers $10k–$50k+
-      </p>
+        <p className="mx-auto max-w-2xl text-gray-600">
+          Upload your commercial lease to identify CAM / NNN overcharges,
+          escalation risk, and recoverable dollars — before reconciliation deadlines.
+        </p>
+
+        <p className="mt-4 text-sm text-gray-500">
+          One-time audit summary · Typically recovers $10k–$50k+
+        </p>
+      </section>
+
+      {/* URGENCY / CALLOUT */}
+      <section className="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-4 text-left">
+        <p className="mb-2 font-medium text-amber-900">
+          ⚠️ CAM / NNN Audit Deadline Risk
+        </p>
+        <p className="text-sm text-amber-800">
+          Most commercial leases allow tenants <strong>30–120 days</strong> after
+          receiving the annual CAM reconciliation to dispute overcharges.
+          <strong> Miss the window, and recovery rights are often waived.</strong>
+        </p>
+      </section>
+
+      {/* UPLOAD / CTA */}
+      <section>
+        {/* your upload component stays here */}
+      </section>
+
+    </main>
+  );
+}
+
 
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
