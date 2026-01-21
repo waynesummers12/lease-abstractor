@@ -5,6 +5,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
+{isDashboard && open && (
+  <>
+    <div
+      className="fixed inset-0 z-40 bg-black/40 md:hidden"
+      onClick={() => setOpen(false)}
+    />
+
+    <aside
+      className="fixed inset-y-0 left-0 z-50 w-64 bg-white p-6 shadow-lg md:hidden"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="mb-6 font-semibold">FloBOT</div>
+      <DashboardNav onNavigate={() => setOpen(false)} />
+    </aside>
+  </>
+)}
+
 export default function Header() {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith("/dashboard");
