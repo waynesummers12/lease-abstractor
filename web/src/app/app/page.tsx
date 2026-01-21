@@ -143,6 +143,32 @@ const exposureRange: { low: number; high: number } | null = (() => {
   };
 })();
 
+/* ---------- SCROLL HELPERS ---------- */
+
+function slowScrollTo(element: HTMLElement, duration = 800) {
+  const startY = window.scrollY;
+  const targetY =
+    element.getBoundingClientRect().top + window.scrollY - 24;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function step(currentTime: number) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // easeOutCubic
+    const ease = 1 - Math.pow(1 - progress, 3);
+
+    window.scrollTo(0, startY + distance * ease);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
 /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -210,11 +236,10 @@ async function handleUploadAndAnalyze() {
   setStatus("Analysis complete ✅");
 
   setTimeout(() => {
-    resultsRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, 100);
+  if (resultsRef.current) {
+    slowScrollTo(resultsRef.current, 1200);
+  }
+}, 100);
 }
 
 /* ---------- STRIPE CHECKOUT ---------- */
@@ -320,7 +345,7 @@ return (
       borderRadius: 10,
       border: "2px solid #16a34a",
       background: "#f0fdf4",
-      animation: "fadeSlideIn 0.6s ease-out both",
+      animation: "fadeSlideIn 0.6s ease-out 0.15s both",
     }}
   >
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
