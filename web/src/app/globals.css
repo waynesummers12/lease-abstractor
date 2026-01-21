@@ -75,3 +75,14 @@ body {
     color: #6b7280; /* gray-500 */
   }
 }
+@keyframes glowOnce {
+  0% {
+    box-shadow: 0 0 0 rgba(22, 163, 74, 0);
+  }
+  40% {
+    box-shadow: 0 0 24px rgba(22, 163, 74, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(22, 163, 74, 0);
+  }
+}

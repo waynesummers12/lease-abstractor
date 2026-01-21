@@ -102,7 +102,7 @@ export default function HomePage() {
 
   // ✅ ADD THIS LINE
   const [animatedExposure, setAnimatedExposure] = useState<number | null>(null);
-
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
   if (selectedAudit) return selectedAudit;
@@ -156,9 +156,10 @@ useEffect(() => {
       );
 
       if (progress < 1) {
-        requestAnimationFrame(tick);
-      }
-    }
+  requestAnimationFrame(animate);
+} else {
+  setShowStickyCTA(true); // 👈 ADD THIS
+}
 
     requestAnimationFrame(tick);
   }, delayMs);
@@ -381,16 +382,19 @@ return (
         <>
     {totalAvoidableExposure != null && (
   <section
-    ref={resultsRef}
-    style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 10,
-      border: "2px solid #16a34a",
-      background: "#f0fdf4",
-      animation: "fadeSlideIn 0.6s ease-out 0.15s both",
-    }}
-  >
+  ref={resultsRef}
+  style={{
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 10,
+    border: "2px solid #16a34a",
+    background: "#f0fdf4",
+    animation:
+      exposureRiskLabel === "high"
+        ? "fadeSlideIn 0.6s ease-out 0.15s both, glowOnce 1.2s ease-out both"
+        : "fadeSlideIn 0.6s ease-out 0.15s both",
+  }}
+>
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
@@ -737,6 +741,44 @@ return (
 </section>
         </>
       )}
+{showStickyCTA && exposureRiskLabel === "high" && (
+  <div
+    style={{
+      position: "fixed",
+      bottom: 20,
+      left: "50%",
+      transform: "translateX(-50%)",
+      background: "#111",
+      color: "#fff",
+      padding: "12px 18px",
+      borderRadius: 10,
+      boxShadow: "0 12px 32px rgba(0,0,0,0.25)",
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      zIndex: 50,
+    }}
+  >
+    <span style={{ fontSize: 14 }}>
+      High-risk CAM exposure detected — timing matters
+    </span>
+
+    <button
+      onClick={handleCheckout}
+      style={{
+        background: "#16a34a",
+        color: "#fff",
+        border: "none",
+        padding: "8px 14px",
+        borderRadius: 6,
+        fontWeight: 600,
+        cursor: "pointer",
+      }}
+    >
+      Get Audit Summary
+    </button>
+  </div>
+)}
 
   </main>
 );
