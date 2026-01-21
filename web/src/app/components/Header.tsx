@@ -1,5 +1,6 @@
 // src/app/components/Header.tsx
 import Link from "next/link";
+console.log("HEADER RENDERED");
 
 export default function Header() {
   return (
