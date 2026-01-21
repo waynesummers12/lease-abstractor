@@ -1,4 +1,4 @@
-import FaqSchema from "../../components/FaqSchema";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "CAM & NNN Audit Pricing | One-Time Lease Audit",
