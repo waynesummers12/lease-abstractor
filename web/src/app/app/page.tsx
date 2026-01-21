@@ -100,6 +100,9 @@ export default function HomePage() {
     // ✅ ADD THIS HERE
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
+  // ✅ ADD THIS LINE
+  const [animatedExposure, setAnimatedExposure] = useState<number | null>(null);
+
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
   if (selectedAudit) return selectedAudit;
@@ -125,6 +128,40 @@ export default function HomePage() {
 
   return total > 0 ? Math.round(total) : null;
 })();
+
+useEffect(() => {
+  // Reset animation if there is no exposure
+  if (totalAvoidableExposure == null) {
+    setAnimatedExposure(null);
+    return;
+  }
+
+  const DURATION_MS = 900;
+  const START_VALUE = 0;
+  const END_VALUE = totalAvoidableExposure;
+  const startTime = performance.now();
+
+  function animate(now: number) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / DURATION_MS, 1);
+
+    // Ease-out cubic (smooth, premium feel)
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+    const currentValue = Math.round(
+      START_VALUE + easedProgress * END_VALUE
+    );
+
+    setAnimatedExposure(currentValue);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}, [totalAvoidableExposure]);
+
 
 const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
   if (totalAvoidableExposure == null) return null;
