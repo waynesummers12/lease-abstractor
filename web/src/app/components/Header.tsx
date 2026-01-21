@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <div className="sticky top-100 z-50 w-full">
+    <div className="sticky top-0 z-50 w-full">
       <div className="mx-auto mt-3 w-[95%] max-w-6xl rounded-2xl bg-black px-5 py-3 text-white shadow-lg">
         <div className="flex items-center justify-between">
           {/* Left: Logo + Nav */}
@@ -21,7 +21,7 @@ export default function Header() {
             </Link>
 
             {/* Main navigation */}
-            <nav className="hidden md:flex items-center gap-5 text-sm text-gray-300">
+            <nav className="hidden md:flex items-center gap-5 text-sm text-black">
               <Link href="/what-we-find" className="hover:text-white">
                 What We Find
               </Link>
