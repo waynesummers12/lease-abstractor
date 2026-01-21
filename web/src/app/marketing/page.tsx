@@ -1,53 +1,30 @@
-// src/app/page.tsx
-"use client";
-
+// src/app/marketing/page.tsx
 import Link from "next/link";
 
-export default function HomePage() {
+export default function MarketingIndexPage() {
   return (
-    <main className="flex flex-col items-center px-6 pt-32 text-center">
-      <h1 className="mb-4 text-4xl font-bold">
-        CAM & NNN Lease Audit — Built for Tenants
+    <main className="mx-auto max-w-3xl px-6 py-20 text-center">
+      <h1 className="text-3xl font-bold mb-4">
+        SaveOnLease Resources
       </h1>
 
-      <p className="mb-6 max-w-xl text-gray-600">
-        Upload your commercial lease and instantly identify CAM / NNN
-        overcharges, uncapped expenses, and audit-window risk — before
-        reconciliation deadlines expire.
+      <p className="text-gray-600 mb-8">
+        Learn how SaveOnLease helps commercial tenants uncover CAM and NNN
+        overcharges.
       </p>
 
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Link
-          href="/product/app"
-          className="rounded-md bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
-        >
-          Start CAM Audit
+      <div className="flex justify-center gap-4">
+        <Link href="/marketing/how-it-works" className="underline">
+          How it Works
         </Link>
-
-        <a
-          href="#how-it-works"
-          className="rounded-md border border-gray-300 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100"
-        >
-          How it works
-        </a>
+        <Link href="/marketing/what-we-find" className="underline">
+          What We Find
+        </Link>
+        <Link href="/marketing/pricing" className="underline">
+          Pricing
+        </Link>
       </div>
-
-      <div
-        id="how-it-works"
-        className="mt-12 max-w-2xl text-left text-sm text-gray-700"
-      >
-        <h2 className="mb-2 text-lg font-semibold">How it works</h2>
-        <ol className="list-decimal space-y-2 pl-5">
-          <li>Upload your commercial lease (PDF)</li>
-          <li>AI analyzes CAM / NNN clauses, caps, and escalation terms</li>
-          <li>Get a clear estimate of avoidable overcharges</li>
-          <li>Download a tenant-ready audit summary</li>
-        </ol>
-      </div>
-
-      <footer className="mt-16 text-xs text-gray-400">
-        © {new Date().getFullYear()} · Tenant-first lease intelligence
-      </footer>
     </main>
   );
 }
+
