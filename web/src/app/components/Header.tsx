@@ -22,7 +22,7 @@ export default function Header() {
           </div>
 
           {/* Middle: Main navigation */}
-          <nav className="hidden md:flex flex-1 justify-center items-center gap-5 text-sm text-gray-300">
+          <nav className="flex flex-1 justify-center items-center gap-5 text-sm text-gray-300">
             <Link href="/what-we-find" className="hover:text-white">
               What We Find
             </Link>
