@@ -30,10 +30,10 @@ export default function SuccessPage() {
         const json = await res.json();
 
         // ✅ Analysis complete → redirect to final page
-        if (json?.analysis && json?.signedUrl) {
-          router.push(`/audit/${auditId}`);
-          return;
-        }
+        if (json?.analysis) {
+  router.push("/product/app/dashboard");
+  return;
+}
 
         // ⏳ Still processing → keep polling
         if (!cancelled) {
