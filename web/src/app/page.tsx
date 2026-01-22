@@ -2,7 +2,7 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-24 text-center">
       {/* ================= HERO ================= */}
-      <h1 className="mb-6 text-6xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05]">
+      <h1 className="mb-6 text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
   CAM & NNN Lease Audit — Built for Tenants
 </h1>
 
