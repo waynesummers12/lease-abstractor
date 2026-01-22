@@ -1,7 +1,7 @@
 // src/app/marketing/page.tsx
 export default function MarketingIndexPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-20 text-center">
+    <div className="mx-auto max-w-3xl px-6 py-20 text-center">
       <h1 className="text-3xl font-bold mb-4">
         SaveOnLease Resources
       </h1>
@@ -10,6 +10,6 @@ export default function MarketingIndexPage() {
         Learn how SaveOnLease helps commercial tenants uncover CAM and NNN
         overcharges.
       </p>
-    </main>
+    </div>
   );
 }
