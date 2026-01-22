@@ -1,7 +1,7 @@
 // web/src/app/layout.tsx
 
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 export default function RootLayout({
@@ -11,10 +11,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col">
-        <Navbar />
+      <body className="min-h-screen flex flex-col bg-white text-gray-900">
+        <Header />
 
-        <main className="pt-16">
+        {/* Header height = 64px */}
+        <main className="flex-1 pt-16">
           {children}
         </main>
 
@@ -23,3 +24,4 @@ export default function RootLayout({
     </html>
   );
 }
+
