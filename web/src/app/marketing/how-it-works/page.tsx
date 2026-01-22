@@ -8,19 +8,14 @@ export const metadata = {
 
 export default function HowItWorksPage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-10 px-6">
-      {/* 🔥 TAILWIND DIAGNOSTIC — REMOVE AFTER TEST */}
-      <div className="relative -mx-6 mb-10 flex items-center justify-center bg-gradient-to-r from-green-500 via-emerald-400 to-lime-400 py-10 text-center text-4xl font-extrabold text-black shadow-2xl">
-        🚨 TAILWIND IS ALIVE 🚨
-      </div>
-
+    <div className="mx-auto max-w-3xl space-y-12 px-6 py-12">
       {/* HERO */}
       <section>
         <h1 className="text-4xl font-bold">How SaveOnLease Works</h1>
         <p className="mt-4 text-lg text-gray-700">
           SaveOnLease helps commercial tenants identify CAM and NNN overcharges
-          by analyzing lease language and expense structures — quickly, securely,
-          and without long-term commitments.
+          by analyzing lease language and expense structures — quickly,
+          securely, and without long-term commitments.
         </p>
       </section>
 
@@ -92,14 +87,13 @@ export default function HowItWorksPage() {
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8">
         <h3 className="text-xl font-semibold">Ready to get started?</h3>
-
         <p className="mt-2 max-w-md text-gray-700">
           Upload your lease and see what your CAM and NNN charges really allow.
         </p>
 
         <Link
           href="/product/app"
-          className="mt-5 inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-5 inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
           Upload a Lease
         </Link>
