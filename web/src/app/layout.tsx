@@ -17,12 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-white text-gray-900">
-        {/* Fixed header */}
         <Header />
 
-        {/* 🔑 OFFSET LAYER — THIS IS THE FIX */}
+        {/* OFFSET LAYER — NOT main */}
         <div className="pt-32 min-h-screen">
-          {/* Semantic content container */}
           <main className="mx-auto">
             {children}
           </main>
@@ -33,5 +31,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
