@@ -26,7 +26,7 @@ export default function Footer() {
             <Link href="/marketing/privacy" className="hover:text-gray-900">
               Privacy
             </Link>
-            <Link href="/marketing/terms" className="hover:text-gray-900">
+            <Link href="/marketing/terms" className="hover:text-red-1100">
               Terms
             </Link>
           </nav>
