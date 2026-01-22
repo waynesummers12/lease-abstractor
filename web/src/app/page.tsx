@@ -6,10 +6,10 @@ export default function HomePage() {
   CAM & NNN Lease Audit — Built for Tenants
 </h1>
 
-      <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
-        Upload your commercial lease and uncover hidden CAM / NNN overcharges,
-        uncapped expenses, and missed audit rights — before deadlines expire.
-      </p>
+      <p className="mx-auto mb-10 max-w-3xl text-xl sm:text-2xl leading-relaxed tracking-wide text-gray-600">
+  Upload your commercial lease and uncover hidden CAM / NNN overcharges,
+  uncapped expenses, and missed audit rights — before deadlines expire.
+</p>
 
       {/* PRIMARY + SECONDARY CTA */}
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
