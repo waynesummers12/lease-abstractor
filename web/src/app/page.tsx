@@ -22,7 +22,7 @@ export default function HomePage() {
         </a>
 
         <a
-          href="/what-we-find"
+          href="marketing/what-we-find"
           className="inline-flex items-center rounded-lg border border-gray-300 px-8 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
         >
           See What We Check
