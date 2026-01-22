@@ -1,6 +1,6 @@
 export default function HomePage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-24 text-center">
+    <div className="mx-auto max-w-3xl px-6 py-24 text-center">
       <h1 className="mb-4 text-4xl font-bold">
         CAM & NNN Lease Audit — Built for Tenants
       </h1>
@@ -16,7 +16,7 @@ export default function HomePage() {
       >
         Start CAM Audit
       </a>
-    </main>
+    </div>
   );
 }
 
