@@ -57,14 +57,14 @@ export default function SuccessPage() {
 
   if (loading) {
     return (
-      <main className="mx-auto max-w-2xl p-8">
+      <div className="mx-auto max-w-2xl p-8">
         <h1 className="text-2xl font-semibold">
           Finalizing your audit…
         </h1>
         <p className="mt-2 text-gray-600">
           This usually takes just a few seconds.
         </p>
-      </main>
+      </div>
     );
   }
 
@@ -72,7 +72,7 @@ export default function SuccessPage() {
 
   if (!data) {
     return (
-      <main className="mx-auto max-w-2xl p-8">
+      <div className="mx-auto max-w-2xl p-8">
         <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
           <p className="font-semibold">Analysis in progress</p>
           <p className="mt-2">
@@ -80,7 +80,7 @@ export default function SuccessPage() {
             few minutes. You can safely close this page or refresh shortly.
           </p>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -92,7 +92,7 @@ export default function SuccessPage() {
   /* ---------------- UI ---------------- */
 
   return (
-    <main className="mx-auto max-w-2xl space-y-8 p-8">
+    <div className="mx-auto max-w-2xl space-y-8 p-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">
@@ -168,6 +168,6 @@ export default function SuccessPage() {
         We’ve also emailed you a copy of this audit for your
         records.
       </div>
-    </main>
+    </div>
   );
 }
