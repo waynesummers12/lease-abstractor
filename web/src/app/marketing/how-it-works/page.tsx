@@ -1,3 +1,4 @@
+import Link from "next/link";
 export const metadata = {
   title: "How SaveOnLease Works | CAM & NNN Lease Audit",
   description:
@@ -83,18 +84,22 @@ export default function HowItWorksPage() {
       </section>
 
       {/* CTA */}
-      <section className="rounded bg-gray-50 p-6">
-        <h3 className="text-xl font-semibold">Ready to get started?</h3>
-        <p className="mt-2 text-gray-700">
-          Upload your lease and see what your CAM and NNN charges really allow.
-        </p>
-        <a
-          href="/"
-          className="mt-4 inline-block rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
-        >
-          Upload a Lease
-        </a>
-      </section>
+<section className="rounded-2xl bg-gray-50 p-8">
+  <h3 className="text-xl font-semibold">
+    Ready to get started?
+  </h3>
+
+  <p className="mt-2 max-w-md text-gray-700">
+    Upload your lease and see what your CAM and NNN charges really allow.
+  </p>
+
+  <Link
+    href="/product/app"
+    className="mt-5 inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
+  >
+    Upload a Lease
+  </Link>
+</section>
     </main>
   );
 }
