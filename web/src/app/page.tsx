@@ -139,10 +139,10 @@ export default function HomePage() {
 
       {/* ================= FINAL CTA ================= */}
       <section className="mt-24 text-center">
-        <p className="mx-auto mb-6 max-w-xl text-gray-600">
-          Used by SMB tenants nationwide to surface CAM / NNN issues before audit
-          rights expire.
-        </p>
+        <p className="mx-auto mb-8 max-w-2xl text-lg sm:text-xl tracking-wide leading-relaxed text-gray-600">
+  Used by SMB tenants nationwide to surface CAM / NNN issues before audit
+  rights expire.
+</p>
 
         <a
           href="/product/app"
