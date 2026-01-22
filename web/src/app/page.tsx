@@ -1,159 +1,182 @@
-export default function HomePage() {
+src/app/page.tsx
+// src/app/marketing/page.tsx
+import Link from "next/link";
+
+export const metadata = {
+  title: "CAM & NNN Lease Audit for Tenants | SaveOnLease",
+  description:
+    "Identify CAM and NNN overcharges in commercial leases. Upload your lease and receive a clear, tenant-first audit with estimated savings—no subscriptions.",
+};
+
+export default function MarketingHomePage() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-24 text-center">
-      {/* ================= HERO ================= */}
-      <h1 className="mb-6 text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
-  CAM & NNN Lease Audit — Built for Tenants
-</h1>
+    <main>
+      {/* HERO */}
+      <section className="mx-auto max-w-7xl px-6 pt-28 pb-20 text-center">
+        <h1 className="mx-auto max-w-5xl text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
+          CAM & NNN Lease Audit
+          <span className="block">Built for Tenants</span>
+        </h1>
+        <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-600">
+          Upload your commercial lease and uncover hidden CAM / NNN overcharges,
+          uncapped expenses, and missed audit rights
+          <span className="block mt-1">— before deadlines expire.</span>
+        </p>
 
-      <p className="mx-auto mb-10 max-w-3xl text-xl sm:text-2xl leading-relaxed tracking-wide text-gray-600">
-  Upload your commercial lease and uncover hidden CAM / NNN overcharges,
-  uncapped expenses, and missed audit rights
-  <span className="block mt-1">— before deadlines expire.</span>
-</p>
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/product/app"
+            className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
+            Start CAM Audit
+          </Link>
+          <Link
+            href="/marketing/what-we-find"
+            className="rounded-xl border px-8 py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition"
+          >
+            See What We Check
+          </Link>
+        </div>
 
-      {/* PRIMARY + SECONDARY CTA */}
-      <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-        <a
-          href="/product/app"
-          className="inline-flex items-center rounded-lg bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-        >
-          Start CAM Audit
-        </a>
-
-        <a
-          href="marketing/what-we-find"
-          className="inline-flex items-center rounded-lg border border-gray-300 px-8 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
-        >
-          See What We Check
-        </a>
-      </div>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
+          Used by SMB tenants nationwide to surface CAM / NNN issues before audit
+          rights expire.
+        </p>
+      </section>
 
       {/* TRUST STRIP */}
-      <div className="mt-6 text-sm text-gray-500">
-        Secure upload • No sales calls • Results in minutes
-      </div>
-
-      {/* ================= PROOF STATS ================= */}
-      <section className="mt-16 grid gap-6 sm:grid-cols-3">
-        <div className="rounded-lg border p-6">
-          <div className="text-3xl font-bold">$5k–$25k</div>
-          <div className="mt-1 text-sm text-gray-600">
-            Typical avoidable CAM / NNN exposure identified
+      <section className="border-y bg-gray-50">
+        <div className="mx-auto max-w-7xl px-6 py-10 grid gap-6 md:grid-cols-3 text-center">
+          <div>
+            <p className="text-3xl font-semibold">$5k–$25k+</p>
+            <p className="mt-1 text-gray-600">Common savings identified</p>
           </div>
-        </div>
-
-        <div className="rounded-lg border p-6">
-          <div className="text-3xl font-bold">30–120 days</div>
-          <div className="mt-1 text-sm text-gray-600">
-            Common audit and dispute deadlines in leases
+          <div>
+            <p className="text-3xl font-semibold">30–120 days</p>
+            <p className="mt-1 text-gray-600">Typical audit windows</p>
           </div>
-        </div>
-
-        <div className="rounded-lg border p-6">
-          <div className="text-3xl font-bold">Tenant-first</div>
-          <div className="mt-1 text-sm text-gray-600">
-            No landlord tools. No broker bias.
+          <div>
+            <p className="text-3xl font-semibold">One-time</p>
+            <p className="mt-1 text-gray-600">No subscriptions or retainers</p>
           </div>
         </div>
       </section>
 
-      {/* ================= VALUE GRID ================= */}
-      <section className="mt-24 grid gap-12 text-left md:grid-cols-3">
-        <div>
-          <h3 className="mb-2 text-lg font-semibold">
-            Identify Overcharges
-          </h3>
-          <p className="text-gray-600">
-            Detect CAM and NNN costs that exceed caps, include non-allowable
-            expenses, or shift landlord responsibilities to tenants.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="mb-2 text-lg font-semibold">
-            Understand Your Risk
-          </h3>
-          <p className="text-gray-600">
-            We flag audit windows, notice requirements, and reconciliation rules
-            that determine whether recovery is still possible.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="mb-2 text-lg font-semibold">
-            See the Dollar Impact
-          </h3>
-          <p className="text-gray-600">
-            Get an estimated avoidable exposure amount and lease health score so
-            you can decide if escalation is worth it.
-          </p>
+      {/* WHAT WE FIND */}
+      <section className="mx-auto max-w-7xl px-6 py-20">
+        <div className="grid gap-12 md:grid-cols-2">
+          <div>
+            <h2 className="text-4xl font-light tracking-tight">
+              What We Find in CAM & NNN Audits
+            </h2>
+            <p className="mt-6 text-lg text-gray-700 leading-relaxed">
+              We analyze your lease language and billed expenses to identify
+              errors landlords often miss—or hope tenants won’t notice.
+            </p>
+            <ul className="mt-6 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600">
+              <li>Administrative & management fees above lease limits</li>
+              <li>Insurance and tax pass-throughs applied incorrectly</li>
+              <li>Capital expenses shifted to tenants improperly</li>
+              <li>Pro-rata share and square-footage errors</li>
+              <li>Charges billed outside allowable audit periods</li>
+            </ul>
+          </div>
+          <div className="rounded-3xl border bg-white p-8 shadow-sm">
+            <p className="text-sm uppercase tracking-widest text-gray-500">
+              One-Time Audit
+            </p>
+            <p className="mt-4 text-5xl font-semibold">$249.99</p>
+            <p className="mt-4 text-gray-700">
+              Includes a full CAM / NNN lease audit with a downloadable PDF
+              summary and email delivery.
+            </p>
+            <ul className="mt-6 space-y-3 text-gray-700 list-none">
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✔</span>
+                <span>Lease language review</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✔</span>
+                <span>CAM & NNN risk identification</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✔</span>
+                <span>Administrative & management fee analysis</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✔</span>
+                <span>Capital expenditure responsibility review</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✔</span>
+                <span>Secure PDF + email delivery</span>
+              </li>
+            </ul>
+            <Link
+              href="/product/app"
+              className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+            >
+              Upload a Lease
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
-      <section className="mt-24 rounded-xl bg-gray-50 p-10 text-left">
-        <h2 className="mb-6 text-2xl font-semibold text-center">
-          How It Works
+      {/* HOW IT WORKS */}
+      <section className="bg-gray-50">
+        <div className="mx-auto max-w-7xl px-6 py-20">
+          <h2 className="text-4xl font-light tracking-tight text-center">
+            How SaveOnLease Works
+          </h2>
+          <div className="mt-12 grid gap-8 md:grid-cols-4">
+            <div className="rounded-2xl border bg-white p-6">
+              <h3 className="text-lg font-semibold">Upload</h3>
+              <p className="mt-3 text-gray-700">
+                Upload your commercial lease PDF—no formatting required.
+              </p>
+            </div>
+            <div className="rounded-2xl border bg-white p-6">
+              <h3 className="text-lg font-semibold">Analyze</h3>
+              <p className="mt-3 text-gray-700">
+                We review CAM / NNN language, caps, exclusions, and allocations.
+              </p>
+            </div>
+            <div className="rounded-2xl border bg-white p-6">
+              <h3 className="text-lg font-semibold">Review</h3>
+              <p className="mt-3 text-gray-700">
+                Receive a plain-English summary with risk flags and estimates.
+              </p>
+            </div>
+            <div className="rounded-2xl border bg-white p-6">
+              <h3 className="text-lg font-semibold">Decide</h3>
+              <p className="mt-3 text-gray-700">
+                Use the audit to negotiate, dispute, or simply gain clarity.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="mx-auto max-w-7xl px-6 py-24 text-center">
+        <h2 className="text-5xl font-light tracking-tight">
+          Don’t Leave CAM & NNN Errors Unchecked
         </h2>
-
-        <ol className="grid gap-6 md:grid-cols-3">
-          <li>
-            <div className="mb-2 font-semibold">1. Upload Your Lease</div>
-            <p className="text-gray-600">
-              Securely upload your commercial lease PDF — amendments and exhibits
-              supported.
-            </p>
-          </li>
-
-          <li>
-            <div className="mb-2 font-semibold">2. Automated Review</div>
-            <p className="text-gray-600">
-              We analyze CAM definitions, NNN pass-throughs, admin fees,
-              exclusions, caps, and audit clauses.
-            </p>
-          </li>
-
-          <li>
-            <div className="mb-2 font-semibold">3. Actionable Results</div>
-            <p className="text-gray-600">
-              Receive a plain-English summary, risk flags, estimated savings, and
-              a downloadable audit report.
-            </p>
-          </li>
-        </ol>
-      </section>
-
-      {/* ================= SCREENSHOT PLACEHOLDER ================= */}
-      <section className="mt-24">
-        <div className="mx-auto max-w-3xl rounded-xl border bg-white p-6 text-left">
-          <div className="mb-2 text-sm font-semibold text-gray-500">
-            Sample Audit Summary (Redacted)
-          </div>
-
-          <div className="flex h-48 items-center justify-center rounded bg-gray-100 text-sm text-gray-500">
-            Screenshot placeholder — add redacted audit image later
-          </div>
-        </div>
-      </section>
-
-      {/* ================= FINAL CTA ================= */}
-      <section className="mt-24 text-center">
-        <p className="mx-auto mb-8 max-w-2xl text-lg sm:text-xl tracking-wide leading-relaxed text-gray-600">
-  Used by SMB tenants nationwide to surface CAM / NNN issues before audit
-  rights expire.
-</p>
-
-        <a
+        <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
+          Audit windows are short. Upload your lease today and see what your
+          charges really allow.
+        </p>
+        <Link
           href="/product/app"
-          className="inline-flex items-center rounded-lg bg-black px-8 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+          className="mt-10 inline-flex items-center rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
           Start Your CAM Audit
-        </a>
+        </Link>
       </section>
     </main>
   );
 }
+
 
 
 
