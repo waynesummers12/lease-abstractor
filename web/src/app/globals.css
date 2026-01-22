@@ -7,7 +7,9 @@
 /* -----------------------------
    Base resets
 ----------------------------- */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -18,7 +20,7 @@ body {
 }
 
 /* -----------------------------
-   Base typography
+   Base typography (SAFE)
 ----------------------------- */
 @layer base {
   body {
@@ -61,6 +63,15 @@ body {
     color: #374151;
   }
 
+  /* IMPORTANT:
+     Do NOT globally style links by selector.
+     Let Tailwind utility classes control links.
+  */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
   small {
     font-size: 0.875rem;
     color: #6b7280; /* gray-500 */
@@ -68,7 +79,7 @@ body {
 }
 
 /* -----------------------------
-   Animations
+   Optional animation (kept)
 ----------------------------- */
 @keyframes glowOnce {
   0% {
@@ -81,3 +92,4 @@ body {
     box-shadow: 0 0 0 rgba(22, 163, 74, 0);
   }
 }
+
