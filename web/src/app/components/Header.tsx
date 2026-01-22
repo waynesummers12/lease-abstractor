@@ -1,52 +1,44 @@
-// src/app/components/Header.tsx
+"use client";
+
 import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-4 inset-x-0 z-50">
+    <header className="fixed top-4 inset-x-0 z-[9999]">
       <div className="mx-auto max-w-7xl px-4">
-        <nav className="flex h-14 items-center justify-between rounded-full bg-black/90 px-6 backdrop-blur shadow-lg">
-          {/* Logo */}
+        <div className="flex h-14 items-center justify-between rounded-full bg-black/90 backdrop-blur shadow-lg px-6">
+          {/* Brand */}
           <Link
             href="/"
-            className="text-sm font-semibold text-white tracking-tight"
+            className="flex items-center gap-2 text-white font-semibold"
           >
-            SaveOnLease
+            <span className="text-sm">SaveOnLease</span>
           </Link>
 
-          {/* Nav Links */}
-          <div className="flex items-center gap-6 text-sm text-gray-300">
-            <Link
-              href="/marketing/what-we-find"
-              className="hover:text-white transition"
-            >
+          {/* Nav */}
+          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-200">
+            <Link href="/marketing/what-we-find" className="hover:text-white">
               What We Find
             </Link>
-
-            <Link
-              href="/marketing/how-it-works"
-              className="hover:text-white transition"
-            >
+            <Link href="/marketing/how-it-works" className="hover:text-white">
               How It Works
             </Link>
-
-            <Link
-              href="/marketing/pricing"
-              className="hover:text-white transition"
-            >
+            <Link href="/marketing/pricing" className="hover:text-white">
               Pricing
             </Link>
+          </nav>
 
-            <Link
-              href="/product/app"
-              className="rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-black hover:bg-gray-100 transition"
-            >
-              Start Audit
-            </Link>
-          </div>
-        </nav>
+          {/* CTA */}
+          <Link
+            href="/product/app"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+          >
+            Start Audit
+          </Link>
+        </div>
       </div>
     </header>
   );
 }
+
 
