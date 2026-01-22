@@ -328,7 +328,7 @@ async function handleCheckout() {
 }
 
 return (
-  <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+  <div style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
@@ -768,7 +768,7 @@ return (
   </div>
 )}
 
-  </main>
+  </div>
 );
 }
 
