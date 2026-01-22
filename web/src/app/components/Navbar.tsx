@@ -23,7 +23,6 @@ export default function Navbar() {
             Start Audit
           </Link>
         </div>
-      </div>
     </nav>
   );
 }
