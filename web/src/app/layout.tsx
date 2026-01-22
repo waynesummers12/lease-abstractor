@@ -14,8 +14,8 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-gray-900">
         <Header />
 
-        {/* Header height = 64px */}
-        <main className="flex-1 pt-16">
+        {/* header height ~64px */}
+        <main className="flex-1 pt-20">
           {children}
         </main>
 
@@ -24,4 +24,3 @@ export default function RootLayout({
     </html>
   );
 }
-
