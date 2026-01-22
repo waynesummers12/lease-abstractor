@@ -42,7 +42,9 @@ function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
 function StatusChips({ audit }: { audit: Audit }) {
   return (
     <div className="flex gap-2">
-      <span className="rounded bg-gray-100 px-2 py-1 text-xs">Paid</span>
+      <span className="rounded bg-gray-100 px-2 py-1 text-xs">
+        Paid
+      </span>
 
       {audit.email_sent && (
         <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
@@ -114,7 +116,9 @@ export default function DashboardPage() {
   if (!audits.length) {
     return (
       <div className="p-6">
-        <h1 className="mb-2 text-2xl font-semibold">No audits yet</h1>
+        <h1 className="mb-2 text-2xl font-semibold">
+          No audits yet
+        </h1>
         <p className="mb-4 text-gray-600">
           Upload a lease to generate your first CAM / NNN audit.
         </p>
@@ -134,7 +138,9 @@ export default function DashboardPage() {
     <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
       <aside className="border-r pr-4">
-        <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
+        <h2 className="mb-4 text-lg font-semibold">
+          Your Audits
+        </h2>
 
         <ul className="space-y-2">
           {audits.map((audit) => (
@@ -164,8 +170,12 @@ export default function DashboardPage() {
       {/* RIGHT — DETAIL */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
-          {selected && <HealthBadge score={getHealthScore(selected)} />}
+          <h1 className="text-2xl font-semibold">
+            Lease Audit Summary
+          </h1>
+          {selected && (
+            <HealthBadge score={getHealthScore(selected)} />
+          )}
         </div>
 
         {selected && <StatusChips audit={selected} />}
