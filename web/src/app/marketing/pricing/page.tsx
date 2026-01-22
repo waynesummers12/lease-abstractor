@@ -34,16 +34,40 @@ export default function PricingPage() {
           summary and email delivery.
         </p>
 
-        <ul className="mt-6 space-y-3 text-gray-700">
-          <li>✔ Lease language review</li>
-          <li>✔ CAM & NNN risk identification</li>
-          <li>✔ Administrative & management fee analysis</li>
-          <li>✔ Capital expenditure responsibility review</li>
-          <li>✔ Insurance and tax pass-through review</li>
-          <li>✔ Pro-rata share & allocation checks</li>
-          <li>✔ Estimated avoidable exposure (when applicable)</li>
-          <li>✔ Secure PDF + email delivery</li>
-        </ul>
+        <ul className="mt-6 space-y-3 text-gray-700 list-none">
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Lease language review</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>CAM & NNN risk identification</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Administrative & management fee analysis</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Capital expenditure responsibility review</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Insurance and tax pass-through review</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Pro-rata share & allocation checks</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Estimated avoidable exposure (when applicable)</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-green-600">✔</span>
+    <span>Secure PDF + email delivery</span>
+  </li>
+</ul>
 
         <a
           href="/"
