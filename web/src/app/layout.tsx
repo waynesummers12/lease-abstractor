@@ -1,4 +1,4 @@
-// src/app/layout.tsx
+// web/src/app/layout.tsx
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -17,16 +17,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-white text-gray-900">
+        {/* Fixed header */}
         <Header />
 
-        {/* Offset for fixed header (top-4 + header height) */}
-        <main className="min-h-screen pt-28">
-          {children}
-        </main>
+        {/* 🔑 OFFSET LAYER — THIS IS THE FIX */}
+        <div className="pt-32 min-h-screen">
+          {/* Semantic content container */}
+          <main className="mx-auto">
+            {children}
+          </main>
+        </div>
 
         <Footer />
       </body>
     </html>
   );
 }
+
 
