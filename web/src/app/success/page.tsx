@@ -31,7 +31,9 @@ export default function SuccessPage() {
 
         // ✅ Analysis complete → redirect to final page
         if (json?.analysis) {
-  router.push("/product/app/dashboard");
+  setTimeout(() => {
+    router.push("/product/app/dashboard");
+  }, 800);
   return;
 }
 
