@@ -5,10 +5,13 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-4 left-0 right-0 z-[1000] flex justify-center pointer-events-none">
-      <div className="pointer-events-auto flex items-center gap-6 rounded-full bg-black px-6 py-3 text-sm text-white shadow-xl">
+    <header className="fixed top-4 left-0 right-0 z-[1000] flex justify-center">
+      <div className="flex items-center gap-6 rounded-full bg-black px-6 py-3 text-sm text-white shadow-lg">
         {/* Brand */}
-        <Link href="/" className="font-semibold text-white">
+        <Link
+          href="/"
+          className="font-semibold text-white hover:text-gray-200 transition"
+        >
           SaveOnLease
         </Link>
 
@@ -47,3 +50,4 @@ export default function Header() {
     </header>
   );
 }
+
