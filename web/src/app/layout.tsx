@@ -1,13 +1,7 @@
 // web/src/app/layout.tsx
 import "./globals.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-
-export const metadata = {
-  title: "SaveOnLease — CAM & NNN Audit for Commercial Tenants",
-  description:
-    "Identify CAM and NNN overcharges in commercial leases with a clear, secure lease audit.",
-};
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -16,12 +10,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white text-gray-900">
-        <Header />
+      <body className="min-h-screen flex flex-col">
+        <Navbar />
 
-        {/* Header height = h-16 → 64px */}
-        <main className="min-h-screen pt-24">
-        {children}
+        <main className="flex-1">
+          {children}
         </main>
 
         <Footer />
@@ -29,7 +22,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
-
-
