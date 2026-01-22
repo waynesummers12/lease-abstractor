@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-/* ================== TYPES ================== */
+/* ================= TYPES ================= */
 
 type AuditResponse = {
   analysis?: {
@@ -12,29 +12,34 @@ type AuditResponse = {
   signedUrl?: string | null;
 };
 
-/* ================== CONFIG ================== */
+/* ================= CONFIG ================= */
 
 const POLL_INTERVAL_MS = 5000;
-const MAX_WAIT_MS = 2 * 60 * 1000; // 2 minutes
+const MAX_WAIT_MS = 120000; // 2 min
 
-/* ================== PAGE ================== */
+/* ================= PAGE ================= */
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const auditId = searchParams.get("auditId");
 
+  const [ready, setReady] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
+
+  const progress = Math.min(
+    Math.round((elapsed / MAX_WAIT_MS) * 100),
+    95
+  );
 
   useEffect(() => {
     if (!auditId) return;
 
-    let cancelled = false;
     let pollTimer: NodeJS.Timeout;
     let tickTimer: NodeJS.Timeout;
 
-    async function checkAudit() {
+    async function pollAudit() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
@@ -45,92 +50,87 @@ export default function SuccessPage() {
 
         const json: AuditResponse = await res.json();
 
-        // ✅ READY → REDIRECT
         if (json?.analysis && json?.signedUrl) {
+          setReady(true);
           router.replace("/product/app/dashboard");
         }
       } catch (err) {
-        console.error("Audit polling error:", err);
+        console.error("Polling error:", err);
       }
     }
 
-    // First check immediately
-    checkAudit();
+    pollAudit();
+    pollTimer = setInterval(pollAudit, POLL_INTERVAL_MS);
 
-    // Poll every N seconds
-    pollTimer = setInterval(checkAudit, POLL_INTERVAL_MS);
-
-    // Track elapsed time for timeout
     tickTimer = setInterval(() => {
-      setElapsed((prev) => {
-        const next = prev + 1000;
-        if (next >= MAX_WAIT_MS) {
+      setElapsed((t) => {
+        if (t + 1000 >= MAX_WAIT_MS) {
           setTimedOut(true);
           clearInterval(pollTimer);
           clearInterval(tickTimer);
         }
-        return next;
+        return t + 1000;
       });
     }, 1000);
 
     return () => {
-      cancelled = true;
       clearInterval(pollTimer);
       clearInterval(tickTimer);
     };
   }, [auditId, router]);
 
-  /* ================== UI ================== */
+  /* ================= UI ================= */
 
   return (
-    <main className="mx-auto flex max-w-xl flex-col items-center px-6 py-28 text-center">
+    <main className="mx-auto max-w-xl px-6 py-28 text-center">
       {!timedOut ? (
         <>
-          {/* Spinner */}
-          <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+          <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
 
           <h1 className="text-xl font-semibold">
             Finalizing your lease audit
           </h1>
 
           <p className="mt-3 text-sm text-gray-600">
-            We’re analyzing your lease and preparing your results.
-            This usually takes under a minute.
+            Reviewing CAM / NNN language and calculating exposure.
           </p>
 
-          <p className="mt-2 text-xs text-gray-500">
-            You’ll be redirected automatically when it’s ready.
-          </p>
-        </>
-      ) : (
-        <>
-          {/* Timeout fallback */}
-          <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
-            <p className="font-semibold">Still working on it</p>
-
-            <p className="mt-2">
-              Your audit is taking longer than expected, but it’s still
-              processing in the background.
-            </p>
-
-            <p className="mt-2">
-              You’ll receive an email as soon as your audit is ready.
-            </p>
-
-            <p className="mt-3 text-xs text-yellow-800">
-              If you need help, contact{" "}
-              <a
-                href="mailto:support@saveonlease.com"
-                className="underline"
-              >
-                support@saveonlease.com
-              </a>
+          {/* Progress */}
+          <div className="mt-6">
+            <div className="h-2 w-full rounded bg-gray-200">
+              <div
+                className="h-2 rounded bg-black transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="mt-2 text-xs text-gray-500">
+              {progress}% complete
             </p>
           </div>
+
+          {/* Manual escape hatch */}
+          <button
+            onClick={() => router.push("/product/app/dashboard")}
+            className="mt-8 text-sm underline text-gray-600"
+          >
+            View latest audit
+          </button>
         </>
+      ) : (
+        <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
+          <p className="font-semibold">Still processing</p>
+          <p className="mt-2">
+            Your audit is taking longer than expected. You’ll receive an email
+            once it’s ready.
+          </p>
+          <button
+            onClick={() => router.push("/product/app/dashboard")}
+            className="mt-4 underline"
+          >
+            Go to dashboard
+          </button>
+        </div>
       )}
     </main>
   );
 }
-
-
