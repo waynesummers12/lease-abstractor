@@ -182,7 +182,7 @@ export default function DashboardPage() {
       </aside>
 
       {/* RIGHT — DETAIL */}
-      <main className="flex-1 space-y-6">
+      <div className="flex-1 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
           {selected && <HealthBadge score={getHealthScore(selected)} />}
@@ -211,7 +211,7 @@ export default function DashboardPage() {
             Download PDF
           </a>
         )}
-      </main>
+      </div>
     </div>
   );
 }
