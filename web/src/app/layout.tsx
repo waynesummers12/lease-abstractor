@@ -20,9 +20,9 @@ export default function RootLayout({
         <Header />
 
         {/* Header height = h-16 → 64px */}
-        <div className="pt-16">
-          {children}
-        </div>
+        <main className="min-h-screen pt-24">
+        {children}
+        </main>
 
         <Footer />
       </body>

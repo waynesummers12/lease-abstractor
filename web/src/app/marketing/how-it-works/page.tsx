@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function HowItWorksPage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-10 px-6 py-12">
+    <div className="mx-auto max-w-3xl space-y-10 px-6">
       {/* 🔥 TAILWIND DIAGNOSTIC — REMOVE AFTER TEST */}
       <div className="relative -mx-6 mb-10 flex items-center justify-center bg-gradient-to-r from-green-500 via-emerald-400 to-lime-400 py-10 text-center text-4xl font-extrabold text-black shadow-2xl">
         🚨 TAILWIND IS ALIVE 🚨
