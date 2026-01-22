@@ -1,65 +1,73 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+
+type AuditResponse = {
+  analysis?: {
+    avoidable_exposure?: number;
+    risk_level?: "LOW" | "MEDIUM" | "HIGH";
+    flagged_sections?: {
+      section: string;
+      title: string;
+    }[];
+    health_score?: number;
+  };
+  signedUrl?: string | null;
+};
 
 export default function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const auditId = searchParams.get("auditId");
 
-  /* ---------------- POLLING ---------------- */
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!auditId) return;
 
     let cancelled = false;
+    let interval: NodeJS.Timeout;
 
-    async function poll() {
+    async function checkAudit() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
           { cache: "no-store" }
         );
 
-        if (!res.ok) {
-          setTimeout(poll, 4000);
+        if (!res.ok) return;
+
+        const json: AuditResponse = await res.json();
+
+        // ✅ READY → REDIRECT
+        if (json?.analysis && json?.signedUrl) {
+          router.replace("/product/app/dashboard");
           return;
         }
-
-        const json = await res.json();
-
-        // ✅ Analysis complete → redirect to final page
-        if (json?.analysis) {
-  setTimeout(() => {
-    router.push("/product/app/dashboard");
-  }, 800);
-  return;
-}
-
-        // ⏳ Still processing → keep polling
-        if (!cancelled) {
-          setTimeout(poll, 3000);
-        }
       } catch (err) {
-        console.error("Success polling error:", err);
-        if (!cancelled) {
-          setTimeout(poll, 5000);
-        }
+        console.error("Audit polling error:", err);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
-    poll();
+    // First check immediately
+    checkAudit();
+
+    // Then poll every 5 seconds
+    interval = setInterval(checkAudit, 5000);
 
     return () => {
       cancelled = true;
+      clearInterval(interval);
     };
   }, [auditId, router]);
 
   /* ---------------- UI ---------------- */
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-20">
+    <main className="mx-auto max-w-xl px-6 py-24">
       <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
         <p className="font-semibold">Analysis in progress</p>
         <p className="mt-2">
@@ -74,3 +82,4 @@ export default function SuccessPage() {
     </main>
   );
 }
+
