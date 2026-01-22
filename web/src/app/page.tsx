@@ -8,7 +8,8 @@ export default function HomePage() {
 
       <p className="mx-auto mb-10 max-w-3xl text-xl sm:text-2xl leading-relaxed tracking-wide text-gray-600">
   Upload your commercial lease and uncover hidden CAM / NNN overcharges,
-  uncapped expenses, and missed audit rights — before deadlines expire.
+  uncapped expenses, and missed audit rights 
+  — before deadlines expire.
 </p>
 
       {/* PRIMARY + SECONDARY CTA */}
