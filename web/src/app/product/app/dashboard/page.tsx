@@ -25,7 +25,7 @@ function getHealthScore(audit: Audit): "A" | "B" | "C" | "D" {
 }
 
 function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
-  const map = {
+  const styles = {
     A: "bg-green-100 text-green-800",
     B: "bg-blue-100 text-blue-800",
     C: "bg-yellow-100 text-yellow-800",
@@ -33,7 +33,7 @@ function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
   };
 
   return (
-    <span className={`rounded px-2 py-1 text-xs font-semibold ${map[score]}`}>
+    <span className={`rounded px-2 py-1 text-xs font-semibold ${styles[score]}`}>
       Health: {score}
     </span>
   );
@@ -75,49 +75,29 @@ export default function DashboardPage() {
 
         if (!baseUrl) {
           console.error("Missing NEXT_PUBLIC_WORKER_URL");
-          if (!cancelled) {
-            setAudits([]);
-            setSelected(null);
-          }
           return;
         }
 
-        const res = await fetch(`${baseUrl}/audit/latest`);
+        const res = await fetch(`${baseUrl}/audit/latest`, {
+          cache: "no-store",
+        });
 
-        if (!res.ok) {
-          if (!cancelled) {
-            setAudits([]);
-            setSelected(null);
-          }
-          return;
-        }
+        if (!res.ok) return;
 
         const json = await res.json();
 
-        if (!cancelled) {
-          if (json?.audit) {
-            setAudits([json.audit]);
-            setSelected(json.audit);
-          } else {
-            setAudits([]);
-            setSelected(null);
-          }
+        if (!cancelled && json?.audit) {
+          setAudits([json.audit]);
+          setSelected(json.audit);
         }
       } catch (err) {
         console.error("Dashboard load failed:", err);
-        if (!cancelled) {
-          setAudits([]);
-          setSelected(null);
-        }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     loadAudits();
-
     return () => {
       cancelled = true;
     };
@@ -153,7 +133,7 @@ export default function DashboardPage() {
   return (
     <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
-      <aside className="w-72 border-r pr-4">
+      <aside className="border-r pr-4">
         <h2 className="mb-4 text-lg font-semibold">Your Audits</h2>
 
         <ul className="space-y-2">
@@ -182,7 +162,7 @@ export default function DashboardPage() {
       </aside>
 
       {/* RIGHT — DETAIL */}
-      <div className="flex-1 space-y-6">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">Lease Audit Summary</h1>
           {selected && <HealthBadge score={getHealthScore(selected)} />}
