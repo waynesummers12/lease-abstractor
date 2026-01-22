@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function PricingPage() {
   return (
-    <main className="mx-auto max-w-3xl space-y-10 px-6 py-12">
+    <div className="mx-auto max-w-3xl space-y-10 px-6 py-12">
       {/* HERO */}
       <section>
         <h1 className="text-4xl font-bold">
@@ -150,6 +150,6 @@ export default function PricingPage() {
           },
         ]}
       />
-    </main>
+    </div>
   );
 }
