@@ -16,14 +16,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white text-gray-900">
+      <body className="bg-white text-gray-900">
         <Header />
 
-        {/* OFFSET LAYER — NOT main */}
-        <div className="pt-32 min-h-screen">
-          <main className="mx-auto">
-            {children}
-          </main>
+        {/* Header height = h-16 → 64px */}
+        <div className="pt-16">
+          {children}
         </div>
 
         <Footer />
@@ -31,6 +29,7 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 
 
