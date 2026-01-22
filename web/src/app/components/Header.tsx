@@ -2,8 +2,6 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-4 left-0 right-0 z-[9999] flex justify-center bg-red-500">
-
     <header className="fixed top-4 left-0 right-0 z-[9999] flex justify-center">
       <div className="flex items-center gap-6 rounded-full bg-black px-6 py-3 text-sm text-white shadow-lg">
         {/* Brand */}
