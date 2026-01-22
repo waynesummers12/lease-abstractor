@@ -13,21 +13,21 @@ export default function Header() {
         <nav className="flex items-center gap-4">
           <Link
             href="/marketing/what-we-find"
-            className="opacity-80 hover:opacity-100 text-white"
+            className="opacity-80 hover:opacity-100"
           >
             What We Find
           </Link>
 
           <Link
             href="/marketing/how-it-works"
-            className="opacity-80 hover:opacity-100 text-white"
+            className="opacity-80 hover:opacity-100"
           >
             How It Works
           </Link>
 
           <Link
             href="/marketing/pricing"
-            className="opacity-80 hover:opacity-100 text-white"
+            className="opacity-80 hover:opacity-100"
           >
             Pricing
           </Link>
@@ -44,5 +44,6 @@ export default function Header() {
     </header>
   );
 }
+
 
 
