@@ -29,9 +29,9 @@ export default function Header() {
   <Image
     src="/logo.png"
     alt="SaveOnLease"
-    width={28}
-    height={40}
-    className="h-10 w-auto"
+    width={24}
+    height={44}
+    className="h-11 w-auto"
     priority
   />
   <span className="text-lg font-semibold tracking-tight">
