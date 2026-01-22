@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -23,29 +24,37 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
-  {/* Brand */}
-  <Link href="/" className="flex items-center gap-2">
-    <Image
-      src="/logo.png"
-      alt="SaveOnLease"
-      width={32}
-      height={32}
-      className="h-8 w-8"
-      priority
-    />
-    <span className="text-lg font-semibold">SaveOnLease</span>
-  </Link>
-</div>
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/logo.png"
+            alt="SaveOnLease"
+            width={32}
+            height={32}
+            className="h-8 w-8"
+            priority
+          />
+          <span className="text-lg font-semibold">SaveOnLease</span>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/marketing/what-we-find" className="opacity-80 hover:opacity-100">
+          <Link
+            href="/marketing/what-we-find"
+            className="opacity-80 hover:opacity-100"
+          >
             What We Find
           </Link>
-          <Link href="/marketing/how-it-works" className="opacity-80 hover:opacity-100">
+          <Link
+            href="/marketing/how-it-works"
+            className="opacity-80 hover:opacity-100"
+          >
             How It Works
           </Link>
-          <Link href="/marketing/pricing" className="opacity-80 hover:opacity-100">
+          <Link
+            href="/marketing/pricing"
+            className="opacity-80 hover:opacity-100"
+          >
             Pricing
           </Link>
           <Link
@@ -69,13 +78,22 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden bg-black px-6 pb-4 text-white">
           <div className="flex flex-col gap-4 text-sm">
-            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
+            <Link
+              href="/marketing/what-we-find"
+              onClick={() => setMenuOpen(false)}
+            >
               What We Find
             </Link>
-            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
+            <Link
+              href="/marketing/how-it-works"
+              onClick={() => setMenuOpen(false)}
+            >
               How It Works
             </Link>
-            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
+            <Link
+              href="/marketing/pricing"
+              onClick={() => setMenuOpen(false)}
+            >
               Pricing
             </Link>
             <Link
