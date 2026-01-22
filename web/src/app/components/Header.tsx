@@ -34,7 +34,7 @@ export default function Header() {
     className="h-11 w-auto"
     priority
   />
-  <span className="text-lg font-semibold tracking-tight">
+  <span className="text-[17px] font-medium tracking-[-0.02em]">
     SaveOnLease
   </span>
 </Link>
