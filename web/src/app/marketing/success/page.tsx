@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type AuditResponse = {
   analysis: {
@@ -16,19 +17,21 @@ type AuditResponse = {
 };
 
 export default function SuccessPage() {
+  const searchParams = useSearchParams();
+  const auditId = searchParams.get("auditId");
+
   const [data, setData] = useState<AuditResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const auditId = params.get("auditId");
+  /* ---------------- LOAD AUDIT ---------------- */
 
+  useEffect(() => {
     if (!auditId) {
       setLoading(false);
       return;
     }
 
-    async function load() {
+    async function loadAudit() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
@@ -50,29 +53,29 @@ export default function SuccessPage() {
       }
     }
 
-    load();
-  }, []);
+    loadAudit();
+  }, [auditId]);
 
   /* ---------------- LOADING ---------------- */
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-2xl p-8">
+      <main className="mx-auto max-w-2xl px-6 py-20">
         <h1 className="text-2xl font-semibold">
           Finalizing your audit…
         </h1>
         <p className="mt-2 text-gray-600">
           This usually takes just a few seconds.
         </p>
-      </div>
+      </main>
     );
   }
 
-  /* ---------------- FALLBACK (PRODUCTION-CORRECT) ---------------- */
+  /* ---------------- FALLBACK ---------------- */
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-2xl p-8">
+      <main className="mx-auto max-w-2xl px-6 py-20">
         <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-6 text-sm text-yellow-900">
           <p className="font-semibold">Analysis in progress</p>
           <p className="mt-2">
@@ -80,9 +83,11 @@ export default function SuccessPage() {
             few minutes. You can safely close this page or refresh shortly.
           </p>
         </div>
-      </div>
+      </main>
     );
   }
+
+  /* ---------------- DATA ---------------- */
 
   const exposure = data.analysis?.avoidable_exposure;
   const risk = data.analysis?.risk_level ?? "HIGH";
@@ -92,20 +97,19 @@ export default function SuccessPage() {
   /* ---------------- UI ---------------- */
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8 p-8">
+    <main className="mx-auto max-w-2xl space-y-8 px-6 py-20">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">
           Lease Audit Complete
         </h1>
         <p className="mt-2 text-gray-600">
-          We’ve completed an initial CAM / NNN risk review of
-          your lease.
+          We’ve completed an initial CAM / NNN risk review of your lease.
         </p>
       </div>
 
-      {/* VALUE BOX */}
-      <div className="rounded border border-green-400 bg-green-50 p-6">
+      {/* Value Box */}
+      <div className="rounded-lg border border-green-400 bg-green-50 p-6">
         <div className="text-sm text-green-700">
           Estimated Avoidable Exposure (Next 12 Months)
         </div>
@@ -139,8 +143,8 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* HEALTH SCORE */}
-      <div className="rounded border p-6">
+      {/* Health Score */}
+      <div className="rounded-lg border p-6">
         <div className="text-sm text-gray-500">
           Lease Health Score
         </div>
@@ -149,25 +153,24 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* ACTIONS */}
-      <div className="flex flex-wrap gap-3">
-        {data.signedUrl && (
+      {/* Actions */}
+      {data.signedUrl && (
+        <div>
           <a
             href={data.signedUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
+            className="inline-block rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
           >
             Download Full Audit (PDF)
           </a>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* REASSURANCE */}
-      <div className="pt-4 text-sm text-gray-600">
-        We’ve also emailed you a copy of this audit for your
-        records.
+      {/* Reassurance */}
+      <div className="pt-2 text-sm text-gray-600">
+        We’ve also emailed you a copy of this audit for your records.
       </div>
-    </div>
+    </main>
   );
 }
