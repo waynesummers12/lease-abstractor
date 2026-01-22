@@ -1,5 +1,5 @@
 src/app/page.tsx
-// src/app/marketing/page.tsx
+
 import Link from "next/link";
 
 export const metadata = {
