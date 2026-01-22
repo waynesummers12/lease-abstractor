@@ -86,11 +86,11 @@ export default function PricingPage() {
           CAM and NNN charges often represent 15–35% of total rent. Even
           small errors can add up over time.
         </p>
-        <ul className="mt-4 list-disc pl-6 text-gray-700 space-y-2">
-          <li>Common findings range from $5,000 to $20,000+</li>
-          <li>Administrative fees frequently exceed lease limits</li>
-          <li>Insurance and tax pass-throughs are often misapplied</li>
-        </ul>
+        <ul className="mt-4 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600">
+       <li>Common findings range from $5,000 to $20,000+</li>
+       <li>Administrative fees frequently exceed lease limits</li>
+       <li>Insurance and tax pass-throughs are often misapplied</li>
+       </ul>
         <p className="mt-3 text-gray-700">
           Many tenants recover the cost of the audit many times over.
         </p>
