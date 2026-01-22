@@ -2,9 +2,9 @@ export default function HomePage() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-24 text-center">
       {/* ================= HERO ================= */}
-      <h1 className="mb-4 text-4xl font-bold">
-        CAM & NNN Lease Audit — Built for Tenants
-      </h1>
+      <h1 className="mb-6 text-6xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.05]">
+  CAM & NNN Lease Audit — Built for Tenants
+</h1>
 
       <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
         Upload your commercial lease and uncover hidden CAM / NNN overcharges,
