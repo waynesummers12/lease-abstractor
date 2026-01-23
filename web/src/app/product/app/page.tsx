@@ -791,6 +791,7 @@ return (
 </section>
 </div>
 );
+</div>
 /* ---------- UI HELPERS ---------- */
 
 function Field({
