@@ -31,52 +31,36 @@ export default function SuccessPage() {
       return;
     }
 
-    let attempts = 0;
-    const MAX_ATTEMPTS = 12; // ~1 minute total
+    let interval: NodeJS.Timeout;
 
     async function loadAudit() {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`;
         console.log("Loading audit:", url);
 
         const res = await fetch(url, { cache: "no-store" });
 
-        // Audit may exist but not be ready yet
+        // 404 = audit exists but not ready yet
         if (!res.ok) {
-          attempts++;
           console.warn("Audit not ready yet:", res.status);
-
-          if (attempts >= MAX_ATTEMPTS) {
-            setLoading(false);
-          }
           return;
         }
 
         const json: AuditResponse = await res.json();
         console.log("Audit response:", json);
 
-        // Analysis alone is enough to show success screen
         if (json?.analysis) {
           setData(json);
           setLoading(false);
-          return;
-        }
-
-        attempts++;
-        if (attempts >= MAX_ATTEMPTS) {
-          setLoading(false);
+          clearInterval(interval); // ✅ stop polling
         }
       } catch (err) {
         console.error("Success page fetch error:", err);
-        attempts++;
-        if (attempts >= MAX_ATTEMPTS) {
-          setLoading(false);
-        }
       }
     }
 
     loadAudit();
-    const interval = setInterval(loadAudit, 5000);
+    interval = setInterval(loadAudit, 5000);
 
     return () => clearInterval(interval);
   }, [auditId]);
@@ -88,9 +72,7 @@ export default function SuccessPage() {
       {loading && (
         <>
           <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
-          <h1 className="text-xl font-semibold">
-            Preparing your audit summary
-          </h1>
+          <h1 className="text-xl font-semibold">Preparing your audit summary</h1>
           <p className="mt-3 text-sm text-gray-600">
             This will only take a moment.
           </p>
@@ -114,9 +96,7 @@ export default function SuccessPage() {
         <>
           <div className="mb-6 text-3xl">✅</div>
 
-          <h1 className="text-2xl font-semibold">
-            Payment successful
-          </h1>
+          <h1 className="text-2xl font-semibold">Payment successful</h1>
 
           <p className="mt-3 text-sm text-gray-600">
             Your CAM / NNN Audit Summary is ready.
@@ -124,16 +104,14 @@ export default function SuccessPage() {
 
           {typeof data.analysis?.avoidable_exposure === "number" && (
             <div className="mt-6 rounded-lg border bg-gray-50 p-4 text-sm">
-              <p className="font-medium">
-                Estimated recoverable exposure
-              </p>
+              <p className="font-medium">Estimated recoverable exposure</p>
               <p className="mt-1 text-2xl font-bold">
                 ${data.analysis.avoidable_exposure.toLocaleString()}
               </p>
             </div>
           )}
 
-          {data.signedUrl && (
+          {data.signedUrl ? (
             <a
               href={data.signedUrl}
               target="_blank"
@@ -142,12 +120,10 @@ export default function SuccessPage() {
             >
               Download PDF Audit
             </a>
-          )}
-
-          {!data.signedUrl && (
+          ) : (
             <p className="mt-6 text-sm text-gray-500">
-              Your PDF is still being prepared. You’ll receive an email as soon
-              as it’s ready.
+              Your PDF is still being prepared. You’ll receive an email as soon as
+              it’s ready.
             </p>
           )}
 
