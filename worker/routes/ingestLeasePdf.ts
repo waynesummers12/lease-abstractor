@@ -10,18 +10,18 @@ const router = new Router({
 });
 
 /**
- * Ingest ORIGINAL lease PDF and return structured analysis
+ * Ingest ORIGINAL lease PDF and persist analysis
  *
- * IMPORTANT:
- * - This route processes SOURCE lease PDFs only
- * - It does NOT generate audit PDFs
- * - It does NOT write to lease_audits
+ * CRITICAL GUARANTEES:
+ * - analysis is generated BEFORE DB insert
+ * - lease_audits row ALWAYS has analysis
+ * - audit PDFs are blocked
  */
 router.post("/pdf", async (ctx) => {
   try {
-    // --------------------
-    // 1. Parse request body (JSON ONLY)
-    // --------------------
+    /* --------------------
+     * 1. Parse request
+     * -------------------- */
     const body = await ctx.request.body({ type: "json" }).value;
     const { objectPath } = body ?? {};
 
@@ -31,23 +31,23 @@ router.post("/pdf", async (ctx) => {
       return;
     }
 
-    // --------------------
-    // 2. Guard: prevent ingesting audit PDFs
-    // --------------------
-    if (objectPath.startsWith("leases/") && objectPath.endsWith(".pdf")) {
-      // OK — but block audit PDFs by convention
-      if (objectPath.includes("/audit") || objectPath.includes("audit")) {
-        ctx.response.status = 400;
-        ctx.response.body = { error: "Audit PDFs cannot be ingested" };
-        return;
-      }
+    /* --------------------
+     * 2. Block audit PDFs
+     * -------------------- */
+    if (
+      objectPath.includes("audit") ||
+      objectPath.endsWith(".audit.pdf")
+    ) {
+      ctx.response.status = 400;
+      ctx.response.body = { error: "Audit PDFs cannot be ingested" };
+      return;
     }
 
     console.info("[ingest] downloading lease pdf", { objectPath });
 
-    // --------------------
-    // 3. Download PDF from Supabase Storage
-    // --------------------
+    /* --------------------
+     * 3. Download PDF
+     * -------------------- */
     const { data, error } = await supabase.storage
       .from("leases")
       .download(objectPath);
@@ -56,14 +56,10 @@ router.post("/pdf", async (ctx) => {
       throw new Error("Failed to download lease PDF");
     }
 
-    // --------------------
-    // 4. Convert to buffer
-    // --------------------
+    /* --------------------
+     * 4. Extract text
+     * -------------------- */
     const buffer = new Uint8Array(await data.arrayBuffer());
-
-    // --------------------
-    // 5. Extract text
-    // --------------------
     const parsed = await pdfParse(buffer);
     const leaseText = parsed.text;
 
@@ -71,19 +67,47 @@ router.post("/pdf", async (ctx) => {
       throw new Error("No text extracted from lease PDF");
     }
 
-    console.info("[ingest] extracted lease text", { length: leaseText.length });
+    console.info("[ingest] extracted lease text", {
+      length: leaseText.length,
+    });
 
-    // --------------------
-    // 6. Run abstraction
-    // --------------------
+    /* --------------------
+     * 5. Run abstraction
+     * -------------------- */
     const analysis = abstractLease(leaseText);
 
-    // --------------------
-    // 7. Respond
-    // --------------------
+    if (!analysis) {
+      throw new Error("Lease abstraction failed");
+    }
+
+    /* --------------------
+     * 6. INSERT audit row (WITH analysis)
+     * -------------------- */
+    const auditId = crypto.randomUUID();
+
+    const { error: insertError } = await supabase
+      .from("lease_audits")
+      .insert({
+        id: auditId,
+        analysis,              // ✅ NEVER NULL
+        status: "unpaid",
+        object_path: null,
+      });
+
+    if (insertError) {
+      console.error("❌ Failed to insert lease_audits row:", insertError);
+      throw new Error("Failed to create audit record");
+    }
+
+    console.log("🧾 lease_audits row created:", auditId);
+
+    /* --------------------
+     * 7. Respond
+     * -------------------- */
     ctx.response.status = 200;
     ctx.response.body = {
       success: true,
+      auditId,
       analysis,
     };
   } catch (err) {

@@ -11,8 +11,10 @@ console.log("✅ auditById route file loaded");
 /**
  * GET /api/audits/:auditId
  *
- * Public, read-only endpoint for success page
- * UUID only, no auth
+ * Public, read-only endpoint for Success page
+ * - No auth
+ * - UUID only
+ * - Poll-safe
  */
 router.get("/api/audits/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
@@ -39,11 +41,11 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   let signedUrl: string | null = null;
 
-  // Only generate PDF URL if audit is paid and file exists
+  // Only allow PDF download after payment
   if (audit.status === "paid" && audit.object_path) {
     const { data, error: signError } = await supabase.storage
       .from("leases")
-      .createSignedUrl(audit.object_path, 60 * 60);
+      .createSignedUrl(audit.object_path, 60 * 60); // 1 hour
 
     if (!signError && data?.signedUrl) {
       signedUrl = data.signedUrl;
@@ -52,7 +54,10 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   ctx.response.status = 200;
   ctx.response.body = {
-    analysis: normalizeAuditForSuccess(audit.analysis),
+    status: audit.status, // helpful for frontend
+    analysis: audit.analysis
+      ? normalizeAuditForSuccess(audit.analysis)
+      : null,
     signedUrl,
   };
 });

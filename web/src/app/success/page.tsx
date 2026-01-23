@@ -6,6 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 /* ================= TYPES ================= */
 
 type AuditResponse = {
+  status?: "paid" | "unpaid";
   analysis: {
     avoidable_exposure?: number;
     tenant?: string | null;
@@ -44,8 +45,8 @@ export default function SuccessPage() {
         const json: AuditResponse = await res.json();
         setData(json);
 
-        // stop polling once analysis exists
-        if (json.analysis) {
+        // stop polling once payment is confirmed OR analysis exists
+        if (json.status === "paid" || json.analysis) {
           clearInterval(interval);
         }
       } catch (err) {
@@ -63,7 +64,7 @@ export default function SuccessPage() {
 
   /* ================= UI ================= */
 
-  // ❌ true error only
+  // ❌ true fatal error only
   if (fatalError) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
