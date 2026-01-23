@@ -20,7 +20,9 @@ const router = new Router({
  */
 router.post("/create", async (ctx) => {
   try {
-    const body = await ctx.request.body({ type: "json" }).value;
+    // deno-lint-ignore no-explicit-any
+const body = await (ctx.request as any).body?.json?.()
+  ?? (await ctx.request.body().value);
     const { auditId } = body;
 
     const priceId = Deno.env.get("STRIPE_PRICE_STARTER");
