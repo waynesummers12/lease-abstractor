@@ -35,7 +35,7 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`;
         console.log("Loading audit:", url);
 
         const res = await fetch(url, { cache: "no-store" });
