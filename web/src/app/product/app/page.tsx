@@ -826,11 +826,9 @@ return (
   </div>
 )}
 
-  </div>
+</div>
 );
 }
-
-
 /* ---------- UI HELPERS ---------- */
 
 function Field({
