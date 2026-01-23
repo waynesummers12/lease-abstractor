@@ -554,19 +554,6 @@ return (
         {/* your upload component stays here */}
       </section>
 
-      {/* ---------- AUDIT URGENCY ---------- */}
-      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-        <p className="text-sm font-medium text-amber-900 mb-1">
-          ⚠️ CAM / NNN Audit Deadline Risk
-        </p>
-        <p className="text-sm text-amber-800">
-          Most commercial leases allow tenants{" "}
-          <strong>30–120 days</strong> after receiving the annual CAM
-          reconciliation to dispute overcharges.{" "}
-          <strong>Miss the window, and recovery rights are often waived.</strong>
-        </p>
-      </div>
-
       {/* ---------- UPLOAD ---------- */}
       <div className="flex items-center gap-4 mb-4">
         <input
