@@ -788,8 +788,7 @@ return (
       </strong>
     </li>
   </ul>
-);
-}
+</section>
 
 /* ---------- UI HELPERS ---------- */
 
