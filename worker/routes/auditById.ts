@@ -38,15 +38,15 @@ router.get("/api/audits/:auditId", async (ctx) => {
 
   // 🔒 HARD INVARIANT:
   // Paid audit MUST have object_path
-  if (audit.status === "paid" && audit.object_path) {
-    const { data, error: signError } = await supabase.storage
-      .from("leases")
-      .createSignedUrl(audit.object_path, 60 * 60);
+  if (audit.object_path) {
+  const { data, error: signError } = await supabase.storage
+    .from("leases")
+    .createSignedUrl(audit.object_path, 60 * 60);
 
-    if (!signError && data?.signedUrl) {
-      signedUrl = data.signedUrl;
-    }
+  if (!signError && data?.signedUrl) {
+    signedUrl = data.signedUrl;
   }
+}
 
   ctx.response.status = 200;
   ctx.response.body = {
