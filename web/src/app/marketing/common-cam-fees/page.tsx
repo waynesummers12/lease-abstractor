@@ -1,5 +1,6 @@
 // src/app/marketing/common-cam-fees/page.tsx
 import Link from "next/link";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "Common CAM Fees Explained | Commercial Lease CAM Charges | SaveOnLease",
@@ -103,6 +104,8 @@ export default function CommonCamFeesPage() {
           Start CAM Audit
         </Link>
       </section>
+      {/* FAQ Schema */}
+      <FaqSchema />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 // src/app/marketing/nnn-expenses-explained/page.tsx
 import Link from "next/link";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "NNN Expenses Explained | Triple Net Lease Costs for Tenants | SaveOnLease",
@@ -112,6 +113,8 @@ export default function NnnExpensesExplainedPage() {
           Start CAM & NNN Audit
         </Link>
       </section>
+      {/* FAQ Schema */}
+      <FaqSchema />
     </main>
   );
 }

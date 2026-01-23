@@ -1,5 +1,6 @@
 // src/app/marketing/audit-rights/page.tsx
 import Link from "next/link";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "Commercial Lease Audit Rights Explained | CAM & NNN | SaveOnLease",
@@ -107,6 +108,8 @@ export default function AuditRightsPage() {
           Start Lease Audit
         </Link>
       </section>
+      {/* FAQ Schema */}
+      <FaqSchema />
     </main>
   );
 }

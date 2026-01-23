@@ -1,5 +1,6 @@
 // src/app/marketing/cam-nnn-overcharges/page.tsx
 import Link from "next/link";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "CAM & NNN Overcharges Explained | SaveOnLease",
@@ -78,6 +79,8 @@ export default function ArticlePage() {
           Start CAM Audit
         </Link>
       </section>
+      {/* FAQ Schema */}
+      <FaqSchema />
     </main>
   );
 }

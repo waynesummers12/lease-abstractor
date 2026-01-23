@@ -1,5 +1,6 @@
 // src/app/marketing/cam-audit-rights/page.tsx
 import Link from "next/link";
+import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "CAM Audit Rights Explained | Commercial Tenants | SaveOnLease",
@@ -108,6 +109,8 @@ export default function CamAuditRightsPage() {
           Start CAM Audit
         </Link>
       </section>
+      {/* FAQ Schema */}
+      <FaqSchema />
     </main>
   );
 }
