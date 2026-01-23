@@ -31,6 +31,9 @@ export default function SuccessPage() {
       return;
     }
 
+    let attempts = 0;
+    const MAX_ATTEMPTS = 12; // ~1 minute total
+
     async function loadAudit() {
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`;
@@ -38,26 +41,45 @@ export default function SuccessPage() {
 
         const res = await fetch(url, { cache: "no-store" });
 
+        // Audit may exist but not be ready yet
         if (!res.ok) {
-          console.error("Audit fetch failed:", res.status);
-          throw new Error("Failed to load audit");
+          attempts++;
+          console.warn("Audit not ready yet:", res.status);
+
+          if (attempts >= MAX_ATTEMPTS) {
+            setLoading(false);
+          }
+          return;
         }
 
         const json: AuditResponse = await res.json();
-        console.log("Audit loaded:", json);
+        console.log("Audit response:", json);
 
-        setData(json);
+        // Analysis alone is enough to show success screen
+        if (json?.analysis) {
+          setData(json);
+          setLoading(false);
+          return;
+        }
+
+        attempts++;
+        if (attempts >= MAX_ATTEMPTS) {
+          setLoading(false);
+        }
       } catch (err) {
-        console.error("Success page error:", err);
-        setError("We couldn’t load your audit. Please try again.");
-      } finally {
-        setLoading(false);
+        console.error("Success page fetch error:", err);
+        attempts++;
+        if (attempts >= MAX_ATTEMPTS) {
+          setLoading(false);
+        }
       }
     }
 
     loadAudit();
-  }, [auditId]);
+    const interval = setInterval(loadAudit, 5000);
 
+    return () => clearInterval(interval);
+  }, [auditId]);
 
   /* ================= UI ================= */
 
@@ -115,15 +137,19 @@ export default function SuccessPage() {
             <a
               href={data.signedUrl}
               target="_blank"
+              rel="noopener noreferrer"
               className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800"
             >
               Download PDF Audit
             </a>
           )}
 
-          <p className="mt-4 text-xs text-gray-500">
-            A copy has also been emailed to you.
-          </p>
+          {!data.signedUrl && (
+            <p className="mt-6 text-sm text-gray-500">
+              Your PDF is still being prepared. You’ll receive an email as soon
+              as it’s ready.
+            </p>
+          )}
 
           <button
             onClick={() => router.push("/product/app")}
