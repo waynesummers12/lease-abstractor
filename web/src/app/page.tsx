@@ -15,6 +15,7 @@ export default function MarketingHomePage() {
           CAM & NNN Lease Audit
           <span className="block">Built for Tenants</span>
         </h1>
+
         <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-600">
           Upload your commercial lease and uncover hidden CAM / NNN overcharges,
           uncapped expenses, and missed audit rights
@@ -79,6 +80,7 @@ export default function MarketingHomePage() {
               <li>Charges billed outside allowable audit periods</li>
             </ul>
           </div>
+
           <div className="rounded-3xl border bg-white p-8 shadow-sm">
             <p className="text-sm uppercase tracking-widest text-gray-500">
               One-Time Audit
@@ -120,44 +122,21 @@ export default function MarketingHomePage() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <h2 className="text-4xl font-light tracking-tight text-center">
-            How SaveOnLease Works
-          </h2>
-          <div className="mt-12 grid gap-8 md:grid-cols-4">
-            <div className="rounded-2xl border bg-white p-6">
-              <h3 className="text-lg font-semibold">Upload</h3>
-              <p className="mt-3 text-gray-700">
-                Upload your commercial lease PDF—no formatting required.
-              </p>
-            </div>
-            <div className="rounded-2xl border bg-white p-6">
-              <h3 className="text-lg font-semibold">Analyze</h3>
-              <p className="mt-3 text-gray-700">
-                We review CAM / NNN language, caps, exclusions, and allocations.
-              </p>
-            </div>
-            <div className="rounded-2xl border bg-white p-6">
-              <h3 className="text-lg font-semibold">Review</h3>
-              <p className="mt-3 text-gray-700">
-                Receive a plain-English summary with risk flags and estimates.
-              </p>
-            </div>
-            <div className="rounded-2xl border bg-white p-6">
-              <h3 className="text-lg font-semibold">Decide</h3>
-              <p className="mt-3 text-gray-700">
-                Use the audit to negotiate, dispute, or simply gain clarity.
-              </p>
-            </div>
-          </div>
+      {/* EDUCATION LINKS */}
+      <section className="mx-auto max-w-7xl px-6 pb-16 text-center">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center text-sm font-semibold">
+          <Link
+            href="/marketing/cam-nnn-overcharges"
+            className="hover:underline"
+          >
+            CAM & NNN Overcharges Explained →
+          </Link>
+          <Link href="/marketing/learn" className="hover:underline">
+            Learn About CAM & NNN →
+          </Link>
         </div>
       </section>
 
-<Link href="/marketing/cam-nnn-overcharges">
-  CAM & NNN Overcharges Explained →
-</Link>
       {/* FINAL CTA */}
       <section className="mx-auto max-w-7xl px-6 py-24 text-center">
         <h2 className="text-5xl font-light tracking-tight">
@@ -177,8 +156,3 @@ export default function MarketingHomePage() {
     </main>
   );
 }
-
-
-
-
-
