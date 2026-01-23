@@ -845,8 +845,7 @@ return (
 )}
 
 </div>
-);
-}
+
 /* ---------- UI HELPERS ---------- */
 
 function Field({
