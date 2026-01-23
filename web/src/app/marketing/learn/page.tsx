@@ -23,6 +23,13 @@ const articles = [
     href: "/marketing/audit-rights",
   },
   {
+    id: "commercial-audit-rights",
+    title: "Commercial Lease Audit Rights",
+    description:
+      "A complete overview of audit rights for commercial tenants covering CAM, NNN, tax, and insurance charges.",
+    href: "/marketing/audit-rights",
+  },
+  {
     id: "common-cam-fees",
     title: "Common CAM Fees Explained",
     description:
