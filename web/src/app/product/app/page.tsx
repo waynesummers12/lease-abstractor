@@ -874,6 +874,7 @@ return (
   </div>
 </section>
 
+{/* ---------- STICKY CTA ---------- */}
 {showStickyCTA && exposureRiskLabel === "high" && (
   <div
     style={{
@@ -912,6 +913,10 @@ return (
     </button>
   </div>
 )}
+</div>
+);
+}
+
 /* ---------- UI HELPERS ---------- */
 
 function Field({
