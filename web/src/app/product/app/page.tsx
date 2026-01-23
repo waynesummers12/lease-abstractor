@@ -790,24 +790,24 @@ return (
     <strong>Why $249.99?</strong>
 
     <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
-      <<li className="text-lg leading-relaxed">
-  Comparable CAM / NNN audits typically cost{" "}
+      <li className="text-lg leading-relaxed">
+  Traditional CAM / NNN audits often cost{" "}
   <strong className="block text-2xl font-extrabold text-gray-900 mt-1">
     $1,500–$5,000+
   </strong>
 </li>
 
 <li className="text-lg leading-relaxed">
-  Tenants frequently recover{" "}
+  A single audit frequently recovers{" "}
   <strong className="block text-2xl font-extrabold text-green-700 mt-1">
     $5,000–$50,000+
   </strong>
 </li>
 
 <li className="text-lg leading-relaxed">
-  One missed audit window can lock in{" "}
+  Miss the audit window, and tenants may forfeit{" "}
   <strong className="block text-xl font-semibold text-red-700 mt-1">
-    years of unrecoverable costs
+    recovery rights permanently
   </strong>
 </li>
     </ul>
