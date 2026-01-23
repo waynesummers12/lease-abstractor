@@ -425,9 +425,6 @@ return (
     </div>
   </section>
 )}
-export default function Page() {
-  return (
-    <main className="mx-auto max-w-4xl px-4 py-16">
       
       {/* ---------- AUDIT HISTORY ---------- */}
       {hasAnalyzedInSession && auditHistory.length > 0 && (
@@ -556,10 +553,6 @@ export default function Page() {
       <section>
         {/* your upload component stays here */}
       </section>
-    </main>
-  );
-}
-
 
       {/* ---------- AUDIT URGENCY ---------- */}
       <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
