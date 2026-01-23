@@ -789,7 +789,7 @@ return (
     </li>
   </ul>
 </section>
-</div></div>
+</div>
 );
 
 /* ---------- UI HELPERS ---------- */
