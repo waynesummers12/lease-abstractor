@@ -406,7 +406,7 @@ return (
       </span>
     </li>
   </ul>
-
+</section>
   {/* Accuracy Statement */}
   <p className="mt-6 inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800">
   📐 Built for accuracy — every estimate is derived from your lease, not market averages.
