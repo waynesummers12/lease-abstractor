@@ -327,140 +327,20 @@ async function handleCheckout() {
   }
 }
 
-return (
-  <div style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+rreturn (
+  <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
- {/* ---------- AUDIT URGENCY ---------- */}
-<section className="mb-8 rounded-2xl border-2 border-amber-400 bg-amber-50 p-6 shadow-lg">
-  <div className="flex items-start gap-3">
-    <div className="text-2xl">⚠️</div>
-
-    <div>
-      <h3 className="text-lg font-semibold text-amber-900">
-        CAM / NNN Audit Deadline Risk
-      </h3>
-
-      <p className="mt-2 text-base text-amber-900 max-w-3xl">
-        Most commercial leases allow tenants{" "}
-        <strong>30–120 days</strong> after receiving the annual CAM
-        reconciliation to dispute overcharges.
-      </p>
-
-      <p className="mt-2 text-base font-semibold text-amber-900">
-        Miss this window, and recovery rights are often permanently waived.
-      </p>
-
-      <p className="mt-3 text-sm text-amber-800">
-        This audit is designed to surface deadline risk early — before it’s too late
-        to act.
-      </p>
-    </div>
-  </div>
-</section>
-{/* ---------- UPLOAD INTRO ---------- */}
-<section className="mb-8 rounded-2xl border-2 border-black bg-white p-8 shadow-lg">
-  <h3 className="text-2xl font-semibold text-gray-900">
-    🔍 Upload Your Lease for Review
-  </h3>
-
-  <p className="mt-3 text-base text-gray-800 max-w-2xl">
-    Upload your commercial lease to receive a clear, tenant-first CAM & NNN audit
-    that highlights audit deadlines, financial risk, and potential overcharges —
-    before your rights expire.
-  </p>
-
-  <ul className="mt-6 space-y-3 text-base text-gray-800">
-    <li className="flex items-start gap-2">
-      <span className="text-green-600 font-bold">✔</span>
-      <span>
-        Identify <strong>audit window deadlines</strong> so you don’t lose recovery rights
-      </span>
-    </li>
-
-    <li className="flex items-start gap-2">
-      <span className="text-green-600 font-bold">✔</span>
-      <span>
-        Detect <strong>CAM / NNN overcharge risk</strong> based on your actual lease language
-      </span>
-    </li>
-
-    <li className="flex items-start gap-2">
-      <span className="text-green-600 font-bold">✔</span>
-      <span>
-        Apply <strong>deterministic lease math</strong> to estimate recoverable CAM / NNN
-        savings — not generic AI summaries
-      </span>
-    </li>
-
-    <li className="flex items-start gap-2">
-      <span className="text-green-600 font-bold">✔</span>
-      <span>
-        Flag <strong>caps, exclusions, escalation, and admin fee issues</strong>
-      </span>
-    </li>
-
-    <li className="flex items-start gap-2">
-      <span className="text-green-600 font-bold">✔</span>
-      <span>
-        Receive a <strong>concise PDF summary</strong> you can keep or share
-      </span>
-    </li>
-  </ul>
-
-  {/* Accuracy Statement */}
-  <p className="mt-6 inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-800">
-  📐 Built for accuracy — every estimate is derived from your lease, not market averages.
-</p>
-
-  <div className="mt-4 flex items-center gap-4 text-sm text-gray-600">
-    🔒 Secure upload · No subscriptions · One-time review
-  </div>
-
-
-{/* ---------- UPLOAD ---------- */}
-<div className="mb-4">
-  <div className="flex items-center gap-4">
-    <input
-      type="file"
-      accept="application/pdf"
-      onChange={(e) => setFile(e.target.files?.[0] || null)}
-    />
-
-    <button
-      onClick={handleUploadAndAnalyze}
-      disabled={!file}
-      className={`px-4 py-2 rounded-md text-sm font-medium ${
-        file
-          ? "bg-black text-white hover:bg-gray-800"
-          : "bg-gray-200 text-gray-500 cursor-not-allowed"
-      }`}
-    >
-      Analyze CAM / NNN Risk
-    </button>
-  </div>
-
-  {status && (
-    <p className="mt-4 text-sm text-gray-600">{status}</p>
-  )}
-</div>
-
-{analysis !== null && (
-  <>
     {totalAvoidableExposure != null && (
   <section
-  ref={resultsRef}
-  style={{
-    marginBottom: 24,
-    padding: 20,
-    borderRadius: 10,
-    border: "2px solid #16a34a",
-    background: "#f0fdf4",
-    animation:
-      exposureRiskLabel === "high"
-        ? "fadeSlideIn 0.6s ease-out 0.15s both, glowOnce 1.2s ease-out both"
-        : "fadeSlideIn 0.6s ease-out 0.15s both",
-  }}
->
+    ref={resultsRef}
+    style={{
+      marginBottom: 24,
+      padding: 20,
+      borderRadius: 10,
+      border: "2px solid #16a34a",
+      background: "#f0fdf4",
+    }}
+  >
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
@@ -479,7 +359,7 @@ return (
             : "#166534",
       }}
     >
-  💰 ${(animatedExposure ?? totalAvoidableExposure)?.toLocaleString()}
+  💰 ${totalAvoidableExposure.toLocaleString()}
 </div>
     <p
   style={{
@@ -505,10 +385,10 @@ return (
     }}
   >
     Estimated recovery range:{" "}
-<strong className="text-2xl font-extrabold text-green-900 block mt-1">
-  ${exposureRange.low.toLocaleString()} – $
-  {exposureRange.high.toLocaleString()}
-</strong>
+    <strong>
+      ${exposureRange.low.toLocaleString()} – $
+      {exposureRange.high.toLocaleString()}
+    </strong>
   </div>
 )}
 
@@ -581,18 +461,15 @@ return (
 >
   <strong>How this estimate was calculated:</strong>
   <ul style={{ marginTop: 6, paddingLeft: 18 }}>
-    <ul className="mt-3 space-y-3 text-[15px] font-medium">
-  <li>
-    CAM / NNN charges flagged as{" "}
-    <strong>uncapped, ambiguous, or escalating</strong>
-  </li>
-  <li>
-    Conservative dollar ranges extracted from lease language (not worst-case)
-  </li>
-  <li>
-    Annualized impact based on current rent and reconciliation rules
-  </li>
-</ul>
+    <li>
+      CAM / NNN charges flagged as <strong>uncapped, ambiguous, or escalating</strong>
+    </li>
+    <li>
+      Conservative dollar ranges extracted from lease language (not worst-case)
+    </li>
+    <li>
+      Annualized impact based on current rent and reconciliation rules
+    </li>
   </ul>
   <div style={{ marginTop: 6, fontStyle: "italic" }}>
     Final recovery depends on lease interpretation, audit rights, and timing.
@@ -604,8 +481,180 @@ return (
     </div>
   </section>
 )}
+export default function Page() {
+  return (
+    <main className="mx-auto max-w-4xl px-4 py-16">
+      
+      {/* ---------- AUDIT HISTORY ---------- */}
+      {hasAnalyzedInSession && auditHistory.length > 0 && (
+        <section
+          style={{
+            marginBottom: 24,
+            padding: 16,
+            border: "1px solid #e5e5e5",
+            borderRadius: 8,
+            background: "#fafafa",
+          }}
+        >
+          <h2 style={{ fontWeight: 600, marginBottom: 12 }}>
+            Previous CAM Audits
+          </h2>
+
+          <ul style={{ listStyle: "none", padding: 0 }}>
+            {auditHistory.map((audit, idx) => (
+              <li key={idx} style={{ marginBottom: 8 }}>
+                <button
+                  onClick={() => setSelectedAudit(audit)}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "10px 12px",
+                    borderRadius: 6,
+                    border:
+                      analysis === audit
+                        ? "2px solid #000"
+                        : "1px solid #ddd",
+                    background:
+                      analysis === audit ? "#000" : "#fff",
+                    color:
+                      analysis === audit ? "#fff" : "#000",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span>{audit.tenant ?? "Unknown Tenant"}</span>
+
+                    {idx === 0 && (
+                      <span
+                        style={{
+                          marginLeft: 8,
+                          padding: "2px 6px",
+                          fontSize: 10,
+                          borderRadius: 4,
+                          background: "#e6f4ea",
+                          color: "#137333",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Most recent
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ fontSize: 12, opacity: 0.7 }}>
+                    Lease ends {audit.lease_end ?? "—"}
+                  </div>
+
+                  <div
+                    style={{
+                      fontSize: 11,
+                      opacity: 0.55,
+                      marginTop: 2,
+                    }}
+                  >
+                    Created{" "}
+                    {audit.created_at
+                      ? new Date(
+                          audit.created_at
+                        ).toLocaleDateString()
+                      : "—"}
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* ---------- HERO / PAGE INTRO ---------- */}
+      <section className="mb-10 text-center">
+        <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+          CAM & NNN Audit Risk — Estimated Tenant Recovery
+        </h1>
+
+        <p className="mx-auto max-w-2xl text-gray-600">
+          Upload your commercial lease to identify CAM / NNN
+          overcharges, escalation risk, and recoverable
+          dollars — before reconciliation deadlines.
+        </p>
+
+        <p className="mt-4 text-sm text-gray-500">
+          One-time audit summary · Typically recovers
+          $10k–$50k+
+        </p>
+      </section>
+
+      {/* ---------- URGENCY / CALLOUT ---------- */}
+      <section className="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-4 text-left">
+        <p className="mb-2 font-medium text-amber-900">
+          ⚠️ CAM / NNN Audit Deadline Risk
+        </p>
+
+        <p className="text-sm text-amber-800">
+          Most commercial leases allow tenants{" "}
+          <strong>30–120 days</strong> after receiving the
+          annual CAM reconciliation to dispute overcharges.
+          <strong>
+            {" "}
+            Miss the window, and recovery rights are often
+            waived.
+          </strong>
+        </p>
+      </section>
+
+      {/* ---------- UPLOAD / CTA ---------- */}
+      <section>
+        {/* your upload component stays here */}
+      </section>
+    </main>
+  );
+}
 
 
+      {/* ---------- AUDIT URGENCY ---------- */}
+      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <p className="text-sm font-medium text-amber-900 mb-1">
+          ⚠️ CAM / NNN Audit Deadline Risk
+        </p>
+        <p className="text-sm text-amber-800">
+          Most commercial leases allow tenants{" "}
+          <strong>30–120 days</strong> after receiving the annual CAM
+          reconciliation to dispute overcharges.{" "}
+          <strong>Miss the window, and recovery rights are often waived.</strong>
+        </p>
+      </div>
+
+      {/* ---------- UPLOAD ---------- */}
+      <div className="flex items-center gap-4 mb-4">
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
+          className={`px-4 py-2 rounded-md text-sm font-medium ${
+            file
+              ? "bg-black text-white hover:bg-gray-800"
+              : "bg-gray-200 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Analyze CAM / NNN Risk
+        </button>
+      </div>
+
+      {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
+
+      {analysis !== null && (
+        <>
           {/* ---------- LEASE SUMMARY ---------- */}
           <section style={cardStyle}>
   <h2 style={sectionTitle}>Lease Summary</h2>
@@ -718,7 +767,7 @@ return (
 
 {/* ---------- CTA ---------- */}
 <section
-  className="mt-6 rounded-lg border p-6"
+  className="mt-6 rounded-lg border p-4"
   style={{
     borderColor:
       exposureRiskLabel === "high"
@@ -745,12 +794,18 @@ return (
           : "#14532d",
     }}
   >
-    🚨 Material CAM / NNN overcharge risk identified
+    {exposureRiskLabel === "high" &&
+      "🚨 High-risk CAM / NNN exposure detected — timing matters"}
+    {exposureRiskLabel === "medium" &&
+      "⚠️ Material CAM / NNN overcharge risk identified"}
+    {exposureRiskLabel === "low" &&
+      "✅ Potential CAM / NNN savings identified"}
   </p>
 
   <p
-    className="mb-4 text-sm"
     style={{
+      fontSize: 13,
+      marginBottom: 12,
       color:
         exposureRiskLabel === "high"
           ? "#7f1d1d"
@@ -759,92 +814,56 @@ return (
           : "#14532d",
     }}
   >
-    A focused audit often recovers meaningful overcharges with limited effort.
+    {exposureRiskLabel === "high" &&
+      "Most leases impose strict audit windows. Missing them can permanently waive recovery rights."}
+    {exposureRiskLabel === "medium" &&
+      "A focused audit often recovers meaningful overcharges with limited effort."}
+    {exposureRiskLabel === "low" &&
+      "Even lower-risk leases frequently contain administrative or escalation errors."}
   </p>
 
-  <strong className="block mb-2 text-sm text-gray-700">
-    Why $249.99?
-  </strong>
+  <button
+  onClick={handleCheckout}
+  disabled={!analysis}
+  className={`px-4 py-2 rounded-md text-sm font-medium ${
+    analysis
+      ? "bg-black text-white hover:bg-gray-800"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+  }`}
+>
+  Get My CAM Audit Summary — $249.99
+</button>
 
-  <ul className="space-y-4 mb-6">
-    <li className="text-lg leading-relaxed">
-      Traditional CAM / NNN audits often cost
-      <strong className="block text-2xl font-extrabold text-gray-900 mt-1">
-        $1,500–$5,000+
-      </strong>
-    </li>
 
-    <li className="text-lg leading-relaxed">
-      A single audit frequently recovers
-      <strong className="block text-2xl font-extrabold text-green-700 mt-1">
-        $5,000–$50,000+
-      </strong>
-    </li>
+  <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
+    <strong>Why $249.99?</strong>
 
-    <li className="text-lg leading-relaxed">
-      Miss the audit window, and tenants may forfeit
-      <strong className="block text-xl font-semibold text-red-700 mt-1">
-        recovery rights permanently
-      </strong>
-    </li>
-  </ul>
-</section>
+    <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
+      <li>
+        Comparable CAM / NNN audits typically cost{" "}
+        <strong>$1,500–$5,000+</strong>
+      </li>
+      <li>
+        Tenants frequently recover{" "}
+        <strong>$5,000–$50,000+</strong> from overcharges
+      </li>
+      <li>
+        One missed audit window can lock in years of unrecoverable costs
+      </li>
+    </ul>
 
-</div>
-)}
-
-{showStickyCTA && totalAvoidableExposure != null && (
-  <div
-    className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-lg rounded-lg border p-4 shadow-lg bg-white"
-    style={{
-      borderColor:
-        exposureRiskLabel === "high"
-          ? "#fecaca"
-          : exposureRiskLabel === "medium"
-          ? "#fde68a"
-          : "#bbf7d0",
-      background:
-        exposureRiskLabel === "high"
-          ? "#fef2f2"
-          : exposureRiskLabel === "medium"
-          ? "#fffbeb"
-          : "#f0fdf4",
-    }}
-  >
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-      <div>
-        <div className="text-sm font-medium">
-          Estimated Avoidable Exposure:
-        </div>
-        <div
-          className={`text-2xl font-extrabold ${
-            exposureRiskLabel === "high"
-              ? "text-red-700"
-              : exposureRiskLabel === "medium"
-              ? "text-yellow-700"
-              : "text-green-700"
-          }`}
-        >
-          💰 ${totalAvoidableExposure.toLocaleString()}
-        </div>
-      </div>
-
-      <button
-        onClick={handleCheckout}
-        disabled={isCheckingOut}
-        className={`px-5 py-2 rounded-md text-sm font-medium ${
-          isCheckingOut
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-black text-white hover:bg-gray-800"
-        }`}
-      >
-        {isCheckingOut ? "Processing…" : "Proceed to Secure Checkout"}
-      </button>
+    <div style={{ fontStyle: "italic", color: "#4b5563" }}>
+      One-time, tenant-first audit designed to pay for itself many times over.
     </div>
   </div>
-)}
+</section>
+        </>
+      )}
 
-</div>
+  </main>
+);
+}
+
 
 /* ---------- UI HELPERS ---------- */
 
