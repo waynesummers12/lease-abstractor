@@ -505,10 +505,10 @@ return (
     }}
   >
     Estimated recovery range:{" "}
-    <strong>
-      ${exposureRange.low.toLocaleString()} – $
-      {exposureRange.high.toLocaleString()}
-    </strong>
+<strong className="text-2xl font-extrabold text-green-900 block mt-1">
+  ${exposureRange.low.toLocaleString()} – $
+  {exposureRange.high.toLocaleString()}
+</strong>
   </div>
 )}
 
