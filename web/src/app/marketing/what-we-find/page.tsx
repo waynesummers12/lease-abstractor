@@ -101,9 +101,12 @@ export default function WhatWeFindPage() {
       {/* CTA STRIP */}
       <section className="rounded-xl bg-black p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
-          <h3 className="text-2xl font-semibold">
-            These issues add up quietly — until they’re expensive
-          </h3>
+          <h3 className="text-2xl font-semibold text-white">
+  These issues add up quietly —
+  <span className="block text-gray-300">
+    until they’re expensive
+  </span>
+</h3>
           <p className="mt-2 text-gray-300 max-w-xl">
             A few thousand dollars here, a few percent there — year after year.
             Our audit shows what your lease actually allows.
