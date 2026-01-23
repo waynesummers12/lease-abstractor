@@ -782,41 +782,97 @@ return (
       : "bg-gray-300 text-gray-500 cursor-not-allowed"
   }`}
 >
-  Get My CAM Audit Summary — $249.99
-</button>
+{/* ---------- CTA ---------- */}
+<section
+  className="mt-6 rounded-lg border p-6"
+  style={{
+    borderColor:
+      exposureRiskLabel === "high"
+        ? "#fecaca"
+        : exposureRiskLabel === "medium"
+        ? "#fde68a"
+        : "#bbf7d0",
+    background:
+      exposureRiskLabel === "high"
+        ? "#fef2f2"
+        : exposureRiskLabel === "medium"
+        ? "#fffbeb"
+        : "#f0fdf4",
+  }}
+>
+  <p
+    className="text-sm font-medium mb-2"
+    style={{
+      color:
+        exposureRiskLabel === "high"
+          ? "#7f1d1d"
+          : exposureRiskLabel === "medium"
+          ? "#78350f"
+          : "#14532d",
+    }}
+  >
+    🚨 Material CAM / NNN overcharge risk identified
+  </p>
 
+  <p
+    className="mb-4 text-sm"
+    style={{
+      color:
+        exposureRiskLabel === "high"
+          ? "#7f1d1d"
+          : exposureRiskLabel === "medium"
+          ? "#78350f"
+          : "#14532d",
+    }}
+  >
+    A focused audit often recovers meaningful overcharges with limited effort.
+  </p>
 
-  <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
-    <strong>Why $249.99?</strong>
-
-    <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
-      <li className="text-lg leading-relaxed">
-  Traditional CAM / NNN audits often cost{" "}
-  <strong className="block text-2xl font-extrabold text-gray-900 mt-1">
-    $1,500–$5,000+
+  <strong className="block mb-2 text-sm text-gray-700">
+    Why $249.99?
   </strong>
-</li>
 
-<li className="text-lg leading-relaxed">
-  A single audit frequently recovers{" "}
-  <strong className="block text-2xl font-extrabold text-green-700 mt-1">
-    $5,000–$50,000+
-  </strong>
-</li>
+  <ul className="space-y-4 mb-6">
+    <li className="text-lg leading-relaxed">
+      Traditional CAM / NNN audits often cost
+      <strong className="block text-2xl font-extrabold text-gray-900 mt-1">
+        $1,500–$5,000+
+      </strong>
+    </li>
 
-<li className="text-lg leading-relaxed">
-  Miss the audit window, and tenants may forfeit{" "}
-  <strong className="block text-xl font-semibold text-red-700 mt-1">
-    recovery rights permanently
-  </strong>
-</li>
-    </ul>
+    <li className="text-lg leading-relaxed">
+      A single audit frequently recovers
+      <strong className="block text-2xl font-extrabold text-green-700 mt-1">
+        $5,000–$50,000+
+      </strong>
+    </li>
 
-    <div style={{ fontStyle: "italic", color: "#4b5563" }}>
-      One-time, tenant-first audit designed to pay for itself many times over.
-    </div>
+    <li className="text-lg leading-relaxed">
+      Miss the audit window, and tenants may forfeit
+      <strong className="block text-xl font-semibold text-red-700 mt-1">
+        recovery rights permanently
+      </strong>
+    </li>
+  </ul>
+
+  {/* CTA — placed immediately after loss framing */}
+  <button
+    onClick={handleCheckout}
+    disabled={!analysis}
+    className={`w-full sm:w-auto rounded-lg px-6 py-3 text-base font-semibold transition ${
+      analysis
+        ? "bg-black text-white hover:bg-gray-800 hover:-translate-y-0.5 hover:shadow-lg"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }`}
+  >
+    Get My CAM Audit Summary — $249.99
+  </button>
+
+  <div className="mt-3 text-xs italic text-gray-600">
+    One-time, tenant-first audit designed to pay for itself many times over.
   </div>
 </section>
+
         </>
       )}
       {showStickyCTA && exposureRiskLabel === "high" && (
