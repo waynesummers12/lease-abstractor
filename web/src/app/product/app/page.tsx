@@ -402,30 +402,35 @@ return (
     </div>
   </div>
 </section>
-      {/* ---------- UPLOAD ---------- */}
-      <div className="flex items-center gap-4 mb-4">
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
+{/* ---------- UPLOAD ---------- */}
+<div className="mb-4">
+  <div className="flex items-center gap-4">
+    <input
+      type="file"
+      accept="application/pdf"
+      onChange={(e) => setFile(e.target.files?.[0] || null)}
+    />
 
-        <button
-  onClick={handleUploadAndAnalyze}
-  disabled={!file}
-  className={`px-4 py-2 rounded-md text-sm font-medium ${
-    file
-      ? "bg-black text-white hover:bg-gray-800"
-      : "bg-gray-200 text-gray-500 cursor-not-allowed"
-  }`}
->
-  Analyze CAM / NNN Risk
-</button>
+    <button
+      onClick={handleUploadAndAnalyze}
+      disabled={!file}
+      className={`px-4 py-2 rounded-md text-sm font-medium ${
+        file
+          ? "bg-black text-white hover:bg-gray-800"
+          : "bg-gray-200 text-gray-500 cursor-not-allowed"
+      }`}
+    >
+      Analyze CAM / NNN Risk
+    </button>
+  </div>
 
-      {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
+  {status && (
+    <p className="mt-4 text-sm text-gray-600">{status}</p>
+  )}
+</div>
 
-      {analysis !== null && (
-        <>
+{analysis !== null && (
+  <>
     {totalAvoidableExposure != null && (
   <section
   ref={resultsRef}
@@ -787,47 +792,49 @@ return (
 </section>
         </>
       )}
-{showStickyCTA && exposureRiskLabel === "high" && (
-  <div
-    style={{
-      position: "fixed",
-      bottom: 20,
-      left: "50%",
-      transform: "translateX(-50%)",
-      background: "#111",
-      color: "#fff",
-      padding: "12px 18px",
-      borderRadius: 10,
-      boxShadow: "0 12px 32px rgba(0,0,0,0.25)",
-      display: "flex",
-      alignItems: "center",
-      gap: 12,
-      zIndex: 50,
-    }}
-  >
-    <span style={{ fontSize: 14 }}>
-      High-risk CAM exposure detected — timing matters
-    </span>
+      {showStickyCTA && exposureRiskLabel === "high" && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 20,
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "#111",
+            color: "#fff",
+            padding: "12px 18px",
+            borderRadius: 10,
+            boxShadow: "0 12px 32px rgba(0,0,0,0.25)",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            zIndex: 50,
+          }}
+        >
+          <span style={{ fontSize: 14 }}>
+            High-risk CAM exposure detected — timing matters
+          </span>
 
-    <button
-      onClick={handleCheckout}
-      style={{
-        background: "#16a34a",
-        color: "#fff",
-        border: "none",
-        padding: "8px 14px",
-        borderRadius: 6,
-        fontWeight: 600,
-        cursor: "pointer",
-      }}
-    >
-      Get Audit Summary
-    </button>
-  </div>
-)}
+          <button
+            onClick={handleCheckout}
+            style={{
+              background: "#16a34a",
+              color: "#fff",
+              border: "none",
+              padding: "8px 14px",
+              borderRadius: 6,
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Get Audit Summary
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
-</div>
-);}
+
 /* ---------- UI HELPERS ---------- */
 
 function Field({
