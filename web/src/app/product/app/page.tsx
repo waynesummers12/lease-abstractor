@@ -180,7 +180,7 @@ const exposureRange: { low: number; high: number } | null = (() => {
 function slowScrollTo(element: HTMLElement, duration = 800) {
   const startY = window.scrollY;
   const targetY =
-    element.getBoundingClientRect().top + window.scrollY - 12;
+  element.getBoundingClientRect().top + window.scrollY - 120;
   const distance = targetY - startY;
   const startTime = performance.now();
 
