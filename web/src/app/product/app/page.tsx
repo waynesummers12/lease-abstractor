@@ -581,15 +581,18 @@ return (
 >
   <strong>How this estimate was calculated:</strong>
   <ul style={{ marginTop: 6, paddingLeft: 18 }}>
-    <li>
-      CAM / NNN charges flagged as <strong>uncapped, ambiguous, or escalating</strong>
-    </li>
-    <li>
-      Conservative dollar ranges extracted from lease language (not worst-case)
-    </li>
-    <li>
-      Annualized impact based on current rent and reconciliation rules
-    </li>
+    <ul className="mt-3 space-y-3 text-[15px] font-medium">
+  <li>
+    CAM / NNN charges flagged as{" "}
+    <strong>uncapped, ambiguous, or escalating</strong>
+  </li>
+  <li>
+    Conservative dollar ranges extracted from lease language (not worst-case)
+  </li>
+  <li>
+    Annualized impact based on current rent and reconciliation rules
+  </li>
+</ul>
   </ul>
   <div style={{ marginTop: 6, fontStyle: "italic" }}>
     Final recovery depends on lease interpretation, audit rights, and timing.
