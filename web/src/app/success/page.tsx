@@ -32,15 +32,25 @@ export default function SuccessPage() {
     }
 
     let interval: number;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 12;
 
     async function loadAudit() {
+      attempts++;
+
+      if (attempts > MAX_ATTEMPTS) {
+        clearInterval(interval);
+        setError("Audit is taking longer than expected.");
+        setLoading(false);
+        return;
+      }
+
       try {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`;
         console.log("Loading audit:", url);
 
         const res = await fetch(url, { cache: "no-store" });
 
-        // 404 = audit exists but not ready yet
         if (!res.ok) {
           console.warn("Audit not ready yet:", res.status);
           return;
@@ -52,27 +62,15 @@ export default function SuccessPage() {
         if (json?.analysis) {
           setData(json);
           setLoading(false);
-          clearInterval(interval); // ✅ stop polling
+          clearInterval(interval);
         }
       } catch (err) {
         console.error("Success page fetch error:", err);
       }
     }
-let attempts = 0;
-const MAX_ATTEMPTS = 12;
 
-async function loadAudit() {
-  attempts++;
-
-  if (attempts > MAX_ATTEMPTS) {
-    clearInterval(interval);
-    return;
-  }
-
-  ...
-}
     loadAudit();
-    interval = setInterval(loadAudit, 5000);
+    interval = window.setInterval(loadAudit, 5000);
 
     return () => clearInterval(interval);
   }, [auditId]);
