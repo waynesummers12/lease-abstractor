@@ -1,11 +1,44 @@
 // src/app/marketing/common-cam-fees/page.tsx
 import Link from "next/link";
-import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
   title: "Common CAM Fees Explained | Commercial Lease CAM Charges | SaveOnLease",
   description:
     "Learn the most common CAM fees charged to commercial tenants, which costs are typically allowed, and where landlords often overcharge.",
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What expenses are typically included in CAM fees?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "CAM fees often include landscaping, snow removal, parking lot maintenance, common area utilities, janitorial services, and security.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are administrative fees part of CAM charges?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Administrative fees may be included in CAM charges, but they are often capped or limited by lease language and frequently exceed those limits.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Which CAM fees are commonly disputed?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Commonly disputed CAM fees include excessive administrative fees, capital repairs, costs benefiting vacant space, and duplicate charges.",
+      },
+    },
+  ],
 };
 
 export default function CommonCamFeesPage() {
@@ -26,10 +59,9 @@ export default function CommonCamFeesPage() {
       {/* CONTENT */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
         <p>
-          CAM fees are intended to cover the costs of maintaining shared areas
-          of a commercial property. However, lease definitions vary widely, and
-          many expenses billed as CAM are limited, capped, or excluded entirely
-          by the lease.
+          CAM fees are intended to cover the costs of maintaining shared areas of
+          a commercial property. Lease definitions vary widely, and many expenses
+          billed as CAM are limited, capped, or excluded entirely by the lease.
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
@@ -104,8 +136,12 @@ export default function CommonCamFeesPage() {
           Start CAM Audit
         </Link>
       </section>
+
       {/* FAQ Schema */}
-      <FaqSchema />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
     </main>
   );
 }
