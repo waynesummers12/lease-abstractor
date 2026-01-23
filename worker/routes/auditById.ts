@@ -4,9 +4,9 @@ import { supabase } from "../lib/supabase.ts";
 import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router();
-
+console.log("✅ auditById route file loaded");
 router.get("/audits/:auditId", async (ctx) => {
-  const auditId = ctx.params.auditId;
+  console.log("🔥 auditById hit:", ctx.params.auditId);
 
   if (!auditId) {
     ctx.response.status = 400;
