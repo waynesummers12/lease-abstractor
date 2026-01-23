@@ -408,7 +408,7 @@ return (
   </ul>
 
   {/* Accuracy Statement */}
-  <p className="mt-6 rounded-xl border-2 border-black bg-black px-5 py-3 text-sm font-semibold text-white">
+  <p className="mt-6 border-l-4 border-gray-900 pl-4 text-sm font-medium text-gray-900">
   Built for accuracy — every estimate is derived from your lease, not market averages.
 </p>
 
