@@ -276,15 +276,17 @@ return (
 
     {totalAvoidableExposure != null && (
   <section
-    ref={resultsRef}
-    style={{
-      marginBottom: 24,
-      padding: 20,
-      borderRadius: 10,
-      border: "2px solid #16a34a",
-      background: "#f0fdf4",
-    }}
-  >
+  style={{
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 10,
+    border: "2px solid #16a34a",
+    background: "#f0fdf4",
+  }}
+>
+{/* Scroll anchor for sticky header */}
+    <div ref={resultsRef} style={{ scrollMarginTop: 120 }} />
+
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
       Estimated Avoidable Exposure (Next 12 Months)
     </div>
