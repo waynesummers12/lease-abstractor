@@ -58,7 +58,19 @@ export default function SuccessPage() {
         console.error("Success page fetch error:", err);
       }
     }
+let attempts = 0;
+const MAX_ATTEMPTS = 12;
 
+async function loadAudit() {
+  attempts++;
+
+  if (attempts > MAX_ATTEMPTS) {
+    clearInterval(interval);
+    return;
+  }
+
+  ...
+}
     loadAudit();
     interval = setInterval(loadAudit, 5000);
 
