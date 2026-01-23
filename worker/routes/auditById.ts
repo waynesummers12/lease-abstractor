@@ -13,7 +13,7 @@ const router = new Router();
  * NO AUTH
  * UUID ONLY
  */
-router.get("/api/audits/:auditId", async (ctx) => {
+router.get("/audits/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
