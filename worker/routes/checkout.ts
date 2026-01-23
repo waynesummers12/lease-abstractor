@@ -2,10 +2,9 @@
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
+import { supabase } from "../lib/supabase.ts";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
-  // Stripe v20 enforces API version internally — do NOT set apiVersion
-});
+const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 
 const router = new Router({
   prefix: "/checkout",
@@ -14,11 +13,10 @@ const router = new Router({
 /**
  * Create Stripe Checkout Session
  *
- * IMPORTANT INVARIANTS:
- * - auditId already exists
- * - PDF is already generated & uploaded
- * - object_path is already persisted
- * - This route ONLY starts payment
+ * HARD GUARANTEES AFTER THIS ROUTE:
+ * - lease_audits row EXISTS
+ * - status = 'unpaid'
+ * - Stripe webhook can ALWAYS update it
  */
 router.post("/create", async (ctx) => {
   try {
@@ -39,6 +37,40 @@ router.post("/create", async (ctx) => {
       ctx.response.body = { error: "Server misconfigured" };
       return;
     }
+
+    /* ---------------------------------------------------------
+       ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
+    ---------------------------------------------------------- */
+
+    const { data: existingAudit } = await supabase
+      .from("lease_audits")
+      .select("id")
+      .eq("id", auditId)
+      .maybeSingle();
+
+    if (!existingAudit) {
+      const { error: insertError } = await supabase
+        .from("lease_audits")
+        .insert({
+          id: auditId,
+          status: "unpaid",
+          amount_paid: 14999,
+          currency: "usd",
+        });
+
+      if (insertError) {
+        console.error("❌ Failed to insert lease_audits row:", insertError);
+        ctx.response.status = 500;
+        ctx.response.body = { error: "Failed to initialize audit record" };
+        return;
+      }
+
+      console.log("🧾 lease_audits row created:", auditId);
+    }
+
+    /* ---------------------------------------------------------
+       CREATE STRIPE CHECKOUT SESSION
+    ---------------------------------------------------------- */
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
