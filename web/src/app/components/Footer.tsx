@@ -14,6 +14,9 @@ export default function Footer() {
 
           {/* Right */}
           <nav className="flex flex-wrap gap-6">
+            <Link href="/marketing/learn" className="hover:text-gray-900">
+              Learn
+            </Link>
             <Link href="/marketing/what-we-find" className="hover:text-gray-900">
               What We Find
             </Link>
@@ -26,7 +29,7 @@ export default function Footer() {
             <Link href="/marketing/privacy" className="hover:text-gray-900">
               Privacy
             </Link>
-            <Link href="/marketing/terms" className="hover:text-red-1100">
+            <Link href="/marketing/terms" className="hover:text-gray-900">
               Terms
             </Link>
           </nav>
@@ -35,5 +38,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-
