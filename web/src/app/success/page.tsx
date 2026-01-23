@@ -33,19 +33,22 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
-          { cache: "no-store" }
-        );
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`;
+        console.log("Loading audit:", url);
+
+        const res = await fetch(url, { cache: "no-store" });
 
         if (!res.ok) {
+          console.error("Audit fetch failed:", res.status);
           throw new Error("Failed to load audit");
         }
 
         const json: AuditResponse = await res.json();
+        console.log("Audit loaded:", json);
+
         setData(json);
       } catch (err) {
-        console.error(err);
+        console.error("Success page error:", err);
         setError("We couldn’t load your audit. Please try again.");
       } finally {
         setLoading(false);
@@ -54,6 +57,7 @@ export default function SuccessPage() {
 
     loadAudit();
   }, [auditId]);
+
 
   /* ================= UI ================= */
 
