@@ -47,11 +47,12 @@ router.post("/generate-pdf", async (ctx) => {
   const objectPath = `${auditId}.pdf`;
 
   const { error: uploadError } = await supabase.storage
-    .from("leases")
-    .upload(objectPath, pdfBytes, {
-      contentType: "application/pdf",
-      upsert: true,
-    });
+  .from("leases")
+  .upload(objectPath, pdfBytes, {
+    contentType: "application/pdf",
+    upsert: true, // ✅ required so retries don’t fail
+    cacheControl: "3600",
+  });
 
   if (uploadError) {
     ctx.throw(500, uploadError.message);
