@@ -790,6 +790,63 @@ return (
   </ul>
 </section>
 
+</div>
+)}
+
+{showStickyCTA && totalAvoidableExposure != null && (
+  <div
+    className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-lg rounded-lg border p-4 shadow-lg bg-white"
+    style={{
+      borderColor:
+        exposureRiskLabel === "high"
+          ? "#fecaca"
+          : exposureRiskLabel === "medium"
+          ? "#fde68a"
+          : "#bbf7d0",
+      background:
+        exposureRiskLabel === "high"
+          ? "#fef2f2"
+          : exposureRiskLabel === "medium"
+          ? "#fffbeb"
+          : "#f0fdf4",
+    }}
+  >
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div className="text-sm font-medium">
+          Estimated Avoidable Exposure:
+        </div>
+        <div
+          className={`text-2xl font-extrabold ${
+            exposureRiskLabel === "high"
+              ? "text-red-700"
+              : exposureRiskLabel === "medium"
+              ? "text-yellow-700"
+              : "text-green-700"
+          }`}
+        >
+          💰 ${totalAvoidableExposure.toLocaleString()}
+        </div>
+      </div>
+
+      <button
+        onClick={handleCheckout}
+        disabled={isCheckingOut}
+        className={`px-5 py-2 rounded-md text-sm font-medium ${
+          isCheckingOut
+            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+            : "bg-black text-white hover:bg-gray-800"
+        }`}
+      >
+        {isCheckingOut ? "Processing…" : "Proceed to Secure Checkout"}
+      </button>
+    </div>
+  </div>
+)}
+
+</div>
+);
+}
 /* ---------- UI HELPERS ---------- */
 
 function Field({
