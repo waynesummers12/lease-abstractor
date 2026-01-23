@@ -411,17 +411,16 @@ return (
         />
 
         <button
-          onClick={handleUploadAndAnalyze}
-          disabled={!file}
-          className={`px-4 py-2 rounded-md text-sm font-medium ${
-            file
-              ? "bg-black text-white hover:bg-gray-800"
-              : "bg-gray-200 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          Analyze CAM / NNN Risk
-        </button>
-      </div>
+  onClick={handleUploadAndAnalyze}
+  disabled={!file}
+  className={`px-4 py-2 rounded-md text-sm font-medium ${
+    file
+      ? "bg-black text-white hover:bg-gray-800"
+      : "bg-gray-200 text-gray-500 cursor-not-allowed"
+  }`}
+>
+  Analyze CAM / NNN Risk
+</button>
 
       {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
 
