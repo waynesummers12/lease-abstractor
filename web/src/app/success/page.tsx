@@ -31,7 +31,7 @@ export default function SuccessPage() {
       return;
     }
 
-    let interval: NodeJS.Timeout;
+    let interval: number;
 
     async function loadAudit() {
       try {
