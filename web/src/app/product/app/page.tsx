@@ -100,9 +100,6 @@ export default function HomePage() {
     // ✅ ADD THIS HERE
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
-  // ✅ ADD THIS LINE
-  const [animatedExposure, setAnimatedExposure] = useState<number | null>(null);
-  const [showStickyCTA, setShowStickyCTA] = useState(false);
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
   if (selectedAudit) return selectedAudit;
@@ -129,35 +126,6 @@ export default function HomePage() {
   return total > 0 ? Math.round(total) : null;
 })();
 
-useEffect(() => {
-  if (totalAvoidableExposure == null) {
-    setAnimatedExposure(null);
-    return;
-  }
-
-  const DURATION_MS = 900;
-  const startTime = performance.now();
-  const endValue = totalAvoidableExposure;
-
-  function tick(now: number) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / DURATION_MS, 1);
-
-    // easeOutCubic
-    const eased = 1 - Math.pow(1 - progress, 3);
-
-    setAnimatedExposure(Math.round(eased * endValue));
-
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      setShowStickyCTA(true); // 👈 CTA appears AFTER count-up
-    }
-  }
-
-  requestAnimationFrame(tick);
-}, [totalAvoidableExposure]);
-
 const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
   if (totalAvoidableExposure == null) return null;
 
@@ -174,32 +142,6 @@ const exposureRange: { low: number; high: number } | null = (() => {
     high: Math.round(totalAvoidableExposure * 1.3),
   };
 })();
-
-/* ---------- SCROLL HELPERS ---------- */
-
-function slowScrollTo(element: HTMLElement, duration = 800) {
-  const startY = window.scrollY;
-  const targetY =
-  element.getBoundingClientRect().top + window.scrollY - 120;
-  const distance = targetY - startY;
-  const startTime = performance.now();
-
-  function step(currentTime: number) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // easeOutCubic
-    const ease = 1 - Math.pow(1 - progress, 3);
-
-    window.scrollTo(0, startY + distance * ease);
-
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
-  }
-
-  requestAnimationFrame(step);
-}
 
 /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
@@ -268,11 +210,13 @@ async function handleUploadAndAnalyze() {
   setStatus("Analysis complete ✅");
 
   setTimeout(() => {
-  if (resultsRef.current) {
-    slowScrollTo(resultsRef.current, 1200);
-  }
-}, 100);
+    resultsRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 100);
 }
+
 
 /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -327,7 +271,7 @@ async function handleCheckout() {
   }
 }
 
-rreturn (
+return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
     {totalAvoidableExposure != null && (
