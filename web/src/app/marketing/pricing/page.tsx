@@ -136,14 +136,16 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section className="pt-4">
-        <Link
-          href="/product/app"
-          className="inline-block rounded border px-6 py-3 hover:bg-gray-50 transition"
-        >
-          Get Started
-        </Link>
-      </section>
+<section className="mt-8 pb-12">
+  <Link
+    href="/product/app"
+    className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white transition
+               hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md
+               active:translate-y-0"
+  >
+    Get Started
+  </Link>
+</section>
 
       {/* FAQ SCHEMA (SEO) */}
       <FaqSchema
