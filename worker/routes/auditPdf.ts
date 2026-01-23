@@ -1,4 +1,5 @@
 // worker/routes/auditPdf.ts
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
@@ -41,9 +42,9 @@ router.post("/generate-pdf", async (ctx) => {
   const pdfBytes = await generateAuditPdf(audit.analysis);
 
   // --------------------
-  // 4. Upload PDF USING AUDIT ID (LOCKED PATH)
+  // 4. Upload PDF (CORRECT PATH — NO PREFIX)
   // --------------------
-  const objectPath = `leases/${auditId}.pdf`;
+  const objectPath = `${auditId}.pdf`;
 
   const { error: uploadError } = await supabase.storage
     .from("leases")
@@ -57,7 +58,7 @@ router.post("/generate-pdf", async (ctx) => {
   }
 
   // --------------------
-  // 5. IMMEDIATELY persist object_path (CRITICAL FIX)
+  // 5. Persist object_path (CRITICAL)
   // --------------------
   const { error: updateError } = await supabase
     .from("lease_audits")
@@ -73,6 +74,7 @@ router.post("/generate-pdf", async (ctx) => {
   // --------------------
   // 6. Respond
   // --------------------
+  ctx.response.status = 200;
   ctx.response.body = {
     success: true,
     object_path: objectPath,
@@ -80,4 +82,3 @@ router.post("/generate-pdf", async (ctx) => {
 });
 
 export default router;
-
