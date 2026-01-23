@@ -24,13 +24,12 @@ export default function MarketingHomePage() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-  href="/product/app"
-  className="mt-8 inline-flex justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
->
-  Upload a Lease
-</Link>
+            href="/product/app"
+            className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
             Start CAM Audit
           </Link>
+
           <Link
             href="/marketing/what-we-find"
             className="rounded-xl border px-8 py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition"
@@ -92,6 +91,7 @@ export default function MarketingHomePage() {
               Includes a full CAM / NNN lease audit with a downloadable PDF
               summary and email delivery.
             </p>
+
             <ul className="mt-6 space-y-3 text-gray-700 list-none">
               <li className="flex items-start gap-2">
                 <span className="text-green-600">✔</span>
@@ -114,13 +114,13 @@ export default function MarketingHomePage() {
                 <span>Secure PDF + email delivery</span>
               </li>
             </ul>
-            <Link
-  href="/product/app"
-  className="mt-8 inline-flex justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
->
-  Upload a Lease
-</Link>
 
+            <Link
+              href="/product/app"
+              className="mt-8 inline-flex justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
+            >
+              Upload a Lease
+            </Link>
           </div>
         </div>
       </section>
