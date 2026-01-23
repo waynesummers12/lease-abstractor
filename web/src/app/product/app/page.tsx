@@ -342,7 +342,28 @@ return (
           <strong>Miss the window, and recovery rights are often waived.</strong>
         </p>
       </div>
+{/* ---------- UPLOAD INTRO ---------- */}
+<section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
+  <h3 className="text-lg font-semibold text-gray-900">
+    🔍 Upload Your Lease for Review
+  </h3>
 
+  <p className="mt-2 text-sm text-gray-700">
+    Upload your commercial lease to receive a clear, tenant-first CAM & NNN audit
+    that highlights deadlines, risks, and potential overcharges.
+  </p>
+
+  <ul className="mt-3 space-y-2 text-sm text-gray-700">
+    <li>✔ Audit window deadlines so you don’t miss your right to dispute</li>
+    <li>✔ CAM / NNN overcharge risk based on your lease language</li>
+    <li>✔ Caps, exclusions, and escalation red flags</li>
+    <li>✔ A concise PDF summary you can keep or share</li>
+  </ul>
+
+  <p className="mt-3 text-xs text-gray-500">
+    Secure upload. No subscriptions. One-time review.
+  </p>
+</section>
       {/* ---------- UPLOAD ---------- */}
       <div className="flex items-center gap-4 mb-4">
         <input
