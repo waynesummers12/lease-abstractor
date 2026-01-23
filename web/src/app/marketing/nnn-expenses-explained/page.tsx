@@ -100,11 +100,11 @@ export default function NnnExpensesExplainedPage() {
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
         <h3 className="text-2xl font-semibold">
-          Unsure if your NNN charges are accurate?
+          Think you might be overpaying?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
-          Upload your lease and receive a tenant-first audit highlighting NNN
-          risks, caps, and potential overcharges.
+          Upload your lease and receive a tenant-first CAM & NNN audit with clear
+          findings and estimated exposure.
         </p>
         <Link
           href="/product/app"
@@ -113,6 +113,7 @@ export default function NnnExpensesExplainedPage() {
           Start CAM & NNN Audit
         </Link>
       </section>
+
       {/* FAQ Schema */}
       <FaqSchema />
     </main>
