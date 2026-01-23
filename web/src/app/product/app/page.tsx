@@ -330,18 +330,33 @@ async function handleCheckout() {
 return (
   <div style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
-      {/* ---------- AUDIT URGENCY ---------- */}
-      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-        <p className="text-sm font-medium text-amber-900 mb-1">
-          ⚠️ CAM / NNN Audit Deadline Risk
-        </p>
-        <p className="text-sm text-amber-800">
-          Most commercial leases allow tenants{" "}
-          <strong>30–120 days</strong> after receiving the annual CAM
-          reconciliation to dispute overcharges.{" "}
-          <strong>Miss the window, and recovery rights are often waived.</strong>
-        </p>
-      </div>
+ {/* ---------- AUDIT URGENCY ---------- */}
+<section className="mb-8 rounded-2xl border-2 border-amber-400 bg-amber-50 p-6 shadow-lg">
+  <div className="flex items-start gap-3">
+    <div className="text-2xl">⚠️</div>
+
+    <div>
+      <h3 className="text-lg font-semibold text-amber-900">
+        CAM / NNN Audit Deadline Risk
+      </h3>
+
+      <p className="mt-2 text-base text-amber-900 max-w-3xl">
+        Most commercial leases allow tenants{" "}
+        <strong>30–120 days</strong> after receiving the annual CAM
+        reconciliation to dispute overcharges.
+      </p>
+
+      <p className="mt-2 text-base font-semibold text-amber-900">
+        Miss this window, and recovery rights are often permanently waived.
+      </p>
+
+      <p className="mt-3 text-sm text-amber-800">
+        This audit is designed to surface deadline risk early — before it’s too late
+        to act.
+      </p>
+    </div>
+  </div>
+</section>
 {/* ---------- UPLOAD INTRO ---------- */}
 <section className="mb-8 rounded-2xl border-2 border-black bg-white p-8 shadow-lg">
   <h3 className="text-2xl font-semibold text-gray-900">
