@@ -24,9 +24,11 @@ export default function MarketingHomePage() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/product/app"
-            className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
-          >
+  href="/product/app"
+  className="mt-8 inline-flex justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
+>
+  Upload a Lease
+</Link>
             Start CAM Audit
           </Link>
           <Link
@@ -113,11 +115,12 @@ export default function MarketingHomePage() {
               </li>
             </ul>
             <Link
-              href="/product/app"
-              className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
-            >
-              Upload a Lease
-            </Link>
+  href="/product/app"
+  className="mt-8 inline-flex justify-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition"
+>
+  Upload a Lease
+</Link>
+
           </div>
         </div>
       </section>
