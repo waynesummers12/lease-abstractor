@@ -846,7 +846,6 @@ return (
       Get Audit Summary
     </button>
   </div>
-)}
 </div>
 );
 }
