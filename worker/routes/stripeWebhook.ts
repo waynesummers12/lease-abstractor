@@ -39,29 +39,33 @@ router.post("/stripe/webhook", async (ctx) => {
 
   // ✅ Handle successful payment
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+  const session = event.data.object as Stripe.Checkout.Session;
 
-    const auditId = session.metadata?.auditId;
-    const stripeSessionId = session.id;
+  const auditId = session.metadata?.auditId;
+  const stripeSessionId = session.id;
 
-    if (!auditId) {
-      console.error("❌ Missing auditId in Stripe metadata");
+  if (!auditId) {
+    console.error("❌ Missing auditId in Stripe metadata");
+  } else {
+    const objectPath = `leases/${auditId}.pdf`;
+
+    const { error } = await supabase
+      .from("lease_audits")
+      .update({
+        status: "paid",
+        stripe_session_id: stripeSessionId,
+        object_path: objectPath,
+      })
+      .eq("id", auditId);
+
+    if (error) {
+      console.error("❌ Failed to mark audit as paid:", error);
     } else {
-      const { error } = await supabase
-        .from("lease_audits")
-        .update({
-          status: "paid",
-          stripe_session_id: stripeSessionId,
-        })
-        .eq("id", auditId);
-
-      if (error) {
-        console.error("❌ Failed to mark audit as paid:", error);
-      } else {
-        console.log("✅ Audit marked as paid:", auditId);
-      }
+      console.log("✅ Audit marked as paid:", auditId);
     }
   }
+}
+
 
   ctx.response.status = 200;
   ctx.response.body = { received: true };
