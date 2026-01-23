@@ -120,7 +120,7 @@ export default function WhatWeFindPage() {
         </ul>
       </section>
 
-      /* CTA */
+      {/* CTA */}
 <section className="rounded bg-gray-50 p-6">
   <h3 className="text-xl font-semibold">
     What This Means for You
