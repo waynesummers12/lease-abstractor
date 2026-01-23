@@ -856,7 +856,6 @@ return (
   </ul>
 
   {/* CTA — placed immediately after loss framing */}
-  {/* CTA — placed immediately after loss framing */}
 <section className="mt-4">
   <button
     onClick={handleCheckout}
@@ -913,9 +912,8 @@ return (
     </button>
   </div>
 )}
+
   );
-
-
 /* ---------- UI HELPERS ---------- */
 
 function Field({
