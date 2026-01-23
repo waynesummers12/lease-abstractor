@@ -789,7 +789,8 @@ return (
     </li>
   </ul>
 </section>
-
+</div>
+);
 /* ---------- UI HELPERS ---------- */
 
 function Field({
