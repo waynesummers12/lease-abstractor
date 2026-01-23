@@ -369,25 +369,36 @@ return (
     before your rights expire.
   </p>
 
-  <ul className="mt-5 space-y-3 text-base text-gray-800">
+  <ul className="mt-6 space-y-3 text-base text-gray-800">
     <li className="flex items-start gap-2">
       <span className="text-green-600 font-bold">✔</span>
       <span>
         Identify <strong>audit window deadlines</strong> so you don’t lose recovery rights
       </span>
     </li>
+
     <li className="flex items-start gap-2">
       <span className="text-green-600 font-bold">✔</span>
       <span>
         Detect <strong>CAM / NNN overcharge risk</strong> based on your actual lease language
       </span>
     </li>
+
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold">✔</span>
+      <span>
+        Apply <strong>deterministic lease math</strong> to estimate recoverable CAM / NNN
+        savings — not generic AI summaries
+      </span>
+    </li>
+
     <li className="flex items-start gap-2">
       <span className="text-green-600 font-bold">✔</span>
       <span>
         Flag <strong>caps, exclusions, escalation, and admin fee issues</strong>
       </span>
     </li>
+
     <li className="flex items-start gap-2">
       <span className="text-green-600 font-bold">✔</span>
       <span>
@@ -396,12 +407,16 @@ return (
     </li>
   </ul>
 
-  <div className="mt-5 flex items-center gap-4">
-    <div className="text-sm text-gray-600">
-      🔒 Secure upload · No subscriptions · One-time review
-    </div>
+  {/* Accuracy Statement */}
+  <p className="mt-5 text-sm text-gray-600 italic">
+    Built for accuracy — every estimate is derived from your lease, not market averages.
+  </p>
+
+  <div className="mt-4 flex items-center gap-4 text-sm text-gray-600">
+    🔒 Secure upload · No subscriptions · One-time review
   </div>
 </section>
+
 {/* ---------- UPLOAD ---------- */}
 <div className="mb-4">
   <div className="flex items-center gap-4">
