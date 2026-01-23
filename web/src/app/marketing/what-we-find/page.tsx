@@ -1,4 +1,5 @@
 import FaqSchema from "@/app/components/FaqSchema";
+import Link from "next/link";
 
 export const metadata = {
   title: "CAM & NNN Overcharge Examples | What Lease Audits Find",
@@ -119,29 +120,29 @@ export default function WhatWeFindPage() {
         </ul>
       </section>
 
-      {/* CTA */}
-      <section className="rounded bg-gray-50 p-6">
-        <h3 className="text-xl font-semibold">
-          What This Means for You
-        </h3>
-        <p className="mt-3 text-gray-700">
-          These issues rarely appear as a single large mistake. Instead, they
-          accumulate quietly — a few thousand dollars here, a few percent
-          there — until tenants are overpaying year after year.
-        </p>
-        <p className="mt-2 text-gray-700">
-          Our audit helps you understand what your lease actually allows,
-          identify potential overcharges, and decide whether it’s worth
-          pursuing corrections.
-        </p>
+      /* CTA */
+<section className="rounded bg-gray-50 p-6">
+  <h3 className="text-xl font-semibold">
+    What This Means for You
+  </h3>
+  <p className="mt-3 text-gray-700">
+    These issues rarely appear as a single large mistake. Instead, they
+    accumulate quietly — a few thousand dollars here, a few percent
+    there — until tenants are overpaying year after year.
+  </p>
+  <p className="mt-2 text-gray-700">
+    Our audit helps you understand what your lease actually allows,
+    identify potential overcharges, and decide whether it’s worth
+    pursuing corrections.
+  </p>
 
-        <a
-          href="/"
-          className="mt-4 inline-block rounded bg-black px-5 py-2 text-white"
-        >
-          Upload a Lease for Review
-        </a>
-      </section>
+  <Link
+    href="/product/app"
+    className="mt-4 inline-block rounded bg-black px-5 py-2 text-white hover:bg-gray-800 transition"
+  >
+    Upload a Lease for Review
+  </Link>
+</section>
 
       {/* FAQ SCHEMA (SEO) */}
       <FaqSchema
