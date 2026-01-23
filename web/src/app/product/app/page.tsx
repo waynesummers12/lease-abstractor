@@ -912,8 +912,6 @@ return (
     </button>
   </div>
 )}
-
-  );
 /* ---------- UI HELPERS ---------- */
 
 function Field({
