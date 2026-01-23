@@ -9,34 +9,32 @@ export const metadata = {
 
 const articles = [
   {
+    id: "cam-nnn-overcharges",
     title: "CAM & NNN Overcharges Explained",
     description:
       "Understand how CAM and NNN overcharges happen and why many tenants unknowingly overpay.",
     href: "/marketing/cam-nnn-overcharges",
   },
   {
+    id: "audit-window-deadlines",
     title: "Audit Window Deadlines Explained",
     description:
       "Learn how CAM and NNN audit windows work, typical 30–120 day deadlines, and what happens if tenants miss them.",
     href: "/marketing/audit-rights",
   },
   {
+    id: "common-cam-fees",
     title: "Common CAM Fees Explained",
     description:
       "A breakdown of common CAM fees, which charges are typically allowed, and which are frequently disputed.",
     href: "/marketing/common-cam-fees",
   },
   {
+    id: "nnn-expenses",
     title: "NNN Expenses Explained",
     description:
       "Learn how Triple Net (NNN) expenses work, why they increase, and when tenants can dispute them.",
     href: "/marketing/nnn-expenses-explained",
-  },
-  {
-    title: "Commercial Lease Audit Rights",
-    description:
-      "A complete overview of audit rights for commercial tenants covering CAM, NNN, tax, and insurance charges.",
-    href: "/marketing/audit-rights",
   },
 ];
 
@@ -58,7 +56,7 @@ export default function LearnPage() {
       <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
           <Link
-            key={article.href}
+            key={article.id}
             href={article.href}
             className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
           >
