@@ -25,7 +25,7 @@ export default function PricingPage() {
       <section className="rounded border p-8">
         <div className="flex items-baseline gap-2">
           <div className="text-5xl font-bold">$249.99</div>
-          <div className="text-[22px] text-gray-600">one-time</div>
+          <div className="text-[24px] text-gray-600">one-time</div>
         </div>
 
         <p className="mt-4 text-gray-700">
