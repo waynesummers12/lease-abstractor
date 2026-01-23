@@ -171,17 +171,16 @@ async function handleUploadAndAnalyze() {
 
   setStatus("Analyzing lease…");
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-      },
-      body: JSON.stringify({ objectPath }),
-    }
-  );
+  const res = await fetch("/api/ingest/lease/pdf", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    objectPath,
+    auditId, // ✅ REQUIRED — ties analysis to lease_audits row
+  }),
+});
 
   if (!res.ok) {
     setStatus("Analysis failed");

@@ -52,20 +52,18 @@ router.post("/pdf", async (ctx) => {
     const analysis = abstractLease(leaseText);
 
     // ✅ PERSIST ANALYSIS
-    const { error: upsertError } = await supabase
-      .from("lease_audits")
-      .upsert(
-        {
-          id: auditId,
-          analysis,
-        },
-        { onConflict: "id" }
-      );
+const { error: updateError } = await supabase
+  .from("lease_audits")
+  .update({
+    analysis,
+  })
+  .eq("id", auditId);
 
-    if (upsertError) {
-      console.error("❌ Failed to persist analysis", upsertError);
-      throw new Error("Failed to save analysis");
-    }
+if (updateError) {
+  console.error("❌ Failed to persist analysis", updateError);
+  throw new Error("Failed to save analysis");
+}
+
 
     console.log("🧾 lease_audits analysis saved:", auditId);
 

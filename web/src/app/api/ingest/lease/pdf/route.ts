@@ -1,19 +1,15 @@
 // src/app/api/ingest/lease/pdf/route.ts
-//
-// Purpose:
-// - Trigger lease parsing after a PDF is uploaded to Supabase Storage
-// - Forward the storage object path to the Deno worker
-//
-// Constraints:
-// - This route does NOT parse PDFs
-// - This route does NOT read file contents
-// - This route only signals the worker to process the uploaded file
-
 
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Purpose:
+ * - Receive objectPath + auditId from client
+ * - Forward both to the Deno worker
+ * - Worker writes analysis into lease_audits
+ */
 export async function POST(req: NextRequest) {
   try {
     const WORKER_URL = process.env.LEASE_WORKER_URL;
@@ -27,11 +23,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { objectPath } = await req.json();
+    const { objectPath, auditId } = await req.json();
 
-    if (!objectPath) {
+    if (!objectPath || !auditId) {
       return NextResponse.json(
-        { error: "Missing objectPath" },
+        { error: "Missing objectPath or auditId" },
         { status: 400 }
       );
     }
@@ -40,10 +36,12 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // ✅ FIXED HEADER
         "x-lease-worker-key": WORKER_KEY,
       },
-      body: JSON.stringify({ objectPath }),
+      body: JSON.stringify({
+        objectPath,
+        auditId, // ✅ NOW REAL
+      }),
     });
 
     const data = await workerRes.json();
