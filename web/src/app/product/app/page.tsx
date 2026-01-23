@@ -343,26 +343,49 @@ return (
         </p>
       </div>
 {/* ---------- UPLOAD INTRO ---------- */}
-<section className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
-  <h3 className="text-lg font-semibold text-gray-900">
+<section className="mb-8 rounded-2xl border-2 border-black bg-white p-8 shadow-lg">
+  <h3 className="text-2xl font-semibold text-gray-900">
     🔍 Upload Your Lease for Review
   </h3>
 
-  <p className="mt-2 text-sm text-gray-700">
+  <p className="mt-3 text-base text-gray-800 max-w-2xl">
     Upload your commercial lease to receive a clear, tenant-first CAM & NNN audit
-    that highlights deadlines, risks, and potential overcharges.
+    that highlights audit deadlines, financial risk, and potential overcharges —
+    before your rights expire.
   </p>
 
-  <ul className="mt-3 space-y-2 text-sm text-gray-700">
-    <li>✔ Audit window deadlines so you don’t miss your right to dispute</li>
-    <li>✔ CAM / NNN overcharge risk based on your lease language</li>
-    <li>✔ Caps, exclusions, and escalation red flags</li>
-    <li>✔ A concise PDF summary you can keep or share</li>
+  <ul className="mt-5 space-y-3 text-base text-gray-800">
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold">✔</span>
+      <span>
+        Identify <strong>audit window deadlines</strong> so you don’t lose recovery rights
+      </span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold">✔</span>
+      <span>
+        Detect <strong>CAM / NNN overcharge risk</strong> based on your actual lease language
+      </span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold">✔</span>
+      <span>
+        Flag <strong>caps, exclusions, escalation, and admin fee issues</strong>
+      </span>
+    </li>
+    <li className="flex items-start gap-2">
+      <span className="text-green-600 font-bold">✔</span>
+      <span>
+        Receive a <strong>concise PDF summary</strong> you can keep or share
+      </span>
+    </li>
   </ul>
 
-  <p className="mt-3 text-xs text-gray-500">
-    Secure upload. No subscriptions. One-time review.
-  </p>
+  <div className="mt-5 flex items-center gap-4">
+    <div className="text-sm text-gray-600">
+      🔒 Secure upload · No subscriptions · One-time review
+    </div>
+  </div>
 </section>
       {/* ---------- UPLOAD ---------- */}
       <div className="flex items-center gap-4 mb-4">
