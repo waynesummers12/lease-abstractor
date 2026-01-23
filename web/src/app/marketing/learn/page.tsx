@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata = {
   title: "CAM & NNN Lease Education for Tenants | SaveOnLease",
   description:
-    "Learn how CAM and NNN charges work, common overcharges, audit rights, and how commercial tenants can protect themselves before deadlines expire.",
+    "Learn how CAM and NNN charges work, common overcharges, audit deadlines, and how commercial tenants can protect themselves before audit windows expire.",
 };
 
 const articles = [
@@ -15,10 +15,10 @@ const articles = [
     href: "/marketing/cam-nnn-overcharges",
   },
   {
-    title: "CAM Audit Rights Explained",
+    title: "Audit Window Deadlines Explained",
     description:
-      "Learn what CAM audit rights are, how long tenants have to act, and what happens if deadlines are missed.",
-    href: "/marketing/cam-audit-rights",
+      "Learn how CAM and NNN audit windows work, typical 30–120 day deadlines, and what happens if tenants miss them.",
+    href: "/marketing/audit-rights",
   },
   {
     title: "Common CAM Fees Explained",
@@ -49,7 +49,7 @@ export default function LearnPage() {
           CAM & NNN Lease Education
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
-          Clear, tenant-first explanations of CAM and NNN charges, audit rights,
+          Clear, tenant-first explanations of CAM and NNN charges, audit windows,
           and common overcharges — so you can act before deadlines expire.
         </p>
       </section>
