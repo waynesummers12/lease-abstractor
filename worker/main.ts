@@ -8,6 +8,7 @@ import latestAuditRoutes from "./routes/latestAudit.ts";
 import auditsRoutes from "./routes/audits.ts";
 import stripeWebhookRoutes from "./routes/stripeWebhook.ts";
 import auditByIdRoutes from "./routes/auditById.ts";
+import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 
 const app = new Application();
 const router = new Router();
@@ -84,6 +85,8 @@ router.use(auditPdfRoutes.allowedMethods());
 /* -------------------- APP -------------------- */
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.use(downloadAuditPdfRoutes.routes());
 
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);

@@ -11,7 +11,6 @@ type AuditResponse = {
     avoidable_exposure?: number;
     tenant?: string | null;
   } | null;
-  signedUrl?: string | null;
 };
 
 /* ================= PAGE ================= */
@@ -22,8 +21,11 @@ export default function SuccessPage() {
   const auditId = searchParams.get("auditId");
 
   const [data, setData] = useState<AuditResponse | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [fatalError, setFatalError] = useState<string | null>(null);
+  const [loadingPdf, setLoadingPdf] = useState(false);
 
+  /* ---------- LOAD AUDIT (POLL UNTIL READY) ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
@@ -39,14 +41,13 @@ export default function SuccessPage() {
           { cache: "no-store" }
         );
 
-        // 404 = still processing → NOT an error
+        // still processing → not fatal
         if (!res.ok) return;
 
         const json: AuditResponse = await res.json();
         setData(json);
 
-        // stop polling once payment is confirmed OR analysis exists
-        if (json.status === "paid" || json.analysis) {
+        if (json.analysis) {
           clearInterval(interval);
         }
       } catch (err) {
@@ -62,9 +63,38 @@ export default function SuccessPage() {
     return () => clearInterval(interval);
   }, [auditId]);
 
+  /* ---------- FETCH SIGNED PDF URL ---------- */
+  useEffect(() => {
+    if (!auditId || !data?.analysis || downloadUrl) return;
+
+    async function fetchDownloadUrl() {
+      try {
+        setLoadingPdf(true);
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}/download`,
+          { cache: "no-store" }
+        );
+
+        if (!res.ok) return;
+
+        const json = await res.json();
+        if (json?.url) {
+          setDownloadUrl(json.url);
+        }
+      } catch (err) {
+        console.error("Failed to load PDF download URL", err);
+      } finally {
+        setLoadingPdf(false);
+      }
+    }
+
+    fetchDownloadUrl();
+  }, [auditId, data, downloadUrl]);
+
   /* ================= UI ================= */
 
-  // ❌ true fatal error only
+  // ❌ fatal error
   if (fatalError) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
@@ -82,7 +112,7 @@ export default function SuccessPage() {
     );
   }
 
-  // ⏳ processing (this is NORMAL)
+  // ⏳ processing (normal)
   if (!data || data.analysis === null) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
@@ -95,7 +125,8 @@ export default function SuccessPage() {
     );
   }
 
-  // ✅ READY
+  /* ================= READY ================= */
+
   return (
     <main className="mx-auto max-w-xl px-6 py-28 text-center">
       <div className="mb-6 text-3xl">✅</div>
@@ -115,24 +146,44 @@ export default function SuccessPage() {
         </div>
       )}
 
-      {data.signedUrl ? (
+      {/* ---------- PRIMARY ACTION ---------- */}
+      {downloadUrl ? (
         <a
-          href={data.signedUrl}
+          href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Download PDF Audit
         </a>
+      ) : loadingPdf ? (
+        <p className="mt-6 text-sm text-gray-500">Preparing your PDF…</p>
       ) : (
         <p className="mt-6 text-sm text-gray-500">
           Your PDF is being finalized. You’ll receive an email when it’s ready.
         </p>
       )}
 
+      {/* ---------- SECONDARY ACTIONS ---------- */}
+      <div className="mt-8 space-y-3 text-sm">
+        <button
+          onClick={() => router.push("/dashboard/audits")}
+          className="block mx-auto underline text-gray-700"
+        >
+          View all audits (My Audits)
+        </button>
+
+        <button
+          onClick={() => alert("PDF regeneration queued.")}
+          className="block mx-auto underline text-gray-500"
+        >
+          Regenerate PDF
+        </button>
+      </div>
+
       <button
         onClick={() => router.push("/product/app")}
-        className="mt-8 block mx-auto text-sm underline text-gray-600"
+        className="mt-10 block mx-auto text-sm underline text-gray-600"
       >
         Return to app
       </button>
