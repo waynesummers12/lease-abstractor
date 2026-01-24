@@ -17,12 +17,26 @@ router.post("/api/stripe/webhook", async (ctx) => {
   let event: Stripe.Event;
 
   /* --------------------------------------------------
+     READ RAW BODY (CRITICAL FIX)
+     -------------------------------------------------- */
+  const rawBody = await ctx.request.body().value;
+
+  /* --------------------------------------------------
      LOCAL DEV MODE — TRUST STRIPE CLI
      -------------------------------------------------- */
   if (isLocal) {
     console.log("⚠️ DEV MODE: skipping Stripe signature verification");
-    const body = await ctx.request.body({ type: "json" }).value;
-    event = body as Stripe.Event;
+
+    try {
+      event =
+        typeof rawBody === "string"
+          ? JSON.parse(rawBody)
+          : (rawBody as Stripe.Event);
+    } catch (err) {
+      console.error("❌ Failed to parse webhook body (local)", err);
+      ctx.response.status = 400;
+      return;
+    }
   } else {
     /* --------------------------------------------------
        PRODUCTION — VERIFY SIGNATURE
@@ -34,11 +48,9 @@ router.post("/api/stripe/webhook", async (ctx) => {
       return;
     }
 
-    const rawText = await ctx.request.body({ type: "text" }).value;
-
     try {
-      event = await stripe.webhooks.constructEventAsync(
-        rawText,
+      event = stripe.webhooks.constructEvent(
+        rawBody,
         sig,
         endpointSecret
       );
@@ -49,7 +61,6 @@ router.post("/api/stripe/webhook", async (ctx) => {
       return;
     }
   }
-
 
   /* --------------------------------------------------
      EVENT HANDLING
@@ -106,7 +117,8 @@ router.post("/api/stripe/webhook", async (ctx) => {
     console.log("🧠 Generating audit PDF…");
 
     const pdfBytes = await generateAuditPdf(data.analysis);
-console.log("📦 PDF bytes length:", pdfBytes?.length);
+    console.log("📦 PDF bytes length:", pdfBytes?.length);
+
     if (!pdfBytes || pdfBytes.length === 0) {
       console.error("❌ PDF generation failed:", auditId);
       ctx.response.status = 200;
@@ -122,7 +134,9 @@ console.log("📦 PDF bytes length:", pdfBytes?.length);
         contentType: "application/pdf",
         upsert: true,
       });
-console.log("📤 Upload result:", uploadError ?? "success");
+
+    console.log("📤 Upload result:", uploadError ?? "success");
+
     if (uploadError) {
       console.error("❌ PDF upload failed:", uploadError);
       ctx.response.status = 200;

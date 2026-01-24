@@ -12,24 +12,28 @@ import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 
 const app = new Application();
 
-/* ---------------------------------
-   STRIPE WEBHOOK — MUST BE FIRST
----------------------------------- */
+/* -------------------------------------------------
+   STRIPE WEBHOOK
+   MUST be registered BEFORE any body/CORS middleware
+-------------------------------------------------- */
 app.use(stripeWebhookRouter.routes());
 app.use(stripeWebhookRouter.allowedMethods());
 
-/* ---------------------------------
-   CORS / middleware
----------------------------------- */
+/* -------------------------------------------------
+   CORS / COMMON MIDDLEWARE
+-------------------------------------------------- */
 app.use(async (ctx, next) => {
   const origin = ctx.request.headers.get("origin");
+
   if (origin === "http://localhost:3000") {
     ctx.response.headers.set("Access-Control-Allow-Origin", origin);
   }
+
   ctx.response.headers.set(
     "Access-Control-Allow-Headers",
     "Content-Type, X-Lease-Worker-Key, stripe-signature"
   );
+
   ctx.response.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS"
@@ -39,12 +43,13 @@ app.use(async (ctx, next) => {
     ctx.response.status = 204;
     return;
   }
+
   await next();
 });
 
-/* ---------------------------------
-   NORMAL ROUTES
----------------------------------- */
+/* -------------------------------------------------
+   NORMAL API ROUTES
+-------------------------------------------------- */
 app.use(downloadAuditPdfRoutes.routes());
 app.use(downloadAuditPdfRoutes.allowedMethods());
 
@@ -66,7 +71,9 @@ app.use(checkoutRoutes.allowedMethods());
 app.use(auditPdfRoutes.routes());
 app.use(auditPdfRoutes.allowedMethods());
 
-/* ---------------------------------
+/* -------------------------------------------------
    START SERVER
----------------------------------- */
+-------------------------------------------------- */
+console.log("🚀 Lease Abstractor Worker running on http://localhost:8000");
+
 await app.listen({ port: 8000 });
