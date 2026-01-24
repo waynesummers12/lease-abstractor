@@ -21,18 +21,17 @@ export default function SuccessPage() {
   const auditId = searchParams.get("auditId");
 
   const [data, setData] = useState<AuditResponse | null>(null);
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
-  const [loadingPdf, setLoadingPdf] = useState(false);
 
-  /* ---------- LOAD AUDIT (POLL UNTIL READY) ---------- */
+  /* ---------- LOAD AUDIT ONCE (NO POLLING LOOP) ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
+      setLoading(false);
       return;
     }
-
-    let interval: number;
 
     async function loadAudit() {
       try {
@@ -41,60 +40,53 @@ export default function SuccessPage() {
           { cache: "no-store" }
         );
 
-        // still processing → not fatal
-        if (!res.ok) return;
+        if (!res.ok) {
+          setFatalError("Audit not found.");
+          return;
+        }
 
         const json: AuditResponse = await res.json();
         setData(json);
-
-        if (json.status === "paid" && json.analysis) {
-          clearInterval(interval);
-        }
       } catch (err) {
-        console.error("Success page fetch error:", err);
+        console.error("Failed to load audit", err);
         setFatalError("Unable to load audit.");
-        clearInterval(interval);
+      } finally {
+        setLoading(false);
       }
     }
 
     loadAudit();
-    interval = window.setInterval(loadAudit, 5000);
-
-    return () => clearInterval(interval);
   }, [auditId]);
 
-  /* ---------- FETCH SIGNED PDF URL ---------- */
-  useEffect(() => {
-    if (!auditId || !data?.analysis || downloadUrl) return;
+  /* ---------- HANDLE PDF DOWNLOAD ---------- */
+  async function handleDownload() {
+    if (!auditId) return;
 
-    async function fetchDownloadUrl() {
-      try {
-        setLoadingPdf(true);
+    try {
+      setDownloading(true);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}/download`,
-          { cache: "no-store" }
-        );
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}/download`,
+        { cache: "no-store" }
+      );
 
-        if (!res.ok) return;
-
-        const json = await res.json();
-        if (json?.url) {
-          setDownloadUrl(json.url);
-        }
-      } catch (err) {
-        console.error("Failed to load PDF download URL", err);
-      } finally {
-        setLoadingPdf(false);
+      if (!res.ok) {
+        alert("PDF is still being generated. Try again in a minute.");
+        return;
       }
-    }
 
-    fetchDownloadUrl();
-  }, [auditId, data, downloadUrl]);
+      const { url } = await res.json();
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error("PDF download failed", err);
+      alert("Failed to download PDF.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   /* ================= UI ================= */
 
-  // ❌ fatal error
   if (fatalError) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
@@ -112,8 +104,7 @@ export default function SuccessPage() {
     );
   }
 
-  // ⏳ processing (normal)
-  if (!data || data.analysis === null) {
+  if (loading || !data || !data.analysis) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
         <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
@@ -146,47 +137,30 @@ export default function SuccessPage() {
         </div>
       )}
 
-      {/* ---------- PRIMARY ACTION ---------- */}
-      {downloadUrl ? (
-        <a
-          href={downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800"
-        >
-          Download PDF Audit
-        </a>
-      ) : loadingPdf ? (
-        <p className="mt-6 text-sm text-gray-500">Preparing your PDF…</p>
-      ) : (
-        <p className="mt-6 text-sm text-gray-500">
-          Your PDF is being finalized. You’ll receive an email when it’s ready.
-        </p>
-      )}
+      <button
+        onClick={handleDownload}
+        disabled={downloading}
+        className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+      >
+        {downloading ? "Preparing PDF…" : "Download PDF Audit"}
+      </button>
 
-      {/* ---------- SECONDARY ACTIONS ---------- */}
       <div className="mt-8 space-y-3 text-sm">
         <button
           onClick={() => router.push("/dashboard/audits")}
           className="block mx-auto underline text-gray-700"
         >
-          View all audits (My Audits)
+          View all audits
         </button>
 
         <button
-          onClick={() => alert("PDF regeneration queued.")}
+          onClick={() => router.push("/product/app")}
           className="block mx-auto underline text-gray-500"
         >
-          Regenerate PDF
+          Return to app
         </button>
       </div>
-
-      <button
-        onClick={() => router.push("/product/app")}
-        className="mt-10 block mx-auto text-sm underline text-gray-600"
-      >
-        Return to app
-      </button>
     </main>
   );
 }
+
