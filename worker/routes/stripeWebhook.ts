@@ -14,12 +14,13 @@ router.post("/stripe/webhook", async (ctx) => {
   const sig = ctx.request.headers.get("stripe-signature");
   if (!sig) {
     ctx.response.status = 400;
+    ctx.response.body = "Missing stripe-signature";
     return;
   }
 
   const rawBody = await ctx.request.body().value;
-  let event: Stripe.Event;
 
+  let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
@@ -28,9 +29,7 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-  /* ------------------------------------------------------------
-     CHECKOUT COMPLETE
-  ------------------------------------------------------------- */
+  /* -------------------- CHECKOUT COMPLETE -------------------- */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const auditId = session.metadata?.auditId;
@@ -61,7 +60,7 @@ router.post("/stripe/webhook", async (ctx) => {
       .single();
 
     if (error || !data?.analysis) {
-      console.error("❌ Missing analysis for audit:", auditId);
+      console.error("❌ Missing analysis for audit:", auditId, error);
       ctx.response.status = 200;
       return;
     }
@@ -71,25 +70,23 @@ router.post("/stripe/webhook", async (ctx) => {
     const pdfBytes = await generateAuditPdf(data.analysis);
 
     if (!pdfBytes || pdfBytes.length === 0) {
-      console.error("❌ Empty PDF output");
+      console.error("❌ PDF generation failed");
       ctx.response.status = 200;
       return;
     }
 
-    const filePath = `${auditId}.pdf`;
+    const filePath = `audit-pdfs/${auditId}.pdf`;
 
-    /* ---------- UPLOAD PDF (CORRECT BUCKET) ---------- */
-    console.log("☁️ Uploading → audit-pdfs/", filePath);
-
+    /* ---------- UPLOAD PDF ---------- */
     const { error: uploadError } = await supabase.storage
       .from("audit-pdfs")
-      .upload(filePath, pdfBytes, {
+      .upload(`${auditId}.pdf`, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
       });
 
     if (uploadError) {
-      console.error("❌ Upload failed:", uploadError);
+      console.error("❌ Failed to upload audit PDF:", uploadError);
       ctx.response.status = 200;
       return;
     }
@@ -98,8 +95,8 @@ router.post("/stripe/webhook", async (ctx) => {
     await supabase
       .from("lease_audits")
       .update({
-        audit_pdf_path: `audit-pdfs/${filePath}`,
         status: "complete",
+        audit_pdf_path: filePath,
         completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
@@ -107,7 +104,7 @@ router.post("/stripe/webhook", async (ctx) => {
     /* ---------- EMAIL ---------- */
     const { data: signed } = await supabase.storage
       .from("audit-pdfs")
-      .createSignedUrl(filePath, 60 * 10);
+      .createSignedUrl(`${auditId}.pdf`, 60 * 10);
 
     if (signed?.signedUrl) {
       await sendAuditEmail({
@@ -120,7 +117,7 @@ router.post("/stripe/webhook", async (ctx) => {
       });
     }
 
-    console.log("✅ Audit PDF generated & stored:", filePath);
+    console.log("✅ Audit PDF generated and stored:", filePath);
   }
 
   ctx.response.status = 200;
@@ -128,5 +125,3 @@ router.post("/stripe/webhook", async (ctx) => {
 });
 
 export default router;
-
-const filePath = `${auditId}.pdf`;
