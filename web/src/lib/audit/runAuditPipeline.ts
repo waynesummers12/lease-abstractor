@@ -3,10 +3,17 @@ import { supabaseBrowser } from "@/lib/supabase/browser";
 import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
 
+type RunMode = "create"; // explicit by design
+
 export async function runAuditPipeline(
   file: File,
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  mode: RunMode = "create"
 ): Promise<AuditPipelineResult> {
+  if (mode !== "create") {
+    throw new Error("runAuditPipeline can only be used for initial audit creation");
+  }
+
   const auditId = crypto.randomUUID();
 
   try {
@@ -30,11 +37,11 @@ export async function runAuditPipeline(
     const objectPath = `leases/${auditId}.pdf`;
 
     const { error: uploadError } = await supabaseBrowser.storage
-  .from("leases")
-  .upload(objectPath, file, {
-    contentType: "application/pdf",
-    upsert: true,
-  });
+      .from("leases")
+      .upload(objectPath, file, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
 
     if (uploadError) {
       return {
@@ -45,7 +52,7 @@ export async function runAuditPipeline(
       };
     }
 
-    /* ---------- 3. INGEST ---------- */
+    /* ---------- 3. INGEST (ONE-TIME ONLY) ---------- */
     const ingestRes = await fetch("/api/ingest/lease/pdf", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
