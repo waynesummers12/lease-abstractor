@@ -82,11 +82,15 @@ router.use(checkoutRoutes.allowedMethods());
 router.use(auditPdfRoutes.routes());
 router.use(auditPdfRoutes.allowedMethods());
 
+/**
+ * ✅ DOWNLOAD ROUTE — MUST BE HERE
+ */
+router.use(downloadAuditPdfRoutes.routes());
+router.use(downloadAuditPdfRoutes.allowedMethods());
+
 /* -------------------- APP -------------------- */
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-app.use(downloadAuditPdfRoutes.routes());
 
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
