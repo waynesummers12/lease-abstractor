@@ -94,6 +94,9 @@ app.use(stripeWebhookRoutes.allowedMethods());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+app.use(auditByIdRoutes.routes());
+app.use(auditByIdRoutes.allowedMethods());
+
 /* -------------------- LISTEN -------------------- */
 const PORT = Number(Deno.env.get("PORT") ?? 8000);
 console.log(`🚀 Lease Abstractor Worker running on http://localhost:${PORT}`);
