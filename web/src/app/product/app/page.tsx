@@ -124,6 +124,13 @@ async function handleUploadAndAnalyze() {
   const newAuditId = crypto.randomUUID();
   setAuditId(newAuditId);
 
+  // ✅ CREATE audit row FIRST (so ingest can update it)
+  await fetch("/api/audits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ auditId: newAuditId }),
+  });
+
   // 🔒 PDF path MUST use auditId
   const objectPath = `leases/${newAuditId}.pdf`;
 
@@ -150,13 +157,12 @@ async function handleUploadAndAnalyze() {
     }),
   });
 
-  // ✅ SINGLE failure guard
   if (!res.ok) {
     setStatus("Analysis failed");
     return;
   }
 
-  // ✅ Re-fetch audit AFTER successful ingest
+  // ✅ Re-fetch audit AFTER ingest
   const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`);
   const audit = await auditRes.json();
   const a = audit.analysis;
@@ -170,7 +176,6 @@ async function handleUploadAndAnalyze() {
   );
   setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
 
-  // ✅ Parse ingest response ONCE
   const data = (await res.json()) as ApiResult;
   setResult(data);
 
@@ -198,6 +203,7 @@ async function handleUploadAndAnalyze() {
     });
   }, 100);
 }
+
 
 /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
