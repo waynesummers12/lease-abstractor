@@ -1,18 +1,18 @@
-// worker/routes/stripeWebhook.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
 import { sendAuditEmail } from "../utils/sendAuditEmail.ts";
+import { Buffer } from "node:buffer";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
+const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!);
+
 const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
-
 const router = new Router();
 
-/* =========================================================
-   STRIPE WEBHOOK
-   ========================================================= */
+/**
+ * Stripe Webhook
+ */
 router.post("/api/stripe/webhook", async (ctx) => {
   console.log("🔥 Stripe webhook hit");
 
@@ -23,18 +23,30 @@ router.post("/api/stripe/webhook", async (ctx) => {
     return;
   }
 
-  const rawBody = await ctx.request.body().value;
+  // 🔑 IMPORTANT: raw body as Uint8Array
+  const rawBody = await ctx.request.body({ type: "bytes" }).value;
 
   let event: Stripe.Event;
+
   try {
-    event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
+    // ✅ DENO-SAFE ASYNC VERIFIER
+    const payload = Buffer.from(rawBody);
+
+event = await stripe.webhooks.constructEventAsync(
+  payload,
+  sig,
+  endpointSecret
+);
+
   } catch (err) {
     console.error("❌ Stripe signature verification failed", err);
     ctx.response.status = 400;
     return;
   }
 
-  /* ---------------- CHECKOUT COMPLETED ---------------- */
+  /* --------------------------------------------------
+     CHECKOUT COMPLETED
+  -------------------------------------------------- */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const auditId = session.metadata?.auditId;
@@ -80,18 +92,19 @@ router.post("/api/stripe/webhook", async (ctx) => {
       return;
     }
 
-    const filePath = `audit-pdfs/${auditId}.pdf`;
+    const fileName = `${auditId}.pdf`;
+    const storagePath = `audit-pdfs/${fileName}`;
 
-    /* ---------- UPLOAD PDF ---------- */
+    /* ---------- UPLOAD ---------- */
     const { error: uploadError } = await supabase.storage
       .from("audit-pdfs")
-      .upload(`${auditId}.pdf`, pdfBytes, {
+      .upload(fileName, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
       });
 
     if (uploadError) {
-      console.error("❌ Failed to upload audit PDF:", uploadError);
+      console.error("❌ Upload failed", uploadError);
       ctx.response.status = 200;
       return;
     }
@@ -101,7 +114,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
       .from("lease_audits")
       .update({
         status: "complete",
-        audit_pdf_path: filePath,
+        audit_pdf_path: storagePath,
         completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
@@ -109,7 +122,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
     /* ---------- EMAIL ---------- */
     const { data: signed } = await supabase.storage
       .from("audit-pdfs")
-      .createSignedUrl(`${auditId}.pdf`, 60 * 10);
+      .createSignedUrl(fileName, 60 * 10);
 
     if (signed?.signedUrl) {
       await sendAuditEmail({
@@ -122,7 +135,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
       });
     }
 
-    console.log("✅ Audit PDF generated and stored:", filePath);
+    console.log("✅ Audit PDF generated & stored:", storagePath);
   }
 
   ctx.response.status = 200;
