@@ -21,9 +21,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { objectPath, auditId } = await req.json();
+    const body = await req.json();
+
+    // 🔎 DIAGNOSTIC — proves what the client is actually sending
+    console.log("📦 /api/ingest/lease/pdf payload:", body);
+
+    const { objectPath, auditId } = body ?? {};
 
     if (!objectPath || !auditId) {
+      console.error("❌ Missing required fields", {
+        objectPath,
+        auditId,
+      });
+
       return NextResponse.json(
         { error: "Missing objectPath or auditId" },
         { status: 400 }
