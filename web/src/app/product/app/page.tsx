@@ -181,7 +181,7 @@ async function handleUploadAndAnalyze() {
   auditId: newAuditId,
 }),
 });
-const auditRes = await fetch(`/api/audits/${newAuditId}`);
+const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`);
 const audit = await auditRes.json();
 
 const a = audit.analysis;
