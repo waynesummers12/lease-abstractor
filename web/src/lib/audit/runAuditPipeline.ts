@@ -1,7 +1,7 @@
 // lib/audit/runAuditPipeline.ts
+import { supabase } from "@/lib/supabaseClient";
 import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function runAuditPipeline(
   file: File,
