@@ -177,9 +177,9 @@ async function handleUploadAndAnalyze() {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    objectPath,
-    auditId, // ✅ REQUIRED — ties analysis to lease_audits row
-  }),
+  objectPath,
+  auditId: newAuditId,
+}),
 });
 
   if (!res.ok) {
