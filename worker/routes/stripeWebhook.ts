@@ -2,6 +2,7 @@ import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
+import { sendAuditEmail } from "../utils/sendAuditEmail.ts"; // ✅ ADD THIS
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
@@ -107,6 +108,30 @@ router.post("/stripe/webhook", async (ctx) => {
             }
 
             console.log("✅ Audit PDF uploaded successfully:", fileName);
+
+            /* ---------- EMAIL PDF ---------- */
+            const { data: signed, error: signedError } =
+              await supabase.storage
+                .from("leases")
+                .createSignedUrl(fileName, 60 * 10);
+
+            if (signedError || !signed?.signedUrl) {
+              console.error(
+                "❌ Failed to create signed URL for email",
+                signedError
+              );
+            } else {
+              const customerEmail =
+                session.customer_details?.email ||
+                session.customer_email ||
+                null;
+
+              await sendAuditEmail({
+                leaseName: "Your Lease",
+                signedUrl: signed.signedUrl,
+                toEmail: customerEmail,
+              });
+            }
 
             /* ---------- SAVE CANONICAL OBJECT PATH ---------- */
             const { error: pathError } = await supabase
