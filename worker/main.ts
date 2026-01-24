@@ -1,103 +1,72 @@
-// worker/main.ts
-import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { Application } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 
-import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
-import checkoutRoutes from "./routes/checkout.ts";
-import auditPdfRoutes from "./routes/auditPdf.ts";
+import stripeWebhookRouter from "./routes/stripeWebhook.ts";
+
+import auditByIdRoutes from "./routes/auditById.ts";
 import latestAuditRoutes from "./routes/latestAudit.ts";
 import auditsRoutes from "./routes/audits.ts";
-import stripeWebhookRoutes from "./routes/stripeWebhook.ts";
-import auditByIdRoutes from "./routes/auditById.ts";
+import checkoutRoutes from "./routes/checkout.ts";
+import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
+import auditPdfRoutes from "./routes/auditPdf.ts";
 import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 
 const app = new Application();
-const router = new Router();
 
-/* -------------------- CORS -------------------- */
+/* ---------------------------------
+   STRIPE WEBHOOK — MUST BE FIRST
+---------------------------------- */
+app.use(stripeWebhookRouter.routes());
+app.use(stripeWebhookRouter.allowedMethods());
+
+/* ---------------------------------
+   CORS / middleware
+---------------------------------- */
 app.use(async (ctx, next) => {
   const origin = ctx.request.headers.get("origin");
-
   if (origin === "http://localhost:3000") {
     ctx.response.headers.set("Access-Control-Allow-Origin", origin);
   }
-
+  ctx.response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, X-Lease-Worker-Key, stripe-signature"
+  );
   ctx.response.headers.set(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS"
   );
 
-  ctx.response.headers.set(
-    "Access-Control-Allow-Headers",
-    [
-      "Content-Type",
-      "X-Lease-Worker-Key",
-      "x-lease-worker-key",
-    ].join(", ")
-  );
-
-  ctx.response.headers.set("Access-Control-Allow-Credentials", "true");
-
   if (ctx.request.method === "OPTIONS") {
     ctx.response.status = 204;
     return;
   }
-
   await next();
 });
 
-/* -------------------- HEALTH -------------------- */
-router.get("/", (ctx) => {
-  ctx.response.body = "Lease Abstractor Worker Running";
-});
-
-/* -------------------- ROUTES -------------------- */
-/**
- * ⚠️ Stripe webhook MUST be first
- */
-router.use(stripeWebhookRoutes.routes());
-router.use(stripeWebhookRoutes.allowedMethods());
-
-/**
- * ✅ DOWNLOAD ROUTE — MUST COME BEFORE GENERIC /audits ROUTES
- */
-router.use(downloadAuditPdfRoutes.routes());
-router.use(downloadAuditPdfRoutes.allowedMethods());
-
-/**
- * Read-only audit routes
- */
-router.use(auditByIdRoutes.routes());
-router.use(auditByIdRoutes.allowedMethods());
-
-router.use(latestAuditRoutes.routes());
-router.use(latestAuditRoutes.allowedMethods());
-
-router.use(auditsRoutes.routes());
-router.use(auditsRoutes.allowedMethods());
-
-/**
- * Mutating / generation routes
- */
-router.use(ingestLeasePdfRoutes.routes());
-router.use(ingestLeasePdfRoutes.allowedMethods());
-
-router.use(checkoutRoutes.routes());
-router.use(checkoutRoutes.allowedMethods());
-
-router.use(auditPdfRoutes.routes());
-router.use(auditPdfRoutes.allowedMethods());
-
-/* 🔥 MUST BE FIRST */
-app.use(stripeWebhookRoutes.routes());
-app.use(stripeWebhookRoutes.allowedMethods());
-/* -------------------- APP -------------------- */
-app.use(router.routes());
-app.use(router.allowedMethods());
+/* ---------------------------------
+   NORMAL ROUTES
+---------------------------------- */
+app.use(downloadAuditPdfRoutes.routes());
+app.use(downloadAuditPdfRoutes.allowedMethods());
 
 app.use(auditByIdRoutes.routes());
 app.use(auditByIdRoutes.allowedMethods());
 
-/* -------------------- LISTEN -------------------- */
-const PORT = Number(Deno.env.get("PORT") ?? 8000);
-console.log(`🚀 Lease Abstractor Worker running on http://localhost:${PORT}`);
-await app.listen({ port: PORT });
+app.use(latestAuditRoutes.routes());
+app.use(latestAuditRoutes.allowedMethods());
+
+app.use(auditsRoutes.routes());
+app.use(auditsRoutes.allowedMethods());
+
+app.use(ingestLeasePdfRoutes.routes());
+app.use(ingestLeasePdfRoutes.allowedMethods());
+
+app.use(checkoutRoutes.routes());
+app.use(checkoutRoutes.allowedMethods());
+
+app.use(auditPdfRoutes.routes());
+app.use(auditPdfRoutes.allowedMethods());
+
+/* ---------------------------------
+   START SERVER
+---------------------------------- */
+await app.listen({ port: 8000 });
