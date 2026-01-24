@@ -2,7 +2,9 @@
 
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 
-/* ---------- TYPES (LOCAL ONLY, NO SHARED CONTRACT) ---------- */
+/* ------------------------------------------------------------------
+   LOCAL TYPES ONLY — NO SHARED CONTRACTS, NO IMPORTS
+------------------------------------------------------------------- */
 
 type AuditFlag = {
   label: string;
@@ -22,7 +24,9 @@ type AuditAnalysis = {
   };
 };
 
-/* ---------- PDF GENERATOR ---------- */
+/* ------------------------------------------------------------------
+   PDF GENERATOR
+------------------------------------------------------------------- */
 
 export async function generateAuditPdf(
   analysis: AuditAnalysis
@@ -33,7 +37,7 @@ export async function generateAuditPdf(
 
   let y = 740;
 
-  function line(text: string, size = 12) {
+  const line = (text: string, size = 12) => {
     page.drawText(text, {
       x: 40,
       y,
@@ -42,14 +46,14 @@ export async function generateAuditPdf(
       color: rgb(0, 0, 0),
     });
     y -= size + 6;
-  }
+  };
 
-  function newPageIfNeeded() {
+  const newPageIfNeeded = () => {
     if (y < 80) {
       page = pdf.addPage([612, 792]);
       y = 740;
     }
-  }
+  };
 
   /* ---------- HEADER ---------- */
 
@@ -82,7 +86,7 @@ export async function generateAuditPdf(
     line(`• ${flag.label} (${flag.severity.toUpperCase()})`);
     line(flag.recommendation, 10);
 
-    if (flag.estimated_impact) {
+    if (flag.estimated_impact !== undefined) {
       line(`Estimated impact: ${flag.estimated_impact}`, 10);
     }
 
