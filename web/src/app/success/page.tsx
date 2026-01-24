@@ -37,9 +37,9 @@ export default function SuccessPage() {
     async function loadAudit() {
       try {
         const res = await fetch(
-  `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`,
-  { cache: "no-store" }
-);
+          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
+          { cache: "no-store" }
+        );
 
         // still processing → not fatal
         if (!res.ok) return;
@@ -48,9 +48,8 @@ export default function SuccessPage() {
         setData(json);
 
         if (json.status === "paid" && json.analysis) {
-  clearInterval(interval);
-}
-
+          clearInterval(interval);
+        }
       } catch (err) {
         console.error("Success page fetch error:", err);
         setFatalError("Unable to load audit.");
@@ -65,34 +64,33 @@ export default function SuccessPage() {
   }, [auditId]);
 
   /* ---------- FETCH SIGNED PDF URL ---------- */
-useEffect(() => {
-  if (!auditId || !data?.analysis || downloadUrl) return;
+  useEffect(() => {
+    if (!auditId || !data?.analysis || downloadUrl) return;
 
-  async function fetchDownloadUrl() {
-    try {
-      setLoadingPdf(true);
+    async function fetchDownloadUrl() {
+      try {
+        setLoadingPdf(true);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}/download`,
-        { cache: "no-store" }
-      );
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}/download`,
+          { cache: "no-store" }
+        );
 
-      if (!res.ok) return;
+        if (!res.ok) return;
 
-      const json = await res.json();
-      if (json?.url) {
-        setDownloadUrl(json.url);
+        const json = await res.json();
+        if (json?.url) {
+          setDownloadUrl(json.url);
+        }
+      } catch (err) {
+        console.error("Failed to load PDF download URL", err);
+      } finally {
+        setLoadingPdf(false);
       }
-    } catch (err) {
-      console.error("Failed to load PDF download URL", err);
-    } finally {
-      setLoadingPdf(false);
     }
-  }
 
-  fetchDownloadUrl();
-}, [auditId, data, downloadUrl]);
-
+    fetchDownloadUrl();
+  }, [auditId, data, downloadUrl]);
 
   /* ================= UI ================= */
 
