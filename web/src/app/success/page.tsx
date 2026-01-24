@@ -25,7 +25,7 @@ export default function SuccessPage() {
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
-  /* ---------- LOAD AUDIT ONCE (NO POLLING LOOP) ---------- */
+  /* ---------- LOAD AUDIT ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
@@ -36,7 +36,7 @@ export default function SuccessPage() {
     async function loadAudit() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`,
           { cache: "no-store" }
         );
 
@@ -58,7 +58,7 @@ export default function SuccessPage() {
     loadAudit();
   }, [auditId]);
 
-  /* ---------- HANDLE PDF DOWNLOAD ---------- */
+  /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
     if (!auditId) return;
 
@@ -66,12 +66,12 @@ export default function SuccessPage() {
       setDownloading(true);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}/download`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}/download`,
         { cache: "no-store" }
       );
 
       if (!res.ok) {
-        alert("PDF is still being generated. Try again in a minute.");
+        alert("PDF is still being generated. Try again shortly.");
         return;
       }
 
@@ -115,8 +115,6 @@ export default function SuccessPage() {
       </main>
     );
   }
-
-  /* ================= READY ================= */
 
   return (
     <main className="mx-auto max-w-xl px-6 py-28 text-center">
@@ -163,4 +161,5 @@ export default function SuccessPage() {
     </main>
   );
 }
+
 
