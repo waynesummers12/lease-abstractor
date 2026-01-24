@@ -4,9 +4,9 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router();
 
 /**
- * GET /api/audits/:id/download
+ * GET /audits/:id/download
  */
-router.get("/api/audits/:id/download", async (ctx) => {
+router.get("/audits/:id/download", async (ctx) => {
   const auditId = ctx.params.id;
 
   if (!auditId) {
@@ -15,7 +15,6 @@ router.get("/api/audits/:id/download", async (ctx) => {
     return;
   }
 
-  // fetch stored object path
   const { data, error } = await supabase
     .from("lease_audits")
     .select("object_path")
@@ -28,10 +27,12 @@ router.get("/api/audits/:id/download", async (ctx) => {
     return;
   }
 
+  const fileName = data.object_path.replace("leases/", "");
+
   const { data: signed, error: signedError } =
     await supabase.storage
       .from("leases")
-      .createSignedUrl(data.object_path.replace("leases/", ""), 60 * 10);
+      .createSignedUrl(fileName, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
     ctx.response.status = 500;
