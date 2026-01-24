@@ -4,19 +4,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Purpose:
- * - Receive objectPath + auditId from client
- * - Forward both to the Deno worker
- * - Worker writes analysis into lease_audits
- */
 export async function POST(req: NextRequest) {
   try {
     const WORKER_URL = process.env.LEASE_WORKER_URL;
     const WORKER_KEY = process.env.LEASE_WORKER_KEY;
 
     if (!WORKER_URL || !WORKER_KEY) {
-      console.error("❌ Missing worker config");
+      console.error("❌ Missing worker config", {
+        WORKER_URL: Boolean(WORKER_URL),
+        WORKER_KEY: Boolean(WORKER_KEY),
+      });
+
       return NextResponse.json(
         { error: "Server misconfigured" },
         { status: 500 }
@@ -38,10 +36,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         "x-lease-worker-key": WORKER_KEY,
       },
-      body: JSON.stringify({
-        objectPath,
-        auditId, // ✅ NOW REAL
-      }),
+      body: JSON.stringify({ objectPath, auditId }),
     });
 
     const data = await workerRes.json();
