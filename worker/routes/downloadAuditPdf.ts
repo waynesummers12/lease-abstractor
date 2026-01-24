@@ -3,7 +3,11 @@ import { supabase } from "../lib/supabase.ts";
 
 const router = new Router();
 
-router.get("/audits/:auditId/download", async (ctx) => {
+/**
+ * GET /api/audits/:auditId/download
+ * Returns a signed URL for the audit PDF
+ */
+router.get("/api/audits/:auditId/download", async (ctx) => {
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
@@ -12,7 +16,6 @@ router.get("/audits/:auditId/download", async (ctx) => {
     return;
   }
 
-  /* ---------- FETCH OBJECT PATH ---------- */
   const { data, error } = await supabase
     .from("lease_audits")
     .select("object_path")
@@ -21,17 +24,16 @@ router.get("/audits/:auditId/download", async (ctx) => {
 
   if (error || !data?.object_path) {
     ctx.response.status = 404;
-    ctx.response.body = { error: "PDF not found" };
+    ctx.response.body = { error: "PDF not ready" };
     return;
   }
 
-  const objectPath = data.object_path.replace("leases/", "");
+  const fileName = data.object_path.replace(/^leases\//, "");
 
-  /* ---------- CREATE SIGNED URL ---------- */
   const { data: signed, error: signedError } =
     await supabase.storage
       .from("leases")
-      .createSignedUrl(objectPath, 60 * 10); // 10 minutes
+      .createSignedUrl(fileName, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
     ctx.response.status = 500;
@@ -39,10 +41,7 @@ router.get("/audits/:auditId/download", async (ctx) => {
     return;
   }
 
-  ctx.response.status = 200;
-  ctx.response.body = {
-    url: signed.signedUrl,
-  };
+  ctx.response.body = { url: signed.signedUrl };
 });
 
 export default router;
