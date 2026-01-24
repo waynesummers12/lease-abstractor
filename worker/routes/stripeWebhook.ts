@@ -71,15 +71,20 @@ router.post("/api/stripe/webhook", async (ctx) => {
       return;
     }
 
-    // 1) Mark audit as paid
-    await supabase
-      .from("lease_audits")
-      .update({
-        status: "paid",
-        stripe_session_id: session.id,
-        paid_at: new Date().toISOString(),
-      })
-      .eq("id", auditId);
+    /* --------------------------------------------------
+   1️⃣ MARK AUDIT PAID
+-------------------------------------------------- */
+
+await supabase
+  .from("lease_audits")
+  .update({
+    status: "paid",
+    stripe_session_id: session.id,
+    paid_at: new Date().toISOString(),
+  })
+  .eq("id", auditId);
+
+console.log("✅ Audit marked paid:", auditId);
 
     // 2) Fetch analysis
     const { data, error } = await supabase
@@ -95,23 +100,46 @@ router.post("/api/stripe/webhook", async (ctx) => {
       return;
     }
 
-    // 3) Generate PDF
-    const pdfBytes = await generateAuditPdf(data.analysis);
-    if (!pdfBytes?.length) {
-      console.error("❌ PDF generation failed for audit:", auditId);
-      ctx.response.status = 200;
-      ctx.response.body = { received: true };
-      return;
-    }
+/* --------------------------------------------------
+   2) GENERATE + UPLOAD AUDIT PDF
+-------------------------------------------------- */
+
+if (!data?.analysis) {
+  console.error("❌ No analysis found for audit:", auditId);
+  ctx.response.status = 200;
+  return;
+}
+
+console.log("🧠 Generating audit PDF…");
+
+const pdfBytes = await generateAuditPdf(data.analysis);
+
+if (!pdfBytes || pdfBytes.length === 0) {
+  console.error("❌ PDF generation failed:", auditId);
+  ctx.response.status = 200;
+  return;
+}
+
+const filePath = `audit-pdfs/${auditId}.pdf`;
+console.log("📄 Uploading PDF:", filePath);
+
+const { error: uploadError } = await supabase.storage
+  .from("audit-pdfs")
+  .upload(`${auditId}.pdf`, pdfBytes, {
+    contentType: "application/pdf",
+    upsert: true,
+  });
+
+if (uploadError) {
+  console.error("❌ PDF upload failed:", uploadError);
+  ctx.response.status = 200;
+  return;
+}
+
+
 
     // 4) Upload PDF
-    const filePath = `audit-pdfs/${auditId}.pdf`;
-    const { error: uploadError } = await supabase.storage
-      .from("audit-pdfs")
-      .upload(`${auditId}.pdf`, pdfBytes, {
-        contentType: "application/pdf",
-        upsert: true,
-      });
+
 
     if (uploadError) {
       console.error("❌ PDF upload failed:", uploadError);
