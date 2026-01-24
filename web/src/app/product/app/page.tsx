@@ -201,22 +201,48 @@ setExposureRange(
 setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
 
 // ✅ Parse ingest response ONCE
-const data = (await res.json()) as ApiResult;
-setResult(data);
+const audit = await auditRes.json();
+const a = audit?.analysis;
 
-if (data.success && data.analysis) {
-  const entry = {
-    ...data.analysis,
-    created_at: new Date().toISOString(),
-  };
-
-  const existing =
-    JSON.parse(sessionStorage.getItem("audit_history") || "[]");
-
-  const updated = [entry, ...existing];
-  sessionStorage.setItem("audit_history", JSON.stringify(updated));
-  setAuditHistory(updated);
+if (!a) {
+  setStatus("Analysis not ready yet");
+  return;
 }
+
+// 🔥 Drive yellow box
+setTotalAvoidableExposure(a.avoidable_exposure ?? null);
+
+setExposureRange(
+  a.avoidable_exposure_range
+    ? {
+        low: a.avoidable_exposure_range.low,
+        high: a.avoidable_exposure_range.high,
+      }
+    : null
+);
+
+setExposureRiskLabel(a.risk_level?.toLowerCase() ?? null);
+
+// ✅ Set analysis as single source of truth
+setResult({
+  success: true,
+  analysis: a,
+});
+
+// ✅ Store history
+const entry = {
+  ...a,
+  created_at: new Date().toISOString(),
+};
+
+const existing =
+  JSON.parse(sessionStorage.getItem("audit_history") || "[]");
+
+const updated = [entry, ...existing];
+sessionStorage.setItem("audit_history", JSON.stringify(updated));
+setAuditHistory(updated);
+
+
 
 setHasAnalyzedInSession(true);
 setStatus("Analysis complete ✅");
