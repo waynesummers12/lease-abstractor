@@ -1,6 +1,9 @@
 // worker/routes/stripeWebhook.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
+import { supabase } from "../lib/supabase.ts";
+import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
+import { sendAuditEmail } from "../utils/sendAuditEmail.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
@@ -61,7 +64,87 @@ router.post("/api/stripe/webhook", async (ctx) => {
 
     console.log("🧾 auditId:", auditId);
 
-    // NEXT STEP: mark paid, generate PDF, email, etc
+    if (!auditId) {
+      console.warn("⚠️ No auditId on session (likely CLI test)");
+      ctx.response.status = 200;
+      ctx.response.body = { received: true };
+      return;
+    }
+
+    // 1) Mark audit as paid
+    await supabase
+      .from("lease_audits")
+      .update({
+        status: "paid",
+        stripe_session_id: session.id,
+        paid_at: new Date().toISOString(),
+      })
+      .eq("id", auditId);
+
+    // 2) Fetch analysis
+    const { data, error } = await supabase
+      .from("lease_audits")
+      .select("analysis")
+      .eq("id", auditId)
+      .single();
+
+    if (error || !data?.analysis) {
+      console.error("❌ Missing analysis for audit:", auditId, error);
+      ctx.response.status = 200;
+      ctx.response.body = { received: true };
+      return;
+    }
+
+    // 3) Generate PDF
+    const pdfBytes = await generateAuditPdf(data.analysis);
+    if (!pdfBytes?.length) {
+      console.error("❌ PDF generation failed for audit:", auditId);
+      ctx.response.status = 200;
+      ctx.response.body = { received: true };
+      return;
+    }
+
+    // 4) Upload PDF
+    const filePath = `audit-pdfs/${auditId}.pdf`;
+    const { error: uploadError } = await supabase.storage
+      .from("audit-pdfs")
+      .upload(`${auditId}.pdf`, pdfBytes, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.error("❌ PDF upload failed:", uploadError);
+      ctx.response.status = 200;
+      ctx.response.body = { received: true };
+      return;
+    }
+
+    // 5) Mark complete + save path
+    await supabase
+      .from("lease_audits")
+      .update({
+        status: "complete",
+        audit_pdf_path: filePath,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("id", auditId);
+
+    // 6) Email signed URL
+    const { data: signed } = await supabase.storage
+      .from("audit-pdfs")
+      .createSignedUrl(`${auditId}.pdf`, 60 * 10);
+
+    if (signed?.signedUrl) {
+      await sendAuditEmail({
+        leaseName: "Your Lease Audit",
+        signedUrl: signed.signedUrl,
+        toEmail:
+          session.customer_details?.email ??
+          session.customer_email ??
+          null,
+      });
+    }
   }
 
   ctx.response.status = 200;
@@ -69,3 +152,4 @@ router.post("/api/stripe/webhook", async (ctx) => {
 });
 
 export default router;
+
