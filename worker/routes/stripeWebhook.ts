@@ -77,7 +77,11 @@ if (event.type === "checkout.session.completed") {
           console.log("🧠 Generating audit PDF…");
           const pdfBytes = await generateAuditPdf(data.analysis);
 
-          const pdfPath = `leases/${auditId}.pdf`;
+          console.log("📄 PDF generated", {
+  byteLength: pdfBytes?.length,
+  type: pdfBytes?.constructor?.name,
+});
+          const pdfPath = `${auditId}.pdf`;
 
           /* ---------- UPLOAD PDF ---------- */
           const { error: uploadError } = await supabase.storage
