@@ -17,10 +17,9 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-  const rawBody = await ctx.request.body().value;
+  const rawBody = await ctx.request.body({ type: "text" }).value;
 
   let event: Stripe.Event;
-
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
@@ -32,7 +31,6 @@ router.post("/stripe/webhook", async (ctx) => {
   /* ------------------------------------------------------------
      PAYMENT COMPLETED
   ------------------------------------------------------------- */
-
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const auditId = session.metadata?.auditId;
@@ -45,25 +43,25 @@ router.post("/stripe/webhook", async (ctx) => {
 
     console.log("💳 Payment complete for audit:", auditId);
 
-    /* ---------- MARK PAID (INITIAL) ---------- */
-await supabase
-  .from("lease_audits")
-  .update({
-    status: "paid",
-    stripe_session_id: session.id,
-    paid_at: new Date().toISOString(),
-  })
-  .eq("id", auditId);
+    /* ---------- MARK PAID ---------- */
+    await supabase
+      .from("lease_audits")
+      .update({
+        status: "paid",
+        stripe_session_id: session.id,
+        paid_at: new Date().toISOString(),
+      })
+      .eq("id", auditId);
 
     /* ---------- FETCH ANALYSIS ---------- */
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("lease_audits")
       .select("analysis")
       .eq("id", auditId)
       .single();
 
-    if (!data?.analysis) {
-      console.error("❌ No analysis found for audit:", auditId);
+    if (error || !data?.analysis) {
+      console.error("❌ No analysis found for audit:", auditId, error);
       ctx.response.status = 200;
       return;
     }
@@ -78,13 +76,15 @@ await supabase
       return;
     }
 
-    const filePath = `${auditId}.pdf`;
+    /* ---------- CANONICAL FILE NAME ---------- */
+    const fileName = `${auditId}.pdf`;
+    const filePath = fileName; // stored inside audit-pdfs bucket
 
-    /* ---------- UPLOAD TO audit-pdfs BUCKET (IMPORTANT FIX) ---------- */
+    /* ---------- UPLOAD PDF ---------- */
     console.log("☁️ Uploading audit PDF → audit-pdfs/", filePath);
 
     const { error: uploadError } = await supabase.storage
-      .from("audit-pdfs") // ✅ CORRECT BUCKET
+      .from("audit-pdfs")
       .upload(filePath, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
@@ -96,15 +96,17 @@ await supabase
       return;
     }
 
-    /* ---------- SAVE PATH ---------- */
+    /* ---------- MARK COMPLETE + SAVE PATH ---------- */
     await supabase
       .from("lease_audits")
       .update({
-        audit_pdf_path: `audit-pdfs/${filePath}`, // 👈 store explicitly
+        status: "complete",
+        audit_pdf_path: `audit-pdfs/${filePath}`,
+        completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
 
-    /* ---------- EMAIL ---------- */
+    /* ---------- EMAIL SIGNED URL ---------- */
     const { data: signed } = await supabase.storage
       .from("audit-pdfs")
       .createSignedUrl(filePath, 60 * 10);
@@ -120,7 +122,7 @@ await supabase
       });
     }
 
-    console.log("✅ Audit PDF generated & saved:", filePath);
+    console.log("✅ Audit PDF generated, uploaded, saved, and emailed:", filePath);
   }
 
   ctx.response.status = 200;
