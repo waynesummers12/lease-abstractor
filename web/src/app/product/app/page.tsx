@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { runAuditPipeline } from "./useAuditUpload";
+import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -121,14 +122,13 @@ async function handleUploadAndAnalyze() {
   const result = await runAuditPipeline(file);
 
   if (!result.success) {
-    console.error("❌ Audit failed:", result.error);
     setStatus(result.error);
     return;
   }
 
   const analysis = result.analysis;
 
-  // 🔥 Drive yellow box
+  // 🔥 Yellow box
   setTotalAvoidableExposure(analysis?.avoidable_exposure ?? null);
 
   setExposureRange(
@@ -142,32 +142,13 @@ async function handleUploadAndAnalyze() {
 
   setExposureRiskLabel(analysis?.risk_level?.toLowerCase() ?? null);
 
-  // ✅ Store result
-  setResult({
-    success: true,
-    analysis,
-  });
-
-  const entry = {
-    ...analysis,
-    created_at: new Date().toISOString(),
-  };
-
-  const existing =
-    JSON.parse(sessionStorage.getItem("audit_history") || "[]");
-
-  const updated = [entry, ...existing];
-  sessionStorage.setItem("audit_history", JSON.stringify(updated));
-  setAuditHistory(updated);
+  setResult({ success: true, analysis });
 
   setHasAnalyzedInSession(true);
   setStatus("Analysis complete ✅");
 
   setTimeout(() => {
-    resultsRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    resultsRef.current?.scrollIntoView({ behavior: "smooth" });
   }, 100);
 }
 
