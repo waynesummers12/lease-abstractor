@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRef } from "react";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -84,7 +83,6 @@ function parseDollarAmount(value: string): number | null {
   return isMonthly ? amount * 12 : amount;
 }
 
-
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
@@ -122,14 +120,20 @@ async function handleUploadAndAnalyze() {
 
   // 🔒 Generate auditId ONCE
   const newAuditId = crypto.randomUUID();
-  setAuditId(newAuditId);
 
   // ✅ CREATE audit row FIRST (so ingest can update it)
-  await fetch("/api/audits", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ auditId: newAuditId }),
-  });
+const createRes = await fetch("/api/audits", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ auditId: newAuditId }),
+});
+
+if (!createRes.ok) {
+  console.error("❌ Failed to create audit", await createRes.text());
+  setStatus("Failed to initialize audit");
+  return;
+}
+
 
   // 🔒 PDF path MUST use auditId
   const objectPath = `leases/${newAuditId}.pdf`;
@@ -162,46 +166,67 @@ async function handleUploadAndAnalyze() {
     return;
   }
 
-  // ✅ Re-fetch audit AFTER ingest
-  const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`);
-  const audit = await auditRes.json();
-  const a = audit.analysis;
+// ✅ Re-fetch audit AFTER ingest
+const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`, {
+  method: "GET",
+  headers: { Accept: "application/json" },
+});
 
-  // 🔥 THESE drive the yellow box
-  setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
-  setExposureRange(
-    a?.avoidable_exposure_range
-      ? { low: a.avoidable_exposure_range.low, high: a.avoidable_exposure_range.high }
-      : null
+// 🚨 Guard before parsing JSON
+if (!auditRes.ok) {
+  console.error(
+    "❌ Failed to fetch audit:",
+    auditRes.status,
+    await auditRes.text()
   );
-  setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
+  setStatus("Audit lookup failed");
+  return;
+}
 
-  const data = (await res.json()) as ApiResult;
-  setResult(data);
+const audit = await auditRes.json();
+const a = audit?.analysis ?? null;
 
-  if (data.success && data.analysis) {
-    const entry = {
-      ...data.analysis,
-      created_at: new Date().toISOString(),
-    };
+// 🔥 THESE drive the yellow box
+setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
 
-    const existing =
-      JSON.parse(sessionStorage.getItem("audit_history") || "[]");
+setExposureRange(
+  a?.avoidable_exposure_range
+    ? {
+        low: a.avoidable_exposure_range.low,
+        high: a.avoidable_exposure_range.high,
+      }
+    : null
+);
 
-    const updated = [entry, ...existing];
-    sessionStorage.setItem("audit_history", JSON.stringify(updated));
-    setAuditHistory(updated);
-  }
+setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
 
-  setHasAnalyzedInSession(true);
-  setStatus("Analysis complete ✅");
+// ✅ Parse ingest response ONCE
+const data = (await res.json()) as ApiResult;
+setResult(data);
 
-  setTimeout(() => {
-    resultsRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }, 100);
+if (data.success && data.analysis) {
+  const entry = {
+    ...data.analysis,
+    created_at: new Date().toISOString(),
+  };
+
+  const existing =
+    JSON.parse(sessionStorage.getItem("audit_history") || "[]");
+
+  const updated = [entry, ...existing];
+  sessionStorage.setItem("audit_history", JSON.stringify(updated));
+  setAuditHistory(updated);
+}
+
+setHasAnalyzedInSession(true);
+setStatus("Analysis complete ✅");
+
+setTimeout(() => {
+  resultsRef.current?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+}, 100);
 }
 
 
