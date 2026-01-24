@@ -4,18 +4,18 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router();
 
 /**
- * GET /api/audits/:auditId/download
- * Returns a signed URL for the audit PDF
+ * GET /api/audits/:id/download
  */
-router.get("/api/audits/:auditId/download", async (ctx) => {
-  const auditId = ctx.params.auditId;
+router.get("/api/audits/:id/download", async (ctx) => {
+  const auditId = ctx.params.id;
 
   if (!auditId) {
     ctx.response.status = 400;
-    ctx.response.body = { error: "Missing auditId" };
+    ctx.response.body = { error: "Missing audit id" };
     return;
   }
 
+  // fetch stored object path
   const { data, error } = await supabase
     .from("lease_audits")
     .select("object_path")
@@ -28,16 +28,14 @@ router.get("/api/audits/:auditId/download", async (ctx) => {
     return;
   }
 
-  const fileName = data.object_path.replace(/^leases\//, "");
-
   const { data: signed, error: signedError } =
     await supabase.storage
       .from("leases")
-      .createSignedUrl(fileName, 60 * 10);
+      .createSignedUrl(data.object_path.replace("leases/", ""), 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
     ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to generate signed URL" };
+    ctx.response.body = { error: "Failed to create signed URL" };
     return;
   }
 
