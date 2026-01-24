@@ -1,5 +1,3 @@
-// worker/routes/stripeWebhook.ts
-
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
@@ -48,19 +46,20 @@ router.post("/stripe/webhook", async (ctx) => {
     if (!auditId) {
       console.error("❌ Missing auditId in Stripe metadata");
     } else {
-      const objectPath = `leases/${auditId}.pdf`;
+      const pdfPath = `leases/${auditId}.pdf`;
 
-      const { error } = await supabase
+      /* ---------- MARK AUDIT AS PAID ---------- */
+      const { error: updateError } = await supabase
         .from("lease_audits")
         .update({
           status: "paid",
           stripe_session_id: stripeSessionId,
-          object_path: objectPath,
+          object_path: pdfPath,
         })
         .eq("id", auditId);
 
-      if (error) {
-        console.error("❌ Failed to mark audit as paid:", error);
+      if (updateError) {
+        console.error("❌ Failed to mark audit as paid:", updateError);
       } else {
         console.log("✅ Audit marked as paid:", auditId);
 
@@ -75,10 +74,24 @@ router.post("/stripe/webhook", async (ctx) => {
           console.error("❌ Missing analysis for paid audit:", auditId);
         } else {
           try {
-            await generateAuditPdf(data.analysis);
-            console.log("📄 Audit PDF generated:", auditId);
+            /* ---------- GENERATE PDF ---------- */
+            const pdfBytes = await generateAuditPdf(data.analysis);
+
+            /* ---------- UPLOAD PDF ---------- */
+            const { error: uploadError } = await supabase.storage
+              .from("leases")
+              .upload(pdfPath, pdfBytes, {
+                contentType: "application/pdf",
+                upsert: true,
+              });
+
+            if (uploadError) {
+              console.error("❌ Failed to upload audit PDF:", uploadError);
+            } else {
+              console.log("📄 Audit PDF generated + uploaded:", pdfPath);
+            }
           } catch (pdfErr) {
-            console.error("❌ Failed to generate audit PDF:", pdfErr);
+            console.error("❌ Failed during PDF generation:", pdfErr);
           }
         }
       }
