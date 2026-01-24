@@ -16,6 +16,7 @@ const router = new Router();
 /* -------------------- CORS -------------------- */
 app.use(async (ctx, next) => {
   const origin = ctx.request.headers.get("origin");
+
   if (origin === "http://localhost:3000") {
     ctx.response.headers.set("Access-Control-Allow-Origin", origin);
   }
@@ -51,19 +52,19 @@ router.get("/", (ctx) => {
 
 /* -------------------- ROUTES -------------------- */
 /**
- * Stripe webhook MUST be mounted early
+ * ⚠️ Stripe webhook MUST be first
  */
 router.use(stripeWebhookRoutes.routes());
 router.use(stripeWebhookRoutes.allowedMethods());
 
 /**
- * ✅ DOWNLOAD ROUTE — MUST COME BEFORE *ALL* AUDIT ROUTES
+ * ✅ DOWNLOAD ROUTE — MUST COME BEFORE GENERIC /audits ROUTES
  */
 router.use(downloadAuditPdfRoutes.routes());
 router.use(downloadAuditPdfRoutes.allowedMethods());
 
 /**
- * Read-only audit APIs (generic → later)
+ * Read-only audit routes
  */
 router.use(auditByIdRoutes.routes());
 router.use(auditByIdRoutes.allowedMethods());
