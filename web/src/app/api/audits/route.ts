@@ -1,9 +1,5 @@
 // src/app/api/audits/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase/server";
-
-/* ---------- CREATE AUDIT ROW ---------- */
 export async function POST(req: NextRequest) {
   try {
     const { auditId } = await req.json();
@@ -17,7 +13,12 @@ export async function POST(req: NextRequest) {
 
     const { error } = await supabaseServer
       .from("lease_audits")
-      .insert({ id: auditId });
+      .insert({
+        id: auditId,
+        status: "pending",
+        currency: "usd",
+        object_path: `leases/${auditId}.pdf`,
+      });
 
     if (error) {
       console.error("❌ Failed to create audit row:", error);
@@ -35,29 +36,4 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-}
-
-/* ---------- READ AUDIT ---------- */
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const auditId = searchParams.get("auditId");
-
-  if (auditId) {
-    const { data, error } = await supabaseServer
-      .from("lease_audits")
-      .select("*")
-      .eq("id", auditId)
-      .single();
-
-    if (error || !data) {
-      return NextResponse.json(
-        { error: "Audit not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(data);
-  }
-
-  return NextResponse.json({ audits: [] });
 }
