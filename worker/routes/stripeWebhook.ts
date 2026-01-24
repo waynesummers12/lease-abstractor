@@ -1,8 +1,10 @@
+// worker/routes/stripeWebhook.ts
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
-import { sendAuditEmail } from "../utils/sendAuditEmail.ts"; // ✅ ADD THIS
+import { sendAuditEmail } from "../utils/sendAuditEmail.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
@@ -11,12 +13,14 @@ const router = new Router();
 
 router.post("/stripe/webhook", async (ctx) => {
   const sig = ctx.request.headers.get("stripe-signature");
+
   if (!sig) {
     ctx.response.status = 400;
     ctx.response.body = "Missing stripe-signature";
     return;
   }
 
+  /* ---------------- RAW BODY (OAK v12 SAFE) ---------------- */
   const rawBody = await ctx.request.body({ type: "text" }).value;
 
   let event: Stripe.Event;
@@ -30,15 +34,12 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-  /* ------------------------------------------------------------
-     HANDLE PAYMENT SUCCESS
-  ------------------------------------------------------------- */
-
+  /* --------------------------------------------------------
+     PAYMENT COMPLETED
+  --------------------------------------------------------- */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-
     const auditId = session.metadata?.auditId;
-    const stripeSessionId = session.id;
 
     if (!auditId) {
       console.error("❌ Missing auditId in Stripe metadata");
@@ -50,7 +51,7 @@ router.post("/stripe/webhook", async (ctx) => {
         .from("lease_audits")
         .update({
           status: "paid",
-          stripe_session_id: stripeSessionId,
+          stripe_session_id: session.id,
         })
         .eq("id", auditId);
 
@@ -75,28 +76,22 @@ router.post("/stripe/webhook", async (ctx) => {
 
             const pdfBytes = await generateAuditPdf(data.analysis);
 
-            console.log("📄 PDF generated", {
-              exists: !!pdfBytes,
-              byteLength: pdfBytes?.length,
-              type: pdfBytes?.constructor?.name,
-            });
-
             if (!pdfBytes || pdfBytes.length === 0) {
               console.error("❌ PDF generation returned empty output");
-              return;
+              throw new Error("Empty PDF");
             }
 
-            const fileName = `${auditId}.pdf`;
+            console.log("📄 PDF generated:", pdfBytes.length, "bytes");
 
-            /* ---------- UPLOAD PDF ---------- */
-            console.log("☁️ Uploading PDF to Supabase Storage", {
-              bucket: "leases",
-              fileName,
-              bytes: pdfBytes.length,
-            });
+            const fileName = `${auditId}.pdf`;
+            const bucket = "audit-pdfs";
+            const objectPath = `${bucket}/${fileName}`;
+
+            /* ---------- UPLOAD TO STORAGE ---------- */
+            console.log("☁️ Uploading PDF to Supabase Storage:", objectPath);
 
             const { error: uploadError } = await supabase.storage
-              .from("leases")
+              .from(bucket)
               .upload(fileName, pdfBytes, {
                 contentType: "application/pdf",
                 upsert: true,
@@ -104,46 +99,42 @@ router.post("/stripe/webhook", async (ctx) => {
 
             if (uploadError) {
               console.error("❌ Failed to upload audit PDF:", uploadError);
-              return;
+              throw uploadError;
             }
 
-            console.log("✅ Audit PDF uploaded successfully:", fileName);
+            console.log("✅ Audit PDF uploaded");
 
-            /* ---------- EMAIL PDF ---------- */
-            const { data: signed, error: signedError } =
-              await supabase.storage
-                .from("leases")
-                .createSignedUrl(fileName, 60 * 10);
-
-            if (signedError || !signed?.signedUrl) {
-              console.error(
-                "❌ Failed to create signed URL for email",
-                signedError
-              );
-            } else {
-              const customerEmail =
-                session.customer_details?.email ||
-                session.customer_email ||
-                null;
-
-              await sendAuditEmail({
-                leaseName: "Your Lease",
-                signedUrl: signed.signedUrl,
-                toEmail: customerEmail,
-              });
-            }
-
-            /* ---------- SAVE CANONICAL OBJECT PATH ---------- */
+            /* ---------- SAVE OBJECT PATH ---------- */
             const { error: pathError } = await supabase
               .from("lease_audits")
-              .update({ object_path: `leases/${fileName}` })
+              .update({ object_path: objectPath })
               .eq("id", auditId);
 
             if (pathError) {
-              console.error("⚠️ Failed to save PDF path:", pathError);
+              console.error("⚠️ Failed to save PDF object path:", pathError);
             }
-          } catch (pdfErr) {
-            console.error("❌ PDF generation/upload failed:", pdfErr);
+
+            /* ---------- SIGNED URL + EMAIL ---------- */
+            const { data: signed, error: signedError } =
+              await supabase.storage
+                .from(bucket)
+                .createSignedUrl(fileName, 60 * 10);
+
+            if (signedError || !signed?.signedUrl) {
+              console.error("❌ Failed to create signed URL", signedError);
+            } else {
+              await sendAuditEmail({
+  leaseName: "Your Lease Audit",
+  signedUrl: signed.signedUrl,
+  toEmail:
+    session.customer_details?.email ??
+    session.customer_email ??
+    null,
+});
+
+            }
+          } catch (err) {
+            console.error("❌ PDF generation pipeline failed:", err);
           }
         }
       }
@@ -156,3 +147,4 @@ router.post("/stripe/webhook", async (ctx) => {
 });
 
 export default router;
+
