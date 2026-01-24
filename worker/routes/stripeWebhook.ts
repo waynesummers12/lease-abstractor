@@ -10,7 +10,12 @@ const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET")!;
 
 const router = new Router();
 
-router.post("/stripe/webhook", async (ctx) => {
+/* =========================================================
+   STRIPE WEBHOOK
+   ========================================================= */
+router.post("/api/stripe/webhook", async (ctx) => {
+  console.log("🔥 Stripe webhook hit");
+
   const sig = ctx.request.headers.get("stripe-signature");
   if (!sig) {
     ctx.response.status = 400;
@@ -29,7 +34,7 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-  /* -------------------- CHECKOUT COMPLETE -------------------- */
+  /* ---------------- CHECKOUT COMPLETED ---------------- */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const auditId = session.metadata?.auditId;
