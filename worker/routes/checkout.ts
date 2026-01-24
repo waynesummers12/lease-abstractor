@@ -5,28 +5,24 @@ import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
-
-const router = new Router({
-  prefix: "/checkout",
-});
+const router = new Router({ prefix: "/checkout" });
 
 /**
  * Create Stripe Checkout Session
  *
  * HARD GUARANTEES AFTER THIS ROUTE:
+ * - auditId is REQUIRED
  * - lease_audits row EXISTS
  * - status = 'unpaid'
- * - Stripe webhook can ALWAYS update it
+ * - Stripe metadata ALWAYS includes auditId
+ * - Webhook can deterministically fulfill
  */
 router.post("/create", async (ctx) => {
   try {
-    // Robust body parsing for Oak
-    // deno-lint-ignore no-explicit-any
-    const body =
-      (ctx.request as any).body?.json?.()
-        ? await (ctx.request as any).body.json()
-        : await ctx.request.body().value;
-
+    /* --------------------------------------------------
+       PARSE BODY (Oak-safe)
+    -------------------------------------------------- */
+    const body = await ctx.request.body({ type: "json" }).value;
     const { auditId } = body ?? {};
 
     const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
@@ -34,7 +30,7 @@ router.post("/create", async (ctx) => {
 
     if (!auditId) {
       ctx.response.status = 400;
-      ctx.response.body = { error: "Missing auditId" };
+      ctx.response.body = { error: "auditId is required" };
       return;
     }
 
@@ -44,10 +40,9 @@ router.post("/create", async (ctx) => {
       return;
     }
 
-    /* ---------------------------------------------------------
+    /* --------------------------------------------------
        ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
-    ---------------------------------------------------------- */
-
+    -------------------------------------------------- */
     const { data: existingAudit, error: selectError } = await supabase
       .from("lease_audits")
       .select("id")
@@ -67,7 +62,7 @@ router.post("/create", async (ctx) => {
         .insert({
           id: auditId,
           status: "unpaid",
-          amount_paid: 14999,
+          amount_paid: 24999,
           currency: "usd",
         });
 
@@ -81,10 +76,9 @@ router.post("/create", async (ctx) => {
       console.log("🧾 lease_audits row created:", auditId);
     }
 
-    /* ---------------------------------------------------------
+    /* --------------------------------------------------
        CREATE STRIPE CHECKOUT SESSION
-    ---------------------------------------------------------- */
-
+    -------------------------------------------------- */
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [
@@ -96,8 +90,14 @@ router.post("/create", async (ctx) => {
       success_url: `${baseUrl}/success?auditId=${auditId}`,
       cancel_url: `${baseUrl}/cancel`,
       metadata: {
-        auditId, // 🔑 webhook relies on this
+        auditId, // 🔒 SINGLE SOURCE OF TRUTH
       },
+    });
+
+    console.log("🧾 Checkout session created:", {
+      sessionId: session.id,
+      auditId,
+      metadata: session.metadata,
     });
 
     ctx.response.status = 200;
