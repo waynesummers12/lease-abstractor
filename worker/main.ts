@@ -87,6 +87,9 @@ router.use(checkoutRoutes.allowedMethods());
 router.use(auditPdfRoutes.routes());
 router.use(auditPdfRoutes.allowedMethods());
 
+/* 🔥 MUST BE FIRST */
+app.use(stripeWebhookRoutes.routes());
+app.use(stripeWebhookRoutes.allowedMethods());
 /* -------------------- APP -------------------- */
 app.use(router.routes());
 app.use(router.allowedMethods());
