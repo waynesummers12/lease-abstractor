@@ -58,8 +58,13 @@ router.use(stripeWebhookRoutes.routes());
 router.use(stripeWebhookRoutes.allowedMethods());
 
 /**
+ * ✅ DOWNLOAD ROUTE — MUST COME BEFORE auditById
+ */
+router.use(downloadAuditPdfRoutes.routes());
+router.use(downloadAuditPdfRoutes.allowedMethods());
+
+/**
  * Read-only audit APIs
- * IMPORTANT: auditById MUST come before latest
  */
 router.use(auditByIdRoutes.routes());
 router.use(auditByIdRoutes.allowedMethods());
@@ -81,12 +86,6 @@ router.use(checkoutRoutes.allowedMethods());
 
 router.use(auditPdfRoutes.routes());
 router.use(auditPdfRoutes.allowedMethods());
-
-/**
- * ✅ DOWNLOAD ROUTE — MUST BE HERE
- */
-router.use(downloadAuditPdfRoutes.routes());
-router.use(downloadAuditPdfRoutes.allowedMethods());
 
 /* -------------------- APP -------------------- */
 app.use(router.routes());
