@@ -20,13 +20,17 @@ const router = new Router({
  */
 router.post("/create", async (ctx) => {
   try {
+    // Robust body parsing for Oak
     // deno-lint-ignore no-explicit-any
-const body = await (ctx.request as any).body?.json?.()
-  ?? (await ctx.request.body().value);
-    const { auditId } = body;
+    const body =
+      (ctx.request as any).body?.json?.()
+        ? await (ctx.request as any).body.json()
+        : await ctx.request.body().value;
 
-    const priceId = Deno.env.get("STRIPE_PRICE_STARTER");
-    const baseUrl = Deno.env.get("BASE_URL");
+    const { auditId } = body ?? {};
+
+    const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
+    const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
 
     if (!auditId) {
       ctx.response.status = 400;
@@ -34,9 +38,9 @@ const body = await (ctx.request as any).body?.json?.()
       return;
     }
 
-    if (!priceId || !baseUrl) {
+    if (!STRIPE_PRICE_STARTER) {
       ctx.response.status = 500;
-      ctx.response.body = { error: "Server misconfigured" };
+      ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
       return;
     }
 
@@ -44,11 +48,18 @@ const body = await (ctx.request as any).body?.json?.()
        ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
     ---------------------------------------------------------- */
 
-    const { data: existingAudit } = await supabase
+    const { data: existingAudit, error: selectError } = await supabase
       .from("lease_audits")
       .select("id")
       .eq("id", auditId)
       .maybeSingle();
+
+    if (selectError) {
+      console.error("❌ Failed to check lease_audits row:", selectError);
+      ctx.response.status = 500;
+      ctx.response.body = { error: "Database error" };
+      return;
+    }
 
     if (!existingAudit) {
       const { error: insertError } = await supabase
@@ -78,14 +89,14 @@ const body = await (ctx.request as any).body?.json?.()
       mode: "payment",
       line_items: [
         {
-          price: priceId,
+          price: STRIPE_PRICE_STARTER,
           quantity: 1,
         },
       ],
-      success_url: `${baseUrl}/success?auditId=${auditId}`, // ✅ ANCHOR
-      cancel_url: `${baseUrl}`,
+      success_url: `${baseUrl}/success?auditId=${auditId}`,
+      cancel_url: `${baseUrl}/cancel`,
       metadata: {
-        auditId, // 🔒 CRITICAL LINK
+        auditId, // 🔑 webhook relies on this
       },
     });
 
