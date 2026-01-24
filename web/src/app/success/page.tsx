@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 /* ================= TYPES ================= */
 
 type AuditResponse = {
-  status?: "paid" | "unpaid";
+  status: "unpaid" | "paid" | "complete";
   analysis: {
     avoidable_exposure?: number;
     tenant?: string | null;
@@ -25,13 +25,15 @@ export default function SuccessPage() {
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
-  /* ---------- LOAD AUDIT ---------- */
+  /* ---------- LOAD + POLL AUDIT ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
       setLoading(false);
       return;
     }
+
+    let pollTimer: NodeJS.Timeout | null = null;
 
     async function loadAudit() {
       try {
@@ -47,6 +49,11 @@ export default function SuccessPage() {
 
         const json: AuditResponse = await res.json();
         setData(json);
+
+        // If paid but not complete, poll again
+        if (json.status === "paid") {
+          pollTimer = setTimeout(loadAudit, 4000);
+        }
       } catch (err) {
         console.error("Failed to load audit", err);
         setFatalError("Unable to load audit.");
@@ -56,6 +63,10 @@ export default function SuccessPage() {
     }
 
     loadAudit();
+
+    return () => {
+      if (pollTimer) clearTimeout(pollTimer);
+    };
   }, [auditId]);
 
   /* ---------- DOWNLOAD PDF ---------- */
@@ -71,7 +82,7 @@ export default function SuccessPage() {
       );
 
       if (!res.ok) {
-        alert("PDF is still being generated. Try again shortly.");
+        alert("Your PDF is still being prepared. Please try again shortly.");
         return;
       }
 
@@ -104,18 +115,29 @@ export default function SuccessPage() {
     );
   }
 
-  if (loading || !data || !data.analysis) {
+  if (loading || !data) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
         <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
-        <h1 className="text-xl font-semibold">Preparing your audit summary</h1>
+        <h1 className="text-xl font-semibold">Preparing your audit</h1>
+      </main>
+    );
+  }
+
+  /* ---------- PAID BUT PROCESSING ---------- */
+  if (data.status === "paid") {
+    return (
+      <main className="mx-auto max-w-xl px-6 py-28 text-center">
+        <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
+        <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
         <p className="mt-3 text-sm text-gray-600">
-          This can take a few minutes. You can safely leave this page.
+          Payment received. We’re generating your PDF now.
         </p>
       </main>
     );
   }
 
+  /* ---------- COMPLETE ---------- */
   return (
     <main className="mx-auto max-w-xl px-6 py-28 text-center">
       <div className="mb-6 text-3xl">✅</div>
@@ -126,7 +148,7 @@ export default function SuccessPage() {
         Your CAM / NNN Audit Summary is ready.
       </p>
 
-      {typeof data.analysis.avoidable_exposure === "number" && (
+      {typeof data.analysis?.avoidable_exposure === "number" && (
         <div className="mt-6 rounded-lg border bg-gray-50 p-4 text-sm">
           <p className="font-medium">Estimated recoverable exposure</p>
           <p className="mt-1 text-2xl font-bold">
@@ -161,5 +183,3 @@ export default function SuccessPage() {
     </main>
   );
 }
-
-
