@@ -7,6 +7,11 @@ const SUPABASE_SERVICE_ROLE_KEY =
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Missing Supabase env vars in worker");
 }
+console.log("SUPABASE_URL =", Deno.env.get("SUPABASE_URL"));
+console.log(
+  "SUPABASE_SERVICE_ROLE_KEY exists =",
+  !!Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
+);
 
 export const supabase = createClient(
   SUPABASE_URL,
