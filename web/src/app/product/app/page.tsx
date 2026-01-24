@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { runAuditPipeline } from "./useAuditUpload";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -118,143 +118,58 @@ async function handleUploadAndAnalyze() {
   setStatus("Uploading lease…");
   setResult(null);
 
-  // 🔒 Generate auditId ONCE
-  const newAuditId = crypto.randomUUID();
+  const result = await runAuditPipeline(file);
 
-  // ✅ CREATE audit row FIRST (so ingest can update it)
-const createRes = await fetch("/api/audits", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ auditId: newAuditId }),
-});
-
-if (!createRes.ok) {
-  console.error("❌ Failed to create audit", await createRes.text());
-  setStatus("Failed to initialize audit");
-  return;
-}
-
-
-  // 🔒 PDF path MUST use auditId
-  const objectPath = `leases/${newAuditId}.pdf`;
-
-  const { error } = await supabase.storage
-    .from("leases")
-    .upload(objectPath, file, {
-      contentType: "application/pdf",
-      upsert: true,
-    });
-
-  if (error) {
-    setStatus(error.message);
+  if (!result.success) {
+    console.error("❌ Audit failed:", result.error);
+    setStatus(result.error);
     return;
   }
 
-  setStatus("Analyzing lease…");
+  const analysis = result.analysis;
 
-  const res = await fetch("/api/ingest/lease/pdf", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      objectPath,
-      auditId: newAuditId,
-    }),
-  });
+  // 🔥 Drive yellow box
+  setTotalAvoidableExposure(analysis?.avoidable_exposure ?? null);
 
-  if (!res.ok) {
-    setStatus("Analysis failed");
-    return;
-  }
-
-// ✅ Re-fetch audit AFTER ingest
-const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`, {
-  method: "GET",
-  headers: { Accept: "application/json" },
-});
-
-// 🚨 Guard before parsing JSON
-if (!auditRes.ok) {
-  console.error(
-    "❌ Failed to fetch audit:",
-    auditRes.status,
-    await auditRes.text()
+  setExposureRange(
+    analysis?.avoidable_exposure_range
+      ? {
+          low: analysis.avoidable_exposure_range.low,
+          high: analysis.avoidable_exposure_range.high,
+        }
+      : null
   );
-  setStatus("Audit lookup failed");
-  return;
-}
 
-const audit = await auditRes.json();
-const a = audit?.analysis ?? null;
+  setExposureRiskLabel(analysis?.risk_level?.toLowerCase() ?? null);
 
-// 🔥 THESE drive the yellow box
-setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
-
-setExposureRange(
-  a?.avoidable_exposure_range
-    ? {
-        low: a.avoidable_exposure_range.low,
-        high: a.avoidable_exposure_range.high,
-      }
-    : null
-);
-
-setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
-
-// ✅ Parse ingest response ONCE
-const audit = await auditRes.json();
-const a = audit?.analysis;
-
-if (!a) {
-  setStatus("Analysis not ready yet");
-  return;
-}
-
-// 🔥 Drive yellow box
-setTotalAvoidableExposure(a.avoidable_exposure ?? null);
-
-setExposureRange(
-  a.avoidable_exposure_range
-    ? {
-        low: a.avoidable_exposure_range.low,
-        high: a.avoidable_exposure_range.high,
-      }
-    : null
-);
-
-setExposureRiskLabel(a.risk_level?.toLowerCase() ?? null);
-
-// ✅ Set analysis as single source of truth
-setResult({
-  success: true,
-  analysis: a,
-});
-
-// ✅ Store history
-const entry = {
-  ...a,
-  created_at: new Date().toISOString(),
-};
-
-const existing =
-  JSON.parse(sessionStorage.getItem("audit_history") || "[]");
-
-const updated = [entry, ...existing];
-sessionStorage.setItem("audit_history", JSON.stringify(updated));
-setAuditHistory(updated);
-
-
-
-setHasAnalyzedInSession(true);
-setStatus("Analysis complete ✅");
-
-setTimeout(() => {
-  resultsRef.current?.scrollIntoView({
-    behavior: "smooth",
-    block: "start",
+  // ✅ Store result
+  setResult({
+    success: true,
+    analysis,
   });
-}, 100);
-}
 
+  const entry = {
+    ...analysis,
+    created_at: new Date().toISOString(),
+  };
+
+  const existing =
+    JSON.parse(sessionStorage.getItem("audit_history") || "[]");
+
+  const updated = [entry, ...existing];
+  sessionStorage.setItem("audit_history", JSON.stringify(updated));
+  setAuditHistory(updated);
+
+  setHasAnalyzedInSession(true);
+  setStatus("Analysis complete ✅");
+
+  setTimeout(() => {
+    resultsRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 100);
+}
 
 /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
