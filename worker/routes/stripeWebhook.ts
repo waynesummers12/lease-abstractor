@@ -50,6 +50,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
     }
   }
 
+
   /* --------------------------------------------------
      EVENT HANDLING
      -------------------------------------------------- */
@@ -105,7 +106,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
     console.log("🧠 Generating audit PDF…");
 
     const pdfBytes = await generateAuditPdf(data.analysis);
-
+console.log("📦 PDF bytes length:", pdfBytes?.length);
     if (!pdfBytes || pdfBytes.length === 0) {
       console.error("❌ PDF generation failed:", auditId);
       ctx.response.status = 200;
@@ -121,7 +122,7 @@ router.post("/api/stripe/webhook", async (ctx) => {
         contentType: "application/pdf",
         upsert: true,
       });
-
+console.log("📤 Upload result:", uploadError ?? "success");
     if (uploadError) {
       console.error("❌ PDF upload failed:", uploadError);
       ctx.response.status = 200;
