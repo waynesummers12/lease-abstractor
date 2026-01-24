@@ -113,41 +113,6 @@ export default function HomePage() {
     return null;
   })();
 
-  const totalAvoidableExposure: number | null = (() => {
-  if (!analysis?.health?.flags?.length) return null;
-
-  let total = 0;
-
-  for (const flag of analysis.health.flags) {
-    const impact = flag.estimated_impact;
-    if (!impact) continue;
-
-    const value = parseDollarAmount(impact);
-    if (typeof value === "number" && value > 0) {
-      total += value;
-    }
-  }
-
-  return total > 0 ? Math.round(total) : null;
-})();
-
-const exposureRiskLabel: "low" | "medium" | "high" | null = (() => {
-  if (totalAvoidableExposure == null) return null;
-
-  if (totalAvoidableExposure >= 25_000) return "high";
-  if (totalAvoidableExposure >= 10_000) return "medium";
-  return "low";
-})();
-
-const exposureRange: { low: number; high: number } | null = (() => {
-  if (totalAvoidableExposure == null) return null;
-
-  return {
-    low: Math.round(totalAvoidableExposure * 0.7),
-    high: Math.round(totalAvoidableExposure * 1.3),
-  };
-})();
-
 /* ---------- UPLOAD + ANALYZE ---------- */
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -177,40 +142,35 @@ async function handleUploadAndAnalyze() {
   setStatus("Analyzing lease…");
 
   const res = await fetch("/api/ingest/lease/pdf", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-  objectPath,
-  auditId: newAuditId,
-}),
-});
-const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`);
-const audit = await auditRes.json();
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      objectPath,
+      auditId: newAuditId,
+    }),
+  });
 
-const a = audit.analysis;
-
-// 🔥 THESE drive the yellow box
-setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
-
-setExposureRange(
-  a?.avoidable_exposure_range
-    ? {
-        low: a.avoidable_exposure_range.low,
-        high: a.avoidable_exposure_range.high,
-      }
-    : null
-);
-
-setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
-
-
+  // ✅ SINGLE failure guard
   if (!res.ok) {
     setStatus("Analysis failed");
     return;
   }
 
+  // ✅ Re-fetch audit AFTER successful ingest
+  const auditRes = await fetch(`/api/audits?auditId=${newAuditId}`);
+  const audit = await auditRes.json();
+  const a = audit.analysis;
+
+  // 🔥 THESE drive the yellow box
+  setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
+  setExposureRange(
+    a?.avoidable_exposure_range
+      ? { low: a.avoidable_exposure_range.low, high: a.avoidable_exposure_range.high }
+      : null
+  );
+  setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
+
+  // ✅ Parse ingest response ONCE
   const data = (await res.json()) as ApiResult;
   setResult(data);
 
@@ -224,7 +184,6 @@ setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
       JSON.parse(sessionStorage.getItem("audit_history") || "[]");
 
     const updated = [entry, ...existing];
-
     sessionStorage.setItem("audit_history", JSON.stringify(updated));
     setAuditHistory(updated);
   }
@@ -239,7 +198,6 @@ setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
     });
   }, 100);
 }
-
 
 /* ---------- STRIPE CHECKOUT ---------- */
 const [isCheckingOut, setIsCheckingOut] = useState(false);
