@@ -181,6 +181,25 @@ async function handleUploadAndAnalyze() {
   auditId: newAuditId,
 }),
 });
+const auditRes = await fetch(`/api/audits/${newAuditId}`);
+const audit = await auditRes.json();
+
+const a = audit.analysis;
+
+// 🔥 THESE drive the yellow box
+setTotalAvoidableExposure(a?.avoidable_exposure ?? null);
+
+setExposureRange(
+  a?.avoidable_exposure_range
+    ? {
+        low: a.avoidable_exposure_range.low,
+        high: a.avoidable_exposure_range.high,
+      }
+    : null
+);
+
+setExposureRiskLabel(a?.risk_level?.toLowerCase() ?? null);
+
 
   if (!res.ok) {
     setStatus("Analysis failed");
