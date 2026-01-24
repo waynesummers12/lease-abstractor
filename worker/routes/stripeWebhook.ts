@@ -1,3 +1,4 @@
+// worker/routes/stripeWebhook.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
@@ -13,13 +14,12 @@ router.post("/stripe/webhook", async (ctx) => {
   const sig = ctx.request.headers.get("stripe-signature");
   if (!sig) {
     ctx.response.status = 400;
-    ctx.response.body = "Missing stripe-signature";
     return;
   }
 
-  const rawBody = await ctx.request.body({ type: "text" }).value;
-
+  const rawBody = await ctx.request.body().value;
   let event: Stripe.Event;
+
   try {
     event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
@@ -29,7 +29,7 @@ router.post("/stripe/webhook", async (ctx) => {
   }
 
   /* ------------------------------------------------------------
-     PAYMENT COMPLETED
+     CHECKOUT COMPLETE
   ------------------------------------------------------------- */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
@@ -41,7 +41,7 @@ router.post("/stripe/webhook", async (ctx) => {
       return;
     }
 
-    console.log("💳 Payment complete for audit:", auditId);
+    console.log("💳 Payment completed for audit:", auditId);
 
     /* ---------- MARK PAID ---------- */
     await supabase
@@ -61,7 +61,7 @@ router.post("/stripe/webhook", async (ctx) => {
       .single();
 
     if (error || !data?.analysis) {
-      console.error("❌ No analysis found for audit:", auditId, error);
+      console.error("❌ Missing analysis for audit:", auditId);
       ctx.response.status = 200;
       return;
     }
@@ -71,17 +71,15 @@ router.post("/stripe/webhook", async (ctx) => {
     const pdfBytes = await generateAuditPdf(data.analysis);
 
     if (!pdfBytes || pdfBytes.length === 0) {
-      console.error("❌ Generated PDF is empty");
+      console.error("❌ Empty PDF output");
       ctx.response.status = 200;
       return;
     }
 
-    /* ---------- CANONICAL FILE NAME ---------- */
-    const fileName = `${auditId}.pdf`;
-    const filePath = fileName; // stored inside audit-pdfs bucket
+    const filePath = `${auditId}.pdf`;
 
-    /* ---------- UPLOAD PDF ---------- */
-    console.log("☁️ Uploading audit PDF → audit-pdfs/", filePath);
+    /* ---------- UPLOAD PDF (CORRECT BUCKET) ---------- */
+    console.log("☁️ Uploading → audit-pdfs/", filePath);
 
     const { error: uploadError } = await supabase.storage
       .from("audit-pdfs")
@@ -96,17 +94,17 @@ router.post("/stripe/webhook", async (ctx) => {
       return;
     }
 
-    /* ---------- MARK COMPLETE + SAVE PATH ---------- */
+    /* ---------- SAVE PATH ---------- */
     await supabase
       .from("lease_audits")
       .update({
-        status: "complete",
         audit_pdf_path: `audit-pdfs/${filePath}`,
+        status: "complete",
         completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
 
-    /* ---------- EMAIL SIGNED URL ---------- */
+    /* ---------- EMAIL ---------- */
     const { data: signed } = await supabase.storage
       .from("audit-pdfs")
       .createSignedUrl(filePath, 60 * 10);
@@ -122,7 +120,7 @@ router.post("/stripe/webhook", async (ctx) => {
       });
     }
 
-    console.log("✅ Audit PDF generated, uploaded, saved, and emailed:", filePath);
+    console.log("✅ Audit PDF generated & stored:", filePath);
   }
 
   ctx.response.status = 200;
