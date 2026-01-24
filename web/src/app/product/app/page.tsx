@@ -92,21 +92,26 @@ export default function HomePage() {
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
 
-  // Audit selection + history HOOKS
+  // Audit selection + history hooks
   const [selectedAudit, setSelectedAudit] = useState<AnalysisWithMeta | null>(null);
   const [auditHistory, setAuditHistory] = useState<AnalysisWithMeta[]>([]);
   const [hasAnalyzedInSession, setHasAnalyzedInSession] = useState(false);
 
-    // ✅ ADD THIS HERE
+  // 🔥 Post-analysis derived state (drives yellow box)
+  const [totalAvoidableExposure, setTotalAvoidableExposure] = useState<number | null>(null);
+  const [exposureRange, setExposureRange] =
+    useState<{ low: number; high: number } | null>(null);
+  const [exposureRiskLabel, setExposureRiskLabel] = useState<string | null>(null);
+
+  // Scroll anchor for results
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
   // ✅ SINGLE SOURCE OF TRUTH
   const analysis: Analysis | null = (() => {
-  if (selectedAudit) return selectedAudit;
-  if (result?.success && result.analysis) return result.analysis;
-  return null;
-})();
-
+    if (selectedAudit) return selectedAudit;
+    if (result?.success && result.analysis) return result.analysis;
+    return null;
+  })();
 
   const totalAvoidableExposure: number | null = (() => {
   if (!analysis?.health?.flags?.length) return null;
