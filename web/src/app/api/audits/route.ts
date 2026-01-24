@@ -1,7 +1,7 @@
 // src/app/api/audits/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseServer } from "@/lib/supabase/server";
 
 /* ---------- CREATE AUDIT ROW ---------- */
 export async function POST(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseServer
       .from("lease_audits")
       .insert({ id: auditId });
 
@@ -42,9 +42,8 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const auditId = searchParams.get("auditId");
 
-  // 🔹 If auditId is provided, return that audit
   if (auditId) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .from("lease_audits")
       .select("*")
       .eq("id", auditId)
@@ -60,8 +59,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data);
   }
 
-  // 🔹 Fallback (optional)
   return NextResponse.json({ audits: [] });
 }
-
-
