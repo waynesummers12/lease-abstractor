@@ -85,34 +85,33 @@ router.post("/stripe/webhook", async (ctx) => {
               return;
             }
 
-            const pdfPath = `${auditId}.pdf`;
+            const fileName = `${auditId}.pdf`;
 
             /* ---------- UPLOAD PDF ---------- */
             console.log("☁️ Uploading PDF to Supabase Storage", {
               bucket: "leases",
-              path: pdfPath,
+              fileName,
               bytes: pdfBytes.length,
             });
 
-            const { data: uploadData, error: uploadError } =
-              await supabase.storage
-                .from("leases")
-                .upload(pdfPath, pdfBytes, {
-                  contentType: "application/pdf",
-                  upsert: true,
-                });
+            const { error: uploadError } = await supabase.storage
+              .from("leases")
+              .upload(fileName, pdfBytes, {
+                contentType: "application/pdf",
+                upsert: true,
+              });
 
             if (uploadError) {
               console.error("❌ Failed to upload audit PDF:", uploadError);
               return;
             }
 
-            console.log("✅ Audit PDF uploaded successfully", uploadData);
+            console.log("✅ Audit PDF uploaded successfully:", fileName);
 
-            /* ---------- SAVE PDF PATH ---------- */
+            /* ---------- SAVE CANONICAL OBJECT PATH ---------- */
             const { error: pathError } = await supabase
               .from("lease_audits")
-              .update({ object_path: pdfPath })
+              .update({ object_path: `leases/${fileName}` })
               .eq("id", auditId);
 
             if (pathError) {
