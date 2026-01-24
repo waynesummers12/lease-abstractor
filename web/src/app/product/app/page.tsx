@@ -156,7 +156,7 @@ const [isCheckingOut, setIsCheckingOut] = useState(false);
 const [auditId, setAuditId] = useState<string | null>(null);
 
 async function handleCheckout() {
-  if (!analysis || isCheckingOut) return;
+  if (isCheckingOut) return;
 
   if (!auditId) {
     setStatus("Missing audit ID — please re-upload lease.");
@@ -167,10 +167,13 @@ async function handleCheckout() {
   setStatus("Redirecting to secure checkout…");
 
   try {
-    sessionStorage.setItem(
-      "latest_analysis",
-      JSON.stringify(analysis)
-    );
+    // Optional: cache analysis for post-checkout UX
+    if (analysis) {
+      sessionStorage.setItem(
+        "latest_analysis",
+        JSON.stringify(analysis)
+      );
+    }
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
@@ -185,24 +188,25 @@ async function handleCheckout() {
     );
 
     if (!res.ok) {
-      throw new Error("Checkout failed");
+      const text = await res.text();
+      throw new Error(`Checkout failed: ${text}`);
     }
 
-    const data = await res.json();
+    const { url } = await res.json();
 
-    if (data?.url) {
-  setIsCheckingOut(false); // ✅ safe cleanup before redirect
-  window.location.href = data.url;
-} else {
-  throw new Error("Missing checkout URL");
-}
+    if (!url) {
+      throw new Error("Missing Stripe checkout URL");
+    }
 
+    // ✅ IMPORTANT: do NOT set state after this
+    window.location.href = url;
   } catch (err) {
-    console.error(err);
+    console.error("❌ Checkout error:", err);
     setStatus("Checkout failed. Please try again.");
     setIsCheckingOut(false);
   }
 }
+
 
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
@@ -387,7 +391,7 @@ return (
                     padding: "10px 12px",
                     borderRadius: 6,
                     border:
-                      analysis === audit
+                      selectedAudit?.id === audit.id
                         ? "2px solid #000"
                         : "1px solid #ddd",
                     background:
@@ -677,16 +681,26 @@ return (
   </p>
 
   <button
-  onClick={handleCheckout}
-  disabled={!analysis}
-  className={`px-4 py-2 rounded-md text-sm font-medium ${
-    analysis
+  type="button"
+  onClick={() => {
+    console.log("🧾 Checkout clicked", {
+      auditId,
+      hasAnalysis: !!analysis,
+    });
+    handleCheckout();
+  }}
+  disabled={!analysis || isCheckingOut}
+  className={`px-4 py-2 rounded-md text-sm font-medium transition ${
+    analysis && !isCheckingOut
       ? "bg-black text-white hover:bg-gray-800"
       : "bg-gray-300 text-gray-500 cursor-not-allowed"
   }`}
 >
-  Get My CAM Audit Summary — $249.99
+  {isCheckingOut
+    ? "Redirecting to secure checkout…"
+    : "Get My CAM Audit Summary — $249.99"}
 </button>
+
 
 
   <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
