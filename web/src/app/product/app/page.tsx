@@ -120,12 +120,20 @@ async function handleUploadAndAnalyze() {
 
   const result = await runAuditPipeline(file);
 
-  if (!result.success) {
-    setStatus(result.error);
-    return;
-  }
+if (!result.success) {
+  setStatus(result.error);
+  return;
+}
 
-  const analysis = result.analysis;
+if (!result.auditId) {
+  setStatus("Audit creation failed — missing audit ID.");
+  return;
+}
+
+setAuditId(result.auditId); // ✅ THIS WAS MISSING
+
+const analysis = result.analysis;
+
 
   // 🔥 Yellow box
   setTotalAvoidableExposure(analysis?.avoidable_exposure ?? null);
