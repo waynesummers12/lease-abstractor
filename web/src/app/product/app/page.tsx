@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { runAuditPipeline } from "./useAuditUpload";
-import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
+import { useAuditUpload } from "./useAuditUpload";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 

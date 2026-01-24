@@ -1,14 +1,16 @@
 // lib/audit/runAuditPipeline.ts
 import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function runAuditPipeline(
-  file: File
+  file: File,
+  supabase: SupabaseClient
 ): Promise<AuditPipelineResult> {
-  try {
-    const auditId = crypto.randomUUID();
+  const auditId = crypto.randomUUID();
 
-    // 1. Create audit
+  try {
+    /* ---------- 1. CREATE AUDIT ---------- */
     const createRes = await fetch("/api/audits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -20,19 +22,34 @@ export async function runAuditPipeline(
         success: false,
         status: "failed",
         auditId,
-        error: "Failed to initialize audit",
+        error: await createRes.text(),
       };
     }
 
-    // 2. Upload PDF
+    /* ---------- 2. UPLOAD PDF ---------- */
     const objectPath = `leases/${auditId}.pdf`;
-    // (reuse your existing upload logic here)
 
-    // 3. Ingest
+    const { error: uploadError } = await supabase.storage
+      .from("leases")
+      .upload(objectPath, file, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
+
+    if (uploadError) {
+      return {
+        success: false,
+        status: "failed",
+        auditId,
+        error: uploadError.message,
+      };
+    }
+
+    /* ---------- 3. INGEST ---------- */
     const ingestRes = await fetch("/api/ingest/lease/pdf", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ objectPath, auditId }),
+      body: JSON.stringify({ auditId, objectPath }),
     });
 
     if (!ingestRes.ok) {
@@ -40,11 +57,11 @@ export async function runAuditPipeline(
         success: false,
         status: "failed",
         auditId,
-        error: "Ingest failed",
+        error: await ingestRes.text(),
       };
     }
 
-    // 4. Wait for analysis (NEW)
+    /* ---------- 4. WAIT FOR ANALYSIS ---------- */
     const analysis = await waitForAnalysis(auditId);
 
     if (!analysis) {
@@ -52,11 +69,11 @@ export async function runAuditPipeline(
         success: false,
         status: "analysis_pending",
         auditId,
-        error: "Analysis still processing",
+        error: "Analysis not ready",
       };
     }
 
-    // 5. Success
+    /* ---------- 5. SUCCESS ---------- */
     return {
       success: true,
       status: "analysis_ready",
@@ -67,8 +84,8 @@ export async function runAuditPipeline(
     return {
       success: false,
       status: "failed",
-      auditId: "unknown",
-      error: err.message ?? "Unexpected pipeline error",
+      auditId,
+      error: err?.message ?? "Unexpected pipeline error",
     };
   }
 }
