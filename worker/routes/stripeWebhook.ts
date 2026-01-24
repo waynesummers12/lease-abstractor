@@ -21,11 +21,7 @@ router.post("/stripe/webhook", async (ctx) => {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      sig,
-      endpointSecret
-    );
+    event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
     console.error("❌ Stripe webhook signature verification failed", err);
     ctx.response.status = 400;
@@ -33,90 +29,106 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-/* ------------------------------------------------------------
-   HANDLE PAYMENT SUCCESS
-------------------------------------------------------------- */
+  /* ------------------------------------------------------------
+     HANDLE PAYMENT SUCCESS
+  ------------------------------------------------------------- */
 
-if (event.type === "checkout.session.completed") {
-  const session = event.data.object as Stripe.Checkout.Session;
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
 
-  const auditId = session.metadata?.auditId;
-  const stripeSessionId = session.id;
+    const auditId = session.metadata?.auditId;
+    const stripeSessionId = session.id;
 
-  if (!auditId) {
-    console.error("❌ Missing auditId in Stripe metadata");
-  } else {
-    console.log("💳 Stripe payment completed for audit:", auditId);
-
-    /* ---------- MARK AUDIT AS PAID ---------- */
-    const { error: updateError } = await supabase
-      .from("lease_audits")
-      .update({
-        status: "paid",
-        stripe_session_id: stripeSessionId,
-      })
-      .eq("id", auditId);
-
-    if (updateError) {
-      console.error("❌ Failed to mark audit as paid:", updateError);
+    if (!auditId) {
+      console.error("❌ Missing auditId in Stripe metadata");
     } else {
-      console.log("✅ Audit marked as paid:", auditId);
+      console.log("💳 Stripe payment completed for audit:", auditId);
 
-      /* ---------- FETCH ANALYSIS ---------- */
-      const { data, error: fetchError } = await supabase
+      /* ---------- MARK AUDIT AS PAID ---------- */
+      const { error: updateError } = await supabase
         .from("lease_audits")
-        .select("analysis")
-        .eq("id", auditId)
-        .single();
+        .update({
+          status: "paid",
+          stripe_session_id: stripeSessionId,
+        })
+        .eq("id", auditId);
 
-      if (fetchError || !data?.analysis) {
-        console.error("❌ Missing analysis for paid audit:", auditId);
+      if (updateError) {
+        console.error("❌ Failed to mark audit as paid:", updateError);
       } else {
-        try {
-          /* ---------- GENERATE PDF ---------- */
-          console.log("🧠 Generating audit PDF…");
-          const pdfBytes = await generateAuditPdf(data.analysis);
+        console.log("✅ Audit marked as paid:", auditId);
 
-          console.log("📄 PDF generated", {
-  byteLength: pdfBytes?.length,
-  type: pdfBytes?.constructor?.name,
-});
-          const pdfPath = `${auditId}.pdf`;
+        /* ---------- FETCH ANALYSIS ---------- */
+        const { data, error: fetchError } = await supabase
+          .from("lease_audits")
+          .select("analysis")
+          .eq("id", auditId)
+          .single();
 
-          /* ---------- UPLOAD PDF ---------- */
-          const { error: uploadError } = await supabase.storage
-            .from("leases")
-            .upload(pdfPath, pdfBytes, {
-              contentType: "application/pdf",
-              upsert: true,
+        if (fetchError || !data?.analysis) {
+          console.error("❌ Missing analysis for paid audit:", auditId);
+        } else {
+          try {
+            /* ---------- GENERATE PDF ---------- */
+            console.log("🧠 Generating audit PDF…");
+
+            const pdfBytes = await generateAuditPdf(data.analysis);
+
+            console.log("📄 PDF generated", {
+              exists: !!pdfBytes,
+              byteLength: pdfBytes?.length,
+              type: pdfBytes?.constructor?.name,
             });
 
-          if (uploadError) {
-            console.error("❌ Failed to upload audit PDF:", uploadError);
-          } else {
-            console.log("📄 Audit PDF uploaded:", pdfPath);
+            if (!pdfBytes || pdfBytes.length === 0) {
+              console.error("❌ PDF generation returned empty output");
+              return;
+            }
 
-            /* ---------- SAVE PDF PATH (OPTIONAL BUT CLEAN) ---------- */
+            const pdfPath = `${auditId}.pdf`;
+
+            /* ---------- UPLOAD PDF ---------- */
+            console.log("☁️ Uploading PDF to Supabase Storage", {
+              bucket: "leases",
+              path: pdfPath,
+              bytes: pdfBytes.length,
+            });
+
+            const { data: uploadData, error: uploadError } =
+              await supabase.storage
+                .from("leases")
+                .upload(pdfPath, pdfBytes, {
+                  contentType: "application/pdf",
+                  upsert: true,
+                });
+
+            if (uploadError) {
+              console.error("❌ Failed to upload audit PDF:", uploadError);
+              return;
+            }
+
+            console.log("✅ Audit PDF uploaded successfully", uploadData);
+
+            /* ---------- SAVE PDF PATH ---------- */
             const { error: pathError } = await supabase
               .from("lease_audits")
-              .update({
-                object_path: pdfPath,
-              })
+              .update({ object_path: pdfPath })
               .eq("id", auditId);
 
             if (pathError) {
               console.error("⚠️ Failed to save PDF path:", pathError);
             }
+          } catch (pdfErr) {
+            console.error("❌ PDF generation/upload failed:", pdfErr);
           }
-        } catch (pdfErr) {
-          console.error("❌ PDF generation/upload failed:", pdfErr);
         }
       }
     }
   }
-}
 
-/* ---------- ALWAYS ACK STRIPE ---------- */
-ctx.response.status = 200;
-ctx.response.body = { received: true };
+  /* ---------- ALWAYS ACK STRIPE ---------- */
+  ctx.response.status = 200;
+  ctx.response.body = { received: true };
 });
+
+export default router;
