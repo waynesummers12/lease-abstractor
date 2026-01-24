@@ -1,5 +1,5 @@
 // lib/audit/runAuditPipeline.ts
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseBrowser } from "@/lib/supabase/browser";
 import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
 
@@ -29,12 +29,12 @@ export async function runAuditPipeline(
     /* ---------- 2. UPLOAD PDF ---------- */
     const objectPath = `leases/${auditId}.pdf`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("leases")
-      .upload(objectPath, file, {
-        contentType: "application/pdf",
-        upsert: true,
-      });
+    const { error: uploadError } = await supabaseBrowser.storage
+  .from("leases")
+  .upload(objectPath, file, {
+    contentType: "application/pdf",
+    upsert: true,
+  });
 
     if (uploadError) {
       return {
