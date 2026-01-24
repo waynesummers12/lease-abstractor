@@ -45,14 +45,15 @@ router.post("/stripe/webhook", async (ctx) => {
 
     console.log("💳 Payment complete for audit:", auditId);
 
-    /* ---------- MARK PAID ---------- */
-    await supabase
-      .from("lease_audits")
-      .update({
-        status: "paid",
-        stripe_session_id: session.id,
-      })
-      .eq("id", auditId);
+    /* ---------- MARK PAID (INITIAL) ---------- */
+await supabase
+  .from("lease_audits")
+  .update({
+    status: "paid",
+    stripe_session_id: session.id,
+    paid_at: new Date().toISOString(),
+  })
+  .eq("id", auditId);
 
     /* ---------- FETCH ANALYSIS ---------- */
     const { data } = await supabase
