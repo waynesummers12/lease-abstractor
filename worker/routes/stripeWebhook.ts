@@ -33,73 +33,86 @@ router.post("/stripe/webhook", async (ctx) => {
     return;
   }
 
-  /* ------------------------------------------------------------
-     HANDLE PAYMENT SUCCESS
-  ------------------------------------------------------------- */
+/* ------------------------------------------------------------
+   HANDLE PAYMENT SUCCESS
+------------------------------------------------------------- */
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+if (event.type === "checkout.session.completed") {
+  const session = event.data.object as Stripe.Checkout.Session;
 
-    const auditId = session.metadata?.auditId;
-    const stripeSessionId = session.id;
+  const auditId = session.metadata?.auditId;
+  const stripeSessionId = session.id;
 
-    if (!auditId) {
-      console.error("❌ Missing auditId in Stripe metadata");
+  if (!auditId) {
+    console.error("❌ Missing auditId in Stripe metadata");
+  } else {
+    console.log("💳 Stripe payment completed for audit:", auditId);
+
+    /* ---------- MARK AUDIT AS PAID ---------- */
+    const { error: updateError } = await supabase
+      .from("lease_audits")
+      .update({
+        status: "paid",
+        stripe_session_id: stripeSessionId,
+      })
+      .eq("id", auditId);
+
+    if (updateError) {
+      console.error("❌ Failed to mark audit as paid:", updateError);
     } else {
-      const pdfPath = `leases/${auditId}.pdf`;
+      console.log("✅ Audit marked as paid:", auditId);
 
-      /* ---------- MARK AUDIT AS PAID ---------- */
-      const { error: updateError } = await supabase
+      /* ---------- FETCH ANALYSIS ---------- */
+      const { data, error: fetchError } = await supabase
         .from("lease_audits")
-        .update({
-          status: "paid",
-          stripe_session_id: stripeSessionId,
-          object_path: pdfPath,
-        })
-        .eq("id", auditId);
+        .select("analysis")
+        .eq("id", auditId)
+        .single();
 
-      if (updateError) {
-        console.error("❌ Failed to mark audit as paid:", updateError);
+      if (fetchError || !data?.analysis) {
+        console.error("❌ Missing analysis for paid audit:", auditId);
       } else {
-        console.log("✅ Audit marked as paid:", auditId);
+        try {
+          /* ---------- GENERATE PDF ---------- */
+          console.log("🧠 Generating audit PDF…");
+          const pdfBytes = await generateAuditPdf(data.analysis);
 
-        /* ---------- FETCH ANALYSIS ---------- */
-        const { data, error: fetchError } = await supabase
-          .from("lease_audits")
-          .select("analysis")
-          .eq("id", auditId)
-          .single();
+          const pdfPath = `leases/${auditId}.pdf`;
 
-        if (fetchError || !data?.analysis) {
-          console.error("❌ Missing analysis for paid audit:", auditId);
-        } else {
-          try {
-            /* ---------- GENERATE PDF ---------- */
-            const pdfBytes = await generateAuditPdf(data.analysis);
+          /* ---------- UPLOAD PDF ---------- */
+          const { error: uploadError } = await supabase.storage
+            .from("leases")
+            .upload(pdfPath, pdfBytes, {
+              contentType: "application/pdf",
+              upsert: true,
+            });
 
-            /* ---------- UPLOAD PDF ---------- */
-            const { error: uploadError } = await supabase.storage
-              .from("leases")
-              .upload(pdfPath, pdfBytes, {
-                contentType: "application/pdf",
-                upsert: true,
-              });
+          if (uploadError) {
+            console.error("❌ Failed to upload audit PDF:", uploadError);
+          } else {
+            console.log("📄 Audit PDF uploaded:", pdfPath);
 
-            if (uploadError) {
-              console.error("❌ Failed to upload audit PDF:", uploadError);
-            } else {
-              console.log("📄 Audit PDF generated + uploaded:", pdfPath);
+            /* ---------- SAVE PDF PATH (OPTIONAL BUT CLEAN) ---------- */
+            const { error: pathError } = await supabase
+              .from("lease_audits")
+              .update({
+                object_path: pdfPath,
+              })
+              .eq("id", auditId);
+
+            if (pathError) {
+              console.error("⚠️ Failed to save PDF path:", pathError);
             }
-          } catch (pdfErr) {
-            console.error("❌ Failed during PDF generation:", pdfErr);
           }
+        } catch (pdfErr) {
+          console.error("❌ PDF generation/upload failed:", pdfErr);
         }
       }
     }
   }
+}
 
-  ctx.response.status = 200;
-  ctx.response.body = { received: true };
+/* ---------- ALWAYS ACK STRIPE ---------- */
+ctx.response.status = 200;
+ctx.response.body = { received: true };
 });
-
-export default router;
