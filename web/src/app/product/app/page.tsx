@@ -243,82 +243,21 @@ export default function HomePage() {
     }
   }
 
-  /* ---------- RENDER ---------- */
+  /* ---------- RENDER (VISIBILITY TEST) ---------- */
   return (
-    <div style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-      <div className="p-4 text-red-600 font-bold">
-        UPLOAD SECTION SHOULD BE HERE
-      </div>
-<div
-        style={{
-          marginBottom: 24,
-          padding: 20,
-          border: "1px dashed #ccc",
-          borderRadius: 8,
-        }}
-      >
-        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>
-          Upload Your Lease
-        </h2>
-
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          style={{ marginBottom: 12 }}
-        />
-
-        <br />
-
-        <button
-          onClick={handleUploadAndAnalyze}
-          disabled={!file}
-          style={{
-            padding: "10px 16px",
-            background: file ? "#2563eb" : "#94a3b8",
-            color: "#fff",
-            borderRadius: 6,
-            border: "none",
-            cursor: file ? "pointer" : "not-allowed",
-          }}
-        >
-          Upload & Analyze Lease
-        </button>
-
-        {status && (
-          <p style={{ marginTop: 12, fontStyle: "italic" }}>{status}</p>
-        )}
-      </div>
-
-      {totalAvoidableExposure != null && (
-        <section
-          style={{
-            marginBottom: 24,
-            padding: 20,
-            borderRadius: 10,
-            border: "2px solid #16a34a",
-            background: "#f0fdf4",
-          }}
-        >
-          <div ref={resultsRef} />
-
-          <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-            Estimated Avoidable Exposure (Next 12 Months)
-          </div>
-
-          <div style={{ fontSize: 34, fontWeight: 900 }}>
-            💰 ${totalAvoidableExposure.toLocaleString()}
-          </div>
-
-          <p style={{ marginTop: 6 }}>
-            Based on your lease terms, you may be able to recover up to{" "}
-            <strong>
-              ${totalAvoidableExposure.toLocaleString()}
-            </strong>{" "}
-            in CAM / NNN.
-          </p>
-        </section>
-      )}
+    <div
+      style={{
+        position: "fixed",
+        top: 120,
+        left: 20,
+        zIndex: 99999,
+        background: "red",
+        color: "white",
+        padding: 40,
+        fontSize: 24,
+      }}
+    >
+      🔥 UPLOAD UI IS RENDERING 🔥
     </div>
   );
 }
