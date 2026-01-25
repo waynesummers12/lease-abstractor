@@ -17,21 +17,28 @@ export async function runAuditPipeline(
   const auditId = crypto.randomUUID();
 
   try {
-    /* ---------- 1. CREATE AUDIT ---------- */
-    const createRes = await fetch("/api/audits", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ auditId }),
-    });
+    /* ---------- 1. RUN AUDIT PIPELINE ---------- */
+const createRes = await fetch(
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/run`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+    },
+    body: JSON.stringify({ auditId }),
+  }
+);
 
-    if (!createRes.ok) {
-      return {
-        success: false,
-        status: "failed",
-        auditId,
-        error: await createRes.text(),
-      };
-    }
+if (!createRes.ok) {
+  return {
+    success: false,
+    status: "failed",
+    auditId,
+    error: await createRes.text(),
+  };
+}
+
 
     /* ---------- 2. UPLOAD PDF ---------- */
     const objectPath = `leases/${auditId}.pdf`;
