@@ -730,3 +730,9 @@ return (
     </main>
   );
 }
+
+const sectionTitle: React.CSSProperties = {
+  fontSize: 20,
+  fontWeight: 700,
+  marginBottom: 16,
+};
