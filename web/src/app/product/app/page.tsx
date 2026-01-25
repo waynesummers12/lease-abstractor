@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
+import { supabaseBrowser } from "@/lib/supabase/browser";
 
 /* ---------- TYPES (MATCH BACKEND) ---------- */
 
@@ -118,21 +119,33 @@ async function handleUploadAndAnalyze() {
   setStatus("Uploading lease…");
   setResult(null);
 
-  const result = await runAuditPipeline(file);
+  try {
+    const result = await runAuditPipeline(
+      file,
+      supabaseBrowser // ✅ REQUIRED
+    );
 
-if (!result.success) {
-  setStatus(result.error);
-  return;
+    if (!result.success) {
+      setStatus(result.error ?? "Analysis failed");
+      return;
+    }
+
+    if (!result.auditId) {
+      setStatus("Audit creation failed — missing audit ID.");
+      return;
+    }
+
+    // ✅ REQUIRED STATE UPDATES
+    setAuditId(result.auditId);
+    setAnalysis(result.analysis);
+
+    setStatus("Analysis complete");
+  } catch (err: any) {
+    console.error("Analyze failed:", err);
+    setStatus(err?.message ?? "Unexpected error");
+  }
 }
 
-if (!result.auditId) {
-  setStatus("Audit creation failed — missing audit ID.");
-  return;
-}
-
-setAuditId(result.auditId); // ✅ THIS WAS MISSING
-
-const analysis = result.analysis;
 
 
   // 🔥 Yellow box
