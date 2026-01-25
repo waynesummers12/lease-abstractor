@@ -2,18 +2,32 @@
 import { sleep } from "./utils";
 import { fetchAnalysis } from "./fetchAnalysis";
 
+type AuditByIdResponse = {
+  analysis: any | null;
+  signedUrl: string | null;
+};
+
 export async function waitForAnalysis(
   auditId: string,
   {
-    maxRetries = 3,
-    delayMs = 750,
+    maxRetries = 10,
+    delayMs = 1500,
   }: { maxRetries?: number; delayMs?: number } = {}
-) {
+): Promise<AuditByIdResponse | null> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    const analysis = await fetchAnalysis(auditId);
+    try {
+      const result = await fetchAnalysis(auditId);
 
-    if (analysis) {
-      return analysis;
+      // ✅ Analysis is ready
+      if (result?.analysis) {
+        return result;
+      }
+    } catch (err) {
+      // Swallow transient errors (404s during early pipeline)
+      console.warn(
+        `waitForAnalysis attempt ${attempt} failed, retrying…`,
+        err
+      );
     }
 
     if (attempt < maxRetries) {
