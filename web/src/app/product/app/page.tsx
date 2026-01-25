@@ -109,6 +109,7 @@ const cardStyle: React.CSSProperties = {
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
+  console.log("🔥 HomePage component is executing");
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
@@ -288,7 +289,7 @@ export default function HomePage() {
           <p style={{ marginTop: 12, fontStyle: "italic" }}>{status}</p>
         )}
       </div>
-      
+
       {totalAvoidableExposure != null && (
         <section
           style={{
