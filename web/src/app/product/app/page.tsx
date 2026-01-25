@@ -245,6 +245,9 @@ export default function HomePage() {
 
   /* ---------- RENDER ---------- */
   return (
+    <div className="p-4 text-red-600 font-bold">
+  UPLOAD SECTION SHOULD BE HERE
+</div>
     <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
       {totalAvoidableExposure != null && (
         <section
