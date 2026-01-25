@@ -168,27 +168,31 @@ async function handleUploadAndAnalyze() {
       return;
     }
 
-    // 3️⃣ Run pipeline using EXISTING auditId
-    setStatus("Uploading lease…");
+try {
+  // 3️⃣ Run pipeline using EXISTING auditId
+  setStatus("Uploading lease…");
+  setResult(null);
 
-    const res = await runAuditPipeline(
-      file,
-      supabaseBrowser,
-      newAuditId // 🔑 pass it explicitly
-    );
+  const res = await runAuditPipeline(
+    file,
+    supabaseBrowser,
+    newAuditId // 🔑 explicitly pass auditId
+  );
 
-    if (!res.success || !res.analysis) {
-      setStatus(res.error ?? "Analysis failed");
-      return;
-    }
-
-    setResult({ success: true, analysis: res.analysis });
-    setHasAnalyzedInSession(true);
-    setStatus("Analysis complete ✅");
-  } catch (err: any) {
-    console.error("Analyze failed:", err);
-    setStatus(err?.message ?? "Unexpected error");
+  if (!res.success || !res.analysis) {
+    setStatus(res.error ?? "Analysis failed");
+    return;
   }
+
+  setAuditId(newAuditId);
+  setResult({ success: true, analysis: res.analysis });
+  setHasAnalyzedInSession(true);
+  setStatus("Analysis complete ✅");
+} catch (err: any) {
+  console.error("Analyze failed:", err);
+  setStatus(err?.message ?? "Unexpected error");
+}
+
 
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {

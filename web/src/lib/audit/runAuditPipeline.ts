@@ -9,11 +9,8 @@ type RunMode = "create";
 export async function runAuditPipeline(
   file: File,
   supabase: SupabaseClient,
-  mode: RunMode = "create"
+  auditId: string
 ): Promise<AuditPipelineResult> {
-  if (mode !== "create") {
-    throw new Error("runAuditPipeline can only be used for initial audit creation");
-  }
 
   const auditId = crypto.randomUUID();
   const objectPath = `leases/${auditId}.pdf`;
