@@ -704,10 +704,11 @@ return (
     </div>
   </div>
 </section>
+        </>
+      )}
   </main>
-  );
+);
 }
-
 
 /* ---------- UI HELPERS ---------- */
 
