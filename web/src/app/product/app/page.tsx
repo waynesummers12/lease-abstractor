@@ -699,11 +699,9 @@ return (
     </ul>
 
     <div style={{ fontStyle: "italic", color: "#4b5563" }}>
-      <p>One-time, tenant-first audit designed to pay for itself many times over.</p>
-    </div>
-</section>
-        </>
-        )}
+  One-time, tenant-first audit designed to pay for itself many times over.
+</div>
+
   </main>
 );
 
