@@ -189,8 +189,6 @@ async function handleUploadAndAnalyze() {
     console.error("Analyze failed:", err);
     setStatus(err?.message ?? "Unexpected error");
   }
-}
-
 
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
