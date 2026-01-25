@@ -682,33 +682,27 @@ return (
 </button>
 
   <div style={{ marginTop: 12, fontSize: 12, color: "#374151" }}>
-    <strong>Why $249.99?</strong>
+  <strong>Why $249.99?</strong>
 
-    <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
-      <li>
-        Comparable CAM / NNN audits typically cost{" "}
-        <strong>$1,500–$5,000+</strong>
-      </li>
-      <li>
-        Tenants frequently recover{" "}
-        <strong>$5,000–$50,000+</strong> from overcharges
-      </li>
-      <li>
-        One missed audit window can lock in years of unrecoverable costs
-      </li>
-    </ul>
+  <ul style={{ paddingLeft: 16, marginTop: 6, marginBottom: 8 }}>
+    <li>
+      Comparable CAM / NNN audits typically cost{" "}
+      <strong>$1,500–$5,000+</strong>
+    </li>
+    <li>
+      Tenants frequently recover{" "}
+      <strong>$5,000–$50,000+</strong> from overcharges
+    </li>
+    <li>
+      One missed audit window can lock in years of unrecoverable costs
+    </li>
+  </ul>
 
-    <div style={{ fontStyle: "italic", color: "#4b5563" }}>
-  One-time, tenant-first audit designed to pay for itself many times over.
-</div>
+  <div style={{ fontStyle: "italic", color: "#4b5563" }}>
+    One-time, tenant-first audit designed to pay for itself many times over.
+  </div>
 </div>
 </section>
-        </>
-      )}
-
-  </main>
-);
-}
 
 /* ---------- UI HELPERS ---------- */
 
