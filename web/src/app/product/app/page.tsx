@@ -703,7 +703,7 @@ return (
       One-time, tenant-first audit designed to pay for itself many times over.
     </div>
   </div>
-    )}
+    `{'}'}`
   </main>
 );
 
