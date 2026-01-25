@@ -272,6 +272,10 @@ export default function HomePage() {
 
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+    <div style={{ marginBottom: 24 }}>
+      <strong>Upload UI will go here</strong>
+    </div>
+
     {totalAvoidableExposure != null && (
       <section
         style={{
@@ -298,4 +302,3 @@ return (
     )}
   </main>
 );
-}
