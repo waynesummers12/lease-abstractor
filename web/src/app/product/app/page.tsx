@@ -168,8 +168,6 @@ async function handleUploadAndAnalyze() {
   }
 }
 
-
-
   // 🔥 Yellow box
   setTotalAvoidableExposure(analysis?.avoidable_exposure ?? null);
 
@@ -250,11 +248,10 @@ async function handleCheckout() {
   }
 }
 
-
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
-{totalAvoidableExposure != null && (
+{totalAvoidableExposure !== null && (
   <section
     style={{
       marginBottom: 24,
@@ -333,7 +330,8 @@ return (
           fontWeight: 500,
         }}
       >
-        <strong>Risk level:</strong> {exposureRiskLabel.toUpperCase()}
+        <strong>Risk level:</strong>{" "}
+        {exposureRiskLabel.toUpperCase()}
       </div>
     )}
 
@@ -348,6 +346,7 @@ return (
       }}
     >
       <strong>How this estimate was calculated:</strong>
+
       <ul style={{ marginTop: 6, paddingLeft: 18 }}>
         <li>
           CAM / NNN charges flagged as{" "}
