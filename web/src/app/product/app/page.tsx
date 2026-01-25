@@ -260,6 +260,13 @@ export default function HomePage() {
         fontSize: 24,
       }}
     >
+      return (
+  <div style={{ padding: 32 }}>
+    <h1 style={{ fontSize: 24, fontWeight: 700 }}>
+      Upload UI will go here
+    </h1>
+  </div>
+);
       🔥 UPLOAD UI IS RENDERING 🔥
     </div>
   );
