@@ -143,34 +143,54 @@ export default function HomePage() {
     selectedAudit ??
     (result?.success ? result.analysis ?? null : null);
 
-  /* ---------- UPLOAD + ANALYZE ---------- */
-  async function handleUploadAndAnalyze() {
-    if (!file) return;
+/* ---------- UPLOAD + ANALYZE ---------- */
+async function handleUploadAndAnalyze() {
+  if (!file) return;
 
-    setStatus("Uploading lease…");
-    setResult(null);
+  setStatus("Preparing audit…");
+  setResult(null);
 
-    try {
-      const res = await runAuditPipeline(file, supabaseBrowser);
+  // 1️⃣ Generate auditId FIRST
+  const newAuditId = crypto.randomUUID();
+  setAuditId(newAuditId);
 
-      if (!res.success || !res.analysis) {
-        setStatus(res.error ?? "Analysis failed");
-        return;
-      }
+  try {
+    // 2️⃣ Create audit row (THIS WAS MISSING)
+    const createRes = await fetch("/api/audits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ auditId: newAuditId }),
+    });
 
-      if (!res.auditId) {
-        setStatus("Audit creation failed — missing audit ID.");
-        return;
-      }
-
-      setAuditId(res.auditId);
-      setResult({ success: true, analysis: res.analysis });
-      setHasAnalyzedInSession(true);
-      setStatus("Analysis complete ✅");
-    } catch (err: any) {
-      console.error("Analyze failed:", err);
-      setStatus(err?.message ?? "Unexpected error");
+    if (!createRes.ok) {
+      const err = await createRes.json();
+      setStatus(err?.error ?? "Failed to initialize audit");
+      return;
     }
+
+    // 3️⃣ Run pipeline using EXISTING auditId
+    setStatus("Uploading lease…");
+
+    const res = await runAuditPipeline(
+      file,
+      supabaseBrowser,
+      newAuditId // 🔑 pass it explicitly
+    );
+
+    if (!res.success || !res.analysis) {
+      setStatus(res.error ?? "Analysis failed");
+      return;
+    }
+
+    setResult({ success: true, analysis: res.analysis });
+    setHasAnalyzedInSession(true);
+    setStatus("Analysis complete ✅");
+  } catch (err: any) {
+    console.error("Analyze failed:", err);
+    setStatus(err?.message ?? "Unexpected error");
+  }
+}
+
 
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
