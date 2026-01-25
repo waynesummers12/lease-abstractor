@@ -170,7 +170,6 @@ export default function HomePage() {
       setStatus(err?.message ?? "Unexpected error");
     }
 
-
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
     if (!analysis) return;
@@ -245,45 +244,44 @@ export default function HomePage() {
 
   /* ---------- RENDER ---------- */
   return (
-    <>
+    <div style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
       <div className="p-4 text-red-600 font-bold">
         UPLOAD SECTION SHOULD BE HERE
       </div>
 
-      <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-        {totalAvoidableExposure != null && (
-          <section
-            style={{
-              marginBottom: 24,
-              padding: 20,
-              borderRadius: 10,
-              border: "2px solid #16a34a",
-              background: "#f0fdf4",
-            }}
-          >
-            <div ref={resultsRef} />
+      {totalAvoidableExposure != null && (
+        <section
+          style={{
+            marginBottom: 24,
+            padding: 20,
+            borderRadius: 10,
+            border: "2px solid #16a34a",
+            background: "#f0fdf4",
+          }}
+        >
+          <div ref={resultsRef} />
 
-            <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-              Estimated Avoidable Exposure (Next 12 Months)
-            </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
+            Estimated Avoidable Exposure (Next 12 Months)
+          </div>
 
-            <div style={{ fontSize: 34, fontWeight: 900 }}>
-              💰 ${totalAvoidableExposure.toLocaleString()}
-            </div>
+          <div style={{ fontSize: 34, fontWeight: 900 }}>
+            💰 ${totalAvoidableExposure.toLocaleString()}
+          </div>
 
-            <p style={{ marginTop: 6 }}>
-              Based on your lease terms, you may be able to recover up to{" "}
-              <strong>
-                ${totalAvoidableExposure.toLocaleString()}
-              </strong>{" "}
-              in CAM / NNN.
-            </p>
-          </section>
-        )}
-      </main>
-    </>
+          <p style={{ marginTop: 6 }}>
+            Based on your lease terms, you may be able to recover up to{" "}
+            <strong>
+              ${totalAvoidableExposure.toLocaleString()}
+            </strong>{" "}
+            in CAM / NNN.
+          </p>
+        </section>
+      )}
+    </div>
   );
 }
+
 
 
 return (
