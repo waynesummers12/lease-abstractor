@@ -298,6 +298,24 @@ return (
           Based on your lease terms, you may be able to recover up to{" "}
           <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
         </p>
+        <div style={{ marginBottom: 24 }}>
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+  />
+
+  <button
+    onClick={handleUploadAndAnalyze}
+    disabled={!file}
+    style={{ marginLeft: 12 }}
+  >
+    Upload & Analyze
+  </button>
+
+  {status && <p>{status}</p>}
+</div>
+
       </section>
     )}
   </main>
