@@ -121,6 +121,14 @@ export default function HomePage() {
   const [hasAnalyzedInSession, setHasAnalyzedInSession] =
     useState(false);
 
+  // 🔥 Yellow box state
+  const [totalAvoidableExposure, setTotalAvoidableExposure] =
+    useState<number | null>(null);
+  const [exposureRange, setExposureRange] =
+    useState<{ low: number; high: number } | null>(null);
+  const [exposureRiskLabel, setExposureRiskLabel] =
+    useState<string | null>(null);
+
   // Stripe
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
