@@ -272,8 +272,26 @@ export default function HomePage() {
 
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
+    <div style={{ marginBottom: 24, fontWeight: 600 }}>
+      Upload UI will go here
+    </div>
+
     <div style={{ marginBottom: 24 }}>
-      <strong>Upload UI will go here</strong>
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+      />
+
+      <button
+        onClick={handleUploadAndAnalyze}
+        disabled={!file}
+        style={{ marginLeft: 12 }}
+      >
+        Upload & Analyze
+      </button>
+
+      {status && <p style={{ marginTop: 8 }}>{status}</p>}
     </div>
 
     {totalAvoidableExposure != null && (
@@ -298,24 +316,6 @@ return (
           Based on your lease terms, you may be able to recover up to{" "}
           <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
         </p>
-        <div style={{ marginBottom: 24 }}>
-  <input
-    type="file"
-    accept=".pdf"
-    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-  />
-
-  <button
-    onClick={handleUploadAndAnalyze}
-    disabled={!file}
-    style={{ marginLeft: 12 }}
-  >
-    Upload & Analyze
-  </button>
-
-  {status && <p>{status}</p>}
-</div>
-
       </section>
     )}
   </main>
