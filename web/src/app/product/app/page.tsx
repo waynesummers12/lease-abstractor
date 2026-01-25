@@ -533,7 +533,6 @@ return (
       : null
   }
 />
-
           </section>
 
           {/* ---------- CAM / NNN ---------- */}
@@ -702,10 +701,9 @@ return (
     <div style={{ fontStyle: "italic", color: "#4b5563" }}>
       One-time, tenant-first audit designed to pay for itself many times over.
     </div>
-  </div>
 </section>
         </>
-      )}
+        )}
   </main>
 );
 
