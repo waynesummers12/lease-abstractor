@@ -264,40 +264,56 @@ return (
       }}
     >
   💰 ${totalAvoidableExposure.toLocaleString()}
-</div>
-    <p
+<div
   style={{
-    marginTop: 6,
-    marginBottom: 8,
-    fontSize: 14,
-    color: "#14532d",
-    fontWeight: 500,
+    marginBottom: 24,
+    padding: 20,
+    borderRadius: 10,
+    border: "2px solid #16a34a",
+    background: "#f0fdf4",
   }}
 >
-  <p>
-  Based on your lease terms, you may be able to recover up to{" "}
-  <strong>
-    ${totalAvoidableExposure.toLocaleString()}
-  </strong>{" "}
-  in CAM / NNN.
-</p>
-
-{exposureRange && (
   <div
     style={{
-      marginTop: 4,
-      marginBottom: 8,
-      fontSize: 13,
-      color: "#166534",
+      fontSize: 18,
+      fontWeight: 700,
+      color: "#14532d",
+      marginBottom: 6,
     }}
   >
-    Estimated recovery range:{" "}
-    <strong>
-      ${exposureRange.low.toLocaleString()} – $
-      {exposureRange.high.toLocaleString()}
-    </strong>
+    💰 ${totalAvoidableExposure.toLocaleString()}
   </div>
-)}
+
+  <p
+    style={{
+      marginTop: 6,
+      marginBottom: 8,
+      fontSize: 14,
+      color: "#14532d",
+      fontWeight: 500,
+    }}
+  >
+    Based on your lease terms, you may be able to recover up to{" "}
+    <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
+  </p>
+
+  {exposureRange && (
+    <div
+      style={{
+        marginTop: 4,
+        fontSize: 13,
+        color: "#166534",
+      }}
+    >
+      Estimated recovery range:{" "}
+      <strong>
+        ${exposureRange.low.toLocaleString()} – $
+        {exposureRange.high.toLocaleString()}
+      </strong>
+    </div>
+  )}
+</div>
+
 
     {exposureRiskLabel && (
   <div
