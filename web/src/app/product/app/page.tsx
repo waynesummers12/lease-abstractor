@@ -169,7 +169,7 @@ export default function HomePage() {
       console.error("Analyze failed:", err);
       setStatus(err?.message ?? "Unexpected error");
     }
-  }
+    
 
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
