@@ -727,9 +727,3 @@ const cardStyle: React.CSSProperties = {
   border: "1px solid #ddd",
   borderRadius: 8,
 };
-
-const sectionTitle: React.CSSProperties = {
-  fontSize: 20,
-  fontWeight: 600,
-  marginBottom: 12,
-};
