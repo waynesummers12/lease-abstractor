@@ -274,9 +274,12 @@ return (
     fontWeight: 500,
   }}
 >
+  <p>
   Based on your lease terms, you may be able to recover up to{" "}
-  <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
-  overcharges over the next 12 months.
+  <strong>
+    ${totalAvoidableExposure.toLocaleString()}
+  </strong>{" "}
+  in CAM / NNN.
 </p>
 
 {exposureRange && (
