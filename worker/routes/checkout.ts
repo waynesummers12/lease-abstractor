@@ -20,25 +20,39 @@ const router = new Router({ prefix: "/checkout" });
 router.post("/create", async (ctx) => {
   try {
     /* --------------------------------------------------
-       PARSE BODY (Oak-safe)
-    -------------------------------------------------- */
-    const body = await ctx.request.body({ type: "json" }).value;
-    const { auditId } = body ?? {};
+   PARSE BODY (Oak v12 SAFE + HARDENED)
+-------------------------------------------------- */
+const bodyValue = await ctx.request.body({ type: "json" }).value;
 
-    const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
-    const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+if (!bodyValue || typeof bodyValue !== "object") {
+  ctx.response.status = 400;
+  ctx.response.body = { error: "Invalid JSON body" };
+  return;
+}
 
-    if (!auditId) {
-      ctx.response.status = 400;
-      ctx.response.body = { error: "auditId is required" };
-      return;
-    }
+const auditId = (bodyValue as { auditId?: string }).auditId;
 
-    if (!STRIPE_PRICE_STARTER) {
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
-      return;
-    }
+const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
+const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+
+/* ---------- HARD FAILS (NO SILENT STRIPE ERRORS) ---------- */
+if (!auditId || typeof auditId !== "string") {
+  ctx.response.status = 400;
+  ctx.response.body = { error: "auditId is required" };
+  return;
+}
+
+if (!STRIPE_PRICE_STARTER) {
+  ctx.response.status = 500;
+  ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
+  return;
+}
+
+/* ---------- DEBUG (TEMP — REMOVE AFTER CONFIRM) ---------- */
+console.log("🧾 Creating checkout for auditId:", auditId);
+console.log("💵 Stripe price:", STRIPE_PRICE_STARTER);
+console.log("🌐 Base URL:", baseUrl);
+
 
     /* --------------------------------------------------
        ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
