@@ -169,7 +169,7 @@ export default function HomePage() {
       console.error("Analyze failed:", err);
       setStatus(err?.message ?? "Unexpected error");
     }
-    
+
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
     if (!analysis) return;
@@ -248,7 +248,47 @@ export default function HomePage() {
       <div className="p-4 text-red-600 font-bold">
         UPLOAD SECTION SHOULD BE HERE
       </div>
+<div
+        style={{
+          marginBottom: 24,
+          padding: 20,
+          border: "1px dashed #ccc",
+          borderRadius: 8,
+        }}
+      >
+        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>
+          Upload Your Lease
+        </h2>
 
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          style={{ marginBottom: 12 }}
+        />
+
+        <br />
+
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
+          style={{
+            padding: "10px 16px",
+            background: file ? "#2563eb" : "#94a3b8",
+            color: "#fff",
+            borderRadius: 6,
+            border: "none",
+            cursor: file ? "pointer" : "not-allowed",
+          }}
+        >
+          Upload & Analyze Lease
+        </button>
+
+        {status && (
+          <p style={{ marginTop: 12, fontStyle: "italic" }}>{status}</p>
+        )}
+      </div>
+      
       {totalAvoidableExposure != null && (
         <section
           style={{
@@ -281,8 +321,6 @@ export default function HomePage() {
     </div>
   );
 }
-
-
 
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
