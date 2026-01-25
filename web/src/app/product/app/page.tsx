@@ -110,9 +110,7 @@ const cardStyle: React.CSSProperties = {
 
 export default function HomePage() {
   console.log("🔥 HomePage component is executing");
-  useEffect(() => {
-  document.body.style.background = "red";
-}, []);
+
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [result, setResult] = useState<ApiResult | null>(null);
