@@ -232,17 +232,17 @@ async function handleCheckout() {
 return (
   <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
 
-    {totalAvoidableExposure != null && (
+{totalAvoidableExposure != null && (
   <section
-  style={{
-    marginBottom: 24,
-    padding: 20,
-    borderRadius: 10,
-    border: "2px solid #16a34a",
-    background: "#f0fdf4",
-  }}
->
-{/* Scroll anchor for sticky header */}
+    style={{
+      marginBottom: 24,
+      padding: 20,
+      borderRadius: 10,
+      border: "2px solid #16a34a",
+      background: "#f0fdf4",
+    }}
+  >
+    {/* Scroll anchor for sticky header */}
     <div ref={resultsRef} style={{ scrollMarginTop: 120 }} />
 
     <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
@@ -263,149 +263,87 @@ return (
             : "#166534",
       }}
     >
-  💰 ${totalAvoidableExposure.toLocaleString()}
-<div
-  style={{
-    marginBottom: 24,
-    padding: 20,
-    borderRadius: 10,
-    border: "2px solid #16a34a",
-    background: "#f0fdf4",
-  }}
->
-  <div
-    style={{
-      fontSize: 18,
-      fontWeight: 700,
-      color: "#14532d",
-      marginBottom: 6,
-    }}
-  >
-    💰 ${totalAvoidableExposure.toLocaleString()}
-  </div>
+      💰 ${totalAvoidableExposure.toLocaleString()}
+    </div>
 
-  <p
-    style={{
-      marginTop: 6,
-      marginBottom: 8,
-      fontSize: 14,
-      color: "#14532d",
-      fontWeight: 500,
-    }}
-  >
-    Based on your lease terms, you may be able to recover up to{" "}
-    <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
-  </p>
-
-  {exposureRange && (
-    <div
+    <p
       style={{
-        marginTop: 4,
-        fontSize: 13,
-        color: "#166534",
+        marginTop: 6,
+        marginBottom: 8,
+        fontSize: 14,
+        color: "#14532d",
+        fontWeight: 500,
       }}
     >
-      Estimated recovery range:{" "}
-      <strong>
-        ${exposureRange.low.toLocaleString()} – $
-        {exposureRange.high.toLocaleString()}
-      </strong>
-    </div>
-  )}
-</div>
+      Based on your lease terms, you may be able to recover up to{" "}
+      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
+    </p>
 
+    {exposureRange && (
+      <div style={{ fontSize: 13, color: "#166534", marginBottom: 12 }}>
+        Estimated recovery range:{" "}
+        <strong>
+          ${exposureRange.low.toLocaleString()} – $
+          {exposureRange.high.toLocaleString()}
+        </strong>
+      </div>
+    )}
 
     {exposureRiskLabel && (
-  <div
-    style={{
-      display: "inline-flex",
-      flexDirection: "column",
-      gap: 6,
-      marginTop: 8,
-      padding: "8px 10px",
-      borderRadius: 8,
-      background:
-        exposureRiskLabel === "high"
-          ? "#fee2e2"
-          : exposureRiskLabel === "medium"
-          ? "#fef3c7"
-          : "#dcfce7",
-      color:
-        exposureRiskLabel === "high"
-          ? "#991b1b"
-          : exposureRiskLabel === "medium"
-          ? "#92400e"
-          : "#166534",
-      fontSize: 13,
-      fontWeight: 500,
-    }}
-  >
-    <div style={{ fontWeight: 700 }}>
-      Risk level: {exposureRiskLabel.toUpperCase()}
+      <div
+        style={{
+          marginTop: 10,
+          padding: "8px 10px",
+          borderRadius: 8,
+          background:
+            exposureRiskLabel === "high"
+              ? "#fee2e2"
+              : exposureRiskLabel === "medium"
+              ? "#fef3c7"
+              : "#dcfce7",
+          color:
+            exposureRiskLabel === "high"
+              ? "#991b1b"
+              : exposureRiskLabel === "medium"
+              ? "#92400e"
+              : "#166534",
+          fontSize: 13,
+          fontWeight: 500,
+        }}
+      >
+        <strong>Risk level:</strong> {exposureRiskLabel.toUpperCase()}
+      </div>
+    )}
+
+    <div
+      style={{
+        marginTop: 12,
+        paddingTop: 10,
+        borderTop: "1px dashed #bbf7d0",
+        fontSize: 12,
+        color: "#166534",
+        lineHeight: 1.5,
+      }}
+    >
+      <strong>How this estimate was calculated:</strong>
+      <ul style={{ marginTop: 6, paddingLeft: 18 }}>
+        <li>
+          CAM / NNN charges flagged as{" "}
+          <strong>uncapped, ambiguous, or escalating</strong>
+        </li>
+        <li>
+          Conservative dollar ranges extracted from lease language
+        </li>
+        <li>
+          Annualized impact based on rent and reconciliation rules
+        </li>
+      </ul>
+
+      <div style={{ fontStyle: "italic", marginTop: 6 }}>
+        Final recovery depends on lease interpretation, audit rights, and timing.
+      </div>
     </div>
-
-    {exposureRiskLabel === "high" && (
-      <div>
-        Significant CAM / NNN exposure detected. Immediate review is recommended
-        before reconciliation or audit deadlines expire.
-      </div>
-    )}
-
-    {exposureRiskLabel === "medium" && (
-      <div>
-        Material overcharge risk identified. A focused audit could recover
-        meaningful dollars.
-      </div>
-    )}
-
-    {exposureRiskLabel === "low" && (
-      <div>
-        Lower-risk findings, but review may still yield savings depending on lease
-        interpretation.
-      </div>
-    )}
-
-    <div style={{ marginTop: 4, fontSize: 12, opacity: 0.9 }}>
-      ⏱️ Most commercial leases require CAM / NNN disputes within{" "}
-      <strong>30–120 days</strong> of reconciliation. Missing this window often
-      waives recovery rights.
-    </div>
-  </div>
-)}
-<div
-  style={{
-    marginTop: 12,
-    paddingTop: 10,
-    borderTop: "1px dashed #bbf7d0",
-    fontSize: 12,
-    color: "#166534",
-    lineHeight: 1.5,
-  }}
->
-  <section>
-  <strong>How this estimate was calculated:</strong>
-
-  <ul style={{ marginTop: 6, paddingLeft: 18 }}>
-    <li>
-      CAM / NNN charges flagged as{" "}
-      <strong>uncapped, ambiguous, or escalating</strong>
-    </li>
-    <li>
-      Conservative dollar ranges extracted from lease language (not worst-case)
-    </li>
-    <li>
-      Annualized impact based on current rent and reconciliation rules
-    </li>
-  </ul>
-
-  <div style={{ marginTop: 6, fontStyle: "italic" }}>
-    Final recovery depends on lease interpretation, audit rights, and timing.
-  </div>
-
-  <div style={{ fontSize: 12, marginTop: 6, color: "#166534" }}>
-    Conservative estimate based on identified CAM / NNN risks
-  </div>
-</section>
+  </section>
 )}
       
       {/* ---------- AUDIT HISTORY ---------- */}
