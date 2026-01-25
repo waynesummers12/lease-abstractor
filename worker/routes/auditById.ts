@@ -11,35 +11,70 @@ console.log("✅ auditById route file loaded");
 router.get("/auditById/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
 
-  console.log("🔥 auditById hit:", auditId);
+  console.log("🔥 auditById hit");
+  console.log("➡️ auditId param:", auditId);
 
   if (!auditId) {
+    console.error("❌ Missing auditId param");
     ctx.response.status = 400;
     ctx.response.body = { error: "auditId required" };
     return;
   }
 
+  console.log("🔎 Querying lease_audits for:", auditId);
+
   const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select("status, analysis, audit_pdf_path")
+    .select("id, status, analysis, audit_pdf_path")
     .eq("id", auditId)
     .maybeSingle();
 
-  if (error || !audit) {
+  if (error) {
+    console.error("❌ Supabase error:", error);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Database error" };
+    return;
+  }
+
+  if (!audit) {
+    console.warn("⚠️ Audit not found:", auditId);
     ctx.response.status = 404;
     ctx.response.body = { error: "Audit not found" };
     return;
   }
 
+  console.log("✅ Audit found:", {
+    id: audit.id,
+    status: audit.status,
+    hasAnalysis: !!audit.analysis,
+    audit_pdf_path: audit.audit_pdf_path,
+  });
+
   let signedUrl: string | null = null;
 
-  // Only expose PDF AFTER payment + generation
+  /* --------------------------------------------------
+     ONLY expose PDF if generation is COMPLETE
+  -------------------------------------------------- */
   if (audit.status === "complete" && audit.audit_pdf_path) {
-    const { data } = await supabase.storage
+    console.log("📄 Creating signed URL for PDF:", audit.audit_pdf_path);
+
+    const { data, error: signedError } = await supabase.storage
       .from("audit-pdfs")
       .createSignedUrl(audit.audit_pdf_path, 60 * 60);
 
-    signedUrl = data?.signedUrl ?? null;
+    if (signedError) {
+      console.error("❌ Signed URL error:", signedError);
+    } else {
+      signedUrl = data?.signedUrl ?? null;
+      console.log("🔗 Signed URL created:", !!signedUrl);
+    }
+  } else {
+    console.log(
+      "ℹ️ PDF not available yet. status =",
+      audit.status,
+      "path =",
+      audit.audit_pdf_path
+    );
   }
 
   ctx.response.status = 200;
@@ -49,6 +84,8 @@ router.get("/auditById/:auditId", async (ctx) => {
       : null,
     signedUrl,
   };
+
+  console.log("✅ auditById response sent");
 });
 
 export default router;
