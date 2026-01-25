@@ -83,7 +83,29 @@ function parseDollarAmount(value: string): number | null {
 
   return isMonthly ? amount * 12 : amount;
 }
+/* ---------- UI HELPERS ---------- */
 
+function Field({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | null | undefined;
+}) {
+  return (
+    <div style={{ display: "flex", marginBottom: 8 }}>
+      <strong style={{ width: 220 }}>{label}:</strong>
+      <span>{value ?? "—"}</span>
+    </div>
+  );
+}
+
+const cardStyle: React.CSSProperties = {
+  marginTop: 24,
+  padding: 20,
+  border: "1px solid #ddd",
+  borderRadius: 8,
+};
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
@@ -704,26 +726,4 @@ return (
 </div>
 </section>
 
-/* ---------- UI HELPERS ---------- */
 
-function Field({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number | null | undefined;
-}) {
-  return (
-    <div style={{ display: "flex", marginBottom: 8 }}>
-      <strong style={{ width: 220 }}>{label}:</strong>
-      <span>{value ?? "—"}</span>
-    </div>
-  );
-}
-
-const cardStyle: React.CSSProperties = {
-  marginTop: 24,
-  padding: 20,
-  border: "1px solid #ddd",
-  borderRadius: 8,
-};
