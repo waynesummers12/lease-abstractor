@@ -2,8 +2,9 @@
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-type RunMode = "create"; // explicit by design
+type RunMode = "create";
 
 export async function runAuditPipeline(
   file: File,
@@ -15,37 +16,10 @@ export async function runAuditPipeline(
   }
 
   const auditId = crypto.randomUUID();
+  const objectPath = `leases/${auditId}.pdf`;
 
   try {
-    /* ---------- 1. RUN AUDIT PIPELINE ---------- */
-await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-lease-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-    },
-    body: JSON.stringify({
-      objectPath,
-      auditId,
-    }),
-  }
-);
-
-if (!createRes.ok) {
-  return {
-    success: false,
-    status: "failed",
-    auditId,
-    error: await createRes.text(),
-  };
-}
-
-
-    /* ---------- 2. UPLOAD PDF ---------- */
-    const objectPath = `leases/${auditId}.pdf`;
-
+    /* ---------- 1. UPLOAD PDF ---------- */
     const { error: uploadError } = await supabaseBrowser.storage
       .from("leases")
       .upload(objectPath, file, {
@@ -62,12 +36,21 @@ if (!createRes.ok) {
       };
     }
 
-        /* ---------- 3. INGEST (ONE-TIME ONLY) ---------- */
-    const ingestRes = await fetch("/api/ingest/lease/pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ auditId, objectPath }),
-    });
+    /* ---------- 2. INGEST VIA WORKER ---------- */
+    const ingestRes = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-lease-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: JSON.stringify({
+          auditId,
+          objectPath,
+        }),
+      }
+    );
 
     if (!ingestRes.ok) {
       return {
@@ -78,7 +61,7 @@ if (!createRes.ok) {
       };
     }
 
-    /* ---------- 4. WAIT FOR ANALYSIS ---------- */
+    /* ---------- 3. WAIT FOR ANALYSIS ---------- */
     const analysis = await waitForAnalysis(auditId);
 
     if (!analysis) {
@@ -90,7 +73,7 @@ if (!createRes.ok) {
       };
     }
 
-    /* ---------- 5. SUCCESS ---------- */
+    /* ---------- 4. SUCCESS ---------- */
     return {
       success: true,
       status: "analysis_ready",
