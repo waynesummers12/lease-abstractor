@@ -18,15 +18,18 @@ export async function runAuditPipeline(
 
   try {
     /* ---------- 1. RUN AUDIT PIPELINE ---------- */
-const createRes = await fetch(
-  `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/run`,
+await fetch(
+  `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
   {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+      "x-lease-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
     },
-    body: JSON.stringify({ auditId }),
+    body: JSON.stringify({
+      objectPath,
+      auditId,
+    }),
   }
 );
 
@@ -59,7 +62,7 @@ if (!createRes.ok) {
       };
     }
 
-    /* ---------- 3. INGEST (ONE-TIME ONLY) ---------- */
+        /* ---------- 3. INGEST (ONE-TIME ONLY) ---------- */
     const ingestRes = await fetch("/api/ingest/lease/pdf", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
