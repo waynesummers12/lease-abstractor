@@ -2,9 +2,9 @@
 
 import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/* ---------- TYPES (MATCH BACKEND) ---------- */
+/* ---------- TYPES ---------- */
 
 type Analysis = {
   tenant: string | null;
@@ -13,7 +13,6 @@ type Analysis = {
   lease_start: string | null;
   lease_end: string | null;
   term_months: number | null;
-
   rent: {
     base_rent: number | null;
     frequency: "monthly" | "annual" | null;
@@ -21,13 +20,11 @@ type Analysis = {
     escalation_value: number | null;
     escalation_interval: "annual" | null;
   };
-
   rent_schedule?: {
     year: number;
     annual_rent: number;
     monthly_rent: number;
   }[];
-
   cam_nnn?: {
     monthly_amount: number | null;
     annual_amount: number | null;
@@ -39,7 +36,6 @@ type Analysis = {
     cam_cap_percent: number | null;
     escalation_exposure: number | null;
   };
-
   health?: {
     score: number;
     flags: {
@@ -50,166 +46,113 @@ type Analysis = {
       estimated_impact?: string;
     }[];
   };
+  avoidable_exposure?: number | null;
+  avoidable_exposure_range?: { low: number; high: number } | null;
+  risk_level?: string | null;
 };
 
-type ApiResult = {
-  success: boolean;
-  analysis?: Analysis;
+/* ---------- CONSTANTS ---------- */
+
+const formatMoney = (v: number | null | undefined) =>
+  v == null ? "—" : `$${v.toLocaleString()}`;
+
+const headerStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 8,
 };
 
-type AnalysisWithMeta = Analysis & {
-  created_at: string;
-};
-
-function parseDollarAmount(value: string): number | null {
-  if (!value) return null;
-
-  // Normalize
-  const text = value.toLowerCase().replace(/,/g, "");
-
-  // Detect monthly
-  const isMonthly = text.includes("month");
-
-  // Extract numbers like 5000, 5k, 15k
-  const matches = text.match(/(\d+(\.\d+)?)(k)?/g);
-  if (!matches || matches.length === 0) return null;
-
-  // Take the LOW end (conservative)
-  const raw = matches[0];
-  let amount = parseFloat(raw.replace("k", ""));
-  if (raw.includes("k")) amount *= 1000;
-
-  if (isNaN(amount)) return null;
-
-  return isMonthly ? amount * 12 : amount;
-}
-/* ---------- UI HELPERS ---------- */
-
-function Field({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number | null | undefined;
-}) {
-  return (
-    <div style={{ display: "flex", marginBottom: 8 }}>
-      <strong style={{ width: 220 }}>{label}:</strong>
-      <span>{value ?? "—"}</span>
-    </div>
-  );
-}
-
-const cardStyle: React.CSSProperties = {
-  marginTop: 24,
+const sectionStyle: React.CSSProperties = {
+  border: "1px solid #e2e8f0",
+  borderRadius: 12,
   padding: 20,
-  border: "1px solid #ddd",
-  borderRadius: 8,
 };
+
+const exposureBoxStyle: React.CSSProperties = {
+  border: "2px solid #16a34a",
+  background: "#f0fdf4",
+  borderRadius: 12,
+  padding: 16,
+  display: "flex",
+  flexDirection: "column",
+  gap: 6,
+};
+
+const buttonStyle: React.CSSProperties = {
+  color: "white",
+  border: "none",
+  padding: "10px 16px",
+  borderRadius: 8,
+  fontWeight: 600,
+};
+
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
-  console.log("🔥 HomePage component is executing");
-
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
-  const [result, setResult] = useState<ApiResult | null>(null);
-
-  // Audit selection + history hooks
-  const [selectedAudit, setSelectedAudit] =
-    useState<AnalysisWithMeta | null>(null);
-  const [auditHistory, setAuditHistory] =
-    useState<AnalysisWithMeta[]>([]);
-  const [hasAnalyzedInSession, setHasAnalyzedInSession] =
-    useState(false);
-
-  // 🔥 Yellow box state
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
     useState<number | null>(null);
   const [exposureRange, setExposureRange] =
     useState<{ low: number; high: number } | null>(null);
-  const [exposureRiskLabel, setExposureRiskLabel] =
-    useState<string | null>(null);
-
-  // Stripe
+  const [exposureRiskLabel, setExposureRiskLabel] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
 
-  // Scroll anchor
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
-  /* ---------- DERIVED ANALYSIS ---------- */
-  const analysis: Analysis | null =
-    selectedAudit ??
-    (result?.success ? result.analysis ?? null : null);
+  async function handleUploadAndAnalyze() {
+    if (!file) return;
+    setStatus("Preparing audit…");
+    setAnalysis(null);
 
-/* ---------- UPLOAD + ANALYZE ---------- */
-async function handleUploadAndAnalyze() {
-  if (!file) return;
+    const newAuditId = crypto.randomUUID();
+    setAuditId(newAuditId);
 
-  setStatus("Preparing audit…");
-  setResult(null);
+    try {
+      const createRes = await fetch("/api/audits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auditId: newAuditId }),
+      });
+      if (!createRes.ok) {
+        const err = await createRes.json();
+        setStatus(err?.error ?? "Failed to initialize audit");
+        return;
+      }
 
-  // 1️⃣ Generate auditId FIRST
-  const newAuditId = crypto.randomUUID();
-  setAuditId(newAuditId);
+      setStatus("Uploading lease…");
 
-  try {
-    // 2️⃣ Create audit row
-    const createRes = await fetch("/api/audits", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ auditId: newAuditId }),
-    });
+      const res = await runAuditPipeline(file, supabaseBrowser, newAuditId);
 
-    if (!createRes.ok) {
-      const err = await createRes.json();
-      setStatus(err?.error ?? "Failed to initialize audit");
-      return;
+      if (!res.success || !res.analysis) {
+        setStatus(res.error ?? "Analysis failed");
+        return;
+      }
+
+      setAnalysis(res.analysis);
+      setStatus("Analysis complete ✅");
+    } catch (err: any) {
+      console.error("Analyze failed:", err);
+      setStatus(err?.message ?? "Unexpected error");
     }
-
-    // 3️⃣ Run pipeline using EXISTING auditId
-    setStatus("Uploading lease…");
-
-    const res = await runAuditPipeline(
-      file,
-      supabaseBrowser,
-      newAuditId
-    );
-
-    if (!res.success || !res.analysis) {
-      setStatus(res.error ?? "Analysis failed");
-      return;
-    }
-
-    setResult({ success: true, analysis: res.analysis });
-    setHasAnalyzedInSession(true);
-    setStatus("Analysis complete ✅");
-  } catch (err: any) {
-    console.error("Analyze failed:", err);
-    setStatus(err?.message ?? "Unexpected error");
   }
-}
 
-  /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
-    if (!analysis) return;
+    if (!analysis) {
+      setTotalAvoidableExposure(null);
+      setExposureRange(null);
+      setExposureRiskLabel(null);
+      return;
+    }
 
-    setTotalAvoidableExposure(
-      (analysis as any).avoidable_exposure ?? null
-    );
-
-    setExposureRange(
-      (analysis as any).avoidable_exposure_range
-        ? {
-            low: (analysis as any).avoidable_exposure_range.low,
-            high: (analysis as any).avoidable_exposure_range.high,
-          }
-        : null
-    );
-
+    const exposure =
+      analysis.avoidable_exposure ?? analysis.cam_nnn?.total_exposure ?? null;
+    setTotalAvoidableExposure(exposure);
+    setExposureRange(analysis.avoidable_exposure_range ?? null);
     setExposureRiskLabel(
-      (analysis as any).risk_level?.toLowerCase() ?? null
+      analysis.risk_level ? analysis.risk_level.toLowerCase() : null
     );
 
     setTimeout(() => {
@@ -217,125 +160,202 @@ async function handleUploadAndAnalyze() {
     }, 100);
   }, [analysis]);
 
-  /* ---------- STRIPE CHECKOUT ---------- */
   async function handleCheckout() {
-    if (isCheckingOut) return;
-
-    if (!auditId) {
-      setStatus("Missing audit ID — please re-upload lease.");
-      return;
-    }
+    if (isCheckingOut || !auditId) return;
 
     setIsCheckingOut(true);
     setStatus("Redirecting to secure checkout…");
 
     try {
       if (analysis) {
-        sessionStorage.setItem(
-          "latest_analysis",
-          JSON.stringify(analysis)
-        );
+        sessionStorage.setItem("latest_analysis", JSON.stringify(analysis));
       }
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-Lease-Worker-Key":
-              process.env.NEXT_PUBLIC_WORKER_KEY!,
+            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
           },
           body: JSON.stringify({ auditId }),
         }
       );
 
       if (!res.ok) throw new Error(await res.text());
-
       const { url } = await res.json();
-      if (!url) throw new Error("Missing Stripe checkout URL");
-
+      if (!url) throw new Error("Missing checkout URL");
       window.location.href = url;
     } catch (err) {
-      console.error("❌ Checkout error:", err);
+      console.error("Checkout error:", err);
       setStatus("Checkout failed. Please try again.");
       setIsCheckingOut(false);
     }
   }
 
-  /* ---------- RENDER (VISIBILITY TEST) ---------- */
   return (
-    <div
+    <main
       style={{
-        position: "fixed",
-        top: 120,
-        left: 20,
-        zIndex: 99999,
-        background: "red",
-        color: "white",
-        padding: 40,
-        fontSize: 24,
+        padding: 32,
+        maxWidth: 960,
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: 24,
       }}
     >
-      return (
-  <div style={{ padding: 32 }}>
-    <h1 style={{ fontSize: 24, fontWeight: 700 }}>
-      Upload UI will go here
-    </h1>
-  </div>
-);
-      🔥 UPLOAD UI IS RENDERING 🔥
-    </div>
+      <header style={headerStyle}>
+        <p
+          style={{
+            fontSize: 12,
+            letterSpacing: 1,
+            textTransform: "uppercase",
+            color: "#475569",
+          }}
+        >
+          Lease audit
+        </p>
+        <h1 style={{ fontSize: 28, fontWeight: 800 }}>
+          Upload your lease and uncover avoidable CAM / NNN spend
+        </h1>
+        <p style={{ color: "#475569" }}>
+          We run your PDF through our audit pipeline and estimate what you
+          could recover in the next 12 months.
+        </p>
+      </header>
+
+      <section style={{ ...sectionStyle, display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+          <button
+            onClick={handleUploadAndAnalyze}
+            disabled={!file}
+            style={{
+              ...buttonStyle,
+              background: !file ? "#cbd5e1" : "#0f172a",
+              cursor: !file ? "not-allowed" : "pointer",
+            }}
+          >
+            Upload & Analyze
+          </button>
+        </div>
+        {status && <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>}
+      </section>
+
+      {analysis ? (
+        <section
+          ref={resultsRef}
+          style={{ ...sectionStyle, display: "grid", gridTemplateColumns: "1fr", gap: 16 }}
+        >
+          <div style={exposureBoxStyle}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
+              Estimated Avoidable Exposure (Next 12 Months)
+            </div>
+            <div style={{ fontSize: 34, fontWeight: 900 }}>
+              {totalAvoidableExposure != null
+                ? `💰 ${totalAvoidableExposure.toLocaleString()}`
+                : "Pending…"}
+            </div>
+            {exposureRange && (
+              <div style={{ color: "#166534" }}>
+                Range: {formatMoney(exposureRange.low)} - {formatMoney(exposureRange.high)}
+              </div>
+            )}
+            {exposureRiskLabel && (
+              <div style={{ color: "#166534", fontWeight: 600 }}>
+                Risk level: {exposureRiskLabel}
+              </div>
+            )}
+            <p style={{ marginTop: 4 }}>
+              Based on your lease terms, this is what you may be able to
+              recover in CAM / NNN overcharges.
+            </p>
+            <button
+              onClick={handleCheckout}
+              disabled={isCheckingOut}
+              style={{
+                ...buttonStyle,
+                background: "#0f172a",
+                cursor: isCheckingOut ? "not-allowed" : "pointer",
+                marginTop: 8,
+                alignSelf: "flex-start",
+              }}
+            >
+              {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
+            </button>
+          </div>
+
+          <div style={{ display: "grid", gap: 12 }}>
+            <div>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>Lease basics</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, fontSize: 14 }}>
+                <span>Tenant: {analysis.tenant ?? "—"}</span>
+                <span>Landlord: {analysis.landlord ?? "—"}</span>
+                <span>Premises: {analysis.premises ?? "—"}</span>
+                <span>Lease start: {analysis.lease_start ?? "—"}</span>
+                <span>Lease end: {analysis.lease_end ?? "—"}</span>
+                <span>Term (months): {analysis.term_months ?? "—"}</span>
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gap: 6,
+                  fontSize: 14,
+                }}
+              >
+                <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
+                <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
+                <span>
+                  Escalation: {analysis.rent?.escalation_type ?? "—"}{" "}
+                  {analysis.rent?.escalation_value ? `(${analysis.rent.escalation_value})` : ""}
+                </span>
+              </div>
+            </div>
+
+            {analysis.cam_nnn && (
+              <div>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>CAM / NNN</div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                    gap: 6,
+                    fontSize: 14,
+                  }}
+                >
+                  <span>Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}</span>
+                  <span>Annual: {formatMoney(analysis.cam_nnn.annual_amount)}</span>
+                  <span>Total exposure: {formatMoney(analysis.cam_nnn.total_exposure)}</span>
+                  <span>{analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}</span>
+                  <span>
+                    {analysis.cam_nnn.reconciliation ? "Reconciliation" : "No reconciliation"}
+                  </span>
+                  <span>{analysis.cam_nnn.includes_capex ? "Includes capex" : "Excludes capex"}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      ) : (
+        <section
+          style={{
+            ...sectionStyle,
+            border: "1px dashed #cbd5e1",
+            color: "#475569",
+          }}
+        >
+          No analysis yet. Upload a PDF to see your results.
+        </section>
+      )}
+    </main>
   );
 }
-
-return (
-  <main style={{ padding: 32, maxWidth: 900, margin: "0 auto" }}>
-    <div style={{ marginBottom: 24, fontWeight: 600 }}>
-      Upload UI will go here
-    </div>
-
-    <div style={{ marginBottom: 24 }}>
-      <input
-        type="file"
-        accept=".pdf"
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-      />
-
-      <button
-        onClick={handleUploadAndAnalyze}
-        disabled={!file}
-        style={{ marginLeft: 12 }}
-      >
-        Upload & Analyze
-      </button>
-
-      {status && <p style={{ marginTop: 8 }}>{status}</p>}
-    </div>
-
-    {totalAvoidableExposure != null && (
-      <section
-        style={{
-          marginBottom: 24,
-          padding: 20,
-          borderRadius: 10,
-          border: "2px solid #16a34a",
-          background: "#f0fdf4",
-        }}
-      >
-        <div style={{ fontSize: 14, fontWeight: 600, color: "#166534" }}>
-          Estimated Avoidable Exposure (Next 12 Months)
-        </div>
-
-        <div style={{ fontSize: 34, fontWeight: 900 }}>
-          💰 ${totalAvoidableExposure.toLocaleString()}
-        </div>
-
-        <p style={{ marginTop: 6 }}>
-          Based on your lease terms, you may be able to recover up to{" "}
-          <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN.
-        </p>
-      </section>
-    )}
-  </main>
-);
