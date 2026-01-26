@@ -6,7 +6,7 @@
 
   "imports": {
     "@oak/oak": "https://deno.land/x/oak@v12.6.1/mod.ts",
-    "pdf-parse": "npm:pdf-parse@^2.4.5",
+    "pdf-parse": "npm:pdf-parse@2.4.5",
     "stripe": "npm:stripe@20.2.0"
   },
 
@@ -19,5 +19,11 @@
   "fmt": {
     "useTabs": false,
     "lineWidth": 100
+  },
+
+  "tasks": {
+    "dev": "deno run --allow-net --allow-read --allow-env --env-file=.env main.ts"
   }
 }
+
+
