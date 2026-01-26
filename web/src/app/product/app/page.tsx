@@ -155,7 +155,7 @@ async function handleUploadAndAnalyze() {
   setAuditId(newAuditId);
 
   try {
-    // 2️⃣ Create audit row (THIS WAS MISSING)
+    // 2️⃣ Create audit row
     const createRes = await fetch("/api/audits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -168,31 +168,28 @@ async function handleUploadAndAnalyze() {
       return;
     }
 
-try {
-  // 3️⃣ Run pipeline using EXISTING auditId
-  setStatus("Uploading lease…");
-  setResult(null);
+    // 3️⃣ Run pipeline using EXISTING auditId
+    setStatus("Uploading lease…");
 
-  const res = await runAuditPipeline(
-    file,
-    supabaseBrowser,
-    newAuditId // 🔑 explicitly pass auditId
-  );
+    const res = await runAuditPipeline(
+      file,
+      supabaseBrowser,
+      newAuditId
+    );
 
-  if (!res.success || !res.analysis) {
-    setStatus(res.error ?? "Analysis failed");
-    return;
+    if (!res.success || !res.analysis) {
+      setStatus(res.error ?? "Analysis failed");
+      return;
+    }
+
+    setResult({ success: true, analysis: res.analysis });
+    setHasAnalyzedInSession(true);
+    setStatus("Analysis complete ✅");
+  } catch (err: any) {
+    console.error("Analyze failed:", err);
+    setStatus(err?.message ?? "Unexpected error");
   }
-
-  setAuditId(newAuditId);
-  setResult({ success: true, analysis: res.analysis });
-  setHasAnalyzedInSession(true);
-  setStatus("Analysis complete ✅");
-} catch (err: any) {
-  console.error("Analyze failed:", err);
-  setStatus(err?.message ?? "Unexpected error");
 }
-
 
   /* ---------- POST-ANALYSIS EFFECT ---------- */
   useEffect(() => {
