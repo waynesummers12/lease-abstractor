@@ -99,25 +99,37 @@ export async function generateAuditPdf(
   ) => wrapLines(text, size, maxWidth, useBold).length * lineHeight(size);
 
   const drawWrapped = (
-    text: string,
-    size: number,
-    x: number,
-    maxWidth: number,
-    color = black,
-    useBold = false
-  ) => {
-    const lines = wrapLines(text, size, maxWidth, useBold);
-    for (const line of lines) {
-      page.drawText(line, {
-        x,
-        y,
-        size,
-        font: useBold ? bold : font,
-        color,
-      });
-      y -= lineHeight(size);
-    }
-  };
+  text: string,
+  size: number,
+  x: number,
+  maxWidth: number,
+  color = black,
+  useBold = false,
+  startY?: number
+) => {
+  const lines = wrapLines(text, size, maxWidth, useBold);
+
+  // Use provided Y if given, otherwise fall back to global y
+  let cursorY = startY ?? y;
+
+  for (const line of lines) {
+    page.drawText(line, {
+      x,
+      y: cursorY,
+      size,
+      font: useBold ? bold : font,
+      color,
+    });
+
+    cursorY -= lineHeight(size);
+  }
+
+  // Only mutate global y if startY was NOT provided
+  if (startY === undefined) {
+    y = cursorY;
+  }
+};
+
 
   const ensureSpace = (requiredHeight: number) => {
     if (y - requiredHeight < 60) {
@@ -274,11 +286,21 @@ export async function generateAuditPdf(
   });
 
   y = detailsTop - detailPaddingTop;
-  for (const [label, value] of details) {
-    drawWrapped(label, 10, 52, labelWidth, gray, true);
-    drawWrapped(value, 12, 200, valueWidth);
-    y -= detailSpacing;
-  }
+
+for (const [label, value] of details) {
+  const rowStartY = y;
+
+  const labelHeight = measureHeight(label, 10, labelWidth, true);
+  const valueHeight = measureHeight(value, 12, valueWidth);
+
+  // Draw label and value at the SAME starting Y
+  drawWrapped(label, 10, 52, labelWidth, gray, true, rowStartY);
+  drawWrapped(value, 12, 200, valueWidth, black, false, rowStartY);
+
+  // Advance Y by the taller of the two
+  y = rowStartY - Math.max(labelHeight, valueHeight) - detailSpacing;
+}
+
 
   y = detailsTop - detailHeight - 10;
 
