@@ -7,7 +7,6 @@ import Link from "next/link";
 
 type Audit = {
   id: string;
-  lease_name: string | null;
   created_at: string;
   avoidable_exposure: number | null;
   signedUrl: string | null;
@@ -154,10 +153,7 @@ export default function DashboardPage() {
               }`}
             >
               <div className="font-medium">
-                {audit.lease_name ?? "Untitled Lease"}
-              </div>
-              <div className="text-xs text-gray-500">
-                {new Date(audit.created_at).toLocaleDateString()}
+              Audit {new Date(audit.created_at).toLocaleDateString()}
               </div>
               <div className="mt-1 text-xs text-gray-500">
                 Health {getHealthScore(audit)}
