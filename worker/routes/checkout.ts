@@ -32,8 +32,8 @@ if (!bodyValue || typeof bodyValue !== "object") {
 
 const auditId = (bodyValue as { auditId?: string }).auditId;
 
-const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
-const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+ const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
+ const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
 
 /* ---------- HARD FAILS (NO SILENT STRIPE ERRORS) ---------- */
 if (!auditId || typeof auditId !== "string") {
@@ -42,11 +42,17 @@ if (!auditId || typeof auditId !== "string") {
   return;
 }
 
-if (!STRIPE_PRICE_STARTER) {
-  ctx.response.status = 500;
-  ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
+if (!UUID_REGEX.test(auditId)) {
+  ctx.response.status = 400;
+  ctx.response.body = { error: "auditId must be a UUID" };
   return;
 }
+
+ if (!STRIPE_PRICE_STARTER) {
+   ctx.response.status = 500;
+   ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
+   return;
+ }
 
 /* ---------- DEBUG (TEMP — REMOVE AFTER CONFIRM) ---------- */
 console.log("🧾 Creating checkout for auditId:", auditId);
