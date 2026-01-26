@@ -143,7 +143,7 @@ console.log("🌐 Base URL:", baseUrl);
     ctx.response.status = 500;
     ctx.response.body = {
       error: "Checkout session failed",
-      detail: err?.message ?? String(err),
+      detail: (err instanceof Error ? err.message : String(err)),
     };
    }
 });
