@@ -3,9 +3,9 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { auditId: string } }
+  { params }: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await params;
 
   if (!auditId) {
     return NextResponse.json(
