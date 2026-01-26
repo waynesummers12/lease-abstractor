@@ -338,5 +338,4 @@ return (
       </section>
     )}
   </main>
-);
 }
