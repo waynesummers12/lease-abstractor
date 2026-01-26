@@ -63,12 +63,17 @@ console.log("🌐 Base URL:", baseUrl);
       .eq("id", auditId)
       .maybeSingle();
 
-if (selectError) {
-  console.error("❌ Database error details:", selectError.message, selectError.code, selectError.details);
-  ctx.response.status = 500;
-  ctx.response.body = { error: `Database error: ${selectError.message}` };
-  return;
-}
+    if (selectError) {
+      console.error("❌ Failed to check lease_audits row:", {
+        message: selectError.message,
+        code: selectError.code,
+        details: selectError.details,
+        hint: selectError.hint,
+      });
+      ctx.response.status = 500;
+      ctx.response.body = { error: `Database error: ${selectError.message}` };
+      return;
+    }
 
     if (!existingAudit) {
       const { error: insertError } = await supabase
@@ -81,9 +86,16 @@ if (selectError) {
         });
 
       if (insertError) {
-        console.error("❌ Failed to insert lease_audits row:", insertError);
+        console.error("❌ Failed to insert lease_audits row:", {
+          message: insertError.message,
+          code: insertError.code,
+          details: insertError.details,
+          hint: insertError.hint,
+        });
         ctx.response.status = 500;
-        ctx.response.body = { error: "Failed to initialize audit record" };
+        ctx.response.body = {
+          error: `Failed to initialize audit record: ${insertError.message}`,
+        };
         return;
       }
 
