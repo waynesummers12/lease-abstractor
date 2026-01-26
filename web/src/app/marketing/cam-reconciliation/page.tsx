@@ -38,11 +38,28 @@ export default function CamReconciliationPage() {
         <p className="mt-3 text-xs text-gray-600">
           🔒 Secure & private • No obligation • Takes 2–3 minutes
         </p>
+        <nav className="mt-4 text-sm text-gray-600 flex flex-wrap gap-x-4 gap-y-2">
+          <a href="#what-is-cam-reconciliation" className="hover:text-gray-900">
+            What is CAM Reconciliation
+          </a>
+          <a href="#common-cam-mistakes" className="hover:text-gray-900">
+            Common Mistakes
+          </a>
+          <a href="#how-much-cam-errors-cost" className="hover:text-gray-900">
+            How Much Errors Cost
+          </a>
+          <a href="#what-you-can-challenge" className="hover:text-gray-900">
+            What You Can Challenge
+          </a>
+          <a href="#audit-deadlines" className="hover:text-gray-900">
+            Audit Deadlines
+          </a>
+        </nav>
       </section>
         
       {/* ---------------- WHAT IS CAM ---------------- */}
       <section className="mb-14">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="what-is-cam-reconciliation" className="mb-3 text-2xl font-semibold">
           What Is CAM Reconciliation? (Plain English)
         </h2>
 
@@ -67,7 +84,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- WHY ERRORS ---------------- */}
       <section className="mb-14">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="common-cam-mistakes" className="mb-3 text-2xl font-semibold">
           Why CAM Reconciliation Errors Are So Common
         </h2>
 
@@ -91,7 +108,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COMMON MISTAKES ---------------- */}
       <section className="mb-14">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="how-much-cam-errors-cost" className="mb-3 text-2xl font-semibold">
           The Most Common CAM Reconciliation Mistakes
         </h2>
 
@@ -126,7 +143,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COST ---------------- */}
       <section className="mb-14">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="what-you-can-challenge" className="mb-3 text-2xl font-semibold">
           How Much CAM Errors Typically Cost Tenants
         </h2>
 
@@ -148,7 +165,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- WHAT CAN BE CHALLENGED ---------------- */}
       <section className="mb-14">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="what-you-can-challenge" className="mb-3 text-2xl font-semibold">
           What Tenants Can (and Can’t) Challenge
         </h2>
 
@@ -175,7 +192,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- AUDIT WINDOW ---------------- */}
       <section className="mb-16">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 id="audit-deadlines" className="mb-3 text-2xl font-semibold">
           Audit Windows Matter More Than Most Tenants Realize
         </h2>
 
