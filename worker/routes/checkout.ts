@@ -63,12 +63,12 @@ console.log("🌐 Base URL:", baseUrl);
       .eq("id", auditId)
       .maybeSingle();
 
-    if (selectError) {
-      console.error("❌ Failed to check lease_audits row:", selectError);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Database error" };
-      return;
-    }
+if (selectError) {
+  console.error("❌ Database error details:", selectError.message, selectError.code, selectError.details);
+  ctx.response.status = 500;
+  ctx.response.body = { error: `Database error: ${selectError.message}` };
+  return;
+}
 
     if (!existingAudit) {
       const { error: insertError } = await supabase
@@ -124,5 +124,6 @@ console.log("🌐 Base URL:", baseUrl);
     ctx.response.body = { error: "Checkout session failed" };
   }
 });
+
 
 export default router;
