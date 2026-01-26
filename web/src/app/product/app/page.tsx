@@ -175,9 +175,9 @@ export default function HomePage() {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-          },
+          "Content-Type": "application/json",
+          "x-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+         },
           body: JSON.stringify({ auditId }),
         }
       );
