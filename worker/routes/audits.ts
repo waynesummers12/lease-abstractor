@@ -18,7 +18,7 @@ router.get("/audits", async (ctx) => {
 
       if (audit.audit_pdf_path) {
         const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
-        const { data: signed, error: signError } = await supabase.storage
+        const { data: signed, error: _signError } = await supabase.storage
           .from("audit-pdfs")
           .createSignedUrl(objectPath, 60 * 60);
 
