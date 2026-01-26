@@ -37,10 +37,7 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}`,
-          { cache: "no-store" }
-        );
+        const res = await fetch(`/api/audits/${auditId}`, { cache: "no-store" });
 
         if (!res.ok) {
           setFatalError("Audit not found.");
