@@ -8,6 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 type AuditResponse = {
   status: "unpaid" | "paid" | "complete";
   audit_pdf_path?: string | null;
+  object_path?: string | null;
   analysis: {
     avoidable_exposure?: number;
     tenant?: string | null;
@@ -93,7 +94,8 @@ export default function SuccessPage() {
   /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
     if (!auditId) return;
-    if (!data?.audit_pdf_path) {
+    const pdfPath = data?.audit_pdf_path ?? data?.object_path;
+    if (!pdfPath) {
       alert("Your PDF is still being prepared. Please try again shortly.");
       return;
     }
@@ -153,7 +155,7 @@ export default function SuccessPage() {
 </pre>
 
   const riskLevel = deriveRiskLevel(data.analysis);
-  const pdfReady = !!data.audit_pdf_path;
+  const pdfReady = Boolean(data.audit_pdf_path || data.object_path);
 
   /* ---------- PAID BUT PROCESSING ---------- */
   if (data.status === "paid") {
