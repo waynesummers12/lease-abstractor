@@ -45,7 +45,7 @@ export async function generateAuditPdf(
 
   const black = rgb(0, 0, 0);
   const gray = rgb(0.45, 0.45, 0.45);
-  const lightGray = rgb(0.95, 0.95, 0.95);
+  const lightGray = rgb(0.97, 0.97, 0.97);
   const green = rgb(0.18, 0.6, 0.4);
   const amber = rgb(0.85, 0.65, 0.13);
   const red = rgb(0.75, 0.2, 0.2);
@@ -54,7 +54,7 @@ export async function generateAuditPdf(
      HELPERS
   ------------------------------------------------------------------- */
 
-  const newPageIfNeeded = (minY = 100) => {
+  const newPageIfNeeded = (minY = 120) => {
     if (y < minY) {
       page = pdf.addPage([612, 792]);
       y = 760;
@@ -75,29 +75,29 @@ export async function generateAuditPdf(
       font: isBold ? bold : font,
       color,
       maxWidth: 532,
-      lineHeight: size + 4,
+      lineHeight: size + 5,
     });
-    y -= size + 6;
+    y -= size + 8;
   };
 
   const drawSectionTitle = (text: string) => {
     newPageIfNeeded();
-    y -= 6;
-    drawText(text, 14, true);
-    y -= 4;
+    y -= 8;
+    drawText(text, 15, true);
+    y -= 8;
   };
 
   const drawCard = (height: number) => {
     page.drawRectangle({
       x: 36,
-      y: y - height + 12,
+      y: y - height + 14,
       width: 540,
       height,
-      borderColor: rgb(0.85, 0.85, 0.85),
-      borderWidth: 1,
+      borderColor: rgb(0.82, 0.82, 0.82),
+      borderWidth: 1.25,
       color: lightGray,
     });
-    y -= 16;
+    y -= 18;
   };
 
   const severityColor = (severity: string) => {
@@ -134,7 +134,7 @@ export async function generateAuditPdf(
   page.drawText("CAM / NNN Lease Audit Summary", {
     x: 40,
     y: 738,
-    size: 20,
+    size: 21,
     font: bold,
     color: rgb(1, 1, 1),
   });
@@ -170,13 +170,13 @@ export async function generateAuditPdf(
     drawText(`$${maxImpact}`, 28, true, 52, green);
     drawText(
       "Based on CAM escalation limits, excluded expenses, and allocation review.",
-      10,
+      11,
       false,
       52,
       gray
     );
 
-    y -= 12;
+    y -= 14;
   }
 
   /* ------------------------------------------------------------------
@@ -185,6 +185,7 @@ export async function generateAuditPdf(
 
   drawSectionTitle("Lease Details");
   drawCard(120);
+  y -= 2;
 
   const details = [
     ["Tenant", analysis.tenant ?? "Not specified"],
@@ -196,10 +197,10 @@ export async function generateAuditPdf(
 
   for (const [label, value] of details) {
     drawText(label, 10, true, 52, gray);
-    drawText(value, 11, false, 180);
+    drawText(value, 12, false, 200);
   }
 
-  y -= 8;
+  y -= 10;
 
   /* ------------------------------------------------------------------
      AUDIT FINDINGS
@@ -210,46 +211,52 @@ export async function generateAuditPdf(
   if (flags.length === 0) {
     drawText(
       "No material CAM or NNN risks were detected based on the extracted lease terms.",
-      11
+      11,
+      false,
+      40,
+      gray
     );
   }
 
   for (const flag of flags) {
-    newPageIfNeeded(160);
+    newPageIfNeeded(170);
 
     drawCard(110);
+    y -= 4;
 
-    drawText(flag.label, 12, true, 52);
+    drawText(flag.label, 13, true, 52);
 
     drawText(
       `Severity: ${flag.severity.toUpperCase()}`,
-      10,
+      11,
       true,
       52,
       severityColor(flag.severity)
     );
+    y -= 2;
 
-    drawText(flag.recommendation, 10, false, 52, gray);
+    drawText(flag.recommendation, 11, false, 52, gray);
 
     if (flag.estimated_impact !== undefined) {
+      y -= 2;
       drawText(
         `Estimated Financial Impact: ${flag.estimated_impact}`,
-        10,
+        11,
         true,
         52
       );
     }
 
-    y -= 6;
+    y -= 8;
   }
 
   /* ------------------------------------------------------------------
      FOOTER DISCLAIMER
   ------------------------------------------------------------------- */
 
-  newPageIfNeeded(120);
+  newPageIfNeeded(140);
 
-  y = 100;
+  y = 110;
 
   page.drawLine({
     start: { x: 40, y },
@@ -258,13 +265,13 @@ export async function generateAuditPdf(
     color: rgb(0.85, 0.85, 0.85),
   });
 
-  y -= 18;
+  y -= 20;
 
   drawText("Disclaimer", 11, true, 40, gray);
   drawText(
     "This audit is provided for informational purposes only and does not constitute legal advice. "
       + "Review findings with a qualified real estate or legal professional before taking action.",
-    9,
+    10,
     false,
     40,
     gray
