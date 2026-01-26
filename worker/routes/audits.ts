@@ -1,23 +1,34 @@
 // worker/routes/audits.ts
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { getPaidAudits } from "../utils/getPaidAudits.ts";
-import { createAuditPdfSignedUrl } from "../utils/createAuditPdfSignedUrl.ts";
+import { getLatestPaidAudit } from "../utils/getLatestPaidAudit.ts";
+import { supabase } from "../lib/supabase.ts";
 
 const router = new Router();
 
 /* --------------------------------------------------
-   GET ALL PAID AUDITS
+   GET ALL COMPLETE AUDITS
 -------------------------------------------------- */
 router.get("/audits", async (ctx) => {
   const audits = await getPaidAudits();
 
   const enriched = await Promise.all(
-    audits.map(async (audit) => ({
-      ...audit,
-      signedUrl: audit.pdf_path
-        ? await createAuditPdfSignedUrl(audit.pdf_path)
-        : null,
-    }))
+    audits.map(async (audit) => {
+      let signedUrl: string | null = null;
+
+      if (audit.audit_pdf_path) {
+        const { data } = await supabase.storage
+          .from("audit-pdfs")
+          .createSignedUrl(audit.audit_pdf_path, 60 * 60);
+        
+        signedUrl = data?.signedUrl ?? null;
+      }
+
+      return {
+        ...audit,
+        signedUrl,
+      };
+    })
   );
 
   ctx.response.status = 200;
@@ -25,28 +36,13 @@ router.get("/audits", async (ctx) => {
 });
 
 /* --------------------------------------------------
-   GET LATEST PAID AUDIT
+   GET LATEST COMPLETE AUDIT (with audit PDF)
 -------------------------------------------------- */
 router.get("/audit/latest", async (ctx) => {
-  const audits = await getPaidAudits();
-
-  if (!audits || audits.length === 0) {
-    ctx.response.status = 200;
-    ctx.response.body = { audit: null };
-    return;
-  }
-
-  const latest = audits[0];
+  const audit = await getLatestPaidAudit();
 
   ctx.response.status = 200;
-  ctx.response.body = {
-    audit: {
-      ...latest,
-      signedUrl: latest.pdf_path
-        ? await createAuditPdfSignedUrl(latest.pdf_path)
-        : null,
-    },
-  };
+  ctx.response.body = { audit };
 });
 
 export default router;
