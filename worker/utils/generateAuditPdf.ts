@@ -142,7 +142,7 @@ export async function generateAuditPdf(
     y: 720,
     width: 612,
     height: 72,
-    color: rgb(0.05, 0.05, 0.05),
+    color: lightGray,
   });
 
   page.drawText("SAVEONLEASE", {
@@ -150,7 +150,7 @@ export async function generateAuditPdf(
     y: 760,
     size: 12,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: gray,
   });
 
   page.drawText("CAM / NNN Lease Audit Summary", {
@@ -158,7 +158,7 @@ export async function generateAuditPdf(
     y: 738,
     size: 21,
     font: bold,
-    color: rgb(1, 1, 1),
+    color: black,
   });
 
   page.drawText("Automated Lease Risk & Cost Exposure Review", {
@@ -166,7 +166,14 @@ export async function generateAuditPdf(
     y: 716,
     size: 11,
     font,
-    color: rgb(0.85, 0.85, 0.85),
+    color: gray,
+  });
+
+  page.drawLine({
+    start: { x: 40, y: 704 },
+    end: { x: 572, y: 704 },
+    thickness: 1,
+    color: rgb(0.82, 0.82, 0.82),
   });
 
   y = 690;
