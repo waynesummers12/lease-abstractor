@@ -11,7 +11,24 @@ type AuditResponse = {
     avoidable_exposure?: number;
     tenant?: string | null;
     risk_level?: string | null;
+    health?: {
+      score?: number | null;
+    };
   } | null;
+};
+
+const deriveRiskLevel = (analysis: AuditResponse["analysis"]) => {
+  if (!analysis) return null;
+
+  if (analysis.risk_level) {
+    return analysis.risk_level.toUpperCase();
+  }
+
+  const score =
+    typeof analysis.health?.score === "number" ? analysis.health.score : null;
+
+  if (score === null) return null;
+  return score >= 75 ? "LOW" : score >= 50 ? "MEDIUM" : "HIGH";
 };
 
 /* ================= PAGE ================= */
@@ -125,7 +142,7 @@ export default function SuccessPage() {
   {JSON.stringify(data.analysis, null, 2)}
 </pre>
 
-  const riskLevel = data.analysis?.risk_level?.toUpperCase() ?? null;
+  const riskLevel = deriveRiskLevel(data.analysis);
 
   /* ---------- PAID BUT PROCESSING ---------- */
   if (data.status === "paid") {
