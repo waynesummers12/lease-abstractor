@@ -74,7 +74,7 @@ export default function SuccessPage() {
       setDownloading(true);
 
       const res = await fetch(
-        `/api/audits/${auditId}/download`,
+        `/api/download?auditId=${auditId}`,
         { cache: "no-store" }
       );
 
