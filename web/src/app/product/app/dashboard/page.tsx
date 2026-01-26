@@ -137,7 +137,7 @@ export default function DashboardPage() {
   return (
     <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
       {/* LEFT — HISTORY */}
-      <aside className="border-r pr-4">
+      <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
           Your Audits
         </h2>
@@ -170,9 +170,15 @@ export default function DashboardPage() {
       {/* RIGHT — DETAIL */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
-            Lease Audit Summary
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold">
+              Lease Audit Summary
+            </h1>
+            <span className="rounded bg-gray-100 px-2 py-1 text-xs">
+              Paid
+            </span>
+          </div>
+
           {selected && (
             <HealthBadge score={getHealthScore(selected)} />
           )}
@@ -180,7 +186,7 @@ export default function DashboardPage() {
 
         {selected && <StatusChips audit={selected} />}
 
-        <div className="rounded border p-6">
+        <div className="rounded border border-gray-200 p-6">
           <div className="text-sm text-gray-500">
             Estimated Avoidable Exposure
           </div>
