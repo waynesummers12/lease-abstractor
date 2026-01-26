@@ -164,7 +164,7 @@ export default function SuccessPage() {
 
       <div className="mt-8 space-y-3 text-sm">
         <button
-          onClick={() => router.push("/dashboard/audits")}
+          onClick={() => router.push("/product/app/dashboard")}
           className="block mx-auto underline text-gray-700"
         >
           View all audits
