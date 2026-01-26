@@ -4,15 +4,11 @@ import { waitForAnalysis } from "./waitForAnalysis";
 import type { AuditPipelineResult } from "./types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-type RunMode = "create";
-
 export async function runAuditPipeline(
   file: File,
   supabase: SupabaseClient,
   auditId: string
 ): Promise<AuditPipelineResult> {
-
-  const auditId = crypto.randomUUID();
   const objectPath = `leases/${auditId}.pdf`;
 
   try {
