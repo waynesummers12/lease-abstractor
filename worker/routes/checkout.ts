@@ -141,8 +141,11 @@ console.log("🌐 Base URL:", baseUrl);
   } catch (err) {
     console.error("❌ Stripe checkout error:", err);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Checkout session failed" };
-  }
+    ctx.response.body = {
+      error: "Checkout session failed",
+      detail: err?.message ?? String(err),
+    };
+   }
 });
 
 

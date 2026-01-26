@@ -31,7 +31,7 @@ app.use(async (ctx, next) => {
 
   ctx.response.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, X-Lease-Worker-Key, stripe-signature"
+    "Content-Type, X-Lease-Worker-Key, X-Worker-Key, x-worker-key, stripe-signature"
   );
 
   ctx.response.headers.set(
