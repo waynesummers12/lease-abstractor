@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 // worker/utils/pdf.ts
 import * as pdfjs from "https://esm.sh/pdfjs-dist@4.0.379/legacy/build/pdf.mjs";
 

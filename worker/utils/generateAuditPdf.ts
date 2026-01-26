@@ -37,104 +37,237 @@ export async function generateAuditPdf(
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
 
   let page = pdf.addPage([612, 792]); // US Letter
-  let y = 740;
+  let y = 760;
 
-  const drawLine = (
-    text: string,
-    size = 12,
-    isBold = false,
-    indent = 0
-  ) => {
-    page.drawText(text, {
-      x: 40 + indent,
-      y,
-      size,
-      font: isBold ? bold : font,
-      color: rgb(0, 0, 0),
-      maxWidth: 520 - indent,
-      lineHeight: size + 4,
-    });
-    y -= size + 8;
-  };
+  /* ------------------------------------------------------------------
+     COLORS
+  ------------------------------------------------------------------- */
 
-  const newPageIfNeeded = () => {
-    if (y < 80) {
+  const black = rgb(0, 0, 0);
+  const gray = rgb(0.45, 0.45, 0.45);
+  const lightGray = rgb(0.95, 0.95, 0.95);
+  const green = rgb(0.18, 0.6, 0.4);
+  const amber = rgb(0.85, 0.65, 0.13);
+  const red = rgb(0.75, 0.2, 0.2);
+
+  /* ------------------------------------------------------------------
+     HELPERS
+  ------------------------------------------------------------------- */
+
+  const newPageIfNeeded = (minY = 100) => {
+    if (y < minY) {
       page = pdf.addPage([612, 792]);
-      y = 740;
+      y = 760;
     }
   };
 
-  /* ================= TITLE ================= */
+  const drawText = (
+    text: string,
+    size = 11,
+    isBold = false,
+    x = 40,
+    color = black
+  ) => {
+    page.drawText(text, {
+      x,
+      y,
+      size,
+      font: isBold ? bold : font,
+      color,
+      maxWidth: 532,
+      lineHeight: size + 4,
+    });
+    y -= size + 6;
+  };
 
-  drawLine("CAM / NNN Lease Audit Summary", 20, true);
-  drawLine("Automated Lease Risk & Cost Exposure Review", 11);
-  y -= 10;
+  const drawSectionTitle = (text: string) => {
+    newPageIfNeeded();
+    y -= 6;
+    drawText(text, 14, true);
+    y -= 4;
+  };
 
-  drawLine("This report is generated from your lease agreement using automated analysis.", 10);
-  y -= 20;
+  const drawCard = (height: number) => {
+    page.drawRectangle({
+      x: 36,
+      y: y - height + 12,
+      width: 540,
+      height,
+      borderColor: rgb(0.85, 0.85, 0.85),
+      borderWidth: 1,
+      color: lightGray,
+    });
+    y -= 16;
+  };
 
-  /* ================= LEASE DETAILS ================= */
+  const severityColor = (severity: string) => {
+    switch (severity.toUpperCase()) {
+      case "HIGH":
+        return red;
+      case "MEDIUM":
+        return amber;
+      default:
+        return green;
+    }
+  };
 
-  drawLine("Lease Details", 14, true);
-  y -= 6;
+  /* ------------------------------------------------------------------
+     HEADER BAND
+  ------------------------------------------------------------------- */
 
-  drawLine(`Tenant: ${analysis.tenant ?? "Not specified"}`);
-  drawLine(`Landlord: ${analysis.landlord ?? "Not specified"}`);
-  drawLine(`Premises: ${analysis.premises ?? "Not specified"}`);
-  drawLine(`Lease Start Date: ${analysis.lease_start ?? "Not specified"}`);
-  drawLine(`Lease End Date: ${analysis.lease_end ?? "Not specified"}`);
+  page.drawRectangle({
+    x: 0,
+    y: 720,
+    width: 612,
+    height: 72,
+    color: rgb(0.05, 0.05, 0.05),
+  });
 
-  y -= 18;
+  page.drawText("SAVEONLEASE", {
+    x: 40,
+    y: 760,
+    size: 12,
+    font: bold,
+    color: rgb(1, 1, 1),
+  });
 
-  /* ================= FINDINGS ================= */
+  page.drawText("CAM / NNN Lease Audit Summary", {
+    x: 40,
+    y: 738,
+    size: 20,
+    font: bold,
+    color: rgb(1, 1, 1),
+  });
 
-  drawLine("Audit Findings", 14, true);
-  y -= 6;
+  page.drawText("Automated Lease Risk & Cost Exposure Review", {
+    x: 40,
+    y: 716,
+    size: 11,
+    font,
+    color: rgb(0.85, 0.85, 0.85),
+  });
+
+  y = 690;
+
+  /* ------------------------------------------------------------------
+     HERO SAVINGS CARD
+  ------------------------------------------------------------------- */
 
   const flags = analysis.health?.flags ?? [];
+  const impacts = flags
+    .map((f) => Number(f.estimated_impact))
+    .filter((v) => !isNaN(v));
+
+  const maxImpact =
+    impacts.length > 0
+      ? Math.max(...impacts).toLocaleString()
+      : null;
+
+  if (maxImpact) {
+    drawCard(92);
+
+    drawText("Estimated Annual Savings", 12, true, 52, gray);
+    drawText(`$${maxImpact}`, 28, true, 52, green);
+    drawText(
+      "Based on CAM escalation limits, excluded expenses, and allocation review.",
+      10,
+      false,
+      52,
+      gray
+    );
+
+    y -= 12;
+  }
+
+  /* ------------------------------------------------------------------
+     LEASE DETAILS CARD
+  ------------------------------------------------------------------- */
+
+  drawSectionTitle("Lease Details");
+  drawCard(120);
+
+  const details = [
+    ["Tenant", analysis.tenant ?? "Not specified"],
+    ["Landlord", analysis.landlord ?? "Not specified"],
+    ["Premises", analysis.premises ?? "Not specified"],
+    ["Lease Start", analysis.lease_start ?? "Not specified"],
+    ["Lease End", analysis.lease_end ?? "Not specified"],
+  ];
+
+  for (const [label, value] of details) {
+    drawText(label, 10, true, 52, gray);
+    drawText(value, 11, false, 180);
+  }
+
+  y -= 8;
+
+  /* ------------------------------------------------------------------
+     AUDIT FINDINGS
+  ------------------------------------------------------------------- */
+
+  drawSectionTitle("Audit Findings");
 
   if (flags.length === 0) {
-    drawLine(
+    drawText(
       "No material CAM or NNN risks were detected based on the extracted lease terms.",
       11
     );
   }
 
   for (const flag of flags) {
-    newPageIfNeeded();
+    newPageIfNeeded(160);
 
-    drawLine(`• ${flag.label}`, 12, true);
-    drawLine(`Severity: ${flag.severity.toUpperCase()}`, 10, false, 12);
+    drawCard(110);
 
-    drawLine(
-      flag.recommendation,
+    drawText(flag.label, 12, true, 52);
+
+    drawText(
+      `Severity: ${flag.severity.toUpperCase()}`,
       10,
-      false,
-      12
+      true,
+      52,
+      severityColor(flag.severity)
     );
 
+    drawText(flag.recommendation, 10, false, 52, gray);
+
     if (flag.estimated_impact !== undefined) {
-      drawLine(
+      drawText(
         `Estimated Financial Impact: ${flag.estimated_impact}`,
         10,
-        false,
-        12
+        true,
+        52
       );
     }
 
-    y -= 10;
+    y -= 6;
   }
 
-  /* ================= FOOTER ================= */
+  /* ------------------------------------------------------------------
+     FOOTER DISCLAIMER
+  ------------------------------------------------------------------- */
 
-  newPageIfNeeded();
-  y -= 20;
+  newPageIfNeeded(120);
 
-  drawLine("Disclaimer", 12, true);
-  drawLine(
+  y = 100;
+
+  page.drawLine({
+    start: { x: 40, y },
+    end: { x: 572, y },
+    thickness: 1,
+    color: rgb(0.85, 0.85, 0.85),
+  });
+
+  y -= 18;
+
+  drawText("Disclaimer", 11, true, 40, gray);
+  drawText(
     "This audit is provided for informational purposes only and does not constitute legal advice. "
-    + "Review findings with a qualified real estate or legal professional before taking action.",
-    9
+      + "Review findings with a qualified real estate or legal professional before taking action.",
+    9,
+    false,
+    40,
+    gray
   );
 
   return await pdf.save();
