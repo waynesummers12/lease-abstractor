@@ -10,9 +10,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -26,25 +24,22 @@ export default function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2">
-  <Image
-    src="/logo.png"
-    alt="SaveOnLease"
-    width={24}
-    height={44}
-    className="h-11 w-auto"
-    priority
-  />
-  <span className="text-lg font-light tracking-tight leading-none">
-    SaveOnLease
-  </span>
-</Link>
+          <Image
+            src="/logo.png"
+            alt="SaveOnLease"
+            width={24}
+            height={44}
+            className="h-11 w-auto"
+            priority
+          />
+          <span className="text-lg font-light tracking-tight leading-none">
+            SaveOnLease
+          </span>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link
-            href="/marketing/learn"
-            className="opacity-80 hover:opacity-100"
-          >
+          <Link href="/marketing/learn" className="opacity-80 hover:opacity-100">
             Learn
           </Link>
           <Link
@@ -59,10 +54,7 @@ export default function Header() {
           >
             How It Works
           </Link>
-          <Link
-            href="/marketing/pricing"
-            className="opacity-80 hover:opacity-100"
-          >
+          <Link href="/marketing/pricing" className="opacity-80 hover:opacity-100">
             Pricing
           </Link>
           <Link
@@ -92,10 +84,7 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden bg-black px-6 pb-4 text-white">
           <div className="flex flex-col gap-4 text-sm">
-            <Link
-              href="/marketing/learn"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/marketing/learn" onClick={() => setMenuOpen(false)}>
               Learn
             </Link>
             <Link
@@ -110,10 +99,7 @@ export default function Header() {
             >
               How It Works
             </Link>
-            <Link
-              href="/marketing/pricing"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
               Pricing
             </Link>
             <Link
@@ -132,6 +118,9 @@ export default function Header() {
           </div>
         </div>
       )}
+      <p className="mt-3 text-xs text-gray-600">
+        🔒 Secure & private • No obligation • Takes 2–3 minutes
+      </p>
     </header>
   );
 }
