@@ -171,7 +171,7 @@ export default function SuccessPage() {
         </button>
 
         <button
-          onClick={() => router.push("/product/app")}
+          onClick={() => router.push("/product/app/dashboard")}
           className="block mx-auto underline text-gray-500"
         >
           Return to app
