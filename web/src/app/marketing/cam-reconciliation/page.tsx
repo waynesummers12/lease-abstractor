@@ -228,6 +228,50 @@ export default function CamReconciliationPage() {
           🔒 Secure & private • No obligation • Takes 2–3 minutes
         </p>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Is CAM reconciliation required every year?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Most commercial leases require landlords to reconcile estimated CAM charges against actual expenses annually.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can tenants dispute CAM charges?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Often yes. Most leases allow tenants to dispute CAM charges, but only within the audit window defined in the lease.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How long do tenants have to audit CAM?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Audit windows are typically 30 to 90 days after receiving the CAM reconciliation, though the exact period depends on the lease.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is my lease information secure?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Lease uploads are private and reviewed securely.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
     </main>
   );
 }
