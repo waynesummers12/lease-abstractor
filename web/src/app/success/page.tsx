@@ -11,6 +11,7 @@ type AuditResponse = {
     avoidable_exposure?: number;
     tenant?: string | null;
     risk_level?: string | null;
+    health_score?: number | null;
     health?: {
       score?: number | null;
     };
@@ -25,7 +26,11 @@ const deriveRiskLevel = (analysis: AuditResponse["analysis"]) => {
   }
 
   const score =
-    typeof analysis.health?.score === "number" ? analysis.health.score : null;
+    typeof analysis.health_score === "number"
+      ? analysis.health_score
+      : typeof analysis.health?.score === "number"
+        ? analysis.health.score
+        : null;
 
   if (score === null) return null;
   return score >= 75 ? "LOW" : score >= 50 ? "MEDIUM" : "HIGH";
