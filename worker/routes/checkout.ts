@@ -6,6 +6,8 @@ import { supabase } from "../lib/supabase.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 const router = new Router({ prefix: "/checkout" });
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Create Stripe Checkout Session
