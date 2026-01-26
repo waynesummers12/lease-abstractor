@@ -151,13 +151,16 @@ export default function SuccessPage() {
         Your CAM / NNN Audit Summary is ready.
       </p>
 
-      {(riskLevel === "MEDIUM" || riskLevel === "HIGH") && (
+      {(riskLevel === "MEDIUM" ||
+  riskLevel === "HIGH" ||
+  typeof data.analysis?.avoidable_exposure === "number") && (
         <div className="mx-auto mt-6 w-full rounded-lg border border-amber-200 bg-yellow-50 p-4 text-left text-sm text-amber-900">
-          <p className="font-semibold">Risk &amp; Timing Notice</p>
+          <p className="font-semibold">Risk & Timing Notice</p>
           <p className="mt-2">
-            Material CAM / NNN overcharge risk identified. A focused audit could
-            recover meaningful dollars.
-          </p>
+           Potential CAM / NNN overcharge risk identified. Acting within the audit
+           window may allow recovery of meaningful dollars.
+            </p>
+
           <div className="mt-3 rounded-md border border-amber-200 bg-yellow-50 p-3">
             <p>
               Most commercial leases require CAM / NNN disputes within 30–120 days
