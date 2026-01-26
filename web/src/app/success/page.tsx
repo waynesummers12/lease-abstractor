@@ -36,12 +36,8 @@ const deriveRiskLevel = (analysis: AuditResponse["analysis"]) => {
 
   if (score === null) return null;
 
-return score >= 75
-  ? "HIGH"
-  : score >= 50
-    ? "MEDIUM"
-    : "LOW";
-
+  return score >= 75 ? "LOW" : score >= 50 ? "MEDIUM" : "HIGH";
+};
 
 /* ================= PAGE ================= */
 
@@ -155,62 +151,59 @@ export default function SuccessPage() {
       </main>
     );
   }
-<pre className="mt-4 text-xs text-gray-400 text-left">
-  {JSON.stringify(data.analysis, null, 2)}
-</pre>
 
   const riskLevel = deriveRiskLevel(data.analysis);
   const pdfReady = Boolean(data.audit_pdf_path || data.object_path);
 
   /* ---------- PAID BUT PROCESSING ---------- */
-if (data.status === "paid") {
+  if (data.status === "paid") {
+    return (
+      <main className="mx-auto max-w-xl px-6 py-28 text-center">
+        <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
+        <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
+        <p className="mt-3 text-sm text-gray-600">
+          Payment received. We’re generating your PDF now.
+        </p>
+      </main>
+    );
+  }
+
+  /* ---------- COMPLETE ---------- */
   return (
     <main className="mx-auto max-w-xl px-6 py-28 text-center">
-      <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
-      <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
+      <div className="mb-6 text-3xl">✅</div>
+
+      <h1 className="text-2xl font-semibold">Payment successful</h1>
+
       <p className="mt-3 text-sm text-gray-600">
-        Payment received. We’re generating your PDF now.
+        Your CAM / NNN Audit Summary is ready.
       </p>
-    </main>
-  );
-}
 
-/* ---------- COMPLETE ---------- */
-return (
-  <main className="mx-auto max-w-xl px-6 py-28 text-center">
-    <div className="mb-6 text-3xl">✅</div>
+      {/* DEV-ONLY DEBUG (SAFE PLACEMENT) */}
+      {process.env.NODE_ENV === "development" && (
+        <pre className="mt-6 text-xs text-gray-400 text-left">
+          {JSON.stringify(data.analysis, null, 2)}
+        </pre>
+      )}
 
-    <h1 className="text-2xl font-semibold">Payment successful</h1>
-
-    <p className="mt-3 text-sm text-gray-600">
-      Your CAM / NNN Audit Summary is ready.
-    </p>
-
-    {/* DEV-ONLY DEBUG (SAFE PLACEMENT) */}
-    {process.env.NODE_ENV === "development" && (
-      <pre className="mt-6 text-xs text-gray-400 text-left">
-        {JSON.stringify(data.analysis, null, 2)}
-      </pre>
-    )}
-
-    {(riskLevel === "MEDIUM" ||
-      riskLevel === "HIGH" ||
-      typeof data.analysis?.avoidable_exposure === "number") && (
-      <div className="mx-auto mt-6 w-full rounded-lg border border-amber-200 bg-yellow-50 p-4 text-left text-sm text-amber-900">
-        <p className="font-semibold">Risk &amp; Timing Notice</p>
-        <p className="mt-2">
-          Potential CAM / NNN overcharge risk identified. Acting within the audit
-          window may allow recovery of meaningful dollars.
-        </p>
-
-        <div className="mt-3 rounded-md border border-amber-200 bg-yellow-50 p-3">
-          <p>
-            Most commercial leases require CAM / NNN disputes within 30–120 days
-            of reconciliation. Missing this window often waives recovery rights.
+      {(riskLevel === "MEDIUM" ||
+        riskLevel === "HIGH" ||
+        typeof data.analysis?.avoidable_exposure === "number") && (
+        <div className="mx-auto mt-6 w-full rounded-lg border border-amber-200 bg-yellow-50 p-4 text-left text-sm text-amber-900">
+          <p className="font-semibold">Risk &amp; Timing Notice</p>
+          <p className="mt-2">
+            Potential CAM / NNN overcharge risk identified. Acting within the audit
+            window may allow recovery of meaningful dollars.
           </p>
+
+          <div className="mt-3 rounded-md border border-amber-200 bg-yellow-50 p-3">
+            <p>
+              Most commercial leases require CAM / NNN disputes within 30–120 days
+              of reconciliation. Missing this window often waives recovery rights.
+            </p>
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
 
       {typeof data.analysis?.avoidable_exposure === "number" && (
