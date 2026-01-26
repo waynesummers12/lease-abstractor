@@ -74,7 +74,7 @@ export default function SuccessPage() {
       setDownloading(true);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/audits/${auditId}/download`,
+        `/api/audits/${auditId}/download`,
         { cache: "no-store" }
       );
 
