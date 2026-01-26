@@ -6,23 +6,23 @@ const SIGNED_URL_TTL_SECONDS = 60 * 60; // 1 hour
 
 export type LatestPaidAudit = {
   id: string;
+  lease_name: string | null;
   created_at: string;
-  object_path: string;
-  signed_url: string;
+  avoidable_exposure: number | null;
+  signedUrl: string | null;
+  email_sent: boolean;
 };
 
 export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
   /**
-   * HARD INVARIANT:
-   * A paid audit MUST have an object_path.
-   * Historical corrupted rows are ignored safely.
+   * Fetch the latest COMPLETE audit with a generated PDF.
    */
 
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("id, created_at, object_path")
-    .eq("status", "paid")
-    .not("object_path", "is", null)
+    .select("id, lease_name, created_at, analysis, audit_pdf_path, email_sent")
+    .eq("status", "complete")
+    .not("audit_pdf_path", "is", null)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -32,25 +32,33 @@ export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
     return null;
   }
 
-  if (!data || !data.object_path) {
+  if (!data || !data.audit_pdf_path) {
     return null;
   }
 
-  const { data: signed, error: signError } =
-    await supabase.storage
-      .from("leases")
-      .createSignedUrl(data.object_path, SIGNED_URL_TTL_SECONDS);
+  // Create signed URL for the audit PDF
+  const { data: signed, error: signError } = await supabase.storage
+    .from("audit-pdfs")
+    .createSignedUrl(data.audit_pdf_path, SIGNED_URL_TTL_SECONDS);
 
   if (signError || !signed?.signedUrl) {
     console.error("Failed to sign audit PDF:", signError);
     return null;
   }
 
+  // Extract avoidable_exposure from analysis
+  const avoidable_exposure = 
+    typeof data.analysis?.avoidable_exposure === "number"
+      ? data.analysis.avoidable_exposure
+      : null;
+
   return {
     id: data.id,
+    lease_name: data.lease_name,
     created_at: data.created_at,
-    object_path: data.object_path,
-    signed_url: signed.signedUrl,
+    avoidable_exposure,
+    signedUrl: signed.signedUrl,
+    email_sent: data.email_sent ?? false,
   };
 }
 
