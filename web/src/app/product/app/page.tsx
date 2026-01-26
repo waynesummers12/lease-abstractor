@@ -56,6 +56,20 @@ type Analysis = {
 const formatMoney = (v: number | null | undefined) =>
   v == null ? "—" : `$${v.toLocaleString()}`;
 
+const formatDate = (value: string | null | undefined) => {
+  if (!value) return "—";
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString();
+};
+
+const formatEscalation = (
+  type: string | null | undefined,
+  value: number | null | undefined
+) => {
+  if (!type) return "—";
+  return value == null ? type : `${type} (${value})`;
+};
+
 const headerStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -296,8 +310,8 @@ export default function HomePage() {
                 <span>Tenant: {analysis.tenant ?? "—"}</span>
                 <span>Landlord: {analysis.landlord ?? "—"}</span>
                 <span>Premises: {analysis.premises ?? "—"}</span>
-                <span>Lease start: {analysis.lease_start ?? "—"}</span>
-                <span>Lease end: {analysis.lease_end ?? "—"}</span>
+                <span>Lease start: {formatDate(analysis.lease_start)}</span>
+                <span>Lease end: {formatDate(analysis.lease_end)}</span>
                 <span>Term (months): {analysis.term_months ?? "—"}</span>
               </div>
             </div>
@@ -315,8 +329,11 @@ export default function HomePage() {
                 <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
                 <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
                 <span>
-                  Escalation: {analysis.rent?.escalation_type ?? "—"}{" "}
-                  {analysis.rent?.escalation_value ? `(${analysis.rent.escalation_value})` : ""}
+                  Escalation:{" "}
+                  {formatEscalation(
+                    analysis.rent?.escalation_type,
+                    analysis.rent?.escalation_value
+                  )}
                 </span>
               </div>
             </div>
