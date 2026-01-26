@@ -36,9 +36,10 @@ export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
   }
 
   // Create signed URL for the audit PDF
+  const objectPath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
   const { data: signed, error: signError } = await supabase.storage
     .from("audit-pdfs")
-    .createSignedUrl(data.audit_pdf_path, SIGNED_URL_TTL_SECONDS);
+    .createSignedUrl(objectPath, SIGNED_URL_TTL_SECONDS);
 
   if (signError || !signed?.signedUrl) {
     console.error("Failed to sign audit PDF:", signError);

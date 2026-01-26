@@ -58,14 +58,15 @@ router.get("/auditById/:auditId", async (ctx) => {
   if (audit.status === "complete" && audit.audit_pdf_path) {
     console.log("📄 Creating signed URL for PDF:", audit.audit_pdf_path);
 
-    const { data, error: signedError } = await supabase.storage
+    const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
+    const { data: signed, error: signError } = await supabase.storage
       .from("audit-pdfs")
-      .createSignedUrl(audit.audit_pdf_path, 60 * 60);
+      .createSignedUrl(objectPath, 60 * 60);
 
-    if (signedError) {
-      console.error("❌ Signed URL error:", signedError);
+    if (signError) {
+      console.error("❌ Signed URL error:", signError);
     } else {
-      signedUrl = data?.signedUrl ?? null;
+      signedUrl = signed?.signedUrl ?? null;
       console.log("🔗 Signed URL created:", !!signedUrl);
     }
   } else {
