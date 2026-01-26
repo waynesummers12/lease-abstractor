@@ -4,7 +4,7 @@
     "npm:@types/node@*": "24.2.0",
     "npm:pdf-lib@1.17.1": "1.17.1",
     "npm:pdf-parse@1.1.1": "1.1.1",
-    "npm:pdf-parse@^2.4.5": "2.4.5",
+    "npm:pdf-parse@2.4.5": "2.4.5",
     "npm:resend@*": "3.5.0",
     "npm:resend@3.5.0": "3.5.0",
     "npm:stripe@20.2.0": "20.2.0_@types+node@24.2.0"
@@ -1041,7 +1041,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:pdf-parse@^2.4.5",
+      "npm:pdf-parse@2.4.5",
       "npm:stripe@20.2.0"
     ]
   }
