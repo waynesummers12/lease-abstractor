@@ -121,6 +121,9 @@ export default function SuccessPage() {
       </main>
     );
   }
+<pre className="mt-4 text-xs text-gray-400 text-left">
+  {JSON.stringify(data.analysis, null, 2)}
+</pre>
 
   const riskLevel = data.analysis?.risk_level?.toUpperCase() ?? null;
 
