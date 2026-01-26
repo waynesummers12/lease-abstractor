@@ -118,9 +118,6 @@ export default function Header() {
           </div>
         </div>
       )}
-      <p className="mt-3 text-xs text-gray-600">
-        🔒 Secure & private • No obligation • Takes 2–3 minutes
-      </p>
     </header>
   );
 }
