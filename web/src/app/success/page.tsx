@@ -128,7 +128,7 @@ export default function SuccessPage() {
 
   if (fatalError) {
     return (
-      <main className="mx-auto max-w-xl px-6 py-28 text-center">
+      <main className="mx-auto max-w-2xl px-6 py-20">
         <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
           <p className="font-semibold">Something went wrong</p>
           <p className="mt-2">{fatalError}</p>
@@ -181,29 +181,32 @@ export default function SuccessPage() {
 
       {/* DEV-ONLY DEBUG (SAFE PLACEMENT) */}
       {process.env.NODE_ENV === "development" && (
-        <pre className="mt-6 text-xs text-gray-400 text-left">
-          {JSON.stringify(data.analysis, null, 2)}
-        </pre>
+        
       )}
 
       {(riskLevel === "MEDIUM" ||
-        riskLevel === "HIGH" ||
-        typeof data.analysis?.avoidable_exposure === "number") && (
-        <div className="mx-auto mt-6 w-full rounded-lg border border-amber-200 bg-yellow-50 p-4 text-left text-sm text-amber-900">
-          <p className="font-semibold">Risk &amp; Timing Notice</p>
-          <p className="mt-2">
-            Potential CAM / NNN overcharge risk identified. Acting within the audit
-            window may allow recovery of meaningful dollars.
-          </p>
+  riskLevel === "HIGH" ||
+  typeof data.analysis?.avoidable_exposure === "number") && (
+  <div className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-5 text-left shadow-sm">
+    <p className="text-sm font-semibold text-amber-900">
+      Risk &amp; Timing Notice
+    </p>
 
-          <div className="mt-3 rounded-md border border-amber-200 bg-yellow-50 p-3">
-            <p>
-              Most commercial leases require CAM / NNN disputes within 30–120 days
-              of reconciliation. Missing this window often waives recovery rights.
-            </p>
-          </div>
-        </div>
-      )}
+    <p className="mt-2 text-sm text-amber-900">
+      Potential CAM / NNN overcharge risk identified. Acting within the audit
+      window may allow recovery of meaningful dollars.
+    </p>
+
+    <div className="mt-4 rounded-lg border border-amber-200 bg-amber-100 p-3 text-sm text-amber-900">
+      <p>
+        Most commercial leases require CAM / NNN disputes within
+        <strong> 30–120 days</strong> of reconciliation. Missing this window
+        often waives recovery rights.
+      </p>
+    </div>
+  </div>
+)}
+
 
 
       {typeof data.analysis?.avoidable_exposure === "number" && (
