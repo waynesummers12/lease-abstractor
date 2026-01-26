@@ -54,52 +54,6 @@ export async function generateAuditPdf(
      HELPERS
   ------------------------------------------------------------------- */
 
-  const newPageIfNeeded = (minY = 120) => {
-    if (y < minY) {
-      page = pdf.addPage([612, 792]);
-      y = 760;
-    }
-  };
-
-  const drawText = (
-    text: string,
-    size = 11,
-    isBold = false,
-    x = 40,
-    color = black
-  ) => {
-    page.drawText(text, {
-      x,
-      y,
-      size,
-      font: isBold ? bold : font,
-      color,
-      maxWidth: 532,
-      lineHeight: size + 5,
-    });
-    y -= size + 8;
-  };
-
-  const drawSectionTitle = (text: string) => {
-    newPageIfNeeded();
-    y -= 8;
-    drawText(text, 15, true);
-    y -= 8;
-  };
-
-  const drawCard = (height: number) => {
-    page.drawRectangle({
-      x: 36,
-      y: y - height + 14,
-      width: 540,
-      height,
-      borderColor: rgb(0.82, 0.82, 0.82),
-      borderWidth: 1.25,
-      color: lightGray,
-    });
-    y -= 18;
-  };
-
   const severityColor = (severity: string) => {
     switch (severity.toUpperCase()) {
       case "HIGH":
@@ -109,6 +63,74 @@ export async function generateAuditPdf(
       default:
         return green;
     }
+  };
+
+  const lineHeight = (size: number) => size + 5;
+
+  const wrapLines = (
+    text: string,
+    size: number,
+    maxWidth: number,
+    useBold = false
+  ) => {
+    const words = text.split(/\s+/);
+    const lines: string[] = [];
+    let current = "";
+
+    for (const word of words) {
+      const test = current ? `${current} ${word}` : word;
+      const width = (useBold ? bold : font).widthOfTextAtSize(test, size);
+      if (width <= maxWidth) {
+        current = test;
+      } else {
+        if (current) lines.push(current);
+        current = word;
+      }
+    }
+    if (current) lines.push(current);
+    return lines;
+  };
+
+  const measureHeight = (
+    text: string,
+    size: number,
+    maxWidth: number,
+    useBold = false
+  ) => wrapLines(text, size, maxWidth, useBold).length * lineHeight(size);
+
+  const drawWrapped = (
+    text: string,
+    size: number,
+    x: number,
+    maxWidth: number,
+    color = black,
+    useBold = false
+  ) => {
+    const lines = wrapLines(text, size, maxWidth, useBold);
+    for (const line of lines) {
+      page.drawText(line, {
+        x,
+        y,
+        size,
+        font: useBold ? bold : font,
+        color,
+      });
+      y -= lineHeight(size);
+    }
+  };
+
+  const ensureSpace = (requiredHeight: number) => {
+    if (y - requiredHeight < 60) {
+      page = pdf.addPage([612, 792]);
+      y = 760;
+    }
+  };
+
+  const drawSectionTitle = (text: string) => {
+    ensureSpace(lineHeight(15) + 18);
+    y -= 8;
+    drawWrapped(text, 15, 40, 532, black, true);
+    y -= 8;
   };
 
   /* ------------------------------------------------------------------
@@ -159,24 +181,49 @@ export async function generateAuditPdf(
     .filter((v) => !isNaN(v));
 
   const maxImpact =
-    impacts.length > 0
-      ? Math.max(...impacts).toLocaleString()
-      : null;
+    impacts.length > 0 ? Math.max(...impacts).toLocaleString() : null;
 
   if (maxImpact) {
-    drawCard(92);
-
-    drawText("Estimated Annual Savings", 12, true, 52, gray);
-    drawText(`$${maxImpact}`, 28, true, 52, green);
-    drawText(
+    const paddingTop = 20;
+    const paddingBottom = 16;
+    const innerWidth = 508; // 540 - 2*16
+    const titleH = measureHeight("Estimated Annual Savings", 12, innerWidth, true);
+    const amountH = measureHeight(`$${maxImpact}`, 28, innerWidth, true);
+    const bodyH = measureHeight(
       "Based on CAM escalation limits, excluded expenses, and allocation review.",
       11,
-      false,
+      innerWidth
+    );
+    const spacing = 6 + 6; // between lines
+    const cardHeight = paddingTop + titleH + spacing + amountH + spacing + bodyH + paddingBottom;
+
+    ensureSpace(cardHeight + 12);
+
+    const cardTop = y;
+    page.drawRectangle({
+      x: 36,
+      y: cardTop - cardHeight + 14,
+      width: 540,
+      height: cardHeight,
+      borderColor: rgb(0.82, 0.82, 0.82),
+      borderWidth: 1.25,
+      color: lightGray,
+    });
+
+    y = cardTop - paddingTop;
+    drawWrapped("Estimated Annual Savings", 12, 52, innerWidth, gray, true);
+    y -= 6;
+    drawWrapped(`$${maxImpact}`, 28, 52, innerWidth, green, true);
+    y -= 6;
+    drawWrapped(
+      "Based on CAM escalation limits, excluded expenses, and allocation review.",
+      11,
       52,
+      innerWidth,
       gray
     );
 
-    y -= 14;
+    y = cardTop - cardHeight - 12;
   }
 
   /* ------------------------------------------------------------------
@@ -184,8 +231,6 @@ export async function generateAuditPdf(
   ------------------------------------------------------------------- */
 
   drawSectionTitle("Lease Details");
-  drawCard(120);
-  y -= 2;
 
   const details = [
     ["Tenant", analysis.tenant ?? "Not specified"],
@@ -195,12 +240,40 @@ export async function generateAuditPdf(
     ["Lease End", analysis.lease_end ?? "Not specified"],
   ];
 
+  const detailPaddingTop = 18;
+  const detailPaddingBottom = 16;
+  const labelWidth = 140;
+  const valueWidth = 330;
+  const detailSpacing = 6;
+
+  let detailHeight = detailPaddingTop + detailPaddingBottom;
   for (const [label, value] of details) {
-    drawText(label, 10, true, 52, gray);
-    drawText(value, 12, false, 200);
+    const labelH = measureHeight(label, 10, labelWidth, true);
+    const valueH = measureHeight(value, 12, valueWidth);
+    detailHeight += labelH + valueH + detailSpacing;
   }
 
-  y -= 10;
+  ensureSpace(detailHeight + 10);
+
+  const detailsTop = y;
+  page.drawRectangle({
+    x: 36,
+    y: detailsTop - detailHeight + 14,
+    width: 540,
+    height: detailHeight,
+    borderColor: rgb(0.82, 0.82, 0.82),
+    borderWidth: 1.25,
+    color: lightGray,
+  });
+
+  y = detailsTop - detailPaddingTop;
+  for (const [label, value] of details) {
+    drawWrapped(label, 10, 52, labelWidth, gray, true);
+    drawWrapped(value, 12, 200, valueWidth);
+    y -= detailSpacing;
+  }
+
+  y = detailsTop - detailHeight - 10;
 
   /* ------------------------------------------------------------------
      AUDIT FINDINGS
@@ -209,55 +282,117 @@ export async function generateAuditPdf(
   drawSectionTitle("Audit Findings");
 
   if (flags.length === 0) {
-    drawText(
+    ensureSpace(
+      measureHeight(
+        "No material CAM or NNN risks were detected based on the extracted lease terms.",
+        11,
+        532
+      ) + 12
+    );
+    drawWrapped(
       "No material CAM or NNN risks were detected based on the extracted lease terms.",
       11,
-      false,
       40,
+      532,
       gray
     );
+    y -= 4;
   }
 
+  const findingPaddingTop = 18;
+  const findingPaddingBottom = 14;
+  const findingWidth = 508;
+  const findingGap = 12;
+
   for (const flag of flags) {
-    newPageIfNeeded(170);
-
-    drawCard(110);
-    y -= 4;
-
-    drawText(flag.label, 13, true, 52);
-
-    drawText(
+    const titleH = measureHeight(flag.label, 13, findingWidth, true);
+    const severityH = measureHeight(
       `Severity: ${flag.severity.toUpperCase()}`,
       11,
-      true,
-      52,
-      severityColor(flag.severity)
+      findingWidth,
+      true
     );
-    y -= 2;
+    const recH = measureHeight(flag.recommendation, 11, findingWidth);
+    const impactH =
+      flag.estimated_impact !== undefined
+        ? measureHeight(
+            `Estimated Financial Impact: ${flag.estimated_impact}`,
+            11,
+            findingWidth,
+            true
+          ) + 2
+        : 0;
+    const bodySpacing = 4 + 4; // between severity/recommendation
+    const cardHeight =
+      findingPaddingTop +
+      titleH +
+      6 +
+      severityH +
+      bodySpacing +
+      recH +
+      (impactH ? 6 + impactH : 0) +
+      findingPaddingBottom;
 
-    drawText(flag.recommendation, 11, false, 52, gray);
+    ensureSpace(cardHeight + findingGap);
 
+    const cardTop = y;
+    page.drawRectangle({
+      x: 36,
+      y: cardTop - cardHeight + 14,
+      width: 540,
+      height: cardHeight,
+      borderColor: rgb(0.82, 0.82, 0.82),
+      borderWidth: 1.25,
+      color: lightGray,
+    });
+
+    y = cardTop - findingPaddingTop;
+    drawWrapped(flag.label, 13, 52, findingWidth, black, true);
+    y -= 6;
+    drawWrapped(
+      `Severity: ${flag.severity.toUpperCase()}`,
+      11,
+      52,
+      findingWidth,
+      severityColor(flag.severity),
+      true
+    );
+    y -= 4;
+    drawWrapped(flag.recommendation, 11, 52, findingWidth, gray);
     if (flag.estimated_impact !== undefined) {
-      y -= 2;
-      drawText(
+      y -= 6;
+      drawWrapped(
         `Estimated Financial Impact: ${flag.estimated_impact}`,
         11,
-        true,
-        52
+        52,
+        findingWidth,
+        black,
+        true
       );
     }
 
-    y -= 8;
+    y = cardTop - cardHeight - findingGap;
   }
 
   /* ------------------------------------------------------------------
      FOOTER DISCLAIMER
   ------------------------------------------------------------------- */
 
-  newPageIfNeeded(140);
+  const disclaimerLineH = 1;
+  const disclaimerHeadingH = measureHeight("Disclaimer", 11, 532, true);
+  const disclaimerBodyH = measureHeight(
+    "This audit is provided for informational purposes only and does not constitute legal advice. "
+      + "Review findings with a qualified real estate or legal professional before taking action.",
+    10,
+    532
+  );
+  const disclaimerSpacing = 20 + 10; // spacing after line + after heading
+  const disclaimerTotal =
+    disclaimerLineH + disclaimerSpacing + disclaimerHeadingH + disclaimerBodyH + 10;
 
-  y = 110;
+  ensureSpace(disclaimerTotal + 20);
 
+  y -= 6;
   page.drawLine({
     start: { x: 40, y },
     end: { x: 572, y },
@@ -266,14 +401,13 @@ export async function generateAuditPdf(
   });
 
   y -= 20;
-
-  drawText("Disclaimer", 11, true, 40, gray);
-  drawText(
+  drawWrapped("Disclaimer", 11, 40, 532, gray, true);
+  drawWrapped(
     "This audit is provided for informational purposes only and does not constitute legal advice. "
       + "Review findings with a qualified real estate or legal professional before taking action.",
     10,
-    false,
     40,
+    532,
     gray
   );
 
