@@ -39,9 +39,7 @@ export default function CamReconciliationPage() {
           🔒 Secure & private • No obligation • Takes 2–3 minutes
         </p>
       </section>
-        <p className="mt-3 text-xs text-gray-600">
-          🔒 Secure & private • No obligation • Takes 2–3 minutes
-        </p>
+        
       {/* ---------------- WHAT IS CAM ---------------- */}
       <section className="mb-14">
         <h2 className="mb-3 text-2xl font-semibold">
