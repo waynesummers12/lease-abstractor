@@ -23,10 +23,9 @@ export default function CamReconciliationPage() {
         </p>
 
         <p className="mb-8 text-gray-700">
-          CAM reconciliation is the annual process landlords use to true up
-          operating expenses and bill tenants for their share. In practice, the
-          process is confusing, opaque, and frequently inaccurate. A simple
-          review can reveal thousands of dollars in avoidable costs.
+          CAM reconciliation is the annual process landlords use to bill tenants
+          for operating expenses — and it’s often confusing, opaque, and
+          frequently inaccurate, so a quick review can reveal avoidable costs.
         </p>
 
         <Link
