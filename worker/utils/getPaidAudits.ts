@@ -4,7 +4,6 @@ import { supabase } from "../lib/supabase.ts";
 
 export type LeaseAudit = {
   id: string;
-  lease_name: string | null;
   status: string;
   audit_pdf_path: string | null;
   created_at: string;
@@ -15,7 +14,7 @@ export type LeaseAudit = {
 export async function getPaidAudits(): Promise<LeaseAudit[]> {
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("id, lease_name, status, audit_pdf_path, created_at, analysis, email_sent")
+    .select("id, status, audit_pdf_path, created_at, analysis, email_sent")
     .eq("status", "complete")
     .not("audit_pdf_path", "is", null)
     .order("created_at", { ascending: false });
@@ -27,7 +26,6 @@ export async function getPaidAudits(): Promise<LeaseAudit[]> {
 
   return (data ?? []).map((row) => ({
     id: row.id,
-    lease_name: row.lease_name,
     status: row.status,
     audit_pdf_path: row.audit_pdf_path,
     created_at: row.created_at,

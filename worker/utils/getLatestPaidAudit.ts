@@ -6,7 +6,6 @@ const SIGNED_URL_TTL_SECONDS = 60 * 60; // 1 hour
 
 export type LatestPaidAudit = {
   id: string;
-  lease_name: string | null;
   created_at: string;
   avoidable_exposure: number | null;
   signedUrl: string | null;
@@ -20,7 +19,7 @@ export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
 
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("id, lease_name, created_at, analysis, audit_pdf_path, email_sent")
+    .select("id, created_at, analysis, audit_pdf_path, email_sent")
     .eq("status", "complete")
     .not("audit_pdf_path", "is", null)
     .order("created_at", { ascending: false })
@@ -54,7 +53,6 @@ export async function getLatestPaidAudit(): Promise<LatestPaidAudit | null> {
 
   return {
     id: data.id,
-    lease_name: data.lease_name,
     created_at: data.created_at,
     avoidable_exposure,
     signedUrl: signed.signedUrl,
