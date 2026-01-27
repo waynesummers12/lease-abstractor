@@ -491,7 +491,7 @@ async function handleCheckout() {
     color: "#111827",
   }}
 >
-  Full audit report generated immediately after checkout.
+  Full audit report generated immediately after checkout. No subscription required.
 </div>
     </div>
 
