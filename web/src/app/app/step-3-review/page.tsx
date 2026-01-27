@@ -120,30 +120,6 @@ export default function HomePage() {
   const [auditId, setAuditId] = useState<string | null>(null);
 
   /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-  useEffect(() => {
-    if (!analysis) return;
-
-    if (typeof analysis.cam_total_avoidable_exposure === "number") {
-      setTotalAvoidableExposure(analysis.cam_total_avoidable_exposure);
-    }
-
-    if (
-      analysis.exposure_range &&
-      typeof analysis.exposure_range.low === "number" &&
-      typeof analysis.exposure_range.high === "number"
-    ) {
-      setExposureRange({
-        low: analysis.exposure_range.low,
-        high: analysis.exposure_range.high,
-      });
-    }
-
-    if (typeof analysis.exposure_risk === "string") {
-      setExposureRiskLabel(analysis.exposure_risk);
-    }
-  }, [analysis]);
-
-
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
   async function handleUploadAndAnalyze() {
@@ -192,7 +168,10 @@ export default function HomePage() {
     }
 
     const exposure =
-      analysis.avoidable_exposure ?? analysis.cam_nnn?.total_exposure ?? null;
+  typeof analysis.cam_total_avoidable_exposure === "number"
+    ? analysis.cam_total_avoidable_exposure
+    : null;
+
     setTotalAvoidableExposure(exposure);
     setExposureRange(analysis.avoidable_exposure_range ?? null);
     setExposureRiskLabel(
@@ -236,15 +215,23 @@ export default function HomePage() {
       setIsCheckingOut(false);
     }
   }
-useEffect(() => {
+
+  useEffect(() => {
   if (!analysis) return;
 
-  console.log("🧠 Lease analysis loaded");
-  console.log("flags:", analysis.health?.flags);
-  console.log("totalAvoidableExposure:", totalAvoidableExposure);
-  console.log("exposureRange:", exposureRange);
-  console.log("exposureRiskLabel:", exposureRiskLabel);
-}, [analysis, totalAvoidableExposure, exposureRange, exposureRiskLabel]);
+  console.log("🧠 FULL analysis object:");
+  console.log(JSON.stringify(analysis, null, 2));
+}, [analysis]);
+
+// useEffect(() => {
+//   if (!analysis) return;
+
+//   console.log("🧠 Lease analysis loaded");
+//   console.log("flags:", analysis.health?.flags);
+//   console.log("totalAvoidableExposure:", totalAvoidableExposure);
+//   console.log("exposureRange:", exposureRange);
+//   console.log("exposureRiskLabel:", exposureRiskLabel);
+// }, [analysis, totalAvoidableExposure, exposureRange, exposureRiskLabel]);
 
   return (
   <main
