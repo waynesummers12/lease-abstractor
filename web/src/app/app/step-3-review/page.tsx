@@ -1,6 +1,6 @@
 "use client";
 
-import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
+import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useEffect, useRef, useState } from "react";
 
