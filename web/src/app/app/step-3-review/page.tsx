@@ -46,9 +46,9 @@ type Analysis = {
       estimated_impact?: string;
     }[];
   };
-  avoidable_exposure?: number | null;
-  avoidable_exposure_range?: { low: number; high: number } | null;
-  risk_level?: string | null;
+  cam_total_avoidable_exposure?: number | null;
+exposure_range?: { low: number; high: number } | null;
+exposure_risk?: "low" | "medium" | "high" | null;
 };
 
 /* ---------- CONSTANTS ---------- */
@@ -207,6 +207,46 @@ useEffect(() => {
     resultsRef.current?.scrollIntoView({ behavior: "smooth" });
   }, 100);
 }, [analysis]);
+
+async function handleCheckout() {
+  if (isCheckingOut || !auditId) return;
+
+  setIsCheckingOut(true);
+  setStatus("Redirecting to secure checkout…");
+
+  try {
+    if (analysis) {
+      sessionStorage.setItem(
+        "latest_analysis",
+        JSON.stringify(analysis)
+      );
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Lease-Worker-Key":
+            process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: JSON.stringify({ auditId }),
+      }
+    );
+
+    if (!res.ok) throw new Error(await res.text());
+
+    const { url } = await res.json();
+    if (!url) throw new Error("Missing checkout URL");
+
+    window.location.href = url;
+  } catch (err) {
+    console.error("Checkout error:", err);
+    setStatus("Checkout failed. Please try again.");
+    setIsCheckingOut(false);
+  }
+}
 
   return (
   <main
