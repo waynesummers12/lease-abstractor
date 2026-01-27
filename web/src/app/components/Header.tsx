@@ -134,60 +134,6 @@ export default function Header() {
                 >
                   NNN Calculation Examples
                 </Link>
-                <Link
-                  href="/marketing/lease-score-explained"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Lease Score Explained
-                </Link>
-                <Link
-                  href="/marketing/how-it-works"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  How It Works
-                </Link>
-                <Link
-                  href="/marketing/learn"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Learn Hub
-                </Link>
-                <Link
-                  href="/marketing/what-we-find"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  What We Find
-                </Link>
-                <Link
-                  href="/marketing/pricing"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Pricing
-                </Link>
-                <Link
-                  href="/marketing/privacy"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Privacy
-                </Link>
-                <Link
-                  href="/marketing/security"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Security
-                </Link>
-                <Link
-                  href="/marketing/terms"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Terms
-                </Link>
-                <Link
-                  href="/marketing"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Marketing Home
-                </Link>
               </div>
             )}
           </div>
@@ -267,33 +213,6 @@ export default function Header() {
             </Link>
             <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
               NNN Calculation Examples
-            </Link>
-            <Link href="/marketing/lease-score-explained" onClick={() => setMenuOpen(false)}>
-              Lease Score Explained
-            </Link>
-            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
-              How It Works
-            </Link>
-            <Link href="/marketing/learn" onClick={() => setMenuOpen(false)}>
-              Learn Hub
-            </Link>
-            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
-              What We Find
-            </Link>
-            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
-              Pricing
-            </Link>
-            <Link href="/marketing/privacy" onClick={() => setMenuOpen(false)}>
-              Privacy
-            </Link>
-            <Link href="/marketing/security" onClick={() => setMenuOpen(false)}>
-              Security
-            </Link>
-            <Link href="/marketing/terms" onClick={() => setMenuOpen(false)}>
-              Terms
-            </Link>
-            <Link href="/marketing" onClick={() => setMenuOpen(false)}>
-              Marketing Home
             </Link>
 
             <hr className="border-white/10 my-2" />
