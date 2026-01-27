@@ -353,19 +353,7 @@ useEffect(() => {
                 </div>
               )}
             </>
-          ) : (
-            <div
-  style={{
-    marginTop: 6,
-    fontSize: 22,
-    fontWeight: 600,
-    color: "#166534",
-  }}
->
-  {typeof analysis?.cam_total_avoidable_exposure === "number"
-    ? `$${analysis.cam_total_avoidable_exposure.toLocaleString()}`
-    : "Analyzing…"}
-</div>
+          ) : null
 
           )}
 
