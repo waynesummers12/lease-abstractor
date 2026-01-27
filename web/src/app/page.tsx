@@ -121,6 +121,9 @@ export default function MarketingHomePage() {
             >
               Upload a Lease
             </Link>
+            <p className="mt-3 text-xs text-gray-600">
+          🔒 Secure & private • No obligation • Takes 2–3 minutes
+        </p>
           </div>
         </div>
       </section>
