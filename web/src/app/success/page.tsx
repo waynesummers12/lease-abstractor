@@ -215,6 +215,53 @@ return (
         </div>
       </div>
     )}
+{/* ---------------- LEASE SCORE EXPLANATION ---------------- */}
+<div className="mt-6 rounded-xl border bg-white p-6 text-left shadow-sm">
+  <h3 className="text-lg font-semibold">
+    How Your Lease Score Is Calculated
+  </h3>
+
+  <p className="mt-2 text-sm text-gray-600">
+    Your Lease Score reflects how tenant-favorable your lease is for CAM / NNN
+    charges, escalation limits, and audit rights — based on the lease terms
+    that most often drive overcharges.
+  </p>
+
+  <div className="mt-5 space-y-4 text-sm">
+    <div>
+      <p className="font-medium text-green-700">Low Risk Lease</p>
+      <p className="text-gray-600">
+        Strong tenant protections with defined CAM limits, excluded capital
+        expenses, and enforceable audit rights. These leases typically limit
+        unexpected cost increases.
+      </p>
+    </div>
+
+    <div>
+      <p className="font-medium text-amber-700">Medium Risk Lease</p>
+      <p className="text-gray-600">
+        Some tenant protections exist, but key terms are ambiguous or partially
+        uncapped. These leases often require proactive monitoring to prevent
+        overcharges.
+      </p>
+    </div>
+
+    <div>
+      <p className="font-medium text-red-700">High Risk Lease</p>
+      <p className="text-gray-600">
+        Limited tenant protections with broadly defined or uncapped CAM / NNN
+        charges. These leases are most likely to produce recoverable overcharges
+        if audited promptly.
+      </p>
+    </div>
+  </div>
+
+  <p className="mt-5 text-xs text-gray-500">
+    Lease Score is based on common dispute outcomes observed across commercial
+    CAM / NNN audits and reflects how landlords typically interpret ambiguous
+    lease language.
+  </p>
+</div>
 
     {/* ---------- RISK & TIMING NOTICE ---------- */}
     {(riskLevel === "MEDIUM" ||
