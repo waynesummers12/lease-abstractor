@@ -75,10 +75,22 @@ export default function Header() {
                   CAM Reconciliation
                 </Link>
                 <Link
+                  href="/marketing/cam-nnn-overcharges"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM / NNN Overcharges
+                </Link>
+                <Link
                   href="/marketing/nnn-audit-rights"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   NNN Audit Rights
+                </Link>
+                <Link
+                  href="/marketing/audit-rights"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Audit Rights
                 </Link>
                 <Link
                   href="/marketing/audit-window-deadlines"
@@ -93,16 +105,88 @@ export default function Header() {
                   CAM Expense Caps
                 </Link>
                 <Link
-                  href="/marketing/cam-admin-fees"
+                  href="/marketing/cam-admin-page"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   CAM Admin Fees
                 </Link>
                 <Link
-                  href="/marketing/cam-vs-nnn"
+                  href="/marketing/cam-vs.nnn"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   CAM vs NNN
+                </Link>
+                <Link
+                  href="/marketing/common-cam-fees"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Common CAM Fees
+                </Link>
+                <Link
+                  href="/marketing/nnn-expenses-explained"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Expenses Explained
+                </Link>
+                <Link
+                  href="/marketing/nnn-calculation-examples"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Calculation Examples
+                </Link>
+                <Link
+                  href="/marketing/lease-score-explained"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Lease Score Explained
+                </Link>
+                <Link
+                  href="/marketing/how-it-works"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  How It Works
+                </Link>
+                <Link
+                  href="/marketing/learn"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Learn Hub
+                </Link>
+                <Link
+                  href="/marketing/what-we-find"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  What We Find
+                </Link>
+                <Link
+                  href="/marketing/pricing"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Pricing
+                </Link>
+                <Link
+                  href="/marketing/privacy"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Privacy
+                </Link>
+                <Link
+                  href="/marketing/security"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Security
+                </Link>
+                <Link
+                  href="/marketing/terms"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Terms
+                </Link>
+                <Link
+                  href="/marketing"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Marketing Home
                 </Link>
               </div>
             )}
@@ -154,8 +238,14 @@ export default function Header() {
             <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
               CAM Reconciliation
             </Link>
+            <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
+              CAM / NNN Overcharges
+            </Link>
             <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
               NNN Audit Rights
+            </Link>
+            <Link href="/marketing/audit-rights" onClick={() => setMenuOpen(false)}>
+              Audit Rights
             </Link>
             <Link href="/marketing/audit-window-deadlines" onClick={() => setMenuOpen(false)}>
               Audit Window Deadlines
@@ -163,11 +253,47 @@ export default function Header() {
             <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
               CAM Expense Caps
             </Link>
-            <Link href="/marketing/cam-admin-fees" onClick={() => setMenuOpen(false)}>
+            <Link href="/marketing/cam-admin-page" onClick={() => setMenuOpen(false)}>
               CAM Admin Fees
             </Link>
-            <Link href="/marketing/cam-vs-nnn" onClick={() => setMenuOpen(false)}>
+            <Link href="/marketing/cam-vs.nnn" onClick={() => setMenuOpen(false)}>
               CAM vs NNN
+            </Link>
+            <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
+              Common CAM Fees
+            </Link>
+            <Link href="/marketing/nnn-expenses-explained" onClick={() => setMenuOpen(false)}>
+              NNN Expenses Explained
+            </Link>
+            <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
+              NNN Calculation Examples
+            </Link>
+            <Link href="/marketing/lease-score-explained" onClick={() => setMenuOpen(false)}>
+              Lease Score Explained
+            </Link>
+            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
+              How It Works
+            </Link>
+            <Link href="/marketing/learn" onClick={() => setMenuOpen(false)}>
+              Learn Hub
+            </Link>
+            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
+              What We Find
+            </Link>
+            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
+              Pricing
+            </Link>
+            <Link href="/marketing/privacy" onClick={() => setMenuOpen(false)}>
+              Privacy
+            </Link>
+            <Link href="/marketing/security" onClick={() => setMenuOpen(false)}>
+              Security
+            </Link>
+            <Link href="/marketing/terms" onClick={() => setMenuOpen(false)}>
+              Terms
+            </Link>
+            <Link href="/marketing" onClick={() => setMenuOpen(false)}>
+              Marketing Home
             </Link>
 
             <hr className="border-white/10 my-2" />
