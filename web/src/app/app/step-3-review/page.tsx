@@ -382,13 +382,6 @@ async function handleCheckout() {
   ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
 </div>
 
-          <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
-            Based on your lease terms, you may be able to recover up to{" "}
-            <strong>
-              ${totalAvoidableExposure.toLocaleString()}
-            </strong>{" "}
-            in CAM / NNN overcharges over the next 12 months.
-          </p>
 
           {exposureRange && (
             <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
