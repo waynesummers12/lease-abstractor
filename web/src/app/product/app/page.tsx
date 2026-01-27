@@ -208,203 +208,272 @@ export default function HomePage() {
   }
 
   return (
-    <main
+  <main
+    style={{
+      padding: 32,
+      maxWidth: 960,
+      margin: "0 auto",
+      display: "flex",
+      flexDirection: "column",
+      gap: 24,
+    }}
+  >
+    {/* ---------- HEADER ---------- */}
+    <header style={headerStyle}>
+      <p
+        style={{
+          fontSize: 12,
+          letterSpacing: 1,
+          textTransform: "uppercase",
+          color: "#475569",
+        }}
+      >
+        Lease audit
+      </p>
+
+      <h1 style={{ fontSize: 28, fontWeight: 800 }}>
+        Upload your lease and uncover avoidable CAM / NNN spend
+      </h1>
+
+      <p style={{ color: "#475569" }}>
+        We run your PDF through our audit pipeline and estimate what you could
+        recover in the next 12 months.
+      </p>
+    </header>
+
+    {/* ---------- UPLOAD ---------- */}
+    <section
       style={{
-        padding: 32,
-        maxWidth: 960,
-        margin: "0 auto",
+        ...sectionStyle,
         display: "flex",
         flexDirection: "column",
-        gap: 24,
+        gap: 12,
       }}
     >
-      <header style={headerStyle}>
-        <p
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        />
+
+        <button
+          onClick={handleUploadAndAnalyze}
+          disabled={!file}
           style={{
-            fontSize: 12,
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            color: "#475569",
+            ...buttonStyle,
+            background: !file ? "#cbd5e1" : "#0f172a",
+            cursor: !file ? "not-allowed" : "pointer",
           }}
         >
-          Lease audit
-        </p>
-        <h1 style={{ fontSize: 28, fontWeight: 800 }}>
-          Upload your lease and uncover avoidable CAM / NNN spend
-        </h1>
-        <p style={{ color: "#475569" }}>
-          We run your PDF through our audit pipeline and estimate what you
-          could recover in the next 12 months.
-        </p>
-      </header>
+          Upload & Analyze
+        </button>
+      </div>
 
-      <section style={{ ...sectionStyle, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <input
-            type="file"
-            accept=".pdf"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
-          <button
-            onClick={handleUploadAndAnalyze}
-            disabled={!file}
-            style={{
-              ...buttonStyle,
-              background: !file ? "#cbd5e1" : "#0f172a",
-              cursor: !file ? "not-allowed" : "pointer",
-            }}
-          >
-            Upload & Analyze
-          </button>
-        </div>
-        {status && <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>}
-      </section>
+      {status && (
+        <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>
+      )}
+    </section>
 
-      {analysis ? (
-        <section
-          ref={resultsRef}
-          style={{ ...sectionStyle, display: "grid", gridTemplateColumns: "1fr", gap: 16 }}
-        >
-          <div style={exposureBoxStyle}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-              Estimated Avoidable Exposure (Next 12 Months)
-            </div>
-            <div style={{ fontSize: 34, fontWeight: 900 }}>
-              {totalAvoidableExposure != null ? (
-  <>
-    <div
-      className={`mt-2 text-4xl font-extrabold tracking-tight ${
-        exposureRiskLabel === "high"
-          ? "text-red-700"
-          : exposureRiskLabel === "medium"
-          ? "text-amber-700"
-          : "text-green-700"
-      }`}
-    >
-      💰 {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
-    </div>
-
-    <p className="mt-2 text-sm text-green-900">
-      Based on your lease terms, you may be able to recover up to{" "}
-      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
-      overcharges over the next 12 months.
-    </p>
-
-    {exposureRange && (
-      <p className="mt-1 text-xs text-green-800">
-        Estimated recovery range:{" "}
-        <strong>
-          ${exposureRange.low.toLocaleString()} – $
-          {exposureRange.high.toLocaleString()}
-        </strong>
-      </p>
-    )}
-  </>
-) : (
-  <div className="mt-2 text-2xl font-semibold text-green-900 animate-pulse">
-    Analyzing…
-  </div>
-)}
-            </div>
-            {exposureRange && (
-              <div style={{ color: "#166534" }}>
-                Range: {formatMoney(exposureRange.low)} - {formatMoney(exposureRange.high)}
-              </div>
-            )}
-            {exposureRiskLabel && (
-              <div style={{ color: "#166534", fontWeight: 600 }}>
-                Risk level: {exposureRiskLabel}
-              </div>
-            )}
-            <p style={{ marginTop: 4 }}>
-              Based on your lease terms, this is what you may be able to
-              recover in CAM / NNN overcharges.
-            </p>
-            <button
-              onClick={handleCheckout}
-              disabled={isCheckingOut}
-              style={{
-                ...buttonStyle,
-                background: "#0f172a",
-                cursor: isCheckingOut ? "not-allowed" : "pointer",
-                marginTop: 8,
-                alignSelf: "flex-start",
-              }}
-            >
-              {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
-            </button>
+    {/* ---------- RESULTS ---------- */}
+    {analysis ? (
+      <section
+        ref={resultsRef}
+        style={{
+          ...sectionStyle,
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: 16,
+        }}
+      >
+        {/* ===== GREEN EXPOSURE BOX ===== */}
+        <div style={exposureBoxStyle}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
+            Estimated Avoidable Exposure (Next 12 Months)
           </div>
 
-          <div style={{ display: "grid", gap: 12 }}>
-            <div>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>Lease basics</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, fontSize: 14 }}>
-                <span>Tenant: {analysis.tenant ?? "—"}</span>
-                <span>Landlord: {analysis.landlord ?? "—"}</span>
-                <span>Premises: {analysis.premises ?? "—"}</span>
-                <span>Lease start: {formatDate(analysis.lease_start)}</span>
-                <span>Lease end: {formatDate(analysis.lease_end)}</span>
-                <span>Term (months): {analysis.term_months ?? "—"}</span>
+          {totalAvoidableExposure != null ? (
+            <>
+              <div
+                style={{
+                  fontSize: 34,
+                  fontWeight: 900,
+                  marginTop: 6,
+                  color:
+                    exposureRiskLabel === "high"
+                      ? "#991b1b"
+                      : exposureRiskLabel === "medium"
+                      ? "#92400e"
+                      : "#166534",
+                }}
+              >
+                💰 ${(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
               </div>
-            </div>
 
+              <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
+                Based on your lease terms, you may be able to recover up to{" "}
+                <strong>${totalAvoidableExposure.toLocaleString()}</strong> in
+                CAM / NNN overcharges over the next 12 months.
+              </p>
+
+              {exposureRange && (
+                <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
+                  Estimated recovery range:{" "}
+                  <strong>
+                    ${exposureRange.low.toLocaleString()} – $
+                    {exposureRange.high.toLocaleString()}
+                  </strong>
+                </p>
+              )}
+
+              {exposureRiskLabel && (
+                <div
+                  style={{
+                    marginTop: 6,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color:
+                      exposureRiskLabel === "high"
+                        ? "#991b1b"
+                        : exposureRiskLabel === "medium"
+                        ? "#92400e"
+                        : "#166534",
+                  }}
+                >
+                  Risk level: {exposureRiskLabel.toUpperCase()}
+                </div>
+              )}
+            </>
+          ) : (
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 22,
+                fontWeight: 600,
+                color: "#166534",
+              }}
+            >
+              Analyzing…
+            </div>
+          )}
+
+          <button
+            onClick={handleCheckout}
+            disabled={isCheckingOut}
+            style={{
+              ...buttonStyle,
+              background: "#0f172a",
+              cursor: isCheckingOut ? "not-allowed" : "pointer",
+              marginTop: 10,
+              alignSelf: "flex-start",
+            }}
+          >
+            {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
+          </button>
+        </div>
+
+        {/* ---------- DETAILS ---------- */}
+        <div style={{ display: "grid", gap: 12 }}>
+          {/* Lease basics */}
+          <div>
+            <div style={{ fontWeight: 700, marginBottom: 6 }}>
+              Lease basics
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 6,
+                fontSize: 14,
+              }}
+            >
+              <span>Tenant: {analysis.tenant ?? "—"}</span>
+              <span>Landlord: {analysis.landlord ?? "—"}</span>
+              <span>Premises: {analysis.premises ?? "—"}</span>
+              <span>Lease start: {formatDate(analysis.lease_start)}</span>
+              <span>Lease end: {formatDate(analysis.lease_end)}</span>
+              <span>Term (months): {analysis.term_months ?? "—"}</span>
+            </div>
+          </div>
+
+          {/* Rent */}
+          <div>
+            <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fit, minmax(160px, 1fr))",
+                gap: 6,
+                fontSize: 14,
+              }}
+            >
+              <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
+              <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
+              <span>
+                Escalation:{" "}
+                {formatEscalation(
+                  analysis.rent?.escalation_type,
+                  analysis.rent?.escalation_value
+                )}
+              </span>
+            </div>
+          </div>
+
+          {/* CAM / NNN */}
+          {analysis.cam_nnn && (
             <div>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>
+                CAM / NNN
+              </div>
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gridTemplateColumns:
+                    "repeat(auto-fit, minmax(200px, 1fr))",
                   gap: 6,
                   fontSize: 14,
                 }}
               >
-                <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
-                <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
                 <span>
-                  Escalation:{" "}
-                  {formatEscalation(
-                    analysis.rent?.escalation_type,
-                    analysis.rent?.escalation_value
-                  )}
+                  Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}
+                </span>
+                <span>
+                  Annual: {formatMoney(analysis.cam_nnn.annual_amount)}
+                </span>
+                <span>
+                  Total exposure:{" "}
+                  {formatMoney(analysis.cam_nnn.total_exposure)}
+                </span>
+                <span>
+                  {analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}
+                </span>
+                <span>
+                  {analysis.cam_nnn.reconciliation
+                    ? "Reconciliation"
+                    : "No reconciliation"}
+                </span>
+                <span>
+                  {analysis.cam_nnn.includes_capex
+                    ? "Includes capex"
+                    : "Excludes capex"}
                 </span>
               </div>
             </div>
-
-            {analysis.cam_nnn && (
-              <div>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>CAM / NNN</div>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                    gap: 6,
-                    fontSize: 14,
-                  }}
-                >
-                  <span>Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}</span>
-                  <span>Annual: {formatMoney(analysis.cam_nnn.annual_amount)}</span>
-                  <span>Total exposure: {formatMoney(analysis.cam_nnn.total_exposure)}</span>
-                  <span>{analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}</span>
-                  <span>
-                    {analysis.cam_nnn.reconciliation ? "Reconciliation" : "No reconciliation"}
-                  </span>
-                  <span>{analysis.cam_nnn.includes_capex ? "Includes capex" : "Excludes capex"}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-      ) : (
-        <section
-          style={{
-            ...sectionStyle,
-            border: "1px dashed #cbd5e1",
-            color: "#475569",
-          }}
-        >
-          No analysis yet. Upload a PDF to see your results.
-        </section>
-      )}
-    </main>
-  );
+          )}
+        </div>
+      </section>
+    ) : (
+      <section
+        style={{
+          ...sectionStyle,
+          border: "1px dashed #cbd5e1",
+          color: "#475569",
+        }}
+      >
+        No analysis yet. Upload a PDF to see your results.
+      </section>
+    )}
+  </main>
+);
 }
