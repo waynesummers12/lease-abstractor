@@ -414,8 +414,7 @@ async function handleCheckout() {
       >
         {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
       </button>
-    </div>
-<div
+      <div
   style={{
     marginTop: 6,
     fontSize: 12,
@@ -424,6 +423,8 @@ async function handleCheckout() {
 >
   Includes full CAM breakdown, findings, and recovery recommendations
 </div>
+    </div>
+
     {/* ---------- DETAILS ---------- */}
     <div style={{ display: "grid", gap: 12 }}>
       {/* Lease basics */}
