@@ -106,13 +106,43 @@ export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
     useState<number | null>(null);
+
   const [exposureRange, setExposureRange] =
     useState<{ low: number; high: number } | null>(null);
-  const [exposureRiskLabel, setExposureRiskLabel] = useState<string | null>(null);
+
+  const [exposureRiskLabel, setExposureRiskLabel] =
+    useState<string | null>(null);
+
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
+
+  /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
+  useEffect(() => {
+    if (!analysis) return;
+
+    if (typeof analysis.cam_total_avoidable_exposure === "number") {
+      setTotalAvoidableExposure(analysis.cam_total_avoidable_exposure);
+    }
+
+    if (
+      analysis.exposure_range &&
+      typeof analysis.exposure_range.low === "number" &&
+      typeof analysis.exposure_range.high === "number"
+    ) {
+      setExposureRange({
+        low: analysis.exposure_range.low,
+        high: analysis.exposure_range.high,
+      });
+    }
+
+    if (typeof analysis.exposure_risk === "string") {
+      setExposureRiskLabel(analysis.exposure_risk);
+    }
+  }, [analysis]);
+
 
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
