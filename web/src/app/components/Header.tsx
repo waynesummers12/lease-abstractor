@@ -70,6 +70,12 @@ export default function Header() {
             NNN Audit Rights
           </Link>
           <Link
+            href="/marketing/cam-expense-caps"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+          >
+            CAM Expense Caps
+          </Link>
+          <Link
             href="/marketing/cam-admin-page"
             className="opacity-80 hover:opacity-100"
           >
@@ -125,6 +131,13 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
             >
               NNN Audit Rights
+            </Link>
+            <Link
+              href="/marketing/cam-expense-caps"
+              className="mt-2 rounded bg-white px-4 py-2 text-black"
+              onClick={() => setMenuOpen(false)}
+            >
+              CAM Expense Caps
             </Link>
             <Link
               href="/marketing/cam-admin-page"
