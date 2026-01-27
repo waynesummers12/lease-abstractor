@@ -1,6 +1,6 @@
 // lib/audit/runAuditPipeline.ts
 import { supabaseBrowser } from "@/lib/supabase/browser";
-import { waitForAnalysis } from "./waitForAnalysis";
+import { waitForAnalysis } from "./analysis.wait";
 import type { AuditPipelineResult } from "./types";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
