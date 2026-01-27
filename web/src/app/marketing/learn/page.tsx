@@ -48,7 +48,7 @@ const articles = [
     title: "Lease Score Explained",
     description:
       "See how Lease Score reveals hidden CAM / NNN risk, uncapped expenses, and audit leverage that often drive commercial lease overcharges.",
-    href: "/marketing/lease-score",
+    href: "/marketing/lease-score-explained",
   },
 ];
 
