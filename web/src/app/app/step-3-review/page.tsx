@@ -155,7 +155,7 @@ export default function HomePage() {
         return;
       }
 
-      setAnalysis(res.analysis);
+      setAnalysis(res.analysis.analysis);
       setStatus("Analysis complete ✅");
     } catch (err: any) {
       console.error("Analyze failed:", err);
