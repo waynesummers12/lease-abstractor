@@ -381,6 +381,64 @@ async function handleCheckout() {
 >
   ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
 </div>
+{/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
+{exposureRiskLabel && (
+  <div style={{ marginTop: 8 }}>
+    <div
+      style={{
+        fontSize: 12,
+        fontWeight: 600,
+        color: "#334155",
+        marginBottom: 4,
+      }}
+    >
+      Confidence in recovery estimate
+    </div>
+
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        background: "#e5e7eb",
+        borderRadius: 999,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          height: "100%",
+          width:
+            exposureRiskLabel === "low"
+              ? "85%"
+              : exposureRiskLabel === "medium"
+              ? "60%"
+              : "35%",
+          background:
+            exposureRiskLabel === "low"
+              ? "#16a34a"
+              : exposureRiskLabel === "medium"
+              ? "#f59e0b"
+              : "#dc2626",
+          transition: "width 600ms ease",
+        }}
+      />
+    </div>
+
+    <div
+      style={{
+        marginTop: 4,
+        fontSize: 11,
+        color: "#475569",
+      }}
+    >
+      {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
+      {exposureRiskLabel === "medium" &&
+        "Moderate confidence — some assumptions applied"}
+      {exposureRiskLabel === "high" &&
+        "Lower confidence — recovery depends on interpretation"}
+    </div>
+  </div>
+)}
 
 
           {exposureRange && (
