@@ -27,7 +27,45 @@ export async function fetchAnalysis(auditId: string): Promise<ApiResult> {
     throw new Error(`Audit fetch failed (${res.status})`);
   }
 
-  return res.json();
+  const data = await res.json();
+
+  /**
+   * Normalize exposure fields so pre-checkout and success
+   * pages can rely on the same shape.
+   *
+   * This does NOT invent data — it only surfaces what exists.
+   */
+  const analysis = data.analysis ?? data;
+
+  return {
+    ...data,
+    analysis: {
+      ...analysis,
+
+      // Primary exposure number
+      cam_total_avoidable_exposure:
+        analysis.cam_total_avoidable_exposure ??
+        analysis.avoidable_exposure ??
+        null,
+
+      // Optional range
+      exposure_range:
+        analysis.exposure_range ??
+        (analysis.exposure_low != null && analysis.exposure_high != null
+          ? {
+              low: analysis.exposure_low,
+              high: analysis.exposure_high,
+            }
+          : null),
+
+      // Optional risk label
+      exposure_risk:
+        analysis.exposure_risk ??
+        analysis.risk_level ??
+        null,
+    },
+  };
 }
+
 
 

@@ -3,6 +3,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import pdfParse from "npm:pdf-parse@1.1.1";
 import { abstractLease } from "../utils/abstractLease.ts";
+import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 import { supabase } from "../lib/supabase.ts";
 
 const router = new Router({
@@ -15,8 +16,10 @@ const router = new Router({
 router.post("/pdf", async (ctx) => {
   try {
     // deno-lint-ignore no-explicit-any
-const body = await (ctx.request as any).body?.json?.()
-  ?? (await ctx.request.body().value);
+    const body =
+      (await (ctx.request as any).body?.json?.()) ??
+      (await ctx.request.body().value);
+
     const { objectPath, auditId } = body ?? {};
 
     if (!objectPath || !auditId) {
@@ -50,24 +53,34 @@ const body = await (ctx.request as any).body?.json?.()
       length: leaseText.length,
     });
 
-    // Run abstraction
-    const analysis = abstractLease(leaseText);
+    /* --------------------------------------------------
+       RUN LEASE ABSTRACTION
+    -------------------------------------------------- */
+    const rawAnalysis = abstractLease(leaseText);
 
-    // ✅ PERSIST ANALYSIS
-const { error: updateError } = await supabase
-  .from("lease_audits")
-  .update({
-    analysis,
-  })
-  .eq("id", auditId);
+    /* --------------------------------------------------
+       🔑 CRITICAL FIX:
+       Normalize analysis EARLY so exposure exists pre-checkout
+    -------------------------------------------------- */
+    const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-if (updateError) {
-  console.error("❌ Failed to persist analysis", updateError);
-  throw new Error("Failed to save analysis");
-}
+    /* --------------------------------------------------
+       PERSIST NORMALIZED ANALYSIS
+    -------------------------------------------------- */
+    const { error: updateError } = await supabase
+      .from("lease_audits")
+      .update({
+        analysis: normalized.analysis,
+        status: "analyzed",
+      })
+      .eq("id", auditId);
 
+    if (updateError) {
+      console.error("❌ Failed to persist analysis", updateError);
+      throw new Error("Failed to save analysis");
+    }
 
-    console.log("🧾 lease_audits analysis saved:", auditId);
+    console.log("🧾 lease_audits normalized analysis saved:", auditId);
 
     ctx.response.status = 200;
     ctx.response.body = {
