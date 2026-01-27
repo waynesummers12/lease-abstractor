@@ -355,8 +355,6 @@ useEffect(() => {
             </>
           ) : null
 
-          )}
-
           <button
             onClick={handleCheckout}
             disabled={isCheckingOut}
