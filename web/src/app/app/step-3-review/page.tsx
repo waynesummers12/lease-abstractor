@@ -105,9 +105,13 @@ const buttonStyle: React.CSSProperties = {
 export default function HomePage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
+
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
 
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
+    useState<number | null>(null);
+
+  const [animatedExposure, setAnimatedExposure] =
     useState<number | null>(null);
 
   const [exposureRange, setExposureRange] =
@@ -159,79 +163,50 @@ export default function HomePage() {
     }
   }
 
-  useEffect(() => {
-    if (!analysis) {
-      setTotalAvoidableExposure(null);
-      setExposureRange(null);
-      setExposureRiskLabel(null);
-      return;
-    }
+  /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
 
-    const exposure =
-  typeof analysis.cam_total_avoidable_exposure === "number"
-    ? analysis.cam_total_avoidable_exposure
-    : null;
-
-    setTotalAvoidableExposure(exposure);
-    setExposureRange(analysis.avoidable_exposure_range ?? null);
-    setExposureRiskLabel(
-      analysis.risk_level ? analysis.risk_level.toLowerCase() : null
-    );
-
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }, [analysis]);
-
-  async function handleCheckout() {
-    if (isCheckingOut || !auditId) return;
-
-    setIsCheckingOut(true);
-    setStatus("Redirecting to secure checkout…");
-
-    try {
-      if (analysis) {
-        sessionStorage.setItem("latest_analysis", JSON.stringify(analysis));
-      }
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-          },
-          body: JSON.stringify({ auditId }),
-        }
-      );
-
-      if (!res.ok) throw new Error(await res.text());
-      const { url } = await res.json();
-      if (!url) throw new Error("Missing checkout URL");
-      window.location.href = url;
-    } catch (err) {
-      console.error("Checkout error:", err);
-      setStatus("Checkout failed. Please try again.");
-      setIsCheckingOut(false);
-    }
+useEffect(() => {
+  if (!analysis) {
+    setTotalAvoidableExposure(null);
+    setExposureRange(null);
+    setExposureRiskLabel(null);
+    setAnimatedExposure(null);
+    return;
   }
 
-  useEffect(() => {
-  if (!analysis) return;
+  const exposure =
+    typeof analysis.cam_total_avoidable_exposure === "number"
+      ? analysis.cam_total_avoidable_exposure
+      : null;
 
-  console.log("🧠 FULL analysis object:");
-  console.log(JSON.stringify(analysis, null, 2));
+  setTotalAvoidableExposure(exposure);
+  setExposureRange(analysis.exposure_range ?? null);
+  setExposureRiskLabel(analysis.exposure_risk ?? null);
+
+  // Initialize animation from 0 → exposure
+  if (exposure != null) {
+    setAnimatedExposure(0);
+
+    let current = 0;
+    const step = Math.max(Math.floor(exposure / 40), 1);
+
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= exposure) {
+        setAnimatedExposure(exposure);
+        clearInterval(interval);
+      } else {
+        setAnimatedExposure(current);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }
+
+  setTimeout(() => {
+    resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, 100);
 }, [analysis]);
-
-// useEffect(() => {
-//   if (!analysis) return;
-
-//   console.log("🧠 Lease analysis loaded");
-//   console.log("flags:", analysis.health?.flags);
-//   console.log("totalAvoidableExposure:", totalAvoidableExposure);
-//   console.log("exposureRange:", exposureRange);
-//   console.log("exposureRiskLabel:", exposureRiskLabel);
-// }, [analysis, totalAvoidableExposure, exposureRange, exposureRiskLabel]);
 
   return (
   <main
