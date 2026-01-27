@@ -1,6 +1,6 @@
 // lib/audit/waitForAnalysis.ts
 import { sleep } from "./analysis.utils";
-import { fetchAnalysis } from "./fetchAnalysis";
+import { fetchAnalysis } from "./analysis.fetch";
 
 type AuditByIdResponse = {
   analysis: any | null;
