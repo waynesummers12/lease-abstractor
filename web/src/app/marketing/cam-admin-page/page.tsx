@@ -232,168 +232,183 @@ export default function CamAdminFeesPage() {
           One-time audit • Secure upload • No subscription
         </p>
       </section>
+      {/* ---------- FAQ SECTION ---------- */}
+      <section
+        style={{
+          marginTop: 48,
+          borderTop: "1px solid #e5e7eb",
+          paddingTop: 32,
+          display: "grid",
+          gap: 16,
+        }}
+      >
+        <h2 style={{ fontSize: 22, fontWeight: 800 }}>
+          CAM Admin Fees — Common Questions
+        </h2>
+
+        <details>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>
+            What are CAM admin fees?
+          </summary>
+          <p style={{ marginTop: 8 }}>
+            CAM admin fees are percentage-based charges added to Common Area
+            Maintenance expenses. They are often labeled as administrative,
+            management, or overhead fees — and they are <strong>not actual
+            maintenance costs</strong>.
+          </p>
+          <p>
+            Many tenants discover these fees only after running a lease audit or
+            using a tool like{" "}
+            <a
+              href="/product/app"
+              style={{ color: "#0f172a", fontWeight: 600 }}
+            >
+              SaveOnLease
+            </a>.
+          </p>
+        </details>
+
+        <details>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>
+            What is a normal CAM admin fee percentage?
+          </summary>
+          <p style={{ marginTop: 8 }}>
+            Most CAM admin fees fall between <strong>10% and 15%</strong>.
+            Percentages above that range are common — but frequently
+            challengeable depending on lease language.
+          </p>
+          <p>
+            Our automated audit flags admin fees that exceed market norms. You
+            can{" "}
+            <a
+              href="/product/app"
+              style={{ color: "#0f172a", fontWeight: 600 }}
+            >
+              check your lease automatically
+            </a>{" "}
+            in minutes.
+          </p>
+        </details>
+
+        <details>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>
+            Are CAM admin fees negotiable or challengeable?
+          </summary>
+          <p style={{ marginTop: 8 }}>
+            Yes. CAM admin fees are one of the <strong>most commonly disputed</strong>{" "}
+            lease charges. They are often reduced or removed when they include
+            double-counting, capital expenses, or vague “management” language.
+          </p>
+          <p>
+            Most tenants never challenge them because the math is buried.{" "}
+            <a
+              href="/product/app"
+              style={{ color: "#0f172a", fontWeight: 600 }}
+            >
+              Automated review
+            </a>{" "}
+            makes this obvious.
+          </p>
+        </details>
+
+        <details>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>
+            When are CAM admin fees not allowed?
+          </summary>
+          <p style={{ marginTop: 8 }}>
+            CAM admin fees may be prohibited when leases exclude overhead costs,
+            cap management fees, or require expenses to reflect actual services
+            performed.
+          </p>
+          <p>
+            If you’re unsure, the fastest way to confirm is to{" "}
+            <a
+              href="/product/app"
+              style={{ color: "#0f172a", fontWeight: 600 }}
+            >
+              upload your lease for analysis
+            </a>.
+          </p>
+        </details>
+
+        <details>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>
+            Why do most tenants overpay CAM admin fees?
+          </summary>
+          <p style={{ marginTop: 8 }}>
+            Because admin fees are rarely itemized and often assumed to be
+            “standard.” In reality, many tenants are paying thousands they don’t
+            owe.
+          </p>
+          <p>
+            That’s why we built an audit designed specifically for tenants.{" "}
+            <a
+              href="/product/app"
+              style={{ color: "#0f172a", fontWeight: 600 }}
+            >
+              Check your fees automatically
+            </a>.
+          </p>
+        </details>
+      </section>
+
+      {/* ---------- SEO FAQ SCHEMA ---------- */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What are CAM admin fees?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "CAM admin fees are percentage-based charges added to Common Area Maintenance costs, often labeled as administrative, management, or overhead fees. They are not direct maintenance expenses and are frequently inflated or misapplied."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is a normal CAM admin fee percentage?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Most CAM admin fees fall between 10% and 15%. Fees above 15% are common but often questionable and may be challengeable depending on lease language."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are CAM admin fees negotiable or challengeable?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Yes. CAM admin fees are frequently negotiable and challengeable, especially when they include double-counting, capital expenses, or services not permitted under the lease."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "When are CAM admin fees not allowed?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "CAM admin fees may not be allowed when leases exclude overhead costs, limit management fees, prohibit capital expenses, or require fees to reflect actual services rendered."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why do most tenants overpay CAM admin fees?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Most tenants overpay because admin fees are buried in lease language and rarely itemized in reconciliation statements. Many tenants assume percentages are standard and never review the calculation."
+                }
+              }
+            ]
+          }),
+        }}
+      />
     </main>
-    {/* ---------- FAQ SECTION ---------- */}
-<section
-  style={{
-    marginTop: 48,
-    borderTop: "1px solid #e5e7eb",
-    paddingTop: 32,
-    display: "grid",
-    gap: 16,
-  }}
->
-  <h2 style={{ fontSize: 22, fontWeight: 800 }}>
-    CAM Admin Fees — Common Questions
-  </h2>
-
-  <details>
-    <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-      What are CAM admin fees?
-    </summary>
-    <p style={{ marginTop: 8 }}>
-      CAM admin fees are percentage-based charges added to Common Area
-      Maintenance expenses. They are often labeled as administrative,
-      management, or overhead fees — and they are <strong>not actual
-      maintenance costs</strong>.
-    </p>
-    <p>
-      Many tenants discover these fees only after running a lease audit or
-      using a tool like{" "}
-      <a href="/product/app" style={{ color: "#0f172a", fontWeight: 600 }}>
-        SaveOnLease
-      </a>.
-    </p>
-  </details>
-
-  <details>
-    <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-      What is a normal CAM admin fee percentage?
-    </summary>
-    <p style={{ marginTop: 8 }}>
-      Most CAM admin fees fall between <strong>10% and 15%</strong>.
-      Percentages above that range are common — but frequently
-      challengeable depending on lease language.
-    </p>
-    <p>
-      Our automated audit flags admin fees that exceed market norms. You
-      can{" "}
-      <a href="/product/app" style={{ color: "#0f172a", fontWeight: 600 }}>
-        check your lease automatically
-      </a>{" "}
-      in minutes.
-    </p>
-  </details>
-
-  <details>
-    <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-      Are CAM admin fees negotiable or challengeable?
-    </summary>
-    <p style={{ marginTop: 8 }}>
-      Yes. CAM admin fees are one of the <strong>most commonly disputed</strong>{" "}
-      lease charges. They are often reduced or removed when they include
-      double-counting, capital expenses, or vague “management” language.
-    </p>
-    <p>
-      Most tenants never challenge them because the math is buried.{" "}
-      <a href="/product/app" style={{ color: "#0f172a", fontWeight: 600 }}>
-        Automated review
-      </a>{" "}
-      makes this obvious.
-    </p>
-  </details>
-
-  <details>
-    <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-      When are CAM admin fees not allowed?
-    </summary>
-    <p style={{ marginTop: 8 }}>
-      CAM admin fees may be prohibited when leases exclude overhead costs,
-      cap management fees, or require expenses to reflect actual services
-      performed.
-    </p>
-    <p>
-      If you’re unsure, the fastest way to confirm is to{" "}
-      <a href="/product/app" style={{ color: "#0f172a", fontWeight: 600 }}>
-        upload your lease for analysis
-      </a>.
-    </p>
-  </details>
-
-  <details>
-    <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-      Why do most tenants overpay CAM admin fees?
-    </summary>
-    <p style={{ marginTop: 8 }}>
-      Because admin fees are rarely itemized and often assumed to be
-      “standard.” In reality, many tenants are paying thousands they don’t
-      owe.
-    </p>
-    <p>
-      That’s why we built an audit designed specifically for tenants.{" "}
-      <a href="/product/app" style={{ color: "#0f172a", fontWeight: 600 }}>
-        Check your fees automatically
-      </a>.
-    </p>
-  </details>
-</section>
-
-    {/* ---------- SEO FAQ SCHEMA ---------- */}
-<script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What are CAM admin fees?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text":
-              "CAM admin fees are percentage-based charges added to Common Area Maintenance costs, often labeled as administrative, management, or overhead fees. They are not direct maintenance expenses and are frequently inflated or misapplied."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is a normal CAM admin fee percentage?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text":
-              "Most CAM admin fees fall between 10% and 15%. Fees above 15% are common but often questionable and may be challengeable depending on lease language."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are CAM admin fees negotiable or challengeable?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text":
-              "Yes. CAM admin fees are frequently negotiable and challengeable, especially when they include double-counting, capital expenses, or services not permitted under the lease."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "When are CAM admin fees not allowed?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text":
-              "CAM admin fees may not be allowed when leases exclude overhead costs, limit management fees, prohibit capital expenses, or require fees to reflect actual services rendered."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why do most tenants overpay CAM admin fees?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text":
-              "Most tenants overpay because admin fees are buried in lease language and rarely itemized in reconciliation statements. Many tenants assume percentages are standard and never review the calculation."
-          }
-        }
-      ]
-    }),
-  }}
-/>
   );
 }
