@@ -24,17 +24,6 @@ export default function NnnAuditRightsPage() {
           charges — but only for a short window. Miss the deadline, and
           overcharges may become final.
         </p>
-
-        <Link
-          href="/product/app"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Upload your lease to check audit rights
-        </Link>
-
-        <p className="mt-2 text-sm text-gray-500">
-          🔒 Secure & private · No obligation · Takes 2–3 minutes
-        </p>
       </header>
 
       {/* ---------- WHAT ARE NNN AUDIT RIGHTS ---------- */}
