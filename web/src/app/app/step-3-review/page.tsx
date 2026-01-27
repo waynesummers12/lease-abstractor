@@ -379,7 +379,7 @@ async function handleCheckout() {
     color: "#166534",
   }}
 >
-  title="Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease"
+  ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
 </div>
 
           <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
