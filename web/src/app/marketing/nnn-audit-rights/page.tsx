@@ -35,7 +35,13 @@ export default function NnnAuditRightsPage() {
         <p className="text-gray-700">
           NNN audit rights give tenants the ability to review, verify, and
           challenge charges passed through by the landlord — including CAM,
-          taxes, insurance, and administrative fees.
+          taxes, insurance, administrative fees, and whether your lease enforces
+          <a
+            href="/marketing/cam-expense-caps"
+            className="ml-1 text-gray-900 underline hover:text-black"
+          >
+            CAM increase limits
+          </a>.
         </p>
 
         <p className="mt-4 text-gray-700">

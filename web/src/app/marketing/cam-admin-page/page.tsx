@@ -164,7 +164,14 @@ export default function CamAdminFeesPage() {
           Admin fees are often limited or prohibited when the lease excludes
           overhead, restricts capital costs, or requires fees to reflect actual
           services rendered. Even when allowed, the calculation is frequently
-          wrong — and hinges on how clearly your lease defines
+          wrong — and hinges on whether your lease sets an
+          <a
+            href="/marketing/cam-expense-caps"
+            style={{ color: "#0f172a", fontWeight: 600, marginLeft: 4 }}
+          >
+            annual CAM cap
+          </a>
+          or clearly defines your lease
           <a
             href="/marketing/nnn-audit-rights"
             style={{ color: "#0f172a", fontWeight: 600, marginLeft: 4 }}

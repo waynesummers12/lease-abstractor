@@ -209,6 +209,13 @@ export default function CamReconciliationPage() {
           >
             your audit rights
           </a>
+          and any
+          <a
+            href="/marketing/cam-expense-caps"
+            className="ml-1 text-gray-900 underline hover:text-black"
+          >
+            CAM expense caps
+          </a>
           before the deadline.
         </p>
       </section>
