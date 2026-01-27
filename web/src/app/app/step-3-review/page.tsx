@@ -418,7 +418,7 @@ async function handleCheckout() {
   style={{
     marginTop: 6,
     fontSize: 12,
-    color: "#334155",
+    color: "#1f2937",
   }}
 >
   Includes full CAM breakdown, findings, and recovery recommendations
