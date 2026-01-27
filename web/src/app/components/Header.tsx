@@ -1,18 +1,31 @@
 // web/src/app/components/Header.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [learnOpen, setLearnOpen] = useState(false);
+  const learnRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close Learn dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (learnRef.current && !learnRef.current.contains(e.target as Node)) {
+        setLearnOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -38,49 +51,78 @@ export default function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/marketing/learn" className="opacity-80 hover:opacity-100">
-            Learn
-          </Link>
+        <nav className="hidden md:flex items-center gap-6 text-sm relative">
+          {/* Learn Dropdown */}
+          <div ref={learnRef} className="relative">
+            <button
+              onMouseEnter={() => setLearnOpen(true)}
+              onClick={() => setLearnOpen((v) => !v)}
+              className="opacity-80 hover:opacity-100 flex items-center gap-1"
+            >
+              Learn
+              <span className="text-xs">▾</span>
+            </button>
+
+            {learnOpen && (
+              <div
+                onMouseLeave={() => setLearnOpen(false)}
+                className="absolute left-0 mt-2 w-64 rounded-lg bg-black border border-white/10 shadow-xl py-2"
+              >
+                <Link
+                  href="/marketing/cam-reconciliation"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM Reconciliation
+                </Link>
+                <Link
+                  href="/marketing/nnn-audit-rights"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Audit Rights
+                </Link>
+                <Link
+                  href="/marketing/cam-expense-caps"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM Expense Caps
+                </Link>
+                <Link
+                  href="/marketing/cam-admin-fees"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM Admin Fees
+                </Link>
+                <Link
+                  href="/marketing/cam-vs-nnn"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM vs NNN
+                </Link>
+              </div>
+            )}
+          </div>
+
           <Link
             href="/marketing/what-we-find"
             className="opacity-80 hover:opacity-100"
           >
             What We Find
           </Link>
+
           <Link
             href="/marketing/how-it-works"
             className="opacity-80 hover:opacity-100"
           >
             How It Works
           </Link>
-          <Link href="/marketing/pricing" className="opacity-80 hover:opacity-100">
+
+          <Link
+            href="/marketing/pricing"
+            className="opacity-80 hover:opacity-100"
+          >
             Pricing
           </Link>
-          <Link
-            href="/marketing/cam-reconciliation"
-            className="opacity-80 hover:opacity-100"
-          >
-            CAM Reconciliation
-          </Link>
-          <Link
-            href="/marketing/nnn-audit-rights"
-            className="opacity-80 hover:opacity-100"
-          >
-            NNN Audit Rights
-          </Link>
-          <Link
-            href="/marketing/cam-expense-caps"
-            className="opacity-80 hover:opacity-100"
-          >
-            CAM Expense Caps
-          </Link>
-          <Link
-            href="/marketing/cam-admin-page"
-            className="opacity-80 hover:opacity-100"
-          >
-            CAM Admin
-          </Link>
+
           <Link
             href="/product/app"
             className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
@@ -102,48 +144,35 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden bg-black px-6 pb-4 text-white">
           <div className="flex flex-col gap-4 text-sm">
-            <Link href="/marketing/learn" onClick={() => setMenuOpen(false)}>
-              Learn
+            <span className="uppercase text-xs opacity-60">Learn</span>
+            <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
+              CAM Reconciliation
             </Link>
-            <Link
-              href="/marketing/what-we-find"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
+              NNN Audit Rights
+            </Link>
+            <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
+              CAM Expense Caps
+            </Link>
+            <Link href="/marketing/cam-admin-fees" onClick={() => setMenuOpen(false)}>
+              CAM Admin Fees
+            </Link>
+            <Link href="/marketing/cam-vs-nnn" onClick={() => setMenuOpen(false)}>
+              CAM vs NNN
+            </Link>
+
+            <hr className="border-white/10 my-2" />
+
+            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
               What We Find
             </Link>
-            <Link
-              href="/marketing/how-it-works"
-              onClick={() => setMenuOpen(false)}
-            >
+            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
               How It Works
             </Link>
             <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
               Pricing
             </Link>
-            <Link
-              href="/marketing/cam-reconciliation"
-              onClick={() => setMenuOpen(false)}
-            >
-              CAM Reconciliation
-            </Link>
-            <Link
-              href="/marketing/nnn-audit-rights"
-              onClick={() => setMenuOpen(false)}
-            >
-              NNN Audit Rights
-            </Link>
-            <Link
-              href="/marketing/cam-expense-caps"
-              onClick={() => setMenuOpen(false)}
-            >
-              CAM Expense Caps
-            </Link>
-            <Link
-              href="/marketing/cam-admin-page"
-              onClick={() => setMenuOpen(false)}
-            >
-              CAM Admin
-            </Link>
+
             <Link
               href="/product/app"
               className="mt-2 rounded bg-white px-4 py-2 text-black"
