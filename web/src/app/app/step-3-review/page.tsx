@@ -103,9 +103,17 @@ const buttonStyle: React.CSSProperties = {
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
+  console.log(
+    "NEXT_PUBLIC_WORKER_URL:",
+    process.env.NEXT_PUBLIC_WORKER_URL
+  );
+  console.log(
+    "NEXT_PUBLIC_WORKER_KEY:",
+    process.env.NEXT_PUBLIC_WORKER_KEY
+  );
+
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
-
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
 
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
@@ -122,6 +130,7 @@ export default function HomePage() {
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
+
 
   /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
   const resultsRef = useRef<HTMLDivElement | null>(null);
