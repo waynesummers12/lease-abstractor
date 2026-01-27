@@ -362,6 +362,25 @@ async function handleCheckout() {
             💰 $
             {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
           </div>
+{/* --- VALUE CONFIDENCE BADGE --- */}
+<div
+  style={{
+    marginTop: 6,
+    alignSelf: "flex-start",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 6,
+    padding: "4px 10px",
+    borderRadius: 999,
+    background: "#dcfce7", // soft green
+    border: "1px solid #86efac",
+    fontSize: 12,
+    fontWeight: 600,
+    color: "#166534",
+  }}
+>
+  ✓ Based on lease terms & CAM reconciliation rules
+</div>
 
           <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
             Based on your lease terms, you may be able to recover up to{" "}
