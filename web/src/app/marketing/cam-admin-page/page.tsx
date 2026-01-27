@@ -126,16 +126,6 @@ export default function CamAdminFeesPage() {
           wrong.
         </p>
       </section>
-
-      {/* ---------- WHY MISSED ---------- */}
-      <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>Why most tenants miss this</h2>
-        <p style={textStyle}>
-          CAM admin fees are buried deep in lease language and rarely itemized in
-          reconciliation statements. Most tenants assume percentages are
-          standard — and never verify them.
-        </p>
-      </section>
 {/* ---------- INLINE COST CALCULATOR ---------- */}
 <section
   style={{
@@ -178,6 +168,16 @@ export default function CamAdminFeesPage() {
     reconciliations and labeled as “standard.”
   </p>
 </section>
+      {/* ---------- WHY MISSED ---------- */}
+      <section style={sectionStyle}>
+        <h2 style={subHeadingStyle}>Why most tenants miss this</h2>
+        <p style={textStyle}>
+          CAM admin fees are buried deep in lease language and rarely itemized in
+          reconciliation statements. Most tenants assume percentages are
+          standard — and never verify them.
+        </p>
+      </section>
+
 {/* ---------- COLORADO TENANT INSIGHT ---------- */}
 <section
   style={{
