@@ -364,6 +364,7 @@ async function handleCheckout() {
           </div>
 {/* --- VALUE CONFIDENCE BADGE --- */}
 <div
+title="Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease"
   style={{
     marginTop: 6,
     alignSelf: "flex-start",
