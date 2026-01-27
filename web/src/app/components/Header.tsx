@@ -123,6 +123,12 @@ export default function Header() {
                   Common CAM Fees
                 </Link>
                 <Link
+                  href="/marketing/non-allowable-cam-nnn-expenses"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Non-Allowable CAM / NNN
+                </Link>
+                <Link
                   href="/marketing/nnn-expenses-explained"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
@@ -133,6 +139,24 @@ export default function Header() {
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   NNN Calculation Examples
+                </Link>
+                <Link
+                  href="/marketing/nnn-insurance-charges-explained"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Insurance Charges
+                </Link>
+                <Link
+                  href="/marketing/nnn-reconcilisation"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Reconciliation
+                </Link>
+                <Link
+                  href="/marketing/pro-rata-share-explained"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Pro Rata Share Explained
                 </Link>
               </div>
             )}
@@ -208,11 +232,23 @@ export default function Header() {
             <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
               Common CAM Fees
             </Link>
+            <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
+              Non-Allowable CAM / NNN
+            </Link>
             <Link href="/marketing/nnn-expenses-explained" onClick={() => setMenuOpen(false)}>
               NNN Expenses Explained
             </Link>
             <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
               NNN Calculation Examples
+            </Link>
+            <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
+              NNN Insurance Charges
+            </Link>
+            <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
+              NNN Reconciliation
+            </Link>
+            <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
+              Pro Rata Share Explained
             </Link>
 
             <hr className="border-white/10 my-2" />
