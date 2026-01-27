@@ -1,10 +1,13 @@
 export function normalizeAuditForSuccess(analysis: any) {
   if (!analysis) return null;
 
-  const health = analysis.health ?? null;
+  const rawHealth = analysis.health ?? {};
 
   const healthScore =
-    typeof health?.score === "number" ? health.score : null;
+    typeof rawHealth.score === "number" ? rawHealth.score : null;
+
+  // 🔑 ALWAYS guarantee flags is an array
+  const flags = Array.isArray(rawHealth.flags) ? rawHealth.flags : [];
 
   const riskLevel =
     healthScore !== null
@@ -15,31 +18,24 @@ export function normalizeAuditForSuccess(analysis: any) {
         : "HIGH"
       : "HIGH";
 
-  // Preserve the incoming flags payload (including null) without forcing defaults
-  const flags = health?.flags ?? null;
-
-  // Optional: pre-compute avoidable exposure if backend already has it
   const avoidableExposure =
     typeof analysis.cam_total_avoidable_exposure === "number"
       ? Math.round(analysis.cam_total_avoidable_exposure)
       : null;
 
   return {
-  // preserve original analysis fields for downstream usage
-  ...analysis,
+    // preserve everything else
+    ...analysis,
 
-  // ✅ ensure health object is always shaped correctly for frontend
-  health: health
-    ? {
-        ...health,
-        score: healthScore,
-        flags, // ← critical: frontend computes exposure from flags[].estimated_impact
-      }
-    : null,
+    // 🔒 frontend-safe shape (never undefined)
+    health: {
+      ...rawHealth,
+      score: healthScore,
+      flags,
+    },
 
-  // ✅ derived + stable fields the UI depends on
-  risk_level: riskLevel,
-  avoidable_exposure: avoidableExposure,
-};
+    // derived fields used by UI
+    risk_level: riskLevel,
+    avoidable_exposure: avoidableExposure,
+  };
 }
-
