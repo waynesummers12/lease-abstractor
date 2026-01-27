@@ -147,6 +147,12 @@ export default function Header() {
                   NNN Insurance Charges
                 </Link>
                 <Link
+                  href="/marketing/nnn-property-tax-charges-explained"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  NNN Property Tax Charges
+                </Link>
+                <Link
                   href="/marketing/nnn-reconcilisation"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
@@ -157,6 +163,12 @@ export default function Header() {
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   Pro Rata Share Explained
+                </Link>
+                <Link
+                  href="/marketing/cam-reconciliation-checklist"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  CAM Reconciliation Checklist
                 </Link>
               </div>
             )}
@@ -244,11 +256,17 @@ export default function Header() {
             <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
               NNN Insurance Charges
             </Link>
+            <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
+              NNN Property Tax Charges
+            </Link>
             <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
               NNN Reconciliation
             </Link>
             <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
               Pro Rata Share Explained
+            </Link>
+            <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
+              CAM Reconciliation Checklist
             </Link>
 
             <hr className="border-white/10 my-2" />
