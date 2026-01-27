@@ -124,49 +124,57 @@ export default function SuccessPage() {
     }
   }
 
-  /* ================= UI ================= */
+/* ================= UI ================= */
 
-  if (fatalError) {
-    return (
-      <main className="mx-auto max-w-2xl px-6 py-20">
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
-          <p className="font-semibold">Something went wrong</p>
-          <p className="mt-2">{fatalError}</p>
-          <button
-            onClick={() => router.push("/product/app")}
-            className="mt-4 underline"
-          >
-            Back to app
-          </button>
-        </div>
-      </main>
-    );
-  }
+if (fatalError) {
+  return (
+    <main className="mx-auto max-w-2xl px-6 py-20">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
+        <p className="font-semibold">Something went wrong</p>
+        <p className="mt-2">{fatalError}</p>
+        <button
+          onClick={() => router.push("/product/app")}
+          className="mt-4 underline"
+        >
+          Back to app
+        </button>
+      </div>
+    </main>
+  );
+}
 
-  if (loading || !data) {
-    return (
-      <main className="mx-auto max-w-xl px-6 py-28 text-center">
-        <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
-        <h1 className="text-xl font-semibold">Preparing your audit</h1>
-      </main>
-    );
-  }
+if (loading || !data) {
+  return (
+    <main className="mx-auto max-w-xl px-6 py-28 text-center">
+      <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+      <h1 className="text-xl font-semibold">Preparing your audit</h1>
+    </main>
+  );
+}
 
-  const riskLevel = deriveRiskLevel(data.analysis);
-  const pdfReady = Boolean(data.audit_pdf_path || data.object_path);
+const riskLevel = deriveRiskLevel(data.analysis);
+const pdfReady = Boolean(data.audit_pdf_path || data.object_path);
 
-  /* ---------- PAID BUT PROCESSING ---------- */
-  if (data.status === "paid") {
-    return (
-      <main className="mx-auto max-w-xl px-6 py-28 text-center">
-        <div className="mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black mx-auto" />
-        <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
-        <p className="mt-3 text-sm text-gray-600">
-          Payment received. We’re generating your PDF now.
-        </p>
-      </main>
-    );
-  }
+/* ✅ FIX: SUPPORT BOTH SCORE SHAPES */
+const leaseScore =
+  typeof data.analysis?.health_score === "number"
+    ? data.analysis.health_score
+    : typeof data.analysis?.health?.score === "number"
+    ? data.analysis.health.score
+    : null;
+
+/* ---------- PAID BUT PROCESSING ---------- */
+if (data.status === "paid") {
+  return (
+    <main className="mx-auto max-w-xl px-6 py-28 text-center">
+      <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+      <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
+      <p className="mt-3 text-sm text-gray-600">
+        Payment received. We’re generating your PDF now.
+      </p>
+    </main>
+  );
+}
 
 /* ---------- COMPLETE ---------- */
 return (
@@ -180,7 +188,7 @@ return (
     </p>
 
     {/* ---------- LEASE SCORE ---------- */}
-    {typeof data.analysis?.health_score === "number" && (
+    {typeof leaseScore === "number" && (
       <div className="mt-8 rounded-xl border border-gray-200 bg-white p-5 text-left shadow-sm">
         <p className="text-sm font-semibold text-gray-900">Lease Score</p>
 
@@ -193,7 +201,7 @@ return (
           <div>
             <p className="text-xs uppercase text-gray-500">Score</p>
             <p className="mt-1 text-3xl font-bold">
-              {data.analysis.health_score}
+              {leaseScore}
               <span className="text-sm font-medium text-gray-500"> / 100</span>
             </p>
           </div>
@@ -321,4 +329,3 @@ return (
     </div>
   </main>
 );
-}
