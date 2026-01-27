@@ -62,7 +62,10 @@ router.post("/pdf", async (ctx) => {
        🔑 CRITICAL FIX:
        Normalize analysis EARLY so exposure exists pre-checkout
     -------------------------------------------------- */
-    const normalized = normalizeAuditForSuccess(rawAnalysis);
+    const normalized = normalizeAuditForSuccess({
+  analysis: rawAnalysis,
+});
+
 
     /* --------------------------------------------------
        PERSIST NORMALIZED ANALYSIS
