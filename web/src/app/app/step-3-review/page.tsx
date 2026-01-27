@@ -402,19 +402,29 @@ async function handleCheckout() {
       )}
 
       <button
-        onClick={handleCheckout}
-        disabled={isCheckingOut}
-        style={{
-          ...buttonStyle,
-          background: "#0f172a",
-          cursor: isCheckingOut ? "not-allowed" : "pointer",
-          marginTop: 10,
-          alignSelf: "flex-start",
-        }}
-      >
-        {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
-      </button>
-    </div>
+  onClick={handleCheckout}
+  disabled={isCheckingOut}
+  style={{
+    ...buttonStyle,
+    background: "#0f172a",
+    cursor: isCheckingOut ? "not-allowed" : "pointer",
+    marginTop: 10,
+    alignSelf: "flex-start",
+  }}
+>
+  {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
+</button>
+
+<div
+  style={{
+    marginTop: 6,
+    fontSize: 12,
+    color: "#475569",
+  }}
+>
+  Includes full CAM breakdown, findings, and recovery recommendations
+</div>
+
 
     {/* ---------- DETAILS ---------- */}
     <div style={{ display: "grid", gap: 12 }}>
