@@ -168,7 +168,7 @@ export default function SuccessPage() {
     );
   }
 
-  /* ---------- COMPLETE ---------- */
+/* ---------- COMPLETE ---------- */
 return (
   <main className="mx-auto max-w-xl px-6 py-28 text-center">
     <div className="mb-6 text-3xl">✅</div>
@@ -180,88 +180,85 @@ return (
     </p>
 
     {/* ---------- LEASE SCORE ---------- */}
-    {riskLevel && (
+    {typeof data.analysis?.health_score === "number" && (
       <div className="mt-8 rounded-xl border border-gray-200 bg-white p-5 text-left shadow-sm">
-        <p className="text-sm font-semibold text-gray-900">
-          Lease Score
-        </p>
+        <p className="text-sm font-semibold text-gray-900">Lease Score</p>
 
         <p className="mt-2 text-sm text-gray-700">
-          A summary of how tenant-favorable your lease is for CAM / NNN charges,
-          escalation limits, and audit rights.
+          A numeric measure of how tenant-favorable your lease is based on CAM /
+          NNN structure, escalation limits, and audit leverage.
         </p>
 
         <div className="mt-4 flex items-center justify-between rounded-lg bg-gray-50 p-4">
           <div>
-            <p className="text-xs uppercase text-gray-500">Assessment</p>
-            <p className="mt-1 text-sm font-semibold">
-              {riskLevel === "LOW" && "Strong Lease"}
-              {riskLevel === "MEDIUM" && "Review Recommended"}
-              {riskLevel === "HIGH" && "High Risk Lease"}
+            <p className="text-xs uppercase text-gray-500">Score</p>
+            <p className="mt-1 text-3xl font-bold">
+              {data.analysis.health_score}
+              <span className="text-sm font-medium text-gray-500"> / 100</span>
             </p>
           </div>
 
-          <div
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${
-              riskLevel === "LOW"
-                ? "bg-green-100 text-green-800"
-                : riskLevel === "MEDIUM"
-                ? "bg-amber-100 text-amber-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {riskLevel}
-          </div>
+          {riskLevel && (
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                riskLevel === "LOW"
+                  ? "bg-green-100 text-green-800"
+                  : riskLevel === "MEDIUM"
+                  ? "bg-amber-100 text-amber-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {riskLevel}
+            </div>
+          )}
         </div>
       </div>
     )}
-{/* ---------------- LEASE SCORE EXPLANATION ---------------- */}
-<div className="mt-6 rounded-xl border bg-white p-6 text-left shadow-sm">
-  <h3 className="text-lg font-semibold">
-    How Your Lease Score Is Calculated
-  </h3>
 
-  <p className="mt-2 text-sm text-gray-600">
-    Your Lease Score reflects how tenant-favorable your lease is for CAM / NNN
-    charges, escalation limits, and audit rights — based on the lease terms
-    that most often drive overcharges.
-  </p>
+    {/* ---------- LEASE SCORE EXPLANATION ---------- */}
+    <div className="mt-6 rounded-xl border bg-white p-6 text-left shadow-sm">
+      <h3 className="text-lg font-semibold">
+        How Your Lease Score Is Calculated
+      </h3>
 
-  <div className="mt-5 space-y-4 text-sm">
-    <div>
-      <p className="font-medium text-green-700">Low Risk Lease</p>
-      <p className="text-gray-600">
-        Strong tenant protections with defined CAM limits, excluded capital
-        expenses, and enforceable audit rights. These leases typically limit
-        unexpected cost increases.
+      <p className="mt-2 text-sm text-gray-600">
+        Your Lease Score reflects how tenant-favorable your lease is for CAM /
+        NNN charges, escalation limits, and audit rights — based on the lease
+        terms most likely to drive overcharges.
+      </p>
+
+      <div className="mt-5 space-y-4 text-sm">
+        <div>
+          <p className="font-medium text-green-700">Low Risk Lease</p>
+          <p className="text-gray-600">
+            Strong tenant protections with defined CAM limits, excluded capital
+            expenses, and enforceable audit rights.
+          </p>
+        </div>
+
+        <div>
+          <p className="font-medium text-amber-700">Medium Risk Lease</p>
+          <p className="text-gray-600">
+            Some protections exist, but key terms are ambiguous or partially
+            uncapped. These leases require active monitoring.
+          </p>
+        </div>
+
+        <div>
+          <p className="font-medium text-red-700">High Risk Lease</p>
+          <p className="text-gray-600">
+            Broad or uncapped CAM / NNN language with limited audit leverage.
+            These leases are most likely to produce recoverable overcharges.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-5 text-xs text-gray-500">
+        Lease Score reflects dispute outcomes observed across commercial CAM /
+        NNN audits and how landlords typically interpret ambiguous lease
+        language.
       </p>
     </div>
-
-    <div>
-      <p className="font-medium text-amber-700">Medium Risk Lease</p>
-      <p className="text-gray-600">
-        Some tenant protections exist, but key terms are ambiguous or partially
-        uncapped. These leases often require proactive monitoring to prevent
-        overcharges.
-      </p>
-    </div>
-
-    <div>
-      <p className="font-medium text-red-700">High Risk Lease</p>
-      <p className="text-gray-600">
-        Limited tenant protections with broadly defined or uncapped CAM / NNN
-        charges. These leases are most likely to produce recoverable overcharges
-        if audited promptly.
-      </p>
-    </div>
-  </div>
-
-  <p className="mt-5 text-xs text-gray-500">
-    Lease Score is based on common dispute outcomes observed across commercial
-    CAM / NNN audits and reflects how landlords typically interpret ambiguous
-    lease language.
-  </p>
-</div>
 
     {/* ---------- RISK & TIMING NOTICE ---------- */}
     {(riskLevel === "MEDIUM" ||
@@ -287,40 +284,40 @@ return (
       </div>
     )}
 
+    {/* ---------- AVOIDABLE EXPOSURE ---------- */}
+    {typeof data.analysis?.avoidable_exposure === "number" && (
+      <div className="mt-6 rounded-lg border bg-gray-50 p-4 text-sm">
+        <p className="font-medium">Estimated recoverable exposure</p>
+        <p className="mt-1 text-2xl font-bold">
+          ${data.analysis.avoidable_exposure.toLocaleString()}
+        </p>
+      </div>
+    )}
 
+    {/* ---------- DOWNLOAD ---------- */}
+    <button
+      onClick={handleDownload}
+      disabled={downloading || !pdfReady}
+      className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+    >
+      {downloading ? "Preparing PDF…" : "Download PDF Audit"}
+    </button>
 
-      {typeof data.analysis?.avoidable_exposure === "number" && (
-        <div className="mt-6 rounded-lg border bg-gray-50 p-4 text-sm">
-          <p className="font-medium">Estimated recoverable exposure</p>
-          <p className="mt-1 text-2xl font-bold">
-            ${data.analysis.avoidable_exposure.toLocaleString()}
-          </p>
-        </div>
-      )}
-
+    {/* ---------- NAV ---------- */}
+    <div className="mt-8 space-y-3 text-sm">
       <button
-        onClick={handleDownload}
-        disabled={downloading || !pdfReady}
-        className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        onClick={() => router.push("/product/app/dashboard")}
+        className="block mx-auto underline text-gray-700"
       >
-        {downloading ? "Preparing PDF…" : "Download PDF Audit"}
+        View all audits
       </button>
 
-      <div className="mt-8 space-y-3 text-sm">
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline text-gray-700"
-        >
-          View all audits
-        </button>
-
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline text-gray-500"
-        >
-          Return to app
-        </button>
-      </div>
-    </main>
-  );
-}
+      <button
+        onClick={() => router.push("/product/app/dashboard")}
+        className="block mx-auto underline text-gray-500"
+      >
+        Return to app
+      </button>
+    </div>
+  </main>
+);
