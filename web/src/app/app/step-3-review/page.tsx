@@ -174,16 +174,22 @@ useEffect(() => {
     return;
   }
 
-  // ✅ SOURCE OF TRUTH
+  // 🔑 SOURCE OF TRUTH — THIS FIELD EXISTS
   const exposure =
-    typeof analysis.avoidable_exposure === "number"
+    typeof (analysis as any).cam_total_avoidable_exposure === "number"
+      ? (analysis as any).cam_total_avoidable_exposure
+      : typeof analysis.avoidable_exposure === "number"
       ? analysis.avoidable_exposure
       : null;
 
   setTotalAvoidableExposure(exposure);
-  setExposureRange(analysis.avoidable_exposure_range ?? null);
+  setExposureRange((analysis as any).exposure_range ?? null);
   setExposureRiskLabel(
-    analysis.risk_level ? analysis.risk_level.toLowerCase() : null
+    typeof (analysis as any).exposure_risk === "string"
+      ? (analysis as any).exposure_risk.toLowerCase()
+      : analysis.risk_level
+      ? analysis.risk_level.toLowerCase()
+      : null
   );
 
   // Animate
@@ -210,6 +216,7 @@ useEffect(() => {
     resultsRef.current?.scrollIntoView({ behavior: "smooth" });
   }, 100);
 }, [analysis]);
+
 
 
 async function handleCheckout() {
