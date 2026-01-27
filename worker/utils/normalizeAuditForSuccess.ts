@@ -1,15 +1,10 @@
 export function normalizeAuditForSuccess(analysis: any) {
   if (!analysis) return null;
 
-  const avoidable =
-    typeof analysis.cam_total_avoidable_exposure === "number"
-      ? Math.round(analysis.cam_total_avoidable_exposure)
-      : null;
+  const health = analysis.health ?? null;
 
   const healthScore =
-    typeof analysis.health?.score === "number"
-      ? analysis.health.score
-      : null;
+    typeof health?.score === "number" ? health.score : null;
 
   const riskLevel =
     healthScore !== null
@@ -20,18 +15,29 @@ export function normalizeAuditForSuccess(analysis: any) {
         : "HIGH"
       : "HIGH";
 
-  const flaggedSections =
-    Array.isArray(analysis.health?.flags)
-      ? analysis.health.flags.slice(0, 3).map((f: any, idx: number) => ({
-          section: `Section ${idx + 1}`,
-          title: f.label,
-        }))
-      : [];
+  // Preserve FULL flags array (frontend depends on this)
+  const flags = Array.isArray(health?.flags) ? health.flags : [];
+
+  // Optional: pre-compute avoidable exposure if backend already has it
+  const avoidableExposure =
+    typeof analysis.cam_total_avoidable_exposure === "number"
+      ? Math.round(analysis.cam_total_avoidable_exposure)
+      : null;
 
   return {
-    avoidable_exposure: avoidable,
+    ...analysis,
+
+    // 🔑 keep health structure intact
+    health: health
+      ? {
+          ...health,
+          flags,
+        }
+      : null,
+
+    // 🔑 derived fields (non-breaking)
     risk_level: riskLevel,
-    flagged_sections: flaggedSections,
-    health_score: healthScore,
+    avoidable_exposure: avoidableExposure,
   };
 }
+
