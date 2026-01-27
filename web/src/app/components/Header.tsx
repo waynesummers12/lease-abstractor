@@ -81,6 +81,12 @@ export default function Header() {
                   NNN Audit Rights
                 </Link>
                 <Link
+                  href="/marketing/audit-window-deadlines"
+                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                >
+                  Audit Window Deadlines
+                </Link>
+                <Link
                   href="/marketing/cam-expense-caps"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
@@ -150,6 +156,9 @@ export default function Header() {
             </Link>
             <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
               NNN Audit Rights
+            </Link>
+            <Link href="/marketing/audit-window-deadlines" onClick={() => setMenuOpen(false)}>
+              Audit Window Deadlines
             </Link>
             <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
               CAM Expense Caps
