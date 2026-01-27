@@ -491,9 +491,7 @@ async function handleCheckout() {
     color: "#111827",
   }}
 >
-  After checkout, your full CAM / NNN audit is generated with
-  flagged clauses, recovery estimates, and next-step guidance —
-  ready in minutes.
+  Full audit report generated immediately after checkout.
 </div>
     </div>
 
