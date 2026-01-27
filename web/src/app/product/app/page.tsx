@@ -270,9 +270,41 @@ export default function HomePage() {
               Estimated Avoidable Exposure (Next 12 Months)
             </div>
             <div style={{ fontSize: 34, fontWeight: 900 }}>
-              {totalAvoidableExposure != null
-                ? `💰 ${totalAvoidableExposure.toLocaleString()}`
-                : "Pending…"}
+              {totalAvoidableExposure != null ? (
+  <>
+    <div
+      className={`mt-2 text-4xl font-extrabold tracking-tight ${
+        exposureRiskLabel === "high"
+          ? "text-red-700"
+          : exposureRiskLabel === "medium"
+          ? "text-amber-700"
+          : "text-green-700"
+      }`}
+    >
+      💰 {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
+    </div>
+
+    <p className="mt-2 text-sm text-green-900">
+      Based on your lease terms, you may be able to recover up to{" "}
+      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
+      overcharges over the next 12 months.
+    </p>
+
+    {exposureRange && (
+      <p className="mt-1 text-xs text-green-800">
+        Estimated recovery range:{" "}
+        <strong>
+          ${exposureRange.low.toLocaleString()} – $
+          {exposureRange.high.toLocaleString()}
+        </strong>
+      </p>
+    )}
+  </>
+) : (
+  <div className="mt-2 text-2xl font-semibold text-green-900 animate-pulse">
+    Analyzing…
+  </div>
+)}
             </div>
             {exposureRange && (
               <div style={{ color: "#166534" }}>
