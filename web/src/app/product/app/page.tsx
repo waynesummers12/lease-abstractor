@@ -301,73 +301,74 @@ useEffect(() => {
             Estimated Avoidable Exposure (Next 12 Months)
           </div>
 
-          {totalAvoidableExposure != null ? (
-            <>
-              <div
-                style={{
-                  fontSize: 34,
-                  fontWeight: 900,
-                  marginTop: 6,
-                  color:
-                    exposureRiskLabel === "high"
-                      ? "#991b1b"
-                      : exposureRiskLabel === "medium"
-                      ? "#92400e"
-                      : "#166534",
-                }}
-              >
-                💰 ${(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
-              </div>
+          {totalAvoidableExposure != null && (
+  <>
+    <div
+      style={{
+        fontSize: 34,
+        fontWeight: 900,
+        marginTop: 6,
+        color:
+          exposureRiskLabel === "high"
+            ? "#991b1b"
+            : exposureRiskLabel === "medium"
+            ? "#92400e"
+            : "#166534",
+      }}
+    >
+      💰 ${(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
+    </div>
 
-              <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
-                Based on your lease terms, you may be able to recover up to{" "}
-                <strong>${totalAvoidableExposure.toLocaleString()}</strong> in
-                CAM / NNN overcharges over the next 12 months.
-              </p>
+    <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
+      Based on your lease terms, you may be able to recover up to{" "}
+      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
+      overcharges over the next 12 months.
+    </p>
 
-              {exposureRange && (
-                <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
-                  Estimated recovery range:{" "}
-                  <strong>
-                    ${exposureRange.low.toLocaleString()} – $
-                    {exposureRange.high.toLocaleString()}
-                  </strong>
-                </p>
-              )}
+    {exposureRange && (
+      <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
+        Estimated recovery range:{" "}
+        <strong>
+          ${exposureRange.low.toLocaleString()} – $
+          {exposureRange.high.toLocaleString()}
+        </strong>
+      </p>
+    )}
 
-              {exposureRiskLabel && (
-                <div
-                  style={{
-                    marginTop: 6,
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color:
-                      exposureRiskLabel === "high"
-                        ? "#991b1b"
-                        : exposureRiskLabel === "medium"
-                        ? "#92400e"
-                        : "#166534",
-                  }}
-                >
-                  Risk level: {exposureRiskLabel.toUpperCase()}
-                </div>
-              )}
-            </>
-          ) : null
+    {exposureRiskLabel && (
+      <div
+        style={{
+          marginTop: 6,
+          fontSize: 12,
+          fontWeight: 700,
+          color:
+            exposureRiskLabel === "high"
+              ? "#991b1b"
+              : exposureRiskLabel === "medium"
+              ? "#92400e"
+              : "#166534",
+        }}
+      >
+        Risk level: {exposureRiskLabel.toUpperCase()}
+      </div>
+    )}
+  </>
+)}
 
-          <button
-            onClick={handleCheckout}
-            disabled={isCheckingOut}
-            style={{
-              ...buttonStyle,
-              background: "#0f172a",
-              cursor: isCheckingOut ? "not-allowed" : "pointer",
-              marginTop: 10,
-              alignSelf: "flex-start",
-            }}
-          >
-            {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
-          </button>
+<button
+  onClick={handleCheckout}
+  disabled={isCheckingOut}
+  style={{
+    ...buttonStyle,
+    background: "#0f172a",
+    cursor: isCheckingOut ? "not-allowed" : "pointer",
+    marginTop: 10,
+    alignSelf: "flex-start",
+  }}
+>
+  {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
+</button>
+
         </div>
 
         {/* ---------- DETAILS ---------- */}
