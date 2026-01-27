@@ -115,17 +115,6 @@ export default function CamAdminFeesPage() {
           </li>
         </ul>
       </section>
-
-      {/* ---------- WHEN NOT ALLOWED ---------- */}
-      <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>When CAM admin fees are not allowed</h2>
-        <p style={textStyle}>
-          Admin fees are often limited or prohibited when the lease excludes
-          overhead, restricts capital costs, or requires fees to reflect actual
-          services rendered. Even when allowed, the calculation is frequently
-          wrong.
-        </p>
-      </section>
 {/* ---------- INLINE COST CALCULATOR ---------- */}
 <section
   style={{
@@ -168,6 +157,17 @@ export default function CamAdminFeesPage() {
     reconciliations and labeled as “standard.”
   </p>
 </section>
+      {/* ---------- WHEN NOT ALLOWED ---------- */}
+      <section style={sectionStyle}>
+        <h2 style={subHeadingStyle}>When CAM admin fees are not allowed</h2>
+        <p style={textStyle}>
+          Admin fees are often limited or prohibited when the lease excludes
+          overhead, restricts capital costs, or requires fees to reflect actual
+          services rendered. Even when allowed, the calculation is frequently
+          wrong.
+        </p>
+      </section>
+
       {/* ---------- WHY MISSED ---------- */}
       <section style={sectionStyle}>
         <h2 style={subHeadingStyle}>Why most tenants miss this</h2>
