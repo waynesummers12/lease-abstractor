@@ -1,13 +1,12 @@
+// worker/utils/normalizeAuditForSuccess.ts
+
 export function normalizeAuditForSuccess(analysis: any) {
   if (!analysis) return null;
 
-  const rawHealth = analysis.health ?? {};
+  const health = analysis.health ?? null;
 
   const healthScore =
-    typeof rawHealth.score === "number" ? rawHealth.score : null;
-
-  // 🔑 ALWAYS guarantee flags is an array
-  const flags = Array.isArray(rawHealth.flags) ? rawHealth.flags : [];
+    typeof health?.score === "number" ? health.score : null;
 
   const riskLevel =
     healthScore !== null
@@ -18,24 +17,31 @@ export function normalizeAuditForSuccess(analysis: any) {
         : "HIGH"
       : "HIGH";
 
+  // 🔑 DO NOT default flags to []
+  // Preserve exactly what abstractLease produced
+  const flags = health?.flags ?? null;
+
   const avoidableExposure =
     typeof analysis.cam_total_avoidable_exposure === "number"
       ? Math.round(analysis.cam_total_avoidable_exposure)
       : null;
 
   return {
-    // preserve everything else
+    // preserve original analysis structure
     ...analysis,
 
-    // 🔒 frontend-safe shape (never undefined)
-    health: {
-      ...rawHealth,
-      score: healthScore,
-      flags,
-    },
+    // ✅ preserve health + flags (this is what frontend needs)
+    health: health
+      ? {
+          ...health,
+          score: healthScore,
+          flags,
+        }
+      : null,
 
-    // derived fields used by UI
+    // derived helpers (safe to add)
     risk_level: riskLevel,
     avoidable_exposure: avoidableExposure,
   };
 }
+
