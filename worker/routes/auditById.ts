@@ -79,12 +79,18 @@ router.get("/auditById/:auditId", async (ctx) => {
   }
 
   ctx.response.status = 200;
-  ctx.response.body = {
-    analysis: audit.analysis
-      ? normalizeAuditForSuccess(audit.analysis)
-      : null,
-    signedUrl,
-  };
+  const normalizedAnalysis = audit.analysis
+  ? normalizeAuditForSuccess(audit.analysis)
+  : null;
+
+ctx.response.body = {
+  id: audit.id,
+  status: audit.status,
+  analysis: normalizedAnalysis,
+  audit_pdf_path: audit.audit_pdf_path,
+  signedUrl,
+};
+
 
   console.log("✅ auditById response sent");
 });
