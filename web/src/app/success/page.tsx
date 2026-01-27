@@ -36,7 +36,7 @@ const deriveRiskLevel = (analysis: AuditResponse["analysis"]) => {
 
   if (score === null) return null;
 
-  return score >= 75 ? "LOW" : score >= 50 ? "MEDIUM" : "HIGH";
+  return score >= 75 ? "HIGH" : score >= 50 ? "MEDIUM" : "LOW";
 };
 
 /* ================= PAGE ================= */
@@ -169,43 +169,76 @@ export default function SuccessPage() {
   }
 
   /* ---------- COMPLETE ---------- */
-  return (
-    <main className="mx-auto max-w-xl px-6 py-28 text-center">
-      <div className="mb-6 text-3xl">✅</div>
+return (
+  <main className="mx-auto max-w-xl px-6 py-28 text-center">
+    <div className="mb-6 text-3xl">✅</div>
 
-      <h1 className="text-2xl font-semibold">Payment successful</h1>
+    <h1 className="text-2xl font-semibold">Payment successful</h1>
 
-      <p className="mt-3 text-sm text-gray-600">
-        Your CAM / NNN Audit Summary is ready.
-      </p>
-
-      {/* DEV-ONLY DEBUG (SAFE PLACEMENT) */}
-      {process.env.NODE_ENV === "development" && (
-        
-      )}
-
-      {(riskLevel === "MEDIUM" ||
-  riskLevel === "HIGH" ||
-  typeof data.analysis?.avoidable_exposure === "number") && (
-  <div className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-5 text-left shadow-sm">
-    <p className="text-sm font-semibold text-amber-900">
-      Risk &amp; Timing Notice
+    <p className="mt-3 text-sm text-gray-600">
+      Your CAM / NNN Audit Summary is ready.
     </p>
 
-    <p className="mt-2 text-sm text-amber-900">
-      Potential CAM / NNN overcharge risk identified. Acting within the audit
-      window may allow recovery of meaningful dollars.
-    </p>
+    {/* ---------- LEASE SCORE ---------- */}
+    {riskLevel && (
+      <div className="mt-8 rounded-xl border border-gray-200 bg-white p-5 text-left shadow-sm">
+        <p className="text-sm font-semibold text-gray-900">
+          Lease Score
+        </p>
 
-    <div className="mt-4 rounded-lg border border-amber-200 bg-amber-100 p-3 text-sm text-amber-900">
-      <p>
-        Most commercial leases require CAM / NNN disputes within
-        <strong> 30–120 days</strong> of reconciliation. Missing this window
-        often waives recovery rights.
-      </p>
-    </div>
-  </div>
-)}
+        <p className="mt-2 text-sm text-gray-700">
+          A summary of how tenant-favorable your lease is for CAM / NNN charges,
+          escalation limits, and audit rights.
+        </p>
+
+        <div className="mt-4 flex items-center justify-between rounded-lg bg-gray-50 p-4">
+          <div>
+            <p className="text-xs uppercase text-gray-500">Assessment</p>
+            <p className="mt-1 text-sm font-semibold">
+              {riskLevel === "LOW" && "Strong Lease"}
+              {riskLevel === "MEDIUM" && "Review Recommended"}
+              {riskLevel === "HIGH" && "High Risk Lease"}
+            </p>
+          </div>
+
+          <div
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              riskLevel === "LOW"
+                ? "bg-green-100 text-green-800"
+                : riskLevel === "MEDIUM"
+                ? "bg-amber-100 text-amber-800"
+                : "bg-red-100 text-red-800"
+            }`}
+          >
+            {riskLevel}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* ---------- RISK & TIMING NOTICE ---------- */}
+    {(riskLevel === "MEDIUM" ||
+      riskLevel === "HIGH" ||
+      typeof data.analysis?.avoidable_exposure === "number") && (
+      <div className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-5 text-left shadow-sm">
+        <p className="text-sm font-semibold text-amber-900">
+          Risk &amp; Timing Notice
+        </p>
+
+        <p className="mt-2 text-sm text-amber-900">
+          Potential CAM / NNN overcharge risk identified. Acting within the audit
+          window may allow recovery of meaningful dollars.
+        </p>
+
+        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-100 p-3 text-sm text-amber-900">
+          <p>
+            Most commercial leases require CAM / NNN disputes within
+            <strong> 30–120 days</strong> of reconciliation. Missing this window
+            often waives recovery rights.
+          </p>
+        </div>
+      </div>
+    )}
 
 
 
