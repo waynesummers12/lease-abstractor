@@ -80,21 +80,11 @@ router.get("/auditById/:auditId", async (ctx) => {
 
   ctx.response.status = 200;
 
-// 🔍 PROVE WHAT IS ACTUALLY STORED
-console.log(
-  "🧪 RAW analysis from DB:",
-  JSON.stringify(audit.analysis, null, 2)
-);
 
 const normalizedAnalysis = audit.analysis
   ? normalizeAuditForSuccess(audit.analysis)
   : null;
 
-// 🔍 PROVE WHAT NORMALIZATION RETURNS
-console.log(
-  "🧪 NORMALIZED analysis:",
-  JSON.stringify(normalizedAnalysis, null, 2)
-);
 
 ctx.response.body = {
   id: audit.id,
