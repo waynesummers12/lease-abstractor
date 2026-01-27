@@ -243,125 +243,130 @@ useEffect(() => {
     </header>
 
     {/* ---------- UPLOAD ---------- */}
-    <section
-      style={{
-        ...sectionStyle,
-        display: "flex",
-        flexDirection: "column",
-        gap: 12,
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-        />
-
-        <button
-          onClick={handleUploadAndAnalyze}
-          disabled={!file}
-          style={{
-            ...buttonStyle,
-            background: !file ? "#cbd5e1" : "#0f172a",
-            cursor: !file ? "not-allowed" : "pointer",
-          }}
-        >
-          Upload & Analyze
-        </button>
-      </div>
-
-      {status && (
-        <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>
-      )}
-    </section>
-
-    {/* ---------- RESULTS ---------- */}
-    {analysis ? (
-      <section
-        ref={resultsRef}
-        style={{
-          ...sectionStyle,
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: 16,
-        }}
-      >
-        {/* ===== GREEN EXPOSURE BOX ===== */}
-        <div style={exposureBoxStyle}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-            Estimated Avoidable Exposure (Next 12 Months)
-          </div>
-
-          {totalAvoidableExposure != null && (
-  <>
-    <div
-      style={{
-        fontSize: 34,
-        fontWeight: 900,
-        marginTop: 6,
-        color:
-          exposureRiskLabel === "high"
-            ? "#991b1b"
-            : exposureRiskLabel === "medium"
-            ? "#92400e"
-            : "#166534",
-      }}
-    >
-      💰 {totalAvoidableExposure.toLocaleString()}
-    </div>
-
-    <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
-      Based on your lease terms, you may be able to recover up to{" "}
-      <strong>${totalAvoidableExposure.toLocaleString()}</strong> in CAM / NNN
-      overcharges over the next 12 months.
-    </p>
-
-    {exposureRange && (
-      <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
-        Estimated recovery range:{" "}
-        <strong>
-          ${exposureRange.low.toLocaleString()} – $
-          {exposureRange.high.toLocaleString()}
-        </strong>
-      </p>
-    )}
-
-    {exposureRiskLabel && (
-      <div
-        style={{
-          marginTop: 6,
-          fontSize: 12,
-          fontWeight: 700,
-          color:
-            exposureRiskLabel === "high"
-              ? "#991b1b"
-              : exposureRiskLabel === "medium"
-              ? "#92400e"
-              : "#166534",
-        }}
-      >
-        Risk level: {exposureRiskLabel.toUpperCase()}
-      </div>
-    )}
-  </>
-)}
-
-<button
-  onClick={handleCheckout}
-  disabled={isCheckingOut}
+<section
   style={{
-    ...buttonStyle,
-    background: "#0f172a",
-    cursor: isCheckingOut ? "not-allowed" : "pointer",
-    marginTop: 10,
-    alignSelf: "flex-start",
+    ...sectionStyle,
+    display: "flex",
+    flexDirection: "column",
+    gap: 12,
   }}
 >
-  {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
-</button>
+  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+    <input
+      type="file"
+      accept=".pdf"
+      onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+    />
 
-        </div>
+    <button
+      onClick={handleUploadAndAnalyze}
+      disabled={!file}
+      style={{
+        ...buttonStyle,
+        background: !file ? "#cbd5e1" : "#0f172a",
+        cursor: !file ? "not-allowed" : "pointer",
+      }}
+    >
+      Upload & Analyze
+    </button>
+  </div>
+
+  {status && (
+    <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>
+  )}
+</section>
+
+{/* ---------- RESULTS ---------- */}
+{analysis && (
+  <section
+    ref={resultsRef}
+    style={{
+      ...sectionStyle,
+      display: "grid",
+      gridTemplateColumns: "1fr",
+      gap: 16,
+    }}
+  >
+    {/* ===== GREEN EXPOSURE BOX ===== */}
+    <div style={exposureBoxStyle}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
+        Estimated Avoidable Exposure (Next 12 Months)
+      </div>
+
+      {totalAvoidableExposure != null && (
+        <>
+          <div
+            style={{
+              fontSize: 34,
+              fontWeight: 900,
+              marginTop: 6,
+              color:
+                exposureRiskLabel === "high"
+                  ? "#991b1b"
+                  : exposureRiskLabel === "medium"
+                  ? "#92400e"
+                  : "#166534",
+            }}
+          >
+            💰 $
+            {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
+          </div>
+
+          <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
+            Based on your lease terms, you may be able to recover up to{" "}
+            <strong>
+              ${totalAvoidableExposure.toLocaleString()}
+            </strong>{" "}
+            in CAM / NNN overcharges over the next 12 months.
+          </p>
+
+          {exposureRange && (
+            <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
+              Estimated recovery range:{" "}
+              <strong>
+                ${exposureRange.low.toLocaleString()} – $
+                {exposureRange.high.toLocaleString()}
+              </strong>
+            </p>
+          )}
+
+          {exposureRiskLabel && (
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 12,
+                fontWeight: 700,
+                color:
+                  exposureRiskLabel === "high"
+                    ? "#991b1b"
+                    : exposureRiskLabel === "medium"
+                    ? "#92400e"
+                    : "#166534",
+              }}
+            >
+              Risk level: {exposureRiskLabel.toUpperCase()}
+            </div>
+          )}
+        </>
+      )}
+
+      <button
+        onClick={handleCheckout}
+        disabled={isCheckingOut}
+        style={{
+          ...buttonStyle,
+          background: "#0f172a",
+          cursor: isCheckingOut ? "not-allowed" : "pointer",
+          marginTop: 10,
+          alignSelf: "flex-start",
+        }}
+      >
+        {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
+      </button>
+    </div>
+  </section>
+)}
+
 
         {/* ---------- DETAILS ---------- */}
         <div style={{ display: "grid", gap: 12 }}>
