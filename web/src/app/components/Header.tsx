@@ -64,6 +64,12 @@ export default function Header() {
             CAM Reconciliation
           </Link>
           <Link
+            href="/cam-admin-page"
+            className="opacity-80 hover:opacity-100"
+          >
+            CAM Admin
+          </Link>
+          <Link
             href="/product/app"
             className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
           >
@@ -107,6 +113,12 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
             >
               CAM Reconciliation
+            </Link>
+            <Link
+              href="/cam-admin-page"
+              onClick={() => setMenuOpen(false)}
+            >
+              CAM Admin
             </Link>
             <Link
               href="/product/app"
