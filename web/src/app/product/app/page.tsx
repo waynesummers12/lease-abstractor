@@ -206,6 +206,15 @@ export default function HomePage() {
       setIsCheckingOut(false);
     }
   }
+useEffect(() => {
+  if (!analysis) return;
+
+  console.log("🧠 Lease analysis loaded");
+  console.log("flags:", analysis.health?.flags);
+  console.log("totalAvoidableExposure:", totalAvoidableExposure);
+  console.log("exposureRange:", exposureRange);
+  console.log("exposureRiskLabel:", exposureRiskLabel);
+}, [analysis, totalAvoidableExposure, exposureRange, exposureRiskLabel]);
 
   return (
   <main
