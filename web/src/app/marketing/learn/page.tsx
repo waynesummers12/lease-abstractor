@@ -43,6 +43,13 @@ const articles = [
       "Learn how Triple Net (NNN) expenses work, why they increase, and when tenants can dispute them.",
     href: "/marketing/nnn-expenses-explained",
   },
+  {
+  id: "lease-score",
+  title: "Lease Score Explained",
+  description:
+    "See how Lease Score reveals hidden CAM / NNN risk, uncapped expenses, and audit leverage that often drive commercial lease overcharges.",
+  href: "/marketing/lease-score-explained",
+},
 ];
 
 export default function LearnPage() {
