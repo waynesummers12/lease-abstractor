@@ -17,31 +17,35 @@ export function normalizeAuditForSuccess(analysis: any) {
         : "HIGH"
       : "HIGH";
 
-  // 🔑 DO NOT default flags to []
-  // Preserve exactly what abstractLease produced
-  const flags = health?.flags ?? null;
-
-  const avoidableExposure =
+  const camTotalAvoidableExposure =
     typeof analysis.cam_total_avoidable_exposure === "number"
       ? Math.round(analysis.cam_total_avoidable_exposure)
       : null;
 
   return {
-    // preserve original analysis structure
-    ...analysis,
+    // 🔒 SINGLE SOURCE OF TRUTH (flat, UI-ready)
+    tenant: analysis.tenant ?? null,
+    landlord: analysis.landlord ?? null,
+    premises: analysis.premises ?? null,
+    lease_start: analysis.lease_start ?? null,
+    lease_end: analysis.lease_end ?? null,
+    term_months: analysis.term_months ?? null,
 
-    // ✅ preserve health + flags (this is what frontend needs)
+    rent: analysis.rent ?? null,
+
+    // ✅ THIS IS WHAT THE GREEN BOX NEEDS
+    cam_total_avoidable_exposure: camTotalAvoidableExposure,
+    exposure_range: analysis.exposure_range ?? null,
+    exposure_risk: analysis.exposure_risk ?? null,
+    risk_level: riskLevel,
+
+    // score + flags (used on success page)
     health: health
       ? {
           ...health,
           score: healthScore,
-          flags,
+          flags: health.flags ?? null,
         }
       : null,
-
-    // derived helpers (safe to add)
-    risk_level: riskLevel,
-    avoidable_exposure: avoidableExposure,
   };
 }
-

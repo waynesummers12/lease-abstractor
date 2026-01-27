@@ -61,11 +61,9 @@ router.post("/pdf", async (ctx) => {
     /* --------------------------------------------------
        🔑 CRITICAL FIX:
        Normalize analysis EARLY so exposure exists pre-checkout
+       (normalizeAuditForSuccess expects the raw analysis object)
     -------------------------------------------------- */
-    const normalized = normalizeAuditForSuccess({
-  analysis: rawAnalysis,
-});
-
+    const normalized = normalizeAuditForSuccess(rawAnalysis);
 
     /* --------------------------------------------------
        PERSIST NORMALIZED ANALYSIS
@@ -73,7 +71,7 @@ router.post("/pdf", async (ctx) => {
     const { error: updateError } = await supabase
       .from("lease_audits")
       .update({
-        analysis: normalized.analysis,
+        analysis: normalized,
         status: "analyzed",
       })
       .eq("id", auditId);
