@@ -392,7 +392,7 @@ async function handleCheckout() {
         marginBottom: 4,
       }}
     >
-      Confidence in recovery estimate
+      Confidence reflects clarity of CAM, escalation, and reconciliation clauses
     </div>
 
     <div
