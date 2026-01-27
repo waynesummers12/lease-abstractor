@@ -277,7 +277,7 @@ useEffect(() => {
 </section>
 
 {/* ---------- RESULTS ---------- */}
-{analysis && (
+{analysis ? (
   <section
     ref={resultsRef}
     style={{
@@ -364,112 +364,109 @@ useEffect(() => {
         {isCheckingOut ? "Opening checkout…" : "Proceed to checkout"}
       </button>
     </div>
+
+    {/* ---------- DETAILS ---------- */}
+    <div style={{ display: "grid", gap: 12 }}>
+      {/* Lease basics */}
+      <div>
+        <div style={{ fontWeight: 700, marginBottom: 6 }}>
+          Lease basics
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 6,
+            fontSize: 14,
+          }}
+        >
+          <span>Tenant: {analysis.tenant ?? "—"}</span>
+          <span>Landlord: {analysis.landlord ?? "—"}</span>
+          <span>Premises: {analysis.premises ?? "—"}</span>
+          <span>Lease start: {formatDate(analysis.lease_start)}</span>
+          <span>Lease end: {formatDate(analysis.lease_end)}</span>
+          <span>Term (months): {analysis.term_months ?? "—"}</span>
+        </div>
+      </div>
+
+      {/* Rent */}
+      <div>
+        <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 6,
+            fontSize: 14,
+          }}
+        >
+          <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
+          <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
+          <span>
+            Escalation:{" "}
+            {formatEscalation(
+              analysis.rent?.escalation_type,
+              analysis.rent?.escalation_value
+            )}
+          </span>
+        </div>
+      </div>
+
+      {/* CAM / NNN */}
+      {analysis.cam_nnn && (
+        <div>
+          <div style={{ fontWeight: 700, marginBottom: 6 }}>
+            CAM / NNN
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: 6,
+              fontSize: 14,
+            }}
+          >
+            <span>
+              Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}
+            </span>
+            <span>
+              Annual: {formatMoney(analysis.cam_nnn.annual_amount)}
+            </span>
+            <span>
+              Total exposure:{" "}
+              {formatMoney(analysis.cam_nnn.total_exposure)}
+            </span>
+            <span>
+              {analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}
+            </span>
+            <span>
+              {analysis.cam_nnn.reconciliation
+                ? "Reconciliation"
+                : "No reconciliation"}
+            </span>
+            <span>
+              {analysis.cam_nnn.includes_capex
+                ? "Includes capex"
+                : "Excludes capex"}
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+) : (
+  <section
+    style={{
+      ...sectionStyle,
+      border: "1px dashed #cbd5e1",
+      color: "#475569",
+    }}
+  >
+    No analysis yet. Upload a PDF to see your results.
   </section>
 )}
-
-
-        {/* ---------- DETAILS ---------- */}
-        <div style={{ display: "grid", gap: 12 }}>
-          {/* Lease basics */}
-          <div>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>
-              Lease basics
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 6,
-                fontSize: 14,
-              }}
-            >
-              <span>Tenant: {analysis.tenant ?? "—"}</span>
-              <span>Landlord: {analysis.landlord ?? "—"}</span>
-              <span>Premises: {analysis.premises ?? "—"}</span>
-              <span>Lease start: {formatDate(analysis.lease_start)}</span>
-              <span>Lease end: {formatDate(analysis.lease_end)}</span>
-              <span>Term (months): {analysis.term_months ?? "—"}</span>
-            </div>
-          </div>
-
-          {/* Rent */}
-          <div>
-            <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "repeat(auto-fit, minmax(160px, 1fr))",
-                gap: 6,
-                fontSize: 14,
-              }}
-            >
-              <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
-              <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
-              <span>
-                Escalation:{" "}
-                {formatEscalation(
-                  analysis.rent?.escalation_type,
-                  analysis.rent?.escalation_value
-                )}
-              </span>
-            </div>
-          </div>
-
-          {/* CAM / NNN */}
-          {analysis.cam_nnn && (
-            <div>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                CAM / NNN
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns:
-                    "repeat(auto-fit, minmax(200px, 1fr))",
-                  gap: 6,
-                  fontSize: 14,
-                }}
-              >
-                <span>
-                  Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}
-                </span>
-                <span>
-                  Annual: {formatMoney(analysis.cam_nnn.annual_amount)}
-                </span>
-                <span>
-                  Total exposure:{" "}
-                  {formatMoney(analysis.cam_nnn.total_exposure)}
-                </span>
-                <span>
-                  {analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}
-                </span>
-                <span>
-                  {analysis.cam_nnn.reconciliation
-                    ? "Reconciliation"
-                    : "No reconciliation"}
-                </span>
-                <span>
-                  {analysis.cam_nnn.includes_capex
-                    ? "Includes capex"
-                    : "Excludes capex"}
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-    ) : (
-      <section
-        style={{
-          ...sectionStyle,
-          border: "1px dashed #cbd5e1",
-          color: "#475569",
-        }}
-      >
-        No analysis yet. Upload a PDF to see your results.
-      </section>
-    )}
   </main>
 );
 }
