@@ -202,7 +202,14 @@ export default function CamReconciliationPage() {
 
         <p className="text-gray-700">
           If the window closes, charges may become final and leverage is lost.
-          Timing matters as much as accuracy.
+          Timing matters as much as accuracy — make sure you understand
+          <a
+            href="/marketing/nnn-audit-rights"
+            className="ml-1 text-gray-900 underline hover:text-black"
+          >
+            your audit rights
+          </a>
+          before the deadline.
         </p>
       </section>
 

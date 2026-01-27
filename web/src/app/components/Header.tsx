@@ -64,6 +64,12 @@ export default function Header() {
             CAM Reconciliation
           </Link>
           <Link
+            href="/marketing/nnn-audit-rights"
+            className="opacity-80 hover:opacity-100"
+          >
+            NNN Audit Rights
+          </Link>
+          <Link
             href="/marketing/cam-admin-page"
             className="opacity-80 hover:opacity-100"
           >
@@ -113,6 +119,12 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
             >
               CAM Reconciliation
+            </Link>
+            <Link
+              href="/marketing/nnn-audit-rights"
+              onClick={() => setMenuOpen(false)}
+            >
+              NNN Audit Rights
             </Link>
             <Link
               href="/marketing/cam-admin-page"

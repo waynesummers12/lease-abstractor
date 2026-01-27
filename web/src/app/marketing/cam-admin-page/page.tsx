@@ -164,7 +164,13 @@ export default function CamAdminFeesPage() {
           Admin fees are often limited or prohibited when the lease excludes
           overhead, restricts capital costs, or requires fees to reflect actual
           services rendered. Even when allowed, the calculation is frequently
-          wrong.
+          wrong — and hinges on how clearly your lease defines
+          <a
+            href="/marketing/nnn-audit-rights"
+            style={{ color: "#0f172a", fontWeight: 600, marginLeft: 4 }}
+          >
+            NNN audit rights
+          </a>.
         </p>
       </section>
 
