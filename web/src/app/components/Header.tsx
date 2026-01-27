@@ -64,7 +64,7 @@ export default function Header() {
             CAM Reconciliation
           </Link>
           <Link
-            href="/cam-admin-page"
+            href="/marketing/cam-admin-page"
             className="opacity-80 hover:opacity-100"
           >
             CAM Admin
@@ -115,7 +115,7 @@ export default function Header() {
               CAM Reconciliation
             </Link>
             <Link
-              href="/cam-admin-page"
+              href="/marketing/cam-admin-page"
               onClick={() => setMenuOpen(false)}
             >
               CAM Admin
