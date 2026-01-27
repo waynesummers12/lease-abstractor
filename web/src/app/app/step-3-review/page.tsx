@@ -103,15 +103,6 @@ const buttonStyle: React.CSSProperties = {
 /* ---------- PAGE ---------- */
 
 export default function HomePage() {
-  console.log(
-    "NEXT_PUBLIC_WORKER_URL:",
-    process.env.NEXT_PUBLIC_WORKER_URL
-  );
-  console.log(
-    "NEXT_PUBLIC_WORKER_KEY:",
-    process.env.NEXT_PUBLIC_WORKER_KEY
-  );
-
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
@@ -183,16 +174,19 @@ useEffect(() => {
     return;
   }
 
+  // ✅ SOURCE OF TRUTH
   const exposure =
-    typeof analysis.cam_total_avoidable_exposure === "number"
-      ? analysis.cam_total_avoidable_exposure
+    typeof analysis.avoidable_exposure === "number"
+      ? analysis.avoidable_exposure
       : null;
 
   setTotalAvoidableExposure(exposure);
-  setExposureRange(analysis.exposure_range ?? null);
-  setExposureRiskLabel(analysis.exposure_risk ?? null);
+  setExposureRange(analysis.avoidable_exposure_range ?? null);
+  setExposureRiskLabel(
+    analysis.risk_level ? analysis.risk_level.toLowerCase() : null
+  );
 
-  // Initialize animation from 0 → exposure
+  // Animate
   if (exposure != null) {
     setAnimatedExposure(0);
 
@@ -216,6 +210,7 @@ useEffect(() => {
     resultsRef.current?.scrollIntoView({ behavior: "smooth" });
   }, 100);
 }, [analysis]);
+
 
 async function handleCheckout() {
   if (isCheckingOut || !auditId) return;
