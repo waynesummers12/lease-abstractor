@@ -15,8 +15,8 @@ export function normalizeAuditForSuccess(analysis: any) {
         : "HIGH"
       : "HIGH";
 
-  // Preserve FULL flags array (frontend depends on this)
-  const flags = Array.isArray(health?.flags) ? health.flags : [];
+  // Preserve the incoming flags payload (including null) without forcing defaults
+  const flags = health?.flags ?? null;
 
   // Optional: pre-compute avoidable exposure if backend already has it
   const avoidableExposure =
@@ -25,19 +25,21 @@ export function normalizeAuditForSuccess(analysis: any) {
       : null;
 
   return {
-    ...analysis,
+  // preserve original analysis fields for downstream usage
+  ...analysis,
 
-    // 🔑 keep health structure intact
-    health: health
-      ? {
-          ...health,
-          flags,
-        }
-      : null,
+  // ✅ ensure health object is always shaped correctly for frontend
+  health: health
+    ? {
+        ...health,
+        score: healthScore,
+        flags, // ← critical: frontend computes exposure from flags[].estimated_impact
+      }
+    : null,
 
-    // 🔑 derived fields (non-breaking)
-    risk_level: riskLevel,
-    avoidable_exposure: avoidableExposure,
-  };
+  // ✅ derived + stable fields the UI depends on
+  risk_level: riskLevel,
+  avoidable_exposure: avoidableExposure,
+};
 }
 
