@@ -333,7 +333,7 @@ export default function HomePage() {
             : "#166534",
       }}
     >
-      💰 ${(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
+      💰 {totalAvoidableExposure.toLocaleString()}
     </div>
 
     <p style={{ marginTop: 6, fontSize: 14, color: "#14532d" }}>
