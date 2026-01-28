@@ -3,13 +3,12 @@
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { waitForAnalysis } from "./analysis.wait";
 import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function runAuditPipeline(
   file: File,
-  supabase: SupabaseClient,
   auditId: string
 ): Promise<AuditPipelineResult> {
+  const supabaseBrowser = getSupabaseBrowser();
   const objectPath = `leases/${auditId}.pdf`;
 
   try {
