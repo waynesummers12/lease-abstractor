@@ -1,20 +1,26 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-export function getSupabaseServer() {
-  // During `next build`, env vars may not be available
-  if (process.env.NEXT_PHASE === "phase-production-build") {
-    return null;
-  }
-
+export function getSupabaseServer(): SupabaseClient {
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseServiceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!supabaseUrl || !supabaseServiceRoleKey) {
-    return null;
+  if (!supabaseUrl) {
+    throw new Error("SUPABASE_URL is required");
   }
 
-  return createClient(supabaseUrl, supabaseServiceRoleKey, {
-    auth: { persistSession: false },
-  });
+  if (!supabaseServiceRoleKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
+  }
+
+  return createClient(
+    supabaseUrl,
+    supabaseServiceRoleKey,
+    {
+      auth: {
+        persistSession: false,
+      },
+    }
+  );
 }
+
