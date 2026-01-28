@@ -3,14 +3,15 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { auditId: string } }
+  context: { params: Promise<{ auditId: string }> }
 ): Promise<Response> {
+  const { auditId } = await context.params;
   const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
     .from("lease_audits")
     .select("*")
-    .eq("id", params.auditId)
+    .eq("id", auditId)
     .single();
 
   if (error || !data) {
@@ -19,4 +20,5 @@ export async function GET(
 
   return NextResponse.json(data);
 }
+
 
