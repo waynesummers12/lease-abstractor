@@ -181,11 +181,11 @@ useEffect(() => {
 
   // 🔑 SOURCE OF TRUTH — THIS FIELD EXISTS
   const exposure =
-    typeof (analysis as any).cam_total_avoidable_exposure === "number"
-      ? (analysis as any).cam_total_avoidable_exposure
-      : typeof analysis.avoidable_exposure === "number"
-      ? analysis.avoidable_exposure
-      : null;
+  typeof (analysis as any).cam_total_avoidable_exposure === "number"
+    ? (analysis as any).cam_total_avoidable_exposure
+    : typeof (analysis as any).avoidable_exposure === "number"
+    ? (analysis as any).avoidable_exposure
+    : null;
 
   setTotalAvoidableExposure(exposure);
   setExposureRange((analysis as any).exposure_range ?? null);
