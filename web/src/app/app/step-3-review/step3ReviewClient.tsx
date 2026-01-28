@@ -176,7 +176,6 @@ async function handleUploadAndAnalyze() {
 
 const res = await runAuditPipeline(
   file,
-  supabase,
   newAuditId
 );
 
