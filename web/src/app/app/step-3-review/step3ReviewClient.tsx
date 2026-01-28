@@ -63,6 +63,31 @@ function formatMoney(value?: number | null) {
     maximumFractionDigits: 0,
   });
 }
+function formatEscalation(
+  type?: "fixed_percent" | "fixed_amount" | "cpi" | "none" | null,
+  value?: number | null,
+  interval?: "annual" | null
+) {
+  if (!type || type === "none") return "None";
+
+  switch (type) {
+    case "fixed_percent":
+      return value != null
+        ? `${value}% ${interval ?? ""}`.trim()
+        : "Fixed %";
+
+    case "fixed_amount":
+      return value != null
+        ? `${formatMoney(value)} ${interval ?? ""}`.trim()
+        : "Fixed amount";
+
+    case "cpi":
+      return "CPI-based";
+
+    default:
+      return "—";
+  }
+}
 
 /* ---------- STYLES ---------- */
 
