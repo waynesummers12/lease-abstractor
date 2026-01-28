@@ -6,24 +6,25 @@ export async function POST(req: NextRequest) {
     console.log("POST /api/audits hit");
 
     const body = await req.json();
-    const { auditId, analysis } = body;
+    const { analysis } = body;
 
-    if (!auditId) {
+    if (!analysis) {
       return NextResponse.json(
-        { error: "Missing auditId" },
+        { error: "Missing analysis" },
         { status: 400 }
       );
     }
 
     const supabase = getSupabaseServer();
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("lease_audits")
       .insert({
-        id: auditId,
-        status: "pending", // ✅ IMPORTANT: NOT paid yet
-        analysis: analysis ?? null,
-      });
+        status: "pending",
+        analysis,
+      })
+      .select("id")
+      .single();
 
     if (error) {
       console.error("Supabase insert failed:", error);
@@ -33,7 +34,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      auditId: data.id,
+    });
   } catch (err) {
     console.error("POST /api/audits failed:", err);
     return NextResponse.json(
