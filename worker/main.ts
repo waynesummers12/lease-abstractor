@@ -74,6 +74,8 @@ app.use(auditPdfRoutes.allowedMethods());
 /* -------------------------------------------------
    START SERVER
 -------------------------------------------------- */
-console.log("🚀 Lease Abstractor Worker running on http://localhost:8000");
+const port = Number(Deno.env.get("PORT") ?? 8000);
 
-await app.listen({ port: 8000 });
+console.log(`🚀 Lease Abstractor Worker running on port ${port}`);
+
+await app.listen({ port });
