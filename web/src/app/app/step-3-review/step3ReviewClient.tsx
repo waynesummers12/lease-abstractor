@@ -1,7 +1,7 @@
 "use client";
 
 import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { getSupabaseBrowser } from "@/app/_client/supabase";
 import { useEffect, useRef, useState } from "react";
 
 type Analysis = {
@@ -172,11 +172,14 @@ async function handleUploadAndAnalyze() {
     /* ---------- 2. RUN PIPELINE ---------- */
     setStatus("Uploading lease…");
 
-    const res = await runAuditPipeline(
-      file,
-      supabaseBrowser,
-      newAuditId
-    );
+    const supabase = getSupabaseBrowser();
+
+const res = await runAuditPipeline(
+  file,
+  supabase,
+  newAuditId
+);
+
 
     if (!res.success) {
       setStatus(res.error ?? "Analysis failed");
