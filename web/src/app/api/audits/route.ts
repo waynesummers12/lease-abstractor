@@ -3,8 +3,10 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("POST /api/audits hit");
+
     const body = await req.json();
-    const { auditId } = body;
+    const { auditId, analysis } = body;
 
     if (!auditId) {
       return NextResponse.json(
@@ -19,10 +21,12 @@ export async function POST(req: NextRequest) {
       .from("lease_audits")
       .insert({
         id: auditId,
-        status: "paid",
+        status: "pending", // ✅ IMPORTANT: NOT paid yet
+        analysis: analysis ?? null,
       });
-console.log("POST /api/audits hit");
+
     if (error) {
+      console.error("Supabase insert failed:", error);
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
