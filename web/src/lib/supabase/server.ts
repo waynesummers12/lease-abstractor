@@ -1,25 +1,26 @@
-import { getSupabaseServer } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export function getSupabaseServer() {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseServiceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await params;
-
-  const supabase = getSupabaseServer(); // ✅ THIS LINE
-
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select("object_path")
-    .eq("id", auditId)
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!supabaseUrl) {
+    throw new Error("supabaseUrl is required");
   }
 
-  return NextResponse.json(data);
+  if (!supabaseServiceRoleKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
+  }
+
+  return createClient(
+    supabaseUrl,
+    supabaseServiceRoleKey,
+    {
+      auth: {
+        persistSession: false,
+      },
+    }
+  );
 }
+
