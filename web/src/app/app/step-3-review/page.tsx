@@ -191,11 +191,11 @@ useEffect(() => {
   setExposureRange((analysis as any).exposure_range ?? null);
   setExposureRiskLabel(
     typeof (analysis as any).exposure_risk === "string"
-      ? (analysis as any).exposure_risk.toLowerCase()
-      : analysis.risk_level
-      ? analysis.risk_level.toLowerCase()
-      : null
-  );
+  ? (analysis as any).exposure_risk.toLowerCase()
+  : typeof (analysis as any).risk_level === "string"
+  ? (analysis as any).risk_level.toLowerCase()
+  : null
+);
 
   // Animate
   if (exposure != null) {
