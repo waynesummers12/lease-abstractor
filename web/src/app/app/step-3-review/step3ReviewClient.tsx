@@ -48,6 +48,29 @@ type Analysis = {
   exposure_range?: { low: number; high: number } | null;
   exposure_risk?: "low" | "medium" | "high" | null;
 };
+
+/* ---------- STYLES ---------- */
+
+const headerStyle: React.CSSProperties = {
+  marginBottom: 12,
+};
+
+const sectionStyle: React.CSSProperties = {
+  padding: 20,
+  borderRadius: 10,
+  border: "2px solid #16a34a",
+  background: "#f0fdf4",
+};
+
+const buttonStyle: React.CSSProperties = {
+  padding: "12px 16px",
+  borderRadius: 8,
+  border: "none",
+  color: "#ffffff",
+  fontWeight: 600,
+  fontSize: 14,
+};
+
 /* ---------- PAGE ---------- */
 
 export default function Step3ReviewClient() {
