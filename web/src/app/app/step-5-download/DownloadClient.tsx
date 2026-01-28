@@ -92,23 +92,37 @@ export default function SuccessPage() {
     };
   }, [auditId]);
 
- import { Suspense } from "react";
- import DownloadClient from "../app/step-5-download/DownloadClient";
- 
- export default function SuccessPage() {
-   return (
-     <Suspense
-       fallback={
-         <main className="mx-auto max-w-xl px-6 py-28 text-center">
-           <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-           <h1 className="text-xl font-semibold">Loading your audit…</h1>
-         </main>
-       }
-     >
-       <DownloadClient />
-     </Suspense>
-   );
- }
+  /* ---------- DOWNLOAD PDF ---------- */
+  async function handleDownload() {
+    if (!auditId) return;
+    const pdfPath = data?.audit_pdf_path ?? data?.object_path;
+    if (!pdfPath) {
+      alert("Your PDF is still being prepared. Please try again shortly.");
+      return;
+    }
+
+    try {
+      setDownloading(true);
+
+      const res = await fetch(
+        `/api/download?auditId=${auditId}`,
+        { cache: "no-store" }
+      );
+
+      if (!res.ok) {
+        alert("Your PDF is still being prepared. Please try again shortly.");
+        return;
+      }
+
+      const { url } = await res.json();
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error("PDF download failed", err);
+      alert("Failed to download PDF.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
 /* ================= UI ================= */
 
