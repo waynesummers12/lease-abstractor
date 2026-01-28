@@ -1,11 +1,23 @@
 // NOTE: Support legacy PDFs stored under `object_path` (leases bucket)
 // and newer PDFs stored under `audit_pdf_path` (audit-pdfs bucket)
 
-import { NextResponse } from "next/server";
+// src/app/api/download/route.ts
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const auditId = searchParams.get("auditId");
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+
+export async function GET(req: NextRequest) {
+  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+
+  if (!workerUrl) {
+    return NextResponse.json(
+      { error: "Worker URL not configured" },
+      { status: 500 }
+    );
+  }
+
+  const auditId = req.nextUrl.searchParams.get("auditId");
 
   if (!auditId) {
     return NextResponse.json(
@@ -14,34 +26,21 @@ export async function GET(request: Request) {
     );
   }
 
+  const res = await fetch(`${workerUrl}/audits/${auditId}/download`, {
+    method: "GET",
+  });
 
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select("audit_pdf_path")
-    .eq("id", auditId)
-    .single();
-
-  if (error || !data?.audit_pdf_path) {
+  if (!res.ok) {
+    const text = await res.text();
     return NextResponse.json(
-      { error: "PDF not ready" },
-      { status: 404 }
+      { error: text || "Failed to fetch download URL" },
+      { status: res.status }
     );
   }
 
-  const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
-
-  const { data: signedUrl, error: signError } = await supabase.storage
-    .from("audit-pdfs")
-    .createSignedUrl(filePath, 3600);
-
-  if (signError || !signedUrl?.signedUrl) {
-    return NextResponse.json(
-      { error: "Failed to generate download URL" },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json({ url: signedUrl.signedUrl });
+  const data = await res.json();
+  return NextResponse.json(data);
 }
+
 
 
