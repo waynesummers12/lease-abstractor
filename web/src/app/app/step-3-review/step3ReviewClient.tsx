@@ -94,50 +94,64 @@ export default function Step3ReviewClient() {
   const [auditId, setAuditId] = useState<string | null>(null);
 
 
-  /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-  const resultsRef = useRef<HTMLDivElement | null>(null);
+/* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
+const resultsRef = useRef<HTMLDivElement | null>(null);
 
-  async function handleUploadAndAnalyze() {
-    if (!file) return;
-    setStatus("Preparing audit…");
-    setAnalysis(null);
+async function handleUploadAndAnalyze() {
+  if (!file) return;
 
-    const newAuditId = crypto.randomUUID();
-    setAuditId(newAuditId);
+  setStatus("Preparing audit…");
+  setAnalysis(null);
+  setAuditId(null);
 
-    try {
-      const createRes = await fetch("/api/audits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId: newAuditId }),
-      });
-      if (!createRes.ok) {
-        const err = await createRes.json();
-        setStatus(err?.error ?? "Failed to initialize audit");
-        return;
-      }
+  try {
+    /* ---------- RUN ANALYSIS PIPELINE FIRST ---------- */
+    setStatus("Uploading lease…");
 
-      setStatus("Uploading lease…");
+    const res = await runAuditPipeline(file, supabaseBrowser);
 
-      const res = await runAuditPipeline(file, supabaseBrowser, newAuditId);
-
-      if (!res.success) {
-  setStatus(res.error ?? "Analysis failed");
-  return;
-}
-
-if (!res.analysis) {
-  setStatus("Analysis failed");
-  return;
-}
-
-      setAnalysis(res.analysis.analysis);
-      setStatus("Analysis complete ✅");
-    } catch (err: any) {
-      console.error("Analyze failed:", err);
-      setStatus(err?.message ?? "Unexpected error");
+    if (!res.success) {
+      setStatus(res.error ?? "Analysis failed");
+      return;
     }
+
+    if (!res.analysis?.analysis) {
+      setStatus("Analysis failed");
+      return;
+    }
+
+    const analysisResult = res.analysis.analysis;
+    setAnalysis(analysisResult);
+
+    /* ---------- CREATE AUDIT RECORD ---------- */
+    const createRes = await fetch("/api/audits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        analysis: analysisResult, // ✅ analysis now exists
+      }),
+    });
+
+    const createData = await createRes.json();
+
+    if (!createRes.ok) {
+      throw new Error(createData.error || "Failed to create audit");
+    }
+
+    // ✅ server-generated auditId
+    setAuditId(createData.auditId);
+
+    setStatus("Analysis complete ✅");
+
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+
+  } catch (err: any) {
+    console.error("Analyze failed:", err);
+    setStatus(err?.message ?? "Unexpected error");
   }
+}
 
   /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
 
