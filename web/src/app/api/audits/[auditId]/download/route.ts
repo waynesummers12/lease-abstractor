@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
-  request: Request,
-  context: { params: { auditId: string } }
+  request: NextRequest,
+  context: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = context.params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -43,5 +43,3 @@ export async function GET(
 
   return NextResponse.json({ url: signed.signedUrl });
 }
-
-
