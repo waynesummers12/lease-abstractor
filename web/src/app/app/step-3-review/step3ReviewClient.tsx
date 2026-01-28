@@ -48,6 +48,12 @@ type Analysis = {
   exposure_range?: { low: number; high: number } | null;
   exposure_risk?: "low" | "medium" | "high" | null;
 };
+function formatDate(value?: string | null) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString();
+}
 
 /* ---------- STYLES ---------- */
 
