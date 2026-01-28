@@ -8,7 +8,9 @@ export async function runAuditPipeline(
   file: File,
   supabase: SupabaseClient
 ): Promise<AuditPipelineResult> {
-  const objectPath = `leases/${crypto.randomUUID()}.pdf`;
+  // ✅ SINGLE SOURCE OF TRUTH
+  const auditId = crypto.randomUUID();
+  const objectPath = `leases/${auditId}.pdf`;
 
   try {
     /* ---------- 1. UPLOAD PDF ---------- */
@@ -38,8 +40,9 @@ export async function runAuditPipeline(
           "x-lease-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
         },
         body: JSON.stringify({
-  objectPath,
-}),
+          auditId,
+          objectPath,
+        }),
       }
     );
 
@@ -73,9 +76,10 @@ export async function runAuditPipeline(
     };
   } catch (err: any) {
     return {
-  success: false,
-  status: "failed",
-  error: uploadError.message,
-};
+      success: false,
+      status: "failed",
+      auditId,
+      error: err?.message ?? "Unexpected pipeline error",
+    };
   }
 }
