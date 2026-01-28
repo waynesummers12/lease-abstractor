@@ -55,6 +55,15 @@ function formatDate(value?: string | null) {
   return d.toLocaleDateString();
 }
 
+function formatMoney(value?: number | null) {
+  if (value == null || isNaN(value)) return "—";
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+}
+
 /* ---------- STYLES ---------- */
 
 const headerStyle: React.CSSProperties = {
