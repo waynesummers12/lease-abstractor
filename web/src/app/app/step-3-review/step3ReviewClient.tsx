@@ -1,7 +1,7 @@
 "use client";
 
 import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
-import { getSupabaseBrowser } from "@/app/_client/supabase";
+import { getSupabaseBrowser } from "@/app/_client/browser";
 import { useEffect, useRef, useState } from "react";
 
 type Analysis = {
