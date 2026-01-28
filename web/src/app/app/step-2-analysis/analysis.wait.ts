@@ -20,8 +20,12 @@ export async function waitForAnalysis(
 
       // ✅ Analysis is ready
       if (result?.success === true && result.analysis) {
-  return result;
+  return {
+    ...result,
+    signedUrl: null,
+  };
 }
+
     } catch (err) {
       // Swallow transient errors (404s during early pipeline)
       console.warn(
