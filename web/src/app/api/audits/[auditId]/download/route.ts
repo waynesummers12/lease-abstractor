@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   _request: Request,
@@ -11,7 +10,6 @@ export async function GET(
     return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
   }
 
-  const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
     .from("lease_audits")

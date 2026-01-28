@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,8 +11,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    const supabase = getSupabaseServer();
 
     const { error } = await supabase
       .from("lease_audits")
