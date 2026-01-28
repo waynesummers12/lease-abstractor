@@ -1,6 +1,6 @@
 // web/src/app/app/step-2-analysis/analysis.service.ts
 
-import { getSupabaseBrowser } from "@/app/_client/supabase";
+import { getSupabaseBrowser } from "@/app/_client/browser";
 import { waitForAnalysis } from "./analysis.wait";
 import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
 import type { SupabaseClient } from "@supabase/supabase-js";
