@@ -7,10 +7,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function runAuditPipeline(
   file: File,
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  auditId: string
 ): Promise<AuditPipelineResult> {
-  // ✅ SINGLE SOURCE OF TRUTH
-  const auditId = crypto.randomUUID();
   const objectPath = `leases/${auditId}.pdf`;
 
   try {
