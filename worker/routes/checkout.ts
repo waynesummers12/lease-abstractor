@@ -56,12 +56,6 @@ if (!UUID_REGEX.test(auditId)) {
    return;
  }
 
-/* ---------- DEBUG (TEMP — REMOVE AFTER CONFIRM) ---------- */
-console.log("🧾 Creating checkout for auditId:", auditId);
-console.log("💵 Stripe price:", STRIPE_PRICE_STARTER);
-console.log("🌐 Base URL:", baseUrl);
-
-
     /* --------------------------------------------------
        ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
     -------------------------------------------------- */
@@ -106,8 +100,6 @@ console.log("🌐 Base URL:", baseUrl);
         };
         return;
       }
-
-      console.log("🧾 lease_audits row created:", auditId);
     }
 
     /* --------------------------------------------------
@@ -132,8 +124,6 @@ console.log("🌐 Base URL:", baseUrl);
     auditId,
   },
 });
-
-
 
     console.log("🧾 Checkout session created:", {
       sessionId: session.id,

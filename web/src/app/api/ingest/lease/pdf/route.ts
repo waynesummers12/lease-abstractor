@@ -23,9 +23,6 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    // 🔎 DIAGNOSTIC — proves what the client is actually sending
-    console.log("📦 /api/ingest/lease/pdf payload:", body);
-
     const { objectPath, auditId } = body ?? {};
 
     if (!objectPath || !auditId) {

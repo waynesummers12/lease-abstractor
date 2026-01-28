@@ -6,13 +6,8 @@ import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router();
 
-console.log("✅ auditById route file loaded");
-
 router.get("/auditById/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
-
-  console.log("🔥 auditById hit");
-  console.log("➡️ auditId param:", auditId);
 
   if (!auditId) {
     console.error("❌ Missing auditId param");
@@ -20,8 +15,6 @@ router.get("/auditById/:auditId", async (ctx) => {
     ctx.response.body = { error: "auditId required" };
     return;
   }
-
-  console.log("🔎 Querying lease_audits for:", auditId);
 
   const { data: audit, error } = await supabase
     .from("lease_audits")
@@ -93,8 +86,6 @@ ctx.response.body = {
   audit_pdf_path: audit.audit_pdf_path,
   signedUrl,
 };
-
-console.log("✅ auditById response sent");
 
 });
 
