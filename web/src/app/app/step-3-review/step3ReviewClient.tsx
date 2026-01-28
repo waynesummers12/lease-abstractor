@@ -70,6 +70,13 @@ const buttonStyle: React.CSSProperties = {
   fontWeight: 600,
   fontSize: 14,
 };
+const exposureBoxStyle: React.CSSProperties = {
+  marginTop: 20,
+  padding: 20,
+  borderRadius: 12,
+  border: "2px solid #16a34a",
+  background: "#f0fdf4",
+};
 
 /* ---------- PAGE ---------- */
 
