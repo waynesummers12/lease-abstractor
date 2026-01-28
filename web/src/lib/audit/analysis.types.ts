@@ -1,4 +1,4 @@
-// lib/audit/types.ts
+// lib/audit/analysis.types.ts
 
 export type AuditPipelineResult =
   | {

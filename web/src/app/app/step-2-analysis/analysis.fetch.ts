@@ -1,8 +1,11 @@
 // web/src/lib/audit/fetchAnalysis.ts
 
-import { ApiResult } from "./types";
+import type { AuditPipelineResult } from "./analysis.types";
 
-export async function fetchAnalysis(auditId: string): Promise<ApiResult> {
+export async function fetchAnalysis(
+  auditId: string
+): Promise<AuditPipelineResult> {
+
   if (!auditId) {
     throw new Error("fetchAnalysis called without auditId");
   }
