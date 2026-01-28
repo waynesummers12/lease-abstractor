@@ -27,14 +27,14 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${workerUrl}/audits/${auditId}/download`,
+    `${workerUrl}/audits/${auditId}`,
     { method: "GET" }
   );
 
   if (!res.ok) {
     const text = await res.text();
     return NextResponse.json(
-      { error: text || "Failed to fetch download URL" },
+      { error: text || "Failed to fetch audit" },
       { status: res.status }
     );
   }
@@ -42,6 +42,7 @@ export async function GET(
   const data = await res.json();
   return NextResponse.json(data);
 }
+
 
 
 
