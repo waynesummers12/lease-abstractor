@@ -1,6 +1,6 @@
 // web/src/lib/audit/fetchAnalysis.ts
 
-import type { AuditPipelineResult } from "./analysis.types";
+import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
 
 export async function fetchAnalysis(
   auditId: string
