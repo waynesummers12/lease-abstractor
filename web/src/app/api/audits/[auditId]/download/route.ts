@@ -1,20 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
-  _req: NextRequest,
+  _request: Request,
   { params }: { params: { auditId: string } }
 ): Promise<Response> {
   const { auditId } = params;
 
   if (!auditId) {
-    return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
   }
 
-  const supabase = getSupabaseServer(); // guaranteed non-null or throws
+  const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
     .from("lease_audits")
@@ -23,10 +20,7 @@ export async function GET(
     .single();
 
   if (error || !data?.object_path) {
-    return NextResponse.json(
-      { error: "PDF not ready" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "PDF not ready" }, { status: 404 });
   }
 
   const { data: signed, error: signError } = await supabase
@@ -43,4 +37,5 @@ export async function GET(
 
   return NextResponse.json({ url: signed.signedUrl });
 }
+
 
