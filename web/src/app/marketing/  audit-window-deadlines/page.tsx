@@ -108,8 +108,32 @@ export default function AuditRightsPage() {
           Start Lease Audit
         </Link>
       </section>
-      {/* FAQ Schema */}
-      <FaqSchema />
+
+      {/* FAQ Schema (SEO) */}
+      <FaqSchema
+        faqs={[
+          {
+            question: "What are audit rights in a commercial lease?",
+            answer:
+              "Audit rights give tenants the contractual ability to review and challenge CAM, NNN, tax, and insurance charges billed by a landlord.",
+          },
+          {
+            question: "Are CAM and NNN audit rights time-limited?",
+            answer:
+              "Yes. Most leases impose strict deadlines—often 30 to 90 days after reconciliation delivery—after which audit rights are waived.",
+          },
+          {
+            question: "What happens if a tenant misses the audit deadline?",
+            answer:
+              "If the audit window closes, charges are usually deemed final, even if they include errors or non-lease-compliant expenses.",
+          },
+          {
+            question: "How can tenants protect their audit rights?",
+            answer:
+              "Tenants should review leases carefully, track reconciliation receipt dates, and conduct structured audits as soon as statements are received.",
+          },
+        ]}
+      />
     </main>
   );
 }
