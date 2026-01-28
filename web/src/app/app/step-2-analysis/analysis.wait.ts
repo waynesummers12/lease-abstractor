@@ -19,9 +19,9 @@ export async function waitForAnalysis(
       const result = await fetchAnalysis(auditId);
 
       // ✅ Analysis is ready
-      if (result?.analysis) {
-        return result;
-      }
+      if (result?.success === true && result.analysis) {
+  return result;
+}
     } catch (err) {
       // Swallow transient errors (404s during early pipeline)
       console.warn(
