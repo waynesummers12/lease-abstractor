@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase/server";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 /* ---------- CREATE AUDIT ROW ---------- */
 export async function POST(req: NextRequest) {

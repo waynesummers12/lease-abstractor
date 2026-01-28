@@ -2,7 +2,7 @@
 // and newer PDFs stored under `audit_pdf_path` (audit-pdfs bucket)
 
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "@/lib/supabase/server";
+import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

@@ -1,20 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
+let _supabaseServer: SupabaseClient | null = null;
 
-// ❌ DO NOT THROW AT BUILD TIME
-if (!supabaseUrl || !supabaseServiceRoleKey) {
-  console.warn(
-    "⚠️ Supabase env vars missing during build. API routes will be unavailable."
-  );
+export function getSupabaseServer() {
+  if (_supabaseServer) return _supabaseServer;
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error("supabaseUrl is required.");
+  }
+
+  _supabaseServer = createClient(supabaseUrl, serviceRoleKey);
+  return _supabaseServer;
 }
 
-export const supabaseServer =
-  supabaseUrl && supabaseServiceRoleKey
-    ? createClient(supabaseUrl, supabaseServiceRoleKey)
-    : null;
 
 
 
