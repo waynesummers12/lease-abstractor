@@ -150,10 +150,15 @@ export default function HomePage() {
 
       const res = await runAuditPipeline(file, supabaseBrowser, newAuditId);
 
-      if (!res.success || !res.analysis) {
-        setStatus(res.error ?? "Analysis failed");
-        return;
-      }
+      if (!res.success) {
+  setStatus(res.error ?? "Analysis failed");
+  return;
+}
+
+if (!res.analysis) {
+  setStatus("Analysis failed");
+  return;
+}
 
       setAnalysis(res.analysis.analysis);
       setStatus("Analysis complete ✅");
