@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-// 🔒 FORCE RUNTIME EXECUTION (CRITICAL)
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-export const revalidate = 0;
-
 export async function GET(
   req: NextRequest,
   { params }: { params: { auditId: string } }
@@ -19,7 +14,9 @@ export async function GET(
     );
   }
 
-  const { data, error } = await supabaseServer
+  const supabase = getSupabaseServer();
+
+  const { data, error } = await supabase
     .from("lease_audits")
     .select("object_path")
     .eq("id", auditId)
@@ -32,18 +29,17 @@ export async function GET(
     );
   }
 
-  const { data: signedUrl, error: signError } = await supabaseServer
+  const { data: signed, error: signError } = await supabase
     .storage
     .from("audits")
     .createSignedUrl(data.object_path, 3600);
 
-  if (signError || !signedUrl?.signedUrl) {
+  if (signError || !signed?.signedUrl) {
     return NextResponse.json(
       { error: "Failed to generate download URL" },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({ url: signedUrl.signedUrl });
+  return NextResponse.json({ url: signed.signedUrl });
 }
-
