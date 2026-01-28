@@ -224,7 +224,7 @@ async function handleCheckout() {
     }}
   >
     {/* ---------- HEADER ---------- */}
-    <header style={headerStyle}>
+    <header style={{ marginBottom: 12 }}>
       <p
         style={{
           fontSize: 12,
