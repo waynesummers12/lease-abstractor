@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
 
+  "engines": {
+    "node": ">=18"
+  },
+
   "scripts": {
     "dev": "cross-env NEXT_DISABLE_TURBOPACK=1 next dev",
     "build": "cross-env NEXT_DISABLE_TURBOPACK=1 next build",
@@ -32,5 +36,6 @@
     "typescript": "^5"
   }
 }
+
 
 
