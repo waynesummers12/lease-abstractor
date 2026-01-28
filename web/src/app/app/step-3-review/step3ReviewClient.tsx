@@ -4,6 +4,50 @@ import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useEffect, useRef, useState } from "react";
 
+type Analysis = {
+  tenant: string | null;
+  landlord: string | null;
+  premises: string | null;
+  lease_start: string | null;
+  lease_end: string | null;
+  term_months: number | null;
+  rent: {
+    base_rent: number | null;
+    frequency: "monthly" | "annual" | null;
+    escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
+    escalation_value: number | null;
+    escalation_interval: "annual" | null;
+  };
+  rent_schedule?: {
+    year: number;
+    annual_rent: number;
+    monthly_rent: number;
+  }[];
+  cam_nnn?: {
+    monthly_amount: number | null;
+    annual_amount: number | null;
+    total_exposure: number | null;
+    is_uncapped: boolean;
+    reconciliation: boolean;
+    pro_rata: boolean;
+    includes_capex: boolean;
+    cam_cap_percent: number | null;
+    escalation_exposure: number | null;
+  };
+  health?: {
+    score: number;
+    flags: {
+      code: string;
+      label: string;
+      severity: "low" | "medium" | "high";
+      recommendation: string;
+      estimated_impact?: string;
+    }[];
+  };
+  cam_total_avoidable_exposure?: number | null;
+  exposure_range?: { low: number; high: number } | null;
+  exposure_risk?: "low" | "medium" | "high" | null;
+};
 /* ---------- PAGE ---------- */
 
 export default function Step3ReviewClient() {
