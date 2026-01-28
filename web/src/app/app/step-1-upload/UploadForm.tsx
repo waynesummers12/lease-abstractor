@@ -1,42 +1,71 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+let supabase: SupabaseClient | null = null;
 
-export default function LeaseUploader({ onUploaded }: { onUploaded: (path: string) => void }) {
+function getSupabase() {
+  if (!supabase) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!url || !anonKey) {
+      throw new Error("Supabase env vars missing");
+    }
+
+    supabase = createClient(url, anonKey);
+  }
+
+  return supabase;
+}
+
+export default function LeaseUploader({
+  onUploaded,
+}: {
+  onUploaded: (path: string) => void;
+}) {
   const [loading, setLoading] = useState(false);
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setLoading(true);
 
-    const objectPath = `leases/${crypto.randomUUID()}.pdf`;
+    try {
+      const objectPath = `leases/${crypto.randomUUID()}.pdf`;
 
-    const { error } = await supabase.storage
-      .from("leases")
-      .upload(objectPath, file, { contentType: "application/pdf" });
+      const { error } = await getSupabase()
+        .storage
+        .from("leases")
+        .upload(objectPath, file, {
+          contentType: "application/pdf",
+        });
 
-    setLoading(false);
+      if (error) {
+        throw error;
+      }
 
-    if (error) {
-      alert(error.message);
-      return;
+      onUploaded(objectPath);
+    } catch (err: any) {
+      alert(err.message || "Upload failed");
+    } finally {
+      setLoading(false);
     }
-
-    onUploaded(objectPath);
   }
 
   return (
     <div>
-      <input type="file" accept="application/pdf" onChange={handleUpload} />
-      {loading && <p>Uploading...</p>}
+      <input
+        type="file"
+        accept="application/pdf"
+        onChange={handleUpload}
+        disabled={loading}
+      />
+      {loading && <p>Uploading…</p>}
     </div>
   );
 }
