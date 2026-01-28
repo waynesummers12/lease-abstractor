@@ -249,12 +249,16 @@ async function handleCheckout() {
     {/* ---------- UPLOAD ---------- */}
 <section
   style={{
-    ...sectionStyle,
+    padding: 20,
+    borderRadius: 10,
+    border: "2px solid #16a34a",
+    background: "#f0fdf4",
     display: "flex",
     flexDirection: "column",
     gap: 12,
   }}
 >
+
   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
     <input
       type="file"
