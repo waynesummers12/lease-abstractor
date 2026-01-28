@@ -1,32 +1,52 @@
-import { NextResponse } from "next/server";
+// src/app/api/audits/[auditId]/download/route.ts
+
+import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic"; // ⬅️ critical
 
 export async function GET(
-  _req: Request,
+  req: NextRequest,
   { params }: { params: { auditId: string } }
 ) {
-  const auditId = params.auditId;
+  const { auditId } = params;
 
   if (!auditId) {
-    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
   }
 
+  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+
+  if (!workerUrl) {
+    return NextResponse.json(
+      { error: "Worker URL not configured" },
+      { status: 500 }
+    );
+  }
+
+  // 🔁 Proxy request to backend worker
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/${auditId}/download`,
+    `${workerUrl}/audits/${auditId}/download`,
     {
-      headers: {
-        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-      },
-      cache: "no-store",
+      method: "GET",
     }
   );
 
-  const body = await res.text();
+  if (!res.ok) {
+    const text = await res.text();
+    return NextResponse.json(
+      { error: text || "Failed to fetch download URL" },
+      { status: res.status }
+    );
+  }
 
-  return new NextResponse(body, {
-    status: res.status,
-    headers: { "Content-Type": "application/json" },
-  });
+  const data = await res.json();
+
+  return NextResponse.json(data);
 }
+
 
 
 
