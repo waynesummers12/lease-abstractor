@@ -1,11 +1,12 @@
+// web/src/app/_client/supabase.ts
 "use client";
 
 import { createClient } from "@supabase/supabase-js";
 
-let supabaseBrowser: ReturnType<typeof createClient> | null = null;
+let client: ReturnType<typeof createClient> | null = null;
 
 export function getSupabaseBrowser() {
-  if (!supabaseBrowser) {
+  if (!client) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -13,9 +14,8 @@ export function getSupabaseBrowser() {
       throw new Error("Missing browser Supabase env vars");
     }
 
-    supabaseBrowser = createClient(url, anonKey);
+    client = createClient(url, anonKey);
   }
 
-  return supabaseBrowser;
+  return client;
 }
-
