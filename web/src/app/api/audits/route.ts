@@ -3,42 +3,34 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("POST /api/audits hit");
-
     const body = await req.json();
-    const { analysis } = body;
+    const { auditId, status } = body;
 
-    if (!analysis) {
+    if (!auditId) {
       return NextResponse.json(
-        { error: "Missing analysis" },
+        { error: "Missing auditId" },
         { status: 400 }
       );
     }
 
     const supabase = getSupabaseServer();
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("lease_audits")
       .insert({
-        status: "pending",
-        analysis,
-      })
-      .select("id")
-      .single();
+        id: auditId,
+        status: status ?? "pending",
+      });
 
     if (error) {
-      console.error("Supabase insert failed:", error);
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      auditId: data.id,
-    });
-  } catch (err) {
+    return NextResponse.json({ success: true, auditId });
+  } catch (err: any) {
     console.error("POST /api/audits failed:", err);
     return NextResponse.json(
       { error: "Internal server error" },
