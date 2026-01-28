@@ -114,19 +114,26 @@ console.log("🌐 Base URL:", baseUrl);
        CREATE STRIPE CHECKOUT SESSION
     -------------------------------------------------- */
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [
-        {
-          price: STRIPE_PRICE_STARTER,
-          quantity: 1,
-        },
-      ],
-      success_url: `${baseUrl}/success?auditId=${auditId}`,
-      cancel_url: `${baseUrl}/cancel`,
-      metadata: {
-        auditId, // 🔒 SINGLE SOURCE OF TRUTH
-      },
-    });
+  mode: "payment",
+
+  payment_method_types: ["card"],
+
+  line_items: [
+    {
+      price: STRIPE_PRICE_STARTER,
+      quantity: 1,
+    },
+  ],
+
+  success_url: `${baseUrl}/success?auditId=${auditId}`,
+  cancel_url: `${baseUrl}/cancel`,
+
+  metadata: {
+    auditId,
+  },
+});
+
+
 
     console.log("🧾 Checkout session created:", {
       sessionId: session.id,
