@@ -11,6 +11,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* ===================== */}
+        {/* FLO BOT EMBED SCRIPT */}
+        {/* ===================== */}
+        <script
+          src="https://flobotagent.com/embed.js"
+          data-site-id="0daed93e-acfd-43ef-b0f3-fccf7bb12584"
+          defer
+        />
+      </head>
+
       <body className="min-h-screen flex flex-col bg-white text-gray-900">
         <Header />
 
@@ -27,4 +38,3 @@ export default function RootLayout({
     </html>
   );
 }
-
