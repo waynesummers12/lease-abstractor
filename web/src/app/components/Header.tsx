@@ -17,6 +17,21 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        learnRef.current &&
+        !learnRef.current.contains(e.target as Node)
+      ) {
+        setLearnOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Close Learn dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -195,12 +210,21 @@ export default function Header() {
             Pricing
           </Link>
 
-          <Link
-            href="/product/app"
-            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
-          >
-            Start Audit
-          </Link>
+          <div className="flex items-center gap-3">
+  <Link
+    href="/contact"
+    className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+  >
+    Contact Us
+  </Link>
+
+  <Link
+    href="/product/app"
+    className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+  >
+    Start Audit
+  </Link>
+</div>
         </nav>
 
         {/* Mobile Menu Button */}
