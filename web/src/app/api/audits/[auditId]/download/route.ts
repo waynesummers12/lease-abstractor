@@ -2,13 +2,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic"; // ⬅️ critical
+export const dynamic = "force-dynamic";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { auditId: string } }
+  context: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -26,12 +26,9 @@ export async function GET(
     );
   }
 
-  // 🔁 Proxy request to backend worker
   const res = await fetch(
     `${workerUrl}/audits/${auditId}/download`,
-    {
-      method: "GET",
-    }
+    { method: "GET" }
   );
 
   if (!res.ok) {
@@ -43,9 +40,9 @@ export async function GET(
   }
 
   const data = await res.json();
-
   return NextResponse.json(data);
 }
+
 
 
 
