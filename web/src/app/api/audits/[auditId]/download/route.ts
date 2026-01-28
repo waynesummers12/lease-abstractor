@@ -3,9 +3,9 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { auditId: string } }
+  context: { params: Promise<{ auditId: string }> }
 ): Promise<Response> {
-  const { auditId } = params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
@@ -37,6 +37,7 @@ export async function GET(
 
   return NextResponse.json({ url: signed.signedUrl });
 }
+
 
 
 
