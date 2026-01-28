@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 
+// 🔒 FORCE RUNTIME EXECUTION (CRITICAL)
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+export const revalidate = 0;
+
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -27,7 +32,6 @@ export async function GET(
     );
   }
 
-  // Generate signed URL for the PDF from storage
   const { data: signedUrl, error: signError } = await supabaseServer
     .storage
     .from("audits")
@@ -42,3 +46,4 @@ export async function GET(
 
   return NextResponse.json({ url: signedUrl.signedUrl });
 }
+
