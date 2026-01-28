@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         id: auditId,
         status: "paid",
       });
-
+console.log("POST /api/audits hit");
     if (error) {
       return NextResponse.json(
         { error: error.message },

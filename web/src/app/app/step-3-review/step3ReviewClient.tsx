@@ -3,112 +3,14 @@
 import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { useEffect, useRef, useState } from "react";
-import Step3ReviewClient from "./Step3ReviewClient";
-
-/* ---------- TYPES ---------- */
-
-type Analysis = {
-  tenant: string | null;
-  landlord: string | null;
-  premises: string | null;
-  lease_start: string | null;
-  lease_end: string | null;
-  term_months: number | null;
-  rent: {
-    base_rent: number | null;
-    frequency: "monthly" | "annual" | null;
-    escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
-    escalation_value: number | null;
-    escalation_interval: "annual" | null;
-  };
-  rent_schedule?: {
-    year: number;
-    annual_rent: number;
-    monthly_rent: number;
-  }[];
-  cam_nnn?: {
-    monthly_amount: number | null;
-    annual_amount: number | null;
-    total_exposure: number | null;
-    is_uncapped: boolean;
-    reconciliation: boolean;
-    pro_rata: boolean;
-    includes_capex: boolean;
-    cam_cap_percent: number | null;
-    escalation_exposure: number | null;
-  };
-  health?: {
-    score: number;
-    flags: {
-      code: string;
-      label: string;
-      severity: "low" | "medium" | "high";
-      recommendation: string;
-      estimated_impact?: string;
-    }[];
-  };
-  cam_total_avoidable_exposure?: number | null;
-exposure_range?: { low: number; high: number } | null;
-exposure_risk?: "low" | "medium" | "high" | null;
-};
-
-/* ---------- CONSTANTS ---------- */
-
-const formatMoney = (v: number | null | undefined) =>
-  v == null ? "—" : `$${v.toLocaleString()}`;
-
-const formatDate = (value: string | null | undefined) => {
-  if (!value) return "—";
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString();
-};
-
-const formatEscalation = (
-  type: string | null | undefined,
-  value: number | null | undefined
-) => {
-  if (!type) return "—";
-  return value == null ? type : `${type} (${value})`;
-};
-
-const headerStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: 8,
-};
-
-const sectionStyle: React.CSSProperties = {
-  border: "1px solid #e2e8f0",
-  borderRadius: 12,
-  padding: 20,
-};
-
-const exposureBoxStyle: React.CSSProperties = {
-  border: "2px solid #16a34a",
-  background: "#f0fdf4",
-  borderRadius: 12,
-  padding: 16,
-  display: "flex",
-  flexDirection: "column",
-  gap: 6,
-};
-
-const buttonStyle: React.CSSProperties = {
-  color: "white",
-  border: "none",
-  padding: "10px 16px",
-  borderRadius: 8,
-  fontWeight: 600,
-};
 
 /* ---------- PAGE ---------- */
 
-export default function HomePage() {
+export default function Step3ReviewClient() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
-export default function Step3ReviewPage() {
-  return <Step3ReviewClient />;
+
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
     useState<number | null>(null);
 
