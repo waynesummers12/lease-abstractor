@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
+  _req: NextRequest,
+  { params }: { params: { auditId: string } }
+): Promise<Response> {
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -14,7 +14,7 @@ export async function GET(
     );
   }
 
-  const supabase = getSupabaseServer();
+  const supabase = getSupabaseServer(); // guaranteed non-null or throws
 
   const { data, error } = await supabase
     .from("lease_audits")
@@ -43,3 +43,4 @@ export async function GET(
 
   return NextResponse.json({ url: signed.signedUrl });
 }
+
