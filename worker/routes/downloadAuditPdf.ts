@@ -12,42 +12,19 @@ export async function downloadAuditPdf(
     return;
   }
 
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select(
-      "audit_pdf_path, audit_pdf_object_path, object_path"
-    )
-    .eq("id", auditId)
-    .maybeSingle();
+  // FINAL SOURCE OF TRUTH
+  // Stripe webhook always writes PDFs here
+  const bucket = "audit-pdfs";
+  const objectPath = `${auditId}.pdf`;
 
-  if (error || !data) {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "Audit not found" };
-    return;
-  }
-
-  const fullPath =
-    data.audit_pdf_path ||
-    data.audit_pdf_object_path ||
-    data.object_path;
-
-  if (!fullPath) {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "PDF not ready" };
-    return;
-  }
-
-  const [bucket, ...rest] = fullPath.split("/");
-  const objectPath = rest.join("/");
-
-  const { data: signed, error: signError } =
+  const { data: signed, error } =
     await supabase.storage
       .from(bucket)
       .createSignedUrl(objectPath, 60 * 10);
 
-  if (signError || !signed?.signedUrl) {
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to create signed URL" };
+  if (error || !signed?.signedUrl) {
+    ctx.response.status = 404;
+    ctx.response.body = { error: "PDF not ready" };
     return;
   }
 
@@ -56,4 +33,3 @@ export async function downloadAuditPdf(
     signedUrl: signed.signedUrl,
   };
 }
-
