@@ -12,24 +12,27 @@ export async function downloadAuditPdf(
     return;
   }
 
-  // CORRECT FINAL SOURCE OF TRUTH
-  const bucket = "leases";
-  const objectPath = `${auditId}.pdf`;
+  const candidates = [
+    { bucket: "leases", path: `${auditId}.pdf` },
+    { bucket: "audit-pdfs", path: `${auditId}.pdf` },
+    { bucket: "leases", path: `leases/${auditId}.pdf` },
+    { bucket: "audit-pdfs", path: `audit-pdfs/${auditId}.pdf` },
+  ];
 
-  const { data: signed, error } =
-    await supabase.storage
-      .from(bucket)
-      .createSignedUrl(objectPath, 60 * 10);
+  for (const c of candidates) {
+    const { data, error } = await supabase.storage
+      .from(c.bucket)
+      .createSignedUrl(c.path, 60 * 10);
 
-  if (error || !signed?.signedUrl) {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "PDF not ready" };
-    return;
+    if (!error && data?.signedUrl) {
+      ctx.response.status = 200;
+      ctx.response.body = { signedUrl: data.signedUrl };
+      return;
+    }
   }
 
-  ctx.response.status = 200;
-  ctx.response.body = {
-    signedUrl: signed.signedUrl,
-  };
+  ctx.response.status = 404;
+  ctx.response.body = { error: "PDF not ready" };
 }
+
 
