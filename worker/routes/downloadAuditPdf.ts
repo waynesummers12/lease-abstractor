@@ -12,9 +12,8 @@ export async function downloadAuditPdf(
     return;
   }
 
-  // FINAL SOURCE OF TRUTH
-  // Stripe webhook always writes PDFs here
-  const bucket = "audit-pdfs";
+  // CORRECT FINAL SOURCE OF TRUTH
+  const bucket = "leases";
   const objectPath = `${auditId}.pdf`;
 
   const { data: signed, error } =
@@ -33,3 +32,4 @@ export async function downloadAuditPdf(
     signedUrl: signed.signedUrl,
   };
 }
+
