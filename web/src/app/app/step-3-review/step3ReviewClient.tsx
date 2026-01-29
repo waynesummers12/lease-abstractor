@@ -153,14 +153,6 @@ async function handleUploadAndAnalyze() {
   const newAuditId = crypto.randomUUID();
   setAuditId(newAuditId);
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
-
-  if (!workerUrl || !workerKey) {
-    setStatus("Worker not configured");
-    return;
-  }
-
   try {
     /* ---------- 1. CREATE AUDIT ROW ---------- */
     const res = await fetch("/api/audits", {
@@ -194,18 +186,17 @@ if (!pipelineResult.success) {
   throw new Error(pipelineResult.error ?? "Audit pipeline failed");
 }
 
-    if (!res.success) {
-      setStatus(res.error ?? "Analysis failed");
-      return;
-    }
+    setStatus("Uploading lease…");
 
-    if (!res.analysis) {
-      setStatus("Analysis failed");
-      return;
-    }
+const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-    setAnalysis(res.analysis.analysis);
-    setStatus("Analysis complete ✅");
+if (!pipelineResult.success) {
+  throw new Error(pipelineResult.error ?? "Audit pipeline failed");
+}
+
+setAnalysis(pipelineResult.analysis);
+setStatus("Analysis complete ✅");
+
 
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
