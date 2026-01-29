@@ -43,7 +43,9 @@ export async function runAuditPipeline(
     }
 
     /* ---------- 3. WAIT FOR ANALYSIS ---------- */
-    const analysis = await waitForAnalysis(auditId);
+    const result = await waitForAnalysis(auditId);
+    const analysis = result?.analysis ?? null;
+
 
     /* ---------- 4. SUCCESS (analysis is guaranteed here) ---------- */
     return {
