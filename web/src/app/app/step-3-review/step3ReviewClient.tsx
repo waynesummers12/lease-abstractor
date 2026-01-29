@@ -153,6 +153,9 @@ async function handleUploadAndAnalyze() {
   const newAuditId = crypto.randomUUID();
   setAuditId(newAuditId);
 
+  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
   try {
     /* ---------- 1. CREATE AUDIT ROW ---------- */
     const res = await fetch(`${workerUrl}/audits`, {
