@@ -13,8 +13,8 @@ export async function downloadAuditPdf(
   }
 
   const candidates = [
-  { bucket: "leases", path: `${auditId}.pdf` },
   { bucket: "leases", path: `leases/${auditId}.pdf` },
+  { bucket: "leases", path: `${auditId}.pdf` },
 ];
 
   for (const c of candidates) {
