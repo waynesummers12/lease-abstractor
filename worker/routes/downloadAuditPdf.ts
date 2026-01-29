@@ -12,41 +12,25 @@ export async function downloadAuditPdf(
     return;
   }
 
-  // LIST files in the leases bucket root
-  const { data: files, error: listError } =
-    await supabase.storage
-      .from("leases")
-      .list("leases", { limit: 1000 });
+  // The PDF lives at: leases/leases/<auditId>.pdf
+  // Bucket = leases
+  // Object path must be RELATIVE to bucket
+  const bucket = "leases";
+  const objectPath = `leases/${auditId}.pdf`;
 
-  if (listError || !files) {
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to list storage files" };
-    return;
-  }
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .createSignedUrl(objectPath, 60 * 10);
 
-  const match = files.find(
-    (f) => f.name === `${auditId}.pdf`
-  );
-
-  if (!match) {
+  if (error || !data?.signedUrl) {
     ctx.response.status = 404;
     ctx.response.body = { error: "PDF not ready" };
     return;
   }
 
-  const { data: signed, error: signError } =
-    await supabase.storage
-      .from("leases")
-      .createSignedUrl(`leases/${match.name}`, 60 * 10);
-
-  if (signError || !signed?.signedUrl) {
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to create signed URL" };
-    return;
-  }
-
   ctx.response.status = 200;
   ctx.response.body = {
-    signedUrl: signed.signedUrl,
+    signedUrl: data.signedUrl,
   };
 }
+
