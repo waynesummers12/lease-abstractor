@@ -152,28 +152,17 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-    if (!pipelineResult.success) {
-      throw new Error(pipelineResult.error ?? "Audit failed");
-    }
-
-    // 🔓 Optimistic update — analysis may already be present
-    if (pipelineResult.analysis) {
-      setAnalysis(pipelineResult.analysis);
-    }
-
     setStatus("Finalizing analysis…");
 
-    // 🔁 Safety net: fetch once more in case analysis arrived milliseconds later
-    if (!pipelineResult.analysis) {
-      const res = await fetch(`/api/audits/${newAuditId}`, {
-        cache: "no-store",
-      });
+    // 🔁 Poll once more to guarantee analysis
+    const res = await fetch(`/api/audits/${newAuditId}`, {
+      cache: "no-store",
+    });
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.analysis) {
-          setAnalysis(data.analysis);
-        }
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.analysis) {
+        setAnalysis(data.analysis);
       }
     }
 
@@ -187,8 +176,6 @@ async function handleUploadAndAnalyze() {
     setStatus(err?.message ?? "Unexpected error");
   }
 }
-
-
 
 /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
 
