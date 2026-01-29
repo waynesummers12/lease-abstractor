@@ -1,10 +1,12 @@
+// src/app/api/audits/[auditId]/download/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -20,20 +22,25 @@ export async function GET(
         headers: {
           "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
         },
+        cache: "no-store",
       }
     );
 
     const body = await res.json();
 
-    if (!res.ok) {
-      return NextResponse.json(body, { status: res.status });
+    if (!res.ok || !body?.signedUrl) {
+      return NextResponse.json(
+        { error: "Audit PDF not ready" },
+        { status: res.status || 500 }
+      );
     }
 
     return NextResponse.json(
       { signedUrl: body.signedUrl },
       { status: 200 }
     );
-  } catch {
+  } catch (err) {
+    console.error("❌ Download proxy failed:", err);
     return NextResponse.json(
       { error: "Failed to fetch signed PDF URL" },
       { status: 500 }
