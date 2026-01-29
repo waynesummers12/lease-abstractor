@@ -2,43 +2,24 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
-
-  if (!auditId) {
-    return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
-    );
-  }
+  const { auditId } = params;
 
   const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
-  if (!workerUrl) {
-    return NextResponse.json(
-      { error: "Worker URL not configured" },
-      { status: 500 }
-    );
-  }
-
   const res = await fetch(
-    `${workerUrl}/auditById/${auditId}`,
+    `${workerUrl}/downloadAuditPdf/${auditId}`,
     { cache: "no-store" }
   );
 
-  const bodyText = await res.text();
-
-  // Pass through worker errors cleanly
   if (!res.ok) {
     return NextResponse.json(
-      { error: bodyText },
+      { error: await res.text() },
       { status: res.status }
     );
   }
 
-  return new NextResponse(bodyText, {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  const data = await res.json();
+  return NextResponse.json(data);
 }
