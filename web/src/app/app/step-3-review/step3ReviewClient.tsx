@@ -152,19 +152,23 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-    if (!pipelineResult?.analysis) {
-      setStatus("Finalizing analysis…");
-      return; // ⛔ do NOT throw
-    }
+if (!pipelineResult.success) {
+  throw new Error(pipelineResult.error ?? "Audit failed");
+}
 
-    setAnalysis(pipelineResult.analysis);
-    setStatus("Analysis complete ✅");
+if (!pipelineResult.analysis) {
+  throw new Error("Analysis missing from pipeline result");
+}
 
+// ✅ THIS IS THE LINE THAT UNBLOCKS THE UI
+setAnalysis(pipelineResult.analysis);
 
+setStatus("Analysis complete ✅");
 
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+setTimeout(() => {
+  resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+}, 100);
+
   } catch (err: any) {
     console.error("Analyze failed:", err);
     setStatus(err?.message ?? "Unexpected error");
