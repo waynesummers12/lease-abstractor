@@ -88,6 +88,21 @@ router.post("/pdf", async (ctx) => {
     console.log("🧾 lease_audits normalized analysis saved for:", objectPath);
 
     /* --------------------------------------------------
+   🔍 FINAL DIAGNOSTIC: FIND ROW BY UUID ANYWHERE
+-------------------------------------------------- */
+const { data: anyRow, error: anyError } = await supabase
+  .from("lease_audits")
+  .select("*")
+  .ilike("object_path", `%${auditId}%`)
+  .limit(1);
+
+if (anyError) {
+  console.error("❌ Diagnostic query error:", anyError);
+} else {
+  console.log("🧪 FULL lease_audits row (diagnostic):", anyRow);
+}
+
+    /* --------------------------------------------------
        🔍 DEBUG: PROVE WHAT IS STORED
     -------------------------------------------------- */
     const { data: debugRow, error: debugError } = await supabase
