@@ -84,6 +84,8 @@ export default function SuccessPage() {
   async function handleDownload() {
   if (!auditId || downloading) return;
 
+  console.log("⬇️ Download clicked for audit:", auditId);
+
   try {
     setDownloading(true);
 
@@ -92,9 +94,8 @@ export default function SuccessPage() {
       { cache: "no-store" }
     );
 
-    // 🔑 IMPORTANT: do NOT alert on non-200
     if (!res.ok) {
-      // just retry silently
+      console.log("⏳ PDF not ready yet");
       setTimeout(() => setDownloading(false), 1500);
       return;
     }
@@ -102,17 +103,20 @@ export default function SuccessPage() {
     const json = await res.json();
 
     if (json?.signedUrl) {
-      window.open(json.signedUrl, "_blank");
-      return;
-    }
+  console.log("✅ Opening signed PDF");
+  window.open(json.signedUrl, "_blank");
+  setDownloading(false); // 👈 ADD THIS
+  return;
+}
 
-    // fallback retry
+
     setTimeout(() => setDownloading(false), 1500);
   } catch (err) {
-    console.error("Download failed", err);
+    console.error("❌ Download failed", err);
     setDownloading(false);
   }
 }
+
 
 
   /* ================= UI ================= */
