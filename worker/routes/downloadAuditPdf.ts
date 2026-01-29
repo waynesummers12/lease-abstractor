@@ -13,11 +13,9 @@ export async function downloadAuditPdf(
   }
 
   const candidates = [
-    { bucket: "leases", path: `${auditId}.pdf` },
-    { bucket: "audit-pdfs", path: `${auditId}.pdf` },
-    { bucket: "leases", path: `leases/${auditId}.pdf` },
-    { bucket: "audit-pdfs", path: `audit-pdfs/${auditId}.pdf` },
-  ];
+  { bucket: "leases", path: `${auditId}.pdf` },
+  { bucket: "leases", path: `leases/${auditId}.pdf` },
+];
 
   for (const c of candidates) {
     const { data, error } = await supabase.storage
