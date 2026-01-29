@@ -4,9 +4,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,
-  context: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await context.params;
+  const auditId = params.auditId;
 
   if (!auditId) {
     return NextResponse.json(
@@ -32,7 +32,7 @@ export async function GET(
   if (!res.ok) {
     const text = await res.text();
     return NextResponse.json(
-      { error: text || "Worker error" },
+      { error: text || "Audit not ready" },
       { status: res.status }
     );
   }
