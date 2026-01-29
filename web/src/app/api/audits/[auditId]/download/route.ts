@@ -1,53 +1,47 @@
-// src/app/api/audits/[auditId]/download/route.ts
+import type { RouterContext } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { supabase } from "../lib/supabase.ts";
 
-import { NextRequest, NextResponse } from "next/server";
-
-export const dynamic = "force-dynamic";
-
-export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ auditId: string }> }
+export async function downloadAuditPdf(
+  ctx: RouterContext<"/downloadAuditPdf/:auditId">
 ) {
-  const { auditId } = await context.params;
+  const auditId = ctx.params.auditId;
 
   if (!auditId) {
-    return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
-    );
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Missing auditId" };
+    return;
   }
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const { data, error } = await supabase
+    .from("lease_audits")
+    .select("audit_pdf_path, object_path")
+    .eq("id", auditId)
+    .maybeSingle();
 
-  if (!workerUrl) {
-    return NextResponse.json(
-      { error: "Worker URL not configured" },
-      { status: 500 }
-    );
+  if (error || (!data?.audit_pdf_path && !data?.object_path)) {
+    ctx.response.status = 404;
+    ctx.response.body = { error: "PDF not found for audit" };
+    return;
   }
 
-  const res = await fetch(
-  `${workerUrl}/downloadAuditPdf/${auditId}`,
-  { method: "GET" }
-);
+  const fullPath = data.audit_pdf_path ?? data.object_path;
 
-  if (!res.ok) {
-    const text = await res.text();
-    return NextResponse.json(
-      { error: text || "Failed to fetch download URL" },
-      { status: res.status }
-    );
+  const [bucket, ...rest] = fullPath.split("/");
+  const objectPath = rest.join("/");
+
+  const { data: signed, error: signError } =
+    await supabase.storage
+      .from(bucket)
+      .createSignedUrl(objectPath, 60 * 10);
+
+  if (signError || !signed?.signedUrl) {
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Failed to create signed URL" };
+    return;
   }
 
-  const data = await res.json();
-  return NextResponse.json(data);
+  ctx.response.status = 200;
+  ctx.response.body = {
+    signedUrl: signed.signedUrl,
+  };
 }
-
-
-
-
-
-
-
-
-
