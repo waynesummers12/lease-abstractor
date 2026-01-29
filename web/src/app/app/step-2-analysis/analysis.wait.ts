@@ -5,19 +5,20 @@ import { sleep } from "./analysis.utils";
 export async function waitForAnalysis(
   auditId: string,
   maxAttempts = 20
-): Promise<any | null> {
+): Promise<any> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
       const res = await fetch(`/api/audits/${auditId}`, {
         cache: "no-store",
       });
 
-      // ⏳ Audit not created yet
+      /* ⏳ Audit not ready yet */
       if (res.status === 404) {
         await sleep(2000);
         continue;
       }
 
+      /* ⚠️ Transient backend issue */
       if (!res.ok) {
         await sleep(2000);
         continue;
@@ -25,16 +26,18 @@ export async function waitForAnalysis(
 
       const data = await res.json();
 
-      // ✅ THIS IS THE REAL SUCCESS CONDITION
+      /* ✅ SUCCESS: analysis exists */
       if (data?.analysis) {
-        return data;
+        return data.analysis; // ← return analysis ONLY
       }
     } catch {
-      // swallow transient errors
+      // swallow transient network errors
     }
 
     await sleep(2000);
   }
 
-  return null;
+  /* 🚫 HARD FAILURE */
+  throw new Error("Timed out waiting for analysis");
 }
+
