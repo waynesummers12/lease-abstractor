@@ -12,25 +12,28 @@ export async function downloadAuditPdf(
     return;
   }
 
-  const candidates = [
-  { bucket: "leases", path: `leases/${auditId}.pdf` },
-  { bucket: "leases", path: `${auditId}.pdf` },
-];
+  // PDF IS STORED IN: bucket = leases, path = leases/<auditId>.pdf
+  const bucket = "leases";
+  const rawPath = `leases/${auditId}.pdf`;
 
-  for (const c of candidates) {
-    const { data, error } = await supabase.storage
-      .from(c.bucket)
-      .createSignedUrl(c.path, 60 * 10);
+  // IMPORTANT: Supabase expects object path *relative to bucket*
+  const objectPath = rawPath.replace(/^leases\//, "");
 
-    if (!error && data?.signedUrl) {
-      ctx.response.status = 200;
-      ctx.response.body = { signedUrl: data.signedUrl };
-      return;
-    }
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .createSignedUrl(objectPath, 60 * 10);
+
+  if (error || !data?.signedUrl) {
+    ctx.response.status = 404;
+    ctx.response.body = { error: "PDF not ready" };
+    return;
   }
 
-  ctx.response.status = 404;
-  ctx.response.body = { error: "PDF not ready" };
+  ctx.response.status = 200;
+  ctx.response.body = {
+    signedUrl: data.signedUrl,
+  };
 }
+
 
 
