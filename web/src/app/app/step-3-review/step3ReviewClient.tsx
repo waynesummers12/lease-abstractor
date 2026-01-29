@@ -158,14 +158,12 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-if (!pipelineResult?.analysis) {
+if (!pipelineResult) {
   throw new Error("Analysis not ready");
 }
 
-setAnalysis(pipelineResult.analysis);
+setAnalysis(pipelineResult);
 setStatus("Analysis complete ✅");
-
-
 
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
