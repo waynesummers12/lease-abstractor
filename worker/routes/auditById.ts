@@ -15,13 +15,13 @@ router.get("/auditById/:auditId", async (ctx) => {
     return;
   }
 
-  // 🔑 Canonical lookup: audit_pdf_path embeds the UUID
-  const pdfPath = `leases/${auditId}.pdf`;
+  // 🔑 Match ANY path that ends with "<uuid>.pdf"
+  const pdfSuffix = `${auditId}.pdf`;
 
   const { data: audit, error } = await supabase
     .from("lease_audits")
     .select("id, status, analysis, audit_pdf_path")
-    .eq("audit_pdf_path", pdfPath)
+    .ilike("audit_pdf_path", `%${pdfSuffix}`)
     .maybeSingle();
 
   if (error) {
@@ -41,8 +41,8 @@ router.get("/auditById/:auditId", async (ctx) => {
   console.log("🔥 auditById hit:", {
     id: audit.id,
     status: audit.status,
-    hasAnalysis: !!audit.analysis,
     audit_pdf_path: audit.audit_pdf_path,
+    hasAnalysis: !!audit.analysis,
   });
 
   const normalizedAnalysis = audit.analysis
