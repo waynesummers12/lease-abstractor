@@ -15,17 +15,14 @@ router.get("/auditById/:auditId", async (ctx) => {
     return;
   }
 
-  // 🔑 Match ANY path that ends with "<uuid>.pdf"
-  const pdfSuffix = `${auditId}.pdf`;
-
   const { data: audit, error } = await supabase
     .from("lease_audits")
     .select("id, status, analysis, audit_pdf_path")
-    .ilike("audit_pdf_path", `%${pdfSuffix}`)
+    .eq("id", auditId)
     .maybeSingle();
 
   if (error) {
-    console.error("❌ Supabase query error:", error);
+    console.error("❌ auditById query error:", error);
     ctx.response.status = 500;
     ctx.response.body = { error: "Database query failed" };
     return;
@@ -41,7 +38,6 @@ router.get("/auditById/:auditId", async (ctx) => {
   console.log("🔥 auditById hit:", {
     id: audit.id,
     status: audit.status,
-    audit_pdf_path: audit.audit_pdf_path,
     hasAnalysis: !!audit.analysis,
   });
 
@@ -49,25 +45,12 @@ router.get("/auditById/:auditId", async (ctx) => {
     ? normalizeAuditForSuccess(audit.analysis)
     : null;
 
-  let signedUrl: string | null = null;
-
-  if (audit.status === "complete" && audit.audit_pdf_path) {
-    const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
-
-    const { data: signed } = await supabase.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectPath, 60 * 60);
-
-    signedUrl = signed?.signedUrl ?? null;
-  }
-
   ctx.response.status = 200;
   ctx.response.body = {
-    id: audit.id,
-    status: audit.status,
     analysis: normalizedAnalysis,
-    signedUrl,
+    status: audit.status,
   };
 });
 
 export default router;
+

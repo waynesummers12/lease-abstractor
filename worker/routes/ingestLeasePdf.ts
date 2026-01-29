@@ -68,24 +68,39 @@ router.post("/pdf", async (ctx) => {
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-    /* --------------------------------------------------
-       🔑 PERSIST ANALYSIS USING audit_pdf_path
-       (THIS IS THE KEY FIX)
-    -------------------------------------------------- */
-    const { error: updateError } = await supabase
-      .from("lease_audits")
-      .update({
-        analysis: normalized,
-        status: "analyzed",
-      })
-      .eq("audit_pdf_path", objectPath);
+/* --------------------------------------------------
+   🔑 UPSERT ANALYSIS (CREATE OR UPDATE)
+-------------------------------------------------- */
+const { error: upsertError } = await supabase
+  .from("lease_audits")
+  .upsert(
+    {
+      id: auditId,                // 🔑 make auditId the PK
+      audit_pdf_path: objectPath, // 🔑 canonical lookup key
+      analysis: normalized,
+      status: "analyzed",
+    },
+    { onConflict: "id" }
+  );
 
-    if (updateError) {
-      console.error("❌ Failed to persist analysis", updateError);
-      throw new Error("Failed to save analysis");
-    }
+if (upsertError) {
+  console.error("❌ Failed to upsert analysis", upsertError);
+  throw new Error("Failed to save analysis");
+}
 
-    console.log("🧾 lease_audits normalized analysis saved for:", objectPath);
+console.log("🧾 lease_audits analysis upserted for:", auditId);
+
+/* --------------------------------------------------
+   🔍 PROVE ROW EXISTS (THIS WILL NOW WORK)
+-------------------------------------------------- */
+const { data: debugRow } = await supabase
+  .from("lease_audits")
+  .select("id, audit_pdf_path, status")
+  .eq("id", auditId)
+  .single();
+
+console.log("🧪 DEBUG lease_audits row:", debugRow);
+
 
     /* --------------------------------------------------
    🔍 FINAL DIAGNOSTIC: FIND ROW BY UUID ANYWHERE
@@ -102,27 +117,10 @@ if (anyError) {
   console.log("🧪 FULL lease_audits row (diagnostic):", anyRow);
 }
 
-    /* --------------------------------------------------
-       🔍 DEBUG: PROVE WHAT IS STORED
-    -------------------------------------------------- */
-    const { data: debugRow, error: debugError } = await supabase
-      .from("lease_audits")
-      .select("id, audit_pdf_path, status")
-      .eq("audit_pdf_path", objectPath)
-      .maybeSingle();
-
-    if (debugError) {
-      console.error("❌ Debug fetch error:", debugError);
-    } else {
-      console.log("🧪 DEBUG lease_audits row:", debugRow);
-    }
-
-    ctx.response.status = 200;
-    ctx.response.body = { success: true };
-  } catch (err) {
-    console.error("❌ Lease ingest error:", err);
+  } catch (err: any) {
+    console.error("[ingest] error", err);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Lease ingest failed" };
+    ctx.response.body = { error: err?.message ?? "Unexpected error" };
   }
 });
 
