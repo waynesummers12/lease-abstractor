@@ -185,7 +185,7 @@ const pipelineResult = await runAuditPipeline(
 
 if (!pipelineResult.success) {
   throw new Error(pipelineResult.error ?? "Audit pipeline failed");
-
+}
 
     if (!res.success) {
       setStatus(res.error ?? "Analysis failed");
