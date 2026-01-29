@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router();
 
 router.get("/downloadAuditPdf/:auditId", async (ctx) => {
+  console.log("🔥 downloadAuditPdf hit", ctx.params.auditId);
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
