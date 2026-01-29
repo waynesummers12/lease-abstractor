@@ -498,9 +498,6 @@ async function handleCheckout() {
     No analysis yet. Upload a PDF to see your results.
   </section>
 )}
-
-  </section>
-)}
   </main>
 );
 }
