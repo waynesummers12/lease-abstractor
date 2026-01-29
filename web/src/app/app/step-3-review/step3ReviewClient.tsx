@@ -368,9 +368,9 @@ async function handleCheckout() {
     ref={resultsRef}
     style={{
       ...sectionStyle,
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      gap: 16,
+      display: "flex",
+      flexDirection: "column",
+      gap: 20,
     }}
   >
     {/* ===== GREEN EXPOSURE BOX ===== */}
@@ -393,10 +393,9 @@ async function handleCheckout() {
         }}
       >
         💰 $
-        {(animatedExposure ?? totalAvoidableExposure)?.toLocaleString()}
+        {(animatedExposure ?? totalAvoidableExposure ?? 0).toLocaleString()}
       </div>
 
-      {/* --- VALUE CONFIDENCE BADGE --- */}
       <div
         style={{
           marginTop: 6,
@@ -413,23 +412,11 @@ async function handleCheckout() {
           color: "#166534",
         }}
       >
-        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
+        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
       </div>
 
-      {/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
       {exposureRiskLabel && (
-        <div style={{ marginTop: 8 }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              color: "#334155",
-              marginBottom: 4,
-            }}
-          >
-            Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-          </div>
-
+        <div style={{ marginTop: 10 }}>
           <div
             style={{
               width: "100%",
@@ -459,14 +446,9 @@ async function handleCheckout() {
             />
           </div>
 
-          <div
-            style={{
-              marginTop: 4,
-              fontSize: 11,
-              color: "#475569",
-            }}
-          >
-            {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
+          <div style={{ marginTop: 6, fontSize: 11, color: "#475569" }}>
+            {exposureRiskLabel === "low" &&
+              "High confidence — terms are clearly defined"}
             {exposureRiskLabel === "medium" &&
               "Moderate confidence — some assumptions applied"}
             {exposureRiskLabel === "high" &&
@@ -476,12 +458,11 @@ async function handleCheckout() {
       )}
     </div>
 
-    {/* --- CTA --- */}
+    {/* ===== CTA ===== */}
     <button
       onClick={handleCheckout}
       disabled={isCheckingOut}
       style={{
-        marginTop: 14,
         alignSelf: "flex-start",
         padding: "10px 18px",
         borderRadius: 8,
@@ -493,20 +474,16 @@ async function handleCheckout() {
         cursor: isCheckingOut ? "not-allowed" : "pointer",
       }}
     >
-      {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
+      {isCheckingOut
+        ? "Opening secure checkout…"
+        : "Unlock full audit report →"}
     </button>
 
-    <div
-      style={{
-        marginTop: 6,
-        fontSize: 12,
-        color: "#475569",
-      }}
-    >
-      Full audit report generated immediately after checkout. No subscription required.
+    <div style={{ fontSize: 12, color: "#475569" }}>
+      Full audit report generated immediately after checkout.
     </div>
 
-    {/* ---------- DETAILS ---------- */}
+    {/* ===== LEASE DETAILS ===== */}
     <div style={{ display: "grid", gap: 12 }}>
       <div>
         <div style={{ fontWeight: 700, marginBottom: 6 }}>Lease basics</div>
@@ -521,8 +498,8 @@ async function handleCheckout() {
           <span>Tenant: {analysis.tenant ?? "—"}</span>
           <span>Landlord: {analysis.landlord ?? "—"}</span>
           <span>Premises: {analysis.premises ?? "—"}</span>
-          <span>Lease start: {analysis.lease_start ?? "—"}</span>
-          <span>Lease end: {analysis.lease_end ?? "—"}</span>
+          <span>Lease start: {formatDate(analysis.lease_start)}</span>
+          <span>Lease end: {formatDate(analysis.lease_end)}</span>
           <span>Term (months): {analysis.term_months ?? "—"}</span>
         </div>
       </div>
@@ -539,171 +516,7 @@ async function handleCheckout() {
     No analysis yet. Upload a PDF to see your results.
   </section>
 )}
-    {/* ===== GREEN EXPOSURE BOX ===== */}
-    <div style={exposureBoxStyle}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-        Estimated Avoidable Exposure (Next 12 Months)
-      </div>
 
-      <div
-        style={{
-          fontSize: 34,
-          fontWeight: 900,
-          marginTop: 6,
-          color:
-            exposureRiskLabel === "high"
-              ? "#991b1b"
-              : exposureRiskLabel === "medium"
-              ? "#92400e"
-              : "#166534",
-        }}
-      >
-        💰 $
-        {(animatedExposure ?? totalAvoidableExposure)?.toLocaleString()}
-      </div>
-
-      {/* --- VALUE CONFIDENCE BADGE --- */}
-      <div
-        style={{
-          marginTop: 6,
-          alignSelf: "flex-start",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          padding: "4px 10px",
-          borderRadius: 999,
-          background: "#dcfce7",
-          border: "1px solid #86efac",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "#166534",
-        }}
-      >
-        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
-      </div>
-
-      {/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
-      {exposureRiskLabel && (
-        <div style={{ marginTop: 8 }}>
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              color: "#334155",
-              marginBottom: 4,
-            }}
-          >
-            Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-          </div>
-
-          <div
-            style={{
-              width: "100%",
-              height: 8,
-              background: "#e5e7eb",
-              borderRadius: 999,
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                height: "100%",
-                width:
-                  exposureRiskLabel === "low"
-                    ? "85%"
-                    : exposureRiskLabel === "medium"
-                    ? "60%"
-                    : "35%",
-                background:
-                  exposureRiskLabel === "low"
-                    ? "#16a34a"
-                    : exposureRiskLabel === "medium"
-                    ? "#f59e0b"
-                    : "#dc2626",
-                transition: "width 600ms ease",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              marginTop: 4,
-              fontSize: 11,
-              color: "#475569",
-            }}
-          >
-            {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
-            {exposureRiskLabel === "medium" &&
-              "Moderate confidence — some assumptions applied"}
-            {exposureRiskLabel === "high" &&
-              "Lower confidence — recovery depends on interpretation"}
-          </div>
-        </div>
-      )}
-    </div>
-{/* --- CTA --- */}
-<button
-  onClick={handleCheckout}
-  disabled={isCheckingOut}
-  style={{
-    marginTop: 14,
-    alignSelf: "flex-start",
-    padding: "10px 18px",
-    borderRadius: 8,
-    background: "#0f172a",
-    color: "#fff",
-    fontWeight: 600,
-    fontSize: 14,
-    border: "none",
-    cursor: isCheckingOut ? "not-allowed" : "pointer",
-  }}
->
-  {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
-</button>
-
-<div
-  style={{
-    marginTop: 6,
-    fontSize: 12,
-    color: "#475569",
-  }}
->
-  Full audit report generated immediately after checkout. No subscription required.
-</div>
-
-    {/* ---------- DETAILS ---------- */}
-    <div style={{ display: "grid", gap: 12 }}>
-      <div>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>Lease basics</div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontSize: 14,
-          }}
-        >
-          <span>Tenant: {analysis.tenant ?? "—"}</span>
-          <span>Landlord: {analysis.landlord ?? "—"}</span>
-          <span>Premises: {analysis.premises ?? "—"}</span>
-          <span>Lease start: {analysis.lease_start ?? "—"}</span>
-          <span>Lease end: {analysis.lease_end ?? "—"}</span>
-          <span>Term (months): {analysis.term_months ?? "—"}</span>
-        </div>
-      </div>
-    </div>
-  </section>
-) : (
-  <section
-    style={{
-      ...sectionStyle,
-      border: "1px dashed #cbd5e1",
-      color: "#475569",
-    }}
-  >
-    No analysis yet. Upload a PDF to see your results.
-  </section>
-)}
   </main>
 );
 }
