@@ -125,21 +125,25 @@ export default function Step3ReviewClient() {
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<any | null>(null);
 
-  const [totalAvoidableExposure, setTotalAvoidableExposure] =
-    useState<number | null>(null);
-
   const [animatedExposure, setAnimatedExposure] =
     useState<number | null>(null);
-
-  const [exposureRange, setExposureRange] =
-    useState<{ low: number; high: number } | null>(null);
-
-  const [exposureRiskLabel, setExposureRiskLabel] =
-    useState<string | null>(null);
 
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
 
+  /* ---------- DERIVED VALUES (FROM analysis) ---------- */
+
+  const totalAvoidableExposure =
+    analysis?.cam_total_avoidable_exposure ?? null;
+
+  const exposureRiskLabel =
+    analysis?.risk_level?.toLowerCase() ?? null;
+
+  // Backend doesn’t return a range yet
+  const exposureRange: { low: number; high: number } | null = null;
+
+  // …rest of component
+}
 
 /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
 const resultsRef = useRef<HTMLDivElement | null>(null);
