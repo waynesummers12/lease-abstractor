@@ -4,9 +4,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { auditId: string } }
+  context: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -24,10 +24,10 @@ export async function GET(
     );
   }
 
-  // 🔑 CORRECT worker route
-  const res = await fetch(`${workerUrl}/auditById/${auditId}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${workerUrl}/auditById/${auditId}`,
+    { cache: "no-store" }
+  );
 
   if (!res.ok) {
     const text = await res.text();
