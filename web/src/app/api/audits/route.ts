@@ -1,9 +1,24 @@
-// web/src/app/api/audits/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+/* -------------------------------------------------
+   REQUIRED: CORS / PREFLIGHT HANDLER
+-------------------------------------------------- */
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
+}
+
+/* -------------------------------------------------
+   CREATE AUDIT (PROXIES TO WORKER)
+-------------------------------------------------- */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -41,7 +56,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      const text = await res.text(); // ⬅️ do NOT assume JSON
+      const text = await res.text(); // ❗ do NOT assume JSON
       console.error("Worker /audits error:", text);
 
       return NextResponse.json(
