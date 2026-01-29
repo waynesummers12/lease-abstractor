@@ -4,9 +4,6 @@ import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { useEffect, useRef, useState } from "react";
 
-const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
-
 type Analysis = {
   tenant: string | null;
   landlord: string | null;
@@ -156,6 +153,9 @@ async function handleUploadAndAnalyze() {
   const newAuditId = crypto.randomUUID();
   setAuditId(newAuditId);
 
+  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
   if (!workerUrl || !workerKey) {
     setStatus("Worker not configured");
     return;
@@ -163,17 +163,16 @@ async function handleUploadAndAnalyze() {
 
   try {
     /* ---------- 1. CREATE AUDIT ROW ---------- */
-    const res = await fetch(`${workerUrl}/audits`, {
+    const res = await fetch("/api/audits", {
   method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "x-lease-worker-key": workerKey,
-  },
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    auditId,
-    objectPath: `leases/${auditId}.pdf`,
+    auditId: newAuditId,
+    filename: file.name,
+    objectPath: `leases/${newAuditId}.pdf`,
   }),
 });
+
 
 
     if (!res.ok) {
