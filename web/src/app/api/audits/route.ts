@@ -1,22 +1,20 @@
 // web/src/app/api/audits/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { randomUUID } from "crypto";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
-    const { filename } = await req.json();
+    const body = await req.json();
+    const { auditId, filename, objectPath } = body;
 
-    if (!filename) {
+    if (!auditId || !filename || !objectPath) {
       return NextResponse.json(
-        { error: "Missing filename" },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
-
-    const auditId = randomUUID();
 
     const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
     const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
@@ -28,7 +26,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 🔁 Delegate audit creation to worker
     const res = await fetch(`${workerUrl}/audits`, {
       method: "POST",
       headers: {
@@ -38,6 +35,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         auditId,
         filename,
+        objectPath,
       }),
     });
 
@@ -49,10 +47,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ auditId });
+    const data = await res.json();
+
+    return NextResponse.json({
+      success: true,
+      auditId,
+      data,
+    });
   } catch (err: any) {
+    console.error("POST /api/audits error:", err);
     return NextResponse.json(
-      { error: err?.message ?? "Unexpected error" },
+      { error: err?.message ?? "Unexpected server error" },
       { status: 500 }
     );
   }
