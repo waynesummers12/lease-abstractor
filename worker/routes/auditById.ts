@@ -6,7 +6,8 @@ import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router();
 
-router.get("/auditById/:auditId", async (ctx) => { const auditId = ctx.params.auditId;
+router.get("/audits/:auditId", async (ctx) => {
+  const auditId = ctx.params.auditId;
 
   if (!auditId) {
     ctx.response.status = 400;

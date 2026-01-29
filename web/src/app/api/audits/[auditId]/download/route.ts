@@ -1,7 +1,5 @@
 // src/app/api/audits/[auditId]/download/route.ts
 
-// src/app/api/audits/[auditId]/download/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +27,9 @@ export async function GET(
   }
 
   const res = await fetch(
-    `${workerUrl}/audits/${auditId}/download`,
-    { method: "GET" }
-  );
+  `${workerUrl}/downloadAuditPdf/${auditId}`,
+  { method: "GET" }
+);
 
   if (!res.ok) {
     const text = await res.text();

@@ -59,7 +59,7 @@ export default function SuccessPage() {
       return;
     }
 
-    let pollTimer: NodeJS.Timeout | null = null;
+    let pollTimer: ReturnType<typeof setTimeout> | null = null;
 
     async function loadAudit() {
       try {
@@ -74,9 +74,13 @@ export default function SuccessPage() {
         setData(json);
 
         // If paid but not complete, poll again
-        if (json.status === "paid") {
-          pollTimer = setTimeout(loadAudit, 4000);
-        }
+        const hasPdf =
+      json.audit_pdf_path || json.object_path;
+
+      if (!hasPdf) {
+      pollTimer = setTimeout(loadAudit, 4000);
+}
+
       } catch (err) {
         console.error("Failed to load audit", err);
         setFatalError("Unable to load audit.");
