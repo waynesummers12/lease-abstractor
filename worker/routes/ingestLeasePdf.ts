@@ -15,6 +15,7 @@ const router = new Router({
  */
 router.post("/pdf", async (ctx) => {
   try {
+    // Parse body safely (Oak-compatible)
     // deno-lint-ignore no-explicit-any
     const body =
       (await (ctx.request as any).body?.json?.()) ??
@@ -30,7 +31,9 @@ router.post("/pdf", async (ctx) => {
 
     console.info("[ingest] downloading lease pdf", { objectPath });
 
-    // Download PDF
+    /* --------------------------------------------------
+       DOWNLOAD PDF
+    -------------------------------------------------- */
     const { data, error } = await supabase.storage
       .from("leases")
       .download(objectPath);
@@ -41,7 +44,9 @@ router.post("/pdf", async (ctx) => {
 
     const buffer = new Uint8Array(await data.arrayBuffer());
 
-    // Extract text
+    /* --------------------------------------------------
+       EXTRACT TEXT
+    -------------------------------------------------- */
     const parsed = await pdfParse(buffer);
     const leaseText = parsed.text;
 
@@ -59,45 +64,51 @@ router.post("/pdf", async (ctx) => {
     const rawAnalysis = abstractLease(leaseText);
 
     /* --------------------------------------------------
-       🔑 CRITICAL FIX:
-       Normalize analysis EARLY so exposure exists pre-checkout
-       (normalizeAuditForSuccess expects the raw analysis object)
+       NORMALIZE EARLY (critical for UI + checkout)
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-/* --------------------------------------------------
-   PERSIST NORMALIZED ANALYSIS
--------------------------------------------------- */
-const { error: updateError } = await supabase
-  .from("lease_audits")
-  .update({
-    analysis: normalized,
-    status: "analyzed",
-  })
-  .eq("audit_pdf_path", objectPath);
+    /* --------------------------------------------------
+       🔑 PERSIST ANALYSIS USING audit_pdf_path
+       (THIS IS THE KEY FIX)
+    -------------------------------------------------- */
+    const { error: updateError } = await supabase
+      .from("lease_audits")
+      .update({
+        analysis: normalized,
+        status: "analyzed",
+      })
+      .eq("audit_pdf_path", objectPath);
 
-if (updateError) {
-  console.error("❌ Failed to persist analysis", updateError);
-  throw new Error("Failed to save analysis");
-}
+    if (updateError) {
+      console.error("❌ Failed to persist analysis", updateError);
+      throw new Error("Failed to save analysis");
+    }
 
-console.log("🧾 lease_audits normalized analysis saved for:", objectPath);
+    console.log("🧾 lease_audits normalized analysis saved for:", objectPath);
 
-/* --------------------------------------------------
-   🔍 PROVE WHAT IS STORED (NOW THIS WILL WORK)
--------------------------------------------------- */
-const { data: debugRow, error: debugError } = await supabase
-  .from("lease_audits")
-  .select("id, audit_pdf_path, status")
-  .eq("audit_pdf_path", objectPath)
-  .maybeSingle();
+    /* --------------------------------------------------
+       🔍 DEBUG: PROVE WHAT IS STORED
+    -------------------------------------------------- */
+    const { data: debugRow, error: debugError } = await supabase
+      .from("lease_audits")
+      .select("id, audit_pdf_path, status")
+      .eq("audit_pdf_path", objectPath)
+      .maybeSingle();
 
-if (debugError) {
-  console.error("❌ Debug fetch error:", debugError);
-} else {
-  console.log("🧪 DEBUG lease_audits row:", debugRow);
-}
+    if (debugError) {
+      console.error("❌ Debug fetch error:", debugError);
+    } else {
+      console.log("🧪 DEBUG lease_audits row:", debugRow);
+    }
 
+    ctx.response.status = 200;
+    ctx.response.body = { success: true };
+  } catch (err) {
+    console.error("❌ Lease ingest error:", err);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Lease ingest failed" };
+  }
 });
 
 export default router;
