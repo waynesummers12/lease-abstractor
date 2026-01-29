@@ -135,8 +135,8 @@ export default function Step3ReviewClient() {
   const [exposureRiskLabel, setExposureRiskLabel] =
     useState<string | null>(null);
 
-  /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-  const resultsRef = useRef<HTMLDivElement | null>(null);
+/* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
+const resultsRef = useRef<HTMLDivElement | null>(null);
 
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -152,24 +152,42 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-if (!pipelineResult.analysis) {
-  throw new Error("Analysis missing from pipeline result");
-}
+    if (!pipelineResult.success) {
+      throw new Error(pipelineResult.error ?? "Audit failed");
+    }
 
-// ✅ THIS IS THE LINE THAT UNBLOCKS THE UI
-setAnalysis(pipelineResult.analysis);
+    // 🔓 Optimistic update — analysis may already be present
+    if (pipelineResult.analysis) {
+      setAnalysis(pipelineResult.analysis);
+    }
 
-setStatus("Analysis complete ✅");
+    setStatus("Finalizing analysis…");
 
-setTimeout(() => {
-  resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-}, 100);
+    // 🔁 Safety net: fetch once more in case analysis arrived milliseconds later
+    if (!pipelineResult.analysis) {
+      const res = await fetch(`/api/audits/${newAuditId}`, {
+        cache: "no-store",
+      });
 
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.analysis) {
+          setAnalysis(data.analysis);
+        }
+      }
+    }
+
+    setStatus("Analysis complete ✅");
+
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   } catch (err: any) {
     console.error("Analyze failed:", err);
     setStatus(err?.message ?? "Unexpected error");
   }
 }
+
 
 
 /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
