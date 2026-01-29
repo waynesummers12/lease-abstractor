@@ -155,10 +155,11 @@ async function handleUploadAndAnalyze() {
     setStatus("Finalizing analysis…");
 
     // ✅ Primary path — pipeline already returned analysis
-    if (pipelineResult?.analysis) {
-      setAnalysis(pipelineResult.analysis);
-    } else {
-      // 🔁 Fallback: fetch once directly from API (non-fatal)
+if (pipelineResult && "analysis" in pipelineResult) {
+  setAnalysis(pipelineResult.analysis);
+} else {
+  // 🔁 Fallback: fetch once directly from API (non-fatal)
+
       const res = await fetch(`/api/audits/${newAuditId}`, {
         cache: "no-store",
       });
