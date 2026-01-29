@@ -271,42 +271,46 @@ async function handleCheckout() {
   setStatus("Redirecting to secure checkout…");
 
   try {
-    if (analysis) {
-      sessionStorage.setItem(
-        "latest_analysis",
-        JSON.stringify(analysis)
-      );
-    }
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Lease-Worker-Key":
-            process.env.NEXT_PUBLIC_WORKER_KEY!,
-        },
-        body: JSON.stringify({ auditId }),
-      }
+  if (analysis) {
+    sessionStorage.setItem(
+      "latest_analysis",
+      JSON.stringify(analysis)
     );
-
-    if (!res.ok) {
-      throw new Error(await res.text());
-    }
-
-    const { url } = await res.json();
-
-    if (!url) {
-      throw new Error("Missing checkout URL");
-    }
-
-    window.location.href = url;
-  } catch (err) {
-    console.error("Checkout error:", err);
-    setStatus("Checkout failed. Please try again.");
-    setIsCheckingOut(false);
   }
+
+  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
+  if (!workerUrl || !workerKey) {
+    throw new Error("Worker not configured");
+  }
+
+  const res = await fetch(`${workerUrl}/checkout/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Lease-Worker-Key": workerKey,
+    },
+    body: JSON.stringify({ auditId }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text(); // ⚠️ worker may not return JSON
+    console.error("Checkout create failed:", text);
+    throw new Error(text || "Checkout creation failed");
+  }
+
+  const data = await res.json();
+
+  if (!data?.url) {
+    throw new Error("Missing checkout URL");
+  }
+
+  window.location.href = data.url;
+} catch (err: any) {
+  console.error("Checkout error:", err);
+  setStatus(err?.message ?? "Checkout failed. Please try again.");
+  setIsCheckingOut(false);
 }
 
   return (
