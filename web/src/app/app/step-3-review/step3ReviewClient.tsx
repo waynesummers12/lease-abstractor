@@ -152,10 +152,6 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-if (!pipelineResult.success) {
-  throw new Error(pipelineResult.error ?? "Audit failed");
-}
-
 if (!pipelineResult.analysis) {
   throw new Error("Analysis missing from pipeline result");
 }
