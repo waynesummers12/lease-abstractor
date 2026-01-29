@@ -1,5 +1,3 @@
-// web/src/app/app/step-2-analysis/analysis.service.ts
-
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { waitForAnalysis } from "./analysis.wait";
 import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
@@ -21,12 +19,7 @@ export async function runAuditPipeline(
       });
 
     if (uploadError) {
-      return {
-        success: false,
-        status: "failed",
-        auditId,
-        error: uploadError.message,
-      };
+      throw new Error(uploadError.message);
     }
 
     /* ---------- 2. INGEST VIA WORKER ---------- */
@@ -46,27 +39,13 @@ export async function runAuditPipeline(
     );
 
     if (!ingestRes.ok) {
-      return {
-        success: false,
-        status: "failed",
-        auditId,
-        error: await ingestRes.text(),
-      };
+      throw new Error(await ingestRes.text());
     }
 
     /* ---------- 3. WAIT FOR ANALYSIS ---------- */
     const analysis = await waitForAnalysis(auditId);
 
-    if (!analysis) {
-      return {
-        success: false,
-        status: "analysis_pending",
-        auditId,
-        error: "Analysis not ready",
-      };
-    }
-
-    /* ---------- 4. SUCCESS ---------- */
+    /* ---------- 4. SUCCESS (analysis is guaranteed here) ---------- */
     return {
       success: true,
       status: "analysis_ready",
