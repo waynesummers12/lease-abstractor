@@ -4,6 +4,9 @@ import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { useEffect, useRef, useState } from "react";
 
+const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
 type Analysis = {
   tenant: string | null;
   landlord: string | null;
@@ -153,8 +156,10 @@ async function handleUploadAndAnalyze() {
   const newAuditId = crypto.randomUUID();
   setAuditId(newAuditId);
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+  if (!workerUrl || !workerKey) {
+    setStatus("Worker not configured");
+    return;
+  }
 
   try {
     /* ---------- 1. CREATE AUDIT ROW ---------- */
@@ -171,8 +176,8 @@ async function handleUploadAndAnalyze() {
 });
 
 
-    if (!createRes.ok) {
-      const err = await createRes.json();
+    if (!res.ok) {
+      const err = await res.json();
       throw new Error(err?.error ?? "Failed to create audit");
     }
 
