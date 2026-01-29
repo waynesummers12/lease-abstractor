@@ -15,11 +15,13 @@ router.get("/auditById/:auditId", async (ctx) => {
     return;
   }
 
-  // 🔑 Try BOTH id and audit_id — only one will exist
+  // 🔑 Canonical lookup: audit_pdf_path embeds the UUID
+  const pdfPath = `leases/${auditId}.pdf`;
+
   const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select("id, audit_id, status, analysis, audit_pdf_path")
-    .or(`id.eq.${auditId},audit_id.eq.${auditId}`)
+    .select("id, status, analysis, audit_pdf_path")
+    .eq("audit_pdf_path", pdfPath)
     .maybeSingle();
 
   if (error) {
@@ -38,9 +40,9 @@ router.get("/auditById/:auditId", async (ctx) => {
 
   console.log("🔥 auditById hit:", {
     id: audit.id,
-    audit_id: audit.audit_id,
     status: audit.status,
     hasAnalysis: !!audit.analysis,
+    audit_pdf_path: audit.audit_pdf_path,
   });
 
   const normalizedAnalysis = audit.analysis
@@ -52,19 +54,16 @@ router.get("/auditById/:auditId", async (ctx) => {
   if (audit.status === "complete" && audit.audit_pdf_path) {
     const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
-    const { data: signed, error: signError } = await supabase.storage
+    const { data: signed } = await supabase.storage
       .from("audit-pdfs")
       .createSignedUrl(objectPath, 60 * 60);
 
-    if (!signError) {
-      signedUrl = signed?.signedUrl ?? null;
-    }
+    signedUrl = signed?.signedUrl ?? null;
   }
 
   ctx.response.status = 200;
   ctx.response.body = {
     id: audit.id,
-    audit_id: audit.audit_id,
     status: audit.status,
     analysis: normalizedAnalysis,
     signedUrl,
@@ -72,5 +71,3 @@ router.get("/auditById/:auditId", async (ctx) => {
 });
 
 export default router;
-
-
