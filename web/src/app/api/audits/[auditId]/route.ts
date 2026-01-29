@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ auditId: string }> }
+  _req: NextRequest,
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await context.params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -16,23 +16,29 @@ export async function GET(
   }
 
   const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
 
-  if (!workerUrl) {
+  if (!workerUrl || !workerKey) {
     return NextResponse.json(
-      { error: "Worker URL not configured" },
+      { error: "Worker not configured" },
       { status: 500 }
     );
   }
 
   const res = await fetch(
-    `${workerUrl}/audits/${auditId}`,
-    { method: "GET" }
+    `${workerUrl}/auditById/${auditId}`,
+    {
+      headers: {
+        "X-Lease-Worker-Key": workerKey,
+      },
+      cache: "no-store",
+    }
   );
 
   if (!res.ok) {
     const text = await res.text();
     return NextResponse.json(
-      { error: text || "Failed to fetch audit" },
+      { error: text || "Audit not ready" },
       { status: res.status }
     );
   }
@@ -40,6 +46,3 @@ export async function GET(
   const data = await res.json();
   return NextResponse.json(data);
 }
-
-
-
