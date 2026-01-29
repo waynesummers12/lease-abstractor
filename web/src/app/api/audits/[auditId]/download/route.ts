@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { auditId: string } }
+  { params }: { params: Promise<{ auditId: string }> }
 ) {
-  const auditId = params.auditId;
+  const { auditId } = await params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -40,4 +40,3 @@ export async function GET(
     );
   }
 }
-
