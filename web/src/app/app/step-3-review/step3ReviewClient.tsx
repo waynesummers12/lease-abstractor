@@ -499,59 +499,6 @@ async function handleCheckout() {
   </section>
 )}
 
-
-
-      {/* CAM / NNN */}
-      {analysis?.cam_nnn && (
-        <div>
-          <div style={{ fontWeight: 700, marginBottom: 6 }}>
-            CAM / NNN
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: 6,
-              fontSize: 14,
-            }}
-          >
-            <span>
-              Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}
-            </span>
-            <span>
-              Annual: {formatMoney(analysis.cam_nnn.annual_amount)}
-            </span>
-            <span>
-              Total exposure:{" "}
-              {formatMoney(analysis.cam_nnn.total_exposure)}
-            </span>
-            <span>
-              {analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}
-            </span>
-            <span>
-              {analysis.cam_nnn.reconciliation
-                ? "Reconciliation"
-                : "No reconciliation"}
-            </span>
-            <span>
-              {analysis.cam_nnn.includes_capex
-                ? "Includes capex"
-                : "Excludes capex"}
-            </span>
-          </div>
-        </div>
-      )}
-  </section>
-) : (
-  <section
-    style={{
-      ...sectionStyle,
-      border: "1px dashed #cbd5e1",
-      color: "#475569",
-    }}
-  >
-    No analysis yet. Upload a PDF to see your results.
   </section>
 )}
   </main>
