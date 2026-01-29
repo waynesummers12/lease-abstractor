@@ -4,10 +4,7 @@ import { supabase } from "../lib/supabase.ts";
 
 const router = new Router();
 
-/**
- * GET /api/audits/:auditId/download
- */
-router.get("/api/audits/:auditId/download", async (ctx) => {
+router.get("/downloadAuditPdf/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
@@ -20,7 +17,7 @@ router.get("/api/audits/:auditId/download", async (ctx) => {
     .from("lease_audits")
     .select("audit_pdf_path")
     .eq("id", auditId)
-    .single();
+    .maybeSingle();
 
   if (error || !data?.audit_pdf_path) {
     ctx.response.status = 404;
@@ -28,7 +25,6 @@ router.get("/api/audits/:auditId/download", async (ctx) => {
     return;
   }
 
-  // Stored value example: audit-pdfs/<auditId>.pdf
   const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
   const { data: signed, error: signedError } = await supabase.storage
@@ -36,12 +32,12 @@ router.get("/api/audits/:auditId/download", async (ctx) => {
     .createSignedUrl(filePath, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
-    console.error("❌ Signed URL error:", signedError);
     ctx.response.status = 500;
     ctx.response.body = { error: "Failed to create signed URL" };
     return;
   }
 
+  ctx.response.status = 200;
   ctx.response.body = { url: signed.signedUrl };
 });
 
