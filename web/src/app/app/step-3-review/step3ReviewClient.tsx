@@ -124,29 +124,19 @@ export default function Step3ReviewClient() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<any | null>(null);
-
   const [animatedExposure, setAnimatedExposure] =
     useState<number | null>(null);
-
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
+  const [totalAvoidableExposure, setTotalAvoidableExposure] =
+    useState<number | null>(null);
+  const [exposureRange, setExposureRange] =
+    useState<{ low: number; high: number } | null>(null);
+  const [exposureRiskLabel, setExposureRiskLabel] =
+    useState<string | null>(null);
 
-  /* ---------- DERIVED VALUES (FROM analysis) ---------- */
-
-  const totalAvoidableExposure =
-    analysis?.cam_total_avoidable_exposure ?? null;
-
-  const exposureRiskLabel =
-    analysis?.risk_level?.toLowerCase() ?? null;
-
-  // Backend doesn’t return a range yet
-  const exposureRange: { low: number; high: number } | null = null;
-
-  // …rest of component
-}
-
-/* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-const resultsRef = useRef<HTMLDivElement | null>(null);
+  /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
+  const resultsRef = useRef<HTMLDivElement | null>(null);
 
 async function handleUploadAndAnalyze() {
   if (!file) return;
@@ -162,13 +152,13 @@ async function handleUploadAndAnalyze() {
 
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-if (!pipelineResult?.analysis) {
-  setStatus("Finalizing analysis…");
-  return; // ⛔ do NOT throw
-}
+    if (!pipelineResult?.analysis) {
+      setStatus("Finalizing analysis…");
+      return; // ⛔ do NOT throw
+    }
 
-setAnalysis(pipelineResult.analysis);
-setStatus("Analysis complete ✅");
+    setAnalysis(pipelineResult.analysis);
+    setStatus("Analysis complete ✅");
 
 
 
@@ -362,7 +352,7 @@ async function handleCheckout() {
 </section>
 
 {/* ---------- RESULTS ---------- */}
-{analysis ? (
+{analysis?.cam_total_avoidable_exposure != null ? (
   <section
     ref={resultsRef}
     style={{
@@ -372,14 +362,12 @@ async function handleCheckout() {
       gap: 16,
     }}
   >
-{/* ===== GREEN EXPOSURE BOX ===== */}
-<div style={exposureBoxStyle}>
-  <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-    Estimated Avoidable Exposure (Next 12 Months)
-  </div>
+    {/* ===== GREEN EXPOSURE BOX ===== */}
+    <div style={exposureBoxStyle}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
+        Estimated Avoidable Exposure (Next 12 Months)
+      </div>
 
-  {analysis?.health?.avoidable_exposure != null && (
-    <>
       <div
         style={{
           fontSize: 34,
@@ -394,10 +382,7 @@ async function handleCheckout() {
         }}
       >
         💰 $
-        {(
-          animatedExposure ??
-          analysis.health.avoidable_exposure
-        ).toLocaleString()}
+        {(animatedExposure ?? totalAvoidableExposure)?.toLocaleString()}
       </div>
 
       {/* --- VALUE CONFIDENCE BADGE --- */}
@@ -417,7 +402,7 @@ async function handleCheckout() {
           color: "#166534",
         }}
       >
-        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
       </div>
 
       {/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
@@ -470,8 +455,7 @@ async function handleCheckout() {
               color: "#475569",
             }}
           >
-            {exposureRiskLabel === "low" &&
-              "High confidence — terms are clearly defined"}
+            {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
             {exposureRiskLabel === "medium" &&
               "Moderate confidence — some assumptions applied"}
             {exposureRiskLabel === "high" &&
@@ -479,93 +463,46 @@ async function handleCheckout() {
           </div>
         </div>
       )}
+    </div>
 
-      {exposureRange && (
-        <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
-          Estimated recovery range:{" "}
-          <strong>
-            ${exposureRange.low.toLocaleString()} – $
-            {exposureRange.high.toLocaleString()}
-          </strong>
-        </p>
-      )}
-    </>
-  )}
-
-  <button
-    onClick={handleCheckout}
-    disabled={isCheckingOut}
+    {/* ---------- DETAILS ---------- */}
+    <div style={{ display: "grid", gap: 12 }}>
+      <div>
+        <div style={{ fontWeight: 700, marginBottom: 6 }}>Lease basics</div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 6,
+            fontSize: 14,
+          }}
+        >
+          <span>Tenant: {analysis.tenant ?? "—"}</span>
+          <span>Landlord: {analysis.landlord ?? "—"}</span>
+          <span>Premises: {analysis.premises ?? "—"}</span>
+          <span>Lease start: {analysis.lease_start ?? "—"}</span>
+          <span>Lease end: {analysis.lease_end ?? "—"}</span>
+          <span>Term (months): {analysis.term_months ?? "—"}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+) : (
+  <section
     style={{
-      ...buttonStyle,
-      background: "#0f172a",
-      cursor: isCheckingOut ? "not-allowed" : "pointer",
-      marginTop: 10,
-      alignSelf: "flex-start",
+      ...sectionStyle,
+      border: "1px dashed #cbd5e1",
+      color: "#475569",
     }}
   >
-    {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
-  </button>
+    No analysis yet. Upload a PDF to see your results.
+  </section>
+)}
 
-  <div
-    style={{
-      marginTop: 6,
-      fontSize: 12,
-      color: "#111827",
-    }}
-  >
-    Full audit report generated immediately after checkout. No subscription required.
-  </div>
-</div>
-
-{/* ---------- DETAILS ---------- */}
-<div style={{ display: "grid", gap: 12 }}>
-  {/* Lease basics */}
-  <div>
-    <div style={{ fontWeight: 700, marginBottom: 6 }}>
-      Lease basics
-    </div>
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 6,
-        fontSize: 14,
-      }}
-    >
-      <span>Tenant: {analysis?.tenant ?? "—"}</span>
-      <span>Landlord: {analysis?.landlord ?? "—"}</span>
-      <span>Premises: {analysis?.premises ?? "—"}</span>
-      <span>Lease start: {formatDate(analysis?.lease_start)}</span>
-      <span>Lease end: {formatDate(analysis?.lease_end)}</span>
-      <span>Term (months): {analysis?.term_months ?? "—"}</span>
-    </div>
-  </div>
-
-  {/* Rent */}
-  <div>
-    <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-        gap: 6,
-        fontSize: 14,
-      }}
-    >
-      <span>
-        Base rent: {formatMoney(analysis?.rent?.base_rent)}
-      </span>
-      <span>Frequency: {analysis?.rent?.frequency ?? "—"}</span>
-      <span>
-        Escalation: {analysis?.rent?.escalation ?? "None"}
-      </span>
-    </div>
-  </div>
-</div>
 
 
       {/* CAM / NNN */}
-      {analysis.cam_nnn && (
+      {analysis?.cam_nnn && (
         <div>
           <div style={{ fontWeight: 700, marginBottom: 6 }}>
             CAM / NNN
