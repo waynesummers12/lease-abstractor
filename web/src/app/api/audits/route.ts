@@ -36,11 +36,14 @@ export async function POST(req: NextRequest) {
         auditId,
         filename,
         objectPath,
+        status: "pending", // ✅ REQUIRED BY WORKER
       }),
     });
 
     if (!res.ok) {
-      const text = await res.text();
+      const text = await res.text(); // ⬅️ do NOT assume JSON
+      console.error("Worker /audits error:", text);
+
       return NextResponse.json(
         { error: text || "Worker failed to create audit" },
         { status: res.status }
@@ -48,6 +51,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.json();
+
     return NextResponse.json({
       success: true,
       auditId,
