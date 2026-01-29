@@ -1,47 +1,43 @@
-import type { RouterContext } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import { supabase } from "../lib/supabase.ts";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function downloadAuditPdf(
-  ctx: RouterContext<"/downloadAuditPdf/:auditId">
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { auditId: string } }
 ) {
-  const auditId = ctx.params.auditId;
+  const auditId = params.auditId;
 
   if (!auditId) {
-    ctx.response.status = 400;
-    ctx.response.body = { error: "Missing auditId" };
-    return;
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
   }
 
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select("audit_pdf_path, object_path")
-    .eq("id", auditId)
-    .maybeSingle();
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/downloadAuditPdf/${auditId}`,
+      {
+        headers: {
+          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+      }
+    );
 
-  if (error || (!data?.audit_pdf_path && !data?.object_path)) {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "PDF not found for audit" };
-    return;
+    const body = await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(body, { status: res.status });
+    }
+
+    return NextResponse.json(
+      { signedUrl: body.signedUrl },
+      { status: 200 }
+    );
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to fetch signed PDF URL" },
+      { status: 500 }
+    );
   }
-
-  const fullPath = data.audit_pdf_path ?? data.object_path;
-
-  const [bucket, ...rest] = fullPath.split("/");
-  const objectPath = rest.join("/");
-
-  const { data: signed, error: signError } =
-    await supabase.storage
-      .from(bucket)
-      .createSignedUrl(objectPath, 60 * 10);
-
-  if (signError || !signed?.signedUrl) {
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to create signed URL" };
-    return;
-  }
-
-  ctx.response.status = 200;
-  ctx.response.body = {
-    signedUrl: signed.signedUrl,
-  };
 }
+
