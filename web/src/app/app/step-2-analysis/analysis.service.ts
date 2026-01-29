@@ -2,7 +2,7 @@
 
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { waitForAnalysis } from "./analysis.wait";
-import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
+import type { AuditPipelineResult } from "./analysis.types";
 
 export async function runAuditPipeline(
   file: File,
