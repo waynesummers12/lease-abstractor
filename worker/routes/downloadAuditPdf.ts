@@ -15,42 +15,27 @@ export async function downloadAuditPdf(
   }
 
   /* --------------------------------------------------
-     FETCH AUDIT PDF PATH (POST-PROCESSED ONLY)
-  -------------------------------------------------- */
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select("audit_pdf_path, status")
-    .eq("id", auditId)
-    .single();
+     FINAL AUDIT PDF LOCATION (POST-PROCESSING)
+     -------------------------------------------------- */
+  const bucket = "audit-pdfs";
+  const objectPath = `${auditId}.pdf`;
 
-  if (error || !data?.audit_pdf_path) {
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .createSignedUrl(objectPath, 60 * 10);
+
+  if (error || !data?.signedUrl) {
+    console.error("❌ Signed URL failed:", error);
     ctx.response.status = 404;
     ctx.response.body = { error: "Audit PDF not ready" };
     return;
   }
 
-  /* --------------------------------------------------
-     SIGN AUDIT PDF (audit-pdfs BUCKET ONLY)
-  -------------------------------------------------- */
-  const bucket = "audit-pdfs";
-
-  // audit_pdf_path is stored as: audit-pdfs/<auditId>.pdf
-  const objectPath = data.audit_pdf_path.replace("audit-pdfs/", "");
-
-  const { data: signed, error: signError } = await supabase.storage
-    .from(bucket)
-    .createSignedUrl(objectPath, 60 * 10);
-
-  if (signError || !signed?.signedUrl) {
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Failed to generate signed URL" };
-    return;
-  }
-
   ctx.response.status = 200;
   ctx.response.body = {
-    url: signed.signedUrl,
+    signedUrl: data.signedUrl,
   };
 }
+
 
 
