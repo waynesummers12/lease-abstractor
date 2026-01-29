@@ -26,12 +26,16 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
     return;
   }
 
-  const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
+  // audit_pdf_path example: "leases/<auditId>.pdf"
+const fullPath = data.audit_pdf_path;
 
-  const { data: signed, error: signedError } = await supabase.storage
-    .from("audit-pdfs")
-    .createSignedUrl(filePath, 60 * 10);
+// Dynamically derive bucket + object path
+const [bucket, ...pathParts] = fullPath.split("/");
+const objectPath = pathParts.join("/");
 
+const { data: signed, error: signedError } = await supabase.storage
+  .from(bucket)
+  .createSignedUrl(objectPath, 60 * 10);
   if (signedError || !signed?.signedUrl) {
     ctx.response.status = 500;
     ctx.response.body = { error: "Failed to create signed URL" };
