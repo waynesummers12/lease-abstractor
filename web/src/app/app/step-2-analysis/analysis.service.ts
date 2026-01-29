@@ -1,3 +1,5 @@
+// web/src/app/app/step-2-analysis/analysis.service.ts
+
 import { getSupabaseBrowser } from "@/app/_client/browser";
 import { waitForAnalysis } from "./analysis.wait";
 import type { AuditPipelineResult } from "@/lib/audit/analysis.types";
@@ -44,15 +46,17 @@ export async function runAuditPipeline(
 
     /* ---------- 3. WAIT FOR ANALYSIS ---------- */
     const result = await waitForAnalysis(auditId);
-    const analysis = result?.analysis ?? null;
 
+    if (!result?.analysis) {
+      throw new Error("Worker returned no analysis");
+    }
 
-    /* ---------- 4. SUCCESS (analysis is guaranteed here) ---------- */
+    /* ---------- 4. SUCCESS ---------- */
     return {
       success: true,
       status: "analysis_ready",
       auditId,
-      analysis,
+      analysis: result.analysis, // ✅ THIS IS THE FIX
     };
   } catch (err: any) {
     return {
