@@ -469,6 +469,35 @@ async function handleCheckout() {
         </div>
       )}
     </div>
+{/* --- CTA --- */}
+<button
+  onClick={handleCheckout}
+  disabled={isCheckingOut}
+  style={{
+    marginTop: 14,
+    alignSelf: "flex-start",
+    padding: "10px 18px",
+    borderRadius: 8,
+    background: "#0f172a",
+    color: "#fff",
+    fontWeight: 600,
+    fontSize: 14,
+    border: "none",
+    cursor: isCheckingOut ? "not-allowed" : "pointer",
+  }}
+>
+  {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
+</button>
+
+<div
+  style={{
+    marginTop: 6,
+    fontSize: 12,
+    color: "#475569",
+  }}
+>
+  Full audit report generated immediately after checkout. No subscription required.
+</div>
 
     {/* ---------- DETAILS ---------- */}
     <div style={{ display: "grid", gap: 12 }}>
