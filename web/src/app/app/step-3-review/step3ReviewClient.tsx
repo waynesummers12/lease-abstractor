@@ -364,7 +364,7 @@ async function handleCheckout() {
 </section>
 
 {/* ---------- RESULTS ---------- */}
-{analysis?.cam_total_avoidable_exposure != null ? (
+{analysis ? (
   <section
     ref={resultsRef}
     style={{
