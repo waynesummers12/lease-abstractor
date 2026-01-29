@@ -46,7 +46,14 @@ app.use(async (ctx, next) => {
 
   await next();
 });
-
+app.use(async (ctx, next) => {
+  console.log(
+  "🔥 Incoming:",
+  ctx.request.method,
+  ctx.request.url.pathname
+);
+  await next();
+});
 /* -------------------------------------------------
    NORMAL API ROUTES
 -------------------------------------------------- */
