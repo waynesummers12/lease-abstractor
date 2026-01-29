@@ -154,15 +154,20 @@ async function handleUploadAndAnalyze() {
 
     setStatus("Finalizing analysis…");
 
-    // 🔁 Poll once more to guarantee analysis
-    const res = await fetch(`/api/audits/${newAuditId}`, {
-      cache: "no-store",
-    });
+    // ✅ Primary path — pipeline already returned analysis
+    if (pipelineResult?.analysis) {
+      setAnalysis(pipelineResult.analysis);
+    } else {
+      // 🔁 Fallback: fetch once directly from API (non-fatal)
+      const res = await fetch(`/api/audits/${newAuditId}`, {
+        cache: "no-store",
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      if (data?.analysis) {
-        setAnalysis(data.analysis);
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.analysis) {
+          setAnalysis(data.analysis);
+        }
       }
     }
 
@@ -176,6 +181,7 @@ async function handleUploadAndAnalyze() {
     setStatus(err?.message ?? "Unexpected error");
   }
 }
+
 
 /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
 
