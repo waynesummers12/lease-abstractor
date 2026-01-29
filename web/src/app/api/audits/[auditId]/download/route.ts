@@ -3,10 +3,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { auditId: string } }
+  _req: NextRequest,
+  context: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -28,11 +28,8 @@ export async function GET(
 
     const body = await res.json();
 
-    if (!res.ok || !body?.signedUrl) {
-      return NextResponse.json(
-        { error: "Audit PDF not ready" },
-        { status: res.status || 500 }
-      );
+    if (!res.ok) {
+      return NextResponse.json(body, { status: res.status });
     }
 
     return NextResponse.json(
@@ -40,10 +37,10 @@ export async function GET(
       { status: 200 }
     );
   } catch (err) {
-    console.error("❌ Download proxy failed:", err);
     return NextResponse.json(
       { error: "Failed to fetch signed PDF URL" },
       { status: 500 }
     );
   }
 }
+
