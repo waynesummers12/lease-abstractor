@@ -1,3 +1,5 @@
+// worker/routes/downloadAuditPdf.ts
+
 import type { RouterContext } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
 
@@ -12,25 +14,43 @@ export async function downloadAuditPdf(
     return;
   }
 
-  // The PDF lives at: leases/leases/<auditId>.pdf
-  // Bucket = leases
-  // Object path must be RELATIVE to bucket
-  const bucket = "leases";
-  const objectPath = `leases/${auditId}.pdf`;
+  /* --------------------------------------------------
+     FETCH AUDIT PDF PATH (POST-PROCESSED ONLY)
+  -------------------------------------------------- */
+  const { data, error } = await supabase
+    .from("lease_audits")
+    .select("audit_pdf_path, status")
+    .eq("id", auditId)
+    .single();
 
-  const { data, error } = await supabase.storage
+  if (error || !data?.audit_pdf_path) {
+    ctx.response.status = 404;
+    ctx.response.body = { error: "Audit PDF not ready" };
+    return;
+  }
+
+  /* --------------------------------------------------
+     SIGN AUDIT PDF (audit-pdfs BUCKET ONLY)
+  -------------------------------------------------- */
+  const bucket = "audit-pdfs";
+
+  // audit_pdf_path is stored as: audit-pdfs/<auditId>.pdf
+  const objectPath = data.audit_pdf_path.replace("audit-pdfs/", "");
+
+  const { data: signed, error: signError } = await supabase.storage
     .from(bucket)
     .createSignedUrl(objectPath, 60 * 10);
 
-  if (error || !data?.signedUrl) {
-    ctx.response.status = 404;
-    ctx.response.body = { error: "PDF not ready" };
+  if (signError || !signed?.signedUrl) {
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Failed to generate signed URL" };
     return;
   }
 
   ctx.response.status = 200;
   ctx.response.body = {
-    signedUrl: data.signedUrl,
+    url: signed.signedUrl,
   };
 }
+
 
