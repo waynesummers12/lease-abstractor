@@ -4,9 +4,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,
-  context: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await context.params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -16,29 +16,23 @@ export async function GET(
   }
 
   const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
 
-  if (!workerUrl || !workerKey) {
+  if (!workerUrl) {
     return NextResponse.json(
-      { error: "Worker not configured" },
+      { error: "Worker URL not configured" },
       { status: 500 }
     );
   }
 
-  const res = await fetch(
-    `${workerUrl}/auditById/${auditId}`,
-    {
-      headers: {
-        "X-Lease-Worker-Key": workerKey,
-      },
-      cache: "no-store",
-    }
-  );
+  // 🔑 CORRECT worker route
+  const res = await fetch(`${workerUrl}/auditById/${auditId}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     const text = await res.text();
     return NextResponse.json(
-      { error: text || "Audit not ready" },
+      { error: text || "Worker error" },
       { status: res.status }
     );
   }
