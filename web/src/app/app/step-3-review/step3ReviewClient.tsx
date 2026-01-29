@@ -156,13 +156,14 @@ async function handleUploadAndAnalyze() {
   try {
     /* ---------- 1. CREATE AUDIT ROW ---------- */
     const createRes = await fetch("/api/audits", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        auditId: newAuditId,
-        status: "pending",
-      }),
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    filename: file.name, // ✅ THIS is what was missing
+  }),
+});
 
     if (!createRes.ok) {
       const err = await createRes.json();
