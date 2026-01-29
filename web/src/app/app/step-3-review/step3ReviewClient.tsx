@@ -159,11 +159,13 @@ async function handleUploadAndAnalyze() {
     const pipelineResult = await runAuditPipeline(file, newAuditId);
 
 if (!pipelineResult?.analysis) {
-  throw new Error("Analysis not ready");
+  setStatus("Finalizing analysis…");
+  return; // ⛔ do NOT throw
 }
 
 setAnalysis(pipelineResult.analysis);
 setStatus("Analysis complete ✅");
+
 
 
     setTimeout(() => {
