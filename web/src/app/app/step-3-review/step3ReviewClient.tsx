@@ -373,6 +373,19 @@ async function handleCheckout() {
       gap: 16,
     }}
   >
+    {/* CONTENT GOES HERE */}
+  </section>
+) : (
+  <section
+    style={{
+      ...sectionStyle,
+      border: "1px dashed #cbd5e1",
+      color: "#475569",
+    }}
+  >
+    No analysis yet. Upload a PDF to see your results.
+  </section>
+)}
     {/* ===== GREEN EXPOSURE BOX ===== */}
     <div style={exposureBoxStyle}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
