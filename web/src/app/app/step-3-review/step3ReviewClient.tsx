@@ -177,11 +177,6 @@ async function handleUploadAndAnalyze() {
 
     const supabase = getSupabaseBrowser();
 
-const pipelineResult = await runAuditPipeline(
-  file,
-  newAuditId
-);
-
 if (!pipelineResult.success) {
   throw new Error(pipelineResult.error ?? "Audit pipeline failed");
 }
