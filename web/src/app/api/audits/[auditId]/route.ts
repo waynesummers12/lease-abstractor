@@ -1,10 +1,12 @@
-import { NextResponse } from "next/server";
+// /Users/waynesmacbookpro13/lease-abstractor/web/src/app/api/audits/[auditId]/route.ts
+
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ auditId: string }> }
+  req: NextRequest,
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const auditId = params.auditId;
 
   if (!auditId) {
     return NextResponse.json(
@@ -13,32 +15,27 @@ export async function GET(
     );
   }
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/audits/${auditId}`,
+      {
+        headers: {
+          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+      }
+    );
 
-  if (!workerUrl) {
+    const body = await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(body, { status: res.status });
+    }
+
+    return NextResponse.json(body, { status: 200 });
+  } catch {
     return NextResponse.json(
-      { error: "Worker URL not configured" },
+      { error: "Failed to fetch audit" },
       { status: 500 }
     );
   }
-
-  const res = await fetch(
-    `${workerUrl}/auditById/${auditId}`,
-    { cache: "no-store" }
-  );
-
-  const bodyText = await res.text();
-
-  // Pass through worker errors cleanly
-  if (!res.ok) {
-    return NextResponse.json(
-      { error: bodyText },
-      { status: res.status }
-    );
-  }
-
-  return new NextResponse(bodyText, {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
 }
