@@ -12,28 +12,41 @@ export async function downloadAuditPdf(
     return;
   }
 
-  // PDF IS STORED IN: bucket = leases, path = leases/<auditId>.pdf
-  const bucket = "leases";
-  const rawPath = `leases/${auditId}.pdf`;
+  // LIST files in the leases bucket root
+  const { data: files, error: listError } =
+    await supabase.storage
+      .from("leases")
+      .list("leases", { limit: 1000 });
 
-  // IMPORTANT: Supabase expects object path *relative to bucket*
-  const objectPath = rawPath.replace(/^leases\//, "");
+  if (listError || !files) {
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Failed to list storage files" };
+    return;
+  }
 
-  const { data, error } = await supabase.storage
-    .from(bucket)
-    .createSignedUrl(objectPath, 60 * 10);
+  const match = files.find(
+    (f) => f.name === `${auditId}.pdf`
+  );
 
-  if (error || !data?.signedUrl) {
+  if (!match) {
     ctx.response.status = 404;
     ctx.response.body = { error: "PDF not ready" };
     return;
   }
 
+  const { data: signed, error: signError } =
+    await supabase.storage
+      .from("leases")
+      .createSignedUrl(`leases/${match.name}`, 60 * 10);
+
+  if (signError || !signed?.signedUrl) {
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Failed to create signed URL" };
+    return;
+  }
+
   ctx.response.status = 200;
   ctx.response.body = {
-    signedUrl: data.signedUrl,
+    signedUrl: signed.signedUrl,
   };
 }
-
-
-
