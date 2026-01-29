@@ -6,7 +6,7 @@ import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router();
 
-router.get("/auditById/:auditId", async (ctx) => {
+router.get("/audits/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
@@ -17,7 +17,7 @@ router.get("/auditById/:auditId", async (ctx) => {
 
   const { data: audit, error } = await supabase
     .from("lease_audits")
-    .select("id, status, analysis, audit_pdf_path")
+    .select("id, status, analysis, audit_pdf_path, object_path")
     .eq("id", auditId)
     .maybeSingle();
 
@@ -49,6 +49,8 @@ router.get("/auditById/:auditId", async (ctx) => {
   ctx.response.body = {
     analysis: normalizedAnalysis,
     status: audit.status,
+    audit_pdf_path: audit.audit_pdf_path ?? null,
+    object_path: audit.object_path ?? null,
   };
 });
 
