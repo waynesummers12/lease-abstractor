@@ -65,33 +65,39 @@ router.post("/pdf", async (ctx) => {
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-    /* --------------------------------------------------
-       PERSIST NORMALIZED ANALYSIS
-    -------------------------------------------------- */
-    const { error: updateError } = await supabase
-      .from("lease_audits")
-      .update({
-        analysis: normalized,
-        status: "analyzed",
-      })
-      .eq("id", auditId);
+/* --------------------------------------------------
+   PERSIST NORMALIZED ANALYSIS
+-------------------------------------------------- */
+const { error: updateError } = await supabase
+  .from("lease_audits")
+  .update({
+    analysis: normalized,
+    status: "analyzed",
+  })
+  .eq("audit_pdf_path", objectPath);
 
-    if (updateError) {
-      console.error("❌ Failed to persist analysis", updateError);
-      throw new Error("Failed to save analysis");
-    }
+if (updateError) {
+  console.error("❌ Failed to persist analysis", updateError);
+  throw new Error("Failed to save analysis");
+}
 
-    console.log("🧾 lease_audits normalized analysis saved:", auditId);
+console.log("🧾 lease_audits normalized analysis saved for:", objectPath);
 
-    ctx.response.status = 200;
-    ctx.response.body = {
-      success: true,
-    };
-  } catch (err) {
-    console.error("❌ Lease ingest error:", err);
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Lease ingest failed" };
-  }
+/* --------------------------------------------------
+   🔍 PROVE WHAT IS STORED (NOW THIS WILL WORK)
+-------------------------------------------------- */
+const { data: debugRow, error: debugError } = await supabase
+  .from("lease_audits")
+  .select("id, audit_pdf_path, status")
+  .eq("audit_pdf_path", objectPath)
+  .maybeSingle();
+
+if (debugError) {
+  console.error("❌ Debug fetch error:", debugError);
+} else {
+  console.log("🧪 DEBUG lease_audits row:", debugRow);
+}
+
 });
 
 export default router;
