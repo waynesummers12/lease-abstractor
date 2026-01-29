@@ -15,11 +15,27 @@ export async function GET(
 
   const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
-  const res = await fetch(`${workerUrl}/auditById/${auditId}`, {
-    cache: "no-store",
-  });
+  if (!workerUrl) {
+    return NextResponse.json(
+      { error: "Worker URL not configured" },
+      { status: 500 }
+    );
+  }
+
+  const res = await fetch(
+    `${workerUrl}/auditById/${auditId}`,
+    { cache: "no-store" }
+  );
+
+  if (!res.ok) {
+    const text = await res.text();
+    return NextResponse.json(
+      { error: "Worker request failed", detail: text },
+      { status: res.status }
+    );
+  }
 
   const data = await res.json();
 
-  return NextResponse.json(data, { status: res.status });
+  return NextResponse.json(data, { status: 200 });
 }
