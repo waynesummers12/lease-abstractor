@@ -1,7 +1,7 @@
 // web/src/app/layout.tsx
 
 import "../styles/globals.css";
-import Header from "./components/Header";
+import HeaderClient from "./components/HeaderClient";
 import Footer from "./components/Footer";
 
 export default function RootLayout({
