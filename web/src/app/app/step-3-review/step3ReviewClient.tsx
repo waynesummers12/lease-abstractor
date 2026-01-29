@@ -364,7 +364,7 @@ async function handleCheckout() {
 </section>
 
 {/* ---------- RESULTS ---------- */}
-{analysis ? (
+{typeof totalAvoidableExposure === "number" ? (
   <section
     ref={resultsRef}
     style={{
