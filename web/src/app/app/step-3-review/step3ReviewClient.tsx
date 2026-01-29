@@ -154,49 +154,16 @@ async function handleUploadAndAnalyze() {
   setAuditId(newAuditId);
 
   try {
-    /* ---------- 1. CREATE AUDIT ROW ---------- */
-    const res = await fetch("/api/audits", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    auditId: newAuditId,
-    filename: file.name,
-    objectPath: `leases/${newAuditId}.pdf`,
-  }),
-});
-
-
-
-
-    if (!res.ok) {
-  const text = await res.text(); // 🔥 worker may not return JSON
-  console.error("Create audit failed:", text);
-  throw new Error(text || "Failed to create audit");
-}
-
-
-    /* ---------- 2. RUN PIPELINE ---------- */
     setStatus("Uploading lease…");
 
-    const supabase = getSupabaseBrowser();
+    const pipelineResult = await runAuditPipeline(file, newAuditId);
 
-if (!pipelineResult.success) {
-  throw new Error(pipelineResult.error ?? "Audit pipeline failed");
-}
+    if (!pipelineResult?.success) {
+      throw new Error(pipelineResult?.error ?? "Audit pipeline failed");
+    }
 
-    setStatus("Uploading lease…");
-
-const pipelineResult = await runAuditPipeline(file, newAuditId);
-
-if (!pipelineResult.success) {
-  throw new Error(pipelineResult.error ?? "Audit pipeline failed");
-}
-
-setAnalysis(pipelineResult.analysis);
-setStatus("Analysis complete ✅");
-
+    setAnalysis(pipelineResult.analysis);
+    setStatus("Analysis complete ✅");
 
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -311,6 +278,8 @@ async function handleCheckout() {
   console.error("Checkout error:", err);
   setStatus(err?.message ?? "Checkout failed. Please try again.");
   setIsCheckingOut(false);
+}
+
 }
 
   return (
