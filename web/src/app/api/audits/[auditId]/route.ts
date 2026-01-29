@@ -1,41 +1,39 @@
-import { NextResponse } from "next/server";
+import { Context } from "oak";
+import { supabase } from "../lib/supabase.ts";
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await params;
+export async function auditById(ctx: Context) {
+  const auditId = ctx.params.auditId;
 
   if (!auditId) {
-    return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
-    );
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Missing auditId" };
+    return;
   }
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+  const { data, error } = await supabase
+    .from("lease_audits")
+    .select("analysis")
+    .eq("id", auditId)
+    .maybeSingle(); // ← important
 
-  if (!workerUrl) {
-    return NextResponse.json(
-      { error: "Worker URL not configured" },
-      { status: 500 }
-    );
+  if (error) {
+    console.error("❌ auditById query error:", error);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Query failed" };
+    return;
   }
 
-  const res = await fetch(
-    `${workerUrl}/auditById/${auditId}`,
-    { cache: "no-store" }
-  );
-
-  if (!res.ok) {
-    const text = await res.text();
-    return NextResponse.json(
-      { error: "Worker request failed", detail: text },
-      { status: res.status }
-    );
+  if (!data || !data.analysis) {
+    console.warn("⚠️ Audit not found:", auditId);
+    ctx.response.status = 404;
+    ctx.response.body = { error: "Audit not found" };
+    return;
   }
 
-  const data = await res.json();
+  console.log("🔥 auditById hit:", auditId);
 
-  return NextResponse.json(data, { status: 200 });
+  ctx.response.status = 200;
+  ctx.response.body = {
+    analysis: data.analysis,
+  };
 }
