@@ -171,9 +171,11 @@ async function handleUploadAndAnalyze() {
 
 
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err?.error ?? "Failed to create audit");
-    }
+  const text = await res.text(); // 🔥 worker may not return JSON
+  console.error("Create audit failed:", text);
+  throw new Error(text || "Failed to create audit");
+}
+
 
     /* ---------- 2. RUN PIPELINE ---------- */
     setStatus("Uploading lease…");
