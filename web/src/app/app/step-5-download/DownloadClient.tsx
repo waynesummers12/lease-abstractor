@@ -193,14 +193,99 @@ export default function SuccessPage() {
             </div>
 
             {riskLevel && (
-              <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold">
-                {riskLevel}
-              </span>
-            )}
-          </div>
+            <div
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                riskLevel === "LOW"
+                  ? "bg-green-100 text-green-800"
+                  : riskLevel === "MEDIUM"
+                  ? "bg-amber-100 text-amber-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {riskLevel}
+            </div>
+          )}
         </div>
-      )}
+      </div>
+    )}
+{/* ---------- LEASE SCORE EXPLANATION ---------- */}
+    <div className="mt-6 rounded-xl border bg-white p-6 text-left shadow-sm">
+      <h3 className="text-lg font-semibold">
+        How Your Lease Score Is Calculated
+      </h3>
 
+      <p className="mt-2 text-sm text-gray-600">
+        Your Lease Score reflects how tenant-favorable your lease is for CAM /
+        NNN charges, escalation limits, and audit rights — based on the lease
+        terms most likely to drive overcharges.
+      </p>
+
+      <div className="mt-5 space-y-4 text-sm">
+        <div>
+          <p className="font-medium text-green-700">Low Risk Lease</p>
+          <p className="text-gray-600">
+            Strong tenant protections with defined CAM limits, excluded capital
+            expenses, and enforceable audit rights.
+          </p>
+        </div>
+
+        <div>
+          <p className="font-medium text-amber-700">Medium Risk Lease</p>
+          <p className="text-gray-600">
+            Some protections exist, but key terms are ambiguous or partially
+            uncapped. These leases require active monitoring.
+          </p>
+        </div>
+
+        <div>
+          <p className="font-medium text-red-700">High Risk Lease</p>
+          <p className="text-gray-600">
+            Broad or uncapped CAM / NNN language with limited audit leverage.
+            These leases are most likely to produce recoverable overcharges.
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-5 text-xs text-gray-500">
+        Lease Score reflects dispute outcomes observed across commercial CAM /
+        NNN audits and how landlords typically interpret ambiguous lease
+        language.
+      </p>
+    </div>
+    {/* ---------- RISK & TIMING NOTICE ---------- */}
+    {(riskLevel === "MEDIUM" ||
+      riskLevel === "HIGH" ||
+      typeof data.analysis?.avoidable_exposure === "number") && (
+      <div className="mt-8 rounded-xl border border-amber-300 bg-amber-50 p-5 text-left shadow-sm">
+        <p className="text-sm font-semibold text-amber-900">
+          Risk &amp; Timing Notice
+        </p>
+
+        <p className="mt-2 text-sm text-amber-900">
+          Potential CAM / NNN overcharge risk identified. Acting within the audit
+          window may allow recovery of meaningful dollars.
+        </p>
+
+        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-100 p-3 text-sm text-amber-900">
+          <p>
+            Most commercial leases require CAM / NNN disputes within
+            <strong> 30–120 days</strong> of reconciliation. Missing this window
+            often waives recovery rights.
+          </p>
+        </div>
+      </div>
+    )}
+
+    {/* ---------- AVOIDABLE EXPOSURE ---------- */}
+    {typeof data.analysis?.avoidable_exposure === "number" && (
+      <div className="mt-6 rounded-lg border bg-gray-50 p-4 text-sm">
+        <p className="font-medium">Estimated recoverable exposure</p>
+        <p className="mt-1 text-2xl font-bold">
+          ${data.analysis.avoidable_exposure.toLocaleString()}
+        </p>
+      </div>
+    )}
+      {/* ---------- NAV ---------- */}
       <button
         onClick={handleDownload}
         disabled={downloading}
