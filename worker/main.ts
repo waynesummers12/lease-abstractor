@@ -1,4 +1,4 @@
-import { Application } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { Application, Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 
 import stripeWebhookRouter from "./routes/stripeWebhook.ts";
 
@@ -8,7 +8,8 @@ import auditsRoutes from "./routes/audits.ts";
 import checkoutRoutes from "./routes/checkout.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import auditPdfRoutes from "./routes/auditPdf.ts";
-import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
+
+import { downloadAuditPdf } from "./routes/downloadAuditPdf.ts";
 
 const app = new Application();
 
@@ -46,20 +47,28 @@ app.use(async (ctx, next) => {
 
   await next();
 });
+
 app.use(async (ctx, next) => {
   console.log(
-  "🔥 Incoming:",
-  ctx.request.method,
-  ctx.request.url.pathname
-);
+    "🔥 Incoming:",
+    ctx.request.method,
+    ctx.request.url.pathname
+  );
   await next();
 });
+
+/* -------------------------------------------------
+   DOWNLOAD AUDIT PDF (HANDLER ROUTE)
+-------------------------------------------------- */
+const downloadRouter = new Router();
+downloadRouter.get("/downloadAuditPdf/:auditId", downloadAuditPdf);
+
+app.use(downloadRouter.routes());
+app.use(downloadRouter.allowedMethods());
+
 /* -------------------------------------------------
    NORMAL API ROUTES
 -------------------------------------------------- */
-app.use(downloadAuditPdfRoutes.routes());
-app.use(downloadAuditPdfRoutes.allowedMethods());
-
 app.use(auditByIdRoutes.routes());
 app.use(auditByIdRoutes.allowedMethods());
 
