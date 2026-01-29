@@ -96,28 +96,27 @@ export default function SuccessPage() {
 
     if (!res.ok) {
       console.log("⏳ PDF not ready yet");
-      setTimeout(() => setDownloading(false), 1500);
+      setDownloading(false);
       return;
     }
 
     const json = await res.json();
 
     if (json?.signedUrl) {
-  console.log("✅ Opening signed PDF");
-  window.open(json.signedUrl, "_blank");
-  setDownloading(false); // 👈 ADD THIS
-  return;
-}
+      console.log("✅ Opening signed PDF");
+      window.open(json.signedUrl, "_blank");
 
+      // 🔑 THIS WAS THE MISSING LINE
+      setDownloading(false);
+      return;
+    }
 
-    setTimeout(() => setDownloading(false), 1500);
+    setDownloading(false);
   } catch (err) {
     console.error("❌ Download failed", err);
     setDownloading(false);
   }
 }
-
-
 
   /* ================= UI ================= */
 
