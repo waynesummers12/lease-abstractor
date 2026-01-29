@@ -123,7 +123,7 @@ const exposureBoxStyle: React.CSSProperties = {
 export default function Step3ReviewClient() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
-  const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [analysis, setAnalysis] = useState<any | null>(null);
 
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
     useState<number | null>(null);
@@ -365,208 +365,197 @@ async function handleCheckout() {
       gap: 16,
     }}
   >
-    {/* ===== GREEN EXPOSURE BOX ===== */}
-    <div style={exposureBoxStyle}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-        Estimated Avoidable Exposure (Next 12 Months)
-      </div>
+{/* ===== GREEN EXPOSURE BOX ===== */}
+<div style={exposureBoxStyle}>
+  <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
+    Estimated Avoidable Exposure (Next 12 Months)
+  </div>
 
-      {totalAvoidableExposure != null && (
-        <>
-          <div
-            style={{
-              fontSize: 34,
-              fontWeight: 900,
-              marginTop: 6,
-              color:
-                exposureRiskLabel === "high"
-                  ? "#991b1b"
-                  : exposureRiskLabel === "medium"
-                  ? "#92400e"
-                  : "#166534",
-            }}
-          >
-            💰 $
-            {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
-          </div>
-{/* --- VALUE CONFIDENCE BADGE --- */}
-<div
-  style={{
-    marginTop: 6,
-    alignSelf: "flex-start",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 6,
-    padding: "4px 10px",
-    borderRadius: 999,
-    background: "#dcfce7", // soft green
-    border: "1px solid #86efac",
-    fontSize: 12,
-    fontWeight: 600,
-    color: "#166534",
-  }}
->
-  ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
-</div>
-{/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
-{exposureRiskLabel && (
-  <div style={{ marginTop: 8 }}>
-    <div
-      style={{
-        fontSize: 12,
-        fontWeight: 600,
-        color: "#334155",
-        marginBottom: 4,
-      }}
-    >
-      Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-    </div>
-
-    <div
-      style={{
-        width: "100%",
-        height: 8,
-        background: "#e5e7eb",
-        borderRadius: 999,
-        overflow: "hidden",
-      }}
-    >
+  {analysis?.health?.avoidable_exposure != null && (
+    <>
       <div
         style={{
-          height: "100%",
-          width:
-            exposureRiskLabel === "low"
-              ? "85%"
+          fontSize: 34,
+          fontWeight: 900,
+          marginTop: 6,
+          color:
+            exposureRiskLabel === "high"
+              ? "#991b1b"
               : exposureRiskLabel === "medium"
-              ? "60%"
-              : "35%",
-          background:
-            exposureRiskLabel === "low"
-              ? "#16a34a"
-              : exposureRiskLabel === "medium"
-              ? "#f59e0b"
-              : "#dc2626",
-          transition: "width 600ms ease",
-        }}
-      />
-    </div>
-
-    <div
-      style={{
-        marginTop: 4,
-        fontSize: 11,
-        color: "#475569",
-      }}
-    >
-      {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
-      {exposureRiskLabel === "medium" &&
-        "Moderate confidence — some assumptions applied"}
-      {exposureRiskLabel === "high" &&
-        "Lower confidence — recovery depends on interpretation"}
-    </div>
-  </div>
-)}
-          {exposureRange && (
-            <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
-              Estimated recovery range:{" "}
-              <strong>
-                ${exposureRange.low.toLocaleString()} – $
-                {exposureRange.high.toLocaleString()}
-              </strong>
-            </p>
-          )}
-
-          {exposureRiskLabel && (
-            <div
-              style={{
-                marginTop: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color:
-                  exposureRiskLabel === "high"
-                    ? "#991b1b"
-                    : exposureRiskLabel === "medium"
-                    ? "#92400e"
-                    : "#166534",
-              }}
-            >
-              Risk level: {exposureRiskLabel.toUpperCase()}
-            </div>
-          )}
-        </>
-      )}
-
-      <button
-        onClick={handleCheckout}
-        disabled={isCheckingOut}
-        style={{
-          ...buttonStyle,
-          background: "#0f172a",
-          cursor: isCheckingOut ? "not-allowed" : "pointer",
-          marginTop: 10,
-          alignSelf: "flex-start",
+              ? "#92400e"
+              : "#166534",
         }}
       >
-        {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
-      </button>
+        💰 $
+        {(
+          animatedExposure ??
+          analysis.health.avoidable_exposure
+        ).toLocaleString()}
+      </div>
+
+      {/* --- VALUE CONFIDENCE BADGE --- */}
       <div
-  style={{
-    marginTop: 6,
-    fontSize: 12,
-    color: "#111827",
-  }}
->
-  Full audit report generated immediately after checkout. No subscription required.
+        style={{
+          marginTop: 6,
+          alignSelf: "flex-start",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "4px 10px",
+          borderRadius: 999,
+          background: "#dcfce7",
+          border: "1px solid #86efac",
+          fontSize: 12,
+          fontWeight: 600,
+          color: "#166534",
+        }}
+      >
+        ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+      </div>
+
+      {/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
+      {exposureRiskLabel && (
+        <div style={{ marginTop: 8 }}>
+          <div
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: "#334155",
+              marginBottom: 4,
+            }}
+          >
+            Confidence reflects clarity of CAM, escalation, and reconciliation clauses
+          </div>
+
+          <div
+            style={{
+              width: "100%",
+              height: 8,
+              background: "#e5e7eb",
+              borderRadius: 999,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                height: "100%",
+                width:
+                  exposureRiskLabel === "low"
+                    ? "85%"
+                    : exposureRiskLabel === "medium"
+                    ? "60%"
+                    : "35%",
+                background:
+                  exposureRiskLabel === "low"
+                    ? "#16a34a"
+                    : exposureRiskLabel === "medium"
+                    ? "#f59e0b"
+                    : "#dc2626",
+                transition: "width 600ms ease",
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              marginTop: 4,
+              fontSize: 11,
+              color: "#475569",
+            }}
+          >
+            {exposureRiskLabel === "low" &&
+              "High confidence — terms are clearly defined"}
+            {exposureRiskLabel === "medium" &&
+              "Moderate confidence — some assumptions applied"}
+            {exposureRiskLabel === "high" &&
+              "Lower confidence — recovery depends on interpretation"}
+          </div>
+        </div>
+      )}
+
+      {exposureRange && (
+        <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
+          Estimated recovery range:{" "}
+          <strong>
+            ${exposureRange.low.toLocaleString()} – $
+            {exposureRange.high.toLocaleString()}
+          </strong>
+        </p>
+      )}
+    </>
+  )}
+
+  <button
+    onClick={handleCheckout}
+    disabled={isCheckingOut}
+    style={{
+      ...buttonStyle,
+      background: "#0f172a",
+      cursor: isCheckingOut ? "not-allowed" : "pointer",
+      marginTop: 10,
+      alignSelf: "flex-start",
+    }}
+  >
+    {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
+  </button>
+
+  <div
+    style={{
+      marginTop: 6,
+      fontSize: 12,
+      color: "#111827",
+    }}
+  >
+    Full audit report generated immediately after checkout. No subscription required.
+  </div>
 </div>
+
+{/* ---------- DETAILS ---------- */}
+<div style={{ display: "grid", gap: 12 }}>
+  {/* Lease basics */}
+  <div>
+    <div style={{ fontWeight: 700, marginBottom: 6 }}>
+      Lease basics
     </div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 6,
+        fontSize: 14,
+      }}
+    >
+      <span>Tenant: {analysis?.tenant ?? "—"}</span>
+      <span>Landlord: {analysis?.landlord ?? "—"}</span>
+      <span>Premises: {analysis?.premises ?? "—"}</span>
+      <span>Lease start: {formatDate(analysis?.lease_start)}</span>
+      <span>Lease end: {formatDate(analysis?.lease_end)}</span>
+      <span>Term (months): {analysis?.term_months ?? "—"}</span>
+    </div>
+  </div>
 
-    {/* ---------- DETAILS ---------- */}
-    <div style={{ display: "grid", gap: 12 }}>
-      {/* Lease basics */}
-      <div>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          Lease basics
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontSize: 14,
-          }}
-        >
-          <span>Tenant: {analysis.tenant ?? "—"}</span>
-          <span>Landlord: {analysis.landlord ?? "—"}</span>
-          <span>Premises: {analysis.premises ?? "—"}</span>
-          <span>Lease start: {formatDate(analysis.lease_start)}</span>
-          <span>Lease end: {formatDate(analysis.lease_end)}</span>
-          <span>Term (months): {analysis.term_months ?? "—"}</span>
-        </div>
-      </div>
+  {/* Rent */}
+  <div>
+    <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+        gap: 6,
+        fontSize: 14,
+      }}
+    >
+      <span>
+        Base rent: {formatMoney(analysis?.rent?.base_rent)}
+      </span>
+      <span>Frequency: {analysis?.rent?.frequency ?? "—"}</span>
+      <span>
+        Escalation: {analysis?.rent?.escalation ?? "None"}
+      </span>
+    </div>
+  </div>
+</div>
 
-      {/* Rent */}
-      <div>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 6,
-            fontSize: 14,
-          }}
-        >
-          <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
-          <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
-          <span>
-            Escalation:{" "}
-            {formatEscalation(
-              analysis.rent?.escalation_type,
-              analysis.rent?.escalation_value
-            )}
-          </span>
-        </div>
-      </div>
 
       {/* CAM / NNN */}
       {analysis.cam_nnn && (
