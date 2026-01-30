@@ -1,3 +1,5 @@
+// web/src/app/api/audit/analyze/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -30,6 +32,7 @@ export async function POST(req: NextRequest) {
     const res = await fetch(`${workerUrl}/ingest/lease/pdf`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         "X-Lease-Worker-Key": workerKey,
       },
       body: JSON.stringify({ auditId, objectPath }),
