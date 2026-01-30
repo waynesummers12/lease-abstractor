@@ -6,25 +6,24 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
-    const file = formData.get("file") as File | null;
     const auditId = formData.get("auditId") as string | null;
+    const objectPath = formData.get("objectPath") as string | null;
 
-    if (!file || !auditId) {
+    if (!auditId || !objectPath) {
       return NextResponse.json(
-        { error: "Missing file or auditId" },
+        { error: "Missing auditId or objectPath" },
         { status: 400 }
       );
     }
 
-    // Convert File → ArrayBuffer
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    // Call WORKER ingest endpoint
     const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
     const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
 
     if (!workerUrl || !workerKey) {
-      throw new Error("Worker not configured");
+      return NextResponse.json(
+        { error: "Worker not configured" },
+        { status: 500 }
+      );
     }
 
     const res = await fetch(`${workerUrl}/ingest/lease/pdf`, {
@@ -35,22 +34,27 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         auditId,
-        fileBase64: buffer.toString("base64"),
+        objectPath,
       }),
     });
 
+    const text = await res.text();
+
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text || "Worker ingest failed");
+      return NextResponse.json(
+        { error: text || "Worker ingest failed" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (err: any) {
-    console.error("[analyze] error", err);
+    console.error("Analyze route error:", err);
     return NextResponse.json(
-      { error: err.message || "Analyze failed" },
+      { error: err?.message ?? "Unexpected error" },
       { status: 500 }
     );
   }
 }
+
 
