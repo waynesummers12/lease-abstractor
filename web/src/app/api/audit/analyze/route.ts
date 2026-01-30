@@ -1,41 +1,56 @@
-import { NextResponse } from "next/server";
+// web/src/app/api/audit/analyze/route.ts
 
-export async function POST(req: Request) {
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
+    const file = formData.get("file") as File | null;
+    const auditId = formData.get("auditId") as string | null;
+
+    if (!file || !auditId) {
+      return NextResponse.json(
+        { error: "Missing file or auditId" },
+        { status: 400 }
+      );
+    }
+
+    // Convert File → ArrayBuffer
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    // Call WORKER ingest endpoint
     const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
     const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
 
     if (!workerUrl || !workerKey) {
-      return NextResponse.json(
-        { error: "Worker not configured" },
-        { status: 500 }
-      );
+      throw new Error("Worker not configured");
     }
 
     const res = await fetch(`${workerUrl}/ingest/lease/pdf`, {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         "X-Lease-Worker-Key": workerKey,
       },
-      body: formData,
+      body: JSON.stringify({
+        auditId,
+        fileBase64: buffer.toString("base64"),
+      }),
     });
 
-    const text = await res.text();
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Worker ingest failed");
+    }
 
-    // Worker always returns JSON (or error JSON)
-    return new NextResponse(text, {
-      status: res.status,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return NextResponse.json({ success: true });
   } catch (err: any) {
-    console.error("Analyze proxy error:", err);
+    console.error("[analyze] error", err);
     return NextResponse.json(
-      { error: err?.message ?? "Unexpected error" },
+      { error: err.message || "Analyze failed" },
       { status: 500 }
     );
   }
 }
+
