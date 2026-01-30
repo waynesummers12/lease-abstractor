@@ -1,18 +1,18 @@
 // web/src/app/app/step-2-analysis/analysis.wait.ts
 
-import { sleep } from "./analysis.utils";
+import { sleep } from "@/app/_shared/utils/sleep";
 
 export async function waitForAnalysis(
   auditId: string,
   maxAttempts = 20
-): Promise<any> {
+): Promise<{ analysis: any }> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const res = await fetch(`/api/audits/${auditId}`, {
+      const res = await fetch(`/api/audit/${auditId}`, {
         cache: "no-store",
       });
 
-      /* ⏳ Audit not ready yet */
+      /* ⏳ Audit not ready */
       if (res.status === 404) {
         await sleep(2000);
         continue;
@@ -26,18 +26,18 @@ export async function waitForAnalysis(
 
       const data = await res.json();
 
-      /* ✅ SUCCESS: analysis exists */
+      /* ✅ SUCCESS */
       if (data?.analysis) {
-        return data.analysis; // ← return analysis ONLY
+        return { analysis: data.analysis };
       }
     } catch {
-      // swallow transient network errors
+      // swallow transient errors
     }
 
     await sleep(2000);
   }
 
-  /* 🚫 HARD FAILURE */
   throw new Error("Timed out waiting for analysis");
 }
+
 
