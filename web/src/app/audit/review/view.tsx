@@ -1,21 +1,40 @@
 "use client";
 
-export default function ReviewView(props: any) {
-  const {
-    file,
-    setFile,
-    status,
-    analysis,
-    resultsRef,
-    exposureBoxStyle,
-    exposureRiskLabel,
-    animatedExposure,
-    totalAvoidableExposure,
-    isCheckingOut,
-    onUploadAndAnalyze,
-    onCheckout,
-  } = props;
+type ReviewViewProps = {
+  file: File | null;
+  setFile: (f: File | null) => void;
+  status: string;
+  analysis: any | null;
+  resultsRef: React.RefObject<HTMLDivElement>;
+  exposureRiskLabel: string | null;
+  animatedExposure: number | null;
+  totalAvoidableExposure: number | null;
+  isCheckingOut: boolean;
+  onUploadAndAnalyze: () => void;
+  onCheckout: () => void;
+};
 
+const exposureBoxStyle: React.CSSProperties = {
+  marginTop: 20,
+  padding: 20,
+  borderRadius: 12,
+  border: "2px solid #16a34a",
+  background: "#f0fdf4",
+};
+
+export default function ReviewView({
+  file,
+  setFile,
+  status,
+  analysis,
+  resultsRef,
+  exposureRiskLabel,
+  animatedExposure,
+  totalAvoidableExposure,
+  isCheckingOut,
+  onUploadAndAnalyze,
+  onCheckout,
+}: ReviewViewProps) {
   return (
     <main
       style={{
