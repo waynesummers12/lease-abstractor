@@ -128,47 +128,53 @@ export default function Step3ReviewClient() {
 
   /* ---------- ANALYZE ---------- */
 
-  async function handleUploadAndAnalyze() {
-    if (!file) return;
+  async function handleCheckout() {
+  if (!auditId || isCheckingOut) return;
 
-    setStatus("Preparing audit…");
-    setAnalysis(null);
+  setIsCheckingOut(true);
+  setStatus("Redirecting to secure checkout…");
 
-    const newAuditId = crypto.randomUUID();
-    setAuditId(newAuditId);
-
-    try {
-      setStatus("Uploading lease…");
-
-      const pipelineResult = await runAuditPipeline(file, newAuditId);
-
-      setStatus("Finalizing analysis…");
-
-      if (pipelineResult && "analysis" in pipelineResult) {
-        setAnalysis(pipelineResult.analysis as Analysis);
-      } else {
-        const res = await fetch(`/api/audit/${newAuditId}`, {
-          cache: "no-store",
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.analysis) {
-            setAnalysis(data.analysis);
-          }
-        }
-      }
-
-      setStatus("Analysis complete ✅");
-
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } catch (err: any) {
-      console.error("Analyze failed:", err);
-      setStatus(err?.message ?? "Unexpected error");
+  try {
+    if (analysis) {
+      sessionStorage.setItem(
+        "latest_analysis",
+        JSON.stringify(analysis)
+      );
     }
+
+    const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+    const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
+    if (!workerUrl || !workerKey) {
+      throw new Error("Worker not configured");
+    }
+
+    const res = await fetch(`${workerUrl}/checkout/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Lease-Worker-Key": workerKey,
+      },
+      body: JSON.stringify({ auditId }),
+    });
+
+    if (!res.ok) {
+      throw new Error(await res.text());
+    }
+
+    const data = await res.json();
+
+    if (!data?.url) {
+      throw new Error("Missing checkout URL");
+    }
+
+    window.location.href = data.url;
+  } catch (err: any) {
+    console.error("Checkout error:", err);
+    setStatus(err?.message ?? "Checkout failed");
+    setIsCheckingOut(false);
   }
+}
 
   /* ---------- DERIVE EXPOSURE ---------- */
 

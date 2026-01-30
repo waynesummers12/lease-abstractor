@@ -59,7 +59,7 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(`/api/audits/${auditId}`, {
+        const res = await fetch(`/api/audit/${auditId}`, {
           cache: "no-store",
         });
 
