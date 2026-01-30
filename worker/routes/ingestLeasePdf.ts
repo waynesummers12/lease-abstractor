@@ -12,16 +12,25 @@ router.post("/pdf", async (ctx) => {
   console.log("🔥 ingestLeasePdf HIT");
 
   /* --------------------------------------------------
-     AUTH CHECK
+     AUTH CHECK (CORRECT SCOPE)
   -------------------------------------------------- */
   const workerKey = ctx.request.headers.get("X-Lease-Worker-Key");
-  console.log("🔐 X-Lease-Worker-Key present:", !!workerKey);
+  const expectedKey = Deno.env.get("LEASE_WORKER_KEY");
 
-  if (!workerKey || workerKey !== Deno.env.get("LEASE_WORKER_KEY")) {
+  console.log("🔐 Received worker key:", workerKey);
+  console.log("🔐 Expected worker key:", expectedKey);
+  console.log("🔐 Key match:", workerKey === expectedKey);
+
+  if (!workerKey || workerKey !== expectedKey) {
     ctx.response.status = 401;
     ctx.response.body = { error: "Unauthorized" };
     return;
   }
+
+  console.log("🔓 Worker authorized");
+
+  // … rest of handler continues here
+});
 
   /* --------------------------------------------------
      CONTENT TYPE CHECK
