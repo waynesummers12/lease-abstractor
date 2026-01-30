@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { auditId, objectPath } = await req.json();
+    const formData = await req.formData();
 
-    if (!auditId || !objectPath) {
+    const auditId = formData.get("auditId");
+    const objectPath = formData.get("objectPath");
+
+    if (
+      typeof auditId !== "string" ||
+      typeof objectPath !== "string"
+    ) {
       return NextResponse.json(
         { error: "Missing auditId or objectPath" },
         { status: 400 }
@@ -24,7 +30,6 @@ export async function POST(req: NextRequest) {
     const res = await fetch(`${workerUrl}/ingest/lease/pdf`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "X-Lease-Worker-Key": workerKey,
       },
       body: JSON.stringify({ auditId, objectPath }),
