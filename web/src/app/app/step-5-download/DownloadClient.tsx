@@ -82,41 +82,32 @@ export default function SuccessPage() {
 
   /* ---------- DOWNLOAD PDF (CORRECT FLOW) ---------- */
   async function handleDownload() {
-  if (!auditId || downloading) return;
-
-  console.log("⬇️ Download clicked for audit:", auditId);
+  if (!auditId) {
+    alert("Missing audit ID");
+    return;
+  }
 
   try {
-    setDownloading(true);
-
-    const res = await fetch(
-      `/api/audits/${auditId}/download`,
-      { cache: "no-store" }
-    );
+    const res = await fetch(`/api/audit/${auditId}/download`);
 
     if (!res.ok) {
-      console.log("⏳ PDF not ready yet");
-      setDownloading(false);
-      return;
+      throw new Error("Failed to generate download link");
     }
 
-    const json = await res.json();
+    const data = await res.json();
 
-    if (json?.signedUrl) {
-      console.log("✅ Opening signed PDF");
-      window.open(json.signedUrl, "_blank");
-
-      // 🔑 THIS WAS THE MISSING LINE
-      setDownloading(false);
-      return;
+    if (!data?.url) {
+      throw new Error("Download URL missing");
     }
 
-    setDownloading(false);
-  } catch (err) {
-    console.error("❌ Download failed", err);
-    setDownloading(false);
+    // ✅ trigger browser download
+    window.location.href = data.url;
+  } catch (err: any) {
+    console.error("Download error:", err);
+    alert(err?.message || "Download failed");
   }
 }
+
 
   /* ================= UI ================= */
 
