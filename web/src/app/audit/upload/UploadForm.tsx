@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 let supabase: SupabaseClient | null = null;
@@ -20,12 +21,9 @@ function getSupabase() {
   return supabase;
 }
 
-export default function LeaseUploader({
-  onUploaded,
-}: {
-  onUploaded: (path: string) => void;
-}) {
+export default function UploadForm() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleUpload(
     e: React.ChangeEvent<HTMLInputElement>
@@ -35,9 +33,11 @@ export default function LeaseUploader({
 
     setLoading(true);
 
-    try {
-      const objectPath = `leases/${crypto.randomUUID()}.pdf`;
+    const auditId = crypto.randomUUID();
+    const objectPath = `leases/${auditId}.pdf`;
 
+    try {
+      /* ---------- UPLOAD TO SUPABASE ---------- */
       const { error } = await getSupabase()
         .storage
         .from("leases")
@@ -45,27 +45,41 @@ export default function LeaseUploader({
           contentType: "application/pdf",
         });
 
-      if (error) {
-        throw error;
+      if (error) throw error;
+
+      /* ---------- TRIGGER ANALYSIS ---------- */
+      const res = await fetch("/api/audit/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          auditId,
+          objectPath,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Analysis failed");
       }
 
-      onUploaded(objectPath);
+      /* ---------- GO TO REVIEW ---------- */
+      router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       alert(err.message || "Upload failed");
-    } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center gap-4">
       <input
         type="file"
         accept="application/pdf"
         onChange={handleUpload}
         disabled={loading}
       />
-      {loading && <p>Uploading…</p>}
+
+      {loading && <p className="text-sm text-gray-600">Uploading…</p>}
     </div>
   );
 }
