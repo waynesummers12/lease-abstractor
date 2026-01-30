@@ -1,2 +1,2 @@
 // web/src/app/app/step-1-upload/page.tsx
-export { default } from "./Step1UploadClient";
+export { default } from "@/app/audit/upload/page";
