@@ -1,13 +1,8 @@
-// web/src/app/api/audit/analyze/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-
-    const auditId = formData.get("auditId") as string | null;
-    const objectPath = formData.get("objectPath") as string | null;
+    const { auditId, objectPath } = await req.json();
 
     if (!auditId || !objectPath) {
       return NextResponse.json(
@@ -16,8 +11,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-    const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+    const workerUrl = process.env.LEASE_WORKER_URL;
+    const workerKey = process.env.LEASE_WORKER_KEY;
 
     if (!workerUrl || !workerKey) {
       return NextResponse.json(
@@ -32,10 +27,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         "X-Lease-Worker-Key": workerKey,
       },
-      body: JSON.stringify({
-        auditId,
-        objectPath,
-      }),
+      body: JSON.stringify({ auditId, objectPath }),
     });
 
     const text = await res.text();
@@ -56,5 +48,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-

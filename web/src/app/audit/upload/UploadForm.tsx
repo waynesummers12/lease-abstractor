@@ -47,14 +47,16 @@ export default function UploadForm() {
 
       if (error) throw error;
 
-      /* ---------- TRIGGER ANALYSIS (FormData!) ---------- */
-      const formData = new FormData();
-      formData.append("auditId", auditId);
-      formData.append("objectPath", objectPath);
-
+      /* ---------- TRIGGER ANALYSIS (JSON, NOT FORMDATA) ---------- */
       const res = await fetch("/api/audit/analyze", {
         method: "POST",
-        body: formData, // ✅ DO NOT set Content-Type manually
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          auditId,
+          objectPath,
+        }),
       });
 
       if (!res.ok) {
@@ -65,7 +67,7 @@ export default function UploadForm() {
       /* ---------- GO TO REVIEW ---------- */
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
-      alert(err.message || "Upload failed");
+      alert(err?.message || "Upload failed");
       setLoading(false);
     }
   }
