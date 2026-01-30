@@ -40,9 +40,9 @@ export async function runAuditPipeline(
     }
 
     /* ---------- 3. WAIT FOR ANALYSIS ---------- */
-    const result = await waitForAnalysis(auditId);
+    const { analysis } = await waitForAnalysis(auditId);
 
-    if (!result?.analysis) {
+    if (!analysis) {
       throw new Error("Analysis not available");
     }
 
@@ -51,7 +51,7 @@ export async function runAuditPipeline(
       success: true,
       status: "analysis_ready",
       auditId,
-      analysis: result.analysis,
+      analysis,
     };
   } catch (err: any) {
     return {
@@ -62,4 +62,5 @@ export async function runAuditPipeline(
     };
   }
 }
+
 
