@@ -47,14 +47,14 @@ export default function UploadForm() {
 
       if (error) throw error;
 
-      /* ---------- TRIGGER ANALYSIS ---------- */
+      /* ---------- TRIGGER ANALYSIS (FormData!) ---------- */
+      const formData = new FormData();
+      formData.append("auditId", auditId);
+      formData.append("objectPath", objectPath);
+
       const res = await fetch("/api/audit/analyze", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          auditId,
-          objectPath,
-        }),
+        body: formData, // ✅ DO NOT set Content-Type manually
       });
 
       if (!res.ok) {
@@ -79,7 +79,9 @@ export default function UploadForm() {
         disabled={loading}
       />
 
-      {loading && <p className="text-sm text-gray-600">Uploading…</p>}
+      {loading && (
+        <p className="text-sm text-gray-600">Uploading…</p>
+      )}
     </div>
   );
 }
