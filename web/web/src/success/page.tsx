@@ -13,7 +13,6 @@ type AuditResponse = {
     }[];
     health_score?: number;
   };
-  signedUrl: string | null;
 };
 
 export default function SuccessPage() {
@@ -21,6 +20,7 @@ export default function SuccessPage() {
   const auditId = searchParams.get("auditId");
 
   const [data, setData] = useState<AuditResponse | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   /* ---------------- LOAD AUDIT ---------------- */
@@ -33,10 +33,9 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/audits/${auditId}`,
-          { cache: "no-store" }
-        );
+        const res = await fetch(`/api/audit/${auditId}`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           setData(null);
@@ -45,8 +44,7 @@ export default function SuccessPage() {
 
         const json = await res.json();
         setData(json);
-      } catch (err) {
-        console.error("Success page load error:", err);
+      } catch {
         setData(null);
       } finally {
         setLoading(false);
@@ -54,6 +52,32 @@ export default function SuccessPage() {
     }
 
     loadAudit();
+  }, [auditId]);
+
+  /* ---------------- LOAD DOWNLOAD URL ---------------- */
+
+  useEffect(() => {
+    if (!auditId) return;
+
+    async function loadDownload() {
+      try {
+        const res = await fetch(
+          `/api/audit/${auditId}/download`,
+          { cache: "no-store" }
+        );
+
+        if (!res.ok) return;
+
+        const json = await res.json();
+        if (json?.url) {
+          setDownloadUrl(json.url);
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    loadDownload();
   }, [auditId]);
 
   /* ---------------- LOADING ---------------- */
@@ -98,7 +122,6 @@ export default function SuccessPage() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-8 px-6 py-20">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">
           Lease Audit Complete
@@ -108,7 +131,6 @@ export default function SuccessPage() {
         </p>
       </div>
 
-      {/* Value Box */}
       <div className="rounded-lg border border-green-400 bg-green-50 p-6">
         <div className="text-sm text-green-700">
           Estimated Avoidable Exposure (Next 12 Months)
@@ -143,7 +165,6 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* Health Score */}
       <div className="rounded-lg border p-6">
         <div className="text-sm text-gray-500">
           Lease Health Score
@@ -153,11 +174,10 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* Actions */}
-      {data.signedUrl && (
+      {downloadUrl && (
         <div>
           <a
-            href={data.signedUrl}
+            href={downloadUrl}
             target="_blank"
             rel="noreferrer"
             className="inline-block rounded bg-black px-5 py-2 text-white hover:bg-gray-800"
@@ -167,7 +187,6 @@ export default function SuccessPage() {
         </div>
       )}
 
-      {/* Reassurance */}
       <div className="pt-2 text-sm text-gray-600">
         We’ve also emailed you a copy of this audit for your records.
       </div>
