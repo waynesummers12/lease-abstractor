@@ -24,31 +24,26 @@ export async function runAuditPipeline(
       throw new Error(uploadError.message);
     }
 
-    /* ---------- 2. INGEST VIA WORKER ---------- */
-    const ingestRes = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-lease-worker-key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-        },
-        body: JSON.stringify({
-          auditId,
-          objectPath,
-        }),
-      }
-    );
+    /* ---------- 2. TRIGGER ANALYSIS (API ONLY) ---------- */
+    const analyzeRes = await fetch("/api/audit/analyze", {
+      method: "POST",
+      body: (() => {
+        const form = new FormData();
+        form.append("auditId", auditId);
+        form.append("objectPath", objectPath);
+        return form;
+      })(),
+    });
 
-    if (!ingestRes.ok) {
-      throw new Error(await ingestRes.text());
+    if (!analyzeRes.ok) {
+      throw new Error(await analyzeRes.text());
     }
 
     /* ---------- 3. WAIT FOR ANALYSIS ---------- */
     const result = await waitForAnalysis(auditId);
 
     if (!result?.analysis) {
-      throw new Error("Worker returned no analysis");
+      throw new Error("Analysis not available");
     }
 
     /* ---------- 4. SUCCESS ---------- */
@@ -56,7 +51,7 @@ export async function runAuditPipeline(
       success: true,
       status: "analysis_ready",
       auditId,
-      analysis: result.analysis, // ✅ THIS IS THE FIX
+      analysis: result.analysis,
     };
   } catch (err: any) {
     return {
@@ -67,3 +62,4 @@ export async function runAuditPipeline(
     };
   }
 }
+
