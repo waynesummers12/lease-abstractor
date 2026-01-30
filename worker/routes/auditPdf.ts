@@ -1,7 +1,7 @@
 // worker/routes/auditPdf.ts
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
 
 const router = new Router({

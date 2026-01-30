@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { generateAuditPdf } from "./generateAuditPdf.ts";
 

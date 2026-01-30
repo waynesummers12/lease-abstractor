@@ -1,6 +1,6 @@
 // worker/utils/getPaidAudits.ts
 
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 
 export type LeaseAudit = {
   id: string;

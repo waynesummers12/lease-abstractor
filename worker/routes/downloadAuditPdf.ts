@@ -1,7 +1,7 @@
 // worker/routes/downloadAuditPdf.ts
 
 import type { RouterContext } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 
 export async function downloadAuditPdf(
   ctx: RouterContext<"/downloadAuditPdf/:auditId">

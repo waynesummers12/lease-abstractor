@@ -2,7 +2,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { getPaidAudits } from "../utils/getPaidAudits.ts";
 import { getLatestPaidAudit } from "../utils/getLatestPaidAudit.ts";
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 
 const router = new Router();
 

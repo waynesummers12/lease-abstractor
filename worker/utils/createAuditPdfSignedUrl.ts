@@ -1,6 +1,6 @@
 // worker/utils/createAuditPdfSignedUrl.ts
 
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 
 /**
  * Create a signed URL for an AUDIT PDF

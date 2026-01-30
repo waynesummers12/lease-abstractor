@@ -1,6 +1,6 @@
 // worker/utils/getLatestPaidAudit.ts
 
-import { supabase } from "../lib/supabase.ts";
+import { supabase } from "../utils/supabaseClient.ts";
 
 const SIGNED_URL_TTL_SECONDS = 60 * 60; // 1 hour
 
