@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ReviewView from "./View";
-import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
+import ReviewView from "./view";
+import { runAuditPipeline } from "../../../lib/audit/runAuditPipeline";
 
 export default function ReviewPage() {
   const [file, setFile] = useState<File | null>(null);
