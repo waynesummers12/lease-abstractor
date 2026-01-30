@@ -12,7 +12,7 @@ router.post("/pdf", async (ctx) => {
   console.log("🔥 ingestLeasePdf HIT");
 
   /* --------------------------------------------------
-     AUTH CHECK (CORRECT SCOPE)
+     AUTH CHECK (WORKER ↔ SERVER)
   -------------------------------------------------- */
   const workerKey = ctx.request.headers.get("X-Lease-Worker-Key");
   const expectedKey = Deno.env.get("LEASE_WORKER_KEY");
@@ -21,16 +21,13 @@ router.post("/pdf", async (ctx) => {
   console.log("🔐 Expected worker key:", expectedKey);
   console.log("🔐 Key match:", workerKey === expectedKey);
 
-  if (!workerKey || workerKey !== expectedKey) {
+  if (!workerKey || !expectedKey || workerKey !== expectedKey) {
     ctx.response.status = 401;
     ctx.response.body = { error: "Unauthorized" };
     return;
   }
 
   console.log("🔓 Worker authorized");
-
-  // … rest of handler continues here
-});
 
   /* --------------------------------------------------
      CONTENT TYPE CHECK
@@ -45,14 +42,14 @@ router.post("/pdf", async (ctx) => {
   }
 
   /* --------------------------------------------------
-     PARSE JSON BODY (Oak v12 CORRECT)
+     PARSE JSON BODY (Oak v12)
   -------------------------------------------------- */
   let payload: any;
   try {
     const body = ctx.request.body({ type: "json" });
     payload = await body.value;
   } catch (err) {
-    console.error("❌ JSON body parse failed", err);
+    console.error("❌ JSON parse failed", err);
     ctx.response.status = 400;
     ctx.response.body = { error: "Invalid JSON body" };
     return;
@@ -67,8 +64,6 @@ router.post("/pdf", async (ctx) => {
     ctx.response.body = { error: "Missing auditId or objectPath" };
     return;
   }
-
-  console.info("[ingest] starting lease ingest", { auditId, objectPath });
 
   try {
     /* --------------------------------------------------
@@ -85,31 +80,27 @@ router.post("/pdf", async (ctx) => {
     const buffer = new Uint8Array(await data.arrayBuffer());
 
     /* --------------------------------------------------
-       EXTRACT TEXT FROM PDF
+       EXTRACT TEXT
     -------------------------------------------------- */
     const parsed = await pdfParse(buffer);
     const leaseText = parsed.text;
 
-    if (!leaseText?.trim()) {
-      throw new Error("No text extracted from lease PDF");
+    if (!leaseText || !leaseText.trim()) {
+      throw new Error("No text extracted from PDF");
     }
 
-    console.info("[ingest] extracted lease text", {
+    console.log("🧠 extracted lease text", {
       length: leaseText.length,
     });
 
     /* --------------------------------------------------
-       RUN LEASE ABSTRACTION
+       ANALYZE LEASE
     -------------------------------------------------- */
     const rawAnalysis = abstractLease(leaseText);
-
-    /* --------------------------------------------------
-       NORMALIZE OUTPUT
-    -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
     /* --------------------------------------------------
-       UPSERT ANALYSIS
+       UPSERT RESULT
     -------------------------------------------------- */
     const { error: upsertError } = await supabase
       .from("lease_audits")
@@ -124,11 +115,10 @@ router.post("/pdf", async (ctx) => {
       );
 
     if (upsertError) {
-      console.error("❌ Failed to upsert analysis", upsertError);
-      throw new Error("Failed to save analysis");
+      throw upsertError;
     }
 
-    console.log("🧾 lease_audits analysis upserted for:", auditId);
+    console.log("✅ lease audit saved:", auditId);
 
     /* --------------------------------------------------
        SUCCESS RESPONSE
@@ -139,10 +129,10 @@ router.post("/pdf", async (ctx) => {
       analysis: normalized,
     };
   } catch (err: any) {
-    console.error("[ingest] error", err);
+    console.error("❌ ingest error", err);
     ctx.response.status = 500;
     ctx.response.body = {
-      error: err?.message ?? "Unexpected ingest error",
+      error: err?.message ?? "Worker ingest failed",
     };
   }
 });
