@@ -1,5 +1,3 @@
-// worker/routes/ingestLeasePdf.ts
-
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import pdfParse from "npm:pdf-parse@1.1.1";
 import { abstractLease } from "../utils/abstractLease.ts";
@@ -12,16 +10,18 @@ const router = new Router({
 
 /**
  * Ingest ORIGINAL lease PDF and persist analysis
+ * Accepts multipart/form-data from Next.js proxy
  */
 router.post("/pdf", async (ctx) => {
   try {
-    // Parse body safely (Oak-compatible)
-    // deno-lint-ignore no-explicit-any
-    const body =
-      (await (ctx.request as any).body?.json?.()) ??
-      (await ctx.request.body().value);
+    /* --------------------------------------------------
+       PARSE MULTIPART FORM DATA (CORRECT)
+    -------------------------------------------------- */
+    const body = ctx.request.body({ type: "form-data" });
+    const formData = await body.value.read();
 
-    const { objectPath, auditId } = body ?? {};
+    const objectPath = formData.fields?.objectPath;
+    const auditId = formData.fields?.auditId;
 
     if (!objectPath || !auditId) {
       ctx.response.status = 400;
@@ -29,10 +29,10 @@ router.post("/pdf", async (ctx) => {
       return;
     }
 
-    console.info("[ingest] downloading lease pdf", { objectPath });
+    console.info("[ingest] downloading lease pdf", { objectPath, auditId });
 
     /* --------------------------------------------------
-       DOWNLOAD PDF
+       DOWNLOAD PDF FROM SUPABASE
     -------------------------------------------------- */
     const { data, error } = await supabase.storage
       .from("leases")
@@ -64,59 +64,40 @@ router.post("/pdf", async (ctx) => {
     const rawAnalysis = abstractLease(leaseText);
 
     /* --------------------------------------------------
-       NORMALIZE EARLY (critical for UI + checkout)
+       NORMALIZE OUTPUT (CRITICAL)
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-/* --------------------------------------------------
-   🔑 UPSERT ANALYSIS (CREATE OR UPDATE)
--------------------------------------------------- */
-const { error: upsertError } = await supabase
-  .from("lease_audits")
-  .upsert(
-    {
-      id: auditId,                // 🔑 make auditId the PK
-      audit_pdf_path: objectPath, // 🔑 canonical lookup key
-      analysis: normalized,
-      status: "analyzed",
-    },
-    { onConflict: "id" }
-  );
+    /* --------------------------------------------------
+       UPSERT ANALYSIS (ID = SOURCE OF TRUTH)
+    -------------------------------------------------- */
+    const { error: upsertError } = await supabase
+      .from("lease_audits")
+      .upsert(
+        {
+          id: auditId,
+          audit_pdf_path: objectPath,
+          analysis: normalized,
+          status: "analyzed",
+        },
+        { onConflict: "id" }
+      );
 
-if (upsertError) {
-  console.error("❌ Failed to upsert analysis", upsertError);
-  throw new Error("Failed to save analysis");
-}
+    if (upsertError) {
+      console.error("❌ Failed to upsert analysis", upsertError);
+      throw new Error("Failed to save analysis");
+    }
 
-console.log("🧾 lease_audits analysis upserted for:", auditId);
-
-/* --------------------------------------------------
-   🔍 PROVE ROW EXISTS (THIS WILL NOW WORK)
--------------------------------------------------- */
-const { data: debugRow } = await supabase
-  .from("lease_audits")
-  .select("id, audit_pdf_path, status")
-  .eq("id", auditId)
-  .single();
-
-console.log("🧪 DEBUG lease_audits row:", debugRow);
-
+    console.log("🧾 lease_audits analysis upserted for:", auditId);
 
     /* --------------------------------------------------
-   🔍 FINAL DIAGNOSTIC: FIND ROW BY UUID ANYWHERE
--------------------------------------------------- */
-const { data: anyRow, error: anyError } = await supabase
-  .from("lease_audits")
-  .select("*")
-  .ilike("object_path", `%${auditId}%`)
-  .limit(1);
-
-if (anyError) {
-  console.error("❌ Diagnostic query error:", anyError);
-} else {
-  console.log("🧪 FULL lease_audits row (diagnostic):", anyRow);
-}
-
+       FINAL RESPONSE (WHAT UI EXPECTS)
+    -------------------------------------------------- */
+    ctx.response.status = 200;
+    ctx.response.body = {
+      auditId,
+      analysis: normalized,
+    };
   } catch (err: any) {
     console.error("[ingest] error", err);
     ctx.response.status = 500;
