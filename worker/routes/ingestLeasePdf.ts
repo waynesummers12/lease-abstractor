@@ -7,6 +7,19 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router({
   prefix: "/ingest/lease",
 });
+router.post("/pdf", async (ctx) => {
+  console.log("🔥 ingestLeasePdf HIT");
+
+  console.log("🔐 headers:", Object.fromEntries(ctx.request.headers.entries()));
+
+  let body: any;
+  try {
+    body = await ctx.request.body().value;
+  } catch (e) {
+    console.error("❌ Body parse failed", e);
+  }
+
+  console.log("📦 raw body:", body);
 
 /**
  * Ingest ORIGINAL lease PDF and persist analysis
