@@ -1,12 +1,13 @@
 // /Users/waynesmacbookpro13/lease-abstractor/web/src/app/api/audits/[auditId]/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
+  _req: NextRequest,
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -16,27 +17,28 @@ export async function GET(
   }
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/audits/${auditId}`,
-      {
-        headers: {
-          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-        },
-      }
-    );
+    const { data, error } = await supabaseServer
+      .from("lease_audits")
+      .select("*")
+      .eq("id", auditId)
+      .single();
 
-    const body = await res.json();
-
-    if (!res.ok) {
-      return NextResponse.json(body, { status: res.status });
+    if (error || !data) {
+      return NextResponse.json(
+        { error: "Audit not found" },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(body, { status: 200 });
-  } catch {
+    // 🔑 IMPORTANT: return the raw row (no wrapping)
+    return NextResponse.json(data, { status: 200 });
+  } catch (err) {
+    console.error("GET /api/audits/[auditId] error:", err);
     return NextResponse.json(
       { error: "Failed to fetch audit" },
       { status: 500 }
     );
   }
 }
+
 
