@@ -4,10 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
+    const { auditId, objectPath } = await req.json();
 
-    const auditId = formData.get("auditId");
-    const objectPath = formData.get("objectPath");
+if (!auditId || !objectPath) {
+  return NextResponse.json(
+    { error: "Missing auditId or objectPath" },
+    { status: 400 }
+  );
+}
+
 
     if (
       typeof auditId !== "string" ||
