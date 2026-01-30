@@ -1,7 +1,2 @@
-export const dynamic = "force-dynamic";
-
-import Step3ReviewClient from "./step3ReviewClient";
-
-export default function Step3ReviewPage() {
-  return <Step3ReviewClient />;
-}
+// web/src/app/app/step-3-review/page.tsx
+export { default } from "@/app/audit/review/page";
