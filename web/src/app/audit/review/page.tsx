@@ -7,9 +7,11 @@ export default function ReviewPage() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<any | null>(null);
-  const [animatedExposure, setAnimatedExposure] = useState<number | null>(null);
+  const [animatedExposure, setAnimatedExposure] =
+    useState<number | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [auditId, setAuditId] = useState<string | null>(null);
+
   const [totalAvoidableExposure, setTotalAvoidableExposure] =
     useState<number | null>(null);
   const [exposureRange, setExposureRange] =
@@ -19,59 +21,62 @@ export default function ReviewPage() {
 
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
+  /* ---------- UPLOAD + ANALYZE ---------- */
+
   async function handleUploadAndAnalyze() {
-  if (!file) return;
+    if (!file) return;
 
-  setStatus("Preparing audit…");
-  setAnalysis(null);
+    setStatus("Preparing audit…");
+    setAnalysis(null);
 
-  const newAuditId = crypto.randomUUID();
-  setAuditId(newAuditId);
+    const newAuditId = crypto.randomUUID();
+    setAuditId(newAuditId);
 
-  try {
-    setStatus("Uploading lease…");
+    try {
+      setStatus("Uploading lease…");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("auditId", newAuditId);
+      const form = new FormData();
+      form.append("file", file);
+      form.append("auditId", newAuditId);
 
-    const res = await fetch("/api/audit/analyze", {
-      method: "POST",
-      body: formData,
-    });
+      const res = await fetch("/api/audit/analyze", {
+        method: "POST",
+        body: form,
+      });
 
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text || "Upload failed");
-    }
-
-    setStatus("Finalizing analysis…");
-
-    // Poll once for analysis (simple version)
-    const resultRes = await fetch(`/api/audits/${newAuditId}`, {
-      cache: "no-store",
-    });
-
-    if (resultRes.ok) {
-      const data = await resultRes.json();
-      if (data?.analysis) {
-        setAnalysis(data.analysis);
+      if (!res.ok) {
+        throw new Error(await res.text());
       }
+
+      setStatus("Finalizing analysis…");
+
+      const pollRes = await fetch(`/api/audit/${newAuditId}`, {
+        cache: "no-store",
+      });
+
+      if (pollRes.ok) {
+        const data = await pollRes.json();
+        if (data?.analysis) {
+          setAnalysis(data.analysis);
+        }
+      }
+
+      setStatus(
+        analysis
+          ? "Analysis complete ✅"
+          : "Analysis processing — refresh shortly"
+      );
+
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } catch (err: any) {
+      console.error("Analyze failed:", err);
+      setStatus(err?.message ?? "Unexpected error");
     }
-
-    setStatus(
-  analysis ? "Analysis complete ✅" : "Analysis processing — refresh shortly"
-);
-
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  } catch (err: any) {
-    console.error("Analyze failed:", err);
-    setStatus(err?.message ?? "Unexpected error");
   }
-}
 
+  /* ---------- DERIVE EXPOSURE ---------- */
 
   useEffect(() => {
     if (!analysis) {
@@ -122,6 +127,8 @@ export default function ReviewPage() {
     return () => clearInterval(interval);
   }, [analysis]);
 
+  /* ---------- CHECKOUT ---------- */
+
   async function handleCheckout() {
     if (isCheckingOut || !auditId) return;
 
@@ -130,34 +137,22 @@ export default function ReviewPage() {
 
     try {
       if (analysis) {
-        sessionStorage.setItem("latest_analysis", JSON.stringify(analysis));
+        sessionStorage.setItem(
+          "latest_analysis",
+          JSON.stringify(analysis)
+        );
       }
 
-      const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-      const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
-
-      if (!workerUrl || !workerKey) {
-        throw new Error("Worker not configured");
-      }
-
-      const res = await fetch(`${workerUrl}/checkout/create`, {
+      const res = await fetch("/api/checkout/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Lease-Worker-Key": workerKey,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ auditId }),
       });
 
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Checkout creation failed");
-      }
-
       const data = await res.json();
 
-      if (!data?.url) {
-        throw new Error("Missing checkout URL");
+      if (!res.ok || !data?.url) {
+        throw new Error("Checkout creation failed");
       }
 
       window.location.href = data.url;
