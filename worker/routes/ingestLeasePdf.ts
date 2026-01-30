@@ -7,43 +7,61 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router({
   prefix: "/ingest/lease",
 });
+
 router.post("/pdf", async (ctx) => {
   console.log("🔥 ingestLeasePdf HIT");
 
-  console.log("🔐 headers:", Object.fromEntries(ctx.request.headers.entries()));
+  /* --------------------------------------------------
+     AUTH CHECK
+  -------------------------------------------------- */
+  const workerKey = ctx.request.headers.get("X-Lease-Worker-Key");
+  console.log("🔐 X-Lease-Worker-Key present:", !!workerKey);
 
-  let body: any;
-  try {
-    body = await ctx.request.body().value;
-  } catch (e) {
-    console.error("❌ Body parse failed", e);
+  if (!workerKey || workerKey !== Deno.env.get("LEASE_WORKER_KEY")) {
+    ctx.response.status = 401;
+    ctx.response.body = { error: "Unauthorized" };
+    return;
   }
 
-  console.log("📦 raw body:", body);
+  /* --------------------------------------------------
+     CONTENT TYPE CHECK
+  -------------------------------------------------- */
+  const contentType = ctx.request.headers.get("content-type") || "";
+  console.log("📦 content-type:", contentType);
 
-/**
- * Ingest ORIGINAL lease PDF and persist analysis
- * Accepts multipart/form-data from Next.js proxy
- */
-router.post("/pdf", async (ctx) => {
+  if (!contentType.includes("application/json")) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Expected application/json" };
+    return;
+  }
+
+  /* --------------------------------------------------
+     PARSE JSON BODY (Oak v12 CORRECT)
+  -------------------------------------------------- */
+  let payload: any;
   try {
-    /* --------------------------------------------------
-       PARSE MULTIPART FORM DATA (CORRECT)
-    -------------------------------------------------- */
-    const body = ctx.request.body({ type: "form-data" });
-    const formData = await body.value.read();
+    const body = ctx.request.body({ type: "json" });
+    payload = await body.value;
+  } catch (err) {
+    console.error("❌ JSON body parse failed", err);
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Invalid JSON body" };
+    return;
+  }
 
-    const objectPath = formData.fields?.objectPath;
-    const auditId = formData.fields?.auditId;
+  console.log("📨 raw body:", payload);
 
-    if (!objectPath || !auditId) {
-      ctx.response.status = 400;
-      ctx.response.body = { error: "Missing objectPath or auditId" };
-      return;
-    }
+  const { auditId, objectPath } = payload ?? {};
 
-    console.info("[ingest] downloading lease pdf", { objectPath, auditId });
+  if (!auditId || !objectPath) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Missing auditId or objectPath" };
+    return;
+  }
 
+  console.info("[ingest] starting lease ingest", { auditId, objectPath });
+
+  try {
     /* --------------------------------------------------
        DOWNLOAD PDF FROM SUPABASE
     -------------------------------------------------- */
@@ -58,7 +76,7 @@ router.post("/pdf", async (ctx) => {
     const buffer = new Uint8Array(await data.arrayBuffer());
 
     /* --------------------------------------------------
-       EXTRACT TEXT
+       EXTRACT TEXT FROM PDF
     -------------------------------------------------- */
     const parsed = await pdfParse(buffer);
     const leaseText = parsed.text;
@@ -77,12 +95,12 @@ router.post("/pdf", async (ctx) => {
     const rawAnalysis = abstractLease(leaseText);
 
     /* --------------------------------------------------
-       NORMALIZE OUTPUT (CRITICAL)
+       NORMALIZE OUTPUT
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
     /* --------------------------------------------------
-       UPSERT ANALYSIS (ID = SOURCE OF TRUTH)
+       UPSERT ANALYSIS
     -------------------------------------------------- */
     const { error: upsertError } = await supabase
       .from("lease_audits")
@@ -104,7 +122,7 @@ router.post("/pdf", async (ctx) => {
     console.log("🧾 lease_audits analysis upserted for:", auditId);
 
     /* --------------------------------------------------
-       FINAL RESPONSE (WHAT UI EXPECTS)
+       SUCCESS RESPONSE
     -------------------------------------------------- */
     ctx.response.status = 200;
     ctx.response.body = {
@@ -114,7 +132,9 @@ router.post("/pdf", async (ctx) => {
   } catch (err: any) {
     console.error("[ingest] error", err);
     ctx.response.status = 500;
-    ctx.response.body = { error: err?.message ?? "Unexpected error" };
+    ctx.response.body = {
+      error: err?.message ?? "Unexpected ingest error",
+    };
   }
 });
 
