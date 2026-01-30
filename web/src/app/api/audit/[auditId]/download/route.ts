@@ -1,3 +1,5 @@
+// web/src/app/api/audit/[auditId]/download/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -14,47 +16,30 @@ export async function GET(
     );
   }
 
-  try {
-    // 1️⃣ Fetch audit row
-    const { data, error } = await supabaseServer
-      .from("lease_audits")
-      .select("audit_pdf_path")
-      .eq("id", auditId)
-      .single();
+  const { data, error } = await supabaseServer
+    .from("lease_audits")
+    .select("audit_pdf_path")
+    .eq("id", auditId)
+    .single();
 
-    if (error || !data?.audit_pdf_path) {
-      return NextResponse.json(
-        { error: "Audit PDF not available" },
-        { status: 404 }
-      );
-    }
-
-    // 2️⃣ Generate signed URL
-    const { data: signed, error: signError } =
-      await supabaseServer.storage
-        .from("leases")
-        .createSignedUrl(data.audit_pdf_path, 60 * 10); // 10 min
-
-    if (signError || !signed?.signedUrl) {
-      return NextResponse.json(
-        { error: "Failed to generate download URL" },
-        { status: 500 }
-      );
-    }
-
-    // 3️⃣ Return JSON (contract-safe)
+  if (error || !data?.audit_pdf_path) {
     return NextResponse.json(
-      { url: signed.signedUrl },
-      { status: 200 }
+      { error: "Audit PDF not available" },
+      { status: 404 }
     );
-  } catch (err) {
-    console.error(
-      "GET /api/audit/[auditId]/download error:",
-      err
-    );
+  }
+
+  const { data: signed, error: signError } =
+    await supabaseServer.storage
+      .from("audit-pdfs") // 🔴 MUST MATCH WORKER BUCKET
+      .createSignedUrl(data.audit_pdf_path, 60 * 10);
+
+  if (signError || !signed?.signedUrl) {
     return NextResponse.json(
-      { error: "Failed to fetch download" },
+      { error: "Failed to generate download link" },
       { status: 500 }
     );
   }
+
+  return NextResponse.json({ signedUrl: signed.signedUrl });
 }
