@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import ReviewView from "./view";
-import { runAuditPipeline } from "../../../lib/audit/runAuditPipeline";
 
 export default function ReviewPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -21,46 +20,58 @@ export default function ReviewPage() {
   const resultsRef = useRef<HTMLDivElement | null>(null);
 
   async function handleUploadAndAnalyze() {
-    if (!file) return;
+  if (!file) return;
 
-    setStatus("Preparing audit…");
-    setAnalysis(null);
+  setStatus("Preparing audit…");
+  setAnalysis(null);
 
-    const newAuditId = crypto.randomUUID();
-    setAuditId(newAuditId);
+  const newAuditId = crypto.randomUUID();
+  setAuditId(newAuditId);
 
-    try {
-      setStatus("Uploading lease…");
+  try {
+    setStatus("Uploading lease…");
 
-      const pipelineResult = await runAuditPipeline(file, newAuditId);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("auditId", newAuditId);
 
-      setStatus("Finalizing analysis…");
+    const res = await fetch("/api/audit/analyze", {
+      method: "POST",
+      body: formData,
+    });
 
-      if (pipelineResult && "analysis" in pipelineResult) {
-        setAnalysis(pipelineResult.analysis);
-      } else {
-        const res = await fetch(`/api/audits/${newAuditId}`, {
-          cache: "no-store",
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.analysis) {
-            setAnalysis(data.analysis);
-          }
-        }
-      }
-
-      setStatus("Analysis complete ✅");
-
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } catch (err: any) {
-      console.error("Analyze failed:", err);
-      setStatus(err?.message ?? "Unexpected error");
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || "Upload failed");
     }
+
+    setStatus("Finalizing analysis…");
+
+    // Poll once for analysis (simple version)
+    const resultRes = await fetch(`/api/audits/${newAuditId}`, {
+      cache: "no-store",
+    });
+
+    if (resultRes.ok) {
+      const data = await resultRes.json();
+      if (data?.analysis) {
+        setAnalysis(data.analysis);
+      }
+    }
+
+    setStatus(
+  analysis ? "Analysis complete ✅" : "Analysis processing — refresh shortly"
+);
+
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  } catch (err: any) {
+    console.error("Analyze failed:", err);
+    setStatus(err?.message ?? "Unexpected error");
   }
+}
+
 
   useEffect(() => {
     if (!analysis) {
