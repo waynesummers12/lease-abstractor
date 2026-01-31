@@ -37,14 +37,10 @@ export async function GET(
    */
   const rawPath = data.audit_pdf_path;
 
-if (!rawPath.startsWith("audit-pdfs/")) {
-  return NextResponse.json(
-    { error: "Invalid audit PDF path" },
-    { status: 500 }
-  );
-}
-
-const objectName = rawPath.replace("audit-pdfs/", "");
+// 🔥 HARD NORMALIZE — DB PATH IS WRONG
+const objectName = rawPath.includes("/")
+  ? rawPath.split("/").pop()!
+  : rawPath;
 
 const { data: signed, error: signError } =
   await supabaseServer.storage
@@ -59,4 +55,5 @@ if (signError || !signed?.signedUrl) {
 }
 
 return NextResponse.json({ url: signed.signedUrl });
+
 }
