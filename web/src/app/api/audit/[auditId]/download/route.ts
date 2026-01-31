@@ -19,18 +19,35 @@ export async function GET(
     );
   }
 
-  // 🔒 DO NOT TRUST DB PATH — WORKER IS SOURCE OF TRUTH
-  const objectName = `${auditId}.pdf`;
+  // 🔒 canonical filenames we support
+  const candidates = [
+    `${auditId}.pdf`,
+    `leases/${auditId}.pdf`,
+    `audit-pdfs/${auditId}.pdf`,
+  ];
 
-  const { data: signed, error: signError } =
-    await supabaseServer.storage
+  let signedUrl: string | null = null;
+  let lastError: unknown = null;
+
+  for (const path of candidates) {
+    const objectName = path.replace(/^audit-pdfs\//, "");
+
+    const { data, error } = await supabaseServer.storage
       .from("audit-pdfs")
       .createSignedUrl(objectName, 60 * 10);
 
-  if (signError || !signed?.signedUrl) {
-    console.error("❌ Signed URL failed", {
+    if (data?.signedUrl) {
+      signedUrl = data.signedUrl;
+      break;
+    }
+
+    lastError = error;
+  }
+
+  if (!signedUrl) {
+    console.error("❌ Failed to sign PDF", {
       auditId,
-      signError,
+      lastError,
     });
 
     return NextResponse.json(
@@ -39,5 +56,6 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ url: signed.signedUrl });
+  return NextResponse.json({ url: signedUrl });
 }
+
