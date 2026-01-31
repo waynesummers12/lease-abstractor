@@ -81,33 +81,7 @@ export default function SuccessPage() {
   }, [auditId]);
 
   /* ---------- DOWNLOAD PDF (CORRECT FLOW) ---------- */
-  async function handleDownload() {
-  try {
-    setLoading(true);
-
-    const res = await fetch(`/api/audit/${auditId}`, {
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error("Audit not found");
-    }
-
-    const data = await res.json();
-
-    if (!data?.signedUrl) {
-      throw new Error("PDF not ready");
-    }
-
-    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to generate download link");
-  } finally {
-    setLoading(false);
-  }
-}
-
+  window.location.href = "/product/app/dashboard";
 
   /* ================= UI ================= */
 
