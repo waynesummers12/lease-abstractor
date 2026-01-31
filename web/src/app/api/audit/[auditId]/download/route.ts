@@ -13,41 +13,49 @@ export async function GET(
   const { auditId } = await params;
 
   if (!auditId) {
+    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+  }
+
+  const { data, error } = await supabaseServer
+    .from("lease_audits")
+    .select("audit_pdf_path")
+    .eq("id", auditId)
+    .single();
+
+  if (error || !data?.audit_pdf_path) {
+    return NextResponse.json({ error: "PDF not ready" }, { status: 404 });
+  }
+
+  const rawPath = data.audit_pdf_path;
+
+  // 🔒 HARD BUCKET RESOLUTION (this is the missing piece)
+  let bucket: "audit-pdfs" | "leases";
+  let objectPath: string;
+
+  if (rawPath.startsWith("audit-pdfs/")) {
+    bucket = "audit-pdfs";
+    objectPath = rawPath.replace("audit-pdfs/", "");
+  } else if (rawPath.startsWith("leases/")) {
+    bucket = "leases";
+    objectPath = rawPath.replace("leases/", "");
+  } else {
     return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
+      { error: "Invalid PDF path" },
+      { status: 500 }
     );
   }
 
-  // 🔒 canonical filenames we support
-  const candidates = [
-    `${auditId}.pdf`,
-    `leases/${auditId}.pdf`,
-    `audit-pdfs/${auditId}.pdf`,
-  ];
+  const { data: signed, error: signError } =
+    await supabaseServer.storage
+      .from(bucket)
+      .createSignedUrl(objectPath, 60 * 10);
 
-  let signedUrl: string | null = null;
-  let lastError: unknown = null;
-
-  for (const path of candidates) {
-    const objectName = path.replace(/^audit-pdfs\//, "");
-
-    const { data, error } = await supabaseServer.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectName, 60 * 10);
-
-    if (data?.signedUrl) {
-      signedUrl = data.signedUrl;
-      break;
-    }
-
-    lastError = error;
-  }
-
-  if (!signedUrl) {
+  if (signError || !signed?.signedUrl) {
     console.error("❌ Failed to sign PDF", {
       auditId,
-      lastError,
+      bucket,
+      objectPath,
+      signError,
     });
 
     return NextResponse.json(
@@ -56,6 +64,5 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ url: signedUrl });
+  return NextResponse.json({ url: signed.signedUrl });
 }
-
