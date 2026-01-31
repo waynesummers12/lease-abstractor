@@ -166,7 +166,7 @@ export default function MarketingHomePage() {
           charges really allow.
         </p>
         <Link
-          href="/product/app"
+          href="/app/step-1-upload"
           className="mt-10 inline-flex items-center rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
           Start Your CAM Audit
