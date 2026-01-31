@@ -5,9 +5,9 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -24,23 +24,30 @@ export async function GET(
     .single();
 
   if (error || !audit?.audit_pdf_path) {
+    console.error("❌ Audit lookup failed", { error, auditId });
     return NextResponse.json(
       { error: "Audit not found or PDF not ready" },
       { status: 404 }
     );
   }
 
-  // audit_pdf_path is stored as: leases/{auditId}.pdf
-  const objectName = audit.audit_pdf_path.replace(/^leases\//, "");
+  const rawPath = audit.audit_pdf_path;
+  const bucket = rawPath.startsWith("audit-pdfs/")
+    ? "audit-pdfs"
+    : rawPath.startsWith("leases/")
+    ? "leases"
+    : "audit-pdfs";
 
-  // 2) Generate signed URL from the *correct bucket*
+  const objectName = rawPath.replace(/^[^/]+\//, "");
+  console.log("🔑 Signing PDF", { auditId, bucket, objectName, rawPath });
+
   const { data: signed, error: signError } =
     await supabaseServer.storage
-      .from("leases")
+      .from(bucket)
       .createSignedUrl(objectName, 60 * 5);
 
   if (signError || !signed?.signedUrl) {
-    console.error("❌ Signed URL error:", signError);
+    console.error("❌ Signed URL error", { signError, bucket, objectName });
     return NextResponse.json(
       { error: "Failed to generate download link" },
       { status: 500 }
