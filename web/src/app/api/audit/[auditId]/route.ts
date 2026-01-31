@@ -1,11 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+// web/src/app/api/audit/[auditId]/route.ts
+
+import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function GET(
-  req: NextRequest,
-  { params }: { params: { auditId: string } }
+  _req: Request,
+  { params }: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await params;
 
   if (!auditId) {
     return NextResponse.json(
