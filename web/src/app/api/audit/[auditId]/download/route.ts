@@ -16,9 +16,10 @@ export async function GET(
     );
   }
 
+  // 1) Fetch audit row
   const { data: audit, error } = await supabaseServer
     .from("lease_audits")
-    .select("audit_pdf_path, status")
+    .select("audit_pdf_path")
     .eq("id", auditId)
     .single();
 
@@ -29,24 +30,25 @@ export async function GET(
     );
   }
 
-  const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
+  // audit_pdf_path is stored as: leases/{auditId}.pdf
+  const objectName = audit.audit_pdf_path.replace(/^leases\//, "");
 
+  // 2) Generate signed URL from the *correct bucket*
   const { data: signed, error: signError } =
     await supabaseServer.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectPath, 60 * 5);
+      .from("leases")
+      .createSignedUrl(objectName, 60 * 5);
 
   if (signError || !signed?.signedUrl) {
+    console.error("❌ Signed URL error:", signError);
     return NextResponse.json(
       { error: "Failed to generate download link" },
       { status: 500 }
     );
   }
 
+  // 3) Return signed URL
   return NextResponse.json({
     signedUrl: signed.signedUrl,
   });
 }
-
-
-
