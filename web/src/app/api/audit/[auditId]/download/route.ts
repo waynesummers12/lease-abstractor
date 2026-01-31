@@ -35,27 +35,28 @@ export async function GET(
    *   bucket: audit-pdfs
    *   path:   <auditId>.pdf
    */
-  const fullPath = data.audit_pdf_path;
-  const objectPath = fullPath.replace(/^audit-pdfs\//, "");
+  const rawPath = data.audit_pdf_path;
 
-  console.log("📄 Signing file:", {
-    bucket: "audit-pdfs",
-    objectPath,
-  });
+if (!rawPath.startsWith("audit-pdfs/")) {
+  return NextResponse.json(
+    { error: "Invalid audit PDF path" },
+    { status: 500 }
+  );
+}
 
-  const { data: signed, error: signError } =
-    await supabaseServer.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectPath, 60 * 10);
+const objectName = rawPath.replace("audit-pdfs/", "");
 
-  console.log("🔗 Signed URL result:", { signed, signError });
+const { data: signed, error: signError } =
+  await supabaseServer.storage
+    .from("audit-pdfs")
+    .createSignedUrl(objectName, 60 * 10);
 
-  if (signError || !signed?.signedUrl) {
-    return NextResponse.json(
-      { error: "Failed to generate download link" },
-      { status: 500 }
-    );
-  }
+if (signError || !signed?.signedUrl) {
+  return NextResponse.json(
+    { error: "Failed to generate download link" },
+    { status: 500 }
+  );
+}
 
-  return NextResponse.json({ url: signed.signedUrl });
+return NextResponse.json({ url: signed.signedUrl });
 }
