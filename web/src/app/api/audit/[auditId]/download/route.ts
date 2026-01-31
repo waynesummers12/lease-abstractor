@@ -1,4 +1,4 @@
-// web/src/app/api/audit/[auditId]/download/route.ts
+// web/src/app/api/audit/[auditId]/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -8,9 +8,9 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await params;
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -19,41 +19,30 @@ export async function GET(
     );
   }
 
-
-  const { data: audit, error } = await supabaseServer
+  const { data, error } = await supabaseServer
     .from("lease_audits")
-    .select("audit_pdf_path")
+    .select(
+      `
+      id,
+      status,
+      completed_at,
+      audit_pdf_path,
+      stripe_session_id,
+      created_at
+    `
+    )
     .eq("id", auditId)
     .single();
 
-  if (error || !audit?.audit_pdf_path) {
+  if (error || !data) {
+    console.error("❌ Audit lookup failed", { auditId, error });
     return NextResponse.json(
-      { error: "PDF not ready" },
+      { error: "Audit not found" },
       { status: 404 }
     );
   }
 
-  // Invariant: always audit-pdfs/{auditId}.pdf
-  const objectName = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
-
-  const { data: signed, error: signError } =
-    await supabaseServer.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectName, 60 * 5);
-
-  if (signError || !signed?.signedUrl) {
-    console.error("❌ Signed URL failed", {
-      auditId,
-      objectName,
-      signError,
-    });
-
-    return NextResponse.json(
-      { error: "Failed to generate download link" },
-      { status: 500 }
-    );
-  }
-
-  return NextResponse.json({ url: signed.signedUrl });
+  return NextResponse.json(data);
 }
+
 
