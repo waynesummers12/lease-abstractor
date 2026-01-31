@@ -7,10 +7,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: { auditId: string } }
+  req: NextRequest,
+  context: { params: { auditId: string } }
 ) {
-  const { auditId } = params;
+  const { auditId } = context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -18,6 +18,7 @@ export async function GET(
       { status: 400 }
     );
   }
+
 
   const { data: audit, error } = await supabaseServer
     .from("lease_audits")
