@@ -33,24 +33,30 @@ export async function GET(
     );
   }
 
-  /* --------------------------------------------------
+/* --------------------------------------------------
      2) Generate signed URL
      -------------------------------------------------- */
-  // audit_pdf_path is stored as: audit-pdfs/{auditId}.pdf
-  const objectName = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
+// audit_pdf_path is stored as: audit-pdfs/{auditId}.pdf
+const objectName = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
-  const { data: signed, error: signError } =
-    await supabaseServer.storage
-      .from("audit-pdfs")
-      .createSignedUrl(objectName, 60 * 5); // 5 minutes
+const { data: signed, error: signError } =
+  await supabaseServer.storage
+    .from("audit-pdfs")
+    .createSignedUrl(objectName, 60 * 5); // 5 minutes
 
-  if (signError || !signed?.signedUrl) {
-    console.error("❌ Signed URL error:", signError);
-    return NextResponse.json(
-      { error: "Failed to generate download link" },
-      { status: 500 }
-    );
-  }
+if (signError || !signed?.signedUrl) {
+  console.error("❌ Signed URL error:", {
+    signError,
+    objectName,
+    bucket: "audit-pdfs",
+  });
+
+  return NextResponse.json(
+    { error: "Failed to generate download link" },
+    { status: 500 }
+  );
+}
+
 
   /* --------------------------------------------------
      3) Return signed URL
