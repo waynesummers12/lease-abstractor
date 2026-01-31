@@ -60,7 +60,7 @@ export async function GET(
 
     if (!signError && signed?.signedUrl) {
       console.log("🔑 Signed PDF", { auditId, bucket: attempt.bucket, objectName: attempt.key });
-      return NextResponse.json({ signedUrl: signed.signedUrl });
+      return NextResponse.json({ url: signed.signedUrl });
     }
 
     console.error("❌ Signed URL error", {
@@ -78,7 +78,7 @@ export async function GET(
         const json = await res.json();
         if (json?.signedUrl) {
           console.log("🔑 Signed via worker", { auditId });
-          return NextResponse.json({ signedUrl: json.signedUrl });
+          return NextResponse.json({ url: json.signedUrl });
         }
       } else {
         const text = await res.text();
