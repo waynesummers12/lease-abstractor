@@ -7,10 +7,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: NextRequest,
-  context: { params: { auditId: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = context.params;
+  const { auditId } = await params;
 
   if (!auditId) {
     return NextResponse.json(
