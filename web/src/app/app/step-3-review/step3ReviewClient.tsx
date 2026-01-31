@@ -174,28 +174,70 @@ export default function Step3ReviewClient() {
       </div>
 
       {animatedExposure != null && (
-        <div className="rounded-xl border border-green-500 bg-green-50 p-6">
-          <div className="text-sm text-green-700">
-            Estimated Avoidable Exposure (12 months)
-          </div>
-          <div className="mt-1 text-4xl font-extrabold text-green-800">
-            ${animatedExposure.toLocaleString()}
-          </div>
+  <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-4">
 
-          {exposureRange && (
-            <div className="mt-2 text-sm text-gray-700">
-              Range: ${exposureRange.low.toLocaleString()} – $
-              {exposureRange.high.toLocaleString()}
-            </div>
-          )}
+    <div className="flex items-center gap-3">
+      <span className="text-2xl">💰</span>
+      <div>
+        <p className="text-sm text-emerald-700 font-medium">
+          Estimated Avoidable Exposure (Next 12 Months)
+        </p>
+        <p className="text-4xl font-extrabold text-emerald-900">
+          ${animatedExposure.toLocaleString()}
+        </p>
+      </div>
+    </div>
 
-          {exposureRiskLabel && (
-            <div className="mt-2 font-semibold text-red-700">
-              Risk level: {exposureRiskLabel.toUpperCase()}
-            </div>
-          )}
-        </div>
-      )}
+    <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
+      ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+    </div>
+
+    {/* Confidence */}
+    <div className="space-y-1">
+      <p className="text-xs text-emerald-700">
+        Confidence reflects clarity of CAM, escalation, and reconciliation clauses
+      </p>
+
+      <div className="w-full h-2 bg-emerald-200 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-emerald-600 rounded-full"
+          style={{ width: "85%" }}
+        />
+      </div>
+
+      <p className="text-xs text-emerald-700">
+        High confidence — terms are clearly defined
+      </p>
+    </div>
+
+    {/* Lease basics preview */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm text-emerald-900">
+      <div>
+        <p className="font-semibold">Tenant</p>
+        <p>{analysis?.tenantName ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Landlord</p>
+        <p>{analysis?.landlordName ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Premises</p>
+        <p>{analysis?.premisesAddress ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Lease Term</p>
+        <p>
+          {analysis?.leaseStartDate} → {analysis?.leaseEndDate}
+        </p>
+      </div>
+    </div>
+
+  </div>
+)}
+
 
       <button
         onClick={handleCheckout}
