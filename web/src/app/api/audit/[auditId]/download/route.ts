@@ -2,7 +2,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
- 
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
 export async function GET(
@@ -64,7 +67,7 @@ export async function GET(
       auditId,
       bucket: attempt.bucket,
       objectName: attempt.key,
-      signError,
+      signError: signError?.message ?? signError,
     });
   }
 
@@ -82,7 +85,7 @@ export async function GET(
         console.error("❌ Worker download failed", { auditId, status: res.status, text });
       }
     } catch (err) {
-      console.error("❌ Worker download error", { auditId, err });
+      console.error("❌ Worker download error", { auditId, err: (err as Error)?.message ?? err });
     }
   } else {
     console.error("❌ Worker URL missing; cannot fallback", { auditId });
