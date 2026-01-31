@@ -39,23 +39,34 @@ export async function GET(
     : "audit-pdfs";
 
   const objectName = rawPath.replace(/^[^/]+\//, "");
-  console.log("🔑 Signing PDF", { auditId, bucket, objectName, rawPath });
 
-  const { data: signed, error: signError } =
-    await supabaseServer.storage
-      .from(bucket)
-      .createSignedUrl(objectName, 60 * 5);
+  const attempts = [
+    { bucket, key: objectName },
+    { bucket, key: rawPath },
+    { bucket: bucket === "audit-pdfs" ? "leases" : "audit-pdfs", key: objectName },
+    { bucket: bucket === "audit-pdfs" ? "leases" : "audit-pdfs", key: rawPath },
+  ];
 
-  if (signError || !signed?.signedUrl) {
-    console.error("❌ Signed URL error", { signError, bucket, objectName });
-    return NextResponse.json(
-      { error: "Failed to generate download link" },
-      { status: 500 }
-    );
+  for (const attempt of attempts) {
+    const { data: signed, error: signError } = await supabaseServer.storage
+      .from(attempt.bucket)
+      .createSignedUrl(attempt.key, 60 * 5);
+
+    if (!signError && signed?.signedUrl) {
+      console.log("🔑 Signed PDF", { auditId, bucket: attempt.bucket, objectName: attempt.key });
+      return NextResponse.json({ signedUrl: signed.signedUrl });
+    }
+
+    console.error("❌ Signed URL error", {
+      auditId,
+      bucket: attempt.bucket,
+      objectName: attempt.key,
+      signError,
+    });
   }
 
-  // 3) Return signed URL
-  return NextResponse.json({
-    signedUrl: signed.signedUrl,
-  });
+  return NextResponse.json(
+    { error: "Failed to generate download link" },
+    { status: 500 }
+  );
 }
