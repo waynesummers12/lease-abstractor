@@ -212,33 +212,34 @@ export default function Step3ReviewClient() {
 
     {/* Lease basics preview */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm text-emerald-900">
+      <div>
+        <p className="font-semibold">Tenant</p>
+        <p>{analysis.tenant ?? "—"}</p>
+      </div>
 
-  <div>
-    <p className="font-semibold">Tenant</p>
-    <p>{analysis.tenant ?? "—"}</p>
+      <div>
+        <p className="font-semibold">Landlord</p>
+        <p>{analysis.landlord ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Premises</p>
+        <p>{analysis.premises ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Lease Term</p>
+        <p>
+          {analysis.lease_start && analysis.lease_end
+            ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
+            : "—"}
+        </p>
+      </div>
+    </div>
+
   </div>
-
-  <div>
-    <p className="font-semibold">Landlord</p>
-    <p>{analysis.landlord ?? "—"}</p>
-  </div>
-
-  <div>
-    <p className="font-semibold">Premises</p>
-    <p>{analysis.premises ?? "—"}</p>
-  </div>
-
-  <div>
-    <p className="font-semibold">Lease Term</p>
-    <p>
-      {analysis.lease_start && analysis.lease_end
-        ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
-        : "—"}
-    </p>
-  </div>
-
-</div>
 )}
+
 
 
       <button
