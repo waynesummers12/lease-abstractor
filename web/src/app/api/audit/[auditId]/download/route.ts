@@ -2,6 +2,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
+ 
+const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
 
 export async function GET(
   _req: NextRequest,
@@ -45,6 +47,7 @@ export async function GET(
     { bucket, key: rawPath },
     { bucket: bucket === "audit-pdfs" ? "leases" : "audit-pdfs", key: objectName },
     { bucket: bucket === "audit-pdfs" ? "leases" : "audit-pdfs", key: rawPath },
+    { bucket: "audit-pdfs", key: `${auditId}.pdf` },
   ];
 
   for (const attempt of attempts) {
@@ -63,6 +66,26 @@ export async function GET(
       objectName: attempt.key,
       signError,
     });
+  }
+
+  if (workerUrl) {
+    try {
+      const res = await fetch(`${workerUrl}/downloadAuditPdf/${auditId}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.signedUrl) {
+          console.log("🔑 Signed via worker", { auditId });
+          return NextResponse.json({ signedUrl: json.signedUrl });
+        }
+      } else {
+        const text = await res.text();
+        console.error("❌ Worker download failed", { auditId, status: res.status, text });
+      }
+    } catch (err) {
+      console.error("❌ Worker download error", { auditId, err });
+    }
+  } else {
+    console.error("❌ Worker URL missing; cannot fallback", { auditId });
   }
 
   return NextResponse.json(
