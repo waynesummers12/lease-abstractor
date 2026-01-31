@@ -46,7 +46,6 @@ export default function SuccessPage() {
 
   const [data, setData] = useState<AuditResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
   /* ---------- LOAD AUDIT ---------- */
@@ -80,8 +79,12 @@ export default function SuccessPage() {
     loadAudit();
   }, [auditId]);
 
-  /* ---------- DOWNLOAD PDF (CORRECT FLOW) ---------- */
-  window.location.href = "/product/app/dashboard";
+  /* ---------- AUTO-REDIRECT WHEN COMPLETE ---------- */
+  useEffect(() => {
+    if (data?.status === "complete") {
+      router.replace("/product/app/dashboard");
+    }
+  }, [data, router]);
 
   /* ================= UI ================= */
 
@@ -132,6 +135,7 @@ export default function SuccessPage() {
       </main>
     );
   }
+
 
   /* ---------- COMPLETE ---------- */
   return (
