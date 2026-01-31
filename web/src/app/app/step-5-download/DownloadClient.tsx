@@ -255,29 +255,29 @@ export default function SuccessPage() {
       </div>
     )}
       {/* ---------- NAV ---------- */}
-      <button
-        onClick={handleDownload}
-        disabled={downloading}
-        className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
-      >
-        {downloading ? "Preparing PDF…" : "Download PDF Audit"}
-      </button>
+<button
+  onClick={() => router.push("/product/app/dashboard")}
+  className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800"
+>
+  View & Download Audit
+</button>
 
-      <div className="mt-8 space-y-3 text-sm">
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline"
-        >
-          View all audits
-        </button>
+<div className="mt-8 space-y-3 text-sm">
+  <button
+    onClick={() => router.push("/product/app/dashboard")}
+    className="block mx-auto underline"
+  >
+    View all audits
+  </button>
 
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline text-gray-500"
-        >
-          Return to app
-        </button>
-      </div>
+  <button
+    onClick={() => router.push("/product/app/dashboard")}
+    className="block mx-auto underline text-gray-500"
+  >
+    Return to app
+  </button>
+</div>
+
     </main>
   );
 }
