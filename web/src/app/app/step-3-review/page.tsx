@@ -1,607 +1,144 @@
 "use client";
 
-import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
-import { supabaseBrowser } from "@/lib/supabase/browser";
-import { useEffect, useRef, useState } from "react";
-
-/* ---------- TYPES ---------- */
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Analysis = {
-  tenant: string | null;
-  landlord: string | null;
-  premises: string | null;
-  lease_start: string | null;
-  lease_end: string | null;
-  term_months: number | null;
-  rent: {
-    base_rent: number | null;
-    frequency: "monthly" | "annual" | null;
-    escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
-    escalation_value: number | null;
-    escalation_interval: "annual" | null;
-  };
-  rent_schedule?: {
-    year: number;
-    annual_rent: number;
-    monthly_rent: number;
-  }[];
-  cam_nnn?: {
-    monthly_amount: number | null;
-    annual_amount: number | null;
-    total_exposure: number | null;
-    is_uncapped: boolean;
-    reconciliation: boolean;
-    pro_rata: boolean;
-    includes_capex: boolean;
-    cam_cap_percent: number | null;
-    escalation_exposure: number | null;
-  };
-  health?: {
-    score: number;
-    flags: {
-      code: string;
-      label: string;
-      severity: "low" | "medium" | "high";
-      recommendation: string;
-      estimated_impact?: string;
-    }[];
-  };
   cam_total_avoidable_exposure?: number | null;
-exposure_range?: { low: number; high: number } | null;
-exposure_risk?: "low" | "medium" | "high" | null;
+  exposure_range?: { low: number; high: number } | null;
+  exposure_risk?: "low" | "medium" | "high" | null;
 };
 
-/* ---------- CONSTANTS ---------- */
+export default function Step3ReviewPage() {
+  const searchParams = useSearchParams();
+  const auditId = searchParams.get("auditId");
 
-const formatMoney = (v: number | null | undefined) =>
-  v == null ? "—" : `$${v.toLocaleString()}`;
-
-const formatDate = (value: string | null | undefined) => {
-  if (!value) return "—";
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString();
-};
-
-const formatEscalation = (
-  type: string | null | undefined,
-  value: number | null | undefined
-) => {
-  if (!type) return "—";
-  return value == null ? type : `${type} (${value})`;
-};
-
-const headerStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: 8,
-};
-
-const sectionStyle: React.CSSProperties = {
-  border: "1px solid #e2e8f0",
-  borderRadius: 12,
-  padding: 20,
-};
-
-const exposureBoxStyle: React.CSSProperties = {
-  border: "2px solid #16a34a",
-  background: "#f0fdf4",
-  borderRadius: 12,
-  padding: 16,
-  display: "flex",
-  flexDirection: "column",
-  gap: 6,
-};
-
-const buttonStyle: React.CSSProperties = {
-  color: "white",
-  border: "none",
-  padding: "10px 16px",
-  borderRadius: 8,
-  fontWeight: 600,
-};
-
-/* ---------- PAGE ---------- */
-
-export default function HomePage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState("");
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
-
-  const [totalAvoidableExposure, setTotalAvoidableExposure] =
-    useState<number | null>(null);
-
-  const [animatedExposure, setAnimatedExposure] =
-    useState<number | null>(null);
-
-  const [exposureRange, setExposureRange] =
-    useState<{ low: number; high: number } | null>(null);
-
-  const [exposureRiskLabel, setExposureRiskLabel] =
-    useState<string | null>(null);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [auditId, setAuditId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!auditId) {
+      setError("Missing audit ID.");
+      setLoading(false);
+      return;
+    }
 
-  /* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-  const resultsRef = useRef<HTMLDivElement | null>(null);
+    async function loadAnalysis() {
+      try {
+        const res = await fetch(`/api/audits/${auditId}`, {
+          cache: "no-store",
+        });
 
-  async function handleUploadAndAnalyze() {
-    if (!file) return;
-    setStatus("Preparing audit…");
-    setAnalysis(null);
+        if (!res.ok) {
+          throw new Error("Failed to load analysis");
+        }
 
-    const newAuditId = crypto.randomUUID();
-    setAuditId(newAuditId);
+        const data = await res.json();
+
+        if (!data?.analysis) {
+          throw new Error("Analysis not ready");
+        }
+
+        setAnalysis(data.analysis);
+      } catch (err: any) {
+        setError(err.message || "Unable to load analysis");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadAnalysis();
+  }, [auditId]);
+
+  async function handleCheckout() {
+    if (!auditId || isCheckingOut) return;
+
+    setIsCheckingOut(true);
 
     try {
-      const createRes = await fetch("/api/audits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId: newAuditId }),
-      });
-      if (!createRes.ok) {
-        const err = await createRes.json();
-        setStatus(err?.error ?? "Failed to initialize audit");
-        return;
-      }
-
-      setStatus("Uploading lease…");
-
-      const res = await runAuditPipeline(file, supabaseBrowser, newAuditId);
-
-      if (!res.success) {
-  setStatus(res.error ?? "Analysis failed");
-  return;
-}
-
-if (!res.analysis) {
-  setStatus("Analysis failed");
-  return;
-}
-
-      setAnalysis(res.analysis.analysis);
-      setStatus("Analysis complete ✅");
-    } catch (err: any) {
-      console.error("Analyze failed:", err);
-      setStatus(err?.message ?? "Unexpected error");
-    }
-  }
-
-  /* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
-
-useEffect(() => {
-  if (!analysis) {
-    setTotalAvoidableExposure(null);
-    setExposureRange(null);
-    setExposureRiskLabel(null);
-    setAnimatedExposure(null);
-    return;
-  }
-
-  // 🔑 SOURCE OF TRUTH — THIS FIELD EXISTS
-  const exposure =
-  typeof (analysis as any).cam_total_avoidable_exposure === "number"
-    ? (analysis as any).cam_total_avoidable_exposure
-    : typeof (analysis as any).avoidable_exposure === "number"
-    ? (analysis as any).avoidable_exposure
-    : null;
-
-  setTotalAvoidableExposure(exposure);
-  setExposureRange((analysis as any).exposure_range ?? null);
-  setExposureRiskLabel(
-    typeof (analysis as any).exposure_risk === "string"
-  ? (analysis as any).exposure_risk.toLowerCase()
-  : typeof (analysis as any).risk_level === "string"
-  ? (analysis as any).risk_level.toLowerCase()
-  : null
-);
-
-  // Animate
-  if (exposure != null) {
-    setAnimatedExposure(0);
-
-    let current = 0;
-    const step = Math.max(Math.floor(exposure / 40), 1);
-
-    const interval = setInterval(() => {
-      current += step;
-      if (current >= exposure) {
-        setAnimatedExposure(exposure);
-        clearInterval(interval);
-      } else {
-        setAnimatedExposure(current);
-      }
-    }, 20);
-
-    return () => clearInterval(interval);
-  }
-
-  setTimeout(() => {
-    resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 100);
-}, [analysis]);
-
-
-
-async function handleCheckout() {
-  if (isCheckingOut || !auditId) return;
-
-  setIsCheckingOut(true);
-  setStatus("Redirecting to secure checkout…");
-
-  try {
-    if (analysis) {
-      sessionStorage.setItem(
-        "latest_analysis",
-        JSON.stringify(analysis)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Lease-Worker-Key":
+              process.env.NEXT_PUBLIC_WORKER_KEY!,
+          },
+          body: JSON.stringify({ auditId }),
+        }
       );
-    }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Lease-Worker-Key":
-            process.env.NEXT_PUBLIC_WORKER_KEY!,
-        },
-        body: JSON.stringify({ auditId }),
+      if (!res.ok) {
+        throw new Error(await res.text());
       }
-    );
 
-    if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      if (!data?.url) throw new Error("Missing checkout URL");
 
-    const { url } = await res.json();
-    if (!url) throw new Error("Missing checkout URL");
-
-    window.location.href = url;
-  } catch (err) {
-    console.error("Checkout error:", err);
-    setStatus("Checkout failed. Please try again.");
-    setIsCheckingOut(false);
+      window.location.href = data.url;
+    } catch (err) {
+      console.error("Checkout failed", err);
+      setIsCheckingOut(false);
+    }
   }
-}
+
+  if (loading) {
+    return <p className="p-8">Loading analysis…</p>;
+  }
+
+  if (error) {
+    return <p className="p-8 text-red-600">{error}</p>;
+  }
+
+  const exposure = analysis?.cam_total_avoidable_exposure;
 
   return (
-  <main
-    style={{
-      padding: 32,
-      maxWidth: 960,
-      margin: "0 auto",
-      display: "flex",
-      flexDirection: "column",
-      gap: 24,
-    }}
-  >
-    {/* ---------- HEADER ---------- */}
-    <header style={headerStyle}>
-      <p
-        style={{
-          fontSize: 12,
-          letterSpacing: 1,
-          textTransform: "uppercase",
-          color: "#475569",
-        }}
-      >
-        Lease audit
-      </p>
+    <main className="mx-auto max-w-3xl px-6 py-24">
+      {/* GREEN BOX */}
+      <div className="rounded-2xl border-2 border-green-600 bg-green-50 p-8">
+        <p className="text-sm font-semibold text-green-700 uppercase">
+          Analysis complete
+        </p>
 
-      <h1 style={{ fontSize: 28, fontWeight: 800 }}>
-        Upload your lease and uncover avoidable CAM / NNN spend
-      </h1>
+        <h1 className="mt-4 text-4xl font-bold">
+          Estimated Avoidable Exposure
+        </h1>
 
-      <p style={{ color: "#475569" }}>
-        We run your PDF through our audit pipeline and estimate what you could
-        recover in the next 12 months.
-      </p>
-    </header>
+        {exposure != null ? (
+          <p className="mt-4 text-5xl font-extrabold text-green-700">
+            ${exposure.toLocaleString()}
+          </p>
+        ) : (
+          <p className="mt-4 text-gray-600">
+            Exposure could not be calculated.
+          </p>
+        )}
 
-    {/* ---------- UPLOAD ---------- */}
-<section
-  style={{
-    ...sectionStyle,
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-  }}
->
-  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-    <input
-      type="file"
-      accept=".pdf"
-      onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-    />
+        {analysis?.exposure_range && (
+          <p className="mt-2 text-sm text-green-800">
+            Estimated range: $
+            {analysis.exposure_range.low.toLocaleString()} – $
+            {analysis.exposure_range.high.toLocaleString()}
+          </p>
+        )}
 
-    <button
-      onClick={handleUploadAndAnalyze}
-      disabled={!file}
-      style={{
-        ...buttonStyle,
-        background: !file ? "#cbd5e1" : "#0f172a",
-        cursor: !file ? "not-allowed" : "pointer",
-      }}
-    >
-      Upload & Analyze
-    </button>
-  </div>
-
-  {status && (
-    <p style={{ color: "#0f172a", fontWeight: 600 }}>{status}</p>
-  )}
-</section>
-
-{/* ---------- RESULTS ---------- */}
-{analysis ? (
-  <section
-    ref={resultsRef}
-    style={{
-      ...sectionStyle,
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      gap: 16,
-    }}
-  >
-    {/* ===== GREEN EXPOSURE BOX ===== */}
-    <div style={exposureBoxStyle}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#166534" }}>
-        Estimated Avoidable Exposure (Next 12 Months)
-      </div>
-
-      {totalAvoidableExposure != null && (
-        <>
-          <div
-            style={{
-              fontSize: 34,
-              fontWeight: 900,
-              marginTop: 6,
-              color:
-                exposureRiskLabel === "high"
-                  ? "#991b1b"
-                  : exposureRiskLabel === "medium"
-                  ? "#92400e"
-                  : "#166534",
-            }}
-          >
-            💰 $
-            {(animatedExposure ?? totalAvoidableExposure).toLocaleString()}
-          </div>
-{/* --- VALUE CONFIDENCE BADGE --- */}
-<div
-  style={{
-    marginTop: 6,
-    alignSelf: "flex-start",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 6,
-    padding: "4px 10px",
-    borderRadius: 999,
-    background: "#dcfce7", // soft green
-    border: "1px solid #86efac",
-    fontSize: 12,
-    fontWeight: 600,
-    color: "#166534",
-  }}
->
-  ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses in your lease
-</div>
-{/* --- RISK-ADJUSTED CONFIDENCE METER --- */}
-{exposureRiskLabel && (
-  <div style={{ marginTop: 8 }}>
-    <div
-      style={{
-        fontSize: 12,
-        fontWeight: 600,
-        color: "#334155",
-        marginBottom: 4,
-      }}
-    >
-      Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-    </div>
-
-    <div
-      style={{
-        width: "100%",
-        height: 8,
-        background: "#e5e7eb",
-        borderRadius: 999,
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width:
-            exposureRiskLabel === "low"
-              ? "85%"
-              : exposureRiskLabel === "medium"
-              ? "60%"
-              : "35%",
-          background:
-            exposureRiskLabel === "low"
-              ? "#16a34a"
-              : exposureRiskLabel === "medium"
-              ? "#f59e0b"
-              : "#dc2626",
-          transition: "width 600ms ease",
-        }}
-      />
-    </div>
-
-    <div
-      style={{
-        marginTop: 4,
-        fontSize: 11,
-        color: "#475569",
-      }}
-    >
-      {exposureRiskLabel === "low" && "High confidence — terms are clearly defined"}
-      {exposureRiskLabel === "medium" &&
-        "Moderate confidence — some assumptions applied"}
-      {exposureRiskLabel === "high" &&
-        "Lower confidence — recovery depends on interpretation"}
-    </div>
-  </div>
-)}
-
-
-          {exposureRange && (
-            <p style={{ marginTop: 4, fontSize: 13, color: "#166534" }}>
-              Estimated recovery range:{" "}
-              <strong>
-                ${exposureRange.low.toLocaleString()} – $
-                {exposureRange.high.toLocaleString()}
-              </strong>
-            </p>
-          )}
-
-          {exposureRiskLabel && (
-            <div
-              style={{
-                marginTop: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color:
-                  exposureRiskLabel === "high"
-                    ? "#991b1b"
-                    : exposureRiskLabel === "medium"
-                    ? "#92400e"
-                    : "#166534",
-              }}
-            >
-              Risk level: {exposureRiskLabel.toUpperCase()}
-            </div>
-          )}
-        </>
-      )}
-
-      <button
-        onClick={handleCheckout}
-        disabled={isCheckingOut}
-        style={{
-          ...buttonStyle,
-          background: "#0f172a",
-          cursor: isCheckingOut ? "not-allowed" : "pointer",
-          marginTop: 10,
-          alignSelf: "flex-start",
-        }}
-      >
-        {isCheckingOut ? "Opening secure checkout…" : "Unlock full audit report →"}
-      </button>
-      <div
-  style={{
-    marginTop: 6,
-    fontSize: 12,
-    color: "#111827",
-  }}
->
-  Full audit report generated immediately after checkout. No subscription required.
-</div>
-    </div>
-
-    {/* ---------- DETAILS ---------- */}
-    <div style={{ display: "grid", gap: 12 }}>
-      {/* Lease basics */}
-      <div>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>
-          Lease basics
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 6,
-            fontSize: 14,
-          }}
+        <button
+          onClick={handleCheckout}
+          disabled={isCheckingOut}
+          className="mt-8 inline-flex rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-50"
         >
-          <span>Tenant: {analysis.tenant ?? "—"}</span>
-          <span>Landlord: {analysis.landlord ?? "—"}</span>
-          <span>Premises: {analysis.premises ?? "—"}</span>
-          <span>Lease start: {formatDate(analysis.lease_start)}</span>
-          <span>Lease end: {formatDate(analysis.lease_end)}</span>
-          <span>Term (months): {analysis.term_months ?? "—"}</span>
-        </div>
-      </div>
+          {isCheckingOut
+            ? "Opening secure checkout…"
+            : "Unlock full audit report →"}
+        </button>
 
-      {/* Rent */}
-      <div>
-        <div style={{ fontWeight: 700, marginBottom: 6 }}>Rent</div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 6,
-            fontSize: 14,
-          }}
-        >
-          <span>Base rent: {formatMoney(analysis.rent?.base_rent)}</span>
-          <span>Frequency: {analysis.rent?.frequency ?? "—"}</span>
-          <span>
-            Escalation:{" "}
-            {formatEscalation(
-              analysis.rent?.escalation_type,
-              analysis.rent?.escalation_value
-            )}
-          </span>
-        </div>
+        <p className="mt-3 text-xs text-gray-600">
+          One-time payment. PDF delivered immediately after checkout.
+        </p>
       </div>
-
-      {/* CAM / NNN */}
-      {analysis.cam_nnn && (
-        <div>
-          <div style={{ fontWeight: 700, marginBottom: 6 }}>
-            CAM / NNN
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: 6,
-              fontSize: 14,
-            }}
-          >
-            <span>
-              Monthly: {formatMoney(analysis.cam_nnn.monthly_amount)}
-            </span>
-            <span>
-              Annual: {formatMoney(analysis.cam_nnn.annual_amount)}
-            </span>
-            <span>
-              Total exposure:{" "}
-              {formatMoney(analysis.cam_nnn.total_exposure)}
-            </span>
-            <span>
-              {analysis.cam_nnn.is_uncapped ? "Uncapped" : "Capped"}
-            </span>
-            <span>
-              {analysis.cam_nnn.reconciliation
-                ? "Reconciliation"
-                : "No reconciliation"}
-            </span>
-            <span>
-              {analysis.cam_nnn.includes_capex
-                ? "Includes capex"
-                : "Excludes capex"}
-            </span>
-          </div>
-        </div>
-      )}
-    </div>
-  </section>
-) : (
-  <section
-    style={{
-      ...sectionStyle,
-      border: "1px dashed #cbd5e1",
-      color: "#475569",
-    }}
-  >
-    No analysis yet. Upload a PDF to see your results.
-  </section>
-)}
-  </main>
-);
+    </main>
+  );
 }
