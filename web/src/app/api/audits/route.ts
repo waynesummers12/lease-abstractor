@@ -3,55 +3,43 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Create audit via worker
- */
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const { auditId } = body;
+  const { auditId } = await req.json();
 
-    if (!auditId) {
-      return NextResponse.json(
-        { error: "Missing auditId" },
-        { status: 400 }
-      );
-    }
+  if (!auditId) {
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
+  }
 
-    const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-    const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+  // 🔑 CRITICAL: worker requires objectPath
+  const objectPath = `leases/${auditId}.pdf`;
 
-    if (!workerUrl || !workerKey) {
-      return NextResponse.json(
-        { error: "Worker env vars not configured" },
-        { status: 500 }
-      );
-    }
-
-    const res = await fetch(`${workerUrl}/audits`, {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
+    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Lease-Worker-Key": workerKey,
+        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
       },
-      body: JSON.stringify({ auditId }),
-    });
-
-    if (!res.ok) {
-      const text = await res.text();
-      return NextResponse.json(
-        { error: "Worker failed to create audit", details: text },
-        { status: 500 }
-      );
+      body: JSON.stringify({
+        auditId,
+        objectPath,
+      }),
     }
+  );
 
-    return NextResponse.json({ success: true, auditId });
-  } catch (err) {
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Worker audit creation failed:", text);
+
     return NextResponse.json(
-      { error: "Unexpected error creating audit" },
+      { error: "Worker failed to create audit", details: text },
       { status: 500 }
     );
   }
+
+  return NextResponse.json({ success: true, auditId });
 }
-
-
