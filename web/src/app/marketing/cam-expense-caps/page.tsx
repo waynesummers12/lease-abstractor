@@ -26,7 +26,7 @@ export default function CamExpenseCapsPage() {
         </p>
 
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Check if your CAM cap is being enforced
@@ -144,7 +144,7 @@ export default function CamExpenseCapsPage() {
         </p>
 
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to check CAM caps

@@ -273,7 +273,7 @@ export default function CamAdminFeesPage() {
             Many tenants discover these fees only after running a lease audit or
             using a tool like{" "}
             <a
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
             >
               SaveOnLease
@@ -294,7 +294,7 @@ export default function CamAdminFeesPage() {
             Our automated audit flags admin fees that exceed market norms. You
             can{" "}
             <a
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
             >
               check your lease automatically
@@ -315,7 +315,7 @@ export default function CamAdminFeesPage() {
           <p>
             Most tenants never challenge them because the math is buried.{" "}
             <a
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
             >
               Automated review
@@ -336,7 +336,7 @@ export default function CamAdminFeesPage() {
           <p>
             If you’re unsure, the fastest way to confirm is to{" "}
             <a
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
             >
               upload your lease for analysis
@@ -356,7 +356,7 @@ export default function CamAdminFeesPage() {
           <p>
             That’s why we built an audit designed specifically for tenants.{" "}
             <a
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
             >
               Check your fees automatically

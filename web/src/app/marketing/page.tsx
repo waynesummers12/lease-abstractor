@@ -24,7 +24,7 @@ export default function MarketingHomePage() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/product/app"
+            href="/product/app/step-1-upload/upload"
             className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
             Start CAM Audit
@@ -112,7 +112,7 @@ export default function MarketingHomePage() {
               </li>
             </ul>
             <Link
-              href="/product/app"
+              href="/product/app/step-1-upload/upload"
               className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
             >
               Upload a Lease

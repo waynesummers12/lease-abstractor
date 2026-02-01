@@ -97,7 +97,7 @@ export default function LearnPage() {
           with clear findings and estimated exposure.
         </p>
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="mt-8 inline-flex rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
           Start CAM & NNN Audit

@@ -139,7 +139,7 @@ export default function NnnExpensesExplainedPage() {
           risks, caps, and potential overcharges.
         </p>
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
           Start CAM & NNN Audit

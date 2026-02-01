@@ -113,7 +113,7 @@ export default function WhatWeFindPage() {
           </p>
         </div>
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="inline-block rounded bg-white px-6 py-3 text-black font-medium hover:bg-gray-100 transition"
         >
           Upload a Lease for Review

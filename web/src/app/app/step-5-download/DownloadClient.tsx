@@ -133,7 +133,7 @@ if (fatalError) {
         <p className="font-semibold">Something went wrong</p>
         <p className="mt-2">{fatalError}</p>
         <button
-          onClick={() => router.push("/product/app")}
+          onClick={() => router.push("/product/app/step-1-upload/upload")}
           className="mt-4 underline"
         >
           Back to app

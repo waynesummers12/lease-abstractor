@@ -25,7 +25,7 @@ export default function Page() {
         </p>
 
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to check CAM charges automatically
@@ -127,7 +127,7 @@ export default function Page() {
         </p>
 
         <Link
-          href="/product/app"
+          href="/product/app/step-1-upload/upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to run the checklist
