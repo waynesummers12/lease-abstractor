@@ -156,18 +156,22 @@ if (uploadError) {
 }
 
     /* --------------------------------------------------
-       4) SAVE PATH + MARK COMPLETE
-       -------------------------------------------------- */
-    await supabase
-      .from("lease_audits")
-      .update({
-        status: "complete",
-        audit_pdf_path: `audit-pdfs/${auditId}.pdf`,
-        completed_at: new Date().toISOString(),
-      })
-      .eq("id", auditId);
+   4) SAVE PATH + MARK COMPLETE  ✅ CRITICAL FIX
+-------------------------------------------------- */
+const storedPath = `${auditId}.pdf`;
 
-    console.log("✅ Audit marked complete:", auditId);
+await supabase
+  .from("lease_audits")
+  .update({
+    status: "complete",
+    audit_pdf_path: storedPath,
+    object_path: storedPath, // ✅ SUPPORT BOTH FIELDS
+    completed_at: new Date().toISOString(),
+  })
+  .eq("id", auditId);
+
+console.log("✅ Audit marked complete with PDF path:", storedPath);
+
 
     /* --------------------------------------------------
        5) CREATE SIGNED URL + EMAIL
