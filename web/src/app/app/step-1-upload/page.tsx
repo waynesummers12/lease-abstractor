@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadForm from "./UploadForm";
@@ -17,7 +19,7 @@ export default function UploadLeasePage() {
     const auditId = crypto.randomUUID();
 
     try {
-      // 1️⃣ Create audit row (API route only, no Supabase here)
+      // 1️⃣ Create audit row
       const createRes = await fetch("/api/audits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -28,7 +30,7 @@ export default function UploadLeasePage() {
         throw new Error("Failed to create audit");
       }
 
-      // 2️⃣ Upload lease PDF → worker (fire-and-forget)
+      // 2️⃣ Fire-and-forget ingest to worker
       const formData = new FormData();
       formData.append("file", file);
       formData.append("auditId", auditId);
@@ -45,7 +47,7 @@ export default function UploadLeasePage() {
         }
       ).catch(console.error);
 
-      // 3️⃣ Navigate immediately to polling page
+      // 3️⃣ Go to polling page
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
