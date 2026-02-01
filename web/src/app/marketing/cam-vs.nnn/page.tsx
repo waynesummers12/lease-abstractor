@@ -131,7 +131,7 @@ export default function CamVsNnnPage() {
         </p>
 
         <a
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease & check now →

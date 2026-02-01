@@ -24,7 +24,7 @@ export default function Page() {
         </p>
 
         <Link
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to check NNN overcharges
@@ -136,7 +136,7 @@ export default function Page() {
         </p>
 
         <Link
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to review NNN charges

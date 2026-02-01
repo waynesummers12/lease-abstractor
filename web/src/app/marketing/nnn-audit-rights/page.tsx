@@ -146,7 +146,7 @@ export default function NnnAuditRightsPage() {
         </p>
 
         <Link
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to review audit rights

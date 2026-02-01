@@ -69,7 +69,7 @@ export default function PricingPage() {
         </ul>
 
         <Link
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="mt-6 inline-block rounded bg-black px-6 py-3 text-white hover:bg-gray-800 transition"
         >
           Upload a Lease
@@ -138,7 +138,7 @@ export default function PricingPage() {
       {/* CTA */}
 <section className="mt-8 pb-12">
   <Link
-    href="/product/app/step-1-upload/upload"
+    href="/app/step-1-upload"
     className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white transition
                hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md
                active:translate-y-0"

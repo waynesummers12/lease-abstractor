@@ -122,7 +122,7 @@ export default function DashboardPage() {
           Upload a lease to generate your first CAM / NNN audit.
         </p>
         <Link
-          href="/product/app/step-1-upload/upload"
+          href="/app/step-1-upload"
           className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
           Upload Lease
