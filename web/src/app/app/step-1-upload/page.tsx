@@ -47,9 +47,21 @@ export default function UploadLeasePage() {
     });
 
     if (!createRes.ok) {
-      const text = await createRes.text();
-      throw new Error(text || "Failed to create audit");
+  let message = "Failed to create audit";
+
+  try {
+    const contentType = createRes.headers.get("content-type");
+    if (contentType?.includes("application/json")) {
+      const json = await createRes.json();
+      message = json?.error || message;
     }
+  } catch {
+    // swallow — fallback message is fine
+  }
+
+  throw new Error(message);
+}
+
 
     // 2️⃣ Upload lease PDF to worker
     const formData = new FormData();
