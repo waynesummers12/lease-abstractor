@@ -7,7 +7,7 @@ import { useAuditUpload } from "./useAuditUpload";
 
 export default function UploadLeasePage() {
   const router = useRouter();
-  const { uploadAndAnalyze } = useAuditUpload();
+  const { uploadFile } = useAuditUpload();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,16 +16,13 @@ export default function UploadLeasePage() {
     setError(null);
     setLoading(true);
 
+    const auditId = crypto.randomUUID();
+
     try {
-      const audit = await uploadAndAnalyze(file);
+      await uploadFile(file, auditId);
 
-      if (!audit?.auditId) {
-        throw new Error("Audit created but no auditId returned.");
-      }
-
-      router.push(
-        `/product/app/step-3-review?auditId=${audit.auditId}`
-      );
+      // ✅ ALWAYS go to Step-2 (analysis)
+      router.push(`/product/app/step-2-analysis?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
       setError(err?.message ?? "Upload failed. Please try again.");
@@ -57,3 +54,4 @@ export default function UploadLeasePage() {
     </main>
   );
 }
+
