@@ -138,7 +138,7 @@ export default function SuccessPage() {
           <p className="font-semibold">Something went wrong</p>
           <p className="mt-2">{fatalError}</p>
           <button
-            onClick={() => router.push("/product/app/step-1-upload")}
+            onClick={() => router.push("/app/step-1-upload")}
             className="mt-4 underline"
           >
             Back to app
