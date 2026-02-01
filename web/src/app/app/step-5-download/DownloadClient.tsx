@@ -1,12 +1,23 @@
+"use client";
+
 /**
- * WORKER ROUTE (DENO + OAK)
- * - Owns business logic
- * - Owns Supabase access
- * - Owns Stripe logic
- * - NEVER imported by frontend
+ * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
+ *
+ * Rules:
+ * - Client-side only
+ * - No Supabase imports
+ * - No Stripe imports
+ * - No server-only logic
+ * - No process.env (except NEXT_PUBLIC_*)
+ *
+ * Allowed:
+ * - fetch("/api/...")
+ * - useState / useEffect / useRouter
+ * - window.location
+ *
+ * Violation = production regression
  */
 
-"use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";

@@ -1,6 +1,25 @@
 // web/src/app/app/useAuditUpload.ts
 "use client";
 
+/**
+ * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
+ *
+ * Rules:
+ * - Client-side only
+ * - No Supabase imports
+ * - No Stripe imports
+ * - No server-only logic
+ * - No process.env (except NEXT_PUBLIC_*)
+ *
+ * Allowed:
+ * - fetch("/api/...")
+ * - useState / useEffect / useRouter
+ * - window.location
+ *
+ * Violation = production regression
+ */
+
+
 export function useAuditUpload() {
   async function uploadAndIngest(file: File, auditId: string) {
     // 🔒 Lazy-load Supabase so it NEVER runs during build
