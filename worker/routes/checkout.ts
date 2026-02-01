@@ -1,11 +1,20 @@
 // worker/routes/checkout.ts
 /**
- * WORKER ROUTE (DENO + OAK)
- * - Owns business logic
- * - Owns Supabase access
- * - Owns Stripe logic
- * - NEVER imported by frontend
+ * STRIPE CHECKOUT ROUTE — SAVEONLEASE V1 (LOCKED)
+ *
+ * CRITICAL:
+ * - auditId is the single source of truth
+ * - Stripe metadata MUST include auditId
+ *
+ * DO NOT:
+ * - Rename metadata keys
+ * - Change success/cancel URLs
+ * - Refactor flow
+ *
+ * Small changes here = broken payments.
  */
+
+
 
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";

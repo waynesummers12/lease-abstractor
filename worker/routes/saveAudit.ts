@@ -1,11 +1,23 @@
 // worker/routes/saveAudit.ts
 /**
- * WORKER ROUTE (DENO + OAK)
- * - Owns business logic
- * - Owns Supabase access
- * - Owns Stripe logic
- * - NEVER imported by frontend
+ * WORKER ROUTE — SAVEONLEASE V1 (LOCKED)
+ *
+ * Runtime:
+ * - Deno + Oak
+ *
+ * Responsibilities:
+ * - Business logic
+ * - Supabase access
+ * - PDF processing
+ * - Stripe operations
+ *
+ * Forbidden:
+ * - Frontend imports
+ * - Next.js APIs
+ *
+ * This file must NEVER be imported by frontend code.
  */
+
 
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";

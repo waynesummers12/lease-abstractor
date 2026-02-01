@@ -1,11 +1,20 @@
 // worker/routes/stripeWebhook.ts
 /**
- * WORKER ROUTE (DENO + OAK)
- * - Owns business logic
- * - Owns Supabase access
- * - Owns Stripe logic
- * - NEVER imported by frontend
+ * STRIPE WEBHOOK — SAVEONLEASE V1 (LOCKED)
+ *
+ * ABSOLUTE RULES:
+ * - Must be registered BEFORE any body middleware
+ * - Signature verification is mandatory
+ *
+ * DO NOT:
+ * - Add logging that mutates body
+ * - Change event parsing
+ * - Move this route
+ *
+ * Violations break fulfillment silently.
  */
+
+
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";

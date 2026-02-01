@@ -1,24 +1,24 @@
 // web/src/app/api/audits/[auditId]/download/route.ts
 /**
- * NEXT.JS API ROUTE — SAVEONLEASE V1 (LOCKED)
+ * DOWNLOAD API ROUTE — SAVEONLEASE V1 (LOCKED)
  *
  * Purpose:
- * - Thin proxy only
- * - No business logic
- * - No Supabase queries
+ * - Generate signed download URL
+ * - Proxy to Worker only
  *
- * CRITICAL RULES:
- * - params are ASYNC → must be awaited
- * - Always use dynamic = "force-dynamic"
+ * Rules:
+ * - No React
+ * - No Supabase client
+ * - params MUST be awaited
  *
- * Allowed:
- * - fetch() to Worker
- * - Header forwarding
- *
- * Forbidden:
- * - Supabase client
- * - Stripe SDK
- * - React imports
+ * Output:
+ * { url: string }
+ * export async function GET(
+  _req: Request,
+  context: { params: Promise<{ auditId: string }> }
+) {
+  const { auditId } = await context.params;
+}
  */
 
 

@@ -18,7 +18,12 @@
  * Forbidden:
  * - Supabase client
  * - Stripe SDK
- * - React imports
+ * export async function GET(
+  _req: Request,
+  context: { params: Promise<{ auditId: string }> }
+) {
+  const { auditId } = await context.params;
+}
  */
 
 export const dynamic = "force-dynamic";
