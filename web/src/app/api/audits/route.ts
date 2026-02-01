@@ -1,14 +1,7 @@
 // web/src/app/api/audits/route.ts
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: { persistSession: false },
-  }
-);
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: Request,
@@ -23,26 +16,35 @@ export async function GET(
     );
   }
 
-  const { data, error } = await supabase
-    .from("lease_audits")
-    .select("*")
-    .eq("id", auditId)
-    .maybeSingle();
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/auditById/${auditId}`,
+    {
+      headers: {
+        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+      },
+      cache: "no-store",
+    }
+  );
 
-  if (error) {
+  if (res.status === 404) {
+    // Analysis not ready yet — polling should continue
     return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
-  }
-
-  if (!data) {
-    return NextResponse.json(
-      { error: "Audit not found" },
+      { analysis: null },
       { status: 404 }
     );
   }
 
-  return NextResponse.json({ audit: data });
+  if (!res.ok) {
+    const text = await res.text();
+    return NextResponse.json(
+      { error: text || "Worker error" },
+      { status: 500 }
+    );
+  }
+
+  const data = await res.json();
+
+  return NextResponse.json(data);
 }
+
 
