@@ -21,9 +21,16 @@ export default function UploadLeasePage() {
 
   try {
     const formData = new FormData();
+
+    // File (keep as-is)
     formData.append("file", file);
+
+    // Send BOTH camelCase and snake_case (worker compatibility)
     formData.append("auditId", auditId);
-    formData.append("objectPath", objectPath); // ✅ REQUIRED
+    formData.append("audit_id", auditId);
+
+    formData.append("objectPath", objectPath);
+    formData.append("object_path", objectPath);
 
     const ingestRes = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
@@ -48,6 +55,7 @@ export default function UploadLeasePage() {
     setLoading(false);
   }
 }
+
 
 
   return (
