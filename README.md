@@ -251,3 +251,6 @@ Stack experimentation is finished.
 One-Line Instruction for Any Engineer
 
 “This system is already deployed and working. Do not change architecture. Do not touch Supabase in frontend SSR. Only make UI, content, or SEO changes.”
+
+⚠️ This repo contains a production-live SaaS.
+Read DO_NOT_TOUCH.md and ENGINEER_HANDOFF.md before making changes.

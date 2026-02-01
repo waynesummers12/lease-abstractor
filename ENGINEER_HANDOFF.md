@@ -1,5 +1,8 @@
 Engineer Handoff — SaveOnLease (Lease Abstractor) V1
 
+⚠️ This system is production-live. Do NOT refactor, rename folders,
+or change architecture without explicit founder approval.
+
 Read this document in full before touching any code.
 This system has already been deployed successfully multiple times.
 The current version is locked as V1.
