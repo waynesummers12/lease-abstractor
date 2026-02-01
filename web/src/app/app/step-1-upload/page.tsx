@@ -1,3 +1,4 @@
+// web/src/app/app/step-1-upload/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -19,10 +20,16 @@ export default function UploadLeasePage() {
     const auditId = crypto.randomUUID();
 
     try {
-      await uploadFile(file, auditId);
+      const result = await uploadFile(file, auditId);
 
-      // ✅ ALWAYS go to Step-2 (analysis)
-      router.push(`/product/app/step-2-analysis?auditId=${auditId}`);
+      if (!result?.auditId) {
+        throw new Error("Missing auditId from pipeline");
+      }
+
+      // ✅ ONLY redirect to step-3
+      router.push(
+        `/product/app/step-3-review?auditId=${result.auditId}`
+      );
     } catch (err: any) {
       console.error("Upload failed:", err);
       setError(err?.message ?? "Upload failed. Please try again.");
@@ -54,4 +61,3 @@ export default function UploadLeasePage() {
     </main>
   );
 }
-
