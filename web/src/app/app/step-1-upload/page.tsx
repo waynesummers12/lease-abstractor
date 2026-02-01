@@ -13,51 +13,39 @@ export default function UploadLeasePage() {
   const [loading, setLoading] = useState(false);
 
   async function handleUpload(file: File) {
-    setError(null);
-    setLoading(true);
+  setError(null);
+  setLoading(true);
 
-    const auditId = crypto.randomUUID();
+  const auditId = crypto.randomUUID();
 
-    try {
-      const createRes = await fetch("/api/audits", {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("auditId", auditId);
+
+    const ingestRes = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+      {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId }),
-      });
-
-      if (!createRes.ok) {
-  const text = await createRes.text();
-  console.error("Create audit failed:", text);
-  throw new Error(text || "Failed to create audit");
-}
-
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("auditId", auditId);
-
-      const ingestRes = await fetch(
-        `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-        {
-          method: "POST",
-          headers: {
-            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-          },
-          body: formData,
-        }
-      );
-
-      if (!ingestRes.ok) {
-        throw new Error(await ingestRes.text());
+        headers: {
+          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: formData,
       }
+    );
 
-      router.push(`/app/step-3-review?auditId=${auditId}`);
-    } catch (err: any) {
-      console.error("Upload failed:", err);
-      setError(err?.message ?? "Upload failed. Please try again.");
-      setLoading(false);
+    if (!ingestRes.ok) {
+      const text = await ingestRes.text();
+      throw new Error(text || "Failed to upload lease");
     }
+
+    router.push(`/app/step-3-review?auditId=${auditId}`);
+  } catch (err: any) {
+    console.error("Upload failed:", err);
+    setError(err?.message ?? "Upload failed. Please try again.");
+    setLoading(false);
   }
+}
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
