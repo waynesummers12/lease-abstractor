@@ -168,15 +168,10 @@ export default function Step3ReviewClient() {
   </div>
 )}
 
-        {/* CHECKOUT BUTTON (UNCHANGED) */}
-<button
-  onClick={async () => {
-    ...
-  }}
-  className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
->
-  Get Full Audit PDF
-</button>
+        className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+      >
+        Get Full Audit PDF
+      </button>
     </main>
   );
 }
