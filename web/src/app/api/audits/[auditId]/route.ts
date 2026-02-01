@@ -3,21 +3,21 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Proxy audit fetch to worker
- */
 export async function GET(
   _req: Request,
-  context: { params: Promise<{ auditId: string }> }
+  { params }: { params: { auditId: string } }
 ) {
-  const { auditId } = await context.params;
+  const { auditId } = params;
 
   if (!auditId) {
-    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/${auditId}`,
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/auditById/${auditId}`,
     {
       headers: {
         "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
@@ -27,15 +27,13 @@ export async function GET(
   );
 
   if (!res.ok) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Audit not found" },
+      { status: res.status }
+    );
   }
 
-  const data = await res.json();
-  return NextResponse.json(data);
+  const audit = await res.json();
+  return NextResponse.json(audit);
 }
-
-
-
-
-
 
