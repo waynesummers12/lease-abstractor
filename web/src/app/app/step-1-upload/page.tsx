@@ -19,16 +19,16 @@ export default function UploadLeasePage() {
     try {
       const audit = await uploadAndAnalyze(file);
 
-      // Expecting audit.id to exist from pipeline
-      if (!audit?.id) {
-        throw new Error("Audit was created but no ID was returned.");
+      if (!audit?.auditId) {
+        throw new Error("Audit created but no auditId returned.");
       }
 
-      // Move user forward in the funnel
-      router.push(`/product/app/step-3-review?auditId=${audit.id}`);
+      router.push(
+        `/product/app/step-3-review?auditId=${audit.auditId}`
+      );
     } catch (err: any) {
       console.error("Upload failed:", err);
-      setError(err.message || "Upload failed. Please try again.");
+      setError(err?.message ?? "Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,6 @@ export default function UploadLeasePage() {
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
-      {/* Heading */}
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-light tracking-tight">
           Upload Your Lease
@@ -46,12 +45,8 @@ export default function UploadLeasePage() {
         </p>
       </div>
 
-      {/* Upload Form */}
       <div className="rounded-2xl border bg-white p-8 shadow-sm">
-        <UploadForm
-          onUpload={handleUpload}
-          loading={loading}
-        />
+        <UploadForm onUpload={handleUpload} loading={loading} />
 
         {error && (
           <p className="mt-4 text-sm text-red-600">

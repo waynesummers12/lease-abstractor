@@ -1,42 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+interface UploadFormProps {
+  onUploaded: (file: File) => void;
+}
 
-export default function LeaseUploader({ onUploaded }: { onUploaded: (path: string) => void }) {
+export default function UploadForm({ onUploaded }: UploadFormProps) {
+  const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  async function handleUpload() {
+    if (!file || loading) return;
 
     setLoading(true);
-
-    const objectPath = `leases/${crypto.randomUUID()}.pdf`;
-
-    const { error } = await supabase.storage
-      .from("leases")
-      .upload(objectPath, file, { contentType: "application/pdf" });
-
-    setLoading(false);
-
-    if (error) {
-      alert(error.message);
-      return;
+    try {
+      onUploaded(file);
+    } finally {
+      setLoading(false);
     }
-
-    onUploaded(objectPath);
   }
 
   return (
-    <div>
-      <input type="file" accept="application/pdf" onChange={handleUpload} />
-      {loading && <p>Uploading...</p>}
+    <div className="w-full max-w-xl mx-auto">
+      <input
+        type="file"
+        accept="application/pdf"
+        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        className="block w-full rounded-lg border p-3"
+      />
+
+      <button
+        onClick={handleUpload}
+        disabled={!file || loading}
+        className="mt-4 w-full rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white disabled:opacity-50"
+      >
+        {loading ? "Uploading…" : "Start Audit"}
+      </button>
     </div>
   );
 }
