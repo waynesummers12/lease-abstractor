@@ -7,29 +7,51 @@ export const dynamic = "force-dynamic";
  * Create audit via worker
  */
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { auditId } = body;
+  try {
+    const body = await req.json();
+    const { auditId } = body;
 
-  if (!auditId) {
-    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
-  }
+    if (!auditId) {
+      return NextResponse.json(
+        { error: "Missing auditId" },
+        { status: 400 }
+      );
+    }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
-    {
+    const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+    const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
+
+    if (!workerUrl || !workerKey) {
+      return NextResponse.json(
+        { error: "Worker env vars not configured" },
+        { status: 500 }
+      );
+    }
+
+    const res = await fetch(`${workerUrl}/audits`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        "X-Lease-Worker-Key": workerKey,
       },
       body: JSON.stringify({ auditId }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      return NextResponse.json(
+        { error: "Worker failed to create audit", details: text },
+        { status: 500 }
+      );
     }
-  );
 
-  if (!res.ok) {
-    return NextResponse.json({ error: "Failed to create audit" }, { status: 500 });
+    return NextResponse.json({ success: true, auditId });
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Unexpected error creating audit" },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json({ success: true, auditId });
 }
+
 
