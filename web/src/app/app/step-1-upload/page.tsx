@@ -17,11 +17,13 @@ export default function UploadLeasePage() {
   setLoading(true);
 
   const auditId = crypto.randomUUID();
+  const objectPath = `leases/${auditId}.pdf`;
 
   try {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("auditId", auditId);
+    formData.append("objectPath", objectPath); // ✅ REQUIRED
 
     const ingestRes = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
@@ -46,6 +48,7 @@ export default function UploadLeasePage() {
     setLoading(false);
   }
 }
+
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
