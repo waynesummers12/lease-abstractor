@@ -1,10 +1,20 @@
 // web/src/app/api/audits/route.ts
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-export const dynamic = "force-dynamic";
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: { persistSession: false },
+  }
+);
 
-export async function POST(req: Request) {
-  const { auditId } = await req.json();
+export async function GET(
+  _req: Request,
+  { params }: { params: { auditId: string } }
+) {
+  const { auditId } = params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -13,33 +23,26 @@ export async function POST(req: Request) {
     );
   }
 
-  // 🔑 CRITICAL: worker requires objectPath
-  const objectPath = `leases/${auditId}.pdf`;
+  const { data, error } = await supabase
+    .from("lease_audits")
+    .select("*")
+    .eq("id", auditId)
+    .maybeSingle();
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-      },
-      body: JSON.stringify({
-        auditId,
-        objectPath,
-      }),
-    }
-  );
-
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("Worker audit creation failed:", text);
-
+  if (error) {
     return NextResponse.json(
-      { error: "Worker failed to create audit", details: text },
+      { error: error.message },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({ success: true, auditId });
+  if (!data) {
+    return NextResponse.json(
+      { error: "Audit not found" },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({ audit: data });
 }
+
