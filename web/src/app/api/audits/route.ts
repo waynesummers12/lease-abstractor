@@ -35,12 +35,12 @@ export async function GET(
 
   const audit = await res.json();
 
-  // 🔑 IMPORTANT: match what Step-3 expects
   return NextResponse.json({
     analysis: audit.analysis,
     audit,
   });
 }
+
 
 
 
