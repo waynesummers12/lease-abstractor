@@ -15,22 +15,29 @@ const router = new Router({
  */
 router.post("/pdf", async (ctx) => {
   try {
-    // deno-lint-ignore no-explicit-any
-    const body =
-      (await (ctx.request as any).body?.json?.()) ??
-      (await ctx.request.body().value);
+    /* --------------------------------------------------
+       ✅ CORRECT MULTIPART PARSING (Oak v12)
+    -------------------------------------------------- */
+    const body = ctx.request.body({ type: "form-data" });
+    const form = await body.value.read();
 
-    const { objectPath, auditId } = body ?? {};
+    const auditId = form.fields.auditId;
+    const objectPath = form.fields.objectPath;
+    const file = form.files?.[0];
 
-    if (!objectPath || !auditId) {
+    if (!auditId || !objectPath || !file) {
       ctx.response.status = 400;
-      ctx.response.body = { error: "Missing objectPath or auditId" };
+      ctx.response.body = {
+        error: "Missing objectPath or auditId",
+      };
       return;
     }
 
     console.info("[ingest] downloading lease pdf", { objectPath });
 
-    // Download PDF
+    /* --------------------------------------------------
+       DOWNLOAD PDF FROM STORAGE
+    -------------------------------------------------- */
     const { data, error } = await supabase.storage
       .from("leases")
       .download(objectPath);
@@ -41,7 +48,9 @@ router.post("/pdf", async (ctx) => {
 
     const buffer = new Uint8Array(await data.arrayBuffer());
 
-    // Extract text
+    /* --------------------------------------------------
+       EXTRACT TEXT
+    -------------------------------------------------- */
     const parsed = await pdfParse(buffer);
     const leaseText = parsed.text;
 
@@ -59,14 +68,12 @@ router.post("/pdf", async (ctx) => {
     const rawAnalysis = abstractLease(leaseText);
 
     /* --------------------------------------------------
-       🔑 CRITICAL FIX:
-       Normalize analysis EARLY so exposure exists pre-checkout
-       (normalizeAuditForSuccess expects the raw analysis object)
+       NORMALIZE ANALYSIS (CRITICAL)
     -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
     /* --------------------------------------------------
-       PERSIST NORMALIZED ANALYSIS
+       PERSIST ANALYSIS
     -------------------------------------------------- */
     const { error: updateError } = await supabase
       .from("lease_audits")
@@ -90,7 +97,9 @@ router.post("/pdf", async (ctx) => {
   } catch (err) {
     console.error("❌ Lease ingest error:", err);
     ctx.response.status = 500;
-    ctx.response.body = { error: "Lease ingest failed" };
+    ctx.response.body = {
+      error: "Lease ingest failed",
+    };
   }
 });
 
