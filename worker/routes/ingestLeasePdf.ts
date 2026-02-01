@@ -10,14 +10,6 @@ const router = new Router({
   prefix: "/ingest/lease",
 });
 
-/**
- * Ingest lease PDF:
- * - receives multipart file
- * - uploads to Supabase Storage
- * - extracts text
- * - analyzes lease
- * - persists analysis
- */
 router.post("/pdf", async (ctx) => {
   try {
     const body = ctx.request.body({ type: "form-data" });
@@ -47,7 +39,6 @@ router.post("/pdf", async (ctx) => {
       });
 
     if (uploadError) {
-      console.error("❌ Upload failed:", uploadError);
       throw new Error("Failed to upload lease PDF");
     }
 
@@ -67,12 +58,12 @@ router.post("/pdf", async (ctx) => {
     const rawAnalysis = abstractLease(leaseText);
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-    // 4️⃣ Persist audit record + analysis
+    // 4️⃣ Persist audit + analysis (✅ CORRECT COLUMN)
     const { error: dbError } = await supabase
       .from("lease_audits")
       .upsert({
         id: auditId,
-        lease_pdf_path: `leases/${objectPath}`,
+        audit_pdf_path: `leases/${objectPath}`,
         analysis: normalized,
         status: "analyzed",
         created_at: new Date().toISOString(),
@@ -95,4 +86,3 @@ router.post("/pdf", async (ctx) => {
 });
 
 export default router;
-
