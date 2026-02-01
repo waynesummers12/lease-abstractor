@@ -1,4 +1,5 @@
 // web/src/app/api/audits/[auditId]/download/route.ts
+/**
  * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
  *
  * Rules:
