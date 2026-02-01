@@ -26,8 +26,11 @@ export default function UploadLeasePage() {
       });
 
       if (!createRes.ok) {
-        throw new Error("Failed to create audit");
-      }
+  const text = await createRes.text();
+  console.error("Create audit failed:", text);
+  throw new Error(text || "Failed to create audit");
+}
+
 
       const formData = new FormData();
       formData.append("file", file);
