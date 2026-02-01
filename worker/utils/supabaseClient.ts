@@ -1,6 +1,11 @@
 // worker/utils/supabaseClient.ts
 /**
- * SHARED UTILITY — SAVEONLEASE V1
+ * SHARED UTILITY — SAVEONLEASE V1 (LOCKED)
+ *
+ * Intended use:
+ * - utils/*.ts files
+ * - Normalization helpers
+ * - Pure calculations
  *
  * Rules:
  * - Pure functions only
@@ -9,11 +14,12 @@
  * - No environment variables
  *
  * Safe to use in:
- * - Worker
- * - API routes
+ * - Worker (Deno + Oak)
+ * - Next.js API routes
  *
- * NOT safe for client unless explicitly reviewed.
+ * NOT safe for client components unless explicitly reviewed.
  */
+
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
