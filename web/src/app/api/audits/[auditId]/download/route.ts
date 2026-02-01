@@ -13,7 +13,7 @@ export async function GET(
       { status: 400 }
     );
   }
-
+console.log("🔥 DOWNLOAD ROUTE HIT", auditId);
   const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
