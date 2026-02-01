@@ -8,7 +8,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 type AuditResponse = {
   status: "unpaid" | "paid" | "complete";
   audit_pdf_path?: string | null;
-  object_path?: string | null;
   analysis: {
     avoidable_exposure?: number;
     tenant?: string | null;
@@ -51,7 +50,7 @@ export default function SuccessPage() {
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
-  /* ---------- LOAD + POLL AUDIT ---------- */
+  /* ---------- LOAD + POLL AUDIT STATUS ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
@@ -64,8 +63,8 @@ export default function SuccessPage() {
     async function loadAudit() {
       try {
         const res = await fetch(
-        `/api/audits/${auditId}/download`,
-        { cache: "no-store" }
+          `/api/audits/${auditId}`,
+          { cache: "no-store" }
         );
 
         if (!res.ok) {
@@ -95,7 +94,7 @@ export default function SuccessPage() {
     };
   }, [auditId]);
 
-  /* ---------- DOWNLOAD PDF (FIXED) ---------- */
+  /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
     if (!auditId) return;
 
@@ -119,7 +118,6 @@ export default function SuccessPage() {
         return;
       }
 
-      // 🔥 Trigger browser download
       window.location.href = url;
     } catch (err) {
       console.error("PDF download failed", err);
@@ -157,15 +155,6 @@ export default function SuccessPage() {
     );
   }
 
-  const riskLevel = deriveRiskLevel(data.analysis);
-
-  const leaseScore =
-    typeof data.analysis?.health_score === "number"
-      ? data.analysis.health_score
-      : typeof data.analysis?.health?.score === "number"
-      ? data.analysis.health.score
-      : null;
-
   /* ---------- PAID BUT PROCESSING ---------- */
   if (data.status === "paid") {
     return (
@@ -190,7 +179,6 @@ export default function SuccessPage() {
         Your CAM / NNN Audit Summary is ready.
       </p>
 
-      {/* ---------- DOWNLOAD ---------- */}
       <button
         onClick={handleDownload}
         disabled={downloading}
@@ -199,7 +187,6 @@ export default function SuccessPage() {
         {downloading ? "Preparing PDF…" : "Download PDF Audit"}
       </button>
 
-      {/* ---------- NAV ---------- */}
       <div className="mt-8 space-y-3 text-sm">
         <button
           onClick={() => router.push("/product/app/dashboard")}
