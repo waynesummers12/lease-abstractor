@@ -3,35 +3,32 @@
  * DOWNLOAD API ROUTE — SAVEONLEASE V1 (LOCKED)
  *
  * Purpose:
- * - Generate signed download URL
- * - Proxy to Worker only
+ * - Generate a signed PDF download URL
+ * - Proxy requests to the Worker only
  *
- * Rules:
- * - No React
- * - No Supabase client
- * - params MUST be awaited
+ * Rules (NON-NEGOTIABLE):
+ * - No React imports
+ * - No Supabase client usage
+ * - params MUST be awaited (Next.js App Router requirement)
+ * - No business logic here
+ *
+ * Input:
+ * - auditId (route param)
  *
  * Output:
- * { url: string }
- * export async function GET(
-  _req: Request,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
-}
+ * - { url: string }
  */
-
 
 
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(
-  _req: Request,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
+export async function GET(//Has to be in all routes
+  _req: Request,//Has to be in all routes
+  context: { params: Promise<{ auditId: string }> }//Has to be in all routes
+) {//Has to be in all routes
+  const { auditId } = await context.params;//Has to be in all routes
 
   if (!auditId) {
     return NextResponse.json(

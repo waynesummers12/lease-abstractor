@@ -26,17 +26,16 @@
 }
  */
 
-export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(
-  _req: Request,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
+export async function GET(//Has to be in all routes 
+  _req: Request,//Has to be in all routes
+  context: { params: Promise<{ auditId: string }> }//Has to be in all routes
+) {//Has to be in all routes
+  const { auditId } = await context.params;//Has to be in all routes
 
   if (!auditId) {
     return NextResponse.json(
