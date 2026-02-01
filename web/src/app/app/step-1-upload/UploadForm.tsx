@@ -3,26 +3,23 @@
 import { useState } from "react";
 
 interface UploadFormProps {
-  onUploaded: (file: File) => void;
+  onUpload: (file: File) => void;
+  loading?: boolean;
 }
 
-export default function UploadForm({ onUploaded }: UploadFormProps) {
+export default function UploadForm({
+  onUpload,
+  loading = false,
+}: UploadFormProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  async function handleUpload() {
+  function handleClick() {
     if (!file || loading) return;
-
-    setLoading(true);
-    try {
-      onUploaded(file);
-    } finally {
-      setLoading(false);
-    }
+    onUpload(file);
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full">
       <input
         type="file"
         accept="application/pdf"
@@ -31,7 +28,7 @@ export default function UploadForm({ onUploaded }: UploadFormProps) {
       />
 
       <button
-        onClick={handleUpload}
+        onClick={handleClick}
         disabled={!file || loading}
         className="mt-4 w-full rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white disabled:opacity-50"
       >
@@ -40,3 +37,4 @@ export default function UploadForm({ onUploaded }: UploadFormProps) {
     </div>
   );
 }
+
