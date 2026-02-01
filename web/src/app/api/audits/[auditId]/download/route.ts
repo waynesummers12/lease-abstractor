@@ -7,47 +7,41 @@ export async function GET(
 ): Promise<Response> {
   const { auditId } = await context.params;
 
+  console.log("🔥 DOWNLOAD ROUTE HIT", auditId);
+
   if (!auditId) {
     return NextResponse.json(
       { error: "Missing auditId" },
       { status: 400 }
     );
   }
-console.log("🔥 DOWNLOAD ROUTE HIT", auditId);
+
   const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("object_path, audit_pdf_path")
+    .select("audit_pdf_path, object_path")
     .eq("id", auditId)
     .maybeSingle();
 
-  if (error || !data) {
-    return NextResponse.json(
-      { error: "Audit not found" },
-      { status: 404 }
-    );
-  }
-
-  // ✅ SUPPORT BOTH FIELDS
-  const pdfPath = data.object_path || data.audit_pdf_path;
-
-  if (!pdfPath) {
+  if (error || (!data?.audit_pdf_path && !data?.object_path)) {
+    console.error("❌ PDF path missing", { auditId, data, error });
     return NextResponse.json(
       { error: "PDF not ready" },
       { status: 404 }
     );
   }
 
-  // Normalize path if it includes bucket prefix
-  const filePath = pdfPath.replace(/^audit-pdfs\//, "");
+  // ✅ Support BOTH historical fields
+  const filePath = data.audit_pdf_path ?? data.object_path;
 
   const { data: signed, error: signError } = await supabase
     .storage
-    .from("audit-pdfs")
+    .from("audit-pdfs") // ✅ CORRECT BUCKET
     .createSignedUrl(filePath, 3600);
 
   if (signError || !signed?.signedUrl) {
+    console.error("❌ Signed URL failed", signError);
     return NextResponse.json(
       { error: "Failed to generate download URL" },
       { status: 500 }
