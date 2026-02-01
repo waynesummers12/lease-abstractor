@@ -1,21 +1,27 @@
 // web/src/app/api/audits/[auditId]/route.ts
 /**
- * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
+ * NEXT.JS API ROUTE — SAVEONLEASE V1 (LOCKED)
  *
- * Rules:
- * - Client-side only
- * - No Supabase imports
- * - No Stripe imports
- * - No server-only logic
- * - No process.env (except NEXT_PUBLIC_*)
+ * Purpose:
+ * - Thin proxy only
+ * - No business logic
+ * - No Supabase queries
+ *
+ * CRITICAL RULES:
+ * - params are ASYNC → must be awaited
+ * - Always use dynamic = "force-dynamic"
  *
  * Allowed:
- * - fetch("/api/...")
- * - useState / useEffect / useRouter
- * - window.location
+ * - fetch() to Worker
+ * - Header forwarding
  *
- * Violation = production regression
+ * Forbidden:
+ * - Supabase client
+ * - Stripe SDK
+ * - React imports
  */
+
+export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 
