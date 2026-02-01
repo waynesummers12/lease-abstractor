@@ -1,32 +1,41 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
-  _request: Request,
-  context: { params: Promise<{ auditId: string }> }
-): Promise<Response> {
-  const { auditId } = await context.params;
+  _req: NextRequest,
+  { params }: { params: { auditId: string } }
+) {
+  const { auditId } = params;
 
   if (!auditId) {
-    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
   }
 
   const supabase = getSupabaseServer();
 
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("object_path")
+    .select("audit_pdf_path")
     .eq("id", auditId)
     .single();
 
-  if (error || !data?.object_path) {
-    return NextResponse.json({ error: "PDF not ready" }, { status: 404 });
+  if (error || !data?.audit_pdf_path) {
+    return NextResponse.json(
+      { error: "PDF not ready" },
+      { status: 404 }
+    );
   }
+
+  // Stored as: audit-pdfs/{filename}.pdf
+  const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
   const { data: signed, error: signError } = await supabase
     .storage
-    .from("audits")
-    .createSignedUrl(data.object_path, 3600);
+    .from("audit-pdfs")
+    .createSignedUrl(filePath, 3600);
 
   if (signError || !signed?.signedUrl) {
     return NextResponse.json(
@@ -37,7 +46,3 @@ export async function GET(
 
   return NextResponse.json({ url: signed.signedUrl });
 }
-
-
-
-
