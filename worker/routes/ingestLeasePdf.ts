@@ -11,47 +11,48 @@ const router = new Router({
 });
 
 /**
- * Ingest ORIGINAL lease PDF and persist analysis
+ * Ingest lease PDF:
+ * - receives multipart file
+ * - uploads to Supabase Storage
+ * - extracts text
+ * - analyzes lease
+ * - persists analysis
  */
 router.post("/pdf", async (ctx) => {
   try {
-    /* --------------------------------------------------
-       ✅ CORRECT MULTIPART PARSING (Oak v12)
-    -------------------------------------------------- */
     const body = ctx.request.body({ type: "form-data" });
     const form = await body.value.read();
 
-    const auditId = form.fields.auditId;
-    const objectPath = form.fields.objectPath;
     const file = form.files?.[0];
+    const auditId = form.fields?.auditId;
 
-    if (!auditId || !objectPath || !file) {
+    if (!file || !auditId) {
       ctx.response.status = 400;
-      ctx.response.body = {
-        error: "Missing objectPath or auditId",
-      };
+      ctx.response.body = { error: "Missing file or auditId" };
       return;
     }
 
-    console.info("[ingest] downloading lease pdf", { objectPath });
+    const objectPath = `${auditId}.pdf`;
 
-    /* --------------------------------------------------
-       DOWNLOAD PDF FROM STORAGE
-    -------------------------------------------------- */
-    const { data, error } = await supabase.storage
+    console.info("[ingest] uploading lease pdf", { objectPath });
+
+    const fileBuffer = await Deno.readFile(file.filename!);
+
+    // 1️⃣ Upload PDF to Supabase Storage
+    const { error: uploadError } = await supabase.storage
       .from("leases")
-      .download(objectPath);
+      .upload(objectPath, fileBuffer, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
 
-    if (error || !data) {
-      throw new Error("Failed to download lease PDF");
+    if (uploadError) {
+      console.error("❌ Upload failed:", uploadError);
+      throw new Error("Failed to upload lease PDF");
     }
 
-    const buffer = new Uint8Array(await data.arrayBuffer());
-
-    /* --------------------------------------------------
-       EXTRACT TEXT
-    -------------------------------------------------- */
-    const parsed = await pdfParse(buffer);
+    // 2️⃣ Extract text
+    const parsed = await pdfParse(fileBuffer);
     const leaseText = parsed.text;
 
     if (!leaseText?.trim()) {
@@ -62,45 +63,36 @@ router.post("/pdf", async (ctx) => {
       length: leaseText.length,
     });
 
-    /* --------------------------------------------------
-       RUN LEASE ABSTRACTION
-    -------------------------------------------------- */
+    // 3️⃣ Analyze lease
     const rawAnalysis = abstractLease(leaseText);
-
-    /* --------------------------------------------------
-       NORMALIZE ANALYSIS (CRITICAL)
-    -------------------------------------------------- */
     const normalized = normalizeAuditForSuccess(rawAnalysis);
 
-    /* --------------------------------------------------
-       PERSIST ANALYSIS
-    -------------------------------------------------- */
-    const { error: updateError } = await supabase
+    // 4️⃣ Persist audit record + analysis
+    const { error: dbError } = await supabase
       .from("lease_audits")
-      .update({
+      .upsert({
+        id: auditId,
+        lease_pdf_path: `leases/${objectPath}`,
         analysis: normalized,
         status: "analyzed",
-      })
-      .eq("id", auditId);
+        created_at: new Date().toISOString(),
+      });
 
-    if (updateError) {
-      console.error("❌ Failed to persist analysis", updateError);
+    if (dbError) {
+      console.error("❌ DB update failed:", dbError);
       throw new Error("Failed to save analysis");
     }
 
-    console.log("🧾 lease_audits normalized analysis saved:", auditId);
+    console.log("✅ Lease ingest complete:", auditId);
 
     ctx.response.status = 200;
-    ctx.response.body = {
-      success: true,
-    };
+    ctx.response.body = { success: true, auditId };
   } catch (err) {
     console.error("❌ Lease ingest error:", err);
     ctx.response.status = 500;
-    ctx.response.body = {
-      error: "Lease ingest failed",
-    };
+    ctx.response.body = { error: "Lease ingest failed" };
   }
 });
 
 export default router;
+
