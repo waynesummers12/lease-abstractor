@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadForm from "./UploadForm";
-import { useAuditUpload } from "./useAuditUpload";
+import { runAuditPipeline } from "../step-2-analysis/analysis.service";
 
 export default function UploadLeasePage() {
   const router = useRouter();
-  const { uploadAndIngest } = useAuditUpload();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -19,14 +18,25 @@ export default function UploadLeasePage() {
     const auditId = crypto.randomUUID();
 
     try {
-      await uploadAndIngest(file, auditId);
+      // 1️⃣ Create audit row FIRST
+      const createRes = await fetch("/api/audits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auditId }),
+      });
 
-      // ✅ GO STRAIGHT TO STEP-3 WITH STRING ID
+      if (!createRes.ok) {
+        throw new Error("Failed to create audit");
+      }
+
+      // 2️⃣ Upload + ingest + wait (fire-and-forget safety)
+      runAuditPipeline(file, auditId).catch(console.error);
+
+      // 3️⃣ Go to Step-3 (polling page)
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
       setError(err?.message ?? "Upload failed. Please try again.");
-    } finally {
       setLoading(false);
     }
   }
