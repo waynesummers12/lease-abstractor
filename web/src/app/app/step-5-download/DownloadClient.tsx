@@ -63,9 +63,10 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(`/api/audits/${auditId}`, {
-          cache: "no-store",
-        });
+        const res = await fetch(
+        `/api/audits/${auditId}/download`,
+        { cache: "no-store" }
+        );
 
         if (!res.ok) {
           setFatalError("Audit not found.");
@@ -102,7 +103,7 @@ export default function SuccessPage() {
       setDownloading(true);
 
       const res = await fetch(
-        `/api/audit/${auditId}/download`,
+        `/api/audits/${auditId}/download`,
         { cache: "no-store" }
       );
 
