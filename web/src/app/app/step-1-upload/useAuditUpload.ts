@@ -1,14 +1,14 @@
 "use client";
 
-import { supabase } from "@/lib/supabaseClient";
-import { runAuditPipeline } from "@/lib/audit/runAuditPipeline";
+import { runAuditPipeline } from "../step-2-analysis/analysis.service";
 
 export function useAuditUpload() {
-  async function uploadAndAnalyze(file: File) {
-    return await runAuditPipeline(file, supabase);
+  async function uploadAndAnalyze(file: File, auditId: string) {
+    return await runAuditPipeline(file, auditId);
   }
 
   return {
     uploadAndAnalyze,
   };
 }
+

@@ -6,7 +6,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export async function runAuditPipeline(
   file: File,
-  supabase: SupabaseClient,
   auditId: string
 ): Promise<AuditPipelineResult> {
   const objectPath = `leases/${auditId}.pdf`;
