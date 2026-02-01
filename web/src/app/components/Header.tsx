@@ -197,11 +197,12 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/product/app/step-1-upload/upload"
-            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
-          >
-            Start Audit
-          </Link>
+  href="/app/step-1-upload"
+  className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+>
+  Start Audit
+</Link>
+
         </nav>
 
         {/* Mobile Menu Button */}
@@ -283,12 +284,12 @@ export default function Header() {
             </Link>
 
             <Link
-              href="/product/app/step-1-upload/upload"
-              className="mt-2 rounded bg-white px-4 py-2 text-black"
-              onClick={() => setMenuOpen(false)}
-            >
-              Start Audit
-            </Link>
+  href="/app/step-1-upload"
+  className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+>
+  Start Audit
+</Link>
+
           </div>
         </div>
       )}
