@@ -3,9 +3,9 @@ import { getSupabaseServer } from "@/lib/supabase/server";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { auditId: string } }
+  context: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -29,7 +29,7 @@ export async function GET(
     );
   }
 
-  // Stored as: audit-pdfs/{filename}.pdf
+  // audit_pdf_path is stored as: audit-pdfs/<filename>.pdf
   const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
   const { data: signed, error: signError } = await supabase
