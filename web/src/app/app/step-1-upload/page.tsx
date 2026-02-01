@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadForm from "./UploadForm";
-import { runAuditPipeline } from "../step-2-analysis/analysis.service";
 
 export default function UploadLeasePage() {
   const router = useRouter();
@@ -18,7 +17,7 @@ export default function UploadLeasePage() {
     const auditId = crypto.randomUUID();
 
     try {
-      // 1️⃣ Create audit row FIRST
+      // 1️⃣ Create audit row (API route only, no Supabase here)
       const createRes = await fetch("/api/audits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,10 +28,24 @@ export default function UploadLeasePage() {
         throw new Error("Failed to create audit");
       }
 
-      // 2️⃣ Upload + ingest + wait (fire-and-forget safety)
-      runAuditPipeline(file, auditId).catch(console.error);
+      // 2️⃣ Upload lease PDF → worker (fire-and-forget)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("auditId", auditId);
 
-      // 3️⃣ Go to Step-3 (polling page)
+      fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+        {
+          method: "POST",
+          headers: {
+            "X-Lease-Worker-Key":
+              process.env.NEXT_PUBLIC_WORKER_KEY!,
+          },
+          body: formData,
+        }
+      ).catch(console.error);
+
+      // 3️⃣ Navigate immediately to polling page
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
