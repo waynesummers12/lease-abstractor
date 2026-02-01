@@ -1,38 +1,33 @@
-// web/src/app/app/step-1-upload/page.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadForm from "./UploadForm";
-import { useAuditUpload } from "./useAuditUpload";
+import { runAuditPipeline } from "../step-2-analysis/analysis.service";
 
 export default function UploadLeasePage() {
   const router = useRouter();
-  const { uploadFile } = useAuditUpload();
-
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleUpload(file: File) {
-    setError(null);
     setLoading(true);
+    setError(null);
 
     const auditId = crypto.randomUUID();
 
     try {
-      const result = await uploadFile(file, auditId);
+      const result = await runAuditPipeline(file, auditId);
 
-      if (!result?.auditId) {
-        throw new Error("Missing auditId from pipeline");
+      if (!result.success) {
+        throw new Error(result.error ?? "Audit failed");
       }
 
-      // ✅ ONLY redirect to step-3
-      router.push(
-        `/product/app/step-3-review?auditId=${result.auditId}`
-      );
+      // ✅ STRING auditId ONLY
+      router.push(`/product/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
-      console.error("Upload failed:", err);
-      setError(err?.message ?? "Upload failed. Please try again.");
+      console.error(err);
+      setError(err.message ?? "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -53,9 +48,7 @@ export default function UploadLeasePage() {
         <UploadForm onUpload={handleUpload} loading={loading} />
 
         {error && (
-          <p className="mt-4 text-sm text-red-600">
-            {error}
-          </p>
+          <p className="mt-4 text-sm text-red-600">{error}</p>
         )}
       </div>
     </main>
