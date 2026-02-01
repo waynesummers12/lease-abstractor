@@ -1,4 +1,20 @@
 // worker/utils/sendAuditEmail.ts
+/**
+ * SHARED UTILITY — SAVEONLEASE V1
+ *
+ * Rules:
+ * - Pure functions only
+ * - No side effects
+ * - No network calls
+ * - No environment variables
+ *
+ * Safe to use in:
+ * - Worker
+ * - API routes
+ *
+ * NOT safe for client unless explicitly reviewed.
+ */
+
 import { Resend } from "npm:resend";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
