@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
  * POST /api/audits
  * Initialize audit row
  */
+
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { auditId } = body;

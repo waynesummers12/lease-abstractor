@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
  * GET /api/audits/:auditId
  * Used by Step-3 polling + success page
  */
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ auditId: string }> }

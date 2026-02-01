@@ -1,26 +1,18 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+// src/lib/supabase/server.ts
 
-export function getSupabaseServer(): SupabaseClient {
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseServiceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY;
+/**
+ * ⚠️ TEMPORARILY DISABLED
+ * Web app no longer talks directly to Supabase.
+ * All DB access happens in the worker.
+ *
+ * This file is intentionally inert to prevent
+ * Vercel build-time execution errors.
+ */
 
-  if (!supabaseUrl) {
-    throw new Error("SUPABASE_URL is required");
-  }
-
-  if (!supabaseServiceRoleKey) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
-  }
-
-  return createClient(
-    supabaseUrl,
-    supabaseServiceRoleKey,
-    {
-      auth: {
-        persistSession: false,
-      },
-    }
+export function getSupabaseServer(): never {
+  throw new Error(
+    "Supabase is disabled in the web app. Use the worker instead."
   );
 }
+
 

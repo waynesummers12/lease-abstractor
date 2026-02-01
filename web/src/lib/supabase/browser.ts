@@ -1,6 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+// src/lib/supabase/browser.ts
 
-export const supabaseBrowser = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+export function getSupabaseBrowser(): never {
+  throw new Error(
+    "Supabase browser client disabled. Use worker APIs only."
+  );
+}
+
