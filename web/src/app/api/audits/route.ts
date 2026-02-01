@@ -1,4 +1,12 @@
 // web/src/app/api/audits/route.ts
+/**
+ * WORKER ROUTE (DENO + OAK)
+ * - Owns business logic
+ * - Owns Supabase access
+ * - Owns Stripe logic
+ * - NEVER imported by frontend
+ */
+
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

@@ -1,4 +1,12 @@
 // worker/routes/saveAudit.ts
+/**
+ * WORKER ROUTE (DENO + OAK)
+ * - Owns business logic
+ * - Owns Supabase access
+ * - Owns Stripe logic
+ * - NEVER imported by frontend
+ */
+
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 

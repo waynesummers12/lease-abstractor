@@ -1,3 +1,11 @@
+/**
+ * WORKER ROUTE (DENO + OAK)
+ * - Owns business logic
+ * - Owns Supabase access
+ * - Owns Stripe logic
+ * - NEVER imported by frontend
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";

@@ -1,4 +1,22 @@
 // web/src/app/api/audits/[auditId]/download/route.ts
+ * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
+ *
+ * Rules:
+ * - Client-side only
+ * - No Supabase imports
+ * - No Stripe imports
+ * - No server-only logic
+ * - No process.env (except NEXT_PUBLIC_*)
+ *
+ * Allowed:
+ * - fetch("/api/...")
+ * - useState / useEffect / useRouter
+ * - window.location
+ *
+ * Violation = production regression
+ */
+
+
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

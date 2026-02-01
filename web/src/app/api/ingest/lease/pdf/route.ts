@@ -1,4 +1,12 @@
 // src/app/api/ingest/lease/pdf/route.ts
+/**
+ * WORKER ROUTE (DENO + OAK)
+ * - Owns business logic
+ * - Owns Supabase access
+ * - Owns Stripe logic
+ * - NEVER imported by frontend
+ */
+
 
 import { NextRequest, NextResponse } from "next/server";
 

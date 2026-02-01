@@ -1,4 +1,12 @@
 // worker/routes/stripeWebhook.ts
+/**
+ * WORKER ROUTE (DENO + OAK)
+ * - Owns business logic
+ * - Owns Supabase access
+ * - Owns Stripe logic
+ * - NEVER imported by frontend
+ */
+
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
