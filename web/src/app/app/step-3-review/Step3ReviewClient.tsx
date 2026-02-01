@@ -13,6 +13,7 @@ type Analysis = {
   cam_total_avoidable_exposure?: number | null;
   exposure_range?: { low: number; high: number } | null;
   exposure_risk?: "low" | "medium" | "high" | null;
+  confidence?: number | null; // ✅ UI-only, safe
 };
 
 export default function Step3ReviewClient() {
@@ -78,6 +79,11 @@ export default function Step3ReviewClient() {
 
   const exposure = analysis.cam_total_avoidable_exposure ?? null;
 
+  const confidence =
+    typeof analysis.confidence === "number"
+      ? Math.min(Math.max(analysis.confidence, 0), 100)
+      : 80;
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
@@ -88,95 +94,104 @@ export default function Step3ReviewClient() {
       </div>
 
       {/* ---------- GREEN SUMMARY BOX ---------- */}
-{exposure != null && (
-  <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-4">
-    {/* Header */}
-    <div className="flex items-center gap-3">
-      <span className="text-2xl">💰</span>
-      <div>
-        <p className="text-sm text-emerald-700 font-medium">
-          Estimated Avoidable Exposure (Next 12 Months)
-        </p>
-        <p className="text-4xl font-extrabold text-emerald-900">
-          ${exposure.toLocaleString()}
-        </p>
-      </div>
-    </div>
+      {exposure != null && (
+        <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">💰</span>
+            <div>
+              <p className="text-sm text-emerald-700 font-medium">
+                Estimated Avoidable Exposure (Next 12 Months)
+              </p>
+              <p className="text-4xl font-extrabold text-emerald-900">
+                ${exposure.toLocaleString()}
+              </p>
+            </div>
+          </div>
 
-    {/* Calculated From */}
-    <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
-      ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
-    </div>
+          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
+            ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+          </div>
 
-    {/* Confidence Explanation */}
-    <p className="text-sm text-emerald-800">
-      Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-    </p>
+          <p className="text-sm text-emerald-800">
+            Confidence reflects clarity of CAM, escalation, and reconciliation
+            clauses
+          </p>
 
-    {/* Confidence / Risk Elevator */}
-    <div className="space-y-1">
-      <div className="h-2 w-full rounded-full bg-emerald-200 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-emerald-600 transition-all"
-          style={{
-            width: `${
-              typeof analysis?.confidence === "number"
-                ? Math.min(Math.max(analysis.confidence, 0), 100)
-                : 80
-            }%`,
-          }}
-        />
-      </div>
+          <div className="space-y-1">
+            <div className="h-2 w-full rounded-full bg-emerald-200 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-emerald-600 transition-all"
+                style={{ width: `${confidence}%` }}
+              />
+            </div>
 
-      <p className="text-xs text-emerald-700">
-        {typeof analysis?.confidence === "number"
-          ? analysis.confidence >= 75
-            ? "High confidence — terms are clearly defined"
-            : analysis.confidence >= 40
-            ? "Moderate confidence — some ambiguity detected"
-            : "Lower confidence — lease language is unclear"
-          : "High confidence — terms are clearly defined"}
-      </p>
-    </div>
+            <p className="text-xs text-emerald-700">
+              {confidence >= 75
+                ? "High confidence — terms are clearly defined"
+                : confidence >= 40
+                ? "Moderate confidence — some ambiguity detected"
+                : "Lower confidence — lease language is unclear"}
+            </p>
+          </div>
 
-    {/* Lease Basics */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm">
-      <div>
-        <p className="font-semibold">Tenant</p>
-        <p>{analysis.tenant ?? "—"}</p>
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm">
+            <div>
+              <p className="font-semibold">Tenant</p>
+              <p>{analysis.tenant ?? "—"}</p>
+            </div>
 
-      <div>
-        <p className="font-semibold">Landlord</p>
-        <p>{analysis.landlord ?? "—"}</p>
-      </div>
+            <div>
+              <p className="font-semibold">Landlord</p>
+              <p>{analysis.landlord ?? "—"}</p>
+            </div>
 
-      <div>
-        <p className="font-semibold">Premises</p>
-        <p>{analysis.premises ?? "—"}</p>
-      </div>
+            <div>
+              <p className="font-semibold">Premises</p>
+              <p>{analysis.premises ?? "—"}</p>
+            </div>
 
-      <div>
-        <p className="font-semibold">Lease Term</p>
-        <p>
-          {analysis.lease_start && analysis.lease_end
-            ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
-            : "—"}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+            <div>
+              <p className="font-semibold">Lease Term</p>
+              <p>
+                {analysis.lease_start && analysis.lease_end
+                  ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
+                  : "—"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
-        {/* CHECKOUT BUTTON (UNCHANGED) */}
-<button
-  onClick={async () => {
-    ...
-  }}
-  className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
->
-  Get Full Audit PDF
-</button>
+      {/* ---------- CHECKOUT BUTTON ---------- */}
+      <button
+        onClick={async () => {
+          if (!auditId) return;
+
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Lease-Worker-Key":
+                  process.env.NEXT_PUBLIC_WORKER_KEY!,
+              },
+              body: JSON.stringify({ auditId }),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data?.url) {
+            window.location.href = data.url;
+          } else {
+            alert("Failed to start checkout");
+          }
+        }}
+        className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+      >
+        Get Full Audit PDF
+      </button>
     </main>
   );
 }
