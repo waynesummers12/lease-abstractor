@@ -17,13 +17,14 @@ export default function UploadLeasePage() {
   setLoading(true);
 
   const auditId = crypto.randomUUID();
+  const objectPath = `leases/${auditId}.pdf`; // ✅ REQUIRED
 
   try {
-    // 1️⃣ Create audit (proxy → worker)
+    // 1️⃣ Create audit row (web → API → worker)
     const createRes = await fetch("/api/audits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ auditId }),
+      body: JSON.stringify({ auditId, objectPath }),
     });
 
     if (!createRes.ok) {
@@ -31,10 +32,11 @@ export default function UploadLeasePage() {
       throw new Error(text || "Failed to create audit");
     }
 
-    // 2️⃣ Upload PDF (audit already exists)
+    // 2️⃣ Upload lease PDF to worker
     const formData = new FormData();
     formData.append("file", file);
     formData.append("auditId", auditId);
+    formData.append("objectPath", objectPath); // ✅ REQUIRED
 
     const ingestRes = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
@@ -60,6 +62,7 @@ export default function UploadLeasePage() {
     setLoading(false);
   }
 }
+
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
