@@ -7,9 +7,9 @@ import { getSupabaseServer } from "@/lib/supabase/server";
  */
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { auditId: string } }
+  { params }: { params: Promise<{ auditId: string }> }
 ) {
-  const { auditId } = params;
+  const { auditId } = await params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -35,6 +35,7 @@ export async function GET(
 
   return NextResponse.json(data);
 }
+
 
 
 
