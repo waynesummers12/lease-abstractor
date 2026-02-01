@@ -1,4 +1,4 @@
-//web/src/app/ste-1-upload/page.tsx
+// web/src/app/step-1-upload/page.tsx
 "use client";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +19,6 @@ export default function UploadLeasePage() {
     const auditId = crypto.randomUUID();
 
     try {
-      // 1️⃣ Create audit row (web → API)
       const createRes = await fetch("/api/audits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,7 +29,6 @@ export default function UploadLeasePage() {
         throw new Error("Failed to create audit");
       }
 
-      // 2️⃣ Upload directly to worker (multipart)
       const formData = new FormData();
       formData.append("file", file);
       formData.append("auditId", auditId);
@@ -50,7 +48,6 @@ export default function UploadLeasePage() {
         throw new Error(await ingestRes.text());
       }
 
-      // 3️⃣ Go to polling page
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
@@ -61,12 +58,26 @@ export default function UploadLeasePage() {
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
-      <div className="mb-10 text-center">
+      <div className="mb-12 text-center">
         <h1 className="text-4xl font-light tracking-tight">
           Upload Your Lease
         </h1>
+
         <p className="mt-4 text-lg text-gray-600">
-          Upload your commercial lease PDF to begin your CAM & NNN audit.
+          Upload your commercial lease PDF to identify CAM & NNN risks,
+          hidden fees, and overcharges.
+        </p>
+
+        <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
+          <div>✔ CAM & NNN overcharges</div>
+          <div>✔ Admin & management fee padding</div>
+          <div>✔ Missing caps & audit rights</div>
+        </div>
+
+        <p className="mt-6 text-sm text-gray-500">
+          🔒 Your lease is encrypted, never shared, and deleted after your audit.
+          <br />
+          ⏱ Takes about 2 minutes • No obligation to purchase
         </p>
       </div>
 
