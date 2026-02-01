@@ -7,8 +7,40 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 type AuditResponse = {
   status: "unpaid" | "paid" | "complete";
-  analysis: any | null;
+  analysis: {
+    tenant?: string | null;
+    risk_level?: string | null;
+    health?: {
+      score?: number | null;
+    };
+    cam_total_avoidable_exposure?: number | null;
+  } | null;
 };
+
+/* ================= HELPERS ================= */
+
+function deriveRiskLevel(score?: number | null) {
+  if (typeof score !== "number") return "UNKNOWN";
+  if (score >= 75) return "LOW RISK";
+  if (score >= 50) return "MODERATE RISK";
+  return "HIGH RISK";
+}
+
+function explainScore(score?: number | null) {
+  if (typeof score !== "number") {
+    return "We were unable to calculate a complete lease health score.";
+  }
+
+  if (score >= 75) {
+    return "Your lease language is generally clear, with fewer CAM / NNN risk indicators. Most tenants in this range still find savings through targeted audits.";
+  }
+
+  if (score >= 50) {
+    return "Your lease contains some ambiguous or unfavorable clauses that often result in CAM or NNN overcharges. Audits frequently uncover recoverable costs in this range.";
+  }
+
+  return "Your lease shows significant risk indicators, unclear cost allocations, or missing protections. Tenants in this range commonly recover meaningful overcharges after audit.";
+}
 
 /* ================= PAGE ================= */
 
@@ -22,7 +54,7 @@ export default function SuccessPage() {
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
-  /* ---------- POLL AUDIT STATUS (NOT DOWNLOAD) ---------- */
+  /* ---------- POLL AUDIT STATUS ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
@@ -136,20 +168,46 @@ export default function SuccessPage() {
     );
   }
 
+  const score = data.analysis?.health?.score ?? null;
+  const riskLabel = deriveRiskLevel(score);
+
   /* ---------- COMPLETE ---------- */
   return (
-    <main className="mx-auto max-w-xl px-6 py-28 text-center">
-      <div className="mb-6 text-3xl">✅</div>
+    <main className="mx-auto max-w-xl px-6 py-24 space-y-8 text-center">
+      <div className="text-3xl">✅</div>
 
       <h1 className="text-2xl font-semibold">Payment successful</h1>
-      <p className="mt-3 text-sm text-gray-600">
-        Your CAM / NNN Audit Summary is ready.
-      </p>
 
+      {/* ---------- LEASE SCORE ---------- */}
+      <div className="rounded-xl border bg-gray-50 p-6 text-left space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-medium text-gray-600">Lease Health Score</p>
+          <span className="text-sm font-semibold">{riskLabel}</span>
+        </div>
+
+        <p className="text-4xl font-bold text-black">
+          {typeof score === "number" ? score : "—"}
+        </p>
+
+        <p className="text-sm text-gray-700">
+          {explainScore(score)}
+        </p>
+
+        {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
+          <p className="text-sm text-gray-600">
+            Estimated avoidable exposure over 12 months:{" "}
+            <span className="font-semibold">
+              ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
+            </span>
+          </p>
+        )}
+      </div>
+
+      {/* ---------- DOWNLOAD ---------- */}
       <button
         onClick={handleDownload}
         disabled={downloading}
-        className="mt-8 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        className="mt-4 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
       >
         {downloading ? "Preparing PDF…" : "Download PDF Audit"}
       </button>
