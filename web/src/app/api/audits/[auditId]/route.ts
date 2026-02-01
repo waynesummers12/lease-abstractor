@@ -1,17 +1,39 @@
-// src/app/api/audits/[auditId]/route.ts
+// web/src/app/api/audits/[auditId]/route.ts
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Audit lookup handled by worker — disabled in web
+ * Proxy audit fetch to worker
  */
-export async function GET() {
-  return NextResponse.json(
-    { error: "Audit lookup handled by worker" },
-    { status: 503 }
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ auditId: string }> }
+) {
+  const { auditId } = await context.params;
+
+  if (!auditId) {
+    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+  }
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/audit/${auditId}`,
+    {
+      headers: {
+        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+      },
+      cache: "no-store",
+    }
   );
+
+  if (!res.ok) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const data = await res.json();
+  return NextResponse.json(data);
 }
+
 
 
 

@@ -1,38 +1,35 @@
-import { NextRequest, NextResponse } from "next/server";
-
-/**
- * POST /api/audits
- * Initialize audit row
- */
+// web/src/app/api/audits/route.ts
+import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+/**
+ * Create audit via worker
+ */
+export async function POST(req: Request) {
   const body = await req.json();
   const { auditId } = body;
 
   if (!auditId) {
-    return NextResponse.json(
-      { error: "Missing auditId" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
   }
 
-  const supabase = getSupabaseServer();
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+      },
+      body: JSON.stringify({ auditId }),
+    }
+  );
 
-  const { error } = await supabase
-    .from("lease_audits")
-    .insert({
-      id: auditId,
-      status: "processing",
-    });
-
-  if (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+  if (!res.ok) {
+    return NextResponse.json({ error: "Failed to create audit" }, { status: 500 });
   }
 
   return NextResponse.json({ success: true, auditId });
 }
+
