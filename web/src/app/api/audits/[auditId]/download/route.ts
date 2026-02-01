@@ -3,17 +3,17 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-/**
- * Proxy PDF download to worker
- */
 export async function GET(
   _req: Request,
-  context: { params: Promise<{ auditId: string }> }
+  context: { params: { auditId: string } }
 ) {
-  const { auditId } = await context.params;
+  const { auditId } = context.params;
 
   if (!auditId) {
-    return NextResponse.json({ error: "Missing auditId" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing auditId" },
+      { status: 400 }
+    );
   }
 
   const res = await fetch(
@@ -34,8 +34,8 @@ export async function GET(
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+
+  return NextResponse.json({
+    url: data.signedUrl,
+  });
 }
-
-
-
