@@ -17,20 +17,24 @@ export default function UploadLeasePage() {
   setLoading(true);
 
   const auditId = crypto.randomUUID();
-  const objectPath = `leases/${auditId}.pdf`;
 
   try {
+    // 1️⃣ Create audit (proxy → worker)
+    const createRes = await fetch("/api/audits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ auditId }),
+    });
+
+    if (!createRes.ok) {
+      const text = await createRes.text();
+      throw new Error(text || "Failed to create audit");
+    }
+
+    // 2️⃣ Upload PDF (audit already exists)
     const formData = new FormData();
-
-    // File (keep as-is)
     formData.append("file", file);
-
-    // Send BOTH camelCase and snake_case (worker compatibility)
     formData.append("auditId", auditId);
-    formData.append("audit_id", auditId);
-
-    formData.append("objectPath", objectPath);
-    formData.append("object_path", objectPath);
 
     const ingestRes = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
@@ -48,6 +52,7 @@ export default function UploadLeasePage() {
       throw new Error(text || "Failed to upload lease");
     }
 
+    // 3️⃣ Review
     router.push(`/app/step-3-review?auditId=${auditId}`);
   } catch (err: any) {
     console.error("Upload failed:", err);
@@ -55,8 +60,6 @@ export default function UploadLeasePage() {
     setLoading(false);
   }
 }
-
-
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
