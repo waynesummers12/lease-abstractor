@@ -1,292 +1,144 @@
 "use client";
 
-import { runAuditPipeline } from "@/app/app/step-2-analysis/analysis.service";
-import { getSupabaseBrowser } from "@/app/_client/browser";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Analysis = {
-  tenant: string | null;
-  landlord: string | null;
-  premises: string | null;
-  lease_start: string | null;
-  lease_end: string | null;
-  term_months: number | null;
-  rent: {
-    base_rent: number | null;
-    frequency: "monthly" | "annual" | null;
-    escalation_type: "fixed_percent" | "fixed_amount" | "cpi" | "none";
-    escalation_value: number | null;
-    escalation_interval: "annual" | null;
-  };
-  rent_schedule?: {
-    year: number;
-    annual_rent: number;
-    monthly_rent: number;
-  }[];
-  cam_nnn?: {
-    monthly_amount: number | null;
-    annual_amount: number | null;
-    total_exposure: number | null;
-    is_uncapped: boolean;
-    reconciliation: boolean;
-    pro_rata: boolean;
-    includes_capex: boolean;
-    cam_cap_percent: number | null;
-    escalation_exposure: number | null;
-  };
-  health?: {
-    score: number;
-    flags: {
-      code: string;
-      label: string;
-      severity: "low" | "medium" | "high";
-      recommendation: string;
-      estimated_impact?: string;
-    }[];
-  };
   cam_total_avoidable_exposure?: number | null;
   exposure_range?: { low: number; high: number } | null;
   exposure_risk?: "low" | "medium" | "high" | null;
 };
-function formatDate(value?: string | null) {
-  if (!value) return "—";
-  const d = new Date(value);
-  if (isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString();
-}
 
-function formatMoney(value?: number | null) {
-  if (value == null || isNaN(value)) return "—";
-  return value.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
-}
-function formatEscalation(
-  type?: "fixed_percent" | "fixed_amount" | "cpi" | "none" | null,
-  value?: number | null,
-  interval?: "annual" | null
-) {
-  if (!type || type === "none") return "None";
+export default function Step3ReviewPage() {
+  const searchParams = useSearchParams();
+  const auditId = searchParams.get("auditId");
 
-  switch (type) {
-    case "fixed_percent":
-      return value != null
-        ? `${value}% ${interval ?? ""}`.trim()
-        : "Fixed %";
-
-    case "fixed_amount":
-      return value != null
-        ? `${formatMoney(value)} ${interval ?? ""}`.trim()
-        : "Fixed amount";
-
-    case "cpi":
-      return "CPI-based";
-
-    default:
-      return "—";
-  }
-}
-
-/* ---------- STYLES ---------- */
-
-const headerStyle: React.CSSProperties = {
-  marginBottom: 12,
-};
-
-const sectionStyle: React.CSSProperties = {
-  padding: 20,
-  borderRadius: 10,
-  border: "2px solid #16a34a",
-  background: "#f0fdf4",
-};
-
-const buttonStyle: React.CSSProperties = {
-  padding: "12px 16px",
-  borderRadius: 8,
-  border: "none",
-  color: "#ffffff",
-  fontWeight: 600,
-  fontSize: 14,
-};
-const exposureBoxStyle: React.CSSProperties = {
-  marginTop: 20,
-  padding: 20,
-  borderRadius: 12,
-  border: "2px solid #16a34a",
-  background: "#f0fdf4",
-};
-
-/* ---------- PAGE ---------- */
-
-export default function Step3ReviewClient() {
-  const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState("");
-  const [analysis, setAnalysis] = useState<any | null>(null);
-  const [animatedExposure, setAnimatedExposure] =
-    useState<number | null>(null);
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [auditId, setAuditId] = useState<string | null>(null);
-  const [totalAvoidableExposure, setTotalAvoidableExposure] =
-    useState<number | null>(null);
-  const [exposureRange, setExposureRange] =
-    useState<{ low: number; high: number } | null>(null);
-  const [exposureRiskLabel, setExposureRiskLabel] =
-    useState<string | null>(null);
 
-/* ---------- DERIVE EXPOSURE FROM ANALYSIS ---------- */
-const resultsRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!auditId) {
+      setError("Missing audit ID.");
+      setLoading(false);
+      return;
+    }
 
-async function handleUploadAndAnalyze() {
-  if (!file) return;
+    async function loadAnalysis() {
+      try {
+        const res = await fetch(`/api/audits/${auditId}`, {
+          cache: "no-store",
+        });
 
-  setStatus("Preparing audit…");
-  setAnalysis(null);
-
-  const newAuditId = crypto.randomUUID();
-  setAuditId(newAuditId);
-
-  try {
-    setStatus("Uploading lease…");
-
-    const pipelineResult = await runAuditPipeline(file, newAuditId);
-
-    setStatus("Finalizing analysis…");
-
-    // ✅ Primary path — pipeline already returned analysis
-if (pipelineResult && "analysis" in pipelineResult) {
-  setAnalysis(pipelineResult.analysis);
-} else {
-  // 🔁 Fallback: fetch once directly from API (non-fatal)
-
-      const res = await fetch(`/api/audits/${newAuditId}`, {
-        cache: "no-store",
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.analysis) {
-          setAnalysis(data.analysis);
+        if (!res.ok) {
+          throw new Error("Failed to load analysis");
         }
+
+        const data = await res.json();
+
+        if (!data?.analysis) {
+          throw new Error("Analysis not ready");
+        }
+
+        setAnalysis(data.analysis);
+      } catch (err: any) {
+        setError(err.message || "Unable to load analysis");
+      } finally {
+        setLoading(false);
       }
     }
 
-    setStatus("Analysis complete ✅");
+    loadAnalysis();
+  }, [auditId]);
 
-    setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  } catch (err: any) {
-    console.error("Analyze failed:", err);
-    setStatus(err?.message ?? "Unexpected error");
-  }
-}
+  async function handleCheckout() {
+    if (!auditId || isCheckingOut) return;
 
+    setIsCheckingOut(true);
 
-/* ---------- DERIVE + ANIMATE EXPOSURE FROM ANALYSIS ---------- */
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Lease-Worker-Key":
+              process.env.NEXT_PUBLIC_WORKER_KEY!,
+          },
+          body: JSON.stringify({ auditId }),
+        }
+      );
 
-useEffect(() => {
-  if (!analysis) {
-    setTotalAvoidableExposure(null);
-    setExposureRange(null);
-    setExposureRiskLabel(null);
-    setAnimatedExposure(null);
-    return;
-  }
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
 
-  const exposure =
-    typeof (analysis as any).cam_total_avoidable_exposure === "number"
-      ? (analysis as any).cam_total_avoidable_exposure
-      : typeof (analysis as any).avoidable_exposure === "number"
-      ? (analysis as any).avoidable_exposure
-      : null;
+      const data = await res.json();
+      if (!data?.url) throw new Error("Missing checkout URL");
 
-  setTotalAvoidableExposure(exposure);
-  setExposureRange((analysis as any).exposure_range ?? null);
-  setExposureRiskLabel(
-    typeof (analysis as any).exposure_risk === "string"
-      ? (analysis as any).exposure_risk.toLowerCase()
-      : typeof (analysis as any).risk_level === "string"
-      ? (analysis as any).risk_level.toLowerCase()
-      : null
-  );
-
-  if (exposure == null) {
-    setAnimatedExposure(null);
-    return;
-  }
-
-  // 🔢 Animate exposure
-  setAnimatedExposure(0);
-
-  setTimeout(() => {
-    resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 100);
-
-  let current = 0;
-  const step = Math.max(Math.floor(exposure / 40), 1);
-
-  const interval = setInterval(() => {
-    current += step;
-    if (current >= exposure) {
-      setAnimatedExposure(exposure);
-      clearInterval(interval);
-    } else {
-      setAnimatedExposure(current);
+      window.location.href = data.url;
+    } catch (err) {
+      console.error("Checkout failed", err);
+      setIsCheckingOut(false);
     }
-  }, 20);
-
-  return () => clearInterval(interval);
-}, [analysis]);
-
-async function handleCheckout() {
-  if (isCheckingOut || !auditId) return;
-
-  setIsCheckingOut(true);
-  setStatus("Redirecting to secure checkout…");
-
-  try {
-  if (analysis) {
-    sessionStorage.setItem(
-      "latest_analysis",
-      JSON.stringify(analysis)
-    );
   }
 
-  const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-  const workerKey = process.env.NEXT_PUBLIC_WORKER_KEY;
-
-  if (!workerUrl || !workerKey) {
-    throw new Error("Worker not configured");
+  if (loading) {
+    return <p className="p-8">Loading analysis…</p>;
   }
 
-  const res = await fetch(`${workerUrl}/checkout/create`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Lease-Worker-Key": workerKey,
-    },
-    body: JSON.stringify({ auditId }),
-  });
-
-  if (!res.ok) {
-    const text = await res.text(); // ⚠️ worker may not return JSON
-    console.error("Checkout create failed:", text);
-    throw new Error(text || "Checkout creation failed");
+  if (error) {
+    return <p className="p-8 text-red-600">{error}</p>;
   }
 
-  const data = await res.json();
+  const exposure = analysis?.cam_total_avoidable_exposure;
 
-  if (!data?.url) {
-    throw new Error("Missing checkout URL");
-  }
+  return (
+    <main className="mx-auto max-w-3xl px-6 py-24">
+      {/* GREEN BOX */}
+      <div className="rounded-2xl border-2 border-green-600 bg-green-50 p-8">
+        <p className="text-sm font-semibold text-green-700 uppercase">
+          Analysis complete
+        </p>
 
-  window.location.href = data.url;
-} catch (err: any) {
-  console.error("Checkout error:", err);
-  setStatus(err?.message ?? "Checkout failed. Please try again.");
-  setIsCheckingOut(false);
-}
+        <h1 className="mt-4 text-4xl font-bold">
+          Estimated Avoidable Exposure
+        </h1>
 
+        {exposure != null ? (
+          <p className="mt-4 text-5xl font-extrabold text-green-700">
+            ${exposure.toLocaleString()}
+          </p>
+        ) : (
+          <p className="mt-4 text-gray-600">
+            Exposure could not be calculated.
+          </p>
+        )}
+
+        {analysis?.exposure_range && (
+          <p className="mt-2 text-sm text-green-800">
+            Estimated range: $
+            {analysis.exposure_range.low.toLocaleString()} – $
+            {analysis.exposure_range.high.toLocaleString()}
+          </p>
+        )}
+
+        <button
+          onClick={handleCheckout}
+          disabled={isCheckingOut}
+          className="mt-8 inline-flex rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-50"
+        >
+          {isCheckingOut
+            ? "Opening secure checkout…"
+            : "Unlock full audit report →"}
+        </button>
+
+        <p className="mt-3 text-xs text-gray-600">
+          One-time payment. PDF delivered immediately after checkout.
+        </p>
+      </div>
+    </main>
+  );
 }
