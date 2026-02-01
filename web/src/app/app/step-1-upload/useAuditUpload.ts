@@ -4,21 +4,44 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export function useAuditUpload() {
-  async function uploadFile(file: File, auditId: string) {
-    const path = `leases/${auditId}.pdf`;
+  async function uploadAndIngest(file: File, auditId: string) {
+    const objectPath = `leases/${auditId}.pdf`;
 
-    const { error } = await supabase.storage
+    // 1️⃣ Upload to Supabase
+    const { error: uploadError } = await supabase.storage
       .from("leases")
-      .upload(path, file, {
+      .upload(objectPath, file, {
         contentType: "application/pdf",
         upsert: true,
       });
 
-    if (error) {
-      throw new Error(error.message);
+    if (uploadError) {
+      throw new Error(uploadError.message);
+    }
+
+    // 2️⃣ Trigger worker ingest
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Lease-Worker-Key":
+            process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: JSON.stringify({
+          auditId,
+          objectPath,
+        }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(await res.text());
     }
   }
 
-  return { uploadFile };
+  return { uploadAndIngest };
 }
+
 

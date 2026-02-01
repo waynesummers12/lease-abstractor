@@ -7,7 +7,7 @@ import { useAuditUpload } from "./useAuditUpload";
 
 export default function UploadLeasePage() {
   const router = useRouter();
-  const { uploadFile } = useAuditUpload(); // ✅ FIXED
+  const { uploadAndIngest } = useAuditUpload();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,21 +16,13 @@ export default function UploadLeasePage() {
     setError(null);
     setLoading(true);
 
-    const auditId = crypto.randomUUID(); // ✅ source of truth
+    const auditId = crypto.randomUUID();
 
     try {
-      // 1️⃣ upload lease to Supabase
-      await uploadFile(file, auditId);
+      await uploadAndIngest(file, auditId);
 
-      // 2️⃣ create audit record (needed for polling)
-      await fetch("/api/audits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId }),
-      });
-
-      // 3️⃣ go straight to review (polling happens there)
-      router.push(`/product/app/step-3-review?auditId=${auditId}`);
+      // ✅ GO STRAIGHT TO STEP-3 WITH STRING ID
+      router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: any) {
       console.error("Upload failed:", err);
       setError(err?.message ?? "Upload failed. Please try again.");
@@ -54,9 +46,7 @@ export default function UploadLeasePage() {
         <UploadForm onUpload={handleUpload} loading={loading} />
 
         {error && (
-          <p className="mt-4 text-sm text-red-600">
-            {error}
-          </p>
+          <p className="mt-4 text-sm text-red-600">{error}</p>
         )}
       </div>
     </main>
