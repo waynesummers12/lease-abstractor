@@ -7,35 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 type AuditResponse = {
   status: "unpaid" | "paid" | "complete";
-  audit_pdf_path?: string | null;
-  analysis: {
-    avoidable_exposure?: number;
-    tenant?: string | null;
-    risk_level?: string | null;
-    health_score?: number | null;
-    health?: {
-      score?: number | null;
-    };
-  } | null;
-};
-
-const deriveRiskLevel = (analysis: AuditResponse["analysis"]) => {
-  if (!analysis) return null;
-
-  if (analysis.risk_level) {
-    return analysis.risk_level.toUpperCase();
-  }
-
-  const score =
-    typeof analysis.health_score === "number"
-      ? analysis.health_score
-      : typeof analysis.health?.score === "number"
-      ? analysis.health.score
-      : null;
-
-  if (score === null) return null;
-
-  return score >= 75 ? "HIGH" : score >= 50 ? "MEDIUM" : "LOW";
+  analysis: any | null;
 };
 
 /* ================= PAGE ================= */
@@ -50,7 +22,7 @@ export default function SuccessPage() {
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
 
-  /* ---------- LOAD + POLL AUDIT STATUS ---------- */
+  /* ---------- POLL AUDIT STATUS (NOT DOWNLOAD) ---------- */
   useEffect(() => {
     if (!auditId) {
       setFatalError("Missing audit reference.");
@@ -62,25 +34,23 @@ export default function SuccessPage() {
 
     async function loadAudit() {
       try {
-        const res = await fetch(
-          `/api/audits/${auditId}`,
-          { cache: "no-store" }
-        );
+        const res = await fetch(`/api/audits/${auditId}`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           setFatalError("Audit not found.");
           return;
         }
 
-        const json: AuditResponse = await res.json();
+        const json = await res.json();
         setData(json);
 
-        // Paid but not complete → keep polling
-        if (json.status === "paid") {
+        if (json.status !== "complete") {
           pollTimer = setTimeout(loadAudit, 4000);
         }
       } catch (err) {
-        console.error("Failed to load audit", err);
+        console.error("Audit polling failed", err);
         setFatalError("Unable to load audit.");
       } finally {
         setLoading(false);
@@ -101,10 +71,9 @@ export default function SuccessPage() {
     try {
       setDownloading(true);
 
-      const res = await fetch(
-        `/api/audits/${auditId}/download`,
-        { cache: "no-store" }
-      );
+      const res = await fetch(`/api/audits/${auditId}/download`, {
+        cache: "no-store",
+      });
 
       if (!res.ok) {
         alert("Your PDF is still being prepared. Please try again shortly.");
@@ -155,8 +124,7 @@ export default function SuccessPage() {
     );
   }
 
-  /* ---------- PAID BUT PROCESSING ---------- */
-  if (data.status === "paid") {
+  if (data.status !== "complete") {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
         <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
@@ -174,7 +142,6 @@ export default function SuccessPage() {
       <div className="mb-6 text-3xl">✅</div>
 
       <h1 className="text-2xl font-semibold">Payment successful</h1>
-
       <p className="mt-3 text-sm text-gray-600">
         Your CAM / NNN Audit Summary is ready.
       </p>
@@ -186,22 +153,6 @@ export default function SuccessPage() {
       >
         {downloading ? "Preparing PDF…" : "Download PDF Audit"}
       </button>
-
-      <div className="mt-8 space-y-3 text-sm">
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline text-gray-700"
-        >
-          View all audits
-        </button>
-
-        <button
-          onClick={() => router.push("/product/app/dashboard")}
-          className="block mx-auto underline text-gray-500"
-        >
-          Return to app
-        </button>
-      </div>
     </main>
   );
 }
