@@ -36,19 +36,20 @@ export default function Header() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
         {/* Brand */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="SaveOnLease"
-            width={24}
-            height={44}
-            className="h-11 w-auto"
-            priority
-          />
-          <span className="text-lg font-light tracking-tight leading-none">
-            SaveOnLease
-          </span>
-        </Link>
+       <Link href="/marketing" className="flex items-center gap-2">
+      <Image
+    src="/logo.png"
+    alt="SaveOnLease"
+    width={24}
+    height={44}
+    className="h-11 w-auto"
+    priority
+     />
+     <span className="text-lg font-light tracking-tight leading-none">
+    SaveOnLease
+  </span>
+</Link>
+
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm relative">
