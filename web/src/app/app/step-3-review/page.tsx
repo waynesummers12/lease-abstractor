@@ -137,9 +137,36 @@ export default function Step3ReviewPage() {
         </div>
       )}
 
-      <button className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800">
-        Get Full Audit PDF
-      </button>
+      <button
+  onClick={async () => {
+    if (!auditId) return;
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Lease-Worker-Key":
+            process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: JSON.stringify({ auditId }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (data?.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Failed to start checkout");
+    }
+  }}
+  className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+>
+  Get Full Audit PDF
+</button>
+
     </main>
   );
 }
