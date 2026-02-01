@@ -11,27 +11,27 @@ export default function UploadLeasePage() {
   const [error, setError] = useState<string | null>(null);
 
   async function handleUpload(file: File) {
-    setLoading(true);
-    setError(null);
+  setError(null);
+  setLoading(true);
 
-    const auditId = crypto.randomUUID();
+  const auditId = crypto.randomUUID();
 
-    try {
-      const result = await runAuditPipeline(file, auditId);
+  try {
+    // 1) Upload + trigger ingest
+    await uploadFile(file, auditId);
 
-      if (!result.success) {
-        throw new Error(result.error ?? "Audit failed");
-      }
-
-      // ✅ STRING auditId ONLY
-      router.push(`/product/app/step-3-review?auditId=${auditId}`);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message ?? "Upload failed");
-    } finally {
-      setLoading(false);
-    }
+    // 2) Immediately go to Step-3
+    router.push(
+      `/product/app/step-3-review?auditId=${auditId}`
+    );
+  } catch (err: any) {
+    console.error("Upload failed:", err);
+    setError(err?.message ?? "Upload failed. Please try again.");
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
