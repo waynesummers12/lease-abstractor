@@ -82,7 +82,10 @@ export default function UploadLeasePage() {
       setUploading(false);
     }
   }
-
+// =======================================================
+// ⛔ DO NOT MODIFY ABOVE THIS LINE ⛔
+// Only edit JSX BELOW the return() statement.
+// =======================================================
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
       <div className="mb-12 text-center">
@@ -94,6 +97,11 @@ export default function UploadLeasePage() {
           Upload your commercial lease PDF to identify CAM & NNN risks,
           hidden fees, and overcharges.
         </p>
+        
+        <p className="mt-4 text-base text-gray-500">
+        We run your PDF through our audit pipeline and estimate what you could
+         recover over the next 12 months.
+         </p>
 
         <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
           <div>✔ CAM & NNN overcharges</div>
