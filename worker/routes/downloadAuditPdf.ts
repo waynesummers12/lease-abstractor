@@ -6,18 +6,11 @@
  * - Deno + Oak
  *
  * Responsibilities:
- * - Business logic
- * - Supabase access
- * - PDF processing
- * - Stripe operations
+ * - Fetch completed audit
+ * - Generate signed PDF URL
  *
- * Forbidden:
- * - Frontend imports
- * - Next.js APIs
- *
- * This file must NEVER be imported by frontend code.
+ * This route is called ONLY by the web API proxy.
  */
-
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
@@ -25,43 +18,50 @@ import { supabase } from "../lib/supabase.ts";
 const router = new Router();
 
 /**
- * GET /api/audits/:auditId/download
+ * GET /downloadAuditPdf/:auditId
  */
-router.get("/api/audits/:auditId/download", async (ctx) => {
+router.get("/downloadAuditPdf/:auditId", async (ctx) => {
   const auditId = ctx.params.auditId;
 
   if (!auditId) {
     ctx.response.status = 400;
-    ctx.response.body = { error: "Missing audit id" };
+    ctx.response.body = { error: "Missing auditId" };
     return;
   }
 
   const { data, error } = await supabase
     .from("lease_audits")
-    .select("audit_pdf_path")
+    .select("status, audit_pdf_path")
     .eq("id", auditId)
-    .single();
+    .maybeSingle();
 
-  if (error || !data?.audit_pdf_path) {
+  if (
+    error ||
+    !data ||
+    data.status !== "complete" ||
+    !data.audit_pdf_path
+  ) {
     ctx.response.status = 404;
     ctx.response.body = { error: "PDF not ready" };
     return;
   }
 
-  // Stored value example: audit-pdfs/<auditId>.pdf has to be leases
-  const filePath = data.audit_pdf_path.replace(/^leases\//, "");
+  // Stored value is "<auditId>.pdf"
+  const fileName = data.audit_pdf_path;
 
-  const { data: signed, error: signedError } = await supabase.storage
-    .from("audit-pdfs")
-    .createSignedUrl(filePath, 60 * 10);
+  const { data: signed, error: signedError } =
+    await supabase.storage
+      .from("audit-pdfs")
+      .createSignedUrl(fileName, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
-    console.error("❌ Signed URL error:", signedError);
+    console.error("❌ Failed to sign PDF:", signedError);
     ctx.response.status = 500;
     ctx.response.body = { error: "Failed to create signed URL" };
     return;
   }
 
+  ctx.response.status = 200;
   ctx.response.body = { url: signed.signedUrl };
 });
 
