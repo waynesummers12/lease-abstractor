@@ -20,6 +20,8 @@
  */
 
 
+"use client";
+
 export const dynamic = "force-dynamic";
 
 import { useState } from "react";
@@ -28,82 +30,93 @@ import UploadForm from "./UploadForm";
 
 export default function UploadLeasePage() {
   const router = useRouter();
+
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false); // ✅ FIXED
 
   async function handleUpload(file: File) {
-  setError(null);
-  setUploading(true);
+    setError(null);
+    setUploading(true);
 
-  const auditId = crypto.randomUUID();
-  const objectPath = `leases/${auditId}.pdf`;
+    const auditId = crypto.randomUUID();
+    const objectPath = `leases/${auditId}.pdf`;
 
-  try {
-    // 1️⃣ Create audit row
-    const createRes = await fetch("/api/audits", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ auditId, objectPath }),
-    });
-
-    if (!createRes.ok) {
-      let message = "Failed to create audit";
-
-      try {
-        const contentType = createRes.headers.get("content-type");
-        if (contentType?.includes("application/json")) {
-          const json = await createRes.json();
-          message = json?.error || message;
-        }
-      } catch {
-        // swallow
-      }
-
-      setError(message);
-      return; // 🔴 DO NOT THROW
-    }
-
-    // 2️⃣ Upload lease PDF
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("auditId", auditId);
-    formData.append("objectPath", objectPath);
-
-    const ingestRes = await fetch(
-      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-      {
+    try {
+      // 1️⃣ Create audit row
+      const createRes = await fetch("/api/audits", {
         method: "POST",
-        headers: {
-          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-        },
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auditId, objectPath }),
+      });
+
+      if (!createRes.ok) {
+        let message = "Failed to create audit";
+
+        try {
+          const contentType = createRes.headers.get("content-type");
+          if (contentType?.includes("application/json")) {
+            const json = await createRes.json();
+            message = json?.error || message;
+          }
+        } catch {
+          // swallow
+        }
+
+        setError(message);
+        return; // ❗ DO NOT THROW
       }
-    );
 
-    if (!ingestRes.ok) {
-      let message = "Failed to upload lease";
+      // 2️⃣ Upload lease PDF
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("auditId", auditId);
+      formData.append("objectPath", objectPath);
 
-      try {
-        const text = await ingestRes.text();
-        if (text) message = text;
-      } catch {
-        // swallow
+      const ingestRes = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+        {
+          method: "POST",
+          headers: {
+            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+          },
+          body: formData,
+        }
+      );
+
+      if (!ingestRes.ok) {
+        let message = "Failed to upload lease";
+
+        try {
+          const text = await ingestRes.text();
+          if (text) message = text;
+        } catch {
+          // swallow
+        }
+
+        setError(message);
+        return; // ❗ DO NOT THROW
       }
 
-      setError(message);
-      return; // 🔴 DO NOT THROW
+      // 3️⃣ Redirect (green box path)
+      router.push(`/success?auditId=${auditId}`);
+    } catch (err) {
+      console.error(err);
+      setError("Unexpected error occurred");
+    } finally {
+      // 🔥 GUARANTEED to run
+      setUploading(false);
     }
-
-    // 3️⃣ Redirect (this was never reached before)
-    router.push(`/success?auditId=${auditId}`);
-  } catch (err) {
-    console.error(err);
-    setError("Unexpected error occurred");
-  } finally {
-    // 🔥 ALWAYS runs now
-    setUploading(false);
   }
+
+  return (
+    <UploadForm
+      onUpload={handleUpload}
+      uploading={uploading}
+      error={error}
+    />
+  );
 }
+
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
