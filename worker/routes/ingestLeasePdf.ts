@@ -86,14 +86,16 @@ router.post("/pdf", async (ctx) => {
 
     // 4️⃣ Persist audit + analysis (✅ CORRECT COLUMN)
     const { error: dbError } = await supabase
-      .from("lease_audits")
-      .upsert({
-        id: auditId,
-        audit_pdf_path: `leases/${objectPath}`,
-        analysis: normalized,
-        status: "analyzed",
-        created_at: new Date().toISOString(),
-      });
+  .from("lease_audits")
+  .upsert({
+    id: auditId,
+    // objectPath already includes "leases/..."
+    audit_pdf_path: objectPath,
+    analysis: normalized,
+    status: "analyzed",
+    created_at: new Date().toISOString(),
+  });
+
 
     if (dbError) {
       console.error("❌ DB update failed:", dbError);
