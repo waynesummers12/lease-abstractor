@@ -19,9 +19,6 @@
  * Violation = production regression
  */
 
-
-"use client";
-
 export const dynamic = "force-dynamic";
 
 import { useState } from "react";
@@ -32,7 +29,7 @@ export default function UploadLeasePage() {
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false); // ✅ FIXED
+  const [uploading, setUploading] = useState(false);
 
   async function handleUpload(file: File) {
     setError(null);
@@ -58,12 +55,10 @@ export default function UploadLeasePage() {
             const json = await createRes.json();
             message = json?.error || message;
           }
-        } catch {
-          // swallow
-        }
+        } catch {}
 
         setError(message);
-        return; // ❗ DO NOT THROW
+        return;
       }
 
       // 2️⃣ Upload lease PDF
@@ -89,34 +84,21 @@ export default function UploadLeasePage() {
         try {
           const text = await ingestRes.text();
           if (text) message = text;
-        } catch {
-          // swallow
-        }
+        } catch {}
 
         setError(message);
-        return; // ❗ DO NOT THROW
+        return;
       }
 
-      // 3️⃣ Redirect (green box path)
+      // 3️⃣ Redirect to success (green box page)
       router.push(`/success?auditId=${auditId}`);
     } catch (err) {
       console.error(err);
       setError("Unexpected error occurred");
     } finally {
-      // 🔥 GUARANTEED to run
       setUploading(false);
     }
   }
-
-  return (
-    <UploadForm
-      onUpload={handleUpload}
-      uploading={uploading}
-      error={error}
-    />
-  );
-}
-
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
@@ -144,11 +126,11 @@ export default function UploadLeasePage() {
       </div>
 
       <div className="rounded-2xl border bg-white p-8 shadow-sm">
-        <UploadForm onUpload={handleUpload} loading={loading} />
-
-        {error && (
-          <p className="mt-4 text-sm text-red-600">{error}</p>
-        )}
+        <UploadForm
+          onUpload={handleUpload}
+          uploading={uploading}
+          error={error}
+        />
       </div>
     </main>
   );
