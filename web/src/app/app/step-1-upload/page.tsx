@@ -86,11 +86,13 @@ export default function UploadLeasePage() {
     }
 
     // 3️⃣ Review
-    router.push(`/app/step-3-review?auditId=${auditId}`);
-  } catch (err: any) {
-    console.error("Upload failed:", err);
-    setError(err?.message ?? "Upload failed. Please try again.");
-    setLoading(false);
+    router.push(`/success?auditId=${auditId}`);
+  } catch (err) {
+    console.error(err);
+    setError("Unexpected error occurred");
+  } finally {
+    // 🔥 THIS IS WHY IT WAS STUCK BEFORE
+    setUploading(false);
   }
 }
 
