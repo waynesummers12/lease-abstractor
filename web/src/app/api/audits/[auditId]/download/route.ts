@@ -56,5 +56,14 @@ export async function GET(
   }
 
   const data = await res.json();
+
+  // Expecting: { url: string }
+  if (!data?.url) {
+    return NextResponse.json(
+      { error: "Invalid download response" },
+      { status: 500 }
+    );
+  }
+
   return NextResponse.json(data);
 }
