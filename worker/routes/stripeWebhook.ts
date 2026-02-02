@@ -14,8 +14,6 @@
  * Violations break fulfillment silently.
  */
 
-
-
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
@@ -35,65 +33,64 @@ if (!endpointSecret && !isLocal) {
 
 const router = new Router();
 
-
 router.post("/stripe/webhook", async (ctx) => {
   console.log("🔥 Stripe webhook hit");
 
+  /* --------------------------------------------------
+     READ RAW BODY (OAK v12 – CORRECT)
+  -------------------------------------------------- */
+  const body = ctx.request.body({ type: "text" });
+  const rawBody = await body.value;
+
+  if (!rawBody || typeof rawBody !== "string") {
+    ctx.throw(400, "Empty or invalid webhook body");
+  }
+
+  // ✅ DECLARE ONCE
   let event: Stripe.Event;
 
-/* --------------------------------------------------
-   READ RAW BODY (OAK v12 – CORRECT)
--------------------------------------------------- */
-const body = ctx.request.body({ type: "text" });
-const rawBody = await body.value;
-
-if (!rawBody || typeof rawBody !== "string") {
-  ctx.throw(400, "Empty or invalid webhook body");
-}
   /* --------------------------------------------------
      LOCAL DEV MODE — TRUST STRIPE CLI
-     -------------------------------------------------- */
+  -------------------------------------------------- */
   if (isLocal) {
     console.log("⚠️ DEV MODE: skipping Stripe signature verification");
 
     try {
-      event =
-        typeof rawBody === "string"
-          ? JSON.parse(rawBody)
-          : (rawBody as Stripe.Event);
+      event = JSON.parse(rawBody) as Stripe.Event;
     } catch (err) {
       console.error("❌ Failed to parse webhook body (local)", err);
       ctx.response.status = 400;
       return;
     }
   } else {
-/* --------------------------------------------------
-   PRODUCTION — VERIFY SIGNATURE
--------------------------------------------------- */
-const sig = ctx.request.headers.get("stripe-signature");
-if (typeof sig !== "string") {
-  ctx.response.status = 400;
-  ctx.response.body = "Missing stripe-signature";
-  return;
-}
+    /* --------------------------------------------------
+       PRODUCTION — VERIFY SIGNATURE (DENO SAFE)
+    -------------------------------------------------- */
+    const sig = ctx.request.headers.get("stripe-signature");
 
-try {
-  event = stripe.webhooks.constructEvent(
-    rawBody,
-    sig,
-    endpointSecret as string
-  );
-} catch (err) {
-  console.error("❌ Stripe signature verification failed", err);
-  ctx.response.status = 400;
-  ctx.response.body = "Webhook Error";
-  return;
-}
+    if (!sig || typeof sig !== "string") {
+      ctx.response.status = 400;
+      ctx.response.body = "Missing stripe-signature";
+      return;
+    }
+
+    try {
+      event = await stripe.webhooks.constructEventAsync(
+        rawBody,
+        sig,
+        endpointSecret as string
+      );
+    } catch (err) {
+      console.error("❌ Stripe signature verification failed:", err);
+      ctx.response.status = 400;
+      ctx.response.body = "Webhook Error";
+      return;
+    }
   }
 
   /* --------------------------------------------------
      EVENT HANDLING
-     -------------------------------------------------- */
+  -------------------------------------------------- */
   console.log("✅ Stripe event received:", event.type);
 
   if (event.type === "checkout.session.completed") {
@@ -113,7 +110,7 @@ try {
 
     /* --------------------------------------------------
        1) MARK AUDIT PAID
-       -------------------------------------------------- */
+    -------------------------------------------------- */
     await supabase
       .from("lease_audits")
       .update({
@@ -127,7 +124,7 @@ try {
 
     /* --------------------------------------------------
        2) FETCH ANALYSIS
-       -------------------------------------------------- */
+    -------------------------------------------------- */
     const { data, error } = await supabase
       .from("lease_audits")
       .select("analysis")
@@ -141,63 +138,54 @@ try {
     }
 
     /* --------------------------------------------------
-   3) GENERATE + UPLOAD PDF
--------------------------------------------------- */
-console.log("🧠 Generating audit PDF…");
+       3) GENERATE + UPLOAD PDF
+    -------------------------------------------------- */
+    console.log("🧠 Generating audit PDF…");
 
-const pdfBytes = await generateAuditPdf(data.analysis);
-console.log("📦 PDF bytes length:", pdfBytes?.length);
+    const pdfBytes = await generateAuditPdf(data.analysis);
 
-if (!pdfBytes || pdfBytes.length === 0) {
-  console.error("❌ PDF generation failed:", auditId);
-  ctx.response.status = 200;
-  return;
-}
+    if (!pdfBytes || pdfBytes.length === 0) {
+      console.error("❌ PDF generation failed:", auditId);
+      ctx.response.status = 200;
+      return;
+    }
 
-const fileName = `${auditId}.pdf`;
-const filePath = `audit-pdfs/${fileName}`;
+    const fileName = `${auditId}.pdf`;
 
-console.log("📄 Uploading PDF:", filePath);
+    const { error: uploadError } = await supabase.storage
+      .from("audit-pdfs")
+      .upload(fileName, pdfBytes, {
+        contentType: "application/pdf",
+        upsert: true,
+      });
 
-const { error: uploadError } = await supabase.storage
-  .from("audit-pdfs")
-  .upload(fileName, pdfBytes, {
-    contentType: "application/pdf",
-    upsert: true,
-  });
-
-console.log("📤 Upload result:", uploadError ?? "success");
-
-if (uploadError) {
-  console.error("❌ PDF upload failed:", uploadError);
-  ctx.response.status = 200;
-  return;
-}
+    if (uploadError) {
+      console.error("❌ PDF upload failed:", uploadError);
+      ctx.response.status = 200;
+      return;
+    }
 
     /* --------------------------------------------------
-   4) SAVE PATH + MARK COMPLETE  ✅ CRITICAL FIX
--------------------------------------------------- */
-const storedPath = `${auditId}.pdf`;
+       4) SAVE PATH + MARK COMPLETE
+    -------------------------------------------------- */
+    await supabase
+      .from("lease_audits")
+      .update({
+        status: "complete",
+        audit_pdf_path: fileName,
+        object_path: fileName,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("id", auditId);
 
-await supabase
-  .from("lease_audits")
-  .update({
-    status: "complete",
-    audit_pdf_path: storedPath,
-    object_path: storedPath, // ✅ SUPPORT BOTH FIELDS
-    completed_at: new Date().toISOString(),
-  })
-  .eq("id", auditId);
-
-console.log("✅ Audit marked complete with PDF path:", storedPath);
-
+    console.log("✅ Audit marked complete:", auditId);
 
     /* --------------------------------------------------
        5) CREATE SIGNED URL + EMAIL
-       -------------------------------------------------- */
+    -------------------------------------------------- */
     const { data: signed, error: signedError } = await supabase.storage
       .from("audit-pdfs")
-      .createSignedUrl(`${auditId}.pdf`, 60 * 10);
+      .createSignedUrl(fileName, 60 * 10);
 
     if (signedError || !signed?.signedUrl) {
       console.error("❌ Failed to create signed URL:", signedError);
@@ -219,6 +207,6 @@ console.log("✅ Audit marked complete with PDF path:", storedPath);
 
   ctx.response.status = 200;
   ctx.response.body = { received: true };
-  });
+});
 
 export default router;
