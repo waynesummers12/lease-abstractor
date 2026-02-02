@@ -33,13 +33,13 @@ export default function UploadLeasePage() {
 
   async function handleUpload(file: File) {
   setError(null);
-  setLoading(true);
+  setUploading(true);
 
   const auditId = crypto.randomUUID();
-  const objectPath = `leases/${auditId}.pdf`; // ✅ REQUIRED
+  const objectPath = `leases/${auditId}.pdf`;
 
   try {
-    // 1️⃣ Create audit row (web → API → worker)
+    // 1️⃣ Create audit row
     const createRes = await fetch("/api/audits", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -47,27 +47,27 @@ export default function UploadLeasePage() {
     });
 
     if (!createRes.ok) {
-  let message = "Failed to create audit";
+      let message = "Failed to create audit";
 
-  try {
-    const contentType = createRes.headers.get("content-type");
-    if (contentType?.includes("application/json")) {
-      const json = await createRes.json();
-      message = json?.error || message;
+      try {
+        const contentType = createRes.headers.get("content-type");
+        if (contentType?.includes("application/json")) {
+          const json = await createRes.json();
+          message = json?.error || message;
+        }
+      } catch {
+        // swallow
+      }
+
+      setError(message);
+      return; // 🔴 DO NOT THROW
     }
-  } catch {
-    // swallow — fallback message is fine
-  }
 
-  throw new Error(message);
-}
-
-
-    // 2️⃣ Upload lease PDF to worker
+    // 2️⃣ Upload lease PDF
     const formData = new FormData();
     formData.append("file", file);
     formData.append("auditId", auditId);
-    formData.append("objectPath", objectPath); // ✅ REQUIRED
+    formData.append("objectPath", objectPath);
 
     const ingestRes = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
@@ -81,21 +81,29 @@ export default function UploadLeasePage() {
     );
 
     if (!ingestRes.ok) {
-      const text = await ingestRes.text();
-      throw new Error(text || "Failed to upload lease");
+      let message = "Failed to upload lease";
+
+      try {
+        const text = await ingestRes.text();
+        if (text) message = text;
+      } catch {
+        // swallow
+      }
+
+      setError(message);
+      return; // 🔴 DO NOT THROW
     }
 
-    // 3️⃣ Review
+    // 3️⃣ Redirect (this was never reached before)
     router.push(`/success?auditId=${auditId}`);
   } catch (err) {
     console.error(err);
     setError("Unexpected error occurred");
   } finally {
-    // 🔥 THIS IS WHY IT WAS STUCK BEFORE
+    // 🔥 ALWAYS runs now
     setUploading(false);
   }
 }
-
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
