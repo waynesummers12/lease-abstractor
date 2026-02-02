@@ -1,1 +1,6 @@
-export { default } from "./app/step-1-upload/page";
+import { redirect } from "next/navigation";
+
+export default function HomePage() {
+  redirect("/marketing");
+}
+
