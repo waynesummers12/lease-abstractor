@@ -128,35 +128,38 @@ if (status !== "complete") {
 
   /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
-    if (!auditId) return;
+  if (!auditId) return;
 
-    try {
-      setDownloading(true);
+  try {
+    setDownloading(true);
 
-      const res = await fetch(`/api/audits/${auditId}/download`, {
-        cache: "no-store",
-      });
+    const res = await fetch(`/api/audits/${auditId}/download`, {
+      cache: "no-store",
+    });
 
-      if (!res.ok) {
-        alert("Your PDF is still being prepared. Please try again shortly.");
-        return;
-      }
-
-      const { url } = await res.json();
-
-      if (!url) {
-        alert("Failed to generate download link.");
-        return;
-      }
-
-      window.location.href = url;
-    } catch (err) {
-      console.error("PDF download failed", err);
-      alert("Failed to download PDF.");
-    } finally {
-      setDownloading(false);
+    if (!res.ok) {
+      alert("Your PDF is still being prepared. Please try again shortly.");
+      return;
     }
+
+    const data = await res.json();
+    const url = data?.url;
+
+    // HARD GUARD — prevents Next.js from hijacking navigation
+    if (!url || typeof url !== "string" || !url.startsWith("http")) {
+      alert("Your PDF is still being prepared. Please try again shortly.");
+      return;
+    }
+
+    // ✅ OPEN IN NEW TAB — DO NOT use window.location.href
+    window.open(url, "_blank", "noopener,noreferrer");
+  } catch (err) {
+    console.error("PDF download failed", err);
+    alert("Failed to download PDF.");
+  } finally {
+    setDownloading(false);
   }
+}
 
   /* ================= UI ================= */
 
