@@ -1,16 +1,22 @@
 // web/src/app/api/audits/[auditId]/download/route.ts
+
+import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+
 /**
  * DOWNLOAD API ROUTE — SAVEONLEASE V1 (LOCKED)
  *
  * Purpose:
  * - Generate a signed PDF download URL
- * - Proxy requests to the Worker only
+ * - Thin proxy to Worker only
  *
  * Rules (NON-NEGOTIABLE):
+ * - params MUST be awaited (Next.js App Router)
  * - No React imports
  * - No Supabase client usage
- * - params MUST be awaited (Next.js App Router requirement)
- * - No business logic here
+ * - No Stripe SDK usage
+ * - No business logic
  *
  * Input:
  * - auditId (route param)
@@ -19,16 +25,11 @@
  * - { url: string }
  */
 
-
-import { NextResponse } from "next/server";
-
-export const dynamic = "force-dynamic";
-
-export async function GET(//Has to be in all routes
-  _req: Request,//Has to be in all routes
-  context: { params: Promise<{ auditId: string }> }//Has to be in all routes
-) {//Has to be in all routes
-  const { auditId } = await context.params;//Has to be in all routes
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ auditId: string }> }
+) {
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
