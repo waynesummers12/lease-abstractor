@@ -217,33 +217,40 @@ return (
     <h1 className="text-2xl font-semibold">Payment successful</h1>
 
     {/* ---------- LEASE SUMMARY ---------- */}
-    <div className="rounded-xl border bg-gray-50 p-6 text-left space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-600">
-          Lease Health Score
-        </p>
-        <span className="text-sm font-semibold">
-          {riskLabel}
-        </span>
-      </div>
+<div className="rounded-xl border bg-gray-50 p-6 text-left space-y-4">
+  <div className="flex items-center justify-between">
+    <p className="text-sm font-medium text-gray-600">
+      Lease Health Score
+    </p>
+    <span className="text-sm font-semibold">
+      {riskLabel}
+    </span>
+  </div>
 
-      <p className="text-4xl font-bold text-black">
-        {typeof score === "number" ? score : "—"}
-      </p>
+  <p className="text-4xl font-bold text-black">
+    {typeof score === "number" ? score : "—"}
+  </p>
 
-      <p className="text-sm text-gray-700">
-        {explainScore(score)}
-      </p>
+  <p className="text-sm text-gray-700">
+    {explainScore(score)}
+  </p>
 
-      {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
-        <p className="text-sm text-gray-600">
-          Estimated avoidable exposure over 12 months:{" "}
-          <span className="font-semibold">
-            ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
-          </span>
-        </p>
-      )}
-    </div>
+  {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
+    <p className="text-sm text-gray-600">
+      Estimated avoidable exposure over 12 months:{" "}
+      <span className="font-semibold">
+        ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
+      </span>
+    </p>
+  )}
+
+  {/* ---------- NEXT STEPS ---------- */}
+  <p className="pt-2 text-sm text-gray-600">
+    Even low-risk leases often contain recoverable CAM or NNN charges.
+    A full audit highlights where landlords commonly over-allocate costs.
+  </p>
+</div>
+
 
     {/* ---------- ACTIONS ---------- */}
     <div className="space-y-3">
