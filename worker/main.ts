@@ -14,24 +14,31 @@ const app = new Application();
 
 /* -------------------------------------------------
    STRIPE WEBHOOK
-   MUST be registered BEFORE any body/CORS middleware
+   MUST be registered BEFORE CORS / body parsing
 -------------------------------------------------- */
 app.use(stripeWebhookRouter.routes());
 app.use(stripeWebhookRouter.allowedMethods());
 
 /* -------------------------------------------------
-   CORS / COMMON MIDDLEWARE
+   CORS (REQUIRED FOR VERCEL → RENDER)
 -------------------------------------------------- */
 app.use(async (ctx, next) => {
   const origin = ctx.request.headers.get("origin");
 
-  if (origin === "http://localhost:3000") {
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://lease-abstractor-livid.vercel.app",
+    "https://saveonlease.com",
+    "https://www.saveonlease.com",
+  ];
+
+  if (origin && allowedOrigins.includes(origin)) {
     ctx.response.headers.set("Access-Control-Allow-Origin", origin);
   }
 
   ctx.response.headers.set(
     "Access-Control-Allow-Headers",
-    "Content-Type, X-Lease-Worker-Key, X-Worker-Key, x-worker-key, stripe-signature"
+    "Content-Type, Authorization, X-Lease-Worker-Key, stripe-signature"
   );
 
   ctx.response.headers.set(
