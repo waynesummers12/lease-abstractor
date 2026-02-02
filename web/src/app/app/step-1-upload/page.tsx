@@ -32,73 +32,55 @@ export default function UploadLeasePage() {
   const [uploading, setUploading] = useState(false);
 
   async function handleUpload(file: File) {
-    setError(null);
-    setUploading(true);
+  setError(null);
+  setLoading(true);
 
-    const auditId = crypto.randomUUID();
-    const objectPath = `leases/${auditId}.pdf`;
+  const auditId = crypto.randomUUID();
+  const objectPath = `leases/${auditId}.pdf`; // ✅ REQUIRED
 
-    try {
-      // 1️⃣ Create audit row
-      const createRes = await fetch("/api/audits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId, objectPath }),
-      });
+  try {
+    // 1️⃣ Create audit row (web → API → worker)
+    const createRes = await fetch("/api/audits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ auditId, objectPath }),
+    });
 
-      if (!createRes.ok) {
-        let message = "Failed to create audit";
-
-        try {
-          const contentType = createRes.headers.get("content-type");
-          if (contentType?.includes("application/json")) {
-            const json = await createRes.json();
-            message = json?.error || message;
-          }
-        } catch {}
-
-        setError(message);
-        return;
-      }
-
-      // 2️⃣ Upload lease PDF
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("auditId", auditId);
-      formData.append("objectPath", objectPath);
-
-      const ingestRes = await fetch(
-        `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
-        {
-          method: "POST",
-          headers: {
-            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
-          },
-          body: formData,
-        }
-      );
-
-      if (!ingestRes.ok) {
-        let message = "Failed to upload lease";
-
-        try {
-          const text = await ingestRes.text();
-          if (text) message = text;
-        } catch {}
-
-        setError(message);
-        return;
-      }
-
-      // 3️⃣ Redirect to success (green box page)
-      router.push(`/success?auditId=${auditId}`);
-    } catch (err) {
-      console.error(err);
-      setError("Unexpected error occurred");
-    } finally {
-      setUploading(false);
+    if (!createRes.ok) {
+      const text = await createRes.text();
+      throw new Error(text || "Failed to create audit");
     }
+
+    // 2️⃣ Upload lease PDF to worker
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("auditId", auditId);
+    formData.append("objectPath", objectPath); // ✅ REQUIRED
+
+    const ingestRes = await fetch(
+      `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+      {
+        method: "POST",
+        headers: {
+          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        },
+        body: formData,
+      }
+    );
+
+    if (!ingestRes.ok) {
+      const text = await ingestRes.text();
+      throw new Error(text || "Failed to upload lease");
+    }
+
+    // 3️⃣ Review
+    router.push(`/app/step-3-review?auditId=${auditId}`);
+  } catch (err: any) {
+    console.error("Upload failed:", err);
+    setError(err?.message ?? "Upload failed. Please try again.");
+    setLoading(false);
   }
+}
 
   return (
     <main className="mx-auto max-w-4xl px-6 py-24">
