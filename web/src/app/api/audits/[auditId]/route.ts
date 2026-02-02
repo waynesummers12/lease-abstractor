@@ -1,41 +1,37 @@
 // web/src/app/api/audits/[auditId]/route.ts
-/**
- * NEXT.JS API ROUTE — SAVEONLEASE V1 (LOCKED)
- *
- * Purpose:
- * - Thin proxy only
- * - No business logic
- * - No Supabase queries
- *
- * CRITICAL RULES:
- * - params are ASYNC → must be awaited
- * - Always use dynamic = "force-dynamic"
- *
- * Allowed:
- * - fetch() to Worker
- * - Header forwarding
- *
- * Forbidden:
- * - Supabase client
- * - Stripe SDK
- * export async function GET(
-  _req: Request,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
-}
- */
-
 
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(//Has to be in all routes 
-  _req: Request,//Has to be in all routes
-  context: { params: Promise<{ auditId: string }> }//Has to be in all routes
-) {//Has to be in all routes
-  const { auditId } = await context.params;//Has to be in all routes
+/**
+ * NEXT.JS API ROUTE — SAVEONLEASE V1 (LOCKED)
+ *
+ * Purpose:
+ * - Fetch a single audit by ID
+ * - Thin proxy to Worker only
+ *
+ * CRITICAL RULES (NON-NEGOTIABLE):
+ * - params are ASYNC → MUST be awaited
+ * - No business logic
+ * - No Supabase client usage
+ * - No Stripe SDK usage
+ *
+ * Allowed:
+ * - fetch() to Worker
+ * - Header forwarding only
+ *
+ * Forbidden:
+ * - React imports
+ * - Database access
+ * - Any transformation logic
+ */
+
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ auditId: string }> }
+) {
+  const { auditId } = await context.params;
 
   if (!auditId) {
     return NextResponse.json(
@@ -64,4 +60,3 @@ export async function GET(//Has to be in all routes
   const audit = await res.json();
   return NextResponse.json(audit);
 }
-
