@@ -26,6 +26,25 @@ type Props = {
 };
 
 export default function UploadForm({ onUpload, loading }: Props) {
+
+/* ======================================================
+   ⚠️  DO NOT MODIFY ABOVE THIS LINE
+   ------------------------------------------------------
+   - State
+   - Hooks
+   - Helpers
+   - Types
+   - Business wiring
+
+   JSX RENDERING BEGINS BELOW
+   ------------------------------------------------------
+   From this point forward:
+   ✔ Safe to edit markup, text, classes
+   ❌ Do NOT add logic, hooks, or state
+   ====================================================== */
+
+   // ⬇️ JSX ONLY ⬇️
+   
   return (
     <label className="block cursor-pointer">
       <input

@@ -164,6 +164,11 @@ if (status !== "complete") {
   /* ================= UI ================= */
 
   if (fatalError) {
+// =======================================================
+// ⛔ DO NOT MODIFY ABOVE THIS LINE ⛔
+// Only edit JSX BELOW the return() statement.
+// =======================================================
+
     return (
       <main className="mx-auto max-w-2xl px-6 py-20">
         <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
@@ -205,45 +210,62 @@ if (status !== "complete") {
   const riskLabel = deriveRiskLevel(score);
 
   /* ---------- COMPLETE ---------- */
-  return (
-    <main className="mx-auto max-w-xl px-6 py-24 space-y-8 text-center">
-      <div className="text-3xl">✅</div>
+return (
+  <main className="mx-auto max-w-xl px-6 py-24 space-y-8 text-center">
+    <div className="text-3xl">✅</div>
 
-      <h1 className="text-2xl font-semibold">Payment successful</h1>
+    <h1 className="text-2xl font-semibold">Payment successful</h1>
 
-      {/* ---------- LEASE SCORE ---------- */}
-      <div className="rounded-xl border bg-gray-50 p-6 text-left space-y-3">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-600">Lease Health Score</p>
-          <span className="text-sm font-semibold">{riskLabel}</span>
-        </div>
-
-        <p className="text-4xl font-bold text-black">
-          {typeof score === "number" ? score : "—"}
+    {/* ---------- LEASE SUMMARY ---------- */}
+    <div className="rounded-xl border bg-gray-50 p-6 text-left space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-medium text-gray-600">
+          Lease Health Score
         </p>
-
-        <p className="text-sm text-gray-700">
-          {explainScore(score)}
-        </p>
-
-        {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
-          <p className="text-sm text-gray-600">
-            Estimated avoidable exposure over 12 months:{" "}
-            <span className="font-semibold">
-              ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
-            </span>
-          </p>
-        )}
+        <span className="text-sm font-semibold">
+          {riskLabel}
+        </span>
       </div>
 
-      {/* ---------- DOWNLOAD ---------- */}
+      <p className="text-4xl font-bold text-black">
+        {typeof score === "number" ? score : "—"}
+      </p>
+
+      <p className="text-sm text-gray-700">
+        {explainScore(score)}
+      </p>
+
+      {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
+        <p className="text-sm text-gray-600">
+          Estimated avoidable exposure over 12 months:{" "}
+          <span className="font-semibold">
+            ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
+          </span>
+        </p>
+      )}
+    </div>
+
+    {/* ---------- ACTIONS ---------- */}
+    <div className="space-y-3">
       <button
         onClick={handleDownload}
         disabled={downloading}
-        className="mt-4 inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        className="inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
       >
         {downloading ? "Preparing PDF…" : "Download PDF Audit"}
       </button>
+
+      <div>
+        <button
+          onClick={() => router.push("/app/step-1-upload")}
+          className="text-sm underline text-gray-600 hover:text-black"
+        >
+          Run another audit
+        </button>
+      </div>
+    </div>
+  </main>
+);
     </main>
   );
 }
