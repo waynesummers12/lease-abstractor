@@ -95,11 +95,22 @@ export default function SuccessPage() {
         }
 
         const json = await res.json();
-        setData(json);
 
-        if (json.status !== "complete") {
-          pollTimer = setTimeout(loadAudit, 4000);
-        }
+// Normalize status regardless of API shape
+const status =
+  json?.status ??
+  json?.audit?.status ??
+  "paid";
+
+setData({
+  status,
+  analysis: json?.analysis ?? json?.audit?.analysis ?? null,
+});
+
+if (status !== "complete") {
+  pollTimer = setTimeout(loadAudit, 4000);
+}
+
       } catch (err) {
         console.error("Audit polling failed", err);
         setFatalError("Unable to load audit.");
