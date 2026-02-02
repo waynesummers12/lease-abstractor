@@ -139,3 +139,7 @@ export default function AuditRightsPage() {
     </main>
   );
 }
+onClick={() => {
+  throw new Error("Sentry frontend test – SaveOnLease");
+}}
+
