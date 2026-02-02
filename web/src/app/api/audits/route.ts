@@ -1,76 +1,55 @@
 // web/src/app/api/audits/route.ts
-/**
- * NEXT.JS API ROUTE — SAVEONLEASE V1 (LOCKED)
- *
- * Purpose:
- * - Thin proxy only
- * - No business logic
- * - No Supabase queries
- *
- * CRITICAL RULES:
- * - params are ASYNC → must be awaited
- * - Always use dynamic = "force-dynamic"
- *
- * Allowed:
- * - fetch() to Worker
- * - Header forwarding
- *
- * Forbidden:
- * - Supabase client
- * - Stripe SDK
- * - React imports
- * 
- * export async function GET(
-  _req: Request,
-  context: { params: Promise<{ auditId: string }> }
-) {
-  const { auditId } = await context.params;
-}
- */
-
-
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(//Has to be in all routes
-  _req: Request,//Has to be in all routes
-  { params }: { params: { auditId: string } }//Has to be in all routes
-) {//Has to be in all routes
-  const { auditId } = params;//Has to be in all routes
+/**
+ * AUDITS COLLECTION ROUTE — SAVEONLEASE V1 (LOCKED)
+ *
+ * Purpose:
+ * - Create initial audit record
+ *
+ * Rules:
+ * - POST ONLY
+ * - NO params
+ * - Proxy to Worker only
+ *
+ * Forbidden:
+ * - Supabase
+ * - Stripe
+ * - React
+ * - auditId params
+ */
+export async function POST(req: Request) {
+  const body = await req.json();
+  const { auditId, objectPath } = body ?? {};
 
-  if (!auditId) {
+  if (!auditId || !objectPath) {
     return NextResponse.json(
-      { error: "Missing auditId" },
+      { error: "Missing auditId or objectPath" },
       { status: 400 }
     );
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/auditById/${auditId}`,
+    `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
     {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
       },
-      cache: "no-store",
+      body: JSON.stringify({ auditId, objectPath }),
     }
   );
 
   if (!res.ok) {
+    const text = await res.text();
     return NextResponse.json(
-      { analysis: null },
-      { status: 404 }
+      { error: text || "Failed to create audit" },
+      { status: 500 }
     );
   }
 
-  const audit = await res.json();
-
-  return NextResponse.json({
-    analysis: audit.analysis,
-    audit,
-  });
+  return NextResponse.json({ success: true });
 }
-
-
-
-
