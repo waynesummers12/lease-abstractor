@@ -36,7 +36,7 @@ if (!endpointSecret && !isLocal) {
 const router = new Router();
 
 
-router.post("/api/stripe/webhook", async (ctx) => {
+router.post("/stripe/webhook", async (ctx) => {
   console.log("🔥 Stripe webhook hit");
 
   let event: Stripe.Event;
