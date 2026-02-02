@@ -130,9 +130,7 @@ export default function AuditRightsPage() {
           Start Lease Audit
         </Link>
       </section>
-onClick={() => {
-  throw new Error("Sentry frontend test – SaveOnLease");
-}}
+
       {/* FAQ Schema */}
       <script
         type="application/ld+json"
