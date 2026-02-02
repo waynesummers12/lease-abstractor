@@ -283,6 +283,12 @@ export default function Header() {
               Pricing
             </Link>
 
+             <Link
+  href="/marketing/contact"
+  onClick={() => setMenuOpen(false)}
+>
+  Contact
+</Link>
             <Link
   href="/app/step-1-upload"
   className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
