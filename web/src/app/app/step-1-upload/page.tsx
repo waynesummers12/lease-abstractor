@@ -87,45 +87,44 @@ export default function UploadLeasePage() {
 // Only edit JSX BELOW the return() statement.
 // =======================================================
   return (
-    <main className="mx-auto max-w-4xl px-6 py-24">
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl font-light tracking-tight">
-          Upload Your Lease
-        </h1>
+  <main className="mx-auto max-w-4xl px-6 py-24">
+    <div className="mb-12 text-center">
+      <h1 className="text-4xl font-light tracking-tight">
+        Upload Your Lease
+      </h1>
 
-        <p className="mt-4 text-lg text-gray-600">
-          Upload your commercial lease PDF to identify CAM & NNN risks,
-          hidden fees, and overcharges.
-        </p>
-        
-        <p className="mt-4 text-base text-gray-500">
+      <p className="mt-4 text-lg text-gray-600">
+        Upload your commercial lease PDF to identify CAM & NNN risks,
+        hidden fees, and overcharges.
+      </p>
+
+      <p className="mt-4 text-base text-gray-500">
         We run your PDF through our audit pipeline and estimate what you could
-         recover over the next 12 months.
-         </p>
+        recover over the next 12 months.
+      </p>
 
-        <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
-          <div>✔ CAM & NNN overcharges</div>
-          <div>✔ Admin & management fee padding</div>
-          <div>✔ Missing caps & audit rights</div>
-        </div>
-
-        <p className="mt-6 text-sm text-gray-500">
-          🔒 Your lease is encrypted, never shared, and deleted after your audit.
-          <br />
-          ⏱ Takes about 2 minutes • No obligation to purchase
-        </p>
+      <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
+        <div>✔ CAM & NNN overcharges</div>
+        <div>✔ Admin & management fee padding</div>
+        <div>✔ Missing caps & audit rights</div>
       </div>
+    </div>
 
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
-        <UploadForm
-          onUpload={handleUpload}
-          loading={uploading}
-        />
+    <div className="rounded-2xl border bg-white p-8 shadow-sm text-center">
+      <UploadForm
+        onUpload={handleUpload}
+        loading={uploading}
+      />
 
-        {error && (
-          <p className="mt-4 text-sm text-red-600">{error}</p>
-        )}
-      </div>
-    </main>
-  );
-}
+      <p className="mt-4 text-sm text-gray-500">
+        🔒 Your lease is encrypted, never shared, and deleted after your audit.
+        <br />
+        ⏱ Takes about 2 minutes • No obligation to purchase
+      </p>
+
+      {error && (
+        <p className="mt-4 text-sm text-red-600">{error}</p>
+      )}
+    </div>
+  </main>
+);
