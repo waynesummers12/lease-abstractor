@@ -25,7 +25,7 @@ export default function ContactPage() {
               href="mailto:support@saveonlease.com"
               className="font-medium text-black underline"
             >
-              support@saveonlease.com
+              audits@saveonlease.com
             </a>
           </p>
 
