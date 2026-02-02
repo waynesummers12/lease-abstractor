@@ -266,6 +266,4 @@ return (
     </div>
   </main>
 );
-    </main>
-  );
 }
