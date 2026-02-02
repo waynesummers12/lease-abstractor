@@ -48,8 +48,8 @@ router.get("/api/audits/:auditId/download", async (ctx) => {
     return;
   }
 
-  // Stored value example: audit-pdfs/<auditId>.pdf
-  const filePath = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
+  // Stored value example: audit-pdfs/<auditId>.pdf has to be leases
+  const filePath = data.audit_pdf_path.replace(/^leases\//, "");
 
   const { data: signed, error: signedError } = await supabase.storage
     .from("audit-pdfs")
