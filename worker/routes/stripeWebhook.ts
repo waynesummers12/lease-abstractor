@@ -41,12 +41,14 @@ router.post("/api/stripe/webhook", async (ctx) => {
 
   let event: Stripe.Event;
 
-  /* --------------------------------------------------
-     READ RAW BODY (CRITICAL FIX)
-     -------------------------------------------------- */
-  const rawBody = await ctx.request.body({ type: "text" }).value;
-   if (!rawBody) {
-  ctx.throw(400, "Empty webhook body");
+/* --------------------------------------------------
+   READ RAW BODY (OAK v12 – CORRECT)
+-------------------------------------------------- */
+const body = ctx.request.body({ type: "text" });
+const rawBody = await body.value;
+
+if (!rawBody || typeof rawBody !== "string") {
+  ctx.throw(400, "Empty or invalid webhook body");
 }
   /* --------------------------------------------------
      LOCAL DEV MODE — TRUST STRIPE CLI
