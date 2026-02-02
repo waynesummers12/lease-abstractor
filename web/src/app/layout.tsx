@@ -1,7 +1,6 @@
-// web/src/app/layout.tsx
-
 import "../styles/globals.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -19,6 +18,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics (GA4) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-EWG7MF2T77"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EWG7MF2T77');
+          `}
+        </Script>
+      </head>
+
       <body className="min-h-screen flex flex-col bg-white text-gray-900">
         <Header />
 
@@ -35,5 +50,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-
