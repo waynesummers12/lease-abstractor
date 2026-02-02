@@ -37,6 +37,7 @@ router.post("/pdf", async (ctx) => {
 
     const file = form.files?.[0];
     const auditId = form.fields?.auditId;
+    const objectPathField = form.fields?.objectPath;
 
     if (!file || !auditId) {
       ctx.response.status = 400;
@@ -44,11 +45,16 @@ router.post("/pdf", async (ctx) => {
       return;
     }
 
-    const objectPath = `${auditId}.pdf`;
+    const objectPath =
+      objectPathField && typeof objectPathField === "string"
+        ? objectPathField.replace(/^\//, "")
+        : `${auditId}.pdf`;
 
     console.info("[ingest] uploading lease pdf", { objectPath });
 
-    const fileBuffer = await Deno.readFile(file.filename!);
+    const fileBuffer = file.content
+      ? new Uint8Array(file.content)
+      : await Deno.readFile(file.filename!);
 
     // 1️⃣ Upload PDF to Supabase Storage
     const { error: uploadError } = await supabase.storage
@@ -99,10 +105,19 @@ router.post("/pdf", async (ctx) => {
     ctx.response.status = 200;
     ctx.response.body = { success: true, auditId };
   } catch (err) {
-    console.error("❌ Lease ingest error:", err);
-    ctx.response.status = 500;
-    ctx.response.body = { error: "Lease ingest failed" };
-  }
+  const message =
+    err instanceof Error ? err.message : String(err);
+
+  console.error("❌ LEASE INGEST ERROR:", err);
+
+  ctx.response.status = 500;
+  ctx.response.body = {
+    error: "Lease ingest failed",
+    details: message,
+  };
+}
+
+
 });
 
 export default router;

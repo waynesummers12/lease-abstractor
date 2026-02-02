@@ -1,4 +1,5 @@
 import { Application } from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 
 import stripeWebhookRouter from "./routes/stripeWebhook.ts";
 
@@ -13,49 +14,33 @@ import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 const app = new Application();
 
 /* -------------------------------------------------
-   STRIPE WEBHOOK
-   MUST be registered BEFORE CORS / body parsing
+   STRIPE WEBHOOK (FIRST, NO CORS/BODY TOUCHING)
 -------------------------------------------------- */
 app.use(stripeWebhookRouter.routes());
 app.use(stripeWebhookRouter.allowedMethods());
 
 /* -------------------------------------------------
-   CORS (REQUIRED FOR VERCEL → RENDER)
+   CORS (SINGLE SOURCE OF TRUTH)
 -------------------------------------------------- */
-app.use(async (ctx, next) => {
-  const origin = ctx.request.headers.get("origin");
-
-  const allowedOrigins = [
-    "http://localhost:3000",
-    "https://lease-abstractor-livid.vercel.app",
-    "https://saveonlease.com",
-    "https://www.saveonlease.com",
-  ];
-
-  if (origin && allowedOrigins.includes(origin)) {
-    ctx.response.headers.set("Access-Control-Allow-Origin", origin);
-  }
-
-  ctx.response.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Lease-Worker-Key, stripe-signature"
-  );
-
-  ctx.response.headers.set(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS"
-  );
-
-  if (ctx.request.method === "OPTIONS") {
-    ctx.response.status = 204;
-    return;
-  }
-
-  await next();
-});
+app.use(
+  oakCors({
+    origin: [
+      "https://lease-abstractor-livid.vercel.app",
+      "https://saveonlease.com",
+      "https://www.saveonlease.com",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Lease-Worker-Key",
+    ],
+  })
+);
 
 /* -------------------------------------------------
-   NORMAL API ROUTES
+   ROUTES
 -------------------------------------------------- */
 app.use(downloadAuditPdfRoutes.routes());
 app.use(downloadAuditPdfRoutes.allowedMethods());
@@ -82,7 +67,5 @@ app.use(auditPdfRoutes.allowedMethods());
    START SERVER
 -------------------------------------------------- */
 const port = Number(Deno.env.get("PORT") ?? 8000);
-
 console.log(`🚀 Lease Abstractor Worker running on port ${port}`);
-
 await app.listen({ port });

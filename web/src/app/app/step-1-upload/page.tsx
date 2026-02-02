@@ -119,7 +119,7 @@ export default function UploadLeasePage() {
       <p className="mt-4 text-sm text-gray-500">
         🔒 Your lease is encrypted, never shared, and deleted after your audit.
         <br />
-        ⏱ Takes about 2 minutes • No obligation to purchase
+        ⏱ Takes about 2 minutes. See how much you can save before buying full audit reports.
       </p>
 
       {error && (
