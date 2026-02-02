@@ -8,21 +8,13 @@ export const dynamic = "force-dynamic";
  * DOWNLOAD API ROUTE — SAVEONLEASE V1 (LOCKED)
  *
  * Purpose:
- * - Generate a signed PDF download URL
- * - Thin proxy to Worker only
+ * - Proxy download requests to Worker
+ * - Return signed PDF URL
  *
- * Rules (NON-NEGOTIABLE):
- * - params MUST be awaited (Next.js App Router)
- * - No React imports
- * - No Supabase client usage
- * - No Stripe SDK usage
+ * Rules:
+ * - No Supabase usage
+ * - No Stripe usage
  * - No business logic
- *
- * Input:
- * - auditId (route param)
- *
- * Output:
- * - { url: string }
  */
 
 export async function GET(
@@ -42,7 +34,8 @@ export async function GET(
     `${process.env.NEXT_PUBLIC_WORKER_URL}/downloadAuditPdf/${auditId}`,
     {
       headers: {
-        "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+        "X-Lease-Worker-Key":
+          process.env.NEXT_PUBLIC_WORKER_KEY!,
       },
       cache: "no-store",
     }
@@ -56,14 +49,6 @@ export async function GET(
   }
 
   const data = await res.json();
-
-  // Expecting: { url: string }
-  if (!data?.url) {
-    return NextResponse.json(
-      { error: "Invalid download response" },
-      { status: 500 }
-    );
-  }
 
   return NextResponse.json(data);
 }
