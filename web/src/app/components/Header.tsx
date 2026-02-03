@@ -299,8 +299,11 @@ export default function Header() {
       >
         Start Audit
       </Link>
-    </div>
+     </div>
   </div>
 )}
+
+    </header>
+  );
 }
 
