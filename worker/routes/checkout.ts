@@ -1,135 +1,88 @@
 // worker/routes/checkout.ts
-/**
- * STRIPE CHECKOUT ROUTE — SAVEONLEASE V1 (LOCKED)
- *
- * CRITICAL:
- * - auditId is the single source of truth
- * - Stripe metadata MUST include auditId
- *
- * DO NOT:
- * - Rename metadata keys
- * - Change success/cancel URLs
- * - Refactor flow
- *
- * Small changes here = broken payments.
- */
-
-
-
-
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 
-const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
 const router = new Router({ prefix: "/checkout" });
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/**
- * Create Stripe Checkout Session
- *
- * HARD GUARANTEES AFTER THIS ROUTE:
- * - auditId is REQUIRED
- * - lease_audits row EXISTS
- * - status = 'unpaid'
- * - Stripe metadata ALWAYS includes auditId
- * - Webhook can deterministically fulfill
- */
+const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
+const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
+const BASE_URL = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+
+if (!STRIPE_SECRET_KEY) {
+  console.error("❌ Missing STRIPE_SECRET_KEY");
+}
+
+const stripe = new Stripe(STRIPE_SECRET_KEY ?? "", {
+  apiVersion: "2025-12-15.clover",
+});
+
 router.post("/create", async (ctx) => {
-  try {
-    /* --------------------------------------------------
-   PARSE BODY (Oak v12 SAFE + HARDENED)
--------------------------------------------------- */
-const bodyValue = await ctx.request.body({ type: "json" }).value;
+  console.log("🔥 /checkout/create HIT");
 
-if (!bodyValue || typeof bodyValue !== "object") {
-  ctx.response.status = 400;
-  ctx.response.body = { error: "Invalid JSON body" };
-  return;
-}
+  /* ---------- PARSE BODY (Oak v12 SAFE) ---------- */
+  const bodyValue = await ctx.request.body({ type: "json" }).value;
 
-const auditId = (bodyValue as { auditId?: string }).auditId;
+  if (!bodyValue || typeof bodyValue !== "object") {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Invalid JSON body" };
+    return;
+  }
 
- const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
- const baseUrl = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+  const auditId = (bodyValue as { auditId?: string }).auditId;
 
-/* ---------- HARD FAILS (NO SILENT STRIPE ERRORS) ---------- */
-if (!auditId || typeof auditId !== "string") {
-  ctx.response.status = 400;
-  ctx.response.body = { error: "auditId is required" };
-  return;
-}
+  if (!auditId || typeof auditId !== "string") {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "auditId is required" };
+    return;
+  }
 
-if (!UUID_REGEX.test(auditId)) {
-  ctx.response.status = 400;
-  ctx.response.body = { error: "auditId must be a UUID" };
-  return;
-}
+  console.log("🧾 auditId:", auditId);
+  console.log("💳 Stripe key present:", Boolean(STRIPE_SECRET_KEY));
+  console.log("💵 Price ID:", STRIPE_PRICE_STARTER);
 
- if (!STRIPE_PRICE_STARTER) {
-   ctx.response.status = 500;
-   ctx.response.body = { error: "Missing STRIPE_PRICE_STARTER env var" };
-   return;
- }
+  if (!STRIPE_SECRET_KEY || !STRIPE_PRICE_STARTER) {
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Stripe not configured" };
+    return;
+  }
 
-/* ---------- DEBUG (TEMP — REMOVE AFTER CONFIRM) ---------- */
-console.log("🧾 Creating checkout for auditId:", auditId);
-console.log("💵 Stripe price:", STRIPE_PRICE_STARTER);
-console.log("🌐 Base URL:", baseUrl);
+  /* ---------- ENSURE lease_audits ROW EXISTS ---------- */
+  const { data: existingAudit, error: selectError } = await supabase
+    .from("lease_audits")
+    .select("id")
+    .eq("id", auditId)
+    .maybeSingle();
 
+  if (selectError) {
+    console.error("❌ Supabase select error:", selectError);
+    ctx.response.status = 500;
+    ctx.response.body = { error: "Database error" };
+    return;
+  }
 
-    /* --------------------------------------------------
-       ENSURE lease_audits ROW EXISTS (IDEMPOTENT)
-    -------------------------------------------------- */
-    const { data: existingAudit, error: selectError } = await supabase
+  if (!existingAudit) {
+    const { error: insertError } = await supabase
       .from("lease_audits")
-      .select("id")
-      .eq("id", auditId)
-      .maybeSingle();
-
-    if (selectError) {
-      console.error("❌ Failed to check lease_audits row:", {
-        message: selectError.message,
-        code: selectError.code,
-        details: selectError.details,
-        hint: selectError.hint,
+      .insert({
+        id: auditId,
+        status: "unpaid",
+        amount_paid: 4999,
+        currency: "usd",
       });
+
+    if (insertError) {
+      console.error("❌ Supabase insert error:", insertError);
       ctx.response.status = 500;
-      ctx.response.body = { error: `Database error: ${selectError.message}` };
+      ctx.response.body = { error: "Failed to create audit record" };
       return;
     }
 
-    if (!existingAudit) {
-      const { error: insertError } = await supabase
-        .from("lease_audits")
-        .insert({
-          id: auditId,
-          status: "unpaid",
-          amount_paid: 24999,
-          currency: "usd",
-        });
+    console.log("🧾 lease_audits row created:", auditId);
+  }
 
-      if (insertError) {
-        console.error("❌ Failed to insert lease_audits row:", {
-          message: insertError.message,
-          code: insertError.code,
-          details: insertError.details,
-          hint: insertError.hint,
-        });
-        ctx.response.status = 500;
-        ctx.response.body = {
-          error: `Failed to initialize audit record: ${insertError.message}`,
-        };
-        return;
-      }
-
-      console.log("🧾 lease_audits row created:", auditId);
-    }
-
-    /* --------------------------------------------------
-       CREATE STRIPE CHECKOUT SESSION
-    -------------------------------------------------- */
+  /* ---------- CREATE STRIPE CHECKOUT SESSION ---------- */
+  try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: [
@@ -138,32 +91,22 @@ console.log("🌐 Base URL:", baseUrl);
           quantity: 1,
         },
       ],
-      success_url: `${baseUrl}/success?auditId=${auditId}`,
-      cancel_url: `${baseUrl}/cancel`,
+      success_url: `${BASE_URL}/success?auditId=${auditId}`,
+      cancel_url: `${BASE_URL}/cancel`,
       metadata: {
         auditId, // 🔒 SINGLE SOURCE OF TRUTH
       },
     });
 
-    console.log("🧾 Checkout session created:", {
-      sessionId: session.id,
-      auditId,
-      metadata: session.metadata,
-    });
+    console.log("✅ Stripe session created:", session.id);
 
     ctx.response.status = 200;
-    ctx.response.body = {
-      url: session.url,
-    };
+    ctx.response.body = { url: session.url };
   } catch (err) {
-    console.error("❌ Stripe checkout error:", err);
+    console.error("❌ Stripe error:", err);
     ctx.response.status = 500;
-    ctx.response.body = {
-      error: "Checkout session failed",
-      detail: (err instanceof Error ? err.message : String(err)),
-    };
-   }
+    ctx.response.body = { error: "Checkout session failed" };
+  }
 });
-
 
 export default router;
