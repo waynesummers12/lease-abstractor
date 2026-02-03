@@ -100,8 +100,8 @@ export default function UploadLeasePage() {
 
       <p className="mt-4 text-base text-gray-500">
         We run your PDF through our audit pipeline and estimate what you could
-        recover over the next 12 months. We compare what you were charged to what your 
-        lease actually allows, and we show you what might not be right.
+        recover over the next 12 months. This estimate is based on your lease terms and billed charges 
+        and shows what may be disputable — not guaranteed savings.
       </p>
 
       <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
