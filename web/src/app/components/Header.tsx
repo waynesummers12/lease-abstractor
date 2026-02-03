@@ -220,90 +220,95 @@ export default function Header() {
       </div>
 
       {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-black px-6 pb-4 text-white">
-          <div className="flex flex-col gap-4 text-sm">
-            <span className="uppercase text-xs opacity-60">Learn</span>
-            <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
-              CAM Reconciliation
-            </Link>
-            <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
-              CAM / NNN Overcharges
-            </Link>
-            <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
-              NNN Audit Rights
-            </Link>
-            <Link href="/marketing/audit-rights" onClick={() => setMenuOpen(false)}>
-              Audit Rights
-            </Link>
-            <Link href="/marketing/audit-window-deadlines" onClick={() => setMenuOpen(false)}>
-              Audit Window Deadlines
-            </Link>
-            <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
-              CAM Expense Caps
-            </Link>
-            <Link href="/marketing/cam-admin-page" onClick={() => setMenuOpen(false)}>
-              CAM Admin Fees
-            </Link>
-            <Link href="/marketing/cam-vs.nnn" onClick={() => setMenuOpen(false)}>
-              CAM vs NNN
-            </Link>
-            <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
-              Common CAM Fees
-            </Link>
-            <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
-              Non-Allowable CAM / NNN
-            </Link>
-            <Link href="/marketing/nnn-expenses-explained" onClick={() => setMenuOpen(false)}>
-              NNN Expenses Explained
-            </Link>
-            <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
-              NNN Calculation Examples
-            </Link>
-            <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
-              NNN Insurance Charges
-            </Link>
-            <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
-              NNN Property Tax Charges
-            </Link>
-            <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
-              NNN Reconciliation
-            </Link>
-            <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
-              Pro Rata Share Explained
-            </Link>
-            <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
-              CAM Reconciliation Checklist
-            </Link>
+{menuOpen && (
+  <div className="md:hidden bg-black px-6 pb-6 text-white">
+    <div className="flex flex-col gap-4 text-sm">
+      <span className="uppercase text-xs opacity-60">Learn</span>
 
-            <hr className="border-white/10 my-2" />
+      <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
+        CAM Reconciliation
+      </Link>
+      <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
+        CAM / NNN Overcharges
+      </Link>
+      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
+        Real CAM & NNN Overcharge Examples
+      </Link>
+      <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
+        NNN Audit Rights
+      </Link>
+      <Link href="/marketing/audit-rights" onClick={() => setMenuOpen(false)}>
+        Audit Rights
+      </Link>
+      <Link href="/marketing/audit-window-deadlines" onClick={() => setMenuOpen(false)}>
+        Audit Window Deadlines
+      </Link>
+      <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
+        CAM Expense Caps
+      </Link>
+      <Link href="/marketing/cam-admin-page" onClick={() => setMenuOpen(false)}>
+        CAM Admin Fees
+      </Link>
+      <Link href="/marketing/cam-vs-nnn" onClick={() => setMenuOpen(false)}>
+        CAM vs NNN
+      </Link>
+      <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
+        Common CAM Fees
+      </Link>
+      <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
+        Non-Allowable CAM / NNN
+      </Link>
+      <Link href="/marketing/nnn-expenses-explained" onClick={() => setMenuOpen(false)}>
+        NNN Expenses Explained
+      </Link>
+      <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
+        NNN Calculation Examples
+      </Link>
+      <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
+        NNN Insurance Charges
+      </Link>
+      <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
+        NNN Property Tax Charges
+      </Link>
+      <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
+        NNN Reconciliation
+      </Link>
+      <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
+        Pro Rata Share Explained
+      </Link>
+      <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
+        CAM Reconciliation Checklist
+      </Link>
+      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
+        Real CAM / NNN Overcharge Examples
+      </Link>
 
-            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
-              What We Find
-            </Link>
-            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
-              How It Works
-            </Link>
-            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
-              Pricing
-            </Link>
+      <hr className="border-white/10 my-2" />
 
-             <Link
-  href="/marketing/contact"
-  onClick={() => setMenuOpen(false)}
->
-  Contact
-</Link>
-            <Link
-  href="/app/step-1-upload"
-  className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
->
-  Start Audit
-</Link>
+      <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
+        What We Find
+      </Link>
+      <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
+        How It Works
+      </Link>
+      <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
+        Pricing
+      </Link>
 
-          </div>
-        </div>
-      )}
-    </header>
-  );
-}
+      {/* Contact is now ALWAYS visible on mobile */}
+      <Link href="/marketing/contact" onClick={() => setMenuOpen(false)}>
+        Contact
+      </Link>
+
+      {/* Primary CTA */}
+      <Link
+        href="/app/step-1-upload"
+        onClick={() => setMenuOpen(false)}
+        className="mt-2 rounded-full bg-white px-4 py-2 text-center text-sm font-semibold text-black hover:bg-gray-200"
+      >
+        Start Audit
+      </Link>
+    </div>
+  </div>
+)}
+
