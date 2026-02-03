@@ -98,6 +98,10 @@ router.post("/create", async (ctx) => {
       },
     });
 
+    console.log("🧪 ENV CHECK", {
+  STRIPE_PRICE_STARTER,
+  STRIPE_SECRET_KEY_PREFIX: STRIPE_SECRET_KEY?.slice(0, 10),
+});
     console.log("✅ Stripe session created:", session.id);
 
     ctx.response.status = 200;
