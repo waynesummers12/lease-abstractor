@@ -252,6 +252,9 @@ export default function Header() {
       <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
         Common CAM Fees
       </Link>
+      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
+        CAM NNN Overcharge Examples Checklist
+      </Link>
       <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
         Non-Allowable CAM / NNN
       </Link>
@@ -275,9 +278,6 @@ export default function Header() {
       </Link>
       <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation Checklist
-      </Link>
-      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
-        CAM NNN Overcharge Examples Checklist
       </Link>
 
       <hr className="border-white/10 my-2" />
