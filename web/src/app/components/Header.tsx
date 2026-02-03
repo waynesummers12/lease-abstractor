@@ -35,7 +35,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
-        {/* Brand */}
+        {/* BrandNEW */}
        <Link href="/marketing" className="flex items-center gap-2">
       <Image
     src="/logo.png"
