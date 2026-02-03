@@ -24,7 +24,7 @@ export default function PricingPage() {
       {/* PRICE CARD */}
       <section className="rounded border p-8">
         <div className="flex items-baseline gap-2">
-          <div className="text-5xl font-bold">$76.95</div>
+          <div className="text-5xl font-bold">$49.99</div>
           <div className="text-[24px] text-gray-600">one-time</div>
         </div>
 

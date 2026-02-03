@@ -84,7 +84,7 @@ export default function MarketingHomePage() {
             <p className="text-sm uppercase tracking-widest text-gray-500">
               One-Time Audit
             </p>
-            <p className="mt-4 text-5xl font-semibold">$76.95</p>
+            <p className="mt-4 text-5xl font-semibold">$49.99</p>
             <p className="mt-4 text-gray-700">
               Includes a full CAM / NNN lease audit with a downloadable PDF
               summary and email delivery.
