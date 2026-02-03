@@ -1,4 +1,3 @@
-// src/app/marketing/nnn-expenses-explained/page.tsx
 import Link from "next/link";
 
 export const metadata = {
@@ -57,18 +56,19 @@ export default function NnnExpensesExplainedPage() {
         </p>
       </section>
 
-      {/* CONTENT */}
+      {/* CORE EXPLANATION */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
         <p>
           NNN expenses are designed to pass certain property operating costs
           directly to tenants. While this can reduce base rent, it also shifts
-          financial risk and complexity onto tenants.
+          financial risk and complexity onto tenants — especially when costs
+          rise faster than revenue.
         </p>
 
         <p>
           The scope of NNN charges is controlled entirely by lease language.
-          Broad definitions or missing caps can lead to unexpected and
-          escalating costs over time.
+          Broad definitions, vague exclusions, or missing caps can lead to
+          unexpected and escalating costs over time.
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
@@ -89,7 +89,32 @@ export default function NnnExpensesExplainedPage() {
             maintaining shared areas of the property.
           </li>
         </ul>
+      </section>
 
+      {/* REAL TENANT EXAMPLES (NEW) */}
+      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+        <h2 className="pt-6 text-3xl font-light tracking-tight">
+          Real NNN Cost Surprises Tenants Encounter
+        </h2>
+
+        <p>
+          Many tenants assume NNN charges are predictable, only to discover
+          large increases after the first reconciliation. One office tenant
+          experienced a sharp property tax increase following a reassessment,
+          resulting in thousands of dollars in additional charges with little
+          notice. Another tenant saw insurance premiums spike due to claims
+          unrelated to their own space.
+        </p>
+
+        <p>
+          Because these expenses sit outside base rent, they often escape
+          scrutiny until invoices arrive — at which point tenants feel
+          obligated to pay before asking questions.
+        </p>
+      </section>
+
+      {/* COMMON ISSUES */}
+      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
         <h2 className="pt-6 text-3xl font-light tracking-tight">
           Common NNN Billing Issues
         </h2>
@@ -101,31 +126,58 @@ export default function NnnExpensesExplainedPage() {
           <li>Charges exceeding lease-defined caps</li>
           <li>Duplicate charges across CAM and NNN categories</li>
         </ul>
+      </section>
 
+      {/* WHY COSTS RISE */}
+      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
         <h2 className="pt-6 text-3xl font-light tracking-tight">
           Why NNN Expenses Increase Over Time
         </h2>
 
         <p>
-          Property taxes and insurance premiums tend to rise annually, sometimes
-          sharply. Without caps or base-year protections, tenants may face
-          unpredictable increases year over year.
+          Property taxes and insurance premiums tend to rise annually and can
+          spike unexpectedly after reassessments, zoning changes, or market-wide
+          insurance repricing. Without caps or base-year protections, tenants
+          absorb the full impact of these increases.
         </p>
 
         <p>
-          Because NNN expenses recur annually, even small errors can compound
-          into significant long-term overpayments.
+          Because NNN expenses recur every year, even small billing errors can
+          compound into significant long-term overpayments if left unchecked.
+        </p>
+      </section>
+
+      {/* WHEN THIS CROSSES THE LINE (NEW) */}
+      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+        <h2 className="pt-6 text-3xl font-light tracking-tight">
+          When NNN Charges Cross the Line
+        </h2>
+
+        <p>
+          NNN charges become problematic when they exceed what the lease allows.
+          This may include passing through landlord overhead, misallocating
+          expenses, charging for capital projects that should be amortized, or
+          ignoring negotiated caps.
         </p>
 
+        <p>
+          If NNN charges feel inconsistent, unusually high, or disconnected
+          from actual services provided, it’s often worth reviewing the lease
+          language carefully and verifying the calculations.
+        </p>
+      </section>
+
+      {/* TENANT ACTION */}
+      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
         <h2 className="pt-6 text-3xl font-light tracking-tight">
           How Tenants Can Manage NNN Exposure
         </h2>
 
         <p>
-          Reviewing NNN charges requires comparing billed expenses against lease
-          definitions, exclusions, and allocation methods. Identifying issues
-          early allows tenants to act within audit windows and preserve dispute
-          rights.
+          Managing NNN exposure starts with understanding what your lease
+          permits. Reviewing billed expenses against definitions, exclusions,
+          and allocation methods allows tenants to identify issues early and
+          act within audit windows.
         </p>
       </section>
 
