@@ -35,7 +35,6 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
-        {/* Brand */}
        <Link href="/marketing" className="flex items-center gap-2">
       <Image
     src="/logo.png"
@@ -49,10 +48,7 @@ export default function Header() {
     SaveOnLease
   </span>
 </Link>
-
-        {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm relative">
-          {/* Learn Dropdown */}
           <div ref={learnRef} className="relative">
             <button
               onMouseEnter={() => setLearnOpen(true)}
@@ -211,7 +207,7 @@ export default function Header() {
 
         </nav>
 
-        {/* Mobile Menu Button */}
+       
         <button
           className="md:hidden rounded border border-white/40 px-2 py-1 text-sm"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -220,7 +216,7 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      
 {menuOpen && (
   <div className="md:hidden bg-black px-6 pb-6 text-white">
     <div className="flex flex-col gap-4 text-sm">
