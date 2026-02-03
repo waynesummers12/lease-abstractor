@@ -38,6 +38,27 @@ export default function CamVsNnnPage() {
         </p>
       </section>
 
+      {/* ---------- REAL TENANT EXAMPLES (NEW) ---------- */}
+      <section className="mb-12">
+        <h2 className="mb-3 text-2xl font-bold">
+          Real Tenant CAM Examples We See Often
+        </h2>
+        <p className="text-gray-700">
+          Many tenants only realize something is wrong when CAM charges jump
+          unexpectedly. One retail tenant saw CAM increase more than 18% year
+          over year, despite no noticeable change in services or maintenance.
+          Another discovered they were paying an administrative fee equal to
+          nearly 15% of total CAM — something their lease limited but was never
+          enforced.
+        </p>
+
+        <p className="mt-4 text-gray-700">
+          These situations are common because CAM reconciliations are often
+          dense, delayed, and difficult to verify. By the time tenants review
+          them, they feel pressured to pay first and question later.
+        </p>
+      </section>
+
       {/* ---------- SECTION 2 ---------- */}
       <section className="mb-12">
         <h2 className="mb-3 text-2xl font-bold">
@@ -57,6 +78,25 @@ export default function CamVsNnnPage() {
           In a true NNN lease, tenants are responsible for their proportionate
           share of all three. However, many leases labeled “NNN” still contain
           carve-outs, caps, or exclusions that landlords may ignore.
+        </p>
+      </section>
+
+      {/* ---------- COMMON SURPRISES (NEW) ---------- */}
+      <section className="mb-12">
+        <h2 className="mb-3 text-2xl font-bold">
+          Common NNN Surprises Tenants Report
+        </h2>
+        <p className="text-gray-700">
+          Tenants are often surprised by how broadly NNN expenses are applied.
+          Property tax reassessments can cause sudden spikes, insurance premiums
+          may increase due to unrelated claims, and some landlords pass through
+          costs that primarily benefit ownership rather than tenants.
+        </p>
+
+        <p className="mt-4 text-gray-700">
+          The confusion is amplified when CAM is already embedded inside NNN,
+          making it difficult to tell whether an increase is driven by taxes,
+          insurance, or maintenance — or whether costs are being counted twice.
         </p>
       </section>
 
@@ -101,23 +141,24 @@ export default function CamVsNnnPage() {
         </div>
       </section>
 
-      {/* ---------- SECTION 4 ---------- */}
+      {/* ---------- WHEN THIS CROSSES THE LINE (NEW) ---------- */}
       <section className="mb-12">
         <h2 className="mb-3 text-2xl font-bold">
-          Why Tenants Get Overcharged
+          When CAM or NNN Charges Cross the Line
         </h2>
         <p className="text-gray-700">
-          Most tenants focus on base rent and overlook operating expenses.
-          Landlords rely on this blind spot — especially during annual
-          reconciliations.
+          Not every increase is improper — but problems arise when charges
+          violate the lease terms. This includes passing through capital
+          improvements that should be amortized, exceeding CAM caps, charging
+          for landlord overhead, or allocating expenses unrelated to the
+          property.
         </p>
 
-        <ul className="mt-4 list-disc pl-6 text-gray-700">
-          <li>CAM admin fees quietly increasing each year</li>
-          <li>Expenses billed outside the lease definition</li>
-          <li>No enforcement of CAM caps or exclusions</li>
-          <li>NNN tax or insurance spikes passed through without review</li>
-        </ul>
+        <p className="mt-4 text-gray-700">
+          If charges feel unclear, inconsistent, or significantly higher than
+          prior years, that’s often a signal to review the lease language closely
+          and verify whether the expenses are allowed.
+        </p>
       </section>
 
       {/* ---------- CTA ---------- */}
