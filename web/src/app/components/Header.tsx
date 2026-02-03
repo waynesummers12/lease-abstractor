@@ -306,9 +306,11 @@ export default function Header() {
         onClick={() => setMenuOpen(false)}
         className="mt-2 rounded-full bg-white px-4 py-2 text-center text-sm font-semibold text-black hover:bg-gray-200"
       >
-        Start Audit
-      </Link>
-    </div>
-  </div>
-)}
+        Start Audit            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
 
