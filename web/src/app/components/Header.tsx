@@ -112,11 +112,12 @@ export default function Header() {
                   CAM Admin Fees
                 </Link>
                 <Link
-                  href="/marketing/cam-vs.nnn"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  CAM vs NNN
-                </Link>
+  href="/marketing/cam-vs-nnn"
+  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+>
+  CAM vs NNN
+</Link>
+
                 <Link
                   href="/marketing/common-cam-fees"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
@@ -197,10 +198,11 @@ export default function Header() {
           </Link>
 <Link
   href="/marketing/contact"
-  onClick={() => setMenuOpen(false)}
+  className="opacity-80 hover:opacity-100"
 >
   Contact
 </Link>
+
           <Link
   href="/app/step-1-upload"
   className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
@@ -305,18 +307,20 @@ export default function Header() {
       </Link>
 
       {/* Contact is now ALWAYS visible on mobile */}
-      <Link href="/marketing/contact" onClick={() => setMenuOpen(false)}>
-        Contact
-      </Link>
-
-      {/* Primary CTA */}
       <Link
-        href="/app/step-1-upload"
-        onClick={() => setMenuOpen(false)}
-        className="mt-2 rounded-full bg-white px-4 py-2 text-center text-sm font-semibold text-black hover:bg-gray-200"
-      >
-        Start Audit            
-        </Link>
+  href="/marketing/contact"
+  className="opacity-80 hover:opacity-100"
+>
+  Contact
+</Link>
+
+<Link
+  href="/app/step-1-upload"
+  className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+>
+  Start Audit
+</Link>
+
           </div>
         </div>
       )}
