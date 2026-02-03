@@ -231,8 +231,11 @@ export default function Header() {
       <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
         CAM / NNN Overcharges
       </Link>
-      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
-        Real CAM & NNN Overcharge Examples
+      <Link
+        href="/marketing/real-cam-nnn-overcharge-examples"
+        onClick={() => setMenuOpen(false)}
+      >
+        Real CAM / NNN Overcharge Examples
       </Link>
       <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
         NNN Audit Rights
@@ -267,7 +270,10 @@ export default function Header() {
       <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
         NNN Insurance Charges
       </Link>
-      <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
+      <Link
+        href="/marketing/nnn-property-tax-charges-explained"
+        onClick={() => setMenuOpen(false)}
+      >
         NNN Property Tax Charges
       </Link>
       <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
@@ -279,7 +285,10 @@ export default function Header() {
       <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation Checklist
       </Link>
-      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
+      <Link
+        href="/marketing/real-cam-nnn-overcharge-examples"
+        onClick={() => setMenuOpen(false)}
+      >
         Real CAM / NNN Overcharge Examples
       </Link>
 
