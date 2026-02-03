@@ -93,14 +93,18 @@ export default function UploadLeasePage() {
         Upload Your Lease
       </h1>
 
-      <p className="mt-4 text-lg text-gray-600">
+      <p className="mt-4 text-lg text-gray-800">
         Upload your commercial lease PDF to identify CAM & NNN risks,
         hidden fees, and overcharges.
       </p>
 
-      <p className="mt-4 text-base text-gray-500">
+      <p className="mt-4 text-base text-gray-600">
         We run your PDF through our audit pipeline and estimate what you could
-        recover over the next 12 months. This estimate is based on your lease terms and billed charges 
+        recover over the next 12 months. 
+        </p>
+        
+        <p className="mt-4 text-base text-gray-600">
+        This estimate is based on your lease terms and billed charges 
         and shows what may be disputable — not guaranteed savings.
       </p>
 
