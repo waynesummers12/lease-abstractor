@@ -141,8 +141,10 @@ router.post("/stripe/webhook", async (ctx) => {
        3) GENERATE + UPLOAD PDF
     -------------------------------------------------- */
     console.log("🧠 Generating audit PDF…");
+    console.log("🧠 PDF generation starting for audit:", auditId);
 
     const pdfBytes = await generateAuditPdf(data.analysis);
+    console.log("📄 PDF bytes length:", pdfBytes?.length ?? 0);
 
     if (!pdfBytes || pdfBytes.length === 0) {
       console.error("❌ PDF generation failed:", auditId);
@@ -177,6 +179,14 @@ router.post("/stripe/webhook", async (ctx) => {
         completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
+
+    const { data: verify } = await supabase
+      .from("lease_audits")
+      .select("status, audit_pdf_path, object_path")
+      .eq("id", auditId)
+      .single();
+
+    console.log("🔎 Post-complete audit state:", verify);
 
     console.log("✅ Audit marked complete:", auditId);
 
