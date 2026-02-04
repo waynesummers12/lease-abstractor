@@ -153,6 +153,7 @@ router.post("/stripe/webhook", async (ctx) => {
     }
 
     const fileName = `${auditId}.pdf`;
+    const objectPath = `audit-pdfs/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from("audit-pdfs")
@@ -174,8 +175,8 @@ router.post("/stripe/webhook", async (ctx) => {
       .from("lease_audits")
       .update({
         status: "complete",
-        audit_pdf_path: fileName,
-        object_path: fileName,
+        audit_pdf_path: objectPath,
+        object_path: objectPath,
         completed_at: new Date().toISOString(),
       })
       .eq("id", auditId);
