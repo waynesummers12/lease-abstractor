@@ -151,7 +151,6 @@ export async function generateAuditPdf(
   }
 };
 
-
   const ensureSpace = (requiredHeight: number) => {
     if (y - requiredHeight < 60) {
       page = pdf.addPage([612, 792]);
@@ -216,9 +215,13 @@ export async function generateAuditPdf(
   ------------------------------------------------------------------- */
 
   const flags = analysis.health?.flags ?? [];
-  const impacts = flags
-    .map((f) => Number(f.estimated_impact))
-    .filter((v) => !isNaN(v));
+const impacts = flags
+  .map((f) =>
+    typeof f.estimated_impact === "string"
+      ? Number(f.estimated_impact.replace(/[^\d.-]/g, ""))
+      : Number(f.estimated_impact)
+  )
+  .filter((v) => !isNaN(v));
 
   const maxImpact =
     impacts.length > 0 ? Math.max(...impacts).toLocaleString() : null;
