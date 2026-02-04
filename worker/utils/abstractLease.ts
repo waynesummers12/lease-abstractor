@@ -318,50 +318,75 @@ function computeLeaseHealth(input: {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
 
-  const baseCam = input.cam_nnn.total_exposure ?? 0;
-  const escCam = input.cam_nnn.escalation_exposure ?? 0;
-  const totalCam = baseCam + escCam;
+  const baseCam = input.cam_nnn.annual_amount ?? 0;
+  const totalCam =
+    (input.cam_nnn.total_exposure ?? 0) +
+    (input.cam_nnn.escalation_exposure ?? 0);
 
-  if (input.cam_nnn.monthly_amount) {
+  /* ---------- UNCAPPED CAM ---------- */
+  if (input.cam_nnn.is_uncapped && totalCam > 0) {
+    const uncappedExposure = totalCam * 0.15;
+
     flags.push({
-      code: "CAM_TOTAL",
-      label: "CAM / NNN charges with escalation risk",
-      severity: input.cam_nnn.is_uncapped ? "high" : "medium",
+      code: "UNCAPPED_CAM",
+      label: "Uncapped CAM expense growth",
+      severity: uncappedExposure > 20000 ? "high" : "medium",
       recommendation:
-        "Audit CAM categories, cap annual growth (3–6%), and exclude capital items.",
-      estimated_impact: `Most tenants recover ${formatMoney(
-        Math.max(totalCam * 0.25, 10000)
-      )}`,
+        "Negotiate a hard annual cap (typically 3–6%) and exclude non-operating expenses.",
+      estimated_impact: formatMoney(uncappedExposure),
     });
 
-    score -= input.cam_nnn.is_uncapped ? 25 : 15;
+    score -= uncappedExposure > 20000 ? 25 : 15;
   }
 
-  if (input.cam_nnn.includes_capex) {
+  /* ---------- CAPITAL EXPENDITURES ---------- */
+  if (input.cam_nnn.includes_capex && baseCam > 0) {
+    const capexExposure = baseCam * 0.2;
+
     flags.push({
       code: "CAPEX_IN_CAM",
-      label: "Capital expenses included in CAM",
-      severity: "high",
+      label: "Capital expenditures included in CAM",
+      severity: capexExposure > 15000 ? "high" : "medium",
       recommendation:
-        "Exclude capital improvements or amortize per lease standards.",
-      estimated_impact: "Capital items often add $15k–$50k+",
+        "Capital improvements should be excluded from CAM or amortized per lease standards.",
+      estimated_impact: formatMoney(capexExposure),
     });
-    score -= 15;
+
+    score -= input.cam_nnn.is_uncapped
+  ? 10   // already penalized above
+  : capexExposure > 15000
+  ? 20
+  : 10;
+  if (flags.length === 1 && score < 80) {
+  score = 80;
+}
+
+score = Math.max(0, Math.min(100, score))
   }
 
-  if (input.cam_nnn.pro_rata) {
-    flags.push({
-      code: "PRO_RATA",
-      label: "Pro-rata CAM allocation risk",
-      severity: "medium",
-      recommendation:
-        "Verify rentable area denominator and co-tenancy adjustments.",
-      estimated_impact: "Over-allocations commonly exceed 5–10%",
-    });
-    score -= 10;
-  }
+  /* ---------- PRO-RATA ALLOCATION ---------- */
+  if (
+  input.cam_nnn.pro_rata &&
+  baseCam > 0 &&
+  (!input.cam_nnn.reconciliation || input.cam_nnn.is_uncapped)
+) {
+  const proRataExposure = baseCam * 0.08;
 
-  return { score: Math.max(score, 0), flags };
+  flags.push({
+    code: "PRO_RATA",
+    label: "Pro-rata CAM allocation risk",
+    severity: proRataExposure > 8000 ? "medium" : "low",
+    recommendation:
+      "Verify the rentable-area denominator, confirm vacant space is properly excluded, and ensure co-tenancy or gross-up adjustments are applied correctly.",
+    estimated_impact: formatMoney(proRataExposure),
+  });
+
+  score -= proRataExposure > 8000 ? 10 : 5;
+}
+
+score = Math.max(0, Math.min(100, score));
+
+return { score, flags };
 }
 
 /* -------------------- MAIN EXPORT -------------------- */
@@ -409,20 +434,52 @@ export function abstractLease(rawText: string) {
   });
 
   return {
-    tenant: extractTenant(text),
-    landlord: extractLandlord(text),
-    premises: extractPremises(text),
-    lease_start,
-    lease_end,
-    term_months,
-    rent,
-    rent_schedule,
-    cam_nnn,
-    cam_total_avoidable_exposure:
-      (cam_nnn.total_exposure ?? 0) +
-      (cam_nnn.escalation_exposure ?? 0),
-    health,
-    raw_preview: text.slice(0, 1500),
+  tenant: extractTenant(text),
+  landlord: extractLandlord(text),
+  premises: extractPremises(text),
+
+  lease_start,
+  lease_end,
+  term_months,
+
+  rent,
+  rent_schedule,
+
+  cam_nnn,
+
+  /* -------------------- CORE EXPOSURE -------------------- */
+  cam_total_avoidable_exposure:
+    (cam_nnn.total_exposure ?? 0) +
+    (cam_nnn.escalation_exposure ?? 0),
+
+  /* -------------------- HEALTH (FULL LOGIC) -------------------- */
+  health,
+
+  /* -------------------- TEASER SUMMARY (GREEN BOX SAFE) -------------------- */
+  teaser_summary:
+    cam_nnn.total_exposure || cam_nnn.escalation_exposure
+      ? {
+          estimated_avoidable_range: {
+            low: Math.round(
+              (((cam_nnn.total_exposure ?? 0) +
+                (cam_nnn.escalation_exposure ?? 0)) *
+                0.15) /
+                1000
+            ) * 1000,
+            high: Math.round(
+              (((cam_nnn.total_exposure ?? 0) +
+                (cam_nnn.escalation_exposure ?? 0)) *
+                0.35) /
+                1000
+            ) * 1000,
+          },
+
+          headline_flags: health.flags.slice(0, 2).map((f) => f.label),
+        }
+      : null,
+
+  /* -------------------- DEBUG / PREVIEW -------------------- */
+  raw_preview: text.slice(0, 1500),
   };
 }
 
