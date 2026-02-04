@@ -70,24 +70,26 @@ function formatMoney(n: number): string {
 
 /* -------------------- CORE FIELDS -------------------- */
 
+/* -------------------- CORE FIELDS -------------------- */
+
 function extractTenant(text: string): string | null {
   return extractWithPatterns(text, [
-    /Tenant[:\s]+([^,.;]+)/i,
-    /Lessee[:\s]+([^,.;]+)/i,
+    /Tenant:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
+    /Lessee:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
   ]);
 }
 
 function extractLandlord(text: string): string | null {
   return extractWithPatterns(text, [
-    /Landlord[:\s]+([^,.;]+)/i,
-    /Lessor[:\s]+([^,.;]+)/i,
+    /Landlord:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
+    /Lessor:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
   ]);
 }
 
 function extractPremises(text: string): string | null {
   return extractWithPatterns(text, [
-    /Premises[:\s]+([^.;]+)/i,
-    /located at ([^.;]+)/i,
+    /Premises:\s*([^.;]+)/i,
+    /located at\s+([^.;]+)/i,
   ]);
 }
 
