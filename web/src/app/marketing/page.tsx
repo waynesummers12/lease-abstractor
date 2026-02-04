@@ -1,5 +1,6 @@
 // src/app/marketing/page.tsx
 import Link from "next/link";
+import { DemoVideo } from "./components/DemoVideo";
 
 export const metadata = {
   title: "CAM & NNN Lease Audit for Tenants | SaveOnLease",
@@ -41,6 +42,14 @@ export default function MarketingHomePage() {
           Used by SMB tenants nationwide to surface CAM / NNN issues before audit
           rights expire.
         </p>
+      </section>
+      
+      <p className="mb-6 text-center text-sm uppercase tracking-widest text-gray-500">
+  2-minute walkthrough
+</p>
+       {/* DEMO VIDEO */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <DemoVideo />
       </section>
 
       {/* TRUST STRIP */}
