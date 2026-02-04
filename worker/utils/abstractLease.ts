@@ -478,7 +478,7 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   return {
   tenant: extractTenant(text) || null,
   landlord: extractLandlord(text) || null,
-  premises: extractPremises
+  premises: extractPremises,
 
   lease_start,
   lease_end,
