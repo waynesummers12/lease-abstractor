@@ -20,7 +20,6 @@
  * NOT safe for client components unless explicitly reviewed.
  */
 
-
 /* -------------------- NORMALIZATION -------------------- */
 
 function normalizeText(raw: string): string {
@@ -34,6 +33,28 @@ function normalizeText(raw: string): string {
 }
 
 /* -------------------- UTILITIES -------------------- */
+
+/**
+ * Conservative CAM estimator when leases reference NNN / CAM
+ * but do not specify dollar amounts.
+ *
+ * Uses rent-based heuristics commonly applied in tenant audits.
+ */
+function estimateCamFromRent(
+  text: string,
+  annualRent: number | null
+): number | null {
+  if (!annualRent) return null;
+
+  // Conservative default
+  let ratio = 0.15;
+
+  if (/industrial|warehouse/i.test(text)) ratio = 0.08;
+  if (/office/i.test(text)) ratio = 0.18;
+  if (/retail|shopping center|plaza/i.test(text)) ratio = 0.2;
+
+  return Math.round(annualRent * ratio);
+}
 
 function extractWithPatterns(text: string, patterns: RegExp[]): string | null {
   for (const p of patterns) {
@@ -234,11 +255,18 @@ export type CamNnn = {
   escalation_exposure: number | null;
 };
 
-function extractCamNnn(text: string, termMonths: number | null): CamNnn {
-  const monthly = extractWithPatterns(text, [
+function extractCamNnn(
+  text: string,
+  termMonths: number | null,
+  annualRent?: number | null
+): CamNnn {
+  const monthlyExplicit = extractWithPatterns(text, [
     /NNN charges[^$]*\$([\d,]+)\s+per\s+month/i,
     /CAM charges[^$]*\$([\d,]+)\s+per\s+month/i,
   ]);
+
+  const referencesCam =
+    /CAM|NNN|operating expenses|common area/i.test(text);
 
   const is_uncapped =
     /no cap|without limitation|all operating expenses/i.test(text);
@@ -259,7 +287,22 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
     /capped at (\d+(?:\.\d+)?)%/i,
   ]);
 
-  if (!monthly) {
+  let monthlyAmount: number | null = null;
+
+  // 1️⃣ Explicit CAM / NNN dollar amount
+  if (monthlyExplicit) {
+    monthlyAmount = Number(monthlyExplicit.replace(/,/g, ""));
+  }
+
+  // 2️⃣ Fallback: estimate CAM from rent if referenced but not priced
+  if (!monthlyAmount && referencesCam && annualRent) {
+    const estimatedAnnual = estimateCamFromRent(text, annualRent);
+    if (estimatedAnnual) {
+      monthlyAmount = Math.round(estimatedAnnual / 12);
+    }
+  }
+
+  if (!monthlyAmount) {
     return {
       monthly_amount: null,
       annual_amount: null,
@@ -273,7 +316,6 @@ function extractCamNnn(text: string, termMonths: number | null): CamNnn {
     };
   }
 
-  const monthlyAmount = Number(monthly.replace(/,/g, ""));
   const annualAmount = monthlyAmount * 12;
   const years = termMonths ? termMonths / 12 : 1;
   const totalExposure = annualAmount * years;
