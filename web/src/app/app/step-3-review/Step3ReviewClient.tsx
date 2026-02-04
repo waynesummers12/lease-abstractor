@@ -10,11 +10,24 @@ type Analysis = {
   lease_start: string | null;
   lease_end: string | null;
   term_months: number | null;
+
   cam_total_avoidable_exposure?: number | null;
-  exposure_range?: { low: number; high: number } | null;
-  exposure_risk?: "low" | "medium" | "high" | null;
-  confidence?: number | null; // ✅ UI-only, safe
+
+  teaser_summary?: {
+    estimated_avoidable_range?: {
+      low: number;
+      high: number;
+    };
+    headline_flags?: string[];
+  } | null;
+
+  confidence?: number | null; // UI-only
 };
+
+function midpoint(range?: { low: number; high: number } | null) {
+  if (!range) return null;
+  return Math.round((range.low + range.high) / 2);
+  }
 
 export default function Step3ReviewClient() {
   const searchParams = useSearchParams();
@@ -77,13 +90,16 @@ export default function Step3ReviewClient() {
     );
   }
 
-  const exposure = analysis.cam_total_avoidable_exposure ?? null;
-
   const confidence =
     typeof analysis.confidence === "number"
       ? Math.min(Math.max(analysis.confidence, 0), 100)
       : 80;
 
+      const range = analysis.teaser_summary?.estimated_avoidable_range;
+
+const exposure = range
+  ? midpoint(range)
+  : null;
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
