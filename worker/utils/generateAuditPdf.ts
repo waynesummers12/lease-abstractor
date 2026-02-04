@@ -188,7 +188,7 @@ export async function generateAuditPdf(
       ? Math.round((execLow + execHigh) / 2)
       : null;
 
-  drawWrapped("Executive Summary", 22, 40, 532, black, true);
+  drawWrapped("★ Executive Summary", 22, 40, 532, black, true);
   y -= 16;
 
   drawWrapped(
@@ -228,7 +228,7 @@ export async function generateAuditPdf(
     y -= 10;
 
     drawWrapped(
-      `$${execMid.toLocaleString()}`,
+      `💰 $${execMid.toLocaleString()}`,
       36,
       52,
       500,
@@ -411,7 +411,7 @@ export async function generateAuditPdf(
     y -= 6;
 
     drawWrapped(
-      `$${mid.toLocaleString()}`,
+      `💰 $${mid.toLocaleString()}`,
       28,
       52,
       innerWidth,
@@ -442,7 +442,7 @@ export async function generateAuditPdf(
     y = cardTop - cardHeight - 12;
   }
 
-  drawSectionTitle("How this estimate was calculated");
+  drawSectionTitle("✓ How this estimate was calculated");
 
   drawWrapped(
     "• CAM / NNN charges flagged as uncapped, ambiguous, or escalating\n"
@@ -461,7 +461,7 @@ export async function generateAuditPdf(
      LEASE DETAILS CARD
   ------------------------------------------------------------------- */
 
-  drawSectionTitle("Lease Details");
+  drawSectionTitle("📄 Lease Details");
 
   const details = [
     ["Tenant", analysis.tenant ?? "Not specified"],
@@ -520,7 +520,7 @@ for (const [label, value] of details) {
      AUDIT FINDINGS
   ------------------------------------------------------------------- */
 
-  drawSectionTitle("Audit Findings");
+  drawSectionTitle("⚠ Audit Findings");
 
   const flags = analysis.health?.flags ?? [];
 
