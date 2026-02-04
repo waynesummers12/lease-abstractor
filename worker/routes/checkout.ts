@@ -19,10 +19,17 @@ const router = new Router({ prefix: "/checkout" });
 
 const STRIPE_SECRET_KEY = Deno.env.get("STRIPE_SECRET_KEY");
 const STRIPE_PRICE_STARTER = Deno.env.get("STRIPE_PRICE_STARTER");
-const BASE_URL = Deno.env.get("BASE_URL") ?? "http://localhost:3000";
+
+// ✅ Canonical public app URL (NO localhost in prod)
+const PUBLIC_APP_URL =
+  Deno.env.get("PUBLIC_APP_URL") ?? "http://localhost:3000";
 
 if (!STRIPE_SECRET_KEY) {
   console.error("❌ Missing STRIPE_SECRET_KEY");
+}
+
+if (!STRIPE_PRICE_STARTER) {
+  console.error("❌ Missing STRIPE_PRICE_STARTER");
 }
 
 const stripe = new Stripe(STRIPE_SECRET_KEY ?? "", {
@@ -33,15 +40,16 @@ router.post("/create", async (ctx) => {
   console.log("🔥 /checkout/create HIT");
 
   /* ---------- PARSE BODY (Oak v12 SAFE) ---------- */
-  const bodyValue = await ctx.request.body({ type: "json" }).value;
+  const bodyResult = ctx.request.body({ type: "json" });
+  const body = await bodyResult.value;
 
-  if (!bodyValue || typeof bodyValue !== "object") {
+  if (!body || typeof body !== "object") {
     ctx.response.status = 400;
     ctx.response.body = { error: "Invalid JSON body" };
     return;
   }
 
-  const auditId = (bodyValue as { auditId?: string }).auditId;
+  const auditId = (body as { auditId?: string }).auditId;
 
   if (!auditId || typeof auditId !== "string") {
     ctx.response.status = 400;
@@ -103,22 +111,13 @@ router.post("/create", async (ctx) => {
           quantity: 1,
         },
       ],
-      success_url: `${BASE_URL}/success?auditId=${auditId}`,
-      cancel_url: `${BASE_URL}/cancel`,
+      success_url: `${PUBLIC_APP_URL}/success?auditId=${auditId}`,
+      cancel_url: `${PUBLIC_APP_URL}/cancel`,
       metadata: {
-        auditId, // 🔒 SINGLE SOURCE OF TRUTH
+        auditId,
       },
     });
 
-    console.log("🧪 ENV CHECK", {
-  STRIPE_PRICE_STARTER,
-  STRIPE_SECRET_KEY_PREFIX: STRIPE_SECRET_KEY?.slice(0, 10),
-});
-
-console.log(
-  "🔐 Stripe key prefix:",
-  STRIPE_SECRET_KEY?.slice(0, 8)
-);
     console.log("✅ Stripe session created:", session.id);
 
     ctx.response.status = 200;
