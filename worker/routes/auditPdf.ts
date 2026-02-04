@@ -60,7 +60,28 @@ const body = await (ctx.request as any).body?.json?.()
   // --------------------
   // 3. Generate PDF
   // --------------------
-  const pdfBytes = await generateAuditPdf(audit.analysis);
+  let pdfBytes: Uint8Array;
+  
+  try {
+    console.log("🧠 Starting PDF generation for audit", auditId);
+    pdfBytes = await generateAuditPdf(audit.analysis);
+  } catch (err) {
+    console.error("❌ PDF generation failed for audit", auditId, err);
+  
+    await supabase
+      .from("lease_audits")
+      .update({
+        status: "error",
+      })
+      .eq("id", auditId);
+  
+    ctx.response.status = 200;
+    ctx.response.body = {
+      success: false,
+      error: "PDF generation failed",
+    };
+    return;
+  }
 
   // --------------------
   // 4. Upload PDF (CORRECT PATH — NO PREFIX)
@@ -86,6 +107,7 @@ const body = await (ctx.request as any).body?.json?.()
     .from("lease_audits")
     .update({
       object_path: objectPath,
+      status: "complete",
     })
     .eq("id", auditId);
 
