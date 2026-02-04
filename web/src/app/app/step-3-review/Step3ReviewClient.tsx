@@ -94,73 +94,103 @@ export default function Step3ReviewClient() {
       </div>
 
       {/* ---------- GREEN SUMMARY BOX ---------- */}
-      {exposure != null && (
-        <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">💰</span>
-            <div>
-              <p className="text-sm text-emerald-700 font-medium">
-                Estimated Avoidable Exposure (Next 12 Months)
-              </p>
-              <p className="text-4xl font-extrabold text-emerald-900">
-                ${exposure.toLocaleString()}
-              </p>
-            </div>
-          </div>
-
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
-            ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
-          </div>
-
-          <p className="text-sm text-emerald-800">
-            Confidence reflects clarity of CAM, escalation, and reconciliation
-            clauses
+{exposure != null && (
+  <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-5">
+    {/* Header */}
+    <div className="flex items-center gap-3">
+      <span className="text-2xl">💰</span>
+      <div>
+        <p className="text-sm text-emerald-700 font-medium">
+          Estimated Avoidable Exposure (Next 12 Months)
+        </p>
+        <p className="text-4xl font-extrabold text-emerald-900">
+          ${exposure.toLocaleString()}
+        </p>
+        {analysis.teaser_summary?.estimated_avoidable_range && (
+          <p className="mt-1 text-sm text-emerald-800">
+            Estimated recovery range:{" "}
+            <span className="font-semibold">
+              ${analysis.teaser_summary.estimated_avoidable_range.low.toLocaleString()}
+              {" – "}
+              ${analysis.teaser_summary.estimated_avoidable_range.high.toLocaleString()}
+            </span>
           </p>
+        )}
+      </div>
+    </div>
 
-          <div className="space-y-1">
-            <div className="h-2 w-full rounded-full bg-emerald-200 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-emerald-600 transition-all"
-                style={{ width: `${confidence}%` }}
-              />
-            </div>
+    {/* Confidence / badge */}
+    <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
+      ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+    </div>
 
-            <p className="text-xs text-emerald-700">
-              {confidence >= 75
-                ? "High confidence — terms are clearly defined"
-                : confidence >= 40
-                ? "Moderate confidence — some ambiguity detected"
-                : "Lower confidence — lease language is unclear"}
-            </p>
-          </div>
+    <div>
+      <p className="text-sm text-emerald-800 mb-2">
+        Confidence reflects clarity of CAM, escalation, and reconciliation clauses
+      </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm">
-            <div>
-              <p className="font-semibold">Tenant</p>
-              <p>{analysis.tenant ?? "—"}</p>
-            </div>
-
-            <div>
-              <p className="font-semibold">Landlord</p>
-              <p>{analysis.landlord ?? "—"}</p>
-            </div>
-
-            <div>
-              <p className="font-semibold">Premises</p>
-              <p>{analysis.premises ?? "—"}</p>
-            </div>
-
-            <div>
-              <p className="font-semibold">Lease Term</p>
-              <p>
-                {analysis.lease_start && analysis.lease_end
-                  ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
-                  : "—"}
-              </p>
-            </div>
-          </div>
+      <div className="space-y-1">
+        <div className="h-2 w-full rounded-full bg-emerald-200 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-emerald-600 transition-all"
+            style={{ width: `${confidence}%` }}
+          />
         </div>
-      )}
+
+        <p className="text-xs text-emerald-700">
+          {confidence >= 75
+            ? "High confidence — terms are clearly defined"
+            : confidence >= 40
+            ? "Moderate confidence — some ambiguity detected"
+            : "Lower confidence — lease language is unclear"}
+        </p>
+      </div>
+    </div>
+
+    {/* How calculated */}
+    <div className="rounded-lg bg-white/60 p-4 border border-emerald-200">
+      <p className="text-sm font-semibold text-emerald-900 mb-2">
+        How this estimate was calculated
+      </p>
+      <ul className="list-disc list-inside space-y-1 text-sm text-emerald-900">
+        <li>CAM / NNN charges flagged as <span className="font-semibold">uncapped, ambiguous, or escalating</span></li>
+        <li>Conservative dollar ranges inferred from lease language (not worst-case)</li>
+        <li>Annualized impact based on current rent and reconciliation rules</li>
+      </ul>
+
+      <p className="mt-3 text-xs text-emerald-700 italic">
+        Final recovery depends on lease interpretation, audit rights, and timing.
+      </p>
+    </div>
+
+    {/* Lease metadata */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm">
+      <div>
+        <p className="font-semibold">Tenant</p>
+        <p>{analysis.tenant ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Landlord</p>
+        <p>{analysis.landlord ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Premises</p>
+        <p>{analysis.premises ?? "—"}</p>
+      </div>
+
+      <div>
+        <p className="font-semibold">Lease Term</p>
+        <p>
+          {analysis.lease_start && analysis.lease_end
+            ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
+            : "—"}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* ---------- CHECKOUT BUTTON ---------- */}
       <button
