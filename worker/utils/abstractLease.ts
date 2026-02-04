@@ -70,8 +70,6 @@ function formatMoney(n: number): string {
 
 /* -------------------- CORE FIELDS -------------------- */
 
-/* -------------------- CORE FIELDS -------------------- */
-
 function extractTenant(text: string): string | null {
   return extractWithPatterns(text, [
     /Tenant:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
@@ -478,9 +476,9 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   });
 
   return {
-  tenant: extractTenant(text),
-  landlord: extractLandlord(text),
-  premises: extractPremises(text),
+  tenant: extractTenant(text) || null,
+  landlord: extractLandlord(text) || null,
+  premises: extractPremises(text) || null,
 
   lease_start,
   lease_end,
