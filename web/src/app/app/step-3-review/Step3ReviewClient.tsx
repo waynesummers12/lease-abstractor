@@ -97,9 +97,10 @@ export default function Step3ReviewClient() {
 
       const range = analysis.teaser_summary?.estimated_avoidable_range;
 
-const exposure = range
-  ? midpoint(range)
-  : null;
+const exposure =
+  range
+    ? midpoint(range)
+    : analysis.cam_total_avoidable_exposure ?? null;
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
