@@ -72,9 +72,14 @@ router.get("/auditById/:auditId", async (ctx) => {
   let signedUrl: string | null = null;
 
   /* --------------------------------------------------
-     ONLY expose PDF if generation is COMPLETE
-  -------------------------------------------------- */
-  if (audit.status === "complete" && audit.audit_pdf_path) {
+       EXPOSE PDF ONCE IT EXISTS (STATUS MAY LAG)
+       Canonical path: audit-pdfs/<auditId>.pdf
+    -------------------------------------------------- */
+  const hasPdf =
+    typeof audit.audit_pdf_path === "string" &&
+    audit.audit_pdf_path.startsWith("audit-pdfs/");
+
+  if (hasPdf) {
     console.log("📄 Creating signed URL for PDF:", audit.audit_pdf_path);
 
     const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
@@ -90,7 +95,8 @@ router.get("/auditById/:auditId", async (ctx) => {
     }
   } else {
     console.log(
-      "ℹ️ PDF not available yet. status =",
+      "ℹ️ PDF not available yet.",
+      "status =",
       audit.status,
       "path =",
       audit.audit_pdf_path
@@ -104,10 +110,12 @@ const normalizedAnalysis = audit.analysis
   ? normalizeAuditForSuccess(audit.analysis)
   : null;
 
+const effectiveStatus =
+  hasPdf && audit.status !== "complete" ? "complete" : audit.status;
 
 ctx.response.body = {
   id: audit.id,
-  status: audit.status,
+  status: effectiveStatus,
   analysis: normalizedAnalysis,
   audit_pdf_path: audit.audit_pdf_path,
   signedUrl,
