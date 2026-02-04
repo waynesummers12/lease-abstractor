@@ -1,4 +1,16 @@
 // worker/routes/checkout.ts
+/**
+ * WORKER ROUTE — SAVEONLEASE V1 (LOCKED)
+ *
+ * Runtime:
+ * - Deno + Oak
+ *
+ * Responsibilities:
+ * - Fetch completed audit
+ * - Generate signed PDF URL
+ *
+ * This route is called ONLY by the web API proxy.
+ */
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
