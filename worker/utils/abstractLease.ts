@@ -266,7 +266,7 @@ function extractCamNnn(
   ]);
 
   const referencesCam =
-    /CAM|NNN|operating expenses|common area/i.test(text);
+  /(CAM|NNN|operating expenses|common area|pro\s*rata)/i.test(text);
 
   const is_uncapped =
     /no cap|without limitation|all operating expenses/i.test(text);
@@ -295,12 +295,38 @@ function extractCamNnn(
   }
 
   // 2️⃣ Fallback: estimate CAM from rent if referenced but not priced
-  if (!monthlyAmount && referencesCam && annualRent) {
-    const estimatedAnnual = estimateCamFromRent(text, annualRent);
-    if (estimatedAnnual) {
-      monthlyAmount = Math.round(estimatedAnnual / 12);
-    }
+if (!monthlyAmount && referencesCam && annualRent) {
+  const estimatedAnnual = estimateCamFromRent(text, annualRent);
+  if (estimatedAnnual) {
+    monthlyAmount = Math.round(estimatedAnnual / 12);
   }
+}
+
+// 3️⃣ Structural CAM fallback (no rent available)
+if (!monthlyAmount && referencesCam) {
+  // Conservative baseline monthly CAM by property type
+  let assumedMonthly = 2000; // default floor
+
+  if (/retail|shopping center|plaza/i.test(text)) {
+    assumedMonthly = 3500;
+  } else if (/office/i.test(text)) {
+    assumedMonthly = 2800;
+  } else if (/industrial|warehouse/i.test(text)) {
+    assumedMonthly = 1500;
+  }
+
+  monthlyAmount = assumedMonthly;
+}
+
+console.log("[CAM DEBUG]", {
+  monthlyAmount,
+  referencesCam,
+  annualRent,
+  is_uncapped,
+  reconciliation,
+  pro_rata,
+  includes_capex,
+});
 
   if (!monthlyAmount) {
     return {
