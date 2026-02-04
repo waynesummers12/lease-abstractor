@@ -117,7 +117,7 @@ ctx.response.body = {
   id: audit.id,
   status: effectiveStatus,
   analysis: normalizedAnalysis,
-  audit_pdf_path: audit.audit_pdf_path,
+  audit_pdf_path: signedUrl ? null : audit.audit_pdf_path,
   signedUrl,
 };
 
