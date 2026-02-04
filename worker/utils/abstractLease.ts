@@ -361,25 +361,6 @@ function computeLeaseHealth(input: {
   let score = 100;
 
   const baseCam = input.cam_nnn.annual_amount ?? 0;
-  const totalCam =
-    (input.cam_nnn.total_exposure ?? 0) +
-    (input.cam_nnn.escalation_exposure ?? 0);
-
-  /* ---------- UNCAPPED CAM ---------- */
-  if (input.cam_nnn.is_uncapped && totalCam > 0) {
-    const uncappedExposure = totalCam * 0.15;
-
-    flags.push({
-      code: "UNCAPPED_CAM",
-      label: "Uncapped CAM expense growth",
-      severity: uncappedExposure > 20000 ? "high" : "medium",
-      recommendation:
-        "Negotiate a hard annual cap (typically 3–6%) and exclude non-operating expenses.",
-      estimated_impact: formatMoney(uncappedExposure),
-    });
-
-    score -= uncappedExposure > 20000 ? 25 : 15;
-  }
 
   /* ---------- CAPITAL EXPENDITURES ---------- */
   if (input.cam_nnn.includes_capex && baseCam > 0) {
@@ -390,45 +371,33 @@ function computeLeaseHealth(input: {
       label: "Capital expenditures included in CAM",
       severity: capexExposure > 15000 ? "high" : "medium",
       recommendation:
-        "Capital improvements should be excluded from CAM or amortized per lease standards.",
+        "Capital improvements should be excluded from CAM or amortized over useful life per lease standards.",
       estimated_impact: formatMoney(capexExposure),
     });
 
-    score -= input.cam_nnn.is_uncapped
-  ? 10   // already penalized above
-  : capexExposure > 15000
-  ? 20
-  : 10;
-  if (flags.length === 1 && score < 80) {
-  score = 80;
-}
-
-score = Math.max(0, Math.min(100, score))
+    score -= capexExposure > 15000 ? 20 : 10;
   }
 
   /* ---------- PRO-RATA ALLOCATION ---------- */
-  if (
-  input.cam_nnn.pro_rata &&
-  baseCam > 0 &&
-  (!input.cam_nnn.reconciliation || input.cam_nnn.is_uncapped)
-) {
-  const proRataExposure = baseCam * 0.08;
+  if (input.cam_nnn.pro_rata && baseCam > 0) {
+    const proRataExposure = baseCam * 0.08;
 
-  flags.push({
-    code: "PRO_RATA",
-    label: "Pro-rata CAM allocation risk",
-    severity: proRataExposure > 8000 ? "medium" : "low",
-    recommendation:
-      "Verify the rentable-area denominator, confirm vacant space is properly excluded, and ensure co-tenancy or gross-up adjustments are applied correctly.",
-    estimated_impact: formatMoney(proRataExposure),
-  });
+    flags.push({
+      code: "PRO_RATA",
+      label: "Pro-rata CAM allocation risk",
+      severity: proRataExposure > 8000 ? "medium" : "low",
+      recommendation:
+        "Verify rentable-area denominator, confirm vacant space is excluded, and ensure any gross-up or co-tenancy adjustments are applied correctly.",
+      estimated_impact: formatMoney(proRataExposure),
+    });
 
-  score -= proRataExposure > 8000 ? 10 : 5;
-}
+    score -= proRataExposure > 8000 ? 10 : 5;
+  }
 
-score = Math.max(0, Math.min(100, score));
+  /* ---------- FINAL NORMALIZATION ---------- */
+  score = Math.max(0, Math.min(100, score));
 
-return { score, flags };
+  return { score, flags };
 }
 
 /* -------------------- MAIN EXPORT -------------------- */
@@ -466,7 +435,12 @@ export function abstractLease(rawText: string) {
     term_months
   );
 
-  const cam_nnn = extractCamNnn(text, term_months);
+  const annualRent =
+  rent.base_rent && rent.frequency === "monthly"
+    ? rent.base_rent * 12
+    : rent.base_rent;
+
+const cam_nnn = extractCamNnn(text, term_months, annualRent);
 
   const health = computeLeaseHealth({
     lease_start,
