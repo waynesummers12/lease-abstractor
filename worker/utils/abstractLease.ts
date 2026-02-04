@@ -374,6 +374,7 @@ export type LeaseRiskFlag = {
 
 export type LeaseHealth = {
   score: number;
+  confidence: number;
   flags: LeaseRiskFlag[];
 };
 
@@ -385,6 +386,7 @@ function computeLeaseHealth(input: {
 }): LeaseHealth {
   const flags: LeaseRiskFlag[] = [];
   let score = 100;
+  let confidence = 100;
 
   const baseCam = input.cam_nnn.annual_amount ?? 0;
 
@@ -402,6 +404,7 @@ function computeLeaseHealth(input: {
     });
 
     score -= capexExposure > 15000 ? 20 : 10;
+    confidence -= capexExposure > 15000 ? 15 : 8;
   }
 
   /* ---------- PRO-RATA ALLOCATION ---------- */
@@ -418,12 +421,23 @@ function computeLeaseHealth(input: {
     });
 
     score -= proRataExposure > 8000 ? 10 : 5;
+    confidence -= proRataExposure > 8000 ? 8 : 4;
   }
+
+  /* ---------- STRUCTURAL CONFIDENCE ADJUSTMENTS ---------- */
+  if (!input.cam_nnn.annual_amount) confidence -= 25;
+  if (!input.term_months) confidence -= 15;
+  if (input.cam_nnn.is_uncapped) confidence -= 10;
 
   /* ---------- FINAL NORMALIZATION ---------- */
   score = Math.max(0, Math.min(100, score));
+  confidence = Math.max(30, Math.min(100, confidence));
 
-  return { score, flags };
+  return {
+    score,
+    confidence,
+    flags,
+  };
 }
 
 /* -------------------- MAIN EXPORT -------------------- */
