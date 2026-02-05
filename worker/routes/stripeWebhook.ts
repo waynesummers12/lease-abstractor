@@ -40,7 +40,7 @@ router.post("/stripe/webhook", async (ctx) => {
      READ RAW BODY (OAK v12 – CORRECT)
   -------------------------------------------------- */
   const body = ctx.request.body({ type: "text" });
-  const rawBody = await body.value;
+const rawBody = await body.value;
 
   if (!rawBody || typeof rawBody !== "string") {
     ctx.throw(400, "Empty or invalid webhook body");
