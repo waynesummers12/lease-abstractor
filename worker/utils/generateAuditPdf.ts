@@ -170,8 +170,9 @@ export async function generateAuditPdf(
 
   const _formatMoney = (n: number) => `$${n.toLocaleString()}`;
 
-  let page = pdf.addPage([612, 792]); // US Letter
-  let y = 760;
+  // let page and y are initialized with the Executive Summary page below
+  let page: import("npm:pdf-lib@1.17.1").PDFPage;
+  let y: number;
 
   /* ------------------------------------------------------------------
      EXECUTIVE SUMMARY (PAGE 1)
@@ -192,7 +193,7 @@ export async function generateAuditPdf(
   y -= 16;
 
   drawWrapped(
-    "This report summarizes potential CAM / NNN cost recovery opportunities identified through automated lease analysis.",
+    `This report summarizes CAM / NNN cost exposure identified in the lease for ${analysis.tenant ?? "the tenant"}${analysis.landlord ? ` with ${analysis.landlord}` : ""}. Findings below reference specific risk patterns detected in the lease language and their estimated annual impact.`,
     12,
     40,
     532,
@@ -262,10 +263,17 @@ export async function generateAuditPdf(
   drawWrapped("Key Observations", 14, 40, 532, black, true);
   y -= 8;
 
+  const flagSummaries = (analysis.health?.flags ?? [])
+    .slice(0, 3)
+    .map(f => {
+      const impact = f.estimated_impact ? ` (${f.estimated_impact})` : "";
+      return `- ${f.label}${impact}`;
+    });
+
   drawWrapped(
-    "- CAM / NNN language allows expenses beyond standard operating costs\n"
-      + "- Certain charges may be uncapped or improperly allocated\n"
-      + "- Recovery opportunity exists if audit rights are exercised timely",
+    flagSummaries.length
+      ? flagSummaries.join("\n")
+      : "- No material CAM / NNN risks detected based on extracted lease terms",
     12,
     40,
     532,
@@ -278,7 +286,9 @@ export async function generateAuditPdf(
   y -= 6;
 
   drawWrapped(
-    "Initiate a formal CAM / NNN audit and request landlord reconciliation support to preserve recovery rights.",
+    execMid !== null
+      ? `Based on an estimated $${execMid.toLocaleString()} in annual exposure, a formal CAM / NNN audit is recommended to validate charges and preserve recovery rights.`
+      : "A formal CAM / NNN audit is recommended to validate charges and preserve recovery rights.",
     12,
     40,
     532,
