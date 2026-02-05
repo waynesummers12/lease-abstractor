@@ -183,6 +183,33 @@ export async function generateAuditPdf(
   page = pdf.addPage([612, 792]);
   y = 760;
 
+  /* ------------------------------------------------------------------
+     WHAT THIS REPORT TELLS YOU
+  ------------------------------------------------------------------- */
+
+  drawWrapped("What This Report Tells You", 16, 40, 532, black, true);
+  y -= 10;
+
+  drawWrapped(
+    "Most tenants pay CAM and NNN charges assuming they’re correct. In practice, leases often contain language that allows costs to escalate quietly over time — especially through reconciliation timing, expense definitions, and allocation methods.",
+    12,
+    40,
+    532,
+    gray
+  );
+
+  y -= 10;
+
+  drawWrapped(
+    "This report highlights where your lease could expose you to unnecessary CAM / NNN costs and where a formal audit would be most likely to uncover recoverable dollars.",
+    12,
+    40,
+    532,
+    gray
+  );
+
+  y -= 28;
+
   const range = analysis.teaser_summary?.estimated_avoidable_range;
   const execLow = range?.low ?? null;
   const execHigh = range?.high ?? null;
