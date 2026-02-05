@@ -81,13 +81,20 @@ export async function generateAuditPdf(
 
   const lineHeight = (size: number) => size + 5;
 
+  const sanitizeText = (text: string) =>
+    text
+      .replace(/\u2011/g, "-")   // non-breaking hyphen
+      .replace(/\u2013|\u2014/g, "-") // en/em dashes
+      .replace(/\u2212/g, "-")   // minus sign
+      .replace(/\u00A0/g, " "); // non-breaking space
+
   const wrapLines = (
     text: string,
     size: number,
     maxWidth: number,
     useBold = false
   ) => {
-    const words = text.split(/\s+/);
+    const words = sanitizeText(text).split(/\s+/);
     const lines: string[] = [];
     let current = "";
 
