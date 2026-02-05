@@ -153,10 +153,10 @@ router.post("/stripe/webhook", async (ctx) => {
     }
 
     const fileName = `${auditId}.pdf`;
-    const objectPath = `audit-pdfs/${fileName}`;
+    const objectPath = `leases/${fileName}`;
 
     const { error: uploadError } = await supabase.storage
-      .from("audit-pdfs")
+      .from("leases")
       .upload(fileName, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
@@ -195,7 +195,7 @@ router.post("/stripe/webhook", async (ctx) => {
        5) CREATE SIGNED URL + EMAIL
     -------------------------------------------------- */
     const { data: signed, error: signedError } = await supabase.storage
-      .from("audit-pdfs")
+      .from("leases")
       .createSignedUrl(fileName, 60 * 10);
 
     if (signedError || !signed?.signedUrl) {
