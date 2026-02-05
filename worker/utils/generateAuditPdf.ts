@@ -176,153 +176,175 @@ export async function generateAuditPdf(
   let page: import("npm:pdf-lib@1.17.1").PDFPage;
   let y: number;
 
-  /* ------------------------------------------------------------------
-     EXECUTIVE SUMMARY (PAGE 1)
-  ------------------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   EXECUTIVE SUMMARY (PAGE 1)
+------------------------------------------------------------------- */
 
-  page = pdf.addPage([612, 792]);
-  y = 760;
+page = pdf.addPage([612, 792]);
+y = 760;
 
-  /* ------------------------------------------------------------------
-     WHAT THIS REPORT TELLS YOU
-  ------------------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   WHAT THIS REPORT TELLS YOU
+------------------------------------------------------------------- */
 
-  drawWrapped("What This Report Tells You", 16, 40, 532, black, true);
-  y -= 10;
+drawWrapped("What This Report Tells You", 16, 40, 532, black, true);
+y -= 10;
+
+drawWrapped(
+  "CAM and NNN charges are rarely static. Even when base rent is fixed, operating expenses can increase through reconciliation timing, expense definitions, administrative markups, and allocation methods written into the lease.",
+  12,
+  40,
+  532,
+  gray
+);
+
+y -= 10;
+
+drawWrapped(
+  "This report reviews your lease language to identify where those mechanisms exist and where a formal audit would be most likely to uncover avoidable or recoverable CAM / NNN costs.",
+  12,
+  40,
+  532,
+  gray
+);
+
+y -= 28;
+
+const range = analysis.teaser_summary?.estimated_avoidable_range;
+const execLow = range?.low ?? null;
+const execHigh = range?.high ?? null;
+const execMid =
+  execLow !== null && execHigh !== null
+    ? Math.round((execLow + execHigh) / 2)
+    : null;
+
+/* ------------------------------------------------------------------
+   EXECUTIVE SUMMARY
+------------------------------------------------------------------- */
+
+drawWrapped("Executive Summary", 22, 40, 532, black, true);
+y -= 16;
+
+drawWrapped(
+  `SaveOnLease analyzed the CAM / NNN provisions in the lease for ${analysis.tenant ?? "the tenant"}${analysis.landlord ? ` with ${analysis.landlord}` : ""}. Our review focused on expense caps, reconciliation rights, audit timing, and cost allocation language that directly influence what the tenant may be required to pay each year.`,
+  12,
+  40,
+  532,
+  gray
+);
+
+y -= 14;
+
+drawWrapped(
+  "Even where leases appear standard, these provisions often create compounding cost exposure over time if left unchecked.",
+  12,
+  40,
+  532,
+  gray
+);
+
+y -= 20;
+
+if (execMid !== null) {
+  const boxHeight = 160;
+
+  page.drawRectangle({
+    x: 36,
+    y: y - boxHeight + 12,
+    width: 540,
+    height: boxHeight,
+    borderColor: rgb(0.82, 0.82, 0.82),
+    borderWidth: 1.5,
+    color: lightGray,
+  });
+
+  y -= 20;
 
   drawWrapped(
-    "Most tenants pay CAM and NNN charges assuming they’re correct. In practice, leases often contain language that allows costs to escalate quietly over time — especially through reconciliation timing, expense definitions, and allocation methods.",
-    12,
-    40,
-    532,
-    gray
+    "Estimated Avoidable CAM / NNN Exposure (Next 12 Months)",
+    13,
+    52,
+    500,
+    gray,
+    true
   );
 
   y -= 10;
 
   drawWrapped(
-    "This report highlights where your lease could expose you to unnecessary CAM / NNN costs and where a formal audit would be most likely to uncover recoverable dollars.",
+    `$${execMid.toLocaleString()}`,
+    36,
+    52,
+    500,
+    green,
+    true
+  );
+
+  y -= 10;
+
+  drawWrapped(
+    `Estimated range based on lease mechanics: $${execLow!.toLocaleString()} – $${execHigh!.toLocaleString()}`,
     12,
-    40,
-    532,
+    52,
+    500,
     gray
   );
 
-  y -= 28;
-
-  const range = analysis.teaser_summary?.estimated_avoidable_range;
-  const execLow = range?.low ?? null;
-  const execHigh = range?.high ?? null;
-  const execMid =
-    execLow !== null && execHigh !== null
-      ? Math.round((execLow + execHigh) / 2)
-      : null;
-
-  drawWrapped("Executive Summary", 22, 40, 532, black, true);
-  y -= 16;
+  y -= 14;
 
   drawWrapped(
-    `This report analyzes the CAM / NNN provisions in the lease for ${analysis.tenant ?? "the tenant"}${analysis.landlord ? ` with ${analysis.landlord}` : ""}. The estimates below are derived directly from lease language related to expense caps, reconciliation rights, and cost allocation methods that materially affect what the tenant may be required to pay.`,
-    12,
-    40,
-    532,
+    "This estimate reflects conservative, lease-based analysis. Actual recovery depends on documentation, timing, and enforcement of audit rights.",
+    11,
+    52,
+    500,
     gray
   );
 
   y -= 24;
+}
 
-  if (execMid !== null) {
-    const boxHeight = 160;
+/* ------------------------------------------------------------------
+   KEY OBSERVATIONS
+------------------------------------------------------------------- */
 
-    page.drawRectangle({
-      x: 36,
-      y: y - boxHeight + 12,
-      width: 540,
-      height: boxHeight,
-      borderColor: rgb(0.82, 0.82, 0.82),
-      borderWidth: 1.5,
-      color: lightGray,
-    });
+drawWrapped("Key Observations", 14, 40, 532, black, true);
+y -= 8;
 
-    y -= 20;
+const flagSummaries = (analysis.health?.flags ?? [])
+  .slice(0, 3)
+  .map(f => {
+    const impact = f.estimated_impact ? ` (${f.estimated_impact})` : "";
+    return `- ${f.label}${impact}`;
+  });
 
-    drawWrapped(
-      "Estimated Recoverable CAM / NNN Exposure (Next 12 Months)",
-      13,
-      52,
-      500,
-      gray,
-      true
-    );
+drawWrapped(
+  flagSummaries.length
+    ? flagSummaries.join("\n")
+    : "- No high-risk CAM or NNN clauses were identified in the extracted lease language. However, reconciliation timing, audit windows, and allocation provisions still warrant review.",
+  12,
+  40,
+  532,
+  gray
+);
 
-    y -= 10;
+y -= 28;
 
-    drawWrapped(
-      `$${execMid.toLocaleString()}`,
-      36,
-      52,
-      500,
-      green,
-      true
-    );
+/* ------------------------------------------------------------------
+   RECOMMENDED NEXT STEP
+------------------------------------------------------------------- */
 
-    y -= 10;
+drawWrapped("Recommended Next Step", 14, 40, 532, black, true);
+y -= 6;
 
-    drawWrapped(
-      `Estimated recovery range: $${execLow!.toLocaleString()} - $${execHigh!.toLocaleString()}`,
-      12,
-      52,
-      500,
-      gray
-    );
-
-    y -= 14;
-
-    drawWrapped(
-      "This estimate reflects conservative lease-based analysis. Actual recovery depends on audit rights, interpretation, and timing.",
-      11,
-      52,
-      500,
-      gray
-    );
-
-    y -= 24;
-  }
-
-  drawWrapped("Key Observations", 14, 40, 532, black, true);
-  y -= 8;
-
-  const flagSummaries = (analysis.health?.flags ?? [])
-    .slice(0, 3)
-    .map(f => {
-      const impact = f.estimated_impact ? ` (${f.estimated_impact})` : "";
-      return `- ${f.label}${impact}`;
-    });
-
-  drawWrapped(
-    flagSummaries.length
-      ? flagSummaries.join("\n")
-      : "- No high‑risk CAM or NNN clauses were detected in the extracted lease language; however, standard reconciliation and audit timing provisions still apply.",
-    12,
-    40,
-    532,
-    gray
-  );
-
-  y -= 28;
-
-  drawWrapped("Recommended Next Step", 14, 40, 532, black, true);
-  y -= 6;
-
-  drawWrapped(
-    execMid !== null
-      ? `Based on an estimated $${execMid.toLocaleString()} in annual exposure, a formal CAM / NNN audit is recommended to validate charges and preserve recovery rights.`
-      : "A formal CAM / NNN audit is recommended to validate charges and preserve recovery rights.",
-    12,
-    40,
-    532,
-    gray
-  );
+drawWrapped(
+  execMid !== null
+    ? `Given the estimated annual exposure of approximately $${execMid.toLocaleString()}, a formal CAM / NNN audit is recommended to validate charges and preserve recovery rights before audit windows expire.`
+    : "A formal CAM / NNN audit is recommended to validate charges and preserve recovery rights, particularly with respect to reconciliation timing and documentation requirements.",
+  12,
+  40,
+  532,
+  gray
+);
 
    /* ------------------------------------------------------------------
      LEASE DETAILS CARD
@@ -387,27 +409,68 @@ for (const [label, value] of details) {
      AUDIT FINDINGS
   ------------------------------------------------------------------- */
 
-  drawSectionTitle("Audit Findings");
+  drawSectionTitle("Audit Findings — Key Cost Drivers");
 
   const flags = analysis.health?.flags ?? [];
 
-  if (flags.length === 0) {
-    ensureSpace(
-      measureHeight(
-        "No material CAM or NNN risks were detected based on the extracted lease terms.",
-        11,
-        532
-      ) + 12
-    );
+if (flags.length === 0) {
+  ensureSpace(
+    measureHeight(
+      "No material CAM or NNN overcharges were identified based on the extracted lease terms. Standard reconciliation, audit timing, and documentation rights still apply.",
+      11,
+      532
+    ) + 12
+  );
+
+  drawWrapped(
+    "No material CAM or NNN overcharges were identified based on the extracted lease terms. Standard reconciliation, audit timing, and documentation rights still apply.",
+    11,
+    40,
+    532,
+    gray
+  );
+
+  y -= 8;
+} else {
+  let index = 1;
+
+  for (const flag of flags) {
+    ensureSpace(120);
+
     drawWrapped(
-      "No material CAM or NNN risks were detected based on the extracted lease terms.",
+      `${index}. ${flag.label}`,
+      13,
+      40,
+      532,
+      black,
+      true
+    );
+    y -= 6;
+
+    drawWrapped(
+      flag.recommendation,
       11,
       40,
       532,
       gray
     );
-    y -= 4;
+
+    if (flag.estimated_impact) {
+      y -= 6;
+      drawWrapped(
+        `Estimated Tenant Impact: ${flag.estimated_impact}`,
+        11,
+        40,
+        532,
+        black,
+        true
+      );
+    }
+
+    y -= 18;
+    index++;
   }
+}
 
   const findingPaddingTop = 18;
   const findingPaddingBottom = 14;
