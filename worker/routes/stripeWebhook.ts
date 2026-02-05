@@ -153,7 +153,7 @@ const rawBody = await body.value;
     }
 
     const fileName = `${auditId}.pdf`;
-const objectPath = `audit-pdfs/${fileName}`;
+const objectPath = fileName;
 
 const { error: uploadError } = await supabase.storage
   .from("audit-pdfs")
