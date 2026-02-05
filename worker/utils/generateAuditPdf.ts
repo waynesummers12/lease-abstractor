@@ -228,7 +228,7 @@ export async function generateAuditPdf(
     y -= 10;
 
     drawWrapped(
-      `💰 $${execMid.toLocaleString()}`,
+      `$${execMid.toLocaleString()}`,
       36,
       52,
       500,
@@ -239,7 +239,7 @@ export async function generateAuditPdf(
     y -= 10;
 
     drawWrapped(
-      `Estimated recovery range: $${execLow!.toLocaleString()} – $${execHigh!.toLocaleString()}`,
+      `Estimated recovery range: $${execLow!.toLocaleString()} - $${execHigh!.toLocaleString()}`,
       12,
       52,
       500,
@@ -263,9 +263,9 @@ export async function generateAuditPdf(
   y -= 8;
 
   drawWrapped(
-    "• CAM / NNN language allows expenses beyond standard operating costs\n"
-      + "• Certain charges may be uncapped or improperly allocated\n"
-      + "• Recovery opportunity exists if audit rights are exercised timely",
+    "- CAM / NNN language allows expenses beyond standard operating costs\n"
+      + "- Certain charges may be uncapped or improperly allocated\n"
+      + "- Recovery opportunity exists if audit rights are exercised timely",
     12,
     40,
     532,
@@ -360,7 +360,7 @@ export async function generateAuditPdf(
     );
 
     const rangeH = measureHeight(
-      `Estimated recovery range: $${range.low.toLocaleString()} – $${range.high.toLocaleString()}`,
+      `Estimated recovery range: $${range.low.toLocaleString()} - $${range.high.toLocaleString()}`,
       11,
       innerWidth
     );
@@ -411,7 +411,7 @@ export async function generateAuditPdf(
     y -= 6;
 
     drawWrapped(
-      `💰 $${mid.toLocaleString()}`,
+      `$${mid.toLocaleString()}`,
       28,
       52,
       innerWidth,
@@ -422,7 +422,7 @@ export async function generateAuditPdf(
     y -= 6;
 
     drawWrapped(
-      `Estimated recovery range: $${range.low.toLocaleString()} – $${range.high.toLocaleString()}`,
+      `Estimated recovery range: $${range.low.toLocaleString()} - $${range.high.toLocaleString()}`,
       11,
       52,
       innerWidth,
@@ -442,13 +442,13 @@ export async function generateAuditPdf(
     y = cardTop - cardHeight - 12;
   }
 
-  drawSectionTitle("✓ How this estimate was calculated");
+  drawSectionTitle("How this estimate was calculated");
 
   drawWrapped(
-    "• CAM / NNN charges flagged as uncapped, ambiguous, or escalating\n"
-    + "• Conservative dollar ranges inferred from lease language (not worst-case)\n"
-    + "• Annualized impact based on current rent and reconciliation rules\n\n"
-    + "Final recovery depends on lease interpretation, audit rights, and timing.",
+    "- CAM / NNN charges flagged as uncapped, ambiguous, or escalating\n"
+    + "- Conservative dollar ranges inferred from lease language (not worst-case)\n"
+    + "- Annualized impact based on current rent and reconciliation rules\n\n"
+    + "- Final recovery depends on lease interpretation, audit rights, and timing.",
     11,
     40,
     532,
@@ -461,7 +461,7 @@ export async function generateAuditPdf(
      LEASE DETAILS CARD
   ------------------------------------------------------------------- */
 
-  drawSectionTitle("📄 Lease Details");
+  drawSectionTitle("Lease Details");
 
   const details = [
     ["Tenant", analysis.tenant ?? "Not specified"],
@@ -520,7 +520,7 @@ for (const [label, value] of details) {
      AUDIT FINDINGS
   ------------------------------------------------------------------- */
 
-  drawSectionTitle("⚠ Audit Findings");
+  drawSectionTitle("Audit Findings");
 
   const flags = analysis.health?.flags ?? [];
 
