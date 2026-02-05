@@ -165,11 +165,6 @@ export async function generateAuditPdf(
     }
   };
 
-  const midpoint = (low: number, high: number) =>
-    Math.round((low + high) / 2);
-
-  const _formatMoney = (n: number) => `$${n.toLocaleString()}`;
-
   // let page and y are initialized with the Executive Summary page below
   let page: import("npm:pdf-lib@1.17.1").PDFPage;
   let y: number;
@@ -193,7 +188,7 @@ export async function generateAuditPdf(
   y -= 16;
 
   drawWrapped(
-    `This report summarizes CAM / NNN cost exposure identified in the lease for ${analysis.tenant ?? "the tenant"}${analysis.landlord ? ` with ${analysis.landlord}` : ""}. Findings below reference specific risk patterns detected in the lease language and their estimated annual impact.`,
+    `This report analyzes the CAM / NNN provisions in the lease for ${analysis.tenant ?? "the tenant"}${analysis.landlord ? ` with ${analysis.landlord}` : ""}. The estimates below are derived directly from lease language related to expense caps, reconciliation rights, and cost allocation methods that materially affect what the tenant may be required to pay.`,
     12,
     40,
     532,
@@ -273,7 +268,7 @@ export async function generateAuditPdf(
   drawWrapped(
     flagSummaries.length
       ? flagSummaries.join("\n")
-      : "- No material CAM / NNN risks detected based on extracted lease terms",
+      : "- No high‑risk CAM or NNN clauses were detected in the extracted lease language; however, standard reconciliation and audit timing provisions still apply.",
     12,
     40,
     532,
@@ -295,179 +290,7 @@ export async function generateAuditPdf(
     gray
   );
 
-  page = pdf.addPage([612, 792]);
-  y = 760;
-
-
-  /* ------------------------------------------------------------------
-     HEADER BAND
-  ------------------------------------------------------------------- */
-
-  page.drawRectangle({
-    x: 0,
-    y: 720,
-    width: 612,
-    height: 72,
-    color: lightGray,
-  });
-
-  page.drawText("SAVEONLEASE", {
-    x: 40,
-    y: 760,
-    size: 12,
-    font: bold,
-    color: gray,
-  });
-
-  page.drawText("CAM / NNN Lease Audit Summary", {
-    x: 40,
-    y: 738,
-    size: 21,
-    font: bold,
-    color: black,
-  });
-
-  page.drawText("Automated Lease Risk & Cost Exposure Review", {
-    x: 40,
-    y: 716,
-    size: 11,
-    font,
-    color: gray,
-  });
-
-  page.drawLine({
-    start: { x: 40, y: 704 },
-    end: { x: 572, y: 704 },
-    thickness: 1,
-    color: rgb(0.82, 0.82, 0.82),
-  });
-
-  y = 690;
-
-  /* ------------------------------------------------------------------
-     HERO RECOVERY SUMMARY CARD
-  ------------------------------------------------------------------- */
-
-  if (range && typeof range.low === "number" && typeof range.high === "number") {
-    const mid = midpoint(range.low, range.high);
-
-    const paddingTop = 20;
-    const paddingBottom = 18;
-    const innerWidth = 508;
-
-    const titleH = measureHeight(
-      "Estimated Recoverable CAM / NNN Exposure (12 Months)",
-      12,
-      innerWidth,
-      true
-    );
-
-    const amountH = measureHeight(
-      `$${mid.toLocaleString()}`,
-      28,
-      innerWidth,
-      true
-    );
-
-    const rangeH = measureHeight(
-      `Estimated recovery range: $${range.low.toLocaleString()} - $${range.high.toLocaleString()}`,
-      11,
-      innerWidth
-    );
-
-    const bodyH = measureHeight(
-      "Based on uncapped CAM language, escalation risk, and expense allocation provisions identified in the lease.",
-      11,
-      innerWidth
-    );
-
-    const spacing = 6 + 6;
-    const cardHeight =
-      paddingTop +
-      titleH +
-      spacing +
-      amountH +
-      spacing +
-      rangeH +
-      spacing +
-      bodyH +
-      paddingBottom;
-
-    ensureSpace(cardHeight + 12);
-
-    const cardTop = y;
-
-    page.drawRectangle({
-      x: 36,
-      y: cardTop - cardHeight + 14,
-      width: 540,
-      height: cardHeight,
-      borderColor: rgb(0.82, 0.82, 0.82),
-      borderWidth: 1.25,
-      color: lightGray,
-    });
-
-    y = cardTop - paddingTop;
-
-    drawWrapped(
-      "Estimated Recoverable CAM / NNN Exposure (12 Months)",
-      12,
-      52,
-      innerWidth,
-      gray,
-      true
-    );
-
-    y -= 6;
-
-    drawWrapped(
-      `$${mid.toLocaleString()}`,
-      28,
-      52,
-      innerWidth,
-      green,
-      true
-    );
-
-    y -= 6;
-
-    drawWrapped(
-      `Estimated recovery range: $${range.low.toLocaleString()} - $${range.high.toLocaleString()}`,
-      11,
-      52,
-      innerWidth,
-      gray
-    );
-
-    y -= 6;
-
-    drawWrapped(
-      "Based on uncapped CAM language, escalation risk, and expense allocation provisions identified in the lease.",
-      11,
-      52,
-      innerWidth,
-      gray
-    );
-
-    y = cardTop - cardHeight - 12;
-  }
-
-  drawSectionTitle("How this estimate was calculated");
-
-  drawWrapped(
-    "- CAM / NNN charges flagged as uncapped, ambiguous, or escalating\n"
-    + "- Conservative dollar ranges inferred from lease language (not worst-case)\n"
-    + "- Annualized impact based on current rent and reconciliation rules\n\n"
-    + "- Final recovery depends on lease interpretation, audit rights, and timing.",
-    11,
-    40,
-    532,
-    gray
-  );
-
-  y -= 12;
-
-  /* ------------------------------------------------------------------
+   /* ------------------------------------------------------------------
      LEASE DETAILS CARD
   ------------------------------------------------------------------- */
 
