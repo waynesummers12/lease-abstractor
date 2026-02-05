@@ -157,7 +157,7 @@ router.post("/stripe/webhook", async (ctx) => {
 
     const { error: uploadError } = await supabase.storage
       .from("leases")
-      .upload(fileName, pdfBytes, {
+      .upload(objectPath, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
       });
@@ -196,7 +196,7 @@ router.post("/stripe/webhook", async (ctx) => {
     -------------------------------------------------- */
     const { data: signed, error: signedError } = await supabase.storage
       .from("leases")
-      .createSignedUrl(fileName, 60 * 10);
+      .createSignedUrl(objectPath, 60 * 10);
 
     if (signedError || !signed?.signedUrl) {
       console.error("❌ Failed to create signed URL:", signedError);
@@ -204,16 +204,19 @@ router.post("/stripe/webhook", async (ctx) => {
       return;
     }
 
-    await sendAuditEmail({
-      leaseName: "Your Lease Audit",
-      signedUrl: signed.signedUrl,
-      toEmail:
-        session.customer_details?.email ??
-        session.customer_email ??
-        null,
-    });
-
-    console.log("📧 Audit email sent:", auditId);
+    try {
+      await sendAuditEmail({
+        leaseName: "Your Lease Audit",
+        signedUrl: signed.signedUrl,
+        toEmail:
+          session.customer_details?.email ??
+          session.customer_email ??
+          null,
+      });
+      console.log("📧 Audit email sent:", auditId);
+    } catch (err) {
+      console.error("⚠️ Email send failed (audit still complete):", err);
+    }
   }
 
   ctx.response.status = 200;
