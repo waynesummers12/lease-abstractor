@@ -188,7 +188,7 @@ export async function generateAuditPdf(
       ? Math.round((execLow + execHigh) / 2)
       : null;
 
-  drawWrapped("★ Executive Summary", 22, 40, 532, black, true);
+  drawWrapped(" Executive Summary", 22, 40, 532, black, true);
   y -= 16;
 
   drawWrapped(
