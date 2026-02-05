@@ -39,11 +39,13 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
   }
 
   // audit_pdf_path is stored as: "audit-pdfs/<auditId>.pdf" OR "<auditId>.pdf"
-  const fileName = data.audit_pdf_path.replace(/^audit-pdfs\//, "");
+  const fileName = data.audit_pdf_path
+  .replace(/^audit-pdfs\//, "")
+  .replace(/^leases\//, "");
 
-  const { data: signed, error: signedError } = await supabase.storage
-    .from("audit-pdfs")
-    .createSignedUrl(fileName, 60 * 10);
+const { data: signed, error: signedError } = await supabase.storage
+  .from("audit-pdfs")
+  .createSignedUrl(fileName, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
     console.error("❌ Signed URL error:", signedError);
