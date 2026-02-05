@@ -46,13 +46,13 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
     return;
   }
 
-  // Stored value is "<auditId>.pdf"
-  const fileName = data.audit_pdf_path;
+  // Stored value is full object path, e.g. "leases/<auditId>.pdf"
+  const objectPath = data.audit_pdf_path;
 
   const { data: signed, error: signedError } =
     await supabase.storage
-      .from("audit-pdfs")
-      .createSignedUrl(fileName, 60 * 10);
+      .from("leases")
+      .createSignedUrl(objectPath, 60 * 10);
 
   if (signedError || !signed?.signedUrl) {
     console.error("❌ Failed to sign PDF:", signedError);
