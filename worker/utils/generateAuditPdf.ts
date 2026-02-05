@@ -301,6 +301,48 @@ if (execMid !== null) {
   );
 
   y -= 24;
+
+/* ------------------------------------------------------------------
+   ESTIMATED ANNUAL IMPACT SUMMARY
+------------------------------------------------------------------- */
+
+if (execLow !== null && execHigh !== null) {
+  const tableTop = y;
+  const rowHeight = 22;
+
+  const rows = [
+    ["Low Estimate", `$${execLow.toLocaleString()}`],
+    ["Midpoint Estimate", `$${execMid!.toLocaleString()}`],
+    ["High Estimate", `$${execHigh.toLocaleString()}`],
+  ];
+
+  const tableHeight = rowHeight * (rows.length + 1) + 16;
+
+  ensureSpace(tableHeight + 10);
+
+  page.drawRectangle({
+    x: 36,
+    y: tableTop - tableHeight + 12,
+    width: 540,
+    height: tableHeight,
+    borderColor: rgb(0.82, 0.82, 0.82),
+    borderWidth: 1.25,
+    color: lightGray,
+  });
+
+  y = tableTop - 16;
+
+  drawWrapped("Estimated Annual Impact Summary", 13, 52, 500, black, true);
+  y -= 12;
+
+  for (const [label, value] of rows) {
+    drawWrapped(label, 11, 52, 260, gray, true, y);
+    drawWrapped(value, 11, 360, 160, black, true, y);
+    y -= rowHeight;
+  }
+
+  y = tableTop - tableHeight - 14;
+}
 }
 
 /* ------------------------------------------------------------------
