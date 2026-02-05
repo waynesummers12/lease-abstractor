@@ -72,8 +72,8 @@ export async function generateAuditPdf(
   const gray = rgb(0.45, 0.45, 0.45);
   const lightGray = rgb(0.97, 0.97, 0.97);
   const green = rgb(0.18, 0.6, 0.4);
-  const amber = rgb(0.85, 0.65, 0.13);
-  const red = rgb(0.75, 0.2, 0.2);
+  const _amber = rgb(0.85, 0.65, 0.13);
+  const _red = rgb(0.75, 0.2, 0.2);
 
   /* ------------------------------------------------------------------
      HELPERS
@@ -161,16 +161,6 @@ export async function generateAuditPdf(
     y -= 8;
   };
 
-  const severityColor = (severity: string) => {
-    switch (severity.toUpperCase()) {
-      case "HIGH":
-        return red;
-      case "MEDIUM":
-        return amber;
-      default:
-        return green;
-    }
-  };
 
   // let page and y are initialized with the Executive Summary page below
   let page: import("npm:pdf-lib@1.17.1").PDFPage;
@@ -210,6 +200,10 @@ drawWrapped(
 
 y -= 28;
 
+/* ------------------------------------------------------------------
+   EXECUTIVE SUMMARY
+------------------------------------------------------------------- */
+
 const range = analysis.teaser_summary?.estimated_avoidable_range;
 const execLow = range?.low ?? null;
 const execHigh = range?.high ?? null;
@@ -217,10 +211,6 @@ const execMid =
   execLow !== null && execHigh !== null
     ? Math.round((execLow + execHigh) / 2)
     : null;
-
-/* ------------------------------------------------------------------
-   EXECUTIVE SUMMARY
-------------------------------------------------------------------- */
 
 drawWrapped("Executive Summary", 22, 40, 532, black, true);
 y -= 16;
@@ -246,7 +236,7 @@ drawWrapped(
 y -= 20;
 
 if (execMid !== null) {
-  const boxHeight = 160;
+  const boxHeight = 150;
 
   page.drawRectangle({
     x: 36,
@@ -258,7 +248,7 @@ if (execMid !== null) {
     color: lightGray,
   });
 
-  y -= 20;
+  y -= 18;
 
   drawWrapped(
     "Estimated Avoidable CAM / NNN Exposure (Next 12 Months)",
@@ -280,10 +270,10 @@ if (execMid !== null) {
     true
   );
 
-  y -= 10;
+  y -= 8;
 
   drawWrapped(
-    `Estimated range based on lease mechanics: $${execLow!.toLocaleString()} – $${execHigh!.toLocaleString()}`,
+    `Estimated range based on lease mechanics: $${execLow!.toLocaleString()} to $${execHigh!.toLocaleString()}`,
     12,
     52,
     500,
@@ -301,48 +291,6 @@ if (execMid !== null) {
   );
 
   y -= 24;
-
-/* ------------------------------------------------------------------
-   ESTIMATED ANNUAL IMPACT SUMMARY
-------------------------------------------------------------------- */
-
-if (execLow !== null && execHigh !== null) {
-  const tableTop = y;
-  const rowHeight = 22;
-
-  const rows = [
-    ["Low Estimate", `$${execLow.toLocaleString()}`],
-    ["Midpoint Estimate", `$${execMid!.toLocaleString()}`],
-    ["High Estimate", `$${execHigh.toLocaleString()}`],
-  ];
-
-  const tableHeight = rowHeight * (rows.length + 1) + 16;
-
-  ensureSpace(tableHeight + 10);
-
-  page.drawRectangle({
-    x: 36,
-    y: tableTop - tableHeight + 12,
-    width: 540,
-    height: tableHeight,
-    borderColor: rgb(0.82, 0.82, 0.82),
-    borderWidth: 1.25,
-    color: lightGray,
-  });
-
-  y = tableTop - 16;
-
-  drawWrapped("Estimated Annual Impact Summary", 13, 52, 500, black, true);
-  y -= 12;
-
-  for (const [label, value] of rows) {
-    drawWrapped(label, 11, 52, 260, gray, true, y);
-    drawWrapped(value, 11, 360, 160, black, true, y);
-    y -= rowHeight;
-  }
-
-  y = tableTop - tableHeight - 14;
-}
 }
 
 /* ------------------------------------------------------------------
@@ -381,7 +329,7 @@ y -= 6;
 drawWrapped(
   execMid !== null
     ? `Given the estimated annual exposure of approximately $${execMid.toLocaleString()}, a formal CAM / NNN audit is recommended to validate charges and preserve recovery rights before audit windows expire.`
-    : "A formal CAM / NNN audit is recommended to validate charges and preserve recovery rights, particularly with respect to reconciliation timing and documentation requirements.",
+    : "A formal CAM / NNN audit is recommended to validate charges and preserve recovery rights.",
   12,
   40,
   532,
@@ -513,81 +461,6 @@ if (flags.length === 0) {
     index++;
   }
 }
-
-  const findingPaddingTop = 18;
-  const findingPaddingBottom = 14;
-  const findingWidth = 508;
-  const findingGap = 12;
-
-  for (const flag of flags) {
-    const titleH = measureHeight(flag.label, 13, findingWidth, true);
-    const severityH = measureHeight(
-      `Severity: ${flag.severity.toUpperCase()}`,
-      11,
-      findingWidth,
-      true
-    );
-    const recH = measureHeight(flag.recommendation, 11, findingWidth);
-    const impactH =
-      flag.estimated_impact !== undefined
-        ? measureHeight(
-            `Estimated Contribution to Annual Exposure: ${flag.estimated_impact}`,
-            11,
-            findingWidth,
-            true
-          ) + 2
-        : 0;
-    const bodySpacing = 4 + 4; // between severity/recommendation
-    const cardHeight =
-      findingPaddingTop +
-      titleH +
-      6 +
-      severityH +
-      bodySpacing +
-      recH +
-      (impactH ? 6 + impactH : 0) +
-      findingPaddingBottom;
-
-    ensureSpace(cardHeight + findingGap);
-
-    const cardTop = y;
-    page.drawRectangle({
-      x: 36,
-      y: cardTop - cardHeight + 14,
-      width: 540,
-      height: cardHeight,
-      borderColor: rgb(0.82, 0.82, 0.82),
-      borderWidth: 1.25,
-      color: lightGray,
-    });
-
-    y = cardTop - findingPaddingTop;
-    drawWrapped(flag.label, 13, 52, findingWidth, black, true);
-    y -= 6;
-    drawWrapped(
-      `Severity: ${flag.severity.toUpperCase()}`,
-      11,
-      52,
-      findingWidth,
-      severityColor(flag.severity),
-      true
-    );
-    y -= 4;
-    drawWrapped(flag.recommendation, 11, 52, findingWidth, gray);
-    if (flag.estimated_impact !== undefined) {
-      y -= 6;
-      drawWrapped(
-        `Estimated Contribution to Annual Exposure: ${flag.estimated_impact}`,
-        11,
-        52,
-        findingWidth,
-        black,
-        true
-      );
-    }
-
-    y = cardTop - cardHeight - findingGap;
-  }
 
   /* ------------------------------------------------------------------
      FOOTER DISCLAIMER
