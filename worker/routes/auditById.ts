@@ -77,15 +77,13 @@ router.get("/auditById/:auditId", async (ctx) => {
     -------------------------------------------------- */
   const hasPdf =
     typeof audit.audit_pdf_path === "string" &&
-    (audit.audit_pdf_path.startsWith("audit-pdfs/") ||
-     audit.audit_pdf_path.startsWith("leases/"));
+    audit.audit_pdf_path.startsWith("audit-pdfs/");
 
   if (hasPdf) {
     console.log("📄 Creating signed URL for PDF:", audit.audit_pdf_path);
 
-    const isAuditBucket = audit.audit_pdf_path.startsWith("audit-pdfs/");
-    const bucket = isAuditBucket ? "audit-pdfs" : "leases";
-    const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\/|^leases\//, "");
+    const bucket = "audit-pdfs";
+    const objectPath = audit.audit_pdf_path.replace(/^audit-pdfs\//, "");
 
     const { data: signed, error: signError } = await supabase.storage
       .from(bucket)
