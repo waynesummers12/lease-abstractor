@@ -1,4 +1,4 @@
-import { supabase } from "./supabaseClient.ts";
+import { supabase } from "../lib/supabase.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { generateAuditPdf } from "./generateAuditPdf.ts";
 
@@ -24,10 +24,10 @@ export async function markAuditPaid(
   }
 
   // 2️⃣ Generate PDF
-  const pdfBytes = await generateAuditPdf(audit.analysis_json);
+  const pdfBytes = await generateAuditPdf(audit.analysis);
 
   // 3️⃣ Upload PDF
-  const objectPath = `audit-pdfs/${auditId}.pdf`;
+  const objectPath = `leases/${auditId}.pdf`;
 
   const { error: uploadError } = await supabase.storage
     .from("leases")

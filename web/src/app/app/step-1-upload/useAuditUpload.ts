@@ -34,7 +34,9 @@ export function useAuditUpload() {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const objectPath = `leases/${auditId}.pdf`;
+    // Raw uploaded lease PDF (NOT the generated audit report)
+    // Audit reports are always written by the worker to the `audit-pdfs` bucket
+    const objectPath = `leases/${auditId}/lease.pdf`;
 
     // 1️⃣ Upload to Supabase
     const { error: uploadError } = await supabase.storage

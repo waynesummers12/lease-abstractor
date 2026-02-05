@@ -86,10 +86,10 @@ const body = await (ctx.request as any).body?.json?.()
   // --------------------
   // 4. Upload PDF (CORRECT PATH — NO PREFIX)
   // --------------------
-  const objectPath = `${auditId}.pdf`;
+  const objectPath = `audit-pdfs/${auditId}.pdf`;
 
   const { error: uploadError } = await supabase.storage
-  .from("leases")
+  .from("audit-pdfs")
   .upload(objectPath, pdfBytes, {
     contentType: "application/pdf",
     upsert: true, // ✅ required so retries don’t fail
@@ -106,8 +106,10 @@ const body = await (ctx.request as any).body?.json?.()
   const { error: updateError } = await supabase
     .from("lease_audits")
     .update({
+      audit_pdf_path: objectPath,
       object_path: objectPath,
       status: "complete",
+      completed_at: new Date().toISOString(),
     })
     .eq("id", auditId);
 

@@ -45,10 +45,7 @@ router.post("/pdf", async (ctx) => {
       return;
     }
 
-    const objectPath =
-      objectPathField && typeof objectPathField === "string"
-        ? objectPathField.replace(/^\//, "")
-        : `${auditId}.pdf`;
+    const objectPath = `leases/${auditId}.pdf`;
 
     console.info("[ingest] uploading lease pdf", { objectPath });
 
@@ -56,7 +53,7 @@ router.post("/pdf", async (ctx) => {
       ? new Uint8Array(file.content)
       : await Deno.readFile(file.filename!);
 
-    // 1️⃣ Upload PDF to Supabase Storage
+    // 1️⃣ Upload ORIGINAL lease PDF (input artifact)
     const { error: uploadError } = await supabase.storage
       .from("leases")
       .upload(objectPath, fileBuffer, {
@@ -86,16 +83,14 @@ router.post("/pdf", async (ctx) => {
 
     // 4️⃣ Persist audit + analysis (✅ CORRECT COLUMN)
     const { error: dbError } = await supabase
-  .from("lease_audits")
-  .upsert({
-    id: auditId,
-    // objectPath already includes "leases/..."
-    audit_pdf_path: objectPath,
-    analysis: normalized,
-    status: "analyzed",
-    created_at: new Date().toISOString(),
-  });
-
+      .from("lease_audits")
+      .upsert({
+        id: auditId,
+        object_path: objectPath, // original uploaded lease
+        analysis: normalized,
+        status: "analyzed",
+        created_at: new Date().toISOString(),
+      });
 
     if (dbError) {
       console.error("❌ DB update failed:", dbError);
