@@ -153,33 +153,33 @@ const rawBody = await body.value;
     }
 
     const fileName = `${auditId}.pdf`;
-    const objectPath = `leases/${fileName}`;
+const objectPath = `audit-pdfs/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
-      .from("leases")
-      .upload(objectPath, pdfBytes, {
-        contentType: "application/pdf",
-        upsert: true,
-      });
+const { error: uploadError } = await supabase.storage
+  .from("audit-pdfs")
+  .upload(objectPath, pdfBytes, {
+    contentType: "application/pdf",
+    upsert: true,
+  });
 
-    if (uploadError) {
-      console.error("❌ PDF upload failed:", uploadError);
-      ctx.response.status = 200;
-      return;
-    }
+if (uploadError) {
+  console.error("❌ PDF upload failed:", uploadError);
+  ctx.response.status = 200;
+  return;
+}
 
     /* --------------------------------------------------
        4) SAVE PATH + MARK COMPLETE
     -------------------------------------------------- */
     await supabase
-      .from("lease_audits")
-      .update({
-        status: "complete",
-        audit_pdf_path: objectPath,
-        object_path: objectPath,
-        completed_at: new Date().toISOString(),
-      })
-      .eq("id", auditId);
+  .from("lease_audits")
+  .update({
+    status: "complete",
+    audit_pdf_path: objectPath,
+    object_path: objectPath,
+    completed_at: new Date().toISOString(),
+  })
+  .eq("id", auditId);
 
     const { data: verify } = await supabase
       .from("lease_audits")
@@ -195,7 +195,7 @@ const rawBody = await body.value;
        5) CREATE SIGNED URL + EMAIL
     -------------------------------------------------- */
     const { data: signed, error: signedError } = await supabase.storage
-      .from("leases")
+      .from("audit-pdfs")
       .createSignedUrl(objectPath, 60 * 10);
 
     if (signedError || !signed?.signedUrl) {
