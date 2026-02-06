@@ -211,13 +211,17 @@ if (status !== "complete") {
 
   /* ---------- GA4: REPORT PURCHASED ---------- */
 useEffect(() => {
-  if (data?.status === "complete" && typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", "report_purchased", {
-      event_category: "funnel",
-      event_label: "audit_pdf_unlocked",
-      value: 49.99,
-    });
-  }
+  if (
+  data?.status === "complete" &&
+  typeof window !== "undefined" &&
+  (window as any).gtag
+) {
+  (window as any).gtag("event", "report_purchased", {
+    event_category: "funnel",
+    event_label: "audit_pdf_unlocked",
+    value: 49.99,
+  });
+}
 }, [data?.status]);
 
   /* ---------- COMPLETE ---------- */
