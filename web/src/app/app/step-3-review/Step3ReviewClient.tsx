@@ -223,6 +223,9 @@ const exposure =
 
         <ul className="list-disc list-inside space-y-2 text-gray-700">
           <li>
+            Audit windows are often time-limited
+          </li>
+          <li>
             Issue-by-issue findings tied directly to specific lease provisions
           </li>
           <li>
