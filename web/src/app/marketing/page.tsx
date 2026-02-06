@@ -96,11 +96,13 @@ export default function MarketingHomePage() {
 
     {/* RIGHT: FREE PREVIEW CARD (UNCHANGED CONTENT) */}
     <div className="rounded-3xl border bg-white p-8 shadow-sm">
-      <p className="text-sm uppercase tracking-widest text-gray-500">
-        Free Preview
-      </p>
+  <p className="text-base font-semibold uppercase tracking-[0.25em] text-green-600">
+    FREE PREVIEW
+  </p>
 
-      <p className="mt-4 text-5xl font-semibold">CAM / NNN Risk Scan</p>
+  <p className="mt-3 text-4xl font-semibold text-gray-900">
+    CAM / NNN Risk Scan
+  </p>
 
       <p className="mt-4 text-gray-700">
         Upload your lease to receive a free CAM / NNN risk preview.
