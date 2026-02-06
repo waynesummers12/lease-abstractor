@@ -1,4 +1,4 @@
-// src/app/marketing/audit-rights/page.tsx
+// src/app/marketing/audit-window-deadlines/page.tsx
 import Link from "next/link";
 import FaqSchema from "@/app/components/FaqSchema";
 
