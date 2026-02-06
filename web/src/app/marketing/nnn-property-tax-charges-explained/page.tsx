@@ -28,7 +28,7 @@ export default function Page() {
           href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Upload your lease to review property tax charges
+          Upload your lease to review property tax charges (Free Preview)
         </Link>
 
         <p className="mt-3 text-xs text-gray-500">
@@ -182,7 +182,7 @@ export default function Page() {
           href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Upload your lease to review tax charges
+          Upload your lease to review tax charges (Free Preview)
         </Link>
 
         <p className="mt-3 text-xs text-gray-500">

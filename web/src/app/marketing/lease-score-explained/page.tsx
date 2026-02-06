@@ -97,7 +97,7 @@ export default function LeaseScorePage() {
           href="/app/step-1-upload"
           className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-gray-200"
         >
-          Start CAM & NNN Audit
+          Start CAM & NNN Audit (Free Preview)
         </Link>
       </section>
     </main>

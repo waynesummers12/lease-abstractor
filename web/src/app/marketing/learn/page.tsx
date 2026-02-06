@@ -100,7 +100,7 @@ export default function LearnPage() {
           href="/app/step-1-upload"
           className="mt-8 inline-flex rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
-          Start CAM & NNN Audit
+          Start CAM & NNN Audit (Free Preview)
         </Link>
       </section>
     </main>

@@ -28,7 +28,7 @@ export default function MarketingHomePage() {
             href="/app/step-1-upload"
             className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
-            Start CAM Audit
+            Start Free CAM Audit
           </Link>
           <Link
             href="/marketing/what-we-find"
@@ -191,7 +191,7 @@ export default function MarketingHomePage() {
           href="/app/step-1-upload"
           className="mt-10 inline-flex items-center rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
-          Start Your CAM Audit
+          Start Your Free CAM Audit
         </Link>
       </section>
     </main>

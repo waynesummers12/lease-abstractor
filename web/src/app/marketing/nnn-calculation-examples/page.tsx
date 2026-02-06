@@ -26,7 +26,7 @@ export default function NNNCalculationExamplesPage() {
         href="/app/step-1-upload"
         className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
       >
-        Upload your lease to calculate your NNN charges
+        Upload your lease to calculate your NNN charges (Free Preview)
       </Link>
 
       <p className="mt-3 text-xs text-gray-500">
@@ -170,7 +170,7 @@ export default function NNNCalculationExamplesPage() {
           href="/app/step-1-upload"
           className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Check my NNN charges
+          Check my NNN charges (Free Preview)
         </Link>
 
         <p className="mt-3 text-xs text-gray-500">

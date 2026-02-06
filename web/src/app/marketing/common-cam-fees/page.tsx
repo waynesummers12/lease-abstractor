@@ -133,7 +133,7 @@ export default function CommonCamFeesPage() {
           href="/app/step-1-upload"
           className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
-          Start CAM Audit
+          Start CAM Audit (Free Preview)
         </Link>
       </section>
 

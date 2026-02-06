@@ -32,7 +32,7 @@ export default function CamReconciliationPage() {
           href="/app"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Upload your lease to check for CAM overcharges
+          Upload your lease to check for CAM overcharges (Free Preview)
         </Link>
         <p className="mt-3 text-xs text-gray-600">
           🔒 Secure & private • No obligation • Takes 2–3 minutes
@@ -235,7 +235,7 @@ export default function CamReconciliationPage() {
           href="/app"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Upload your lease to check CAM reconciliation
+          Upload your lease to check CAM reconciliation (Free Preview)
         </Link>
 
         <p className="mt-3 text-xs text-gray-600">

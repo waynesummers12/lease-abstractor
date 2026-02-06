@@ -133,7 +133,7 @@ export default function RealCamNnnExamplesPage() {
           href="/app/step-1-upload"
           className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
-          Upload Your Lease & Check Now
+          Upload Your Lease & Check Now (Free Preview)
         </Link>
       </section>
     </main>
