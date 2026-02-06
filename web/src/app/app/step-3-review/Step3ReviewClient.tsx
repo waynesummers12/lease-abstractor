@@ -101,6 +101,22 @@ const exposure =
   range
     ? midpoint(range)
     : analysis.cam_total_avoidable_exposure ?? null;
+
+    const hasFiredLeaseUploaded = useRef(false);
+
+    useEffect(() => {
+  if (exposure != null && !hasFiredLeaseUploaded.current) {
+    hasFiredLeaseUploaded.current = true;
+
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "lease_uploaded", {
+        event_category: "funnel",
+        event_label: "estimated_savings_shown",
+        value: exposure,
+      });
+    }
+  }
+}, [exposure]);
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
@@ -109,6 +125,7 @@ const exposure =
           Initial CAM / NNN risk assessment based on your lease.
         </p>
       </div>
+
 
       {/* ---------- GREEN SUMMARY BOX ---------- */}
 {exposure != null && (

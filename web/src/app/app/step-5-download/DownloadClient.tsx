@@ -209,6 +209,17 @@ if (status !== "complete") {
   const score = data.analysis?.health?.score ?? null;
   const riskLabel = deriveRiskLevel(score);
 
+  /* ---------- GA4: REPORT PURCHASED ---------- */
+useEffect(() => {
+  if (data?.status === "complete" && typeof window !== "undefined" && window.gtag) {
+    window.gtag("event", "report_purchased", {
+      event_category: "funnel",
+      event_label: "audit_pdf_unlocked",
+      value: 49.99,
+    });
+  }
+}, [data?.status]);
+
   /* ---------- COMPLETE ---------- */
 return (
   <main className="mx-auto max-w-xl px-6 py-24 space-y-8 text-center">
