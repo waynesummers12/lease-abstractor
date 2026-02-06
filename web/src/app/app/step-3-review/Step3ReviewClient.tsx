@@ -38,6 +38,7 @@ export default function Step3ReviewClient() {
   const [error, setError] = useState<string | null>(null);
 
   const pollRef = useRef<number | null>(null);
+  const hasFiredLeaseUploaded = useRef(false);
 
   useEffect(() => {
     if (!auditId) {
@@ -101,8 +102,6 @@ const exposure =
   range
     ? midpoint(range)
     : analysis.cam_total_avoidable_exposure ?? null;
-
-    const hasFiredLeaseUploaded = useRef(false);
 
     useEffect(() => {
   if (exposure != null && !hasFiredLeaseUploaded.current) {
