@@ -96,9 +96,9 @@ export default function MarketingHomePage() {
 
     {/* RIGHT: FREE PREVIEW CARD (UNCHANGED CONTENT) */}
     <div className="rounded-3xl border bg-white p-8 shadow-sm">
-  <p className="text-base font-semibold uppercase tracking-[0.25em] text-green-600">
-    FREE PREVIEW
-  </p>
+  <p className="text-lg font-bold uppercase tracking-[0.3em] text-green-600">
+  FREE PREVIEW
+</p>
 
   <p className="mt-3 text-4xl font-semibold text-gray-900">
     CAM / NNN Risk Scan
