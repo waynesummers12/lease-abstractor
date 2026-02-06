@@ -104,8 +104,8 @@ export default function UploadLeasePage() {
         </p>
         
         <p className="mt-4 text-base text-gray-600">
-        This estimate is based on your lease terms and billed charges 
-        and shows what may be disputable — not guaranteed savings.
+        This estimate is based on your lease language, including CAM, NNN, escalation, and audit provisions. 
+        It reflects potential exposure identified from contractual terms — not a review of actual billed statements.
       </p>
 
       <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
