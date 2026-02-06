@@ -463,6 +463,34 @@ if (flags.length === 0) {
 }
 
   /* ------------------------------------------------------------------
+     SCOPE OF ANALYSIS
+  ------------------------------------------------------------------- */
+
+  const scopeHeadingH = measureHeight("About This Analysis", 11, 532, true);
+  const scopeBodyH = measureHeight(
+    "This report is based on lease language and contractual CAM / NNN provisions. "
+      + "A complete financial recovery analysis may also require review of billed statements, reconciliations, and supporting documentation. "
+      + "SaveOnLease can extend this analysis if additional materials are provided.",
+    10,
+    532
+  );
+
+  ensureSpace(scopeHeadingH + scopeBodyH + 20);
+
+  drawWrapped("About This Analysis", 11, 40, 532, gray, true);
+  drawWrapped(
+    "This report is based on lease language and contractual CAM / NNN provisions. "
+      + "A complete financial recovery analysis may also require review of billed statements, reconciliations, and supporting documentation. "
+      + "SaveOnLease can extend this analysis if additional materials are provided.",
+    10,
+    40,
+    532,
+    gray
+  );
+
+  y -= 18;
+
+  /* ------------------------------------------------------------------
      FOOTER DISCLAIMER
   ------------------------------------------------------------------- */
 
