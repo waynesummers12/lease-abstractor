@@ -52,11 +52,9 @@ export default function Step3ReviewClient() {
         const res = await fetch(`/api/audits/${auditId}`, {
           cache: "no-store",
         });
-
         if (!res.ok) return;
 
         const data = await res.json();
-
         if (data?.analysis) {
           setAnalysis(data.analysis);
           setLoading(false);
@@ -74,6 +72,27 @@ export default function Step3ReviewClient() {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, [auditId]);
+
+  const range = analysis?.teaser_summary?.estimated_avoidable_range;
+
+const exposure =
+  range
+    ? midpoint(range)
+    : analysis?.cam_total_avoidable_exposure ?? null;
+
+  useEffect(() => {
+  if (exposure != null && !hasFiredLeaseUploaded.current) {
+    hasFiredLeaseUploaded.current = true;
+
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "lease_uploaded", {
+        event_category: "funnel",
+        event_label: "estimated_savings_shown",
+        value: exposure,
+      });
+    }
+  }
+}, [exposure]);
 
   if (loading) {
     return (
@@ -96,26 +115,7 @@ export default function Step3ReviewClient() {
       ? Math.min(Math.max(analysis.confidence, 0), 100)
       : 80;
 
-      const range = analysis.teaser_summary?.estimated_avoidable_range;
 
-const exposure =
-  range
-    ? midpoint(range)
-    : analysis.cam_total_avoidable_exposure ?? null;
-
-    useEffect(() => {
-  if (exposure != null && !hasFiredLeaseUploaded.current) {
-    hasFiredLeaseUploaded.current = true;
-
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "lease_uploaded", {
-        event_category: "funnel",
-        event_label: "estimated_savings_shown",
-        value: exposure,
-      });
-    }
-  }
-}, [exposure]);
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
