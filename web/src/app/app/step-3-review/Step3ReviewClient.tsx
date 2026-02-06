@@ -209,6 +209,39 @@ const exposure =
   </div>
 )}
 
+      {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
+      <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
+        <h2 className="text-lg font-semibold">
+          Unlock the Full CAM / NNN Audit — $49.99
+        </h2>
+
+        <p className="text-gray-700">
+          This free preview highlights potential CAM / NNN exposure based on
+          your lease language. Unlocking the full audit provides a complete,
+          downloadable PDF with the detail you need to take action.
+        </p>
+
+        <ul className="list-disc list-inside space-y-2 text-gray-700">
+          <li>
+            Issue-by-issue findings tied directly to specific lease provisions
+          </li>
+          <li>
+            Estimated dollar impact for each CAM / NNN risk identified
+          </li>
+          <li>
+            Audit-ready explanations you can share with an attorney,
+            accountant, or landlord
+          </li>
+          <li>
+            A secure, downloadable PDF for your records
+          </li>
+        </ul>
+
+        <p className="text-sm text-gray-600">
+          One-time payment. No subscriptions. No auto-renewals.
+        </p>
+      </div>
+
       {/* ---------- CHECKOUT BUTTON ---------- */}
       <button
         onClick={async () => {
