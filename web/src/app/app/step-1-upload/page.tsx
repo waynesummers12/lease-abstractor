@@ -90,7 +90,7 @@ export default function UploadLeasePage() {
   <main className="mx-auto max-w-4xl px-6 py-24">
     <div className="mb-12 text-center">
       <h1 className="text-4xl font-light tracking-tight">
-        Upload Your Lease
+        Upload Your Lease (Free Preview)
       </h1>
 
       <p className="mt-4 text-lg text-gray-800">
