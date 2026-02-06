@@ -71,51 +71,75 @@ export default function MarketingHomePage() {
       </section>
 
       {/* WHAT WE FIND */}
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="rounded-3xl border bg-white p-8 shadow-sm">
-  <p className="text-sm uppercase tracking-widest text-gray-500">
-    Free Preview
-  </p>
+<section className="mx-auto max-w-7xl px-6 py-20">
+  <div className="grid gap-12 md:grid-cols-2 items-start">
 
-  <p className="mt-4 text-5xl font-semibold">CAM / NNN Risk Scan</p>
+    {/* LEFT: WHAT WE FIND */}
+    <div>
+      <h2 className="text-4xl font-light tracking-tight">
+        What We Find in CAM & NNN Audits
+      </h2>
 
-  <p className="mt-4 text-gray-700">
-    Upload your lease to receive a free CAM / NNN risk preview.
-    See whether your lease contains provisions that commonly lead to
-    overcharges — before deciding whether to unlock the full audit PDF.
-  </p>
+      <p className="mt-6 text-lg text-gray-700 leading-relaxed">
+        We analyze your lease language and billed expenses to identify errors
+        landlords often miss—or hope tenants won’t notice.
+      </p>
 
-  <ul className="mt-6 space-y-3 text-gray-700 list-none">
-    <li className="flex items-start gap-2">
-      <span className="text-green-600">✔</span>
-      <span>Lease language review (CAM & NNN clauses)</span>
-    </li>
-    <li className="flex items-start gap-2">
-      <span className="text-green-600">✔</span>
-      <span>Identification of common overcharge risk patterns</span>
-    </li>
-    <li className="flex items-start gap-2">
-      <span className="text-green-600">✔</span>
-      <span>Administrative & management fee risk flags</span>
-    </li>
-    <li className="flex items-start gap-2">
-      <span className="text-green-600">✔</span>
-      <span>Capital expense & pro-rata responsibility checks</span>
-    </li>
-    <li className="flex items-start gap-2">
-      <span className="text-green-600">✔</span>
-      <span>Preview results instantly — upgrade only if issues are found</span>
-    </li>
-  </ul>
+      <ul className="mt-6 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600">
+        <li>Administrative & management fees above lease limits</li>
+        <li>Insurance and tax pass-throughs applied incorrectly</li>
+        <li>Capital expenses shifted to tenants improperly</li>
+        <li>Pro-rata share and square-footage errors</li>
+        <li>Charges billed outside allowable audit periods</li>
+      </ul>
+    </div>
 
-  <Link
-    href="/app/step-1-upload"
-    className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
-  >
-    Upload Lease (Free Preview)
-  </Link>
-</div>
-      </section>
+    {/* RIGHT: FREE PREVIEW CARD (UNCHANGED CONTENT) */}
+    <div className="rounded-3xl border bg-white p-8 shadow-sm">
+      <p className="text-sm uppercase tracking-widest text-gray-500">
+        Free Preview
+      </p>
+
+      <p className="mt-4 text-5xl font-semibold">CAM / NNN Risk Scan</p>
+
+      <p className="mt-4 text-gray-700">
+        Upload your lease to receive a free CAM / NNN risk preview.
+        See whether your lease contains provisions that commonly lead to
+        overcharges — before deciding whether to unlock the full audit PDF.
+      </p>
+
+      <ul className="mt-6 space-y-3 text-gray-700 list-none">
+        <li className="flex items-start gap-2">
+          <span className="text-green-600">✔</span>
+          <span>Lease language review (CAM & NNN clauses)</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-green-600">✔</span>
+          <span>Identification of common overcharge risk patterns</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-green-600">✔</span>
+          <span>Administrative & management fee risk flags</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-green-600">✔</span>
+          <span>Capital expense & pro-rata responsibility checks</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <span className="text-green-600">✔</span>
+          <span>Preview results instantly — upgrade only if issues are found</span>
+        </li>
+      </ul>
+
+      <Link
+        href="/app/step-1-upload"
+        className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+      >
+        Upload Lease (Free Preview)
+      </Link>
+    </div>
+  </div>
+</section>
 
       {/* HOW IT WORKS */}
       <section className="bg-gray-50">
