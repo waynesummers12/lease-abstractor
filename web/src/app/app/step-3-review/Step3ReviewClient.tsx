@@ -138,7 +138,7 @@ const exposure =
 
     {/* Confidence / badge */}
     <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
-      ✓ Calculated from CAM, NNN, escalation, and reconciliation clauses
+      ✓ Calculated from your CAM, NNN, escalation, and reconciliation lease clauses
     </div>
 
     <div>
