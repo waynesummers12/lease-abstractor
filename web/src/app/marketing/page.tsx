@@ -115,7 +115,6 @@ export default function MarketingHomePage() {
     Upload Lease (Free Preview)
   </Link>
 </div>
-        </div>
       </section>
 
       {/* HOW IT WORKS */}
