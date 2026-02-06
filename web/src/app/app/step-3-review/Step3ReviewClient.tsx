@@ -73,26 +73,36 @@ export default function Step3ReviewClient() {
     };
   }, [auditId]);
 
-  const range = analysis?.teaser_summary?.estimated_avoidable_range;
+    const range = analysis?.teaser_summary?.estimated_avoidable_range;
 
-const exposure =
-  range
-    ? midpoint(range)
-    : analysis?.cam_total_avoidable_exposure ?? null;
+  // Total exposure across remaining lease term
+  const totalLeaseExposure =
+    range
+      ? midpoint(range)
+      : analysis?.cam_total_avoidable_exposure ?? null;
 
+  // Annualized exposure (Next 12 Months)
+  const leaseMonths = analysis?.term_months ?? 12;
+
+  const annualExposure =
+    totalLeaseExposure != null
+      ? Math.round((totalLeaseExposure / leaseMonths) * 12)
+      : null;
+
+  // GA4: fire once when value is shown
   useEffect(() => {
-  if (exposure != null && !hasFiredLeaseUploaded.current) {
-    hasFiredLeaseUploaded.current = true;
+    if (annualExposure != null && !hasFiredLeaseUploaded.current) {
+      hasFiredLeaseUploaded.current = true;
 
-    if (typeof window !== "undefined" && (window as any).gtag) {
-      (window as any).gtag("event", "lease_uploaded", {
-        event_category: "funnel",
-        event_label: "estimated_savings_shown",
-        value: exposure,
-      });
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "lease_uploaded", {
+          event_category: "funnel",
+          event_label: "estimated_savings_shown",
+          value: annualExposure,
+        });
+      }
     }
-  }
-}, [exposure]);
+  }, [annualExposure]);
 
   if (loading) {
     return (
@@ -127,7 +137,7 @@ const exposure =
 
 
       {/* ---------- GREEN SUMMARY BOX ---------- */}
-{exposure != null && (
+{annualExposure != null && (
   <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-5">
     {/* Header */}
     <div className="flex items-center gap-3">
@@ -136,12 +146,26 @@ const exposure =
         <p className="text-sm text-emerald-700 font-medium">
           Estimated Avoidable Exposure (Next 12 Months)
         </p>
+
+        {/* PRIMARY NUMBER */}
         <p className="text-4xl font-extrabold text-emerald-900">
-          ${exposure.toLocaleString()}
+          ${annualExposure.toLocaleString()}
         </p>
-        {analysis.teaser_summary?.estimated_avoidable_range && (
+
+        {/* SECONDARY CONTEXT */}
+        {totalLeaseExposure != null && (
           <p className="mt-1 text-sm text-emerald-800">
-            Estimated recovery range:{" "}
+            Estimated total exposure over remaining lease term:{" "}
+            <span className="font-semibold">
+              ${totalLeaseExposure.toLocaleString()}
+            </span>
+          </p>
+        )}
+
+        {/* RANGE (IF AVAILABLE) */}
+        {analysis.teaser_summary?.estimated_avoidable_range && (
+          <p className="mt-1 text-sm text-emerald-700">
+            Conservative estimate range:{" "}
             <span className="font-semibold">
               ${analysis.teaser_summary.estimated_avoidable_range.low.toLocaleString()}
               {" – "}
