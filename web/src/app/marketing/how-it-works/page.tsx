@@ -105,7 +105,7 @@ export default function HowItWorksPage() {
           href="/app/step-1-upload"
           className="mt-6 inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
-          Upload a Lease
+          Upload Lease (Free Preview)
         </Link>
       </section>
     </div>

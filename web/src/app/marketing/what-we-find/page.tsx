@@ -116,7 +116,7 @@ export default function WhatWeFindPage() {
           href="/app/step-1-upload"
           className="inline-block rounded bg-white px-6 py-3 text-black font-medium hover:bg-gray-100 transition"
         >
-          Upload a Lease for Review
+          Upload Lease (Free Preview)
         </Link>
       </section>
 

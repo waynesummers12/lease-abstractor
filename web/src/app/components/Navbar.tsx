@@ -20,7 +20,7 @@ export default function Navbar() {
             href="/app/step-1-upload"
             className="rounded-md bg-white px-4 py-2 font-semibold text-black hover:bg-gray-200"
           >
-            Start Audit
+            Start Audit (Free Preview)
           </Link>
         </div>
     </nav>

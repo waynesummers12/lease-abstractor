@@ -144,7 +144,7 @@ export default function DashboardPage() {
           href="/app/step-1-upload"
           className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
-          Upload Lease
+          Upload Lease (Free Preview)
         </Link>
       </div>
     );
