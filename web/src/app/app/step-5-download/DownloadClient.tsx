@@ -126,6 +126,21 @@ if (status !== "complete") {
     };
   }, [auditId]);
 
+        /* ---------- GA4: REPORT PURCHASED ---------- */
+useEffect(() => {
+  if (
+  data?.status === "complete" &&
+  typeof window !== "undefined" &&
+  (window as any).gtag
+) {
+  (window as any).gtag("event", "report_purchased", {
+    event_category: "funnel",
+    event_label: "audit_pdf_unlocked",
+    value: 49.99,
+  });
+}
+}, [data?.status]);
+
   /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
   if (!auditId) return;
@@ -160,6 +175,7 @@ if (status !== "complete") {
     setDownloading(false);
   }
 }
+
 
   /* ================= UI ================= */
 
@@ -208,21 +224,6 @@ if (status !== "complete") {
 
   const score = data.analysis?.health?.score ?? null;
   const riskLabel = deriveRiskLevel(score);
-
-  /* ---------- GA4: REPORT PURCHASED ---------- */
-useEffect(() => {
-  if (
-  data?.status === "complete" &&
-  typeof window !== "undefined" &&
-  (window as any).gtag
-) {
-  (window as any).gtag("event", "report_purchased", {
-    event_category: "funnel",
-    event_label: "audit_pdf_unlocked",
-    value: 49.99,
-  });
-}
-}, [data?.status]);
 
   /* ---------- COMPLETE ---------- */
 return (
