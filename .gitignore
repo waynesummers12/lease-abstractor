@@ -11,4 +11,16 @@ dist
 
 # OS
 .DS_Store
+# -----------------------------
+# Local dev-only PDF work (DO NOT COMMIT)
+# -----------------------------
 
+# Generated preview PDFs
+worker/audit-preview.pdf
+
+# Local PDF rendering sandbox
+worker/utils/dev/renderPdf.ts
+
+# Experimental / WIP PDF generator
+worker/utils/generateAuditPdf_v2.ts
+worker/audit-preview.pdf

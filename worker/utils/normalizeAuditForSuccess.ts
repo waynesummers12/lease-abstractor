@@ -21,7 +21,40 @@
  */
 
 
-export function normalizeAuditForSuccess(analysis: any) {
+type NormalizeAuditHealth = {
+  score?: number | null;
+  flags?: unknown;
+};
+
+type NormalizeAuditAnalysis = {
+  tenant?: string | null;
+  landlord?: string | null;
+  premises?: string | null;
+  lease_start?: string | null;
+  lease_end?: string | null;
+  term_months?: number | null;
+  rent?: number | null;
+
+  exposure_range?: string | null;
+  exposure_risk?: string | null;
+
+  cam_total_avoidable_exposure?: number | null;
+
+  cam_escalation_low?: number | null;
+  cam_escalation_high?: number | null;
+
+  capital_items_low?: number | null;
+  capital_items_high?: number | null;
+
+  management_fees_low?: number | null;
+  management_fees_high?: number | null;
+
+  health?: NormalizeAuditHealth | null;
+};
+
+export function normalizeAuditForSuccess(
+  analysis: NormalizeAuditAnalysis | null | undefined,
+) {
   if (!analysis) return null;
 
   const health = analysis.health ?? null;
@@ -43,6 +76,44 @@ export function normalizeAuditForSuccess(analysis: any) {
       ? Math.round(analysis.cam_total_avoidable_exposure)
       : null;
 
+  /* -------------------------------------------------
+     Roll-up derivation (PDF + UI source of truth)
+     Conservative defaults if data missing
+  -------------------------------------------------- */
+
+  const rollup = {
+    camEscalation: {
+      low:
+        typeof analysis.cam_escalation_low === "number"
+          ? Math.round(analysis.cam_escalation_low)
+          : 0,
+      high:
+        typeof analysis.cam_escalation_high === "number"
+          ? Math.round(analysis.cam_escalation_high)
+          : 0,
+    },
+    capitalItems: {
+      low:
+        typeof analysis.capital_items_low === "number"
+          ? Math.round(analysis.capital_items_low)
+          : 0,
+      high:
+        typeof analysis.capital_items_high === "number"
+          ? Math.round(analysis.capital_items_high)
+          : 0,
+    },
+    managementFees: {
+      low:
+        typeof analysis.management_fees_low === "number"
+          ? Math.round(analysis.management_fees_low)
+          : 0,
+      high:
+        typeof analysis.management_fees_high === "number"
+          ? Math.round(analysis.management_fees_high)
+          : 0,
+    },
+  };
+
   return {
     // 🔒 SINGLE SOURCE OF TRUTH (flat, UI-ready)
     tenant: analysis.tenant ?? null,
@@ -54,11 +125,14 @@ export function normalizeAuditForSuccess(analysis: any) {
 
     rent: analysis.rent ?? null,
 
-    // ✅ THIS IS WHAT THE GREEN BOX NEEDS
+    // ✅ PRIMARY EXPOSURE (green box)
     cam_total_avoidable_exposure: camTotalAvoidableExposure,
     exposure_range: analysis.exposure_range ?? null,
     exposure_risk: analysis.exposure_risk ?? null,
     risk_level: riskLevel,
+
+    // ✅ ROLL-UP (used by PDF + BottomLine)
+    rollup,
 
     // score + flags (used on success page)
     health: health
