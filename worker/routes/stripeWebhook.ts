@@ -17,7 +17,8 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
-import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
+import { generateAuditPdfV3 as generateAuditPdf } from "../utils/generateAuditPdf_v3.ts";
+import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 import { sendAuditEmail } from "../utils/sendAuditEmail.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {});
@@ -143,7 +144,30 @@ const rawBody = await body.value;
     console.log("🧠 Generating audit PDF…");
     console.log("🧠 PDF generation starting for audit:", auditId);
 
-    const pdfBytes = await generateAuditPdf(data.analysis);
+    const normalized = normalizeAuditForSuccess(data.analysis);
+
+if (!normalized) {
+  console.error("❌ Failed to normalize audit analysis:", auditId);
+  ctx.response.status = 200;
+  return;
+}
+
+const exposureRange = {
+  low:
+    normalized.rollup.camEscalation.low +
+    normalized.rollup.capitalItems.low +
+    normalized.rollup.managementFees.low,
+
+  high:
+    normalized.rollup.camEscalation.high +
+    normalized.rollup.capitalItems.high +
+    normalized.rollup.managementFees.high,
+};
+
+const pdfBytes = await generateAuditPdf({
+  ...normalized,
+  exposureRange,
+});
     console.log("📄 PDF bytes length:", pdfBytes?.length ?? 0);
 
     if (!pdfBytes || pdfBytes.length === 0) {
