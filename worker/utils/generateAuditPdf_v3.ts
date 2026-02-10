@@ -16,6 +16,21 @@ type ExposureRange = {
   high: number;
 };
 
+type Rollup = {
+  camEscalation: {
+    low: number;
+    high: number;
+  };
+  capitalItems: {
+    low: number;
+    high: number;
+  };
+  managementFees: {
+    low: number;
+    high: number;
+  };
+};
+
 type RollupRow = {
   label: string;
   conservative: string;
@@ -28,21 +43,17 @@ type Cursor = {
 };
 
 type AuditAnalysis = {
-  tenant: string;
-  landlord: string;
+  // Nullable metadata (PDF should never crash on missing fields)
+  tenant: string | null;
+  landlord: string | null;
 
   audit_id?: string | null;
 
-  exposureRange: {
-    low: number;
-    high: number;
-  };
+  // Derived totals used by Hero + BottomLine
+  exposureRange: ExposureRange;
 
-  rollup: {
-    camEscalation: { low: number; high: number };
-    capitalItems: { low: number; high: number };
-    managementFees: { low: number; high: number };
-  };
+  // Canonical rollup (single source of truth)
+  rollup: Rollup;
 };
 /* -----------------------------
    Layout constants

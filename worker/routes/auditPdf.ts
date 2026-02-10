@@ -21,7 +21,8 @@
 
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
-import { generateAuditPdf } from "../utils/generateAuditPdf.ts";
+import { generateAuditPdfV3 as generateAuditPdf } from "../utils/generateAuditPdf_v3.ts";
+import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 
 const router = new Router({
   prefix: "/audit",
@@ -64,7 +65,29 @@ const body = await (ctx.request as any).body?.json?.()
   
   try {
     console.log("🧠 Starting PDF generation for audit", auditId);
-    pdfBytes = await generateAuditPdf(audit.analysis);
+    const normalized = normalizeAuditForSuccess(audit.analysis);
+
+if (!normalized) {
+  ctx.throw(400, "Failed to normalize audit analysis");
+  return; // ⬅️ important for TS narrowing
+}
+
+const exposureRange = {
+  low:
+    normalized.rollup.camEscalation.low +
+    normalized.rollup.capitalItems.low +
+    normalized.rollup.managementFees.low,
+
+  high:
+    normalized.rollup.camEscalation.high +
+    normalized.rollup.capitalItems.high +
+    normalized.rollup.managementFees.high,
+};
+
+pdfBytes = await generateAuditPdf({
+  ...normalized,
+  exposureRange,
+});
   } catch (err) {
     console.error("❌ PDF generation failed for audit", auditId, err);
   
