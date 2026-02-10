@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabase.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
-import { generateAuditPdf } from "./generateAuditPdf.ts";
+import { generateAuditPdfV3 as generateAuditPdf } from "./generateAuditPdf_v3.ts";
+import { normalizeAuditForSuccess } from "./normalizeAuditForSuccess.ts";
 
 
 export async function markAuditPaid(
@@ -23,8 +24,29 @@ export async function markAuditPaid(
     throw new Error("Audit not found");
   }
 
-  // 2️⃣ Generate PDF
-  const pdfBytes = await generateAuditPdf(audit.analysis);
+  // 2️⃣ Normalize + generate PDF (V3)
+  const normalized = normalizeAuditForSuccess(audit.analysis);
+
+  if (!normalized) {
+    throw new Error("Failed to normalize audit analysis");
+  }
+
+  const exposureRange = {
+    low:
+      normalized.rollup.camEscalation.low +
+      normalized.rollup.capitalItems.low +
+      normalized.rollup.managementFees.low,
+
+    high:
+      normalized.rollup.camEscalation.high +
+      normalized.rollup.capitalItems.high +
+      normalized.rollup.managementFees.high,
+  };
+
+  const pdfBytes = await generateAuditPdf({
+    ...normalized,
+    exposureRange,
+  });
 
   // 3️⃣ Upload PDF
   const objectPath = `leases/${auditId}.pdf`;
