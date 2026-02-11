@@ -54,28 +54,32 @@ export default function Header() {
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative">
           <div ref={learnRef} className="relative flex items-center gap-1">
-            <Link
-              href="/marketing/learn"
-              className="opacity-80 hover:opacity-100"
-            >
-              Education
-            </Link>
+  {/* Clickable label → goes to Learn page */}
+  <Link
+    href="/marketing/learn"
+    className="opacity-80 hover:opacity-100"
+  >
+    Education
+  </Link>
 
-            <button
-              onMouseEnter={() => setLearnOpen(true)}
-              onClick={(e) => {
-                e.preventDefault();
-                setLearnOpen((v) => !v);
-              }}
-              className="opacity-80 hover:opacity-100 text-xs"
-            >
-              ▾
-            </button>
+  {/* Separate dropdown toggle */}
+  <button
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setLearnOpen((v) => !v);
+    }}
+    onMouseEnter={() => setLearnOpen(true)}
+    className="text-xs opacity-70 hover:opacity-100"
+    aria-label="Toggle education menu"
+  >
+    ▾
+  </button>
 
-            {learnOpen && (
-              <div
-                onMouseLeave={() => setLearnOpen(false)}
-                className="absolute left-0 mt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
+  {learnOpen && (
+    <div
+      onMouseLeave={() => setLearnOpen(false)}
+      className="absolute left-0 mt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
               >
                 {/* Foundations */}
                 <span className={sectionTitle}>Foundations</span>
@@ -225,8 +229,10 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden rounded border border-white/40 px-2 py-1 text-sm"
-          onClick={() => setMenuOpen(!menuOpen)}
+          className="md:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
         >
           ☰
         </button>
@@ -268,9 +274,6 @@ export default function Header() {
       <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
         Common CAM Fees
       </Link>
-      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
-        CAM NNN Overcharge Examples Checklist
-      </Link>
       <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
         Non-Allowable CAM / NNN
       </Link>
@@ -286,7 +289,7 @@ export default function Header() {
       <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
         NNN Property Tax Charges
       </Link>
-      <Link href="/marketing/nnn-reconcilisation" onClick={() => setMenuOpen(false)}>
+      <Link href="/marketing/nnn-reconciliation" onClick={() => setMenuOpen(false)}>
         NNN Reconciliation
       </Link>
       <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
