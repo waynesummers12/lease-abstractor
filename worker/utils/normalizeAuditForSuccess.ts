@@ -23,6 +23,7 @@
 type NormalizeAuditHealth = {
   score?: number | null;
   flags?: unknown;
+  findings?: unknown;
 };
 
 type NormalizeAuditAnalysis = {
@@ -138,11 +139,12 @@ export function normalizeAuditForSuccess(
 
     // health block (unchanged)
     health: health
-      ? {
-          ...health,
-          score: healthScore,
-          flags: health.flags ?? null,
-        }
-      : null,
+  ? {
+      ...health,
+      score: healthScore,
+      flags: health.flags ?? null,
+      findings: health.findings ?? [],
+    }
+  : null,
   };
 }

@@ -33,7 +33,14 @@ type LeaseHealthInput = {
     reconciliation: boolean;
     includes_capex: boolean;
     cam_cap_percent: number | null;
-    escalation_exposure: number | null;
+
+    // 🔥 Structured numeric findings inputs
+    escalation_low: number | null;
+    escalation_high: number | null;
+    capital_items_low: number | null;
+    capital_items_high: number | null;
+    management_fee_low: number | null;
+    management_fee_high: number | null;
   } | null;
 };
 
@@ -45,9 +52,18 @@ type HealthFlag = {
   estimated_impact?: string;
 };
 
+type StructuredFinding = {
+  type: "CAM_ESCALATION" | "CAPITAL_ITEMS" | "MANAGEMENT_FEES";
+  low: number;
+  high: number;
+  explanation: string;
+  severity: "low" | "medium" | "high";
+};
+
 export function computeLeaseHealth(input: LeaseHealthInput) {
   const flags: HealthFlag[] = [];
   let score = 100;
+  const findings: StructuredFinding[] = [];
 
   const cam = input.cam_nnn;
 
@@ -81,17 +97,57 @@ export function computeLeaseHealth(input: LeaseHealthInput) {
     });
   }
 
-  /* ---------- ESCALATION ---------- */
-  if (typeof cam.escalation_exposure === "number" && cam.escalation_exposure > 0) {
-    score -= 15;
-    flags.push({
-      code: "ESCALATION_RISK",
-      label: "Escalating CAM expenses detected",
-      severity: "medium",
-      recommendation:
-        "Escalation clauses should be reviewed for caps and compounding.",
-      estimated_impact: `$${Math.round(cam.escalation_exposure).toLocaleString()} annually`,
+  /* ---------- STRUCTURED NUMERIC FINDINGS ---------- */
+
+  if (
+    typeof cam.escalation_high === "number" &&
+    cam.escalation_high > 0
+  ) {
+    findings.push({
+      type: "CAM_ESCALATION",
+      low: cam.escalation_low ?? 0,
+      high: cam.escalation_high,
+      explanation:
+        "Projected CAM escalation exposure based on uncapped or compounding increases.",
+      severity:
+        cam.escalation_high > 15000 ? "high" : "medium",
     });
+
+    score -= cam.escalation_high > 15000 ? 20 : 10;
+  }
+
+  if (
+    typeof cam.capital_items_high === "number" &&
+    cam.capital_items_high > 0
+  ) {
+    findings.push({
+      type: "CAPITAL_ITEMS",
+      low: cam.capital_items_low ?? 0,
+      high: cam.capital_items_high,
+      explanation:
+        "Capital expenditures appear to be passed through CAM and may require amortization.",
+      severity:
+        cam.capital_items_high > 10000 ? "high" : "medium",
+    });
+
+    score -= cam.capital_items_high > 10000 ? 20 : 10;
+  }
+
+  if (
+    typeof cam.management_fee_high === "number" &&
+    cam.management_fee_high > 0
+  ) {
+    findings.push({
+      type: "MANAGEMENT_FEES",
+      low: cam.management_fee_low ?? 0,
+      high: cam.management_fee_high,
+      explanation:
+        "Management or administrative fee percentage may exceed conservative market caps.",
+      severity:
+        cam.management_fee_high > 10000 ? "medium" : "low",
+    });
+
+    score -= cam.management_fee_high > 10000 ? 10 : 5;
   }
 
   /* ---------- RECONCILIATION ---------- */
@@ -111,5 +167,6 @@ export function computeLeaseHealth(input: LeaseHealthInput) {
   return {
     score,
     flags,
+    findings,
   };
 }
