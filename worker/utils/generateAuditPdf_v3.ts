@@ -138,8 +138,8 @@ const explanationResult = drawExplanationBox(
       "The lease allows roof, HVAC, and structural components to be amortized through CAM “as determined by Landlord”. This is a major red flag. Typical annual tenant exposure for improperly allocated capital items at this lease size:",
       `• $${rollup.capitalItems.low.toLocaleString()} – $${rollup.capitalItems.high.toLocaleString()} per year.`,
       "Many of these items are:",
-      "• non-recoverable under standard audit interpretations, or",
-      "• amortized incorrectly.",
+      "• Non-recoverable under standard audit interpretations, or",
+      "• Amortized incorrectly.",
 
       "3. Management fees (uncapped)",
       "Management fees are included with no stated percentage cap. Industry norms typically limit management fees to 3–5% of CAM.",
