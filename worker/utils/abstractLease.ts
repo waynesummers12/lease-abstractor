@@ -254,9 +254,13 @@ export type CamNnn = {
   includes_capex: boolean;
   cam_cap_percent: number | null;
 
-  // 🔥 NEW — explicit escalation bounds
+  // 🔥 CAM escalation exposure
   escalation_low: number | null;
   escalation_high: number | null;
+
+  // 🔥 Capital items amortization (NEW)
+  capital_items_low: number | null;
+  capital_items_high: number | null;
 };
 
 function extractCamNnn(
@@ -333,24 +337,45 @@ console.log("[CAM DEBUG]", {
 });
 
   if (!monthlyAmount) {
-    return {
-  monthly_amount: null,
-  annual_amount: null,
-  total_exposure: null,
+  return {
+    monthly_amount: null,
+    annual_amount: null,
+    total_exposure: null,
 
-  // NEW — required by CamNnn
-  escalation_low: null,
-  escalation_high: null,
+    // Escalation placeholders (required by CamNnn)
+    escalation_low: null,
+    escalation_high: null,
 
-  is_uncapped,
-  reconciliation,
-  pro_rata,
-  includes_capex,
-  cam_cap_percent: capPct ? Number(capPct) : null,
-};
-  }
+    // Capital items placeholders
+    capital_items_low: null,
+    capital_items_high: null,
+
+    is_uncapped,
+    reconciliation,
+    pro_rata,
+    includes_capex,
+    cam_cap_percent: capPct ? Number(capPct) : null,
+  };
+}
 
   const annualAmount = monthlyAmount * 12;
+  /* ---------- CAPITAL ITEMS AMORTIZATION ---------- */
+/**
+ * Conservative assumption:
+ * - 10–20% of annual CAM is capital improperly passed through
+ * - Amortized over 10 years
+ */
+let capitalItemsLow: number | null = null;
+let capitalItemsHigh: number | null = null;
+
+if (includes_capex && annualAmount > 0) {
+  const capitalPortionLow = annualAmount * 0.10;
+  const capitalPortionHigh = annualAmount * 0.20;
+
+  // Annualized exposure (amortized)
+  capitalItemsLow = Math.round(capitalPortionLow / 10);
+  capitalItemsHigh = Math.round(capitalPortionHigh / 10);
+}
   const years = termMonths ? termMonths / 12 : 1;
   const totalExposure = annualAmount * years;
 
@@ -373,6 +398,9 @@ return {
   pro_rata,
   includes_capex,
   cam_cap_percent: capPct ? Number(capPct) : null,
+
+  capital_items_low: capitalItemsLow,
+  capital_items_high: capitalItemsHigh,
 
   escalation_low,
   escalation_high,
