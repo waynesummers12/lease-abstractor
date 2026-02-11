@@ -256,8 +256,8 @@ export default function Step3ReviewClient() {
         </h2>
 
         <p className="text-gray-700">
-          This free preview highlights potential CAM / NNN exposure based on
-          your lease language. Unlocking the full audit provides a complete,
+          This complete audit highlights potential CAM / NNN exposure based on
+          your lease language. Unlocking this full audit provides a complete,
           downloadable PDF with the detail you need to take action.
         </p>
 
