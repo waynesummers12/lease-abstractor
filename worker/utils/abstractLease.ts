@@ -508,6 +508,7 @@ function computeLeaseHealth(input: {
     confidence -= capexExposure > 15000 ? 15 : 8;
   }
 
+
   /* ---------- MANAGEMENT FEE WATCH FLAG ---------- */
 if (
   input.cam_nnn.management_fee_low === null &&
@@ -523,6 +524,41 @@ if (
 
   // Light confidence impact only (educational flag)
   confidence -= 3;
+}
+
+  /* ---------- MANAGEMENT FEE FINANCIAL FINDING ---------- */
+if (
+  (input.cam_nnn.management_fee_low ?? 0) > 0 ||
+  (input.cam_nnn.management_fee_high ?? 0) > 0
+) {
+  const annualImpact =
+    input.cam_nnn.management_fee_high ?? 0;
+
+  const termImpact = Math.round(
+    annualImpact * ((input.term_months ?? 12) / 12)
+  );
+
+  flags.push({
+    code: "MGMT_FEE_DELTA",
+    label: "Management fee exceeds conservative market cap",
+    severity: annualImpact > 10000 ? "medium" : "low",
+    recommendation:
+      "Negotiate a management/admin fee cap of 3–5% of operating expenses or require landlord documentation of fee calculation methodology.",
+    estimated_impact: formatMoney(annualImpact),
+  });
+
+  findings.push({
+    category: "Management Fees",
+    issue:
+      "Management or administrative fee appears above conservative industry cap assumptions.",
+    lease_snippet: null,
+    estimated_annual_impact: Math.round(annualImpact),
+    estimated_term_impact: termImpact,
+    confidence: annualImpact > 10000 ? "medium" : "low",
+  });
+
+  score -= annualImpact > 10000 ? 8 : 4;
+  confidence -= annualImpact > 10000 ? 6 : 3;
 }
 
   /* ---------- PRO-RATA ALLOCATION ---------- */
