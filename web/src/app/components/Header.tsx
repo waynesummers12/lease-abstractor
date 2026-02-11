@@ -70,7 +70,7 @@ export default function Header() {
       setLearnOpen((v) => !v);
     }}
     onMouseEnter={() => setLearnOpen(true)}
-    className="text-xs opacity-70 hover:opacity-100"
+    className="text-lg leading-none opacity-70 hover:opacity-100"
     aria-label="Toggle education menu"
   >
     ▾
@@ -79,7 +79,7 @@ export default function Header() {
   {learnOpen && (
     <div
       onMouseLeave={() => setLearnOpen(false)}
-      className="absolute left-0 mt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
+      className="absolute left-0 top-full pt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
               >
                 {/* Foundations */}
                 <span className={sectionTitle}>Foundations</span>
