@@ -582,22 +582,25 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
 
     cam_nnn,
 
-// 🔥 FLATTENED NUMERIC FIELDS (FOR PDF + NORMALIZER)
-escalation_low: cam_nnn.escalation_low,
-escalation_high: cam_nnn.escalation_high,
+/* -------------------- FLATTENED NUMERIC FIELDS -------------------- */
+escalation_low: cam_nnn.escalation_low ?? 0,
+escalation_high: cam_nnn.escalation_high ?? 0,
 
-capital_items_low: cam_nnn.capital_items_low,
-capital_items_high: cam_nnn.capital_items_high,
+capital_items_low: cam_nnn.capital_items_low ?? 0,
+capital_items_high: cam_nnn.capital_items_high ?? 0,
 
-management_fee_low: cam_nnn.management_fee_low,
-management_fee_high: cam_nnn.management_fee_high,
+management_fee_low: cam_nnn.management_fee_low ?? 0,
+management_fee_high: cam_nnn.management_fee_high ?? 0,
 
-/* -------------------- CORE EXPOSURE -------------------- */
-cam_total_avoidable_exposure:
-  (cam_nnn.total_exposure ?? 0) +
-  (cam_nnn.escalation_high ?? 0) +
-  (cam_nnn.capital_items_high ?? 0) +
-  (cam_nnn.management_fee_high ?? 0),
+/* -------------------- CORE EXPOSURE (AUTHORITATIVE) -------------------- */
+cam_total_avoidable_exposure: (() => {
+  const base = cam_nnn.total_exposure ?? 0;
+  const escalation = cam_nnn.escalation_high ?? 0;
+  const capital = cam_nnn.capital_items_high ?? 0;
+  const management = cam_nnn.management_fee_high ?? 0;
+
+  return base + escalation + capital + management;
+})(),
 
   /* -------------------- HEALTH (FULL LOGIC) -------------------- */
   health,
