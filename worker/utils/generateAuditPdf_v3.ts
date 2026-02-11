@@ -136,7 +136,7 @@ const explanationResult = drawExplanationBox(
 
       "2. Capital expenditures passed through CAM",
       "The lease allows roof, HVAC, and structural components to be amortized through CAM “as determined by Landlord”. This is a major red flag. Typical annual tenant exposure for improperly allocated capital items at this lease size:",
-      `• ~$${rollup.capitalItems.low.toLocaleString()} – $${rollup.capitalItems.high.toLocaleString()} per year.`,
+      `• $${rollup.capitalItems.low.toLocaleString()} – $${rollup.capitalItems.high.toLocaleString()} per year.`,
       "Many of these items are:",
       "• non-recoverable under standard audit interpretations, or",
       "• amortized incorrectly.",
