@@ -247,12 +247,16 @@ export type CamNnn = {
   monthly_amount: number | null;
   annual_amount: number | null;
   total_exposure: number | null;
+
   is_uncapped: boolean;
   reconciliation: boolean;
   pro_rata: boolean;
   includes_capex: boolean;
   cam_cap_percent: number | null;
-  escalation_exposure: number | null;
+
+  // 🔥 NEW — explicit escalation bounds
+  escalation_low: number | null;
+  escalation_high: number | null;
 };
 
 function extractCamNnn(
@@ -330,36 +334,49 @@ console.log("[CAM DEBUG]", {
 
   if (!monthlyAmount) {
     return {
-      monthly_amount: null,
-      annual_amount: null,
-      total_exposure: null,
-      is_uncapped,
-      reconciliation,
-      pro_rata,
-      includes_capex,
-      cam_cap_percent: capPct ? Number(capPct) : null,
-      escalation_exposure: null,
-    };
+  monthly_amount: null,
+  annual_amount: null,
+  total_exposure: null,
+
+  // NEW — required by CamNnn
+  escalation_low: null,
+  escalation_high: null,
+
+  is_uncapped,
+  reconciliation,
+  pro_rata,
+  includes_capex,
+  cam_cap_percent: capPct ? Number(capPct) : null,
+};
   }
 
   const annualAmount = monthlyAmount * 12;
   const years = termMonths ? termMonths / 12 : 1;
   const totalExposure = annualAmount * years;
 
-  const assumedGrowth = is_uncapped ? 0.06 : 0.03;
-  const escalationExposure = annualAmount * assumedGrowth * years;
+  // 📈 CAM escalation exposure (next 12 months, conservative)
+let escalation_low: number | null = null;
+let escalation_high: number | null = null;
 
-  return {
-    monthly_amount: monthlyAmount,
-    annual_amount: annualAmount,
-    total_exposure: totalExposure,
-    is_uncapped,
-    reconciliation,
-    pro_rata,
-    includes_capex,
-    cam_cap_percent: capPct ? Number(capPct) : null,
-    escalation_exposure: escalationExposure,
-  };
+if (is_uncapped && annualAmount) {
+  escalation_low = Math.round(annualAmount * 0.10); // conservative
+  escalation_high = Math.round(annualAmount * 0.25); // aggressive
+}
+
+return {
+  monthly_amount: monthlyAmount,
+  annual_amount: annualAmount,
+  total_exposure: totalExposure,
+
+  is_uncapped,
+  reconciliation,
+  pro_rata,
+  includes_capex,
+  cam_cap_percent: capPct ? Number(capPct) : null,
+
+  escalation_low,
+  escalation_high,
+};
 }
 
 /* -------------------- LEASE HEALTH -------------------- */
@@ -505,26 +522,26 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
 
   /* -------------------- CORE EXPOSURE -------------------- */
   cam_total_avoidable_exposure:
-    (cam_nnn.total_exposure ?? 0) +
-    (cam_nnn.escalation_exposure ?? 0),
+  (cam_nnn.total_exposure ?? 0) +
+  (cam_nnn.escalation_high ?? 0),
 
   /* -------------------- HEALTH (FULL LOGIC) -------------------- */
   health,
 
   /* -------------------- TEASER SUMMARY (GREEN BOX SAFE) -------------------- */
   teaser_summary:
-    cam_nnn.total_exposure || cam_nnn.escalation_exposure
+    cam_nnn.total_exposure
       ? {
           estimated_avoidable_range: {
             low: Math.round(
               (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_exposure ?? 0)) *
+                (cam_nnn.escalation_high ?? 0)) *
                 0.15) /
                 1000
             ) * 1000,
             high: Math.round(
               (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_exposure ?? 0)) *
+                (cam_nnn.escalation_high ?? 0)) *
                 0.35) /
                 1000
             ) * 1000,
