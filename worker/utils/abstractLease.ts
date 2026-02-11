@@ -486,6 +486,23 @@ function computeLeaseHealth(input: {
     confidence -= capexExposure > 15000 ? 15 : 8;
   }
 
+  /* ---------- MANAGEMENT FEE WATCH FLAG ---------- */
+if (
+  input.cam_nnn.management_fee_low === null &&
+  input.cam_nnn.management_fee_high === null
+) {
+  flags.push({
+    code: "MGMT_FEE_WATCH",
+    label: "Management fee included with no stated percentage cap",
+    severity: "low",
+    recommendation:
+      "Confirm whether a management or administrative fee is embedded in CAM. Industry norms typically cap these at 3–5% of operating expenses.",
+  });
+
+  // Light confidence impact only (educational flag)
+  confidence -= 3;
+}
+
   /* ---------- PRO-RATA ALLOCATION ---------- */
   if (input.cam_nnn.pro_rata && baseCam > 0) {
     const proRataExposure = baseCam * 0.08;
