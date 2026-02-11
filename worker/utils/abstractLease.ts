@@ -580,7 +580,17 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   rent,
   rent_schedule,
 
-  cam_nnn,
+    cam_nnn,
+
+  // 🔥 FLATTENED NUMERIC FIELDS (FOR PDF + NORMALIZER)
+  escalation_low: cam_nnn.escalation_low,
+  escalation_high: cam_nnn.escalation_high,
+
+  capital_items_low: cam_nnn.capital_items_low,
+  capital_items_high: cam_nnn.capital_items_high,
+
+  management_fee_low: cam_nnn.management_fee_low,
+  management_fee_high: cam_nnn.management_fee_high,
 
   /* -------------------- CORE EXPOSURE -------------------- */
   cam_total_avoidable_exposure:
