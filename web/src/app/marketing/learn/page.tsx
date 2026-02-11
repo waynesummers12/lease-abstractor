@@ -16,6 +16,13 @@ const articles = [
     href: "/marketing/cam-nnn-overcharges",
   },
   {
+    id: "common-cam-fees",
+    title: "Common CAM Fees Explained",
+    description:
+      "A breakdown of common CAM fees, which charges are typically allowed, and which are frequently disputed.",
+    href: "/marketing/common-cam-fees",
+  },
+  {
     id: "audit-window-deadlines",
     title: "Audit Window Deadlines Explained",
     description:
@@ -70,6 +77,13 @@ const articles = [
     description:
       "Specific audit rights related to NNN charges including tax and insurance allocations.",
     href: "/marketing/nnn-audit-rights",
+  },
+  {
+    id: "nnn-expenses-explained",
+    title: "NNN Expenses Explained",
+    description:
+      "Learn how Triple Net (NNN) expenses work, why they increase, and when tenants can dispute them.",
+    href: "/marketing/nnn-expenses-explained",
   },
   {
     id: "nnn-calculation-examples",
