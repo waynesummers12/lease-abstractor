@@ -20,7 +20,6 @@
  * NOT safe for client components unless explicitly reviewed.
  */
 
-
 type NormalizeAuditHealth = {
   score?: number | null;
   flags?: unknown;
@@ -40,14 +39,15 @@ type NormalizeAuditAnalysis = {
 
   cam_total_avoidable_exposure?: number | null;
 
-  cam_escalation_low?: number | null;
-  cam_escalation_high?: number | null;
+  // 🔥 flattened numeric inputs from abstractLease
+  escalation_low?: number | null;
+  escalation_high?: number | null;
 
   capital_items_low?: number | null;
   capital_items_high?: number | null;
 
-  management_fees_low?: number | null;
-  management_fees_high?: number | null;
+  management_fee_low?: number | null;
+  management_fee_high?: number | null;
 
   health?: NormalizeAuditHealth | null;
 };
@@ -77,21 +77,22 @@ export function normalizeAuditForSuccess(
       : null;
 
   /* -------------------------------------------------
-     Roll-up derivation (PDF + UI source of truth)
-     Conservative defaults if data missing
+     ROLLUPS — SINGLE SOURCE OF TRUTH FOR PDF
+     (No inference, no guessing, just wiring)
   -------------------------------------------------- */
 
   const rollup = {
     camEscalation: {
       low:
-        typeof analysis.cam_escalation_low === "number"
-          ? Math.round(analysis.cam_escalation_low)
+        typeof analysis.escalation_low === "number"
+          ? Math.round(analysis.escalation_low)
           : 0,
       high:
-        typeof analysis.cam_escalation_high === "number"
-          ? Math.round(analysis.cam_escalation_high)
+        typeof analysis.escalation_high === "number"
+          ? Math.round(analysis.escalation_high)
           : 0,
     },
+
     capitalItems: {
       low:
         typeof analysis.capital_items_low === "number"
@@ -102,20 +103,21 @@ export function normalizeAuditForSuccess(
           ? Math.round(analysis.capital_items_high)
           : 0,
     },
+
     managementFees: {
       low:
-        typeof analysis.management_fees_low === "number"
-          ? Math.round(analysis.management_fees_low)
+        typeof analysis.management_fee_low === "number"
+          ? Math.round(analysis.management_fee_low)
           : 0,
       high:
-        typeof analysis.management_fees_high === "number"
-          ? Math.round(analysis.management_fees_high)
+        typeof analysis.management_fee_high === "number"
+          ? Math.round(analysis.management_fee_high)
           : 0,
     },
   };
 
   return {
-    // 🔒 SINGLE SOURCE OF TRUTH (flat, UI-ready)
+    // 🔒 FLAT, UI-READY FIELDS
     tenant: analysis.tenant ?? null,
     landlord: analysis.landlord ?? null,
     premises: analysis.premises ?? null,
@@ -125,16 +127,16 @@ export function normalizeAuditForSuccess(
 
     rent: analysis.rent ?? null,
 
-    // ✅ PRIMARY EXPOSURE (green box)
+    // ✅ PRIMARY EXPOSURE (GREEN BOX — UNCHANGED)
     cam_total_avoidable_exposure: camTotalAvoidableExposure,
     exposure_range: analysis.exposure_range ?? null,
     exposure_risk: analysis.exposure_risk ?? null,
     risk_level: riskLevel,
 
-    // ✅ ROLL-UP (used by PDF + BottomLine)
+    // ✅ PDF + SUMMARY SOURCE
     rollup,
 
-    // score + flags (used on success page)
+    // health block (unchanged)
     health: health
       ? {
           ...health,
