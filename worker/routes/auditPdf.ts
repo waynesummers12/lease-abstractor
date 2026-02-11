@@ -72,6 +72,18 @@ if (!normalized) {
   return; // ⬅️ important for TS narrowing
 }
 
+console.log("🧪 NORMALIZED FOR PDF", {
+  camEscalationHigh: normalized.rollup.camEscalation.high,
+  capitalItemsHigh: normalized.rollup.capitalItems.high,
+  managementFeesHigh: normalized.rollup.managementFees.high,
+  camTotalAvoidableExposure: normalized.cam_total_avoidable_exposure,
+});
+
+if (!normalized) {
+  ctx.throw(400, "Failed to normalize audit analysis");
+  return; // ⬅️ important for TS narrowing
+}
+
 const exposureRange = {
   low:
     normalized.rollup.camEscalation.low +
