@@ -17,7 +17,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close Learn dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (learnRef.current && !learnRef.current.contains(e.target as Node)) {
@@ -28,6 +27,10 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const sectionTitle = "block px-4 pt-3 pb-1 text-xs uppercase opacity-50";
+  const linkClass =
+    "block px-4 py-1.5 text-sm opacity-90 hover:bg-white/10";
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${
@@ -35,19 +38,20 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
-       <Link href="/marketing" className="flex items-center gap-2">
-      <Image
-    src="/logo.png"
-    alt="SaveOnLease"
-    width={24}
-    height={44}
-    className="h-11 w-auto"
-    priority
-     />
-     <span className="text-lg font-light tracking-tight leading-none">
-    SaveOnLease
-  </span>
-</Link>
+        <Link href="/marketing" className="flex items-center gap-2">
+          <Image
+            src="/logo.png"
+            alt="SaveOnLease"
+            width={24}
+            height={44}
+            className="h-11 w-auto"
+            priority
+          />
+          <span className="text-lg font-light tracking-tight leading-none">
+            SaveOnLease
+          </span>
+        </Link>
+
         <nav className="hidden md:flex items-center gap-6 text-sm relative">
           <div ref={learnRef} className="relative">
             <button
@@ -62,110 +66,114 @@ export default function Header() {
             {learnOpen && (
               <div
                 onMouseLeave={() => setLearnOpen(false)}
-                className="absolute left-0 mt-2 w-64 rounded-lg bg-black border border-white/10 shadow-xl py-2"
+                className="absolute left-0 mt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
               >
+                {/* Foundations */}
+                <span className={sectionTitle}>Foundations</span>
+                <Link href="/marketing/cam-vs-nnn" className={linkClass}>
+                  CAM vs NNN
+                </Link>
+                <Link
+                  href="/marketing/pro-rata-share-explained"
+                  className={linkClass}
+                >
+                  Pro Rata Share
+                </Link>
+                <Link
+                  href="/marketing/nnn-calculation-examples"
+                  className={linkClass}
+                >
+                  NNN Calculation Examples
+                </Link>
+
+                {/* Audit Rights */}
+                <span className={sectionTitle}>Audit Rights</span>
+                <Link href="/marketing/audit-rights" className={linkClass}>
+                  Audit Rights
+                </Link>
+                <Link href="/marketing/nnn-audit-rights" className={linkClass}>
+                  NNN Audit Rights
+                </Link>
+                <Link
+                  href="/marketing/audit-window-deadlines"
+                  className={linkClass}
+                >
+                  Audit Window Deadlines
+                </Link>
+
+                {/* CAM Topics */}
+                <span className={sectionTitle}>CAM Topics</span>
                 <Link
                   href="/marketing/cam-reconciliation"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   CAM Reconciliation
                 </Link>
                 <Link
-                  href="/marketing/cam-nnn-overcharges"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  CAM / NNN Overcharges
-                </Link>
-                <Link
-                  href="/marketing/nnn-audit-rights"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  NNN Audit Rights
-                </Link>
-                <Link
-                  href="/marketing/audit-rights"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Audit Rights
-                </Link>
-                <Link
-                  href="/marketing/audit-window-deadlines"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  Audit Window Deadlines
-                </Link>
-                <Link
                   href="/marketing/cam-expense-caps"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   CAM Expense Caps
                 </Link>
                 <Link
                   href="/marketing/cam-admin-page"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   CAM Admin Fees
                 </Link>
                 <Link
-  href="/marketing/cam-vs-nnn"
-  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
->
-  CAM vs NNN
-</Link>
-
-                <Link
                   href="/marketing/common-cam-fees"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   Common CAM Fees
                 </Link>
                 <Link
-                  href="/marketing/non-allowable-cam-nnn-expenses"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  href="/marketing/cam-reconciliation-checklist"
+                  className={linkClass}
                 >
-                  Non-Allowable CAM / NNN
+                  CAM Reconciliation Checklist
                 </Link>
+
+                {/* NNN Topics */}
+                <span className={sectionTitle}>NNN Topics</span>
                 <Link
-                  href="/marketing/nnn-expenses-explained"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  href="/marketing/nnn-reconciliation"
+                  className={linkClass}
                 >
-                  NNN Expenses Explained
-                </Link>
-                <Link
-                  href="/marketing/nnn-calculation-examples"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
-                >
-                  NNN Calculation Examples
+                  NNN Reconciliation
                 </Link>
                 <Link
                   href="/marketing/nnn-insurance-charges-explained"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   NNN Insurance Charges
                 </Link>
                 <Link
                   href="/marketing/nnn-property-tax-charges-explained"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  className={linkClass}
                 >
                   NNN Property Tax Charges
                 </Link>
+
+                {/* Risk & Overcharges */}
+                <span className={sectionTitle}>Risk & Overcharges</span>
                 <Link
-                  href="/marketing/nnn-reconciliation"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  href="/marketing/cam-nnn-overcharges"
+                  className={linkClass}
                 >
-                  NNN Reconciliation
+                  CAM / NNN Overcharges
                 </Link>
                 <Link
-                  href="/marketing/pro-rata-share-explained"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  href="/marketing/non-allowable-cam-nnn-expenses"
+                  className={linkClass}
                 >
-                  Pro Rata Share Explained
+                  Non-Allowable CAM / NNN
                 </Link>
                 <Link
-                  href="/marketing/cam-reconciliation-checklist"
-                  className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
+                  href="/marketing/real-cam-nnn-overcharge-examples"
+                  className={linkClass}
                 >
-                  CAM Reconciliation Checklist
+                  Real Overcharge Examples
                 </Link>
               </div>
             )}
@@ -191,23 +199,22 @@ export default function Header() {
           >
             Pricing
           </Link>
-<Link
-  href="/marketing/contact"
-  className="opacity-80 hover:opacity-100"
->
-  Contact
-</Link>
 
           <Link
-  href="/app/step-1-upload"
-  className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
->
-  Start Audit (Free Preview)
-</Link>
+            href="/marketing/contact"
+            className="opacity-80 hover:opacity-100"
+          >
+            Contact
+          </Link>
 
+          <Link
+            href="/app/step-1-upload"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+          >
+            Start Audit (Free Preview)
+          </Link>
         </nav>
 
-       
         <button
           className="md:hidden rounded border border-white/40 px-2 py-1 text-sm"
           onClick={() => setMenuOpen(!menuOpen)}
