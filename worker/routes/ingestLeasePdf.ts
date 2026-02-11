@@ -23,7 +23,6 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import pdfParse from "npm:pdf-parse@1.1.1";
 import { abstractLease } from "../utils/abstractLease.ts";
-import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 import { supabase } from "../lib/supabase.ts";
 
 const router = new Router({
@@ -37,7 +36,6 @@ router.post("/pdf", async (ctx) => {
 
     const file = form.files?.[0];
     const auditId = form.fields?.auditId;
-    const objectPathField = form.fields?.objectPath;
 
     if (!file || !auditId) {
       ctx.response.status = 400;
@@ -77,9 +75,12 @@ router.post("/pdf", async (ctx) => {
       length: leaseText.length,
     });
 
-    // 3️⃣ Analyze lease
+    // 3️⃣ Analyze lease (RAW — full fidelity)
     const rawAnalysis = abstractLease(leaseText);
-    const normalized = normalizeAuditForSuccess(rawAnalysis);
+
+    // ❗ IMPORTANT:
+    // We persist RAW analysis so cam_nnn + numeric fields survive.
+    // Normalization happens later (Stripe / PDF step).
 
     // 4️⃣ Persist audit + analysis (✅ CORRECT COLUMN)
     const { error: dbError } = await supabase
@@ -87,7 +88,7 @@ router.post("/pdf", async (ctx) => {
       .upsert({
         id: auditId,
         object_path: objectPath, // original uploaded lease
-        analysis: normalized,
+        analysis: rawAnalysis, // 🔥 FIX: persist full analysis
         status: "analyzed",
         created_at: new Date().toISOString(),
       });
