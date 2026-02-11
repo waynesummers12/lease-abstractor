@@ -20,7 +20,7 @@ const articles = [
     title: "Audit Window Deadlines Explained",
     description:
       "Learn how CAM and NNN audit windows work, typical 30–120 day deadlines, and what happens if tenants miss them.",
-    href: "/marketing/audit-rights",
+    href: "/marketing/audit-window-deadlines",
   },
   {
     id: "commercial-audit-rights",
@@ -30,18 +30,95 @@ const articles = [
     href: "/marketing/audit-rights",
   },
   {
-    id: "common-cam-fees",
-    title: "Common CAM Fees Explained",
+    id: "cam-admin-fees",
+    title: "CAM Admin Fees Explained",
     description:
-      "A breakdown of common CAM fees, which charges are typically allowed, and which are frequently disputed.",
-    href: "/marketing/common-cam-fees",
+      "How CAM administrative and management fees work, what is typical, and when they become excessive.",
+    href: "/marketing/cam-admin-page",
   },
   {
-    id: "nnn-expenses",
-    title: "NNN Expenses Explained",
+    id: "cam-expense-caps",
+    title: "CAM Expense Caps Explained",
     description:
-      "Learn how Triple Net (NNN) expenses work, why they increase, and when tenants can dispute them.",
-    href: "/marketing/nnn-expenses-explained",
+      "What CAM caps are, how they are structured, and how uncapped leases increase tenant risk.",
+    href: "/marketing/cam-expense-caps",
+  },
+  {
+    id: "cam-reconciliation-checklist",
+    title: "CAM Reconciliation Checklist",
+    description:
+      "A step-by-step tenant checklist for reviewing CAM reconciliations before audit windows expire.",
+    href: "/marketing/cam-reconciliation-checklist",
+  },
+  {
+    id: "cam-reconciliation",
+    title: "CAM Reconciliation Explained",
+    description:
+      "How annual CAM reconciliations work and how tenants identify discrepancies.",
+    href: "/marketing/cam-reconciliation",
+  },
+  {
+    id: "cam-vs-nnn",
+    title: "CAM vs. NNN Explained",
+    description:
+      "Understand the difference between CAM and NNN charges and how each impacts your lease.",
+    href: "/marketing/cam-vs-nnn",
+  },
+  {
+    id: "nnn-audit-rights",
+    title: "NNN Audit Rights Explained",
+    description:
+      "Specific audit rights related to NNN charges including tax and insurance allocations.",
+    href: "/marketing/nnn-audit-rights",
+  },
+  {
+    id: "nnn-calculation-examples",
+    title: "NNN Calculation Examples",
+    description:
+      "Real-world examples of how NNN charges are calculated and where errors commonly occur.",
+    href: "/marketing/nnn-calculation-examples",
+  },
+  {
+    id: "nnn-insurance-charges",
+    title: "NNN Insurance Charges Explained",
+    description:
+      "How insurance costs are allocated in NNN leases and when they are challengeable.",
+    href: "/marketing/nnn-insurance-charges-explained",
+  },
+  {
+    id: "nnn-property-tax-charges",
+    title: "NNN Property Tax Charges Explained",
+    description:
+      "How property tax increases flow through NNN leases and when reassessments matter.",
+    href: "/marketing/nnn-property-tax-charges-explained",
+  },
+  {
+    id: "nnn-reconciliation",
+    title: "NNN Reconciliation Explained",
+    description:
+      "How NNN reconciliations work and what tenants should verify each year.",
+    href: "/marketing/nnn-reconciliation",
+  },
+  {
+    id: "non-allowable-expenses",
+    title: "Non-Allowable CAM / NNN Expenses",
+    description:
+      "Charges that are frequently disputed and often non-recoverable under standard lease interpretation.",
+    href: "/marketing/non-allowable-cam-nnn-expenses",
+  },
+  {
+    id: "pro-rata-share",
+    title: "Pro Rata Share Explained",
+    description:
+      "How pro rata share is calculated and how small miscalculations can significantly impact tenants.",
+    href: "/marketing/pro-rata-share-explained",
+  },
+  {
+    id: "real-overcharge-examples",
+    title: "Real CAM / NNN Overcharge Examples",
+    description:
+      "Actual examples of CAM and NNN overcharges and how they were identified.",
+    href: "/marketing/real-cam-nnn-overcharge-examples",
   },
   {
     id: "lease-score-explained",
