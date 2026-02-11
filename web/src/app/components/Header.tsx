@@ -55,7 +55,7 @@ export default function Header() {
               onClick={() => setLearnOpen((v) => !v)}
               className="opacity-80 hover:opacity-100 flex items-center gap-1"
             >
-              Learn
+              Education
               <span className="text-xs">▾</span>
             </button>
 
@@ -220,7 +220,7 @@ export default function Header() {
 {menuOpen && (
   <div className="md:hidden bg-black px-6 pb-6 text-white">
     <div className="flex flex-col gap-4 text-sm">
-      <span className="uppercase text-xs opacity-60">Learn</span>
+      <span className="uppercase text-xs opacity-60">Education</span>
 
       <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation
@@ -309,4 +309,3 @@ export default function Header() {
     </header>
   );
 }
-
