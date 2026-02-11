@@ -53,14 +53,23 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative">
-          <div ref={learnRef} className="relative">
-            <button
-              onMouseEnter={() => setLearnOpen(true)}
-              onClick={() => setLearnOpen((v) => !v)}
-              className="opacity-80 hover:opacity-100 flex items-center gap-1"
+          <div ref={learnRef} className="relative flex items-center gap-1">
+            <Link
+              href="/marketing/learn"
+              className="opacity-80 hover:opacity-100"
             >
               Education
-              <span className="text-xs">▾</span>
+            </Link>
+
+            <button
+              onMouseEnter={() => setLearnOpen(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                setLearnOpen((v) => !v);
+              }}
+              className="opacity-80 hover:opacity-100 text-xs"
+            >
+              ▾
             </button>
 
             {learnOpen && (
