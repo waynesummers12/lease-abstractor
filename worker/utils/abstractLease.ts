@@ -451,10 +451,20 @@ export type LeaseRiskFlag = {
   estimated_impact?: string;
 };
 
+export type AuditFinding = {
+  category: "CAM Escalation" | "Capital Items" | "Management Fees" | "Pro-Rata";
+  issue: string;
+  lease_snippet?: string | null;
+  estimated_annual_impact: number;
+  estimated_term_impact: number;
+  confidence: "low" | "medium" | "high";
+};
+
 export type LeaseHealth = {
   score: number;
   confidence: number;
   flags: LeaseRiskFlag[];
+  findings: AuditFinding[];
 };
 
 function computeLeaseHealth(input: {
@@ -464,6 +474,7 @@ function computeLeaseHealth(input: {
   cam_nnn: CamNnn;
 }): LeaseHealth {
   const flags: LeaseRiskFlag[] = [];
+  const findings: AuditFinding[] = [];
   let score = 100;
   let confidence = 100;
 
@@ -480,6 +491,17 @@ function computeLeaseHealth(input: {
       recommendation:
         "Capital improvements should be excluded from CAM or amortized over useful life per lease standards.",
       estimated_impact: formatMoney(capexExposure),
+    });
+
+    findings.push({
+      category: "Capital Items",
+      issue: "Capital expenditures may be improperly included in CAM.",
+      lease_snippet: null,
+      estimated_annual_impact: Math.round(capexExposure),
+      estimated_term_impact: Math.round(
+        capexExposure * ((input.term_months ?? 12) / 12)
+      ),
+      confidence: capexExposure > 15000 ? "high" : "medium",
     });
 
     score -= capexExposure > 15000 ? 20 : 10;
@@ -516,6 +538,17 @@ if (
       estimated_impact: formatMoney(proRataExposure),
     });
 
+    findings.push({
+      category: "Pro-Rata",
+      issue: "Potential misallocation of CAM based on pro-rata calculation.",
+      lease_snippet: null,
+      estimated_annual_impact: Math.round(proRataExposure),
+      estimated_term_impact: Math.round(
+        proRataExposure * ((input.term_months ?? 12) / 12)
+      ),
+      confidence: proRataExposure > 8000 ? "medium" : "low",
+    });
+
     score -= proRataExposure > 8000 ? 10 : 5;
     confidence -= proRataExposure > 8000 ? 8 : 4;
   }
@@ -533,6 +566,7 @@ if (
     score,
     confidence,
     flags,
+    findings,
   };
 }
 
