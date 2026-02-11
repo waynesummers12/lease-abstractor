@@ -128,7 +128,7 @@ const explanationResult = drawExplanationBox(
     title: "How that number is derived (from your lease)",
     paragraphs: [
       "1. Uncapped CAM / NNN (primary risk)",
-      "The lease explicitly states no cap or limitation on CAM / NNN increases. In today’s Denver retail market, uncapped CAM commonly inflates 10–25% year over year due to insurance repricing, tax reassessments, and capital items pushed through CAM.",
+      "The lease explicitly states no cap or limitation on CAM / NNN increases. In your local retail market, uncapped CAM commonly inflates 10–25% year over year due to insurance repricing, tax reassessments, and capital items pushed through CAM.",
 
       "Avoidable exposure from uncapped escalation:",
       `• Low case (10%): ~$${rollup.camEscalation.low.toLocaleString()}`,
