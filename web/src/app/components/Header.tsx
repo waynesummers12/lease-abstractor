@@ -70,7 +70,7 @@ export default function Header() {
       setLearnOpen((v) => !v);
     }}
     onMouseEnter={() => setLearnOpen(true)}
-    className="text-lg leading-none opacity-70 hover:opacity-100"
+    className="text-3xl leading-none opacity-80 hover:opacity-100 transition-transform duration-200 hover:scale-110"
     aria-label="Toggle education menu"
   >
     ▾
