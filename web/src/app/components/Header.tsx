@@ -1,4 +1,3 @@
-// web/src/app/components/Header.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -27,7 +26,8 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const sectionTitle = "block px-4 pt-3 pb-1 text-xs uppercase opacity-50";
+  const sectionTitle =
+    "block px-4 pt-4 pb-2 text-[11px] font-semibold tracking-wider uppercase text-white/50 border-t border-white/10 mt-2";
   const linkClass =
     "block px-4 py-1.5 text-sm opacity-90 hover:bg-white/10";
 
@@ -81,6 +81,9 @@ export default function Header() {
       onMouseLeave={() => setLearnOpen(false)}
       className="absolute left-0 top-full pt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
               >
+                <div className="px-4">
+                  <div className="h-px bg-white/10 mb-2"></div>
+                </div>
                 {/* Foundations */}
                 <span className={sectionTitle}>Foundations</span>
                 <Link href="/marketing/cam-vs-nnn" className={linkClass}>
@@ -98,6 +101,9 @@ export default function Header() {
                 >
                   NNN Calculation Examples
                 </Link>
+                <div className="px-4">
+                  <div className="h-px bg-white/10 my-2"></div>
+                </div>
 
                 {/* Audit Rights */}
                 <span className={sectionTitle}>Audit Rights</span>
@@ -113,6 +119,9 @@ export default function Header() {
                 >
                   Audit Window Deadlines
                 </Link>
+                <div className="px-4">
+                  <div className="h-px bg-white/10 my-2"></div>
+                </div>
 
                 {/* CAM Topics */}
                 <span className={sectionTitle}>CAM Topics</span>
@@ -146,6 +155,9 @@ export default function Header() {
                 >
                   CAM Reconciliation Checklist
                 </Link>
+                <div className="px-4">
+                  <div className="h-px bg-white/10 my-2"></div>
+                </div>
 
                 {/* NNN Topics */}
                 <span className={sectionTitle}>NNN Topics</span>
@@ -167,6 +179,9 @@ export default function Header() {
                 >
                   NNN Property Tax Charges
                 </Link>
+                <div className="px-4">
+                  <div className="h-px bg-white/10 my-2"></div>
+                </div>
 
                 {/* Risk & Overcharges */}
                 <span className={sectionTitle}>Risk & Overcharges</span>
