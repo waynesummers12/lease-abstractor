@@ -150,7 +150,7 @@ export default function Header() {
                   NNN Property Tax Charges
                 </Link>
                 <Link
-                  href="/marketing/nnn-reconcilisation"
+                  href="/marketing/nnn-reconciliation"
                   className="block px-4 py-2 text-sm opacity-90 hover:bg-white/10"
                 >
                   NNN Reconciliation
