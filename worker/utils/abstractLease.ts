@@ -261,6 +261,10 @@ export type CamNnn = {
   // 🔥 Capital items amortization (NEW)
   capital_items_low: number | null;
   capital_items_high: number | null;
+
+  // 🔥 Management / admin fee delta (NEW)
+  management_fee_low: number | null;
+  management_fee_high: number | null;
 };
 
 function extractCamNnn(
@@ -294,6 +298,14 @@ function extractCamNnn(
     /CAM cap[^%]*(\d+(?:\.\d+)?)%/i,
     /capped at (\d+(?:\.\d+)?)%/i,
   ]);
+
+  // Management/admin fee detection
+  const mgmtFeePct = extractWithPatterns(text, [
+    /(management|admin(?:istration)?) fee[^%]*(\d+(?:\.\d+)?)%/i,
+  ]);
+
+  const managementFeePercent =
+    mgmtFeePct ? Number(mgmtFeePct) : 15; // common default
 
   let monthlyAmount: number | null = null;
 
@@ -337,28 +349,47 @@ console.log("[CAM DEBUG]", {
 });
 
   if (!monthlyAmount) {
-  return {
-    monthly_amount: null,
-    annual_amount: null,
-    total_exposure: null,
+    return {
+      monthly_amount: null,
+      annual_amount: null,
+      total_exposure: null,
 
-    // Escalation placeholders (required by CamNnn)
-    escalation_low: null,
-    escalation_high: null,
+      // Escalation placeholders (required by CamNnn)
+      escalation_low: null,
+      escalation_high: null,
 
-    // Capital items placeholders
-    capital_items_low: null,
-    capital_items_high: null,
+      // Capital items placeholders
+      capital_items_low: null,
+      capital_items_high: null,
 
-    is_uncapped,
-    reconciliation,
-    pro_rata,
-    includes_capex,
-    cam_cap_percent: capPct ? Number(capPct) : null,
-  };
-}
+      // Management fee placeholders
+      management_fee_low: null,
+      management_fee_high: null,
+
+      is_uncapped,
+      reconciliation,
+      pro_rata,
+      includes_capex,
+      cam_cap_percent: capPct ? Number(capPct) : null,
+    };
+  }
 
   const annualAmount = monthlyAmount * 12;
+  /* ---------- MANAGEMENT FEE CAP DELTA ---------- */
+  let managementFeeLow: number | null = null;
+  let managementFeeHigh: number | null = null;
+
+  if (annualAmount > 0) {
+    const actualPct = managementFeePercent / 100;
+    const capPctNum = capPct ? Number(capPct) / 100 : 0.05; // conservative cap
+
+    const deltaPct = Math.max(0, actualPct - capPctNum);
+
+    if (deltaPct > 0) {
+      managementFeeLow = Math.round(annualAmount * deltaPct * 0.5);
+      managementFeeHigh = Math.round(annualAmount * deltaPct);
+    }
+  }
   /* ---------- CAPITAL ITEMS AMORTIZATION ---------- */
 /**
  * Conservative assumption:
@@ -388,23 +419,26 @@ if (is_uncapped && annualAmount) {
   escalation_high = Math.round(annualAmount * 0.25); // aggressive
 }
 
-return {
-  monthly_amount: monthlyAmount,
-  annual_amount: annualAmount,
-  total_exposure: totalExposure,
+  return {
+    monthly_amount: monthlyAmount,
+    annual_amount: annualAmount,
+    total_exposure: totalExposure,
 
-  is_uncapped,
-  reconciliation,
-  pro_rata,
-  includes_capex,
-  cam_cap_percent: capPct ? Number(capPct) : null,
+    is_uncapped,
+    reconciliation,
+    pro_rata,
+    includes_capex,
+    cam_cap_percent: capPct ? Number(capPct) : null,
 
-  capital_items_low: capitalItemsLow,
-  capital_items_high: capitalItemsHigh,
+    capital_items_low: capitalItemsLow,
+    capital_items_high: capitalItemsHigh,
 
-  escalation_low,
-  escalation_high,
-};
+    escalation_low,
+    escalation_high,
+
+    management_fee_low: managementFeeLow,
+    management_fee_high: managementFeeHigh,
+  };
 }
 
 /* -------------------- LEASE HEALTH -------------------- */
@@ -550,9 +584,10 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
 
   /* -------------------- CORE EXPOSURE -------------------- */
   cam_total_avoidable_exposure:
-  (cam_nnn.total_exposure ?? 0) +
-  (cam_nnn.escalation_high ?? 0) +
-  (cam_nnn.capital_items_high ?? 0),
+    (cam_nnn.total_exposure ?? 0) +
+    (cam_nnn.escalation_high ?? 0) +
+    (cam_nnn.capital_items_high ?? 0) +
+    (cam_nnn.management_fee_high ?? 0),
 
   /* -------------------- HEALTH (FULL LOGIC) -------------------- */
   health,
@@ -564,13 +599,15 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
           estimated_avoidable_range: {
             low: Math.round(
               (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_high ?? 0)) *
+                (cam_nnn.escalation_high ?? 0) +
+                (cam_nnn.management_fee_high ?? 0)) *
                 0.15) /
                 1000
             ) * 1000,
             high: Math.round(
               (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_high ?? 0)) *
+                (cam_nnn.escalation_high ?? 0) +
+                (cam_nnn.management_fee_high ?? 0)) *
                 0.35) /
                 1000
             ) * 1000,
