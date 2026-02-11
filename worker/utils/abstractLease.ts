@@ -551,7 +551,8 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   /* -------------------- CORE EXPOSURE -------------------- */
   cam_total_avoidable_exposure:
   (cam_nnn.total_exposure ?? 0) +
-  (cam_nnn.escalation_high ?? 0),
+  (cam_nnn.escalation_high ?? 0) +
+  (cam_nnn.capital_items_high ?? 0),
 
   /* -------------------- HEALTH (FULL LOGIC) -------------------- */
   health,
