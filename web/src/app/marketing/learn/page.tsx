@@ -7,145 +7,150 @@ export const metadata = {
     "Learn how CAM and NNN charges work, common overcharges, audit deadlines, and how commercial tenants can protect themselves before audit windows expire.",
 };
 
-const articles = [
+type Article = {
+  title: string;
+  description: string;
+  href: string;
+};
+
+type Section = {
+  label: string;
+  articles: Article[];
+};
+
+const sections: Section[] = [
   {
-    id: "cam-nnn-overcharges",
-    title: "CAM & NNN Overcharges Explained",
-    description:
-      "Understand how CAM and NNN overcharges happen and why many tenants unknowingly overpay.",
-    href: "/marketing/cam-nnn-overcharges",
+    label: "Foundations",
+    articles: [
+      {
+        title: "CAM vs. NNN Explained",
+        description:
+          "Understand the difference between CAM and NNN charges and how each impacts your lease.",
+        href: "/marketing/cam-vs-nnn",
+      },
+      {
+        title: "Pro Rata Share Explained",
+        description:
+          "How pro rata share is calculated and how small miscalculations can significantly impact tenants.",
+        href: "/marketing/pro-rata-share-explained",
+      },
+      {
+        title: "NNN Calculation Examples",
+        description:
+          "Real-world examples of how NNN charges are calculated and where errors commonly occur.",
+        href: "/marketing/nnn-calculation-examples",
+      },
+    ],
   },
   {
-    id: "common-cam-fees",
-    title: "Common CAM Fees Explained",
-    description:
-      "A breakdown of common CAM fees, which charges are typically allowed, and which are frequently disputed.",
-    href: "/marketing/common-cam-fees",
+    label: "Audit Rights",
+    articles: [
+      {
+        title: "Audit Rights Explained",
+        description:
+          "A complete overview of audit rights for commercial tenants covering CAM, NNN, tax, and insurance charges.",
+        href: "/marketing/audit-rights",
+      },
+      {
+        title: "NNN Audit Rights Explained",
+        description:
+          "Specific audit rights related to NNN charges including tax and insurance allocations.",
+        href: "/marketing/nnn-audit-rights",
+      },
+      {
+        title: "Audit Window Deadlines Explained",
+        description:
+          "Learn how CAM and NNN audit windows work, typical 30–120 day deadlines, and what happens if tenants miss them.",
+        href: "/marketing/audit-window-deadlines",
+      },
+    ],
   },
   {
-    id: "audit-window-deadlines",
-    title: "Audit Window Deadlines Explained",
-    description:
-      "Learn how CAM and NNN audit windows work, typical 30–120 day deadlines, and what happens if tenants miss them.",
-    href: "/marketing/audit-window-deadlines",
+    label: "CAM Topics",
+    articles: [
+      {
+        title: "CAM Reconciliation Explained",
+        description:
+          "How annual CAM reconciliations work and how tenants identify discrepancies.",
+        href: "/marketing/cam-reconciliation",
+      },
+      {
+        title: "CAM Expense Caps Explained",
+        description:
+          "What CAM caps are, how they are structured, and how uncapped leases increase tenant risk.",
+        href: "/marketing/cam-expense-caps",
+      },
+      {
+        title: "CAM Admin Fees Explained",
+        description:
+          "How CAM administrative and management fees work, what is typical, and when they become excessive.",
+        href: "/marketing/cam-admin-page",
+      },
+      {
+        title: "Common CAM Fees Explained",
+        description:
+          "A breakdown of common CAM fees, which charges are typically allowed, and which are frequently disputed.",
+        href: "/marketing/common-cam-fees",
+      },
+      {
+        title: "CAM Reconciliation Checklist",
+        description:
+          "A step-by-step tenant checklist for reviewing CAM reconciliations before audit windows expire.",
+        href: "/marketing/cam-reconciliation-checklist",
+      },
+    ],
   },
   {
-    id: "commercial-audit-rights",
-    title: "Commercial Lease Audit Rights",
-    description:
-      "A complete overview of audit rights for commercial tenants covering CAM, NNN, tax, and insurance charges.",
-    href: "/marketing/audit-rights",
+    label: "NNN Topics",
+    articles: [
+      {
+        title: "NNN Reconciliation Explained",
+        description:
+          "How NNN reconciliations work and what tenants should verify each year.",
+        href: "/marketing/nnn-reconciliation",
+      },
+      {
+        title: "NNN Insurance Charges Explained",
+        description:
+          "How insurance costs are allocated in NNN leases and when they are challengeable.",
+        href: "/marketing/nnn-insurance-charges-explained",
+      },
+      {
+        title: "NNN Property Tax Charges Explained",
+        description:
+          "How property tax increases flow through NNN leases and when reassessments matter.",
+        href: "/marketing/nnn-property-tax-charges-explained",
+      },
+    ],
   },
   {
-    id: "cam-admin-fees",
-    title: "CAM Admin Fees Explained",
-    description:
-      "How CAM administrative and management fees work, what is typical, and when they become excessive.",
-    href: "/marketing/cam-admin-page",
-  },
-  {
-    id: "cam-expense-caps",
-    title: "CAM Expense Caps Explained",
-    description:
-      "What CAM caps are, how they are structured, and how uncapped leases increase tenant risk.",
-    href: "/marketing/cam-expense-caps",
-  },
-  {
-    id: "cam-reconciliation-checklist",
-    title: "CAM Reconciliation Checklist",
-    description:
-      "A step-by-step tenant checklist for reviewing CAM reconciliations before audit windows expire.",
-    href: "/marketing/cam-reconciliation-checklist",
-  },
-  {
-    id: "cam-reconciliation",
-    title: "CAM Reconciliation Explained",
-    description:
-      "How annual CAM reconciliations work and how tenants identify discrepancies.",
-    href: "/marketing/cam-reconciliation",
-  },
-  {
-    id: "cam-vs-nnn",
-    title: "CAM vs. NNN Explained",
-    description:
-      "Understand the difference between CAM and NNN charges and how each impacts your lease.",
-    href: "/marketing/cam-vs-nnn",
-  },
-  {
-    id: "nnn-audit-rights",
-    title: "NNN Audit Rights Explained",
-    description:
-      "Specific audit rights related to NNN charges including tax and insurance allocations.",
-    href: "/marketing/nnn-audit-rights",
-  },
-  {
-    id: "nnn-expenses-explained",
-    title: "NNN Expenses Explained",
-    description:
-      "Learn how Triple Net (NNN) expenses work, why they increase, and when tenants can dispute them.",
-    href: "/marketing/nnn-expenses-explained",
-  },
-  {
-    id: "nnn-calculation-examples",
-    title: "NNN Calculation Examples",
-    description:
-      "Real-world examples of how NNN charges are calculated and where errors commonly occur.",
-    href: "/marketing/nnn-calculation-examples",
-  },
-  {
-    id: "nnn-insurance-charges",
-    title: "NNN Insurance Charges Explained",
-    description:
-      "How insurance costs are allocated in NNN leases and when they are challengeable.",
-    href: "/marketing/nnn-insurance-charges-explained",
-  },
-  {
-    id: "nnn-property-tax-charges",
-    title: "NNN Property Tax Charges Explained",
-    description:
-      "How property tax increases flow through NNN leases and when reassessments matter.",
-    href: "/marketing/nnn-property-tax-charges-explained",
-  },
-  {
-    id: "nnn-reconciliation",
-    title: "NNN Reconciliation Explained",
-    description:
-      "How NNN reconciliations work and what tenants should verify each year.",
-    href: "/marketing/nnn-reconciliation",
-  },
-  {
-    id: "non-allowable-expenses",
-    title: "Non-Allowable CAM / NNN Expenses",
-    description:
-      "Charges that are frequently disputed and often non-recoverable under standard lease interpretation.",
-    href: "/marketing/non-allowable-cam-nnn-expenses",
-  },
-  {
-    id: "pro-rata-share",
-    title: "Pro Rata Share Explained",
-    description:
-      "How pro rata share is calculated and how small miscalculations can significantly impact tenants.",
-    href: "/marketing/pro-rata-share-explained",
-  },
-  {
-    id: "real-overcharge-examples",
-    title: "Real CAM / NNN Overcharge Examples",
-    description:
-      "Actual examples of CAM and NNN overcharges and how they were identified.",
-    href: "/marketing/real-cam-nnn-overcharge-examples",
-  },
-  {
-    id: "lease-score-explained",
-    title: "Lease Score Explained",
-    description:
-      "See how Lease Score reveals hidden CAM / NNN risk, uncapped expenses, and audit leverage that often drive commercial lease overcharges.",
-    href: "/marketing/lease-score-explained",
+    label: "Risk & Overcharges",
+    articles: [
+      {
+        title: "CAM / NNN Overcharges Explained",
+        description:
+          "Understand how CAM and NNN overcharges happen and why many tenants unknowingly overpay.",
+        href: "/marketing/cam-nnn-overcharges",
+      },
+      {
+        title: "Non-Allowable CAM / NNN Expenses",
+        description:
+          "Charges that are frequently disputed and often non-recoverable under standard lease interpretation.",
+        href: "/marketing/non-allowable-cam-nnn-expenses",
+      },
+      {
+        title: "Real CAM / NNN Overcharge Examples",
+        description:
+          "Actual examples of CAM and NNN overcharges and how they were identified.",
+        href: "/marketing/real-cam-nnn-overcharge-examples",
+      },
+    ],
   },
 ];
 
 export default function LearnPage() {
   return (
-    <main className="mx-auto max-w-7xl px-6 py-20 space-y-16">
+    <main className="mx-auto max-w-7xl px-6 py-20 space-y-20">
       {/* HERO */}
       <section className="text-center">
         <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
@@ -157,26 +162,37 @@ export default function LearnPage() {
         </p>
       </section>
 
-      {/* ARTICLES GRID */}
-      <section className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {articles.map((article) => (
-          <Link
-            key={article.id}
-            href={article.href}
-            className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
-          >
-            <h2 className="text-xl font-semibold group-hover:underline">
-              {article.title}
-            </h2>
-            <p className="mt-3 text-gray-700 leading-relaxed">
-              {article.description}
+      {/* SECTIONS */}
+      {sections.map((section) => (
+        <section key={section.label} className="space-y-8">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-gray-500">
+              {section.label}
             </p>
-            <p className="mt-4 text-sm font-semibold text-black">
-              Read article →
-            </p>
-          </Link>
-        ))}
-      </section>
+            <div className="mt-2 h-px w-16 bg-gray-200" />
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {section.articles.map((article) => (
+              <Link
+                key={article.title}
+                href={article.href}
+                className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
+              >
+                <h2 className="text-xl font-semibold group-hover:underline">
+                  {article.title}
+                </h2>
+                <p className="mt-3 text-gray-700 leading-relaxed">
+                  {article.description}
+                </p>
+                <p className="mt-4 text-sm font-semibold text-black">
+                  Read article →
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
 
       {/* CTA */}
       <section className="rounded-3xl bg-gray-50 p-10 text-center">
