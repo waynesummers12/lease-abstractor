@@ -182,6 +182,31 @@ export default function LearnPage() {
         </p>
       </section>
 
+      {/* Core Anchor Block */}
+      <section className="rounded-2xl border bg-gray-50 p-10 text-center space-y-5">
+        <h2 className="text-3xl font-semibold">
+          Start With CAM Reconciliation
+        </h2>
+
+        <p className="mx-auto max-w-3xl text-gray-700 leading-relaxed">
+          Most commercial tenant overcharges are discovered during annual CAM reconciliation.
+          Reconciliation statements are where allocation errors, non-allowable expenses,
+          administrative markups, and uncapped increases often surface.
+        </p>
+
+        <p className="mx-auto max-w-3xl text-gray-700 leading-relaxed">
+          If you are reviewing a reconciliation statement or believe your CAM charges
+          may be incorrect, begin with our complete CAM Reconciliation guide.
+        </p>
+
+        <Link
+          href="/marketing/cam-reconciliation"
+          className="inline-flex rounded-lg bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+        >
+          Read the CAM Reconciliation Guide →
+        </Link>
+      </section>
+
       {/* SECTIONS */}
       {sections.map((section) => (
         <section key={section.label} className="space-y-8">
