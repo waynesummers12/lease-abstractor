@@ -92,7 +92,7 @@ export default function HowItWorksPage() {
 
         {/* Upload Visual */}
         <div className="space-y-6">
-          <h3 className="text-2xl font-semibold">1. Your Lease</h3>
+          <h3 className="text-2xl font-semibold">1. Upload Your Lease</h3>
           <div className="rounded-2xl border shadow-sm overflow-hidden">
             <Image
               src="/demo/lease-example.png"
