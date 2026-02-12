@@ -31,7 +31,7 @@ export default function CamReconciliationPage() {
         </p>
 
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to review CAM reconciliation (Free Preview)
@@ -194,7 +194,7 @@ export default function CamReconciliationPage() {
 
         <div className="mt-6">
           <Link
-            href="/app"
+            href="/app/step-1-upload"
             className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
           >
             Review Your CAM Reconciliation (Free Preview)
@@ -277,7 +277,7 @@ export default function CamReconciliationPage() {
         </p>
 
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to check CAM reconciliation (Free Preview)

@@ -47,11 +47,12 @@ export default function CamNnnOverchargesPage() {
       {/* HERO */}
       <section>
         <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
-          CAM & NNN Overcharges Explained
+          CAM & NNN Overcharges Explained — How Commercial Tenants Identify Avoidable Costs
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
-          Many commercial tenants unknowingly overpay CAM and NNN charges due to
-          unclear lease language, billing errors, and missed audit rights.
+          CAM and NNN overcharges often stem from reconciliation errors, improper
+          allocations, and expenses that exceed lease-defined caps or exclusions.
+          Many tenants do not discover these issues until audit windows are nearly closed.
         </p>
       </section>
 
@@ -68,6 +69,22 @@ export default function CamNnnOverchargesPage() {
           Overcharges usually occur when expenses that are excluded or limited by
           the lease are passed through anyway, or when calculations are applied
           incorrectly.
+        </p>
+
+        <h2 className="pt-6 text-3xl font-light tracking-tight">
+          What CAM & NNN Overcharges Can Actually Cost
+        </h2>
+
+        <p>
+          Even small billing inconsistencies can create meaningful financial exposure.
+          For example, a 10,000 square foot tenant paying $7.00 per square foot
+          in CAM and NNN charges is responsible for $70,000 annually in recoverable costs.
+        </p>
+
+        <p>
+          If 5–10% of those charges exceed lease limits or are misallocated,
+          exposure can range from $3,500 to $7,000 per year — and significantly
+          more over multi-year lease terms.
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
@@ -89,7 +106,8 @@ export default function CamNnnOverchargesPage() {
         <p>
           Most commercial leases give tenants only 30 to 120 days to audit and
           dispute CAM and NNN charges after receiving a reconciliation statement.
-          Missing this window often means losing recovery rights permanently.
+          After that period expires, charges are often deemed accepted by default,
+          even if errors exist.
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
@@ -110,13 +128,13 @@ export default function CamNnnOverchargesPage() {
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
           Upload your lease and receive a tenant-first CAM & NNN audit with clear
-          findings and estimated exposure.
+          findings and estimated exposure before audit deadlines close.
         </p>
         <Link
-          href="/app/step-1-upload"
+          href="/app"
           className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
-          Start CAM & NNN Audit (Free Preview)
+          Review CAM & NNN Charges (Free Preview)
         </Link>
       </section>
 
