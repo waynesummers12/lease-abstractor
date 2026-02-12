@@ -91,17 +91,24 @@ export default function HowItWorksPage() {
         </div>
 
         {/* Upload Visual */}
-        <div className="space-y-6">
-          <h3 className="text-2xl font-semibold">1. Upload Your Lease</h3>
-          <div className="rounded-2xl border shadow-sm overflow-hidden">
-            <Image
-              src="/demo/lease-example.png"
-              alt="Commercial lease document example"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-          </div>
+<div className="space-y-6">
+  <h3 className="text-2xl font-semibold">1. Upload Your Lease</h3>
+
+  <p className="text-gray-700 max-w-2xl">
+    Upload your commercial lease agreement, including any amendments or exhibits. 
+    No formatting is required — our system securely analyzes the lease language as submitted.
+  </p>
+
+  <div className="rounded-2xl border shadow-sm overflow-hidden">
+    <Image
+      src="/demo/lease-example.png"
+      alt="Commercial lease document example"
+      width={1200}
+      height={800}
+      className="w-full h-auto"
+    />
+  </div>
+</div>
         </div>
 
         {/* Free Preview Visual */}
