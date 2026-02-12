@@ -14,29 +14,32 @@ export default function CamReconciliationPage() {
       {/* ---------------- HERO ---------------- */}
       <section className="mb-16">
         <h1 className="mb-4 text-4xl font-bold tracking-tight">
-          CAM Reconciliation Explained — How Tenants Spot Overcharges & Save Money
+          CAM Reconciliation Explained — How Commercial Tenants Spot Overcharges & Protect Audit Rights
         </h1>
 
         <p className="mb-6 text-lg text-gray-700">
-          Most commercial tenants overpay CAM charges — not because they agreed
-          to it, but because reconciliation errors are easy to miss.
+          CAM reconciliation is where many avoidable CAM overcharges first surface.
+          During the annual reconciliation statement, estimated operating expenses
+          are compared against actual costs — and allocation errors, non-allowable
+          expenses, and inflated administrative fees often appear.
         </p>
 
         <p className="mb-8 text-gray-700">
-          CAM reconciliation is the annual process landlords use to bill tenants
-          for operating expenses — and it’s often confusing, opaque, and
-          frequently inaccurate, so a quick review can reveal avoidable costs.
+          For commercial tenants, reviewing reconciliation language, pro-rata share
+          allocations, and audit rights early can prevent thousands of dollars in
+          recurring exposure before deadlines expire.
         </p>
 
         <Link
           href="/app"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Upload your lease to check for CAM overcharges (Free Preview)
+          Upload your lease to review CAM reconciliation (Free Preview)
         </Link>
         <p className="mt-3 text-xs text-gray-600">
           🔒 Secure & private • No obligation • Takes 2–3 minutes
         </p>
+
         <nav className="mt-4 text-sm text-gray-600 flex flex-wrap gap-x-4 gap-y-2">
           <a href="#what-is-cam-reconciliation" className="hover:text-gray-900">
             What is CAM Reconciliation
