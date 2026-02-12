@@ -126,7 +126,7 @@ export default function HowItWorksPage() {
         {/* Final Report Visual */}
         <div className="space-y-6">
           <h3 className="text-2xl font-semibold">
-            3. Full CAM / NNN Audit Summary
+            3. CAM / NNN Audit Summary (Sample)
           </h3>
           <div className="rounded-2xl border shadow-sm overflow-hidden">
             <Image
