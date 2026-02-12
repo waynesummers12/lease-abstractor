@@ -142,7 +142,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COST ---------------- */}
       <section className="mb-14">
-        <h2 id="what-you-can-challenge" className="mb-3 text-2xl font-semibold">
+        <h2 id="how-much-cam-errors-cost" className="mb-3 text-2xl font-semibold">
           How Much CAM Errors Typically Cost Tenants
         </h2>
 
@@ -160,6 +160,38 @@ export default function CamReconciliationPage() {
           Because CAM charges recur every year, unchallenged errors compound over
           time.
         </p>
+      </section>
+
+      {/* ---------------- REAL WORLD EXAMPLE ---------------- */}
+      <section className="mb-14 border-t pt-10">
+        <h2 className="mb-3 text-2xl font-semibold">
+          Example: How Small CAM Errors Become Large Costs
+        </h2>
+
+        <p className="mb-4 text-gray-700">
+          Consider a 7,500 square foot retail tenant paying $6.75 per square foot
+          in CAM charges. That equates to more than $50,000 annually in recoverable expenses.
+        </p>
+
+        <p className="mb-4 text-gray-700">
+          If administrative fees are applied at 8% without proper lease support,
+          or capital improvements are incorrectly passed through, exposure can
+          range from $3,000 to $12,000 per year.
+        </p>
+
+        <p className="text-gray-700">
+          Over a five‑year lease term, even modest reconciliation errors can
+          exceed $25,000–$60,000 if left unchallenged.
+        </p>
+
+        <div className="mt-6">
+          <Link
+            href="/app"
+            className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          >
+            Review Your CAM Reconciliation (Free Preview)
+          </Link>
+        </div>
       </section>
 
       {/* ---------------- WHAT CAN BE CHALLENGED ---------------- */}
@@ -197,7 +229,9 @@ export default function CamReconciliationPage() {
 
         <p className="mb-4 text-gray-700">
           Most leases give tenants a limited window — often 30–90 days — to
-          dispute CAM charges after receiving the reconciliation.
+          dispute CAM charges after receiving the reconciliation statement.
+          After that period expires, charges are frequently deemed accepted
+          by default, even if errors exist.
         </p>
 
         <p className="text-gray-700">
