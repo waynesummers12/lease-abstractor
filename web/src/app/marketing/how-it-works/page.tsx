@@ -124,20 +124,31 @@ export default function HowItWorksPage() {
         </div>
 
         {/* Final Report Visual */}
-        <div className="space-y-6">
-          <h3 className="text-2xl font-semibold">
-            3. CAM / NNN Audit Summary (Sample)
-          </h3>
-          <div className="rounded-2xl border shadow-sm overflow-hidden">
-            <Image
-              src="/demo/final-report.png"
-              alt="Final CAM NNN audit PDF example"
-              width={1200}
-              height={800}
-              className="w-full h-auto"
-            />
-          </div>
-        </div>
+<div className="space-y-6">
+  <h3 className="text-2xl font-semibold">
+    3. CAM / NNN Audit Summary (Sample)
+  </h3>
+
+  <p className="text-gray-700 max-w-2xl">
+    Below is a one-page example from the full CAM / NNN Audit Summary you’ll receive after purchase. 
+    Your complete report includes detailed findings, lease references, and exposure estimates tailored 
+    to your specific lease.
+  </p>
+
+  <p className="text-gray-700 font-medium">
+    Delivered as a professional PDF (typically 8–15 pages).
+  </p>
+
+  <div className="rounded-2xl border shadow-sm overflow-hidden">
+    <Image
+      src="/demo/final-report.png"
+      alt="Final CAM NNN audit PDF example"
+      width={1200}
+      height={800}
+      className="w-full h-auto"
+    />
+  </div>
+</div>
       </section>
 
       {/* CTA */}
