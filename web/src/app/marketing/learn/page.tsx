@@ -2,9 +2,29 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "CAM & NNN Lease Education for Tenants | SaveOnLease",
+  title:
+    "CAM & NNN Lease Education for Commercial Tenants | CAM Reconciliation, Audit Rights & Overcharges",
   description:
-    "Learn how CAM and NNN charges work, common overcharges, audit deadlines, and how commercial tenants can protect themselves before audit windows expire.",
+    "A tenant-first CAM & NNN education hub covering CAM reconciliation, NNN overcharges, audit rights, pro rata share calculations, expense caps, and audit window deadlines. Learn how commercial tenants identify and dispute overcharges before deadlines expire.",
+  keywords: [
+    "CAM reconciliation",
+    "NNN reconciliation",
+    "CAM overcharges",
+    "NNN overcharges",
+    "commercial lease audit",
+    "CAM audit rights",
+    "NNN audit rights",
+    "pro rata share calculation",
+    "CAM expense caps",
+    "non-allowable CAM charges",
+  ],
+  openGraph: {
+    title:
+      "CAM & NNN Lease Education for Commercial Tenants | SaveOnLease",
+    description:
+      "Learn how CAM and NNN charges work, how reconciliation statements are reviewed, and how tenants identify overcharges before audit windows close.",
+    type: "website",
+  },
 };
 
 type Article = {
