@@ -9,6 +9,9 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [learnOpen, setLearnOpen] = useState(false);
   const learnRef = useRef<HTMLDivElement | null>(null);
+  type AuditCTAProps = {
+  variant?: "education" | "urgency" | "exposure";
+};
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);

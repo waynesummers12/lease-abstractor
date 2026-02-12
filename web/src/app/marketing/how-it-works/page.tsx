@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "How SaveOnLease Works | CAM & NNN Lease Audit",
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default function HowItWorksPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16 space-y-16">
+    <div className="mx-auto max-w-6xl px-6 py-16 space-y-24">
       {/* HERO */}
       <section className="text-center">
         <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
@@ -23,15 +24,11 @@ export default function HowItWorksPage() {
 
       {/* STEPS GRID */}
       <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {/* STEP 1 */}
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold">Step 1</h2>
-          <h3 className="mt-1 text-lg font-medium">
-            Upload Your Lease
-          </h3>
+          <h3 className="mt-1 text-lg font-medium">Upload Your Lease</h3>
           <p className="mt-3 text-gray-700">
-            Upload a copy of your commercial lease agreement, including
-            amendments and exhibits.
+            Upload your commercial lease agreement, including amendments and exhibits.
           </p>
           <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700 marker:text-green-600">
             <li>No formatting required</li>
@@ -40,15 +37,14 @@ export default function HowItWorksPage() {
           </ul>
         </div>
 
-        {/* STEP 2 */}
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold">Step 2</h2>
           <h3 className="mt-1 text-lg font-medium">
             Automated CAM / NNN Analysis
           </h3>
           <p className="mt-3 text-gray-700">
-            We review your lease to identify allowed, limited, or excluded
-            expenses and common overcharges.
+            We analyze your lease to identify uncapped expenses, capital pass-throughs,
+            management fees, and reconciliation risks.
           </p>
           <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700 marker:text-green-600">
             <li>CAM definitions & exclusions</li>
@@ -58,46 +54,92 @@ export default function HowItWorksPage() {
           </ul>
         </div>
 
-        {/* STEP 3 */}
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold">Step 3</h2>
-          <h3 className="mt-1 text-lg font-medium">
-            Review Your Results
-          </h3>
+          <h3 className="mt-1 text-lg font-medium">Review Your Results</h3>
           <p className="mt-3 text-gray-700">
             Receive a clear summary of CAM and NNN risks with estimated avoidable
-            exposure where applicable.
+            exposure.
           </p>
           <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-700 marker:text-green-600">
+            <li>Exposure estimate</li>
             <li>Plain-English explanations</li>
-            <li>Risk flags & recommendations</li>
             <li>Downloadable audit PDF</li>
             <li>Email delivery</li>
           </ul>
         </div>
 
-        {/* STEP 4 */}
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
           <h2 className="text-xl font-semibold">Step 4</h2>
-          <h3 className="mt-1 text-lg font-medium">
-            Decide What to Do Next
+          <h3 className="mt-1 text-lg font-medium">Decide What to Do Next</h3>
+          <p className="mt-3 text-gray-700">
+            Use the audit to pursue corrections, negotiations, or further review —
+            with no pressure.
+          </p>
+        </div>
+      </section>
+
+      {/* VISUAL WALKTHROUGH */}
+      <section className="space-y-16">
+        <div className="text-center space-y-4">
+          <h2 className="text-4xl font-light tracking-tight">
+            What You’ll See
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-gray-700">
+            From lease upload to exposure summary, here’s what the process looks like.
+          </p>
+        </div>
+
+        {/* Upload Visual */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-semibold">1. Your Lease</h3>
+          <div className="rounded-2xl border shadow-sm overflow-hidden">
+            <Image
+              src="/demo/lease-example.png"
+              alt="Commercial lease document example"
+              width={1200}
+              height={800}
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+
+        {/* Free Preview Visual */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-semibold">
+            2. Instant Exposure Estimate
           </h3>
-          <p className="mt-3 text-gray-700">
-            Use the audit to decide whether to pursue corrections, negotiations,
-            or further review — with no pressure.
-          </p>
-          <p className="mt-3 text-gray-700">
-            Many tenants use the audit to prepare questions for their landlord or
-            advisor.
-          </p>
+          <div className="rounded-2xl border shadow-sm overflow-hidden">
+            <Image
+              src="/demo/free-preview.png"
+              alt="Free preview exposure estimate example"
+              width={1200}
+              height={800}
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+
+        {/* Final Report Visual */}
+        <div className="space-y-6">
+          <h3 className="text-2xl font-semibold">
+            3. Full CAM / NNN Audit Summary
+          </h3>
+          <div className="rounded-2xl border shadow-sm overflow-hidden">
+            <Image
+              src="/demo/final-report.png"
+              alt="Final CAM NNN audit PDF example"
+              width={1200}
+              height={800}
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </section>
 
       {/* CTA */}
       <section className="rounded-3xl bg-gray-50 p-10 text-center">
-        <h3 className="text-2xl font-semibold">
-          Ready to get started?
-        </h3>
+        <h3 className="text-2xl font-semibold">Ready to get started?</h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
           Upload your lease and see what your CAM and NNN charges really allow.
         </p>
