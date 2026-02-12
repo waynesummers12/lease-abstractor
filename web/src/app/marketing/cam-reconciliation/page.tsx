@@ -91,7 +91,9 @@ export default function CamReconciliationPage() {
         </h2>
 
         <p className="mb-4 text-gray-700">
-          CAM reconciliation errors are not rare — they are common.
+          CAM reconciliation errors are not isolated incidents — they are a predictable
+          byproduct of how operating expenses are estimated, categorized, and allocated
+          across multi-tenant properties.
         </p>
 
         <ul className="ml-6 list-disc space-y-2 text-gray-700">
@@ -103,8 +105,11 @@ export default function CamReconciliationPage() {
         </ul>
 
         <p className="mt-4 text-gray-700">
-          Most tenants assume the numbers are correct — and by the time questions
-          arise, audit windows may already be closing.
+          In many properties, reconciliation statements are generated from property
+          management systems or internal accounting spreadsheets that group expenses
+          broadly and apply allocations automatically. Without a lease-specific review,
+          tenants may never know whether charges comply with caps, exclusions, or
+          pro-rata share calculations defined in their lease.
         </p>
       </section>
 
