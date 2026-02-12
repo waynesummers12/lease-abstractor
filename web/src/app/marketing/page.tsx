@@ -141,6 +141,62 @@ export default function MarketingHomePage() {
       </Link>
     </div>
   </div>
+      {/* DOLLAR IMPACT */}
+      <div className="mt-20 border-t pt-16">
+        <h2 className="text-4xl font-light tracking-tight">
+          What CAM Errors Can Actually Cost
+        </h2>
+
+        <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
+          Even small miscalculations in CAM reconciliations can compound quickly.
+          For example, a 7,500 sq ft retail tenant paying $6.50 per sq ft in CAM
+          charges could see $3,000–$12,000 in avoidable exposure annually if
+          administrative fees, capital expenses, or pro-rata allocations are
+          applied incorrectly.
+        </p>
+
+        <p className="mt-4 text-gray-700 leading-relaxed max-w-4xl">
+          Larger tenants may face significantly higher exposure — especially
+          when audit windows close and overcharges continue year after year.
+        </p>
+
+        <div className="mt-8">
+          <Link
+            href="/app/step-1-upload"
+            className="inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
+            Check Your CAM Exposure
+          </Link>
+        </div>
+      </div>
+
+      {/* AUDIT DEADLINE */}
+      <div className="mt-20 border-t pt-16">
+        <h2 className="text-4xl font-light tracking-tight">
+          Why Timing Matters
+        </h2>
+
+        <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
+          Most commercial leases provide tenants only 30–120 days to dispute
+          CAM and NNN charges after reconciliation statements are delivered.
+          Once that window closes, even incorrect charges may become difficult
+          to recover.
+        </p>
+
+        <p className="mt-4 text-gray-700 leading-relaxed max-w-4xl">
+          Reviewing your lease language early helps protect your audit rights
+          and prevents avoidable costs from compounding across multiple years.
+        </p>
+
+        <div className="mt-8">
+          <Link
+            href="/app/step-1-upload"
+            className="inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
+            Start Free CAM Audit
+          </Link>
+        </div>
+      </div>
 </section>
 
       {/* HOW IT WORKS */}
