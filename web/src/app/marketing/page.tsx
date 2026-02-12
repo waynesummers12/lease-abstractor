@@ -178,6 +178,80 @@ export default function MarketingHomePage() {
         </div>
       </section>
 
+{/* OUTCOME PREVIEW */}
+<section className="mx-auto max-w-5xl px-6 py-24">
+  <div className="text-center">
+    <h2 className="text-4xl font-light tracking-tight">
+      What Your Audit Reveals
+    </h2>
+    <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-700 leading-relaxed">
+      Every lease is different. Your report highlights exposure ranges, lease
+      language risks, and specific provisions that may be costing you money.
+    </p>
+  </div>
+
+  <div className="mt-16 space-y-20">
+
+    {/* Step 1 */}
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold">
+        1. Upload Your Lease
+      </h3>
+      <p className="text-gray-700 max-w-3xl">
+        Submit your commercial lease agreement, including amendments. 
+        No formatting is required — we securely analyze your lease as submitted.
+      </p>
+      <div className="rounded-2xl border shadow-sm overflow-hidden">
+        <img
+          src="/demo/lease-example.png"
+          alt="Commercial lease document example"
+          className="w-full h-auto"
+        />
+      </div>
+    </div>
+
+    {/* Step 2 */}
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold">
+        2. Instant Exposure Estimate (Free Analysis)
+      </h3>
+      <p className="text-gray-700 max-w-3xl">
+        Immediately see an estimated avoidable exposure range based on 
+        common CAM / NNN risk patterns in your lease — before any payment.
+      </p>
+      <div className="rounded-2xl border shadow-sm overflow-hidden">
+        <img
+          src="/demo/free-preview.png"
+          alt="Free CAM NNN exposure preview example"
+          className="w-full h-auto"
+        />
+      </div>
+    </div>
+
+    {/* Step 3 */}
+    <div className="space-y-6">
+      <h3 className="text-2xl font-semibold">
+        3. Full CAM / NNN Audit Summary
+      </h3>
+      <p className="text-gray-700 max-w-3xl">
+        Unlock a professional CAM / NNN Audit Summary detailing flagged risks,
+        lease references, and exposure calculations specific to your lease.
+      </p>
+      <p className="text-gray-700 font-medium">
+        Delivered as a professional PDF (typically 8–15 pages).
+      </p>
+      <div className="rounded-2xl border shadow-sm overflow-hidden">
+        <img
+          src="/demo/final-report.png"
+          alt="Full CAM NNN audit PDF example"
+          className="w-full h-auto"
+        />
+      </div>
+    </div>
+
+  </div>
+</section>
+
       {/* FINAL CTA */}
       <section className="mx-auto max-w-7xl px-6 py-24 text-center">
         <h2 className="text-5xl font-light tracking-tight">
