@@ -207,7 +207,10 @@ export default function CamReconciliationPage() {
         <h2 id="what-you-can-challenge" className="mb-3 text-2xl font-semibold">
           What Tenants Can (and Can’t) Challenge
         </h2>
-
+        <p className="mb-6 text-gray-700">
+          Whether a charge is challengeable depends entirely on the specific language,
+          caps, exclusions, and allocation methods defined in your lease agreement.
+        </p>
         <div className="grid gap-6 md:grid-cols-2 text-gray-700">
           <div>
             <h3 className="mb-2 font-semibold">Often Challengeable</h3>
