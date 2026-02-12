@@ -255,17 +255,17 @@ export default function MarketingHomePage() {
       {/* FINAL CTA */}
       <section className="mx-auto max-w-7xl px-6 py-24 text-center">
         <h2 className="text-5xl font-light tracking-tight">
-          Don’t Leave CAM & NNN Errors Unchecked
+          See What Your Lease Is Really Costing You
         </h2>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
-          Audit windows are short. Upload your lease today and see what your
-          charges really allow.
+          Most CAM / NNN overcharges go unnoticed until audit windows close. 
+          Upload your lease today and uncover potential exposure before it’s too late.
         </p>
         <Link
           href="/app/step-1-upload"
           className="mt-10 inline-flex items-center rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
-          Start Your Free CAM Audit
+          Start Free Exposure Review
         </Link>
       </section>
     </main>
