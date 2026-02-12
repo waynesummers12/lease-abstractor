@@ -107,8 +107,11 @@ export default function HowItWorksPage() {
         {/* Free Preview Visual */}
         <div className="space-y-6">
           <h3 className="text-2xl font-semibold">
-            2. Instant Exposure Estimate
+            2. Instant Exposure Estimate (Free Analysis)
           </h3>
+          <p className="text-gray-700 max-w-2xl">
+            This is the free exposure estimate you’ll see immediately after uploading your lease — before any payment.
+          </p>
           <div className="rounded-2xl border shadow-sm overflow-hidden">
             <Image
               src="/demo/free-preview.png"
