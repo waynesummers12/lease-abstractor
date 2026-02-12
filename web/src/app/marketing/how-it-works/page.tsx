@@ -109,7 +109,6 @@ export default function HowItWorksPage() {
     />
   </div>
 </div>
-        </div>
 
         {/* Free Preview Visual */}
         <div className="space-y-6">
