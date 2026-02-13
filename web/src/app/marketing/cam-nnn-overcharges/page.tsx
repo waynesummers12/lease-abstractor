@@ -53,9 +53,10 @@ export default function CamNnnOverchargesPage() {
           CAM & NNN Overcharges Explained — How Commercial Tenants Identify Avoidable Costs
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
-          CAM and NNN overcharges often stem from reconciliation errors, improper
-          allocations, and expenses that exceed lease-defined caps or exclusions.
-          Many tenants do not discover these issues until audit windows are nearly closed.
+          CAM & NNN overcharges explained in practical terms: these avoidable
+          costs often stem from reconciliation errors, improper allocations, and
+          expenses that exceed lease-defined caps or exclusions. Many commercial
+          tenants do not discover these issues until audit windows are nearly closed.
         </p>
       </section>
 

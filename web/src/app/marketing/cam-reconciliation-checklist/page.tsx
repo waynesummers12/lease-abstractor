@@ -1,5 +1,3 @@
-// web/src/app/marketing/cam-reconciliation-checklist/page.tsx
-
 import Link from "next/link";
 
 export const metadata = {
@@ -19,9 +17,11 @@ export default function Page() {
         </h1>
 
         <p className="mb-6 text-gray-600">
-          Most CAM reconciliation statements contain errors — but tenants rarely
-          know what to look for. This checklist walks through the most common
-          overcharges and mistakes.
+          This CAM reconciliation checklist explains what every commercial
+          tenant should review before paying a reconciliation statement.
+          Most CAM reconciliation statements contain errors — but tenants
+          rarely know what to look for, and overcharges are often approved
+          unintentionally.
         </p>
 
         <Link

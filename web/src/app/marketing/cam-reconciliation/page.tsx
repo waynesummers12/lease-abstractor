@@ -21,10 +21,11 @@ export default function CamReconciliationPage() {
         </h1>
 
         <p className="mb-6 text-lg text-gray-700">
-          CAM reconciliation is where many avoidable CAM overcharges first surface.
-          During the annual reconciliation statement, estimated operating expenses
-          are compared against actual costs — and allocation errors, non-allowable
-          expenses, and inflated administrative fees often appear.
+          CAM reconciliation explained in practical terms: this is where many
+          commercial tenants first spot overcharges and protect audit rights.
+          During the annual reconciliation statement, estimated operating
+          expenses are compared against actual costs — and allocation errors,
+          non-allowable expenses, and inflated administrative fees often appear.
         </p>
 
         <p className="mb-8 text-gray-700">

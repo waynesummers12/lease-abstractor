@@ -56,7 +56,9 @@ export default function CamAdminFeesPage() {
 
         <p style={{ ...textStyle, fontSize: 17 }}>
           <strong>
-            CAM admin fees are often inflated — and frequently challengeable.
+            CAM admin fees: what they are — and why tenants overpay — comes down
+            to percentage markups that are often inflated and frequently
+            challengeable.
           </strong>
         </p>
 

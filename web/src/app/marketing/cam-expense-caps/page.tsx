@@ -20,9 +20,9 @@ export default function CamExpenseCapsPage() {
         </h1>
 
         <p className="mb-6 text-lg text-gray-600">
-          Many commercial leases limit how much CAM charges can increase each
-          year. When those caps are ignored or misapplied, tenants often pay far
-          more than their lease allows.
+          CAM expense caps explained in practical terms: many commercial leases
+          limit how much CAM charges can increase each year. When those caps are
+          ignored or misapplied, tenants often pay far more than their lease allows.
         </p>
 
         <Link

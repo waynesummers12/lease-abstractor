@@ -13,9 +13,11 @@ export default function CamVsNnnPage() {
           CAM vs NNN Charges: What’s the Difference — and Why It Matters
         </h1>
         <p className="text-lg text-gray-600">
-          CAM and NNN charges are often lumped together, poorly explained, and
-          quietly inflated. For many tenants, these costs add{" "}
-          <strong>15–35% on top of base rent</strong>.
+          CAM vs NNN charges explained in practical terms: these operating
+          expenses are often lumped together, poorly explained, and quietly
+          inflated. For many commercial tenants, CAM and NNN costs add
+          <strong> 15–35% on top of base rent</strong> — yet few fully
+          understand what they are actually paying for.
         </p>
       </header>
 
