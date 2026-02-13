@@ -50,9 +50,10 @@ export default function AuditRightsPage() {
           Commercial Lease Audit Rights Explained
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
-          Most commercial leases give tenants the right to audit CAM and NNN
-          charges — but only if strict notice and timing requirements are met.
-          Missing these deadlines can permanently waive recovery rights.
+          Commercial lease audit rights explained in plain terms: most commercial
+          leases give tenants the right to audit CAM and NNN charges — but only if
+          strict notice and timing requirements are met. Missing these deadlines
+          can permanently waive recovery rights.
         </p>
       </section>
 
@@ -139,5 +140,3 @@ export default function AuditRightsPage() {
     </main>
   );
 }
-
-
