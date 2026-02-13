@@ -6,6 +6,9 @@ export const metadata = {
   title: "CAM Reconciliation Explained | Spot Overcharges & Save Money",
   description:
     "Learn how CAM reconciliation works, common overcharge mistakes, and how commercial tenants can identify avoidable CAM costs before audit deadlines close.",
+  alternates: {
+    canonical: "https://saveonlease.com/marketing/cam-reconciliation",
+  },
 };
 
 export default function CamReconciliationPage() {
@@ -115,7 +118,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COMMON MISTAKES ---------------- */}
       <section className="mb-14">
-        <h2 id="how-much-cam-errors-cost" className="mb-3 text-2xl font-semibold">
+        <h2 id="common-cam-mistakes-detail" className="mb-3 text-2xl font-semibold">
           The Most Common CAM Reconciliation Mistakes
         </h2>
 
