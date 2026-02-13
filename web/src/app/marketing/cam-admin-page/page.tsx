@@ -236,7 +236,7 @@ export default function CamAdminFeesPage() {
 
         <button
           style={ctaStyle}
-          onClick={() => (window.location.href = "/product/app")}
+          onClick={() => (window.location.href = "/app/step-1-upload")}
         >
           Check your CAM admin fees automatically →
         </button>
