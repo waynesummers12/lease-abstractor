@@ -31,7 +31,13 @@ export default function AuditRightsPage() {
         <p>
           Audit rights allow tenants to review and dispute operating expenses
           billed by a landlord. These rights are governed entirely by lease
-          language and typically apply to CAM, NNN, tax, and insurance charges.
+          language and typically apply to{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM reconciliation
+          </Link>,{" "}
+          <Link href="/marketing/cam-nnn-overcharges" className="underline hover:text-black">
+            CAM & NNN overcharges
+          </Link>, tax, and insurance charges.
         </p>
 
         <p>
@@ -71,6 +77,12 @@ export default function AuditRightsPage() {
           If objections are not made in writing within this window, the charges
           are typically deemed final — even if incorrect.
         </p>
+        <p>
+          Missing a 60-day audit window can lock in five-figure CAM or NNN
+          overcharges for the life of a lease. Because operating expenses recur
+          annually, even a modest $5,000 error can compound into tens of
+          thousands of dollars over a multi-year term.
+        </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
           Why Tenants Lose Audit Rights
@@ -90,8 +102,28 @@ export default function AuditRightsPage() {
         <p>
           The best way to protect audit rights is to review lease language and
           reconciliation statements as soon as they are received. A structured
-          audit can surface issues early and help tenants act before deadlines
+          audit — particularly of{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            annual CAM reconciliation statements
+          </Link>{" "}
+          — can surface issues early and help tenants act before deadlines
           expire.
+        </p>
+
+        <h2 className="pt-6 text-3xl font-light tracking-tight">
+          What If the Audit Window Has Already Closed?
+        </h2>
+
+        <p>
+          Even if the formal audit window has expired, all leverage is not necessarily lost.
+          Some leases allow limited follow-up review, and many landlords remain open to
+          discussion when presented with clear documentation of errors.
+        </p>
+
+        <p>
+          Identifying reconciliation mistakes can still strengthen negotiations,
+          protect future years, and prevent recurring overcharges. Understanding what
+          happened — even after a deadline — is often financially valuable.
         </p>
       </section>
 
