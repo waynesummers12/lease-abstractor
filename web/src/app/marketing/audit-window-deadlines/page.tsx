@@ -113,6 +113,36 @@ export default function AuditRightsPage() {
       </section>
 
       {/* FAQ Schema (SEO) */}
+      {/* ---------------- BREADCRUMB SCHEMA ---------------- */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://saveonlease.com/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Learn",
+                item: "https://saveonlease.com/marketing/learn",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: "Audit Window Deadlines",
+                item: "https://saveonlease.com/marketing/audit-window-deadlines",
+              },
+            ],
+          }),
+        }}
+      />
       <FaqSchema
         faqs={[
           {
