@@ -16,9 +16,10 @@ export default function HowItWorksPage() {
           How SaveOnLease Works
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
-          SaveOnLease helps commercial tenants identify CAM and NNN overcharges by
-          analyzing lease language and expense structures — quickly, securely,
-          and without long-term commitments.
+          How SaveOnLease works in practical terms: we help commercial tenants
+          identify CAM and NNN overcharges by analyzing lease language and
+          expense structures — quickly, securely, and without long-term
+          commitments.
         </p>
       </section>
 

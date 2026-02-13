@@ -11,15 +11,14 @@ export default function LeaseScorePage() {
     <main className="mx-auto max-w-4xl px-6 py-24">
       {/* ---------- HERO ---------- */}
       <section className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight">
-          Lease Score Explained
-        </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-          Lease Score summarizes how tenant-favorable your commercial lease is
-          for CAM / NNN charges, escalation limits, and audit rights — the terms
-          that most often drive overcharges.
-        </p>
-      </section>
+  <h1 className="text-4xl font-bold tracking-tight">
+    Lease Score Explained — How We Evaluate CAM / NNN Risk
+  </h1>
+  <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+    This guide explains how Lease Score evaluates CAM / NNN risk, escalation limits, 
+    and audit rights to determine how tenant-favorable your commercial lease really is.
+  </p>
+</section>
 
       {/* ---------- WHAT IT IS ---------- */}
       <section className="mt-20 rounded-xl border bg-white p-8 shadow-sm">

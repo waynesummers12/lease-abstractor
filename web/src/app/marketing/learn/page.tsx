@@ -180,8 +180,10 @@ export default function LearnPage() {
           CAM & NNN Lease Education
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
-          Clear, tenant-first explanations of CAM and NNN charges, audit windows,
-          and common overcharges — so you can act before deadlines expire.
+          CAM & NNN lease education explained in practical, tenant-first terms:
+          clear guidance on CAM reconciliation, NNN charges, audit windows,
+          and common overcharges — so commercial tenants can act before
+          deadlines expire.
         </p>
       </section>
 
