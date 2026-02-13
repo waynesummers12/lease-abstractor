@@ -18,9 +18,10 @@ export default function Page() {
         </h1>
 
         <p className="mb-6 text-gray-600">
-          Most commercial tenants overpay NNN charges — not because they agreed
-          to them, but because reconciliation statements are confusing, opaque,
-          and rarely reviewed line by line.
+          NNN reconciliation statements determine what tenants ultimately owe for taxes,
+          insurance, and maintenance. Most commercial tenants overpay during NNN reconciliation —
+          not because they agreed to the charges, but because reconciliation statements are confusing,
+          opaque, and rarely reviewed line by line.
         </p>
 
         <Link

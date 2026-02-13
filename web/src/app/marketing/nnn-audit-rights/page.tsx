@@ -20,8 +20,8 @@ export default function NnnAuditRightsPage() {
         </h1>
 
         <p className="mb-6 text-lg text-gray-600">
-          Most commercial leases give tenants the right to audit NNN and CAM
-          charges — but only for a short window. Miss the deadline, and
+          NNN audit rights allow commercial tenants to review and challenge NNN
+          and CAM charges — but only for a short window. Miss the deadline, and
           overcharges may become final.
         </p>
       </header>

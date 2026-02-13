@@ -49,10 +49,9 @@ export default function NnnExpensesExplainedPage() {
           NNN Expenses Explained
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
-          Triple Net (NNN) leases require tenants to pay property taxes,
-          insurance, and common area maintenance costs — often on top of base
-          rent. Understanding these expenses is essential to avoiding
-          overcharges.
+          NNN expenses in Triple Net (NNN) leases require tenants to pay property taxes,
+          insurance, and common area maintenance costs — often on top of base rent.
+           Understanding NNN expenses clearly is essential to avoiding overcharges.  
         </p>
       </section>
 
@@ -123,7 +122,15 @@ export default function NnnExpensesExplainedPage() {
           <li>Insurance premiums allocated incorrectly</li>
           <li>Taxes billed for vacant or non-tenant spaces</li>
           <li>Capital improvements treated as operating expenses</li>
-          <li>Charges exceeding lease-defined caps</li>
+          <li>
+            Charges exceeding lease-defined caps. See how these caps are analyzed during{" "}
+            <Link
+              href="/marketing/cam-reconciliation"
+              className="underline hover:text-black"
+            >
+              CAM reconciliation
+            </Link>.
+          </li>
           <li>Duplicate charges across CAM and NNN categories</li>
         </ul>
       </section>
@@ -178,8 +185,30 @@ export default function NnnExpensesExplainedPage() {
           permits. Reviewing billed expenses against definitions, exclusions,
           and allocation methods allows tenants to identify issues early and
           act within audit windows.
+          Understanding your{" "}
+         <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">
+  audit window deadlines
+          </Link>{" "}
+          is critical before disputes expire.    
         </p>
       </section>
+
+<section className="space-y-4 text-lg text-gray-700 leading-relaxed">
+  <h2 className="text-3xl font-light tracking-tight">
+    Why NNN Errors Matter Financially
+  </h2>
+
+  <p>
+    Even modest NNN billing errors can cost tenants thousands annually.
+    Because property taxes and insurance premiums fluctuate each year,
+    small misallocations compound over time.
+  </p>
+
+  <p>
+    Reviewing NNN expenses proactively preserves leverage and prevents
+    long-term overpayment.
+  </p>
+</section>
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">

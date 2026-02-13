@@ -19,9 +19,10 @@ export default function Page() {
         </h1>
 
         <p className="mb-6 text-gray-600">
-          Many CAM and NNN charges appear legitimate — but are explicitly
-          excluded by lease language. These “non-allowable” expenses are one of
-          the most common sources of tenant overpayment.
+          Non-allowable CAM and NNN expenses often appear legitimate — but are
+          explicitly excluded by lease language. These non-allowable expenses are
+          one of the most common sources of tenant overpayment in commercial
+          leases.
         </p>
 
         <Link
@@ -112,7 +113,7 @@ export default function Page() {
 
         <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
           <Link
-            href="/marketing/cam-admin-page"
+            href="/marketing/cam-admin-fees"
             className="underline"
           >
             CAM admin fees explained →

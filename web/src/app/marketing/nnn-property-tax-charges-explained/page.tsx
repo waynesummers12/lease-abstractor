@@ -1,5 +1,3 @@
-// web/src/app/marketing/nnn-property-tax-charges-explained/page.tsx
-
 import Link from "next/link";
 
 export const metadata = {
