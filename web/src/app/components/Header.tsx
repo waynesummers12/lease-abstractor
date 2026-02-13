@@ -7,6 +7,18 @@ import Image from "next/image";
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
   const [learnOpen, setLearnOpen] = useState(false);
   const learnRef = useRef<HTMLDivElement | null>(null);
   type AuditCTAProps = {
@@ -258,7 +270,7 @@ export default function Header() {
 
       
 {menuOpen && (
-  <div className="md:hidden bg-black px-6 pb-6 text-white">
+  <div className="fixed inset-0 z-[999] md:hidden bg-black px-6 pt-24 pb-10 text-white overflow-y-auto">
     <div className="flex flex-col gap-4 text-sm">
       <span className="uppercase text-xs opacity-60">Education</span>
 
