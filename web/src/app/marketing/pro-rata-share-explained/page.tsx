@@ -1,5 +1,3 @@
-// web/src/app/marketing/pro-rata-share-explained/page.tsx
-
 import Link from "next/link";
 
 export const metadata = {
