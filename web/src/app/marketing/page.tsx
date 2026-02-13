@@ -6,6 +6,9 @@ export const metadata = {
   title: "CAM & NNN Lease Audit for Tenants | SaveOnLease",
   description:
     "Identify CAM and NNN overcharges in commercial leases. Upload your lease and receive a clear, tenant-first audit with estimated savings—no subscriptions.",
+  alternates: {
+    canonical: "/marketing",
+  },
 };
 
 export default function MarketingHomePage() {
