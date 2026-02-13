@@ -85,6 +85,30 @@ export default function AuditRightsPage() {
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
+          Example Lease Audit Deadline Clause
+        </h2>
+
+        <p>
+          Many commercial leases include language similar to the following:
+        </p>
+
+        <div className="rounded-lg border bg-gray-100 p-6 text-base text-gray-800">
+          <p className="italic">
+            “Tenant shall notify Landlord in writing of any objection to the
+            annual reconciliation statement within sixty (60) days after
+            receipt. Failure to object within such period shall constitute
+            Tenant’s acceptance of the statement as final and binding.”
+          </p>
+        </div>
+
+        <p>
+          While the exact wording varies, the structure is consistent: a defined
+          objection period, a written notice requirement, and automatic
+          acceptance if no action is taken. Understanding this language is
+          critical before audit windows expire.
+        </p>
+
+        <h2 className="pt-6 text-3xl font-light tracking-tight">
           Why Tenants Lose Audit Rights
         </h2>
 
@@ -191,6 +215,16 @@ export default function AuditRightsPage() {
             question: "What happens if a tenant misses the audit deadline?",
             answer:
               "If the audit window closes, charges are usually deemed final, even if they include errors or non-lease-compliant expenses.",
+          },
+          {
+            question: "Can tenants audit prior years of CAM or NNN charges?",
+            answer:
+              "In most cases, audit rights apply only to the defined window for each reconciliation year. However, identifying past errors can still inform negotiations or prevent similar issues in future years.",
+          },
+          {
+            question: "Do tenants need an accountant or attorney to audit CAM charges?",
+            answer:
+              "Not necessarily. While professionals can assist in complex situations, many audit rights issues relate directly to lease language, expense caps, and allocation math that can be reviewed systematically.",
           },
           {
             question: "How can tenants protect their audit rights?",
