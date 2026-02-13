@@ -192,14 +192,23 @@ export default function LearnPage() {
         </h2>
 
         <p className="mx-auto max-w-3xl text-gray-700 leading-relaxed">
-          Most commercial tenant overcharges are discovered during annual CAM reconciliation.
-          Reconciliation statements are where allocation errors, non-allowable expenses,
-          administrative markups, and uncapped increases often surface.
+          Most commercial tenant overcharges are discovered during annual{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM reconciliation
+          </Link>.
+          Reconciliation statements are where allocation errors,{" "}
+          <Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline hover:text-black">
+            non-allowable CAM expenses
+          </Link>, administrative markups, and uncapped increases often surface.
         </p>
 
         <p className="mx-auto max-w-3xl text-gray-700 leading-relaxed">
           If you are reviewing a reconciliation statement or believe your CAM charges
-          may be incorrect, begin with our complete CAM Reconciliation guide.
+          may be incorrect, begin with our complete{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM Reconciliation guide
+          </Link>{" "}
+          to understand how tenants identify overcharges before audit windows close.
         </p>
 
         <Link
@@ -241,6 +250,21 @@ export default function LearnPage() {
           </div>
         </section>
       ))}
+
+      {/* Why This Matters Financially */}
+      <section className="mx-auto max-w-4xl text-center space-y-6">
+        <h3 className="text-3xl font-semibold tracking-tight">
+          Why This Matters Financially
+        </h3>
+        <p className="text-gray-700 leading-relaxed">
+          Even small CAM allocation errors can cost tenants $5,000–$50,000+ annually.
+          Because CAM and NNN charges recur every year, unnoticed errors compound over time.
+        </p>
+        <p className="text-gray-700 leading-relaxed">
+          Reviewing your lease before audit windows close preserves leverage,
+          protects your ability to dispute overcharges, and helps prevent avoidable costs from becoming permanent.
+        </p>
+      </section>
 
       {/* CTA */}
       <section className="rounded-3xl bg-gray-50 p-10 text-center">
