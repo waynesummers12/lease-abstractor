@@ -261,8 +261,15 @@ export default function LearnPage() {
           Because CAM and NNN charges recur every year, unnoticed errors compound over time.
         </p>
         <p className="text-gray-700 leading-relaxed">
-          Reviewing your lease before audit windows close preserves leverage,
-          protects your ability to dispute overcharges, and helps prevent avoidable costs from becoming permanent.
+          Reviewing your lease before{" "}
+          <Link
+            href="/marketing/audit-window-deadlines"
+            className="underline hover:text-black"
+          >
+            audit windows close
+          </Link>{" "}
+          preserves leverage, protects your ability to dispute overcharges, and
+          helps prevent avoidable costs from becoming permanent.
         </p>
       </section>
 
