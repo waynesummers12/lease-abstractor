@@ -236,37 +236,37 @@ export default function CamReconciliationPage() {
       </section>
 
       {/* ---------------- AUDIT WINDOW ---------------- */}
-      <section className="mb-16">
-        <h2 id="audit-deadlines" className="mb-3 text-2xl font-semibold">
-          Audit Windows Matter More Than Most Tenants Realize
-        </h2>
+<section className="mb-16">
+  <h2 id="audit-deadlines" className="mb-3 text-2xl font-semibold">
+    Audit Windows Matter More Than Most Tenants Realize
+  </h2>
 
-        <p className="mb-4 text-gray-700">
-          Most leases give tenants a limited window — often 30–90 days — to
-          dispute CAM charges after receiving the reconciliation statement.
-          After that period expires, charges are frequently deemed accepted
-          by default, even if errors exist.
-        </p>
+  <p className="mb-4 text-gray-700">
+    Most leases give tenants a limited window — often 30–90 days — to
+    dispute CAM charges after receiving the reconciliation statement.
+    After that period expires, charges are frequently deemed accepted
+    by default, even if errors exist.
+  </p>
 
-        <p className="text-gray-700">
-          If the window closes, charges may become final and leverage is lost.
-          Timing matters as much as accuracy — make sure you understand
-          <a
-            href="/marketing/nnn-audit-rights"
-            className="ml-1 text-gray-900 underline hover:text-black"
-          >
-            your audit rights
-          </a>
-          and any
-          <a
-            href="/marketing/cam-expense-caps"
-            className="ml-1 text-gray-900 underline hover:text-black"
-          >
-            CAM expense caps
-          </a>
-          before the deadline.
-        </p>
-      </section>
+  <p className="text-gray-700">
+    If the window closes, charges may become final and leverage is lost.
+    Timing matters as much as accuracy — make sure you understand{" "}
+    <a
+      href="/marketing/nnn-audit-rights"
+      className="text-gray-900 underline hover:text-black"
+    >
+      your audit rights
+    </a>{" "}
+    and any{" "}
+    <a
+      href="/marketing/cam-expense-caps"
+      className="text-gray-900 underline hover:text-black"
+    >
+      CAM expense caps
+    </a>{" "}
+    before the deadline.
+  </p>
+</section>
 
       {/* ---------------- FINAL CTA ---------------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
