@@ -133,12 +133,16 @@ export default function MarketingHomePage() {
         </li>
       </ul>
 
-      <Link
-        href="/app/step-1-upload"
-        className="mt-8 inline-flex w-full justify-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
-      >
-        Upload Lease (Free Preview)
-      </Link>
+      <p className="mt-4 text-sm text-gray-600">
+  Takes 2 minutes. No subscription. Secure & confidential.
+</p>
+
+<Link
+  href="/app/step-1-upload"
+  className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
+>
+  Start Lease Audit (Free Preview)
+</Link>
     </div>
   </div>
       {/* DOLLAR IMPACT */}
