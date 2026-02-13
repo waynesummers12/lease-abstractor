@@ -18,6 +18,9 @@ export const metadata = {
     "CAM expense caps",
     "non-allowable CAM charges",
   ],
+  alternates: {
+    canonical: "https://saveonlease.com/marketing/learn",
+  },
   openGraph: {
     title:
       "CAM & NNN Lease Education for Commercial Tenants | SaveOnLease",

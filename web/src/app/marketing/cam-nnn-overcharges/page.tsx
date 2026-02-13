@@ -5,6 +5,9 @@ export const metadata = {
   title: "CAM & NNN Overcharges Explained | SaveOnLease",
   description:
     "Learn what CAM and NNN overcharges are, how they happen, and how commercial tenants can identify billing errors before audit deadlines expire.",
+  alternates: {
+    canonical: "https://saveonlease.com/marketing/cam-nnn-overcharges",
+  },
 };
 
 const faqSchema = {

@@ -6,6 +6,9 @@ export const metadata = {
   title: "Commercial Lease Audit Rights Explained | CAM & NNN | SaveOnLease",
   description:
     "Learn how commercial lease audit rights work, common CAM & NNN audit deadlines, and how tenants can preserve their right to dispute overcharges.",
+  alternates: {
+    canonical: "https://saveonlease.com/marketing/audit-window-deadlines",
+  },
 };
 
 export default function AuditRightsPage() {
