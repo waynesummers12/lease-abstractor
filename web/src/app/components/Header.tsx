@@ -271,6 +271,15 @@ export default function Header() {
       
 {menuOpen && (
   <div className="fixed inset-0 z-[999] md:hidden bg-black px-6 pt-24 pb-10 text-white overflow-y-auto">
+    <div className="flex justify-end mb-6">
+      <button
+        onClick={() => setMenuOpen(false)}
+        className="text-2xl font-light"
+        aria-label="Close menu"
+      >
+        ✕
+      </button>
+    </div>
     <div className="flex flex-col gap-4 text-sm">
       <span className="uppercase text-xs opacity-60">Education</span>
 
