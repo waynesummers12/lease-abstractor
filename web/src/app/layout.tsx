@@ -4,7 +4,7 @@ import Script from "next/script";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL("https://saveonlease.com"),
   title: {
     default: "SaveOnLease — CAM & NNN Lease Audit for Commercial Tenants",
@@ -12,6 +12,10 @@ export const metadata = {
   },
   description:
     "Identify CAM and NNN overcharges in commercial leases with a clear, tenant-first audit and estimated exposure.",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
