@@ -135,7 +135,7 @@ export default function CamNnnOverchargesPage() {
           findings and estimated exposure before audit deadlines close.
         </p>
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
           Review CAM & NNN Charges (Free Preview)

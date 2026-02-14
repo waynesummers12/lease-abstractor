@@ -25,7 +25,8 @@ export function drawCallout(
       ? rgb(0.85, 0.33, 0.31)
       : rgb(0.25, 0.55, 0.85);
 
-  let y = cursorY;
+    // Add internal top padding so content sits inside the block visually
+  let y = cursorY - SPACING.md;
 
   /* ---------- Title ---------- */
   page.drawText(title, {
@@ -35,7 +36,8 @@ export function drawCallout(
     font: boldFont,
   });
 
-  y -= 20;
+    // Space between title and first paragraph
+  y -= SPACING.md;
 
   /* ---------- Body (no overlap) ---------- */
   for (const line of lines) {
@@ -48,7 +50,7 @@ export function drawCallout(
       11,
       boxWidth - padding * 2
     );
-    y -= SPACING.xs;
+    y -= SPACING.sm;
   }
 
   const contentHeight = cursorY - y + SPACING.sm;
@@ -56,7 +58,7 @@ export function drawCallout(
   /* ---------- Accent bar ---------- */
   page.drawRectangle({
     x: boxX,
-    y: cursorY - contentHeight + 4,
+        y: cursorY - contentHeight,
     width: 4,
     height: contentHeight,
     color: accentColor,
