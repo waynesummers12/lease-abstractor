@@ -105,6 +105,24 @@ export default function Header() {
                   CAM vs NNN
                 </Link>
                 <Link
+                  href="/marketing/triple-net-lease"
+                  className={linkClass}
+                >
+                  Triple Net Lease (NNN)
+                </Link>
+                <Link
+                  href="/marketing/triple-net-lease-meaning"
+                  className={linkClass}
+                >
+                  Triple Net Lease Meaning
+                </Link>
+                <Link
+                  href="/marketing/triple-net-lease-vs-gross"
+                  className={linkClass}
+                >
+                  Triple Net Lease vs Gross
+                </Link>
+                <Link
                   href="/marketing/pro-rata-share-explained"
                   className={linkClass}
                 >
@@ -145,6 +163,18 @@ export default function Header() {
                   className={linkClass}
                 >
                   CAM Reconciliation
+                </Link>
+                <Link
+                  href="/marketing/common-area-maintenance"
+                  className={linkClass}
+                >
+                  Common Area Maintenance (CAM)
+                </Link>
+                <Link
+                  href="/marketing/cam-fee-meaning"
+                  className={linkClass}
+                >
+                  CAM Fee Meaning
                 </Link>
                 <Link
                   href="/marketing/cam-expense-caps"
@@ -205,6 +235,18 @@ export default function Header() {
                   className={linkClass}
                 >
                   CAM / NNN Overcharges
+                </Link>
+                <Link
+                  href="/marketing/lease-overcharge"
+                  className={linkClass}
+                >
+                  Lease Overcharge
+                </Link>
+                <Link
+                  href="/marketing/cam-reconciliation-errors"
+                  className={linkClass}
+                >
+                  CAM Reconciliation Errors
                 </Link>
                 <Link
                   href="/marketing/non-allowable-cam-nnn-expenses"
