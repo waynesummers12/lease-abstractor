@@ -352,6 +352,27 @@ export default function Header() {
       <Link href="/marketing/cam-vs-nnn" onClick={() => setMenuOpen(false)}>
         CAM vs NNN
       </Link>
+      <Link href="/marketing/triple-net-lease" onClick={() => setMenuOpen(false)}>
+        Triple Net Lease (NNN)
+      </Link>
+      <Link href="/marketing/triple-net-lease-meaning" onClick={() => setMenuOpen(false)}>
+        Triple Net Lease Meaning
+      </Link>
+      <Link href="/marketing/triple-net-lease-vs-gross" onClick={() => setMenuOpen(false)}>
+        Triple Net Lease vs Gross
+      </Link>
+      <Link href="/marketing/lease-overcharge" onClick={() => setMenuOpen(false)}>
+        Lease Overcharge
+      </Link>
+      <Link href="/marketing/cam-reconciliation-errors" onClick={() => setMenuOpen(false)}>
+        CAM Reconciliation Errors
+      </Link>
+      <Link href="/marketing/common-area-maintenance" onClick={() => setMenuOpen(false)}>
+        Common Area Maintenance (CAM)
+      </Link>
+      <Link href="/marketing/cam-fee-meaning" onClick={() => setMenuOpen(false)}>
+        CAM Fee Meaning
+      </Link>
       <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
         Common CAM Fees
       </Link>
