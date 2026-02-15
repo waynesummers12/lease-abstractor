@@ -32,8 +32,15 @@ export default function CommonAreaMaintenancePage() {
         <p>
           In a triple net (NNN) lease or modified gross lease, tenants often
           contribute to the cost of maintaining shared areas of a building or
-          shopping center. These costs are referred to as CAM charges or CAM
-          fees.
+          shopping center. These costs are referred to as {" "}
+          <Link href="/marketing/cam-charges" className="underline hover:text-black">
+            CAM charges
+          </Link>{" "}
+          or {" "}
+          <Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">
+            CAM fees
+          </Link>
+          .
         </p>
         <p>
           CAM expenses are usually allocated to tenants based on their
@@ -114,6 +121,13 @@ export default function CommonAreaMaintenancePage() {
             className="underline hover:text-black"
           >
             CAM reconciliation
+          </Link>{" "}
+          and detailed reviews of {" "}
+          <Link
+            href="/marketing/cam-reconciliation-errors"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation errors
           </Link>
           .
         </p>
@@ -134,7 +148,14 @@ export default function CommonAreaMaintenancePage() {
           >
             commercial lease audit
           </Link>{" "}
-          can uncover potential savings before audit windows close.
+          can uncover potential savings before {" "}
+          <Link
+            href="/marketing/audit-window-deadlines"
+            className="underline hover:text-black"
+          >
+            audit window deadlines
+          </Link>
+          close.
         </p>
         <Link
           href="/app/step-1-upload"

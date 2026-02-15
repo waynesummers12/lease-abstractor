@@ -71,7 +71,11 @@ export default function CamReconciliationPage() {
 
         <p className="mb-4 text-gray-700">
           CAM reconciliation is the yearly calculation landlords use to determine
-          how much tenants owe for Common Area Maintenance (CAM) expenses.
+          how much tenants owe for{" "}
+          <Link href="/marketing/common-area-maintenance" className="underline hover:text-black">
+            Common Area Maintenance (CAM)
+          </Link>{" "}
+          expenses.
         </p>
 
         <ol className="ml-6 list-decimal space-y-2 text-gray-700">
@@ -169,8 +173,11 @@ export default function CamReconciliationPage() {
         </ul>
 
         <p className="mt-4 text-gray-700">
-          Because CAM charges recur every year, unchallenged errors compound over
-          time.
+          Because{" "}
+          <Link href="/marketing/cam-charges" className="underline hover:text-black">
+            CAM charges
+          </Link>{" "}
+          recur every year, unchallenged errors compound over time.
         </p>
       </section>
 
@@ -214,6 +221,11 @@ export default function CamReconciliationPage() {
         <p className="mb-6 text-gray-700">
           Whether a charge is challengeable depends entirely on the specific language,
           caps, exclusions, and allocation methods defined in your lease agreement.
+          Many disputes arise from misunderstood{" "}
+          <Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">
+            CAM fee meaning
+          </Link>{" "}
+          and improper classification of expenses.
         </p>
         <div className="grid gap-6 md:grid-cols-2 text-gray-700">
           <div>
