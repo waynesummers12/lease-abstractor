@@ -111,8 +111,14 @@ export default function CamReconciliationErrorsPage() {
 
         <p className="text-gray-700 leading-relaxed">
           Upload your lease and reconciliation documents to identify potential
-          CAM and NNN overcharges, cap violations, and structural billing
-          errors.
+          CAM and NNN overcharges through a formal{" "}
+          <Link
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            commercial lease audit
+          </Link>
+          , including cap violations and structural billing errors.
         </p>
 
         <Link
