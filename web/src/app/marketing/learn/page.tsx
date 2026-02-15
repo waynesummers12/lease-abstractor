@@ -63,6 +63,24 @@ const sections: Section[] = [
           "Real-world examples of how NNN charges are calculated and where errors commonly occur.",
         href: "/marketing/nnn-calculation-examples",
       },
+      {
+        title: "Triple Net Lease Explained",
+        description:
+          "A practical breakdown of triple net (NNN) leases, including taxes, insurance, CAM, and how risk shifts to tenants.",
+        href: "/marketing/triple-net-lease",
+      },
+      {
+        title: "Triple Net Lease Meaning",
+        description:
+          "Plain-English definition of a triple net lease and what tenants are actually agreeing to financially.",
+        href: "/marketing/triple-net-lease-meaning",
+      },
+      {
+        title: "Triple Net Lease vs Gross Lease",
+        description:
+          "Compare triple net vs gross leases and understand how operating expense risk differs for tenants.",
+        href: "/marketing/triple-net-lease-vs-gross",
+      },
     ],
   },
   {
@@ -166,6 +184,18 @@ const sections: Section[] = [
         description:
           "Actual examples of CAM and NNN overcharges and how they were identified.",
         href: "/marketing/real-cam-nnn-overcharge-examples",
+      },
+      {
+        title: "Lease Overcharge Explained",
+        description:
+          "How commercial lease overcharges happen and how tenants identify billing mistakes before audit deadlines.",
+        href: "/marketing/lease-overcharge",
+      },
+      {
+        title: "CAM Reconciliation Errors",
+        description:
+          "Common CAM reconciliation errors including allocation mistakes, admin markups, and non-allowable expense pass-throughs.",
+        href: "/marketing/cam-reconciliation-errors",
       },
     ],
   },
