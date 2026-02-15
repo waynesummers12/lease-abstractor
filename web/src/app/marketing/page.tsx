@@ -5,7 +5,7 @@ import { DemoVideo } from "./components/DemoVideo";
 export const metadata = {
   title: "CAM & NNN Lease Audit for Tenants | SaveOnLease",
   description:
-    "Identify CAM and NNN overcharges in commercial leases. Upload your lease and receive a clear, tenant-first audit with estimated savings—no subscriptions.",
+    "Upload your commercial lease and uncover hidden Common Area Maintenance (CAM) and NNN overcharges, uncapped expenses, and missed audit rights — before deadlines expire.",
   alternates: {
     canonical: "/marketing",
   },

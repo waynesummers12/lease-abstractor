@@ -110,7 +110,6 @@ function computeLeaseHealthScore(analysis: AuditAnalysis) {
 function createPage(pdfDoc: PDFDocument) {
   const page = pdfDoc.addPage();
   const { height } = page.getSize();
-  // Start content lower to avoid header overlap
   return { page, y: height - PAGE.margin - 40 };
 }
 
@@ -153,7 +152,7 @@ function drawFooter(
     `Prepared by SaveOnLease • ${new Date().toLocaleDateString()} • Audit ID: ${auditId}`,
     {
       x: PAGE.margin,
-      y: PAGE.bottom - 20,
+      y: 20,
       size: 8,
       font,
       color: COLORS.subtle,
@@ -213,17 +212,17 @@ export async function generateAuditPdfV4(
     y,
     boldFont,
     FONT_SIZES.h2,
-    SPACING.sm
+    SPACING.lg
   );
 
   const executiveParagraphs = [
-    `Our review of your lease structure and cost pass-through provisions indicates an estimated ${currency(
+    `Our review indicates an estimated ${currency(
       totalLow
     )} - ${currency(
       totalHigh
-    )} in avoidable operating expense exposure over the next 12 months alone.`,
-    "The primary exposure drivers are structural — uncapped CAM escalation, landlord-controlled capital allocations, and management fees without defined limits.",
-    "Absent proactive review, these provisions typically compound year-over-year and materially weaken tenant leverage prior to reconciliation, audit, or renewal discussions.",
+    )} in avoidable operating expense exposure over the next 12 months.`,
+    "Primary exposure drivers include uncapped CAM escalation, capital allocations, and management fees without defined limits.",
+    "Absent proactive review, these provisions typically compound year-over-year and weaken tenant leverage prior to reconciliation or renewal.",
   ];
 
   for (const p of executiveParagraphs) {
@@ -234,38 +233,6 @@ export async function generateAuditPdfV4(
       y,
       font,
       CONTENT.maxWidth
-    );
-    y -= SPACING.sm;
-  }
-
-  y -= SPACING.lg;
-
-  y = drawHeading(
-    page,
-    "Scope of Review",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h3,
-    SPACING.sm
-  );
-
-  const scopeItems = [
-    "• Lease-defined CAM and NNN escalation mechanics",
-    "• Capital expenditure recoverability language",
-    "• Management and administrative fee limitations",
-    "• Pro-rata allocation methodology",
-    "• Audit window provisions and dispute deadlines",
-  ];
-
-  for (const item of scopeItems) {
-    y = drawParagraph(
-      page,
-      item,
-      PAGE.margin + 8,
-      y,
-      font,
-      CONTENT.maxWidth - 8
     );
     y -= SPACING.sm;
   }
@@ -328,8 +295,8 @@ export async function generateAuditPdfV4(
     "warning",
     [
       "Operating expenses across retail and office properties are increasing due to insurance repricing, tax reassessments, and capital items being allocated through CAM.",
-      "Most commercial leases restrict audit rights to a 12-24 month window. Once closed, recovery of overcharges is typically unavailable.",
-      "Addressing structural exposure before reconciliation or renewal materially improves negotiating position and reduces long-term cost creep.",
+      "Most commercial leases restrict audit rights to a 12–24 month window. Once closed, recovery of overcharges is typically unavailable.",
+      "Addressing structural exposure before reconciliation or renewal materially improves negotiating position and reduces long-term cost creep."
     ],
     font,
     boldFont
@@ -337,34 +304,7 @@ export async function generateAuditPdfV4(
 
   y -= SPACING.lg;
 
-  y = drawHeading(
-    page,
-    "Multi-Year Exposure Illustration",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h3,
-    SPACING.sm
-  );
-
-  const multiYearExample = `Even modest annual exposure can compound significantly across a multi-year lease term. For example, ${currency(
-    totalLow
-  )} annually over a five-year term represents approximately ${currency(
-    totalLow * 5
-  )} in cumulative exposure if structural provisions remain unchanged.`;
-
-  y = drawParagraph(
-    page,
-    multiYearExample,
-    PAGE.margin,
-    y,
-    font,
-    CONTENT.maxWidth
-  );
-
-  y -= SPACING.lg;
-
-  drawBottomLine(
+  const bottomResult = drawBottomLine(
     pdfDoc,
     page,
     y,
@@ -375,235 +315,181 @@ export async function generateAuditPdfV4(
     { font, boldFont }
   );
 
+  page = bottomResult.page;
+  y = bottomResult.cursorY;
+
   drawFooter(page, analysis.audit_id ?? "N/A", font);
 
-/* ============================
-   PAGE 3 — WHAT WE CHECK (Borrowed Authority Layer)
-============================ */
+  /* ============================
+     PAGE 3 — METHODOLOGY
+  ============================ */
 
-({ page, y } = createPage(pdfDoc));
-drawHeader(page, analysis, font);
+  ({ page, y } = createPage(pdfDoc));
+  drawHeader(page, analysis, font);
 
-y = drawHeading(
-  page,
-  "What We Review in Your CAM / NNN Structure",
-  PAGE.margin,
-  y,
-  boldFont,
-  FONT_SIZES.h2,
-  SPACING.lg
-);
-
-const reviewIntro =
-  "We analyze your lease language and operating expense structure to identify structural provisions that commonly lead to overcharges or compounding cost exposure.";
-
-y = drawParagraph(
-  page,
-  reviewIntro,
-  PAGE.margin,
-  y,
-  font,
-  CONTENT.maxWidth
-);
-
-y -= SPACING.lg;
-
-const reviewItems = [
-  "Administrative & management fees above lease-defined limits",
-  "Insurance and tax pass-throughs applied outside allowable categories",
-  "Capital expenses shifted to tenants improperly",
-  "Pro-rata share and square-footage allocation errors",
-  "Charges billed outside defined audit periods",
-];
-
-for (const item of reviewItems) {
-  y = drawParagraph(
+  const explanationResult = drawExplanationBox(
+    pdfDoc,
     page,
-    `• ${item}`,
-    PAGE.margin + 8,
-    y,
-    font,
-    CONTENT.maxWidth - 8
+    y - SPACING.sm,
+    {
+      title: "How Exposure Is Derived",
+      paragraphs: [
+        "Exposure modeling is based on specific lease provisions identified within your agreement.",
+        "Applied market-observed CAM inflation sensitivity ranges (10–25%) to uncapped categories.",
+        "Modeled capital expenditure allocation using standard amortization and recoverability benchmarks.",
+        "Benchmarked management fee structures against prevailing 3–5% industry norms for comparable asset classes.",
+        "Modeled exposure conservatively — not worst-case assumptions."
+      ],
+    },
+    { font, boldFont }
   );
-  y -= SPACING.md;
-}
 
-drawFooter(page, analysis.audit_id ?? "N/A", font);
+  page = explanationResult.page;
+  y = explanationResult.cursorY;
 
-/* ============================
-   PAGE 4 — HOW EXPOSURE IS DERIVED
-============================ */
-
-({ page, y } = createPage(pdfDoc));
-drawHeader(page, analysis, font);
-
-const explanationResult = drawExplanationBox(
-  pdfDoc,
-  page,
-  y - SPACING.sm,
-  {
-    title: "How Exposure Is Derived",
-    paragraphs: [
-      "Exposure modeling is based on specific lease provisions identified within your agreement.",
-      "Applied market-observed CAM inflation sensitivity ranges (10–25%) to uncapped categories.",
-      "Modeled capital expenditure allocation using standard amortization and recoverability benchmarks.",
-      "Benchmarked management fee structures against prevailing 3–5% industry norms for comparable asset classes.",
-      "Modeled exposure conservatively — not worst-case assumptions.",
-    ],
-  },
-  { font, boldFont }
-);
-
-page = explanationResult.page;
-y = explanationResult.cursorY;
-
-y -= SPACING.lg;
-
-y = drawHeading(
-  page,
-  "Audit Windows & Timing Risk",
-  PAGE.margin,
-  y,
-  boldFont,
-  FONT_SIZES.h3,
-  SPACING.sm
-);
-
-const timingContext =
-  "Most commercial leases provide tenants a limited window — often 30 to 120 days — to dispute CAM and NNN charges after reconciliation statements are delivered. Once that window closes, even incorrect charges may become difficult to recover.";
-
-y = drawParagraph(
-  page,
-  timingContext,
-  PAGE.margin,
-  y,
-  font,
-  CONTENT.maxWidth
-);
-
-drawFooter(page, analysis.audit_id ?? "N/A", font);
-
-/* ============================
-   PAGE 5 — RECOMMENDED NEXT STEPS
-============================ */
-
-({ page, y } = createPage(pdfDoc));
-drawHeader(page, analysis, font);
-
-y = drawHeading(
-  page,
-  "Recommended Next Steps",
-  PAGE.margin,
-  y,
-  boldFont,
-  FONT_SIZES.h2,
-  SPACING.lg
-);
-
-const actions = [
-  "Confirm audit window deadlines and upcoming reconciliation timelines.",
-  "Formally request detailed CAM backup, capital allocation schedules, and supporting invoices.",
-  "Evaluate management fee structure against market benchmarks and lease-defined limits.",
-  "Initiate structured tenant inquiry prior to reconciliation, renewal, or amendment negotiations.",
-];
-
-for (const step of actions) {
-  y = drawParagraph(
+  const timingResult = drawExplanationBox(
+    pdfDoc,
     page,
-    `• ${step}`,
-    PAGE.margin + 8,
-    y,
-    font,
-    CONTENT.maxWidth - 8
+    y - SPACING.lg,
+    {
+      title: "Audit Windows & Timing Risk",
+      paragraphs: [
+        "Most commercial leases provide tenants a limited window — often 30 to 120 days — to dispute CAM and NNN charges after reconciliation statements are delivered.",
+        "Once that window closes, even clearly incorrect charges may become difficult or impossible to recover.",
+        "Proactive review before reconciliation, renewal, or amendment negotiations materially strengthens tenant leverage and protects long-term economics."
+      ],
+    },
+    { font, boldFont }
   );
-  y -= SPACING.md;
-}
 
-drawFooter(page, analysis.audit_id ?? "N/A", font);
+  page = timingResult.page;
+  y = timingResult.cursorY;
 
-/* ============================
-   PAGE 6 — LEASE HEALTH SCORE
-============================ */
+  drawFooter(page, analysis.audit_id ?? "N/A", font);
 
-({ page, y } = createPage(pdfDoc));
-drawHeader(page, analysis, font);
+  /* ============================
+     PAGE 4 — ACTION PLAN
+  ============================ */
 
-const health = computeLeaseHealthScore(analysis);
+  ({ page, y } = createPage(pdfDoc));
+  drawHeader(page, analysis, font);
 
-y = drawHeading(
-  page,
-  "Lease Health Score",
-  PAGE.margin,
-  y,
-  boldFont,
-  FONT_SIZES.h2,
-  SPACING.sm
-);
+  y = drawHeading(
+    page,
+    "Recommended Next Steps",
+    PAGE.margin,
+    y,
+    boldFont,
+    FONT_SIZES.h2,
+    SPACING.lg
+  );
 
-y = drawParagraph(
-  page,
-  "Overall Structural Risk Index",
-  PAGE.margin,
-  y,
-  font,
-  CONTENT.maxWidth,
-  FONT_SIZES.small,
-  SPACING.lg
-);
+  const actions = [
+    "Confirm audit window deadlines and upcoming reconciliation timelines.",
+    "Formally request detailed CAM backup, capital allocation schedules, and supporting invoices.",
+    "Evaluate management fee structure against market benchmarks and lease-defined limits.",
+    "Initiate structured tenant inquiry prior to reconciliation, renewal, or amendment negotiations.",
+  ];
 
-const { width } = page.getSize();
-const scoreText = `${health.score} / 100`;
-const textWidth = boldFont.widthOfTextAtSize(scoreText, 52);
+  for (const step of actions) {
+    const text = `• ${step}`;
+    y = drawParagraph(
+      page,
+      text,
+      PAGE.margin + 8,
+      y,
+      font,
+      CONTENT.maxWidth - 8
+    );
+    y -= SPACING.md;
+  }
 
-page.drawText(scoreText, {
-  x: width / 2 - textWidth / 2,
-  y,
-  size: 52,
-  font: boldFont,
-  color: COLORS.text,
-});
+  drawFooter(page, analysis.audit_id ?? "N/A", font);
 
-y -= 100;
+  /* ============================
+     PAGE 5 — LEASE HEALTH SCORE
+  ============================ */
 
-const interpretation =
-  health.score >= 80
-    ? "This lease structure demonstrates comparatively strong cost controls. Continued monitoring is advisable to prevent erosion of protections."
-    : health.score >= 60
-    ? "This lease presents moderate structural exposure driven by pass-through provisions that warrant disciplined oversight."
-    : "This lease presents elevated financial exposure requiring proactive audit positioning and strategic negotiation before costs compound.";
+  ({ page, y } = createPage(pdfDoc));
+  drawHeader(page, analysis, font);
 
-y = drawParagraph(
-  page,
-  interpretation,
-  PAGE.margin,
-  y,
-  font,
-  CONTENT.maxWidth
-);
+  const health = computeLeaseHealthScore(analysis);
 
-y -= SPACING.lg;
+  y = drawHeading(
+    page,
+    "Lease Health Score",
+    PAGE.margin,
+    y,
+    boldFont,
+    FONT_SIZES.h2,
+    SPACING.lg
+  );
 
-const breakdownLines = [
-  `Cap Protection: ${health.breakdown.capProtection}`,
-  `Allocation Clarity: ${health.breakdown.allocationClarity}`,
-  `Fee Discipline: ${health.breakdown.feeDiscipline}`,
-  `Cost Predictability: ${health.breakdown.costPredictability}`,
-];
-
-for (const line of breakdownLines) {
   y = drawParagraph(
     page,
-    line,
+    "Overall Structural Risk Index",
     PAGE.margin,
     y,
     font,
     CONTENT.maxWidth,
-    FONT_SIZES.body,
-    SPACING.sm
+    FONT_SIZES.small,
+    SPACING.lg
   );
-}
 
-drawFooter(page, analysis.audit_id ?? "N/A", font);
+  y -= SPACING.md;
+
+  const { width } = page.getSize();
+  const scoreText = `${health.score} / 100`;
+  const textWidth = boldFont.widthOfTextAtSize(scoreText, 48);
+
+  page.drawText(scoreText, {
+    x: width / 2 - textWidth / 2,
+    y,
+    size: 48,
+    font: boldFont,
+    color: COLORS.text,
+  });
+
+  y -= 80;
+
+  const interpretation =
+    health.score >= 80
+      ? "This lease structure demonstrates comparatively strong cost controls, though continued monitoring is advisable to prevent erosion of protections."
+      : health.score >= 60
+      ? "This lease presents moderate structural exposure driven by pass-through provisions that warrant disciplined review and oversight."
+      : "This lease presents elevated financial exposure requiring proactive audit positioning and strategic negotiation before costs compound.";
+
+  y = drawParagraph(
+    page,
+    interpretation,
+    PAGE.margin,
+    y,
+    font,
+    CONTENT.maxWidth
+  );
+
+  y -= SPACING.lg;
+
+  const breakdownLines = [
+    `Cap Protection: ${health.breakdown.capProtection}`,
+    `Allocation Clarity: ${health.breakdown.allocationClarity}`,
+    `Fee Discipline: ${health.breakdown.feeDiscipline}`,
+    `Cost Predictability: ${health.breakdown.costPredictability}`,
+  ];
+
+  for (const line of breakdownLines) {
+    y = drawParagraph(
+      page,
+      line,
+      PAGE.margin,
+      y,
+      font,
+      CONTENT.maxWidth
+    );
+    y -= SPACING.sm;
+  }
+
+  drawFooter(page, analysis.audit_id ?? "N/A", font);
 
   return await pdfDoc.save();
 }

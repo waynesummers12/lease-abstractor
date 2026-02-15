@@ -8,11 +8,12 @@ import { drawParagraph } from "../text.ts";
  * ExplanationBox
  * Enterprise-grade explanatory container.
  *
- * Goals:
- * - Fill remaining space on page cleanly
- * - Wrap all content inside gray surface
- * - Sit tight under the RiskBox
- * - Never overflow or clip
+ * Fixes:
+ * - Dynamic height (no more full-page gray fill)
+ * - Proper title spacing
+ * - Divider sits correctly under title
+ * - Paragraphs never bleed outside gray box
+ * - Accent bar matches true content height
  */
 export function drawExplanationBox(
   pdfDoc: PDFDocument,
@@ -32,42 +33,82 @@ export function drawExplanationBox(
 
   const boxX = PAGE.margin;
   const boxWidth = page.getSize().width - PAGE.margin * 2;
-  const padding = 18;
+  const padding = 22;
   const accentWidth = 4;
 
+  let y = cursorY;
+
   /* -------------------------------------------------
-     Determine usable height on this page
+     Pre-calc content height (so box wraps content)
   -------------------------------------------------- */
 
-  const maxAvailableHeight =
-    cursorY - PAGE.bottom - SPACING.md;
+  const titleHeight = 22;
+  const dividerGap = SPACING.sm;
+
+  let contentHeight = padding + titleHeight + dividerGap;
+
+  for (const paragraph of paragraphs) {
+    const fontSize = 11;
+    const lineHeight =
+      paragraph.startsWith("•")
+        ? fontSize * 1.15
+        : paragraph.endsWith(":")
+        ? fontSize * 1.25
+        : fontSize * 1.3;
+
+    const words = paragraph.split(" ");
+    let lines = 1;
+    let currentWidth = 0;
+    const maxWidth =
+      paragraph.startsWith("•")
+        ? boxWidth - padding * 2 - 6
+        : boxWidth - padding * 2;
+
+    for (const word of words) {
+      const wordWidth = font.widthOfTextAtSize(word + " ", fontSize);
+      if (currentWidth + wordWidth > maxWidth) {
+        lines += 1;
+        currentWidth = wordWidth;
+      } else {
+        currentWidth += wordWidth;
+      }
+    }
+
+    contentHeight += lines * lineHeight + SPACING.sm;
+  }
+
+  contentHeight += padding;
+
+  /* -------------------------------------------------
+     Ensure space on page
+  -------------------------------------------------- */
 
   ({ page, cursorY } = ensureSpace(
     pdfDoc,
     page,
     cursorY,
-    maxAvailableHeight
+    contentHeight + SPACING.lg
   ));
 
-  let y = cursorY;
+  y = cursorY;
 
   /* -------------------------------------------------
-     Draw background FIRST (so text appears on top)
+     Background + accent
   -------------------------------------------------- */
 
   page.drawRectangle({
     x: boxX,
-    y: cursorY - maxAvailableHeight,
+    y: y - contentHeight,
     width: boxWidth,
-    height: maxAvailableHeight,
+    height: contentHeight,
     color: rgb(0.955, 0.955, 0.955),
   });
 
   page.drawRectangle({
     x: boxX,
-    y: cursorY - maxAvailableHeight,
+    y: y - contentHeight,
     width: accentWidth,
-    height: maxAvailableHeight,
+    height: contentHeight,
     color: rgb(0.85, 0.2, 0.2),
   });
 
@@ -75,8 +116,7 @@ export function drawExplanationBox(
      Title
   -------------------------------------------------- */
 
-  // Pull down slightly so it hugs RiskBox
-  y -= SPACING.xs;
+  y -= padding;
 
   page.drawText(title, {
     x: boxX + padding,
@@ -86,7 +126,7 @@ export function drawExplanationBox(
     color: rgb(0.1, 0.1, 0.1),
   });
 
-  y -= 22;
+  y -= titleHeight;
 
   /* -------------------------------------------------
      Divider
@@ -99,64 +139,53 @@ export function drawExplanationBox(
     color: rgb(0.82, 0.82, 0.82),
   });
 
-  y -= SPACING.sm;
+  y -= dividerGap;
 
-/* -------------------------------------------------
-   Body paragraphs
--------------------------------------------------- */
+  /* -------------------------------------------------
+     Body
+  -------------------------------------------------- */
 
-for (const paragraph of paragraphs) {
-  // Bullet lines
-  if (paragraph.startsWith("•")) {
-    y = drawParagraph({
-      page,
-      text: paragraph,
-      x: boxX + padding + 6,
-      y,
-      font,
-      size: 11,
-      maxWidth: boxWidth - padding * 2 - 6,
-      lineHeight: 11 * 1.15, // tighter bullet spacing
-    });
+  for (const paragraph of paragraphs) {
+    if (paragraph.startsWith("•")) {
+      y = drawParagraph({
+        page,
+        text: paragraph,
+        x: boxX + padding + 6,
+        y,
+        font,
+        size: 11,
+        maxWidth: boxWidth - padding * 2 - 6,
+        lineHeight: 11 * 1.15,
+      });
+    } else if (paragraph.endsWith(":")) {
+      y = drawParagraph({
+        page,
+        text: paragraph,
+        x: boxX + padding,
+        y,
+        font,
+        size: 11,
+        maxWidth: boxWidth - padding * 2,
+        lineHeight: 11 * 1.25,
+      });
+    } else {
+      y = drawParagraph({
+        page,
+        text: paragraph,
+        x: boxX + padding,
+        y,
+        font,
+        size: 11,
+        maxWidth: boxWidth - padding * 2,
+        lineHeight: 11 * 1.3,
+      });
+    }
 
-    y -= SPACING.xs; // small gap between bullets
-    continue;
+    y -= SPACING.sm;
   }
 
-  // Section headers (lines ending with :)
-  if (paragraph.endsWith(":")) {
-    y = drawParagraph({
-      page,
-      text: paragraph,
-      x: boxX + padding,
-      y,
-      font,
-      size: 11,
-      maxWidth: boxWidth - padding * 2,
-      lineHeight: 11 * 1.25,
-    });
-
-    y -= SPACING.xs;
-    continue;
-  }
-
-  // Normal body text
-  y = drawParagraph({
+  return {
     page,
-    text: paragraph,
-    x: boxX + padding,
-    y,
-    font,
-    size: 11,
-    maxWidth: boxWidth - padding * 2,
-    lineHeight: 11 * 1.3,
-  });
-
-  y -= SPACING.sm;
+    cursorY: y - SPACING.lg,
+  };
 }
-
-    return {
-      page,
-      cursorY: y - SPACING.lg,
-    };
-  }
