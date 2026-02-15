@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -30,6 +28,11 @@ export default function TripleNetLeaseVsGrossPage() {
           In a gross lease, most property expenses are included in the rent.
           In a triple net (NNN) lease, tenants pay base rent plus property
           taxes, insurance, and common area maintenance (CAM).
+        </p>
+
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Tenants comparing a triple net lease vs gross lease are often deciding
+          between predictable rent and variable operating expense exposure.
         </p>
 
         <Link
