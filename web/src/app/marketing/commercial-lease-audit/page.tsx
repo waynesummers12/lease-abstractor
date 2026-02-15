@@ -6,6 +6,9 @@ export const metadata = {
   title: "Commercial Lease Audit for Tenants | Identify CAM & NNN Overcharges",
   description:
     "Commercial lease audit for tenants. Identify CAM, NNN, and reconciliation overcharges before audit windows close. See how much exposure may be avoidable.",
+  alternates: {
+    canonical: "https://saveonlease.com/marketing/commercial-lease-audit",
+  },
 };
 
 export default function CommercialLeaseAuditPage() {
@@ -18,9 +21,9 @@ export default function CommercialLeaseAuditPage() {
         </h1>
 
         <p className="text-lg text-gray-700 mb-4">
-          A <strong>commercial lease audit</strong> reviews your lease language
-          and annual CAM / NNN charges to determine whether costs were billed
-          correctly — and whether avoidable overcharges exist.
+          A <strong>commercial lease audit for tenants</strong> reviews your
+          lease language and annual CAM / NNN charges to determine whether
+          costs were billed correctly — and whether avoidable overcharges exist.
         </p>
 
         <p className="text-lg text-gray-700">
@@ -175,7 +178,8 @@ export default function CommercialLeaseAuditPage() {
 
         <p className="text-gray-700 mb-6">
           Upload your commercial lease for a tenant-focused review of CAM /
-          NNN language, caps, exclusions, and reconciliation exposure.
+          NNN language, caps, exclusions, and reconciliation exposure through a
+          formal commercial lease audit process.
         </p>
 
         <Link
