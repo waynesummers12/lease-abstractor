@@ -38,6 +38,18 @@ export default function CamVsNnnPage() {
           whether capital improvements or management fees are improperly passed
           through.
         </p>
+
+        <p className="mt-4 text-gray-700">
+          These issues often surface during annual{" "}
+          <a
+            href="/marketing/cam-reconciliation"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation
+          </a>{" "}
+          reviews, where tenants compare estimated versus actual expenses and
+          identify lease violations.
+        </p>
       </section>
 
       {/* ---------- REAL TENANT EXAMPLES (NEW) ---------- */}
@@ -77,8 +89,14 @@ export default function CamVsNnnPage() {
         </ul>
 
         <p className="mt-4 text-gray-700">
-          In a true NNN lease, tenants are responsible for their proportionate
-          share of all three. However, many leases labeled “NNN” still contain
+          In a{" "}
+          <a
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            true NNN lease
+          </a>
+          , tenants are responsible for their proportionate share of all three. However, many leases labeled “NNN” still contain
           carve-outs, caps, or exclusions that landlords may ignore.
         </p>
       </section>
@@ -169,7 +187,14 @@ export default function CamVsNnnPage() {
           Not sure whether your charges are CAM or NNN?
         </h3>
         <p className="mb-4 text-gray-700">
-          Our automated lease audit identifies CAM vs NNN obligations, flags
+          Our automated{" "}
+          <a
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            lease audit
+          </a>{" "}
+          identifies CAM vs NNN obligations, flags
           overcharges, and estimates what you may be able to recover.
         </p>
 
