@@ -64,7 +64,14 @@ export default function LeaseOverchargePage() {
           >
             CAM reconciliation
           </Link>{" "}
-          review or a formal lease audit.
+          review or a formal{" "}
+          <Link
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            commercial lease audit
+          </Link>
+          .
         </p>
       </section>
 
