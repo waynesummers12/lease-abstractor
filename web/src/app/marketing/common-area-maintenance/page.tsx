@@ -127,7 +127,14 @@ export default function CommonAreaMaintenancePage() {
         <p className="text-lg text-gray-700 leading-relaxed">
           Many commercial tenants overpay CAM expenses due to unclear lease
           language or improper expense allocation. Reviewing your lease and
-          reconciliation statements can uncover potential savings.
+          reconciliation statements through a {" "}
+          <Link
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            commercial lease audit
+          </Link>{" "}
+          can uncover potential savings before audit windows close.
         </p>
         <Link
           href="/app/step-1-upload"

@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -24,13 +22,15 @@ export default function CamFeeCalculatorPage() {
 
         <p className="mb-6 text-lg text-gray-700">
           A CAM fee calculator helps commercial tenants estimate how much
-          they may be paying in Common Area Maintenance (CAM) charges each year.
+          they may be paying in Common Area Maintenance (CAM) charges each year —
+          and whether those charges align with the lease.
         </p>
 
         <p className="mb-8 text-gray-700">
-          While landlords often provide annual reconciliation statements,
-          tenants rarely see how CAM allocations are calculated — or whether
-          those calculations match the lease language.
+          While landlords provide annual reconciliation statements, most tenants
+          never see how CAM allocations are calculated or whether expense
+          categories, administrative fees, and capital costs match the actual
+          lease language.
         </p>
 
         <Link
@@ -131,9 +131,21 @@ export default function CamFeeCalculatorPage() {
           into $5,000–$50,000+ in annual exposure depending on property size.
         </p>
 
+        <p className="text-gray-700 leading-relaxed mb-4">
+          Because CAM fees recur every year under most commercial leases,
+          unnoticed errors compound over time and reduce leverage during
+          reconciliation disputes.
+        </p>
+
         <p className="text-gray-700 leading-relaxed">
-          Because CAM fees recur each year, unnoticed errors compound over
-          the life of a lease.
+          These issues are often identified during a{" "}
+          <Link
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            commercial lease audit
+          </Link>
+          , where the lease language is reviewed against actual CAM allocations.
         </p>
       </section>
 
