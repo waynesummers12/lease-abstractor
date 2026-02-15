@@ -23,7 +23,12 @@ export default function CamFeeMeaningPage() {
         <p className="text-lg text-gray-700">
           While CAM fees are common in retail, office, and industrial leases,
           they are also one of the most misunderstood — and frequently
-          overcharged — components of a lease.
+          overcharged — components of a lease. Learn how these charges are
+          reviewed during{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM reconciliation
+          </Link>
+          .
         </p>
       </section>
 
@@ -67,8 +72,17 @@ export default function CamFeeMeaningPage() {
           <li>Insurance administration charges</li>
         </ul>
         <p className="text-gray-700 mt-4">
-          Without proper caps or exclusions, CAM charges can increase
-          significantly year over year.
+          Without proper caps or exclusions,{" "}
+          <Link href="/marketing/cam-charges" className="underline hover:text-black">
+            CAM charges
+          </Link>{" "}
+          can increase significantly year over year — especially when
+          reconciliation errors go unreviewed. See common
+          {" "}
+          <Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">
+            CAM reconciliation errors
+          </Link>
+          {" "}that inflate tenant costs.
         </p>
       </section>
 
@@ -84,7 +98,12 @@ export default function CamFeeMeaningPage() {
         </p>
         <p className="text-gray-700">
           Over the life of a lease, small CAM miscalculations can add up to
-          tens of thousands of dollars in avoidable costs.
+          tens of thousands of dollars in avoidable costs — particularly if
+          tenants miss their{" "}
+          <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">
+            audit window deadlines
+          </Link>
+          .
         </p>
       </section>
 
