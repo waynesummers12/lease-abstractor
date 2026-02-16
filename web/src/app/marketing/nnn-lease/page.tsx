@@ -91,6 +91,16 @@ export default function NnnLeasePage() {
           </Link>
           process.
         </p>
+        <p>
+          For a clearer comparison of how CAM differs from full NNN structures, see our{" "}
+          <Link
+            href="/marketing/cam-vs-nnn"
+            className="underline hover:text-black"
+          >
+            CAM vs NNN guide
+          </Link>
+          .
+        </p>
       </section>
 
       {/* HOW NNN LEASES IMPACT TENANTS */}
