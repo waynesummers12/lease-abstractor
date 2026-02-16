@@ -58,9 +58,19 @@ export default function CamChargesPage() {
           lighting, and security.
         </p>
         <p>
-          In many leases — especially triple net (NNN) leases — CAM charges are
-          billed separately from base rent and reconciled annually through
-          <Link href="/marketing/cam-reconciliation" className="ml-1 underline hover:text-black">
+          In many leases — especially{" "}
+          <Link
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            triple net (NNN) leases
+          </Link>{" "}
+          — CAM charges are billed separately from base rent and reconciled annually
+          through{" "}
+          <Link
+            href="/marketing/cam-reconciliation"
+            className="underline hover:text-black"
+          >
             CAM reconciliation
           </Link>.
         </p>
@@ -80,9 +90,22 @@ export default function CamChargesPage() {
           <li>Property management or administrative fees</li>
         </ul>
         <p>
-          However, not all expenses are automatically allowed. Whether a charge
-          is valid depends on how the lease defines allowable CAM expenses and
-          whether caps or exclusions apply.
+          However, not all expenses are automatically allowed. Whether a charge is
+          valid depends on how the lease defines allowable CAM expenses and whether
+          caps or exclusions apply. Many of these limits are outlined in{" "}
+          <Link
+            href="/marketing/common-area-maintenance"
+            className="underline hover:text-black"
+          >
+            Common Area Maintenance (CAM) provisions
+          </Link>{" "}
+          and detailed further in{" "}
+          <Link
+            href="/marketing/lease-cam"
+            className="underline hover:text-black"
+          >
+            lease CAM language
+          </Link>.
         </p>
       </section>
 
@@ -116,10 +139,15 @@ export default function CamChargesPage() {
           <li>Non-allowable expenses passed through</li>
         </ul>
         <p>
-          These types of errors are frequently discovered during
-          <Link href="/marketing/cam-reconciliation-errors" className="ml-1 underline hover:text-black">
-            CAM reconciliation reviews
-          </Link>.
+          These types of errors are frequently discovered during{" "}
+          <Link
+            href="/marketing/cam-reconciliation-errors"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation error reviews
+          </Link>{" "}
+          and often relate to improper allocation, vague lease drafting, or expenses
+          that exceed negotiated caps.
         </p>
       </section>
 
@@ -134,11 +162,16 @@ export default function CamChargesPage() {
           compound over time.
         </p>
         <p>
-          Most leases also include strict
-          <Link href="/marketing/audit-window-deadlines" className="ml-1 underline hover:text-black">
+          Most leases also include strict{" "}
+          <Link
+            href="/marketing/audit-window-deadlines"
+            className="underline hover:text-black"
+          >
             audit window deadlines
-          </Link>,
-          which limit how long tenants have to dispute incorrect charges.
+          </Link>
+          , which limit how long tenants have to dispute incorrect charges. Missing
+          that deadline can permanently waive your right to challenge CAM
+          overcharges.
         </p>
       </section>
 

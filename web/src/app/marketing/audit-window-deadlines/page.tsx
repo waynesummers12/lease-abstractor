@@ -32,12 +32,12 @@ export default function AuditRightsPage() {
         <p>
           Audit rights allow tenants to review and dispute operating expenses
           billed by a landlord. These rights are governed entirely by lease
-          language and typically apply to{" "}
-          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
-            CAM reconciliation
+          language and typically apply to {" "}
+          <Link href="/marketing/common-area-maintenance-charges" className="underline hover:text-black">
+            common area maintenance (CAM) charges
           </Link>,{" "}
-          <Link href="/marketing/cam-nnn-overcharges" className="underline hover:text-black">
-            CAM & NNN overcharges
+          <Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">
+            CAM reconciliation errors
           </Link>, tax, and insurance charges.
         </p>
 
@@ -76,7 +76,10 @@ export default function AuditRightsPage() {
 
         <p>
           If objections are not made in writing within this window, the charges
-          are typically deemed final — even if incorrect.
+          are typically deemed final — even if incorrect or inconsistent with
+          <Link href="/marketing/lease-cam" className="underline hover:text-black">
+            lease CAM provisions
+          </Link>.
         </p>
         <p>
           Missing a 60-day audit window can lock in five-figure CAM or NNN
@@ -126,7 +129,12 @@ export default function AuditRightsPage() {
 
         <p>
           The best way to protect audit rights is to review lease language and
-          reconciliation statements as soon as they are received. A structured
+          reconciliation statements as soon as they are received — especially
+          those involving {" "}
+          <Link href="/marketing/cam-commercial-real-estate" className="underline hover:text-black">
+            CAM in commercial real estate
+          </Link> environments.
+          A structured
           audit — particularly of{" "}
           <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
             annual CAM reconciliation statements

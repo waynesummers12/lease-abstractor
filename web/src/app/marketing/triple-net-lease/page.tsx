@@ -24,8 +24,10 @@ export default function TripleNetLeasePage() {
         <p className="text-lg text-gray-700 leading-relaxed">
           A <strong>triple net lease (NNN lease)</strong> is a commercial lease
           where the tenant pays base rent <em>plus</em> three additional
-          categories of expenses: property taxes, insurance, and common area
-          maintenance (CAM).
+          categories of expenses: property taxes, insurance, and{" "}
+          <Link href="/marketing/common-area-maintenance" className="underline hover:text-black">
+            common area maintenance (CAM)
+          </Link>.
         </p>
 
         <p className="text-lg text-gray-700 leading-relaxed">
@@ -53,7 +55,11 @@ export default function TripleNetLeasePage() {
           <li>
             <strong>Common Area Maintenance (CAM)</strong> – Expenses for
             maintaining shared spaces like parking lots, landscaping, security,
-            lighting, and management.
+            lighting, and management. These costs are typically reviewed
+            through{" "}
+            <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+              CAM reconciliation
+            </Link>.
           </li>
         </ul>
 
@@ -136,8 +142,10 @@ export default function TripleNetLeasePage() {
 
         <p className="text-lg text-gray-700 leading-relaxed mt-4">
           Many tenants never review how CAM, taxes, and insurance are
-          calculated. Our lease audit identifies potential overcharges and
-          compliance risks.
+          calculated. Our lease audit reviews{" "}
+          <Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">
+            CAM reconciliation errors
+          </Link>, allocation issues, and compliance risks before audit windows close.
         </p>
 
         <div className="mt-6">
