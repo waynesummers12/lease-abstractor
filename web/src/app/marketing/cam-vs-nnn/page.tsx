@@ -19,6 +19,9 @@ export default function CamVsNnnPage() {
           <strong> 15–35% on top of base rent</strong> — yet few fully
           understand what they are actually paying for.
         </p>
+        <p className="mt-4 text-gray-700">
+          If you are evaluating a full <a href="/marketing/nnn" className="underline hover:text-black">NNN lease structure</a>, understanding how CAM is embedded inside NNN is critical before reviewing reconciliation statements or annual increases.
+        </p>
       </header>
 
       {/* ---------- SECTION 1 ---------- */}
