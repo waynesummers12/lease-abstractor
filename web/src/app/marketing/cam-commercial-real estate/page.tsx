@@ -38,7 +38,7 @@ export default function CamCommercialRealEstatePage() {
         </p>
 
         <Link
-          href="/app"
+          href="/marketing/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload Your Lease to Review CAM Charges (Free Preview)
@@ -166,7 +166,7 @@ export default function CamCommercialRealEstatePage() {
         </p>
 
         <Link
-          href="/app"
+          href="/marketing/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload Your Lease (Free Preview)

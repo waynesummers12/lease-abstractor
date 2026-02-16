@@ -34,7 +34,7 @@ export default function CamFeeCalculatorPage() {
         </p>
 
         <Link
-          href="/app"
+          href="/marketing/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload Your Lease for a CAM Fee Review (Free Preview)
@@ -161,7 +161,7 @@ export default function CamFeeCalculatorPage() {
         </p>
 
         <Link
-          href="/app"
+          href="/marketing/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload Your Lease
