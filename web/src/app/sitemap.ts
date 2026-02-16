@@ -35,9 +35,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
 
-    // SEO Supporting Pages
+    // Core Authority Pages
     {
       url: `${baseUrl}/marketing/cam-reconciliation`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-reconciliation-errors`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
@@ -52,13 +58,113 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/marketing/audit-window-deadlines`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/marketing/audit-rights`,
       lastModified: now,
       changeFrequency: "monthly",
+      priority: 0.8,
+    },
+
+    // CAM Cluster
+    {
+      url: `${baseUrl}/marketing/cam-charges`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-fee-meaning`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-fee-calculator`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/marketing/common-area-maintenance`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/common-area-maintenance-cam`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/marketing/common-area-maintenance-charges`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-real-estate`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-commercial-real-estate`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/lease-cam`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+
+    // NNN / Lease Cluster
+    {
+      url: `${baseUrl}/marketing/nnn-lease`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/marketing/triple-net-lease`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/marketing/triple-net-lease-meaning`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/triple-net-lease-vs-gross`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/cam-vs-nnn`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/marketing/commercial-lease-audit`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/marketing/lease-overcharge`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
   ];
 }
