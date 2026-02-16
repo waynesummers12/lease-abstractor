@@ -74,6 +74,17 @@ export default function CamChargesPage() {
             CAM reconciliation
           </Link>.
         </p>
+        <p>
+          If you're unsure how CAM differs from broader NNN expense structures,
+          review our{" "}
+          <Link
+            href="/marketing/cam-vs-nnn"
+            className="underline hover:text-black"
+          >
+            CAM vs NNN comparison guide
+          </Link>
+          .
+        </p>
       </section>
 
       {/* WHAT IS INCLUDED */}

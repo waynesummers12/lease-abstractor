@@ -33,6 +33,13 @@ export default function TripleNetLeasePage() {
           properties, many tenants underestimate how much these additional
           charges can increase total occupancy costs.
         </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          For a deeper structural breakdown of how expenses are allocated in practice, review our{" "}
+          <Link href="/marketing/nnn-lease" className="underline hover:text-black">
+            NNN lease guide
+          </Link>
+          .
+        </p>
       </section>
 
       {/* WHAT TENANTS PAY */}

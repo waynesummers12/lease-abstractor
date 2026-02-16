@@ -82,8 +82,12 @@ export default function CommonAreaMaintenancePage() {
           CAM vs. NNN: What’s the Difference?
         </h2>
         <p>
-          CAM is often one component of a triple net (NNN) lease. NNN typically
-          includes:
+          CAM is often one component of a triple net (NNN) lease. In fact, under a{" "}
+          <Link href="/marketing/nnn" className="underline hover:text-black">
+            NNN (Triple Net) lease
+          </Link>
+          , tenants are typically responsible for property taxes, insurance, and
+          Common Area Maintenance. NNN typically includes:
         </p>
         <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
           <li>Property taxes</li>

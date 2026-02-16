@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -41,6 +39,18 @@ export default function LeaseCamPage() {
           overcharges.
         </p>
 
+        <p className="mt-4 text-gray-700 leading-relaxed">
+          Lease CAM terms often interact with{" "}
+          <Link href="/marketing/cam-vs-nnn" className="underline hover:text-black">
+            CAM vs NNN structures
+          </Link>{" "}
+          and broader{" "}
+          <Link href="/marketing/nnn-lease" className="underline hover:text-black">
+            NNN lease obligations
+          </Link>
+          , which determine how operating expenses are ultimately allocated.
+        </p>
+
         <Link
           href="/app/step-1-upload"
           className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
@@ -72,6 +82,13 @@ export default function LeaseCamPage() {
             CAM reconciliation
           </Link>
           .
+        </p>
+        <p>
+          For a broader definition of shared property expenses, see our guide to{" "}
+          <Link href="/marketing/common-area-maintenance" className="underline hover:text-black">
+            Common Area Maintenance (CAM)
+          </Link>{" "}
+          in commercial real estate.
         </p>
       </section>
 
