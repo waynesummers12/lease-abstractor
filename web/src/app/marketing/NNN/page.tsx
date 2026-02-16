@@ -1,4 +1,4 @@
-// src/app/marketing/NNN/page.tsx
+// src/app/marketing/nnn/page.tsx
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NNNPage() {
+export default function nnnPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
