@@ -173,7 +173,7 @@ const sections: Section[] = [
         title: "CAM in Commercial Real Estate",
         description:
           "How CAM structures operate specifically in commercial properties and where billing mistakes occur.",
-        href: "/marketing/cam-commercial-real-estate",
+        href: "/marketing/cam-commercial-realestate",
       },
       {
         title: "Lease CAM Explained",
@@ -190,7 +190,7 @@ const sections: Section[] = [
         title: "NNN (Triple Net) Explained",
         description:
           "A simplified explanation of NNN (triple net) leases and how CAM, taxes, and insurance are passed through to tenants.",
-        href: "/marketing/nnn",
+        href: "/marketing/nnn-lease",
       },
       {
         title: "NNN Reconciliation Explained",
