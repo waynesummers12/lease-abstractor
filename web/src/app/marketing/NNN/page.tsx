@@ -34,6 +34,18 @@ export default function NNNPage() {
           and where errors or overcharges can occur.
         </p>
 
+        <p className="mb-8 text-gray-700 leading-relaxed">
+          For a deeper breakdown of structure and terminology, review our{" "}
+          <Link href="/marketing/nnn-lease" className="underline hover:text-black">
+            NNN lease guide
+          </Link>{" "}
+          and our{" "}
+          <Link href="/marketing/cam-vs-nnn" className="underline hover:text-black">
+            CAM vs NNN comparison
+          </Link>
+          .
+        </p>
+
         <Link
           href="/app/step-1-upload"
           className="inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
@@ -65,6 +77,14 @@ export default function NNNPage() {
         <p>
           These costs are typically estimated monthly and reconciled annually
           through a <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">CAM reconciliation</Link> process.
+        </p>
+
+        <p>
+          Many tenants reviewing NNN leases also encounter standalone{" "}
+          <Link href="/marketing/cam-charges" className="underline hover:text-black">
+            CAM charges
+          </Link>{" "}
+          language or lease CAM provisions that define allocation rules and expense caps.
         </p>
       </section>
 
