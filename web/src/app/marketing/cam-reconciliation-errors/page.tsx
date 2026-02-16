@@ -122,7 +122,7 @@ export default function CamReconciliationErrorsPage() {
         </p>
 
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-block mt-4 px-6 py-3 bg-black text-white rounded-lg hover:opacity-90 transition"
         >
           Upload Your Lease
