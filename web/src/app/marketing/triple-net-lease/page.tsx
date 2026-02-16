@@ -142,7 +142,7 @@ export default function TripleNetLeasePage() {
 
         <div className="mt-6">
           <Link
-            href="/app"
+            href="/app/step-1-upload"
             className="inline-block bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
           >
             Upload Your Lease
