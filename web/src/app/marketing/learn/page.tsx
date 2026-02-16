@@ -155,7 +155,7 @@ const sections: Section[] = [
         title: "Common Area Maintenance (CAM)",
         description:
           "A practical breakdown of Common Area Maintenance in commercial real estate and how shared expenses are allocated.",
-        href: "/marketing/common-area-maintenance",
+        href: "/marketing/common-area-maintenance-charges",
       },
       {
         title: "Common Area Maintenance Charges",
