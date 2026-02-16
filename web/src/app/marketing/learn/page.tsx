@@ -29,6 +29,24 @@ export const metadata = {
     type: "website",
   },
 };
+{/* NNN (FEATURED) */}
+<div className="rounded-2xl border bg-white p-8 shadow-sm transition hover:shadow-md">
+  <h2 className="text-2xl font-semibold tracking-tight">
+    NNN (Triple Net) Explained
+  </h2>
+
+  <p className="mt-4 text-gray-700 leading-relaxed">
+    What NNN means in commercial real estate and how CAM, taxes,
+    and insurance charges are passed through to tenants.
+  </p>
+
+  <Link
+    href="/marketing/nnn"
+    className="mt-6 inline-flex items-center font-medium underline hover:text-black"
+  >
+    Read article →
+  </Link>
+</div>
 
 type Article = {
   title: string;
@@ -190,7 +208,7 @@ const sections: Section[] = [
         title: "NNN (Triple Net) Explained",
         description:
           "A simplified explanation of NNN (triple net) leases and how CAM, taxes, and insurance are passed through to tenants.",
-        href: "/marketing/nnn-lease",
+        href: "/marketing/nnn",
       },
       {
         title: "NNN Reconciliation Explained",
