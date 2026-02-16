@@ -1,5 +1,3 @@
-
-
 // src/app/marketing/nnn-lease/page.tsx
 
 import type { Metadata } from "next";
@@ -33,6 +31,17 @@ export default function NnnLeasePage() {
           While NNN leases are common in commercial real estate, many tenants
           underestimate how CAM, tax, and insurance charges are calculated — and
           where overcharges can occur.
+        </p>
+
+        <p className="mb-8 text-gray-700">
+          For a broader breakdown of structure and terminology, see our{" "}
+          <Link
+            href="/marketing/nnn"
+            className="underline hover:text-black"
+          >
+            NNN lease overview
+          </Link>
+          .
         </p>
 
         <Link

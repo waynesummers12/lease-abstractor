@@ -1,5 +1,3 @@
-
-
 // src/app/marketing/NNN/page.tsx
 
 import type { Metadata } from "next";

@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -105,6 +103,14 @@ export default function TripleNetLeasePage() {
               className="underline hover:text-black"
             >
               CAM vs NNN: What’s the Difference?
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/marketing/nnn"
+              className="underline hover:text-black"
+            >
+              NNN Lease Overview: Taxes, Insurance & CAM Explained
             </Link>
           </li>
           <li>
