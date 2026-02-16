@@ -312,7 +312,7 @@ export default function Header() {
 
       
 {menuOpen && (
-  <div className="fixed inset-0 z-[999] md:hidden bg-black px-6 pt-24 pb-10 text-white overflow-y-auto">
+  <div className="fixed inset-0 z-[1001] md:hidden bg-black/95 backdrop-blur-sm px-6 pt-24 pb-10 text-white overflow-y-auto">
     <div className="flex justify-end mb-6">
       <button
         onClick={() => setMenuOpen(false)}
