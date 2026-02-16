@@ -190,7 +190,7 @@ const sections: Section[] = [
         title: "NNN (Triple Net) Explained",
         description:
           "A simplified explanation of NNN (triple net) leases and how CAM, taxes, and insurance are passed through to tenants.",
-        href: "/marketing/nnn",
+        href: "/marketing/nnn-main",
       },
       {
         title: "NNN Reconciliation Explained",
