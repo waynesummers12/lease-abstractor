@@ -81,6 +81,12 @@ const sections: Section[] = [
           "Compare triple net vs gross leases and understand how operating expense risk differs for tenants.",
         href: "/marketing/triple-net-lease-vs-gross",
       },
+      {
+        title: "NNN Lease Explained",
+        description:
+          "A complete overview of NNN leases, including tax, insurance, and CAM obligations and how financial risk shifts to tenants.",
+        href: "/marketing/nnn-lease",
+      },
     ],
   },
   {
@@ -139,11 +145,53 @@ const sections: Section[] = [
           "A step-by-step tenant checklist for reviewing CAM reconciliations before audit windows expire.",
         href: "/marketing/cam-reconciliation-checklist",
       },
+      {
+        title: "CAM Charges Explained",
+        description:
+          "What CAM charges include, how they are structured, and which items are frequently disputed by commercial tenants.",
+        href: "/marketing/cam-charges",
+      },
+      {
+        title: "Common Area Maintenance (CAM)",
+        description:
+          "A practical breakdown of Common Area Maintenance in commercial real estate and how shared expenses are allocated.",
+        href: "/marketing/common-area-maintenance",
+      },
+      {
+        title: "Common Area Maintenance Charges",
+        description:
+          "Detailed explanation of common area maintenance charges and how tenants identify over-allocations.",
+        href: "/marketing/common-area-maintenance-charges",
+      },
+      {
+        title: "CAM in Real Estate",
+        description:
+          "How CAM works in commercial real estate and how operating expenses flow through to tenants.",
+        href: "/marketing/cam-real-estate",
+      },
+      {
+        title: "CAM in Commercial Real Estate",
+        description:
+          "How CAM structures operate specifically in commercial properties and where billing mistakes occur.",
+        href: "/marketing/cam-commercial-real-estate",
+      },
+      {
+        title: "Lease CAM Explained",
+        description:
+          "How CAM provisions are written in leases and how lease language affects tenant exposure.",
+        href: "/marketing/lease-cam",
+      },
     ],
   },
   {
     label: "NNN Topics",
     articles: [
+      {
+        title: "NNN (Triple Net) Explained",
+        description:
+          "A simplified explanation of NNN (triple net) leases and how CAM, taxes, and insurance are passed through to tenants.",
+        href: "/marketing/nnn",
+      },
       {
         title: "NNN Reconciliation Explained",
         description:
