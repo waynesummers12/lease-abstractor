@@ -30,8 +30,15 @@ export default function CommonAreaMaintenanceCamPage() {
 
         <p className="text-gray-700 leading-relaxed">
           CAM language in a lease determines what is included, how expenses are
-          allocated, and whether caps or exclusions apply. Small drafting or
-          calculation errors can lead to recurring overcharges.
+          allocated, and whether caps or exclusions apply. In broader
+          <Link
+            href="/marketing/cam-real-estate"
+            className="underline hover:text-black"
+          >
+            real estate CAM structures
+          </Link>,
+          small drafting or calculation errors can lead to recurring
+          overcharges.
         </p>
 
         <Link

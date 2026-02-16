@@ -30,8 +30,14 @@ export default function LeaseCamPage() {
 
         <p className="text-gray-700 leading-relaxed">
           CAM provisions in a lease determine what expenses are allowed, how
-          they are allocated, and whether caps or exclusions apply. Small
-          errors in lease CAM language can lead to significant recurring
+          they are allocated, and whether caps or exclusions apply. In broader
+          <Link
+            href="/marketing/cam-commercial-real-estate"
+            className="underline hover:text-black"
+          >
+            commercial real estate CAM structures
+          </Link>,
+          small drafting or allocation errors can lead to significant recurring
           overcharges.
         </p>
 
