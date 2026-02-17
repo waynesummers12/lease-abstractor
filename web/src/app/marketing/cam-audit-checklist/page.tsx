@@ -133,7 +133,14 @@ export default function CamAuditChecklistPage() {
 
           <p className="text-gray-700">
             Structured tenant-side review is no longer optional due diligence.
-            It is financial risk management.
+            It is financial risk management. For a deeper breakdown of reconciliation mechanics, see our{" "}
+            <Link href="/marketing/cam-reconciliation" className="underline">
+              CAM reconciliation guide
+            </Link>{" "}
+            and our analysis of{" "}
+            <Link href="/marketing/cam-vs-nnn" className="underline">
+              CAM vs. NNN lease structures
+            </Link>.
           </p>
         </div>
       </section>
@@ -161,7 +168,13 @@ export default function CamAuditChecklistPage() {
                 What are common CAM reconciliation errors in retail and office leases?
               </h3>
               <p>
-                Common CAM reconciliation errors include management fee overapplication, capital expenses improperly passed through, pro rata share miscalculations, gross-up distortion during vacancy, and controllable expense cap violations.
+                Common CAM reconciliation errors include management fee overapplication,
+                capital expenses improperly passed through, pro rata share miscalculations,
+                gross-up distortion during vacancy, and controllable expense cap violations.
+                For a detailed explanation of how these errors appear in practice, review our{" "}
+                <Link href="/marketing/cam-reconciliation" className="underline">
+                  CAM reconciliation breakdown
+                </Link>.
               </p>
             </div>
 
@@ -179,7 +192,13 @@ export default function CamAuditChecklistPage() {
                 When should a tenant review CAM reconciliation charges?
               </h3>
               <p>
-                Tenants should review CAM reconciliation charges immediately upon receipt, especially before contractual audit windows close. Most commercial leases limit dispute rights to a defined period after reconciliation delivery.
+                Tenants should review CAM reconciliation charges immediately upon receipt,
+                especially before contractual audit windows close. Most commercial leases
+                limit dispute rights to a defined period after reconciliation delivery.
+                Learn more about timing risks in our{" "}
+                <Link href="/marketing/audit-window-deadlines" className="underline">
+                  audit window deadlines guide
+                </Link>.
               </p>
             </div>
 
@@ -188,7 +207,14 @@ export default function CamAuditChecklistPage() {
                 What should I do if CAM charges increase significantly year over year?
               </h3>
               <p>
-                If CAM charges increase materially year over year, tenants should review lease caps, allocation methodology, expense classifications, and audit window deadlines before accepting the reconciliation statement.
+                If CAM charges increase materially year over year, tenants should review
+                lease caps, allocation methodology, expense classifications, and audit
+                window deadlines before accepting the reconciliation statement. You may
+                also want to reference our{" "}
+                <Link href="/marketing/cam-reconciliation-checklist" className="underline">
+                  CAM reconciliation checklist overview
+                </Link>{" "}
+                for a structured review sequence.
               </p>
             </div>
 
