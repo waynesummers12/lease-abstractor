@@ -253,6 +253,35 @@ const sections: Section[] = [
       },
     ],
   },
+    {
+    label: "Tools & Analysis",
+    articles: [
+      {
+        title: "Commercial Lease Audit Explained",
+        description:
+          "How commercial lease audits work and how tenants identify financial exposure before audit windows close.",
+        href: "/marketing/commercial-lease-audit",
+      },
+      {
+        title: "CAM Fee Calculator",
+        description:
+          "Estimate CAM fee exposure and understand how administrative markups affect tenant costs.",
+        href: "/marketing/cam-fee-calculator",
+      },
+      {
+        title: "Lease Score Explained",
+        description:
+          "How tenant lease scoring identifies financial risk, exposure levels, and negotiation leverage.",
+        href: "/marketing/lease-score-explained",
+      },
+      {
+        title: "Audit Window Language Explained",
+        description:
+          "How audit window clauses are written in leases and how subtle language impacts tenant rights.",
+        href: "/marketing/audit-window-language",
+      },
+    ],
+  },
 ];
 
 export default function LearnPage() {
