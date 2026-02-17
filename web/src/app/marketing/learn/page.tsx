@@ -347,12 +347,29 @@ export default function LearnPage() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition disabled:opacity-50"
             >
+              {/* PDF Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-4 w-4"
+              >
+                <path d="M6 2a2 2 0 0 0-2 2v16l4-4h10a2 2 0 0 0 2-2V8l-6-6H6z" />
+              </svg>
               Get Checklist →
             </button>
           </form>
-          <p className="text-xs text-gray-500 -mt-2">
+          <p className="flex items-center justify-center gap-1 text-xs text-gray-500 -mt-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-3 w-3 opacity-70"
+            >
+              <path d="M6 2a2 2 0 0 0-2 2v16l4-4h10a2 2 0 0 0 2-2V8l-6-6H6z" />
+            </svg>
             Free PDF Download
           </p>
           {status === "success" && (
