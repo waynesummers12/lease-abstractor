@@ -1,19 +1,18 @@
-
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
-export async function GET() {
-  return NextResponse.json(
-    { error: "Method not allowed. Use POST." },
-    { status: 405 }
-  );
-}
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { email } = body;
+    const { email } = await req.json();
 
-    // Basic validation
     if (!email || typeof email !== "string") {
       return NextResponse.json(
         { error: "Valid email is required." },
@@ -21,17 +20,33 @@ export async function POST(req: Request) {
       );
     }
 
-    // TODO: Replace this with real database logic (Supabase, etc.)
-    // For now, just log the email so we confirm capture works.
-    console.log("New CAM Checklist Lead:", email);
+    // 1️⃣ Store lead
+    await supabase.from("checklist_leads").insert({
+      email,
+      source: "learn_page",
+    });
 
-    return NextResponse.json(
-      { success: true },
-      { status: 200 }
-    );
+    // 2️⃣ Send email
+    await resend.emails.send({
+      from: "SaveOnLease <audit@saveonlease.com>",
+      to: email,
+      subject: "Your Tenant-First CAM Audit Checklist",
+      html: `
+        <h2>Your CAM Audit Checklist</h2>
+        <p>Thanks for requesting the Tenant-First CAM Audit Checklist.</p>
+        <p>You can download it here:</p>
+        <p>
+          <a href="https://saveonlease.com/checklist-download.pdf">
+            Download Checklist
+          </a>
+        </p>
+        <p>– Wayne</p>
+      `,
+    });
+
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Checklist lead error:", error);
-
     return NextResponse.json(
       { error: "Something went wrong." },
       { status: 500 }

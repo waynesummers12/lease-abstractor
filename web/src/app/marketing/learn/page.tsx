@@ -279,6 +279,16 @@ export default function LearnPage() {
       }
 
       setStatus("success");
+
+      // 🔥 GA4 lead tracking event
+      if (typeof window !== "undefined" && (window as any).gtag) {
+        (window as any).gtag("event", "generate_lead", {
+          event_category: "Checklist",
+          event_label: "CAM Audit Checklist",
+          value: 1,
+        });
+      }
+
       setEmail("");
     } catch (err) {
       setStatus("error");
