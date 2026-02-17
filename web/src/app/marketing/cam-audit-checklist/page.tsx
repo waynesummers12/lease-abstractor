@@ -129,6 +129,66 @@ export default function CamAuditChecklistPage() {
         </div>
       </section>
 
+      {/* Visible FAQ Section */}
+      <section className="py-20 px-6 bg-white border-t">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold mb-10">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="space-y-8 text-gray-700">
+
+            <div>
+              <h3 className="text-xl font-semibold mb-2">
+                What is a CAM audit checklist?
+              </h3>
+              <p>
+                A CAM audit checklist is a structured review framework used by
+                commercial tenants to evaluate Common Area Maintenance (CAM)
+                reconciliations for administrative fee overcharges, capital
+                misclassification, allocation errors, and audit window risk.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold mb-2">
+                What errors does a CAM review typically uncover?
+              </h3>
+              <p>
+                Common findings include management fee overapplication, improper
+                capital expense allocation, pro rata share miscalculations,
+                gross-up distortion, controllable expense cap violations, and
+                audit window timing exposure.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold mb-2">
+                How much money can a CAM audit recover?
+              </h3>
+              <p>
+                Depending on lease structure and property size, structured CAM
+                reviews frequently identify annual exposure ranging from
+                $5,000 to $50,000 or more in misapplied or misclassified charges.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold mb-2">
+                When should a tenant perform a CAM audit?
+              </h3>
+              <p>
+                Tenants should perform a CAM review immediately upon receiving
+                an annual reconciliation, especially before contractual audit
+                windows close. Most leases limit dispute rights to a defined
+                period after reconciliation delivery.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-black text-white py-20 px-6 text-center">
         <div className="max-w-3xl mx-auto">
