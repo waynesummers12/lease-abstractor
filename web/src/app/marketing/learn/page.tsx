@@ -276,6 +276,11 @@ export default function LearnPage() {
         <p className="text-xs uppercase tracking-widest text-gray-500">
           Featured Resource
         </p>
+        <div className="flex justify-center">
+          <span className="inline-block rounded-full bg-black px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+            Most Downloaded
+          </span>
+        </div>
 
         <h2 className="text-4xl font-semibold tracking-tight">
           The Tenant‑First CAM Audit Checklist
