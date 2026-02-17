@@ -1,5 +1,7 @@
+"use client";
 // src/app/marketing/learn/page.tsx
 import Link from "next/link";
+import { useState } from "react";
 
 export const metadata = {
   title:
@@ -285,6 +287,32 @@ const sections: Section[] = [
 ];
 
 export default function LearnPage() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const res = await fetch("/api/checklist-leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Request failed");
+      }
+
+      setStatus("success");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+    }
+  };
   return (
     <main className="mx-auto max-w-7xl px-6 py-20 space-y-20">
       {/* HERO */}
@@ -324,24 +352,35 @@ export default function LearnPage() {
 
         <div className="pt-6 space-y-6">
           <form
-            action="/api/checklist-leads"
-            method="POST"
+            onSubmit={handleSubmit}
             className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4"
           >
             <input
               type="email"
-              name="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email to download the checklist"
               className="w-full rounded-xl border border-gray-300 px-5 py-4 text-sm focus:border-black focus:outline-none"
             />
             <button
               type="submit"
-              className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+              disabled={status === "loading"}
+              className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition disabled:opacity-50"
             >
               Get Checklist →
             </button>
           </form>
+          {status === "success" && (
+            <p className="text-sm text-green-600">
+              Checklist sent. Check your inbox.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="text-sm text-red-600">
+              Something went wrong. Please try again.
+            </p>
+          )}
 
           <p className="text-xs text-gray-500">
             Secure. Confidential. No spam. We only send practical tenant-focused resources.
