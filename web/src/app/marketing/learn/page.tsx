@@ -293,21 +293,39 @@ export default function LearnPage() {
           dispute deadlines expire.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Link
-            href="/marketing/cam-audit-checklist"
-            className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+        <div className="pt-6 space-y-6">
+          <form
+            action="#"
+            method="POST"
+            className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4"
           >
-            View Full Guide →
-          </Link>
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email to download the checklist"
+              className="w-full rounded-xl border border-gray-300 px-5 py-4 text-sm focus:border-black focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+            >
+              Get Checklist →
+            </button>
+          </form>
 
-          <Link
-            href="/assets/cam-audit-checklist-v1.pdf"
-            target="_blank"
-            className="inline-flex rounded-xl border border-black px-8 py-4 text-sm font-semibold text-black hover:bg-gray-100 transition"
-          >
-            Download PDF →
-          </Link>
+          <p className="text-xs text-gray-500">
+            Secure. Confidential. No spam. We only send practical tenant-focused resources.
+          </p>
+
+          <div className="flex justify-center pt-2">
+            <Link
+              href="/marketing/cam-audit-checklist"
+              className="text-sm underline hover:text-black"
+            >
+              Or view the full online guide →
+            </Link>
+          </div>
         </div>
       </section>
 
