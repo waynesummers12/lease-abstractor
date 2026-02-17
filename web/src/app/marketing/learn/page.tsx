@@ -1,5 +1,4 @@
 // src/app/marketing/learn/page.tsx
-"use client";
 import Link from "next/link";
 
 export const metadata = {
