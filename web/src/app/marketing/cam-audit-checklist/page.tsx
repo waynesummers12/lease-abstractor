@@ -7,6 +7,48 @@ export const metadata = {
 };
 
 export default function CamAuditChecklistPage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "What is a CAM audit checklist?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "A CAM audit checklist is a structured review framework used by commercial tenants to evaluate Common Area Maintenance reconciliations for administrative fee overcharges, capital misclassification, allocation errors, and audit window risk.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What errors does a CAM review typically uncover?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "Common findings include management fee overapplication, improper capital expense allocation, pro rata share miscalculations, gross-up distortion, controllable expense cap violations, and audit window timing exposure.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How much money can a CAM audit recover?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "Depending on lease structure and property size, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "When should a tenant perform a CAM audit?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "Tenants should perform a CAM review immediately upon receiving an annual reconciliation, especially before contractual audit windows close. Most leases limit dispute rights to a defined period after reconciliation delivery.",
+        },
+      },
+    ],
+  };
   return (
     <main className="bg-white text-gray-900">
       {/* Hero Section */}
@@ -108,6 +150,10 @@ export default function CamAuditChecklistPage() {
           </Link>
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
     </main>
   );
 }
