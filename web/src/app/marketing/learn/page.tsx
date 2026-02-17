@@ -1,4 +1,5 @@
 // src/app/marketing/learn/page.tsx
+"use client";
 import Link from "next/link";
 
 export const metadata = {
@@ -294,11 +295,7 @@ export default function LearnPage() {
         </p>
 
         <div className="pt-6 space-y-6">
-          <form
-            action="#"
-            method="POST"
-            className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4"
-          >
+          <div className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4">
             <input
               type="email"
               name="email"
@@ -307,12 +304,15 @@ export default function LearnPage() {
               className="w-full rounded-xl border border-gray-300 px-5 py-4 text-sm focus:border-black focus:outline-none"
             />
             <button
-              type="submit"
+              type="button"
+              onClick={() => {
+                window.location.href = "/assets/cam-audit-checklist-v1.pdf";
+              }}
               className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
             >
               Get Checklist →
             </button>
-          </form>
+          </div>
 
           <p className="text-xs text-gray-500">
             Secure. Confidential. No spam. We only send practical tenant-focused resources.
