@@ -109,6 +109,17 @@ export default function CamAuditChecklistPage() {
             <li>• Audit window leverage protection</li>
             <li>• Financial exposure compounding models</li>
           </ul>
+          <p className="mt-8 text-gray-700">
+            If you're new to CAM structures, you may also want to review our{" "}
+            <Link href="/marketing/common-area-maintenance-cam" className="underline">
+              overview of Common Area Maintenance (CAM)
+            </Link>{" "}
+            and our guide to{" "}
+            <Link href="/marketing/nnn" className="underline">
+              NNN (Triple Net) leases
+            </Link>{" "}
+            to understand how operating expenses are structured before applying this checklist.
+          </p>
         </div>
       </section>
 
@@ -133,7 +144,16 @@ export default function CamAuditChecklistPage() {
 
           <p className="text-gray-700">
             Structured tenant-side review is no longer optional due diligence.
-            It is financial risk management. For a deeper breakdown of reconciliation mechanics, see our{" "}
+            It is financial risk management.
+            Tenants reviewing CAM exposure should also understand how charges appear in practice within{" "}
+            <Link href="/marketing/cam-commercial-real-estate" className="underline">
+              commercial real estate CAM structures
+            </Link>{" "}
+            and how allocation mechanics differ under{" "}
+            <Link href="/marketing/triple-net-lease" className="underline">
+              triple net lease agreements
+            </Link>.
+            For a deeper breakdown of reconciliation mechanics, see our{" "}
             <Link href="/marketing/cam-reconciliation" className="underline">
               CAM reconciliation guide
             </Link>{" "}
@@ -218,6 +238,53 @@ export default function CamAuditChecklistPage() {
               </p>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* Related Guides */}
+      <section className="bg-gray-50 py-16 px-6 border-t">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-gray-600 mb-6">
+            Continue your CAM & NNN lease research with these structured tenant-side guides.
+          </p>
+          <h2 className="text-2xl font-bold mb-8 text-center">
+            Related CAM & NNN Guides
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8 text-gray-700">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="font-semibold mb-3">CAM Reconciliation Guide</h3>
+              <p className="text-sm mb-4">
+                Step-by-step breakdown of how CAM reconciliations are calculated,
+                where errors occur, and how to review allocations.
+              </p>
+              <Link href="/marketing/cam-reconciliation" className="underline">
+                Read Guide →
+              </Link>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="font-semibold mb-3">Audit Window Deadlines</h3>
+              <p className="text-sm mb-4">
+                Understand 30, 60, and 90-day audit notice requirements and how
+                missed deadlines eliminate dispute leverage.
+              </p>
+              <Link href="/marketing/audit-window-deadlines" className="underline">
+                Review Deadlines →
+              </Link>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h3 className="font-semibold mb-3">CAM vs. NNN Explained</h3>
+              <p className="text-sm mb-4">
+                Compare CAM charges and Triple Net lease structures to understand
+                how operating expenses are passed through.
+              </p>
+              <Link href="/marketing/cam-vs-nnn" className="underline">
+                Compare Structures →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
