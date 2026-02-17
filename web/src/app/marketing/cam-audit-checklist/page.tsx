@@ -90,7 +90,7 @@ export default function CamAuditChecklistPage() {
       {/* CTA Section */}
       <section className="bg-black text-white py-20 px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6">
+          <h2 className="text-3xl font-bold mb-6 text-white">
             Before Your Audit Window Closes
           </h2>
 
