@@ -352,6 +352,9 @@ export default function LearnPage() {
               Get Checklist →
             </button>
           </form>
+          <p className="text-xs text-gray-500 -mt-2">
+            Free PDF Download
+          </p>
           {status === "success" && (
             <p className="text-sm text-green-600">
               Checklist sent. Check your inbox.
