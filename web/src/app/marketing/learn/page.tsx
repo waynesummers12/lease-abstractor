@@ -146,6 +146,12 @@ const sections: Section[] = [
         href: "/marketing/cam-reconciliation-checklist",
       },
       {
+        title: "Tenant-First CAM Audit Checklist (Free Download)",
+        description:
+          "Download the full 25-point Tenant-First CAM Audit Checklist used to identify administrative overcharges, capital misclassification, pro rata errors, and audit window risks.",
+        href: "/marketing/cam-audit-checklist",
+      },
+      {
         title: "CAM Charges Explained",
         description:
           "What CAM charges include, how they are structured, and which items are frequently disputed by commercial tenants.",
@@ -263,6 +269,41 @@ export default function LearnPage() {
           and common overcharges — so commercial tenants can act before
           deadlines expire.
         </p>
+      </section>
+
+      {/* Featured Resource */}
+      <section className="rounded-3xl border-2 border-black bg-white p-12 text-center space-y-6 shadow-md">
+        <p className="text-xs uppercase tracking-widest text-gray-500">
+          Featured Resource
+        </p>
+
+        <h2 className="text-4xl font-semibold tracking-tight">
+          The Tenant‑First CAM Audit Checklist
+        </h2>
+
+        <p className="mx-auto max-w-3xl text-lg text-gray-700 leading-relaxed">
+          A 25‑point structured review framework used to identify administrative
+          fee overapplication, capital misclassification, pro rata allocation
+          errors, expense volatility risks, and audit window exposure before
+          dispute deadlines expire.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <Link
+            href="/marketing/cam-audit-checklist"
+            className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
+            View Full Guide →
+          </Link>
+
+          <Link
+            href="/assets/cam-audit-checklist-v1.pdf"
+            target="_blank"
+            className="inline-flex rounded-xl border border-black px-8 py-4 text-sm font-semibold text-black hover:bg-gray-100 transition"
+          >
+            Download PDF →
+          </Link>
+        </div>
       </section>
 
       {/* Core Anchor Block */}
