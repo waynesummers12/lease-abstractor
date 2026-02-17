@@ -294,7 +294,11 @@ export default function LearnPage() {
         </p>
 
         <div className="pt-6 space-y-6">
-          <div className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4">
+          <form
+            action="/api/checklist-leads"
+            method="POST"
+            className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4"
+          >
             <input
               type="email"
               name="email"
@@ -302,15 +306,13 @@ export default function LearnPage() {
               placeholder="Enter your email to download the checklist"
               className="w-full rounded-xl border border-gray-300 px-5 py-4 text-sm focus:border-black focus:outline-none"
             />
-            <a
-              href="/assets/cam-audit-checklist-v1.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="submit"
               className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
             >
               Get Checklist →
-            </a>
-          </div>
+            </button>
+          </form>
 
           <p className="text-xs text-gray-500">
             Secure. Confidential. No spam. We only send practical tenant-focused resources.

@@ -2,7 +2,7 @@ import { Application } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 
 import stripeWebhookRouter from "./routes/stripeWebhook.ts";
-
+import checklistLeads from "./routes/checklistLeads.ts";
 import auditByIdRoutes from "./routes/auditById.ts";
 import latestAuditRoutes from "./routes/latestAudit.ts";
 import auditsRoutes from "./routes/audits.ts";
@@ -50,6 +50,9 @@ app.use(auditByIdRoutes.allowedMethods());
 
 app.use(latestAuditRoutes.routes());
 app.use(latestAuditRoutes.allowedMethods());
+
+app.use(checklistLeads.routes());
+app.use(checklistLeads.allowedMethods());
 
 app.use(auditsRoutes.routes());
 app.use(auditsRoutes.allowedMethods());
