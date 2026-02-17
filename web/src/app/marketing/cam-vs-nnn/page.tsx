@@ -182,6 +182,17 @@ export default function CamVsNnnPage() {
           prior years, that’s often a signal to review the lease language closely
           and verify whether the expenses are allowed.
         </p>
+
+        <p className="mt-4 text-gray-700">
+          For a structured framework on how to review these categories step-by-step, use our{" "}
+          <a
+            href="/marketing/cam-audit-checklist"
+            className="underline hover:text-black"
+          >
+            Tenant-First CAM Audit Checklist
+          </a>
+          , which outlines the most common classification, allocation, and reconciliation risks.
+        </p>
       </section>
 
       {/* ---------- CTA ---------- */}

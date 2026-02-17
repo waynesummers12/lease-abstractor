@@ -19,7 +19,7 @@ export default function Page() {
         <p className="mb-6 text-gray-600">
           This CAM reconciliation checklist explains what every commercial
           tenant should review before paying a reconciliation statement.
-          Most CAM reconciliation statements contain errors — but tenants
+          Most <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">CAM reconciliation</Link> statements contain errors — but tenants
           rarely know what to look for, and overcharges are often approved
           unintentionally.
         </p>
@@ -49,7 +49,9 @@ export default function Page() {
         </p>
 
         <p className="mt-4 text-gray-700">
-          This checklist highlights the most common issues tenants miss.
+          This checklist highlights the most common issues tenants miss,
+          especially around <Link href="/marketing/cam-charges" className="underline hover:text-black">CAM charges</Link>,
+          administrative fee layering, and allocation math.
         </p>
       </section>
 
@@ -72,7 +74,10 @@ export default function Page() {
 
         <p className="mt-6 text-gray-700">
           If any item above is unclear, it’s worth reviewing your lease in
-          detail — or automating the process.
+          detail — or automating the process with a structured
+          <Link href="/marketing/commercial-lease-audit" className="ml-1 underline hover:text-black">
+            commercial lease audit
+          </Link>.
         </p>
       </section>
 
@@ -98,8 +103,11 @@ export default function Page() {
         </h2>
 
         <p className="text-gray-700">
-          Most leases limit how long tenants have to dispute CAM charges —
-          commonly 30 to 90 days after receiving a reconciliation.
+          Most leases limit how long tenants have to dispute
+          <Link href="/marketing/cam-charges" className="ml-1 underline hover:text-black">
+            CAM charges
+          </Link>
+          — commonly 30 to 90 days after receiving a reconciliation.
         </p>
 
         <p className="mt-3 text-gray-700">

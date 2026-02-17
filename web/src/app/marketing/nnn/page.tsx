@@ -149,7 +149,12 @@ export default function nnnPage() {
           <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black ml-1">
             audit window deadlines
           </Link>
-          that limit how long tenants have to dispute incorrect charges.
+          that limit how long tenants have to dispute incorrect charges. Before
+          accepting reconciliation totals, many tenants use a structured
+          <Link href="/marketing/cam-audit-checklist" className="underline hover:text-black ml-1">
+            CAM audit checklist
+          </Link>
+          to verify allocations, expense categories, and cap compliance.
         </p>
       </section>
 

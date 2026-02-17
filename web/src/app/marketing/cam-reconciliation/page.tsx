@@ -25,7 +25,7 @@ export default function CamReconciliationPage() {
           commercial tenants first spot overcharges and protect audit rights.
           During the annual reconciliation statement, estimated operating
           expenses are compared against actual costs — and allocation errors,
-          non-allowable expenses, and inflated administrative fees often appear.
+          non-allowable expenses, and inflated administrative fees often appear. Tenants comparing reconciliation detail against a structured <Link href="/marketing/cam-reconciliation-checklist" className="underline hover:text-black">CAM reconciliation checklist</Link> framework often identify discrepancies earlier.
         </p>
 
         <p className="mb-8 text-gray-700">
@@ -173,11 +173,7 @@ export default function CamReconciliationPage() {
         </ul>
 
         <p className="mt-4 text-gray-700">
-          Because{" "}
-          <Link href="/marketing/cam-charges" className="underline hover:text-black">
-            CAM charges
-          </Link>{" "}
-          recur every year, unchallenged errors compound over time.
+          Because <Link href="/marketing/cam-charges" className="underline hover:text-black">CAM charges</Link> recur every year, unchallenged errors compound over time. Reviewing your structure against a formal <Link href="/marketing/cam-reconciliation-checklist" className="underline hover:text-black">CAM reconciliation checklist</Link> can help quantify exposure before deadlines close.
         </p>
       </section>
 
@@ -225,7 +221,7 @@ export default function CamReconciliationPage() {
           <Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">
             CAM fee meaning
           </Link>{" "}
-          and improper classification of expenses.
+          and improper classification of expenses. Tenants operating under <Link href="/marketing/nnn" className="underline hover:text-black">NNN (triple net) leases</Link> or evaluating <Link href="/marketing/cam-vs-nnn" className="underline hover:text-black">CAM vs NNN structures</Link> should pay particular attention to allocation language.
         </p>
         <div className="grid gap-6 md:grid-cols-2 text-gray-700">
           <div>
@@ -278,6 +274,10 @@ export default function CamReconciliationPage() {
       CAM expense caps
     </a>{" "}
     before the deadline.
+  </p>
+
+  <p className="mt-4 text-gray-700">
+    Understanding <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">audit window deadlines</Link> and formal notice requirements ensures reconciliation disputes preserve contractual leverage.
   </p>
 </section>
 

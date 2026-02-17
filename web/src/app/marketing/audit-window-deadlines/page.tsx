@@ -130,17 +130,25 @@ export default function AuditRightsPage() {
         <p>
           The best way to protect audit rights is to review lease language and
           reconciliation statements as soon as they are received — especially
-          those involving {" "}
+          those involving{" "}
           <Link href="/marketing/cam-commercial-real-estate" className="underline hover:text-black">
             CAM in commercial real estate
-          </Link> environments.
-          A structured
-          audit — particularly of{" "}
+          </Link>{" "}
+          environments. A structured audit — particularly of{" "}
           <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
             annual CAM reconciliation statements
           </Link>{" "}
           — can surface issues early and help tenants act before deadlines
           expire.
+        </p>
+
+        <p>
+          Tenants who need a step-by-step framework can use the{" "}
+          <Link href="/marketing/cam-audit-checklist" className="underline hover:text-black">
+            Tenant-First CAM Audit Checklist
+          </Link>{" "}
+          to systematically review expense categories, allocation math, and
+          audit notice requirements before the objection period closes.
         </p>
 
         <h2 className="pt-6 text-3xl font-light tracking-tight">
