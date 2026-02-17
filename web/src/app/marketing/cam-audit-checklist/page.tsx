@@ -13,38 +13,47 @@ export default function CamAuditChecklistPage() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What is a CAM audit checklist?",
+        name: "What is a CAM audit checklist in a commercial lease?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "A CAM audit checklist is a structured review framework used by commercial tenants to evaluate Common Area Maintenance reconciliations for administrative fee overcharges, capital misclassification, allocation errors, and audit window risk.",
+            "A CAM audit checklist is a structured framework commercial tenants use to review Common Area Maintenance (CAM) reconciliation charges for administrative overapplication, capital misclassification, pro rata allocation errors, and audit window exposure.",
         },
       },
       {
         "@type": "Question",
-        name: "What errors does a CAM review typically uncover?",
+        name: "What are common CAM reconciliation errors in retail and office leases?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "Common findings include management fee overapplication, improper capital expense allocation, pro rata share miscalculations, gross-up distortion, controllable expense cap violations, and audit window timing exposure.",
+            "Common CAM reconciliation errors include management fee overapplication, capital expenses improperly passed through, pro rata share miscalculations, gross-up distortion during vacancy, and controllable expense cap violations.",
         },
       },
       {
         "@type": "Question",
-        name: "How much money can a CAM audit recover?",
+        name: "How much money can a CAM audit identify or recover?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "Depending on lease structure and property size, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.",
+            "Depending on lease structure and square footage, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.",
         },
       },
       {
         "@type": "Question",
-        name: "When should a tenant perform a CAM audit?",
+        name: "When should a tenant review CAM reconciliation charges?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "Tenants should perform a CAM review immediately upon receiving an annual reconciliation, especially before contractual audit windows close. Most leases limit dispute rights to a defined period after reconciliation delivery.",
+            "Tenants should review CAM reconciliation charges immediately upon receipt, especially before contractual audit windows close. Most commercial leases limit dispute rights to a defined period after reconciliation delivery.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What should I do if CAM charges increase significantly year over year?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text:
+            "If CAM charges increase materially year over year, tenants should review lease caps, allocation methodology, expense classifications, and audit window deadlines before accepting the reconciliation statement.",
         },
       },
     ],
@@ -140,48 +149,46 @@ export default function CamAuditChecklistPage() {
 
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                What is a CAM audit checklist?
+                What is a CAM audit checklist in a commercial lease?
               </h3>
               <p>
-                A CAM audit checklist is a structured review framework used by
-                commercial tenants to evaluate Common Area Maintenance (CAM)
-                reconciliations for administrative fee overcharges, capital
-                misclassification, allocation errors, and audit window risk.
+                A CAM audit checklist is a structured framework commercial tenants use to review Common Area Maintenance (CAM) reconciliation charges for administrative overapplication, capital misclassification, pro rata allocation errors, and audit window exposure.
               </p>
             </div>
 
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                What errors does a CAM review typically uncover?
+                What are common CAM reconciliation errors in retail and office leases?
               </h3>
               <p>
-                Common findings include management fee overapplication, improper
-                capital expense allocation, pro rata share miscalculations,
-                gross-up distortion, controllable expense cap violations, and
-                audit window timing exposure.
+                Common CAM reconciliation errors include management fee overapplication, capital expenses improperly passed through, pro rata share miscalculations, gross-up distortion during vacancy, and controllable expense cap violations.
               </p>
             </div>
 
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                How much money can a CAM audit recover?
+                How much money can a CAM audit identify or recover?
               </h3>
               <p>
-                Depending on lease structure and property size, structured CAM
-                reviews frequently identify annual exposure ranging from
-                $5,000 to $50,000 or more in misapplied or misclassified charges.
+                Depending on lease structure and square footage, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.
               </p>
             </div>
 
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                When should a tenant perform a CAM audit?
+                When should a tenant review CAM reconciliation charges?
               </h3>
               <p>
-                Tenants should perform a CAM review immediately upon receiving
-                an annual reconciliation, especially before contractual audit
-                windows close. Most leases limit dispute rights to a defined
-                period after reconciliation delivery.
+                Tenants should review CAM reconciliation charges immediately upon receipt, especially before contractual audit windows close. Most commercial leases limit dispute rights to a defined period after reconciliation delivery.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold mb-2">
+                What should I do if CAM charges increase significantly year over year?
+              </h3>
+              <p>
+                If CAM charges increase materially year over year, tenants should review lease caps, allocation methodology, expense classifications, and audit window deadlines before accepting the reconciliation statement.
               </p>
             </div>
 
