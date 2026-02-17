@@ -312,11 +312,11 @@ export default function LearnPage() {
       {/* Featured Resource */}
       <section className="rounded-3xl border-2 border-black bg-white p-12 text-center space-y-6 shadow-md">
         <p className="text-xs uppercase tracking-widest text-gray-500">
-          Featured Resource
+          Complimentary Download
         </p>
         <div className="flex justify-center">
           <span className="inline-block rounded-full bg-black px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-            Most Downloaded
+            Most Downloaded Tenant Checklist
           </span>
         </div>
 
