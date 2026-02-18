@@ -22,7 +22,7 @@ export default function ContactPage() {
           <p>
             📩 Email us at{" "}
             <a
-              href="mailto:support@saveonlease.com"
+              href="mailto:audits@saveonlease.com"
               className="font-medium text-black underline"
             >
               audits@saveonlease.com
