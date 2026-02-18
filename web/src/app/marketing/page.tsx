@@ -163,69 +163,6 @@ export default function MarketingHomePage() {
 </Link>
     </div>
   </div>
-      {/* DETAILED WHAT WE FIND GRID */}
-      <div className="mt-20 grid gap-8 md:grid-cols-3">
-        {/* CAM Reconciliation Errors */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-gray-900">CAM Reconciliation Errors</h3>
-          <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-2 marker:text-green-600">
-            <li>Incorrect annual reconciliations or math errors</li>
-            <li>Missed expense caps or exclusions</li>
-            <li>Prior year adjustments billed outside audit window</li>
-          </ul>
-          <p className="mt-4 text-sm font-medium text-gray-900">
-            Typical exposure: $2,000–$15,000 per year depending on tenant size and reconciliation structure.
-          </p>
-        </div>
-        {/* Administrative & Management Fee Abuse */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-gray-900">Administrative & Management Fee Abuse</h3>
-          <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-2 marker:text-green-600">
-            <li>Admin fees exceeding lease limits</li>
-            <li>Stacked admin and management charges</li>
-            <li>Fees calculated on ineligible expense categories</li>
-          </ul>
-          <p className="mt-4 text-sm font-medium text-gray-900">
-            Common impact: 10–20% admin fees layered onto CAM can add $3,000–$12,000 annually for mid-size tenants.
-          </p>
-        </div>
-        {/* Improper Capital Expenditures */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-gray-900">Improper Capital Expenditures</h3>
-          <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-2 marker:text-green-600">
-            <li>Capital repairs billed as operating expenses</li>
-            <li>Unamortized capital costs in annual CAM</li>
-            <li>Non-compliant upgrades shifted to tenants</li>
-          </ul>
-          <p className="mt-4 text-sm font-medium text-gray-900">
-            Long-term exposure: Improper capital allocations may create $5,000–$25,000+ in avoidable costs over a lease term.
-          </p>
-        </div>
-        {/* Insurance & Tax Pass-Through Issues */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-gray-900">Insurance & Tax Pass-Through Issues</h3>
-          <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-2 marker:text-green-600">
-            <li>Insurance premiums above market rates</li>
-            <li>Uncapped tax increases or special assessments</li>
-            <li>Improper calculation of billable amounts</li>
-          </ul>
-          <p className="mt-4 text-sm font-medium text-gray-900">
-            Typical impact: Insurance and tax pass-through increases can add $2,000–$10,000 annually if not limited by lease language.
-          </p>
-        </div>
-        {/* Pro-Rata Share & Allocation Errors */}
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h3 className="text-xl font-semibold text-gray-900">Pro-Rata Share & Allocation Errors</h3>
-          <ul className="mt-3 list-disc pl-5 text-gray-700 space-y-2 marker:text-green-600">
-            <li>Incorrect square footage calculations</li>
-            <li>Allocations including non-billable areas</li>
-            <li>Double-billing or misapplied charges</li>
-          </ul>
-          <p className="mt-4 text-sm font-medium text-gray-900">
-            Allocation mistakes can result in 3–8% overcharges — often $4,000–$18,000 per year for multi-tenant properties.
-          </p>
-        </div>
-      </div>
 
       {/* DOLLAR IMPACT */}
       <div className="mt-20 border-t pt-16">
