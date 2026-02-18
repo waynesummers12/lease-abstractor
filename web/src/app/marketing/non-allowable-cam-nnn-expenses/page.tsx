@@ -113,7 +113,7 @@ export default function Page() {
 
         <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
           <Link
-            href="/marketing/cam-admin-fees"
+            href="/marketing/cam-admin-page"
             className="underline"
           >
             CAM admin fees explained →
