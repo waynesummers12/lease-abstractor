@@ -241,6 +241,43 @@ export default function MarketingHomePage() {
         </div>
       </div>
 
+      {/* CASE EXAMPLE */}
+      <div className="mt-20 border-t pt-16">
+        <h2 className="text-4xl font-light tracking-tight">
+          Example: Retail Tenant CAM Overcharge Review
+        </h2>
+
+        <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
+          A 8,200 sq ft retail tenant in a multi-tenant shopping center was
+          paying approximately $7.10 per sq ft in CAM charges. After reviewing
+          the lease language and reconciliation statements, we identified:
+        </p>
+
+        <ul className="mt-6 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600 max-w-4xl">
+          <li>15% administrative fees applied to insurance and tax categories not permitted by the lease</li>
+          <li>Capital roof repairs billed in a single year instead of amortized</li>
+          <li>Incorrect pro-rata allocation including vacant space</li>
+        </ul>
+
+        <p className="mt-6 text-gray-900 font-medium max-w-4xl">
+          Estimated avoidable exposure: $11,400 in a single reconciliation year.
+        </p>
+
+        <p className="mt-4 text-gray-700 leading-relaxed max-w-4xl">
+          The tenant was still within the 90-day audit window and was able to
+          raise the discrepancies before the charges rolled into future years.
+        </p>
+
+        <div className="mt-8">
+          <Link
+            href="/app/step-1-upload"
+            className="inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          >
+            Check Your Lease for Similar Issues
+          </Link>
+        </div>
+      </div>
+
       {/* AUDIT DEADLINE */}
       <div className="mt-20 border-t pt-16">
         <h2 className="text-4xl font-light tracking-tight">
