@@ -45,6 +45,21 @@ export default function MarketingHomePage() {
           Used by SMB tenants nationwide to surface CAM / NNN issues before audit
           rights expire.
         </p>
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-gray-600">
+          Learn more about{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM reconciliation errors
+          </Link>
+          , understand{" "}
+          <Link href="/marketing/nnn" className="underline hover:text-black">
+            triple net (NNN) lease structures
+          </Link>
+          , or review your{" "}
+          <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">
+            commercial lease audit rights
+          </Link>
+          .
+        </p>
       </section>
       
       <p className="mb-6 text-center text-sm uppercase tracking-widest text-gray-500">
