@@ -315,6 +315,162 @@ export default function CamReconciliationPage() {
   </p>
 </section>
 
+      {/* ---------------- RECONCILIATION CALCULATION EXAMPLE ---------------- */}
+      <section className="mb-16 border-t pt-10">
+        <h2 className="mb-4 text-2xl font-semibold">
+          CAM Reconciliation Calculation Example (With Math)
+        </h2>
+
+        <p className="mb-6 text-gray-700">
+          Below is a simplified example of how CAM reconciliation math works in a multi‑tenant retail property.
+        </p>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full border text-sm text-gray-700">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border px-4 py-2 text-left">Item</th>
+                <th className="border px-4 py-2 text-left">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border px-4 py-2">Total Property CAM Expenses</td>
+                <td className="border px-4 py-2">$500,000</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">Tenant Square Footage</td>
+                <td className="border px-4 py-2">10,000 SF</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">Total Leasable SF</td>
+                <td className="border px-4 py-2">100,000 SF</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">Pro‑Rata Share</td>
+                <td className="border px-4 py-2">10%</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">Tenant CAM Obligation</td>
+                <td className="border px-4 py-2">$50,000</td>
+              </tr>
+              <tr>
+                <td className="border px-4 py-2">Estimated CAM Paid</td>
+                <td className="border px-4 py-2">$42,000</td>
+              </tr>
+              <tr className="font-semibold">
+                <td className="border px-4 py-2">Reconciliation Balance Due</td>
+                <td className="border px-4 py-2">$8,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p className="mt-6 text-gray-700">
+          Errors typically occur in the total expense pool, the square footage denominator,
+          admin fee layering, or inclusion of non‑allowable categories.
+        </p>
+      </section>
+
+      {/* ---------------- SAMPLE STATEMENT BREAKDOWN ---------------- */}
+      <section className="mb-16">
+        <h2 className="mb-4 text-2xl font-semibold">
+          Sample CAM Reconciliation Statement Breakdown
+        </h2>
+
+        <p className="mb-6 text-gray-700">
+          A typical reconciliation statement may group expenses into broad categories:
+        </p>
+
+        <ul className="ml-6 list-disc space-y-2 text-gray-700">
+          <li>Repairs & Maintenance</li>
+          <li>Landscaping & Snow Removal</li>
+          <li>Insurance</li>
+          <li>Property Taxes</li>
+          <li>Utilities</li>
+          <li>Management / Administrative Fee (5–15%)</li>
+        </ul>
+
+        <p className="mt-6 text-gray-700">
+          Red flags include vague “miscellaneous” categories, year‑over‑year spikes without explanation,
+          capital projects passed through as operating expenses, and admin fees applied to excluded items.
+        </p>
+      </section>
+
+      {/* ---------------- EXPOSURE CALCULATOR ---------------- */}
+      <section className="mb-16 rounded-xl border bg-gray-50 p-8">
+        <h2 className="mb-4 text-2xl font-semibold">
+          Estimate Your Potential CAM Overcharge Exposure
+        </h2>
+
+        <p className="mb-6 text-gray-700">
+          Even small per‑square‑foot discrepancies compound quickly. Use the simplified example below:
+        </p>
+
+        <div className="grid gap-4 md:grid-cols-3 text-sm text-gray-700">
+          <div>
+            <p className="font-semibold">Space Size</p>
+            <p>12,000 SF</p>
+          </div>
+          <div>
+            <p className="font-semibold">Potential Overcharge</p>
+            <p>$1.50 / SF</p>
+          </div>
+          <div>
+            <p className="font-semibold">Annual Exposure</p>
+            <p className="font-semibold">$18,000</p>
+          </div>
+        </div>
+
+        <p className="mt-6 text-gray-700">
+          Over a 5‑year term, that equals $90,000 — excluding escalation.
+          This is why reconciliation review before audit windows close is critical.
+        </p>
+      </section>
+
+      {/* ---------------- STATE-SPECIFIC VARIATIONS ---------------- */}
+      <section className="mb-16 border-t pt-10">
+        <h2 className="mb-4 text-2xl font-semibold">
+          State‑Specific Audit Window Variations
+        </h2>
+
+        <p className="mb-6 text-gray-700">
+          Audit rights and enforceability vary by jurisdiction. While commercial leases
+          are primarily contract‑driven, state law can affect interpretation and enforcement.
+        </p>
+
+        <div className="space-y-6 text-gray-700 text-sm">
+          <div>
+            <h3 className="font-semibold">California</h3>
+            <p>
+              Commercial tenants often negotiate detailed audit clauses. Courts generally enforce
+              clearly written notice deadlines strictly.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">Texas</h3>
+            <p>
+              Strong contract enforcement environment. Missing audit deadlines may significantly
+              reduce leverage in disputes.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">New York</h3>
+            <p>
+              Complex commercial leasing market. Detailed lease language governs reconciliation,
+              and expense categorization disputes are common.
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-6 text-gray-700">
+          Regardless of state, audit windows are usually short and strictly applied.
+          Reviewing reconciliation detail promptly preserves negotiating leverage.
+        </p>
+      </section>
+
       {/* ---------------- RELATED DEEP DIVES ---------------- */}
       <section className="mb-16 border-t pt-10">
         <h2 className="mb-6 text-2xl font-semibold">
