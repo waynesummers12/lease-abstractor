@@ -29,9 +29,7 @@ export default function CamReconciliationPage() {
         </p>
 
         <p className="mb-8 text-gray-700">
-          For commercial tenants, reviewing reconciliation language, pro-rata share
-          allocations, and audit rights early can prevent thousands of dollars in
-          recurring exposure before deadlines expire.
+          This guide serves as the central authority resource on CAM reconciliation for commercial tenants. Below, you’ll find a complete breakdown of definitions, common overcharges, reconciliation math, audit deadlines, expense caps, and real-world exposure examples — with direct links to deeper resources on each topic.
         </p>
 
         <Link
@@ -61,6 +59,27 @@ export default function CamReconciliationPage() {
             Audit Deadlines
           </a>
         </nav>
+
+      {/* ---------------- PILLAR OVERVIEW ---------------- */}
+      <section className="mb-16 rounded-xl border bg-gray-50 p-8">
+        <h2 className="mb-4 text-2xl font-semibold">
+          Complete CAM Reconciliation Guide for Commercial Tenants
+        </h2>
+        <div className="grid gap-6 md:grid-cols-2 text-sm text-gray-700">
+          <ul className="list-disc ml-6 space-y-2">
+            <li><Link href="/marketing/common-area-maintenance" className="underline hover:text-black">Common Area Maintenance (CAM) explained</Link></li>
+            <li><Link href="/marketing/cam-charges" className="underline hover:text-black">What CAM charges include</Link></li>
+            <li><Link href="/marketing/pro-rata-share-explained" className="underline hover:text-black">Pro-rata share allocation</Link></li>
+            <li><Link href="/marketing/cam-expense-caps" className="underline hover:text-black">CAM expense caps & limitations</Link></li>
+          </ul>
+          <ul className="list-disc ml-6 space-y-2">
+            <li><Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline hover:text-black">Non-allowable CAM expenses</Link></li>
+            <li><Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">Common reconciliation errors</Link></li>
+            <li><Link href="/marketing/nnn-overcharges" className="underline hover:text-black">NNN overcharges explained</Link></li>
+            <li><Link href="/marketing/commercial-lease-audit" className="underline hover:text-black">Commercial lease audit process</Link></li>
+          </ul>
+        </div>
+      </section>
       </section>
         
       {/* ---------------- WHAT IS CAM ---------------- */}
@@ -90,6 +109,12 @@ export default function CamReconciliationPage() {
           For many tenants, this is the largest and least-understood charge in
           their lease.
         </p>
+        <div className="mt-6 rounded-lg border p-6 text-sm text-gray-700">
+          <p className="mb-2 font-semibold">Important:</p>
+          <p>
+            CAM reconciliation is not the same as base rent adjustment. It strictly relates to recoverable operating expenses defined in your lease. Misunderstanding this distinction is one of the most common reasons tenants overpay without realizing it.
+          </p>
+        </div>
       </section>
 
       {/* ---------------- WHY ERRORS ---------------- */}
@@ -175,6 +200,15 @@ export default function CamReconciliationPage() {
         <p className="mt-4 text-gray-700">
           Because <Link href="/marketing/cam-charges" className="underline hover:text-black">CAM charges</Link> recur every year, unchallenged errors compound over time. Reviewing your structure against a formal <Link href="/marketing/cam-reconciliation-checklist" className="underline hover:text-black">CAM reconciliation checklist</Link> can help quantify exposure before deadlines close.
         </p>
+        <div className="mt-6 rounded-lg border p-6 text-sm text-gray-700">
+          <h3 className="mb-2 font-semibold">Exposure Compounds Over Time</h3>
+          <p className="mb-2">
+            Even a $1.25 per square foot overcharge on a 10,000 SF space equals $12,500 annually.
+          </p>
+          <p>
+            Over a 5-year term, that becomes $62,500 — excluding escalation impacts or admin fee layering.
+          </p>
+        </div>
       </section>
 
       {/* ---------------- REAL WORLD EXAMPLE ---------------- */}
@@ -280,6 +314,39 @@ export default function CamReconciliationPage() {
     Understanding <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">audit window deadlines</Link> and formal notice requirements ensures reconciliation disputes preserve contractual leverage.
   </p>
 </section>
+
+      {/* ---------------- RELATED DEEP DIVES ---------------- */}
+      <section className="mb-16 border-t pt-10">
+        <h2 className="mb-6 text-2xl font-semibold">
+          Related CAM & NNN Deep Dive Resources
+        </h2>
+        <div className="grid gap-6 md:grid-cols-3 text-sm text-gray-700">
+          <div>
+            <h3 className="font-semibold mb-2">Definitions & Structure</h3>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">CAM fee meaning</Link></li>
+              <li><Link href="/marketing/triple-net-lease" className="underline hover:text-black">Triple net lease (NNN)</Link></li>
+              <li><Link href="/marketing/cam-vs-nnn" className="underline hover:text-black">CAM vs NNN comparison</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Overcharges & Errors</h3>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><Link href="/marketing/real-cam-nnn-overcharge-examples" className="underline hover:text-black">Real overcharge examples</Link></li>
+              <li><Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline hover:text-black">Non-allowable expenses</Link></li>
+              <li><Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">Reconciliation errors</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Audit & Deadlines</h3>
+            <ul className="list-disc ml-6 space-y-1">
+              <li><Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">Audit window deadlines</Link></li>
+              <li><Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">NNN audit rights</Link></li>
+              <li><Link href="/marketing/commercial-lease-audit" className="underline hover:text-black">Lease audit process</Link></li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* ---------------- FINAL CTA ---------------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
