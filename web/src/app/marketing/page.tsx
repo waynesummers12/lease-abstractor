@@ -3,9 +3,9 @@ import Link from "next/link";
 import { DemoVideo } from "./components/DemoVideo";
 
 export const metadata = {
-  title: "CAM & NNN Lease Audit for Tenants | SaveOnLease",
+  title: "CAM & NNN Lease Audit Built for Tenants | SaveOnLease",
   description:
-    "Upload your commercial lease and uncover hidden Common Area Maintenance (CAM) and NNN overcharges, uncapped expenses, and missed audit rights — before deadlines expire.",
+    "Upload your commercial lease and uncover hidden CAM / NNN overcharges, uncapped expenses, and missed audit rights — before deadlines expire.",
   alternates: {
     canonical: "/marketing",
   },
