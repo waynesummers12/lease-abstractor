@@ -183,7 +183,7 @@ export default function CommercialLeaseAuditPage() {
         </p>
 
         <Link
-          href="/marketing/step-1-upload"
+          href="/app/step-1-upload"
           className="inline-block bg-black text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
         >
           Upload Your Lease
