@@ -189,6 +189,12 @@ const sections: Section[] = [
           "How property tax increases flow through NNN leases and when reassessments matter.",
         href: "/marketing/nnn-property-tax-charges-explained",
       },
+      {
+        title: "NNN Expenses Explained",
+        description:
+          "A breakdown of common NNN expenses, how they are categorized, and which charges tenants should verify annually.",
+        href: "/marketing/nnn-expenses-explained",
+      },
     ],
   },
   {
