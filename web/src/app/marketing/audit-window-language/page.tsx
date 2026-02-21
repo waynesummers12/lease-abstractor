@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -35,7 +33,7 @@ export default function AuditWindowRightsPage() {
         </p>
 
         <Link
-          href="/marketing/step-1-upload"
+          href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
           Upload your lease to check your audit window (Free Preview)
