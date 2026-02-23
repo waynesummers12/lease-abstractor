@@ -44,7 +44,7 @@ export default function Header() {
   const sectionTitle =
     "block px-4 pt-4 pb-2 text-[11px] font-semibold tracking-wider uppercase text-white/50 border-t border-white/10 mt-2";
   const linkClass =
-    "block px-4 py-1.5 text-sm opacity-90 hover:bg-white/10";
+    "block px-4 py-1.5 text-sm text-white opacity-90 hover:bg-white/10";
 
   return (
     <header
@@ -67,12 +67,12 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm relative">
+        <nav className="hidden md:flex items-center gap-6 text-sm relative text-white">
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
   <Link
     href="/marketing/learn"
-    className="opacity-80 hover:opacity-100"
+    className="text-white opacity-80 hover:opacity-100"
   >
     Education
   </Link>
@@ -266,28 +266,28 @@ export default function Header() {
 
           <Link
             href="/marketing/what-we-find"
-            className="opacity-80 hover:opacity-100"
+            className="text-white opacity-80 hover:opacity-100"
           >
             What We Find
           </Link>
 
           <Link
             href="/marketing/how-it-works"
-            className="opacity-80 hover:opacity-100"
+            className="text-white opacity-80 hover:opacity-100"
           >
             How It Works
           </Link>
 
           <Link
             href="/marketing/pricing"
-            className="opacity-80 hover:opacity-100"
+            className="text-white opacity-80 hover:opacity-100"
           >
             Pricing
           </Link>
 
           <Link
             href="/marketing/contact"
-            className="opacity-80 hover:opacity-100"
+            className="text-white opacity-80 hover:opacity-100"
           >
             Contact
           </Link>
