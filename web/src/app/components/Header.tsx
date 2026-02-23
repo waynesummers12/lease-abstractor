@@ -89,7 +89,7 @@ export default function Header() {
   {/* Clickable label → goes to Learn page */}
   <Link
     href="/marketing/learn"
-    className="text-white opacity-80 hover:opacity-100"
+    className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
   >
     Education
   </Link>
@@ -283,28 +283,28 @@ export default function Header() {
 
           <Link
             href="/marketing/what-we-find"
-            className="text-white opacity-80 hover:opacity-100"
+            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
           >
             What We Find
           </Link>
 
           <Link
             href="/marketing/how-it-works"
-            className="text-white opacity-80 hover:opacity-100"
+            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
           >
             How It Works
           </Link>
 
           <Link
             href="/marketing/pricing"
-            className="text-white opacity-80 hover:opacity-100"
+            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
           >
             Pricing
           </Link>
 
           <Link
             href="/marketing/contact"
-            className="text-white opacity-80 hover:opacity-100"
+            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
           >
             Contact
           </Link>
