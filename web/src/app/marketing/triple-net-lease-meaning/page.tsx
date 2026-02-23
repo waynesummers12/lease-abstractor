@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -23,9 +21,23 @@ export default function TripleNetLeaseMeaningPage() {
 
         <p className="text-lg text-gray-700 leading-relaxed">
           The <strong>triple net lease meaning</strong> is simple in theory but
-          expensive in practice. In a triple net (NNN) lease, tenants pay base
-          rent <em>plus</em> property taxes, insurance, and common area
-          maintenance (CAM) expenses.
+          expensive in practice. A triple net (NNN) lease shifts operating
+          expense responsibility from landlord to tenant — which can materially
+          increase long‑term occupancy costs depending on how the lease is
+          drafted.
+        </p>
+
+        <p className="text-lg text-gray-700 leading-relaxed">
+          If you are new to NNN structures, start with our complete
+          {" "}
+          <Link
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            Triple Net Lease guide
+          </Link>
+          {" "}
+          for a deeper structural breakdown.
         </p>
 
         <p className="text-lg text-gray-700 leading-relaxed">
@@ -69,6 +81,18 @@ export default function TripleNetLeaseMeaningPage() {
           expecting a simple definition. But the real financial impact depends
           on how these categories are defined inside your lease.
         </p>
+
+        <p>
+          To understand how these categories are reconciled annually, review our
+          {" "}
+          <Link
+            href="/marketing/cam-reconciliation"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation guide
+          </Link>
+          , which explains how projected expenses compare to actuals.
+        </p>
       </section>
 
       {/* HOW IT COMPARES */}
@@ -85,6 +109,20 @@ export default function TripleNetLeaseMeaningPage() {
         <p>
           That structure shifts risk to the tenant — especially when expenses
           increase unexpectedly.
+        </p>
+
+        <p>
+          Expense volatility is often amplified by administrative layering and
+          capital pass‑through language. See our
+          {" "}
+          <Link
+            href="/marketing/cam-admin-fees"
+            className="underline hover:text-black"
+          >
+            CAM administrative fee analysis
+          </Link>
+          {" "}
+          for common overcharge patterns.
         </p>
 
         <p>
@@ -113,15 +151,56 @@ export default function TripleNetLeaseMeaningPage() {
         </ul>
 
         <p>
-          These issues are typically uncovered during{" "}
+          These issues are typically uncovered during
+          {" "}
           <Link
             href="/marketing/cam-reconciliation"
             className="underline hover:text-black"
           >
             CAM reconciliation
-          </Link>{" "}
-          review or a formal lease audit.
+          </Link>
+          {" "}
+          review or a formal
+          {" "}
+          <Link
+            href="/marketing/nnn-audit-rights"
+            className="underline hover:text-black"
+          >
+            NNN audit rights
+          </Link>
+          {" "}
+          exercise before the audit window closes.
         </p>
+      </section>
+
+      {/* RELATED RESOURCES */}
+      <section className="space-y-6 border-t pt-10 text-lg text-gray-700 leading-relaxed">
+        <h2 className="text-3xl font-light tracking-tight">
+          Related NNN Resources
+        </h2>
+
+        <ul className="list-disc pl-6 space-y-3 marker:text-green-600">
+          <li>
+            <Link href="/marketing/triple-net-lease" className="underline hover:text-black">
+              What Is a Triple Net Lease?
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+              How CAM Reconciliation Works
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">
+              Understanding Your Audit Window
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/cam-admin-fees" className="underline hover:text-black">
+              Administrative Fee Overcharges Explained
+            </Link>
+          </li>
+        </ul>
       </section>
 
       {/* CTA */}
