@@ -318,6 +318,53 @@ export default function TripleNetLeasePage() {
         </ul>
       </section>
 
+      {/* NNN EXPENSE RECONCILIATION AUTHORITY SECTION */}
+      <section className="space-y-6 border-t pt-12 text-lg text-gray-700 leading-relaxed">
+        <h2 className="text-3xl font-light tracking-tight">
+          How Triple Net Lease (NNN) Expense Reconciliation Works
+        </h2>
+
+        <p>
+          A triple net lease (NNN) structure requires tenants to pay property taxes,
+          insurance, and common area maintenance (CAM) expenses in addition to base rent.
+          These expenses are estimated during the year and formally reconciled after year-end.
+        </p>
+
+        <p>
+          During the reconciliation process, landlords compare projected operating expenses
+          against actual costs. Tenants are billed for shortfalls — or occasionally credited
+          for overpayments.
+        </p>
+
+        <p>
+          Most overcharge disputes arise during{" "}
+          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+            CAM reconciliation
+          </Link>{" "}
+          when administrative fees, capital expenditures, or non-allowable expenses
+          are incorrectly passed through under the NNN structure.
+        </p>
+
+        <p>
+          If you are reviewing a reconciliation statement, you should also understand
+          your{" "}
+          <Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">
+            NNN audit rights
+          </Link>{" "}
+          and any applicable{" "}
+          <Link href="/marketing/cam-expense-caps" className="underline hover:text-black">
+            CAM expense caps
+          </Link>{" "}
+          defined in your lease.
+        </p>
+
+        <p>
+          In practice, the financial risk of a triple net lease depends less on the
+          base rent and more on how operating expenses are drafted, categorized,
+          and reconciled over time.
+        </p>
+      </section>
+
       {/* FAQ */}
       <section className="space-y-6">
         <h2 className="text-3xl font-light tracking-tight">
