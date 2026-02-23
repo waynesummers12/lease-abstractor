@@ -60,6 +60,42 @@ export default function CamReconciliationPage() {
           </a>
         </nav>
 
+      {/* ---------------- NNN PILLAR AUTHORITY BRIDGE ---------------- */}
+      <section className="mb-16 border-t pt-10 text-lg text-gray-700 leading-relaxed">
+        <h2 className="mb-4 text-2xl font-semibold">
+          How CAM Reconciliation Fits Within a Triple Net (NNN) Lease
+        </h2>
+
+        <p className="mb-4">
+          CAM reconciliation exists within the broader structure of a{" "}
+          <Link
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            Triple Net Lease (NNN)
+          </Link>{" "}
+          where tenants pay property taxes, insurance, and common area maintenance
+          expenses in addition to base rent.
+        </p>
+
+        <p className="mb-4">
+          While this page focuses specifically on reconciliation mechanics and
+          overcharge risks, the full financial exposure depends on how the NNN
+          structure is drafted, capped, and allocated across the lease term.
+        </p>
+
+        <p>
+          If you are reviewing a reconciliation statement without first
+          understanding the underlying NNN framework, start with our{" "}
+          <Link
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            complete Triple Net Lease guide
+          </Link>{" "}
+          for a structural overview before analyzing expense detail.
+        </p>
+      </section>
       {/* ---------------- PILLAR OVERVIEW ---------------- */}
       <section className="mb-16 rounded-xl border bg-gray-50 p-8">
         <h2 className="mb-4 text-2xl font-semibold">
