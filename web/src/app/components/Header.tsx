@@ -67,7 +67,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm relative text-white">
+        <nav className="flex items-center gap-6 text-sm relative text-white">
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
   <Link
