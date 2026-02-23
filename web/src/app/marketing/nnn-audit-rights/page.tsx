@@ -1,9 +1,39 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "NNN Audit Rights Explained — Don’t Miss Your Chance to Challenge Charges",
+  metadataBase: new URL("https://www.saveonlease.com"),
+  title:
+    "NNN Audit Rights Explained — Don’t Miss Your Chance to Challenge Charges | SaveOnLease",
   description:
-    "Most commercial leases give tenants limited audit rights for NNN and CAM charges. Learn how audit windows work, what you can challenge, and how to act before deadlines expire.",
+    "Understand NNN audit rights in commercial leases, how CAM reconciliation deadlines work, what charges tenants can dispute, and how to protect financial recovery.",
+  alternates: {
+    canonical:
+      "https://www.saveonlease.com/marketing/nnn-audit-rights",
+  },
+  openGraph: {
+    title:
+      "NNN Audit Rights — What Tenants Can Challenge (and When)",
+    description:
+      "Learn how NNN audit rights work, what CAM and operating expenses tenants can dispute, and why reconciliation deadlines matter.",
+    url: "https://www.saveonlease.com/marketing/nnn-audit-rights",
+    siteName: "SaveOnLease",
+    images: [
+      {
+        url: "https://www.saveonlease.com/og-nnn-audit-rights.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "NNN Audit Rights — What Tenants Can Challenge (and When)",
+    description:
+      "Protect your audit rights before CAM reconciliation deadlines expire.",
+    images: ["https://www.saveonlease.com/og-nnn-audit-rights.jpg"],
+  },
 };
 
 export default function NnnAuditRightsPage() {
@@ -206,7 +236,7 @@ export default function NnnAuditRightsPage() {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": "NNN Audit Rights — What Tenants Can Challenge (and When)",
-            "image": "https://saveonlease.com/og-nnn-audit-rights.jpg",
+            "image": "https://www.saveonlease.com/og-nnn-audit-rights.jpg",
             "articleSection": "Commercial Real Estate / NNN Lease Audits",
             "description":
               "Learn how NNN audit rights work, what tenants can challenge in CAM and operating expense reconciliations, and how audit deadlines affect financial recovery.",
@@ -219,7 +249,7 @@ export default function NnnAuditRightsPage() {
               "name": "SaveOnLease",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://saveonlease.com/logo.png"
+                "url": "https://www.saveonlease.com/logo.png"
               }
             },
             "sameAs": [
@@ -228,7 +258,7 @@ export default function NnnAuditRightsPage() {
             ],
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": "https://saveonlease.com/marketing/nnn-audit-rights"
+              "@id": "https://www.saveonlease.com/marketing/nnn-audit-rights"
             },
             "datePublished": "2026-02-01",
             "dateModified": "2026-02-22"
@@ -247,19 +277,19 @@ export default function NnnAuditRightsPage() {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://saveonlease.com"
+                "item": "https://www.saveonlease.com"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Triple Net Lease",
-                "item": "https://saveonlease.com/marketing/triple-net-lease"
+                "item": "https://www.saveonlease.com/marketing/triple-net-lease"
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": "NNN Audit Rights",
-                "item": "https://saveonlease.com/marketing/nnn-audit-rights"
+                "item": "https://www.saveonlease.com/marketing/nnn-audit-rights"
               }
             ]
           }),
