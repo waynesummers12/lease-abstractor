@@ -8,6 +8,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://saveonlease.com/marketing/triple-net-lease",
   },
+  openGraph: {
+    title: "Triple Net Lease (NNN Lease) Explained for Commercial Tenants",
+    description:
+      "Understand how NNN leases allocate taxes, insurance, and CAM expenses — and where tenants commonly overpay during reconciliation.",
+    url: "https://saveonlease.com/marketing/triple-net-lease",
+    siteName: "SaveOnLease",
+    images: [
+      {
+        url: "https://saveonlease.com/og-triple-net-lease.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Triple Net Lease (NNN Lease) Explained",
+    description:
+      "Learn how NNN leases work and how to identify overcharges in CAM and operating expenses.",
+    images: ["https://saveonlease.com/og-triple-net-lease.jpg"],
+  },
 };
 
 export default function TripleNetLeasePage() {
