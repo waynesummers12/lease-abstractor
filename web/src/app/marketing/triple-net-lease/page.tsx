@@ -2,33 +2,41 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Triple Net Lease (NNN Lease) Explained for Commercial Tenants | SaveOnLease",
+  title:
+    "Triple Net Lease (NNN Lease) Explained for Commercial Tenants | SaveOnLease",
   description:
     "What is a triple net lease (NNN lease)? Learn how property taxes, insurance, and CAM charges work — and how tenants can identify overcharges in commercial leases.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/triple-net-lease",
+    canonical: "https://www.saveonlease.com/marketing/triple-net-lease",
   },
   openGraph: {
-    title: "Triple Net Lease (NNN Lease) Explained for Commercial Tenants",
+    title:
+      "Triple Net Lease (NNN Lease) Explained for Commercial Tenants",
     description:
       "Understand how NNN leases allocate taxes, insurance, and CAM expenses — and where tenants commonly overpay during reconciliation.",
-    url: "https://saveonlease.com/marketing/triple-net-lease",
+    url: "https://www.saveonlease.com/marketing/triple-net-lease",
     siteName: "SaveOnLease",
+    type: "article",
     images: [
       {
-        url: "https://saveonlease.com/og-triple-net-lease.jpg",
+        url: "https://www.saveonlease.com/og-triple-net-lease.jpg",
+        secureUrl:
+          "https://www.saveonlease.com/og-triple-net-lease.jpg",
         width: 1200,
         height: 630,
+        alt: "Triple Net Lease (NNN) explained for commercial tenants",
       },
     ],
-    type: "article",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Triple Net Lease (NNN Lease) Explained",
+    title:
+      "Triple Net Lease (NNN Lease) Explained for Commercial Tenants",
     description:
       "Learn how NNN leases work and how to identify overcharges in CAM and operating expenses.",
-    images: ["https://saveonlease.com/og-triple-net-lease.jpg"],
+    images: [
+      "https://www.saveonlease.com/og-triple-net-lease.jpg",
+    ],
   },
 };
 
