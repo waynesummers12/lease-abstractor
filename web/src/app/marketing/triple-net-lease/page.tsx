@@ -137,6 +137,61 @@ export default function TripleNetLeasePage() {
         </p>
       </section>
 
+      {/* ---------------- NNN CLUSTER CONTEXTUAL AUTHORITY ---------------- */}
+      <section className="space-y-6 border-t pt-12 text-lg text-gray-700 leading-relaxed">
+        <h2 className="text-3xl font-light tracking-tight">
+          Related Triple Net (NNN) Lease Risk Areas
+        </h2>
+
+        <p>
+          While this page explains the structure of a triple net lease, most
+          tenant disputes arise from how expenses are categorized, allocated,
+          and reconciled over time.
+        </p>
+
+        <p>
+          If you are reviewing operating expense increases, you should also
+          understand how{" "}
+          <Link
+            href="/marketing/cam-reconciliation"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation
+          </Link>{" "}
+          works, what constitutes{" "}
+          <Link
+            href="/marketing/nnn-expenses-explained"
+            className="underline hover:text-black"
+          >
+            allowable vs non‑allowable NNN expenses
+          </Link>, and whether your lease includes enforceable{" "}
+          <Link
+            href="/marketing/cam-expense-caps"
+            className="underline hover:text-black"
+          >
+            CAM expense caps
+          </Link>.
+        </p>
+
+        <p>
+          Tenants concerned about overbilling should review their{" "}
+          <Link
+            href="/marketing/nnn-audit-rights"
+            className="underline hover:text-black"
+          >
+            NNN audit rights
+          </Link>{" "}
+          and follow a structured{" "}
+          <Link
+            href="/marketing/cam-audit-checklist"
+            className="underline hover:text-black"
+          >
+            CAM audit checklist
+          </Link>{" "}
+          before the audit window closes.
+        </p>
+      </section>
+
       {/* CORE STRUCTURE */}
       <section className="space-y-6">
         <h2 className="text-3xl font-light tracking-tight">
