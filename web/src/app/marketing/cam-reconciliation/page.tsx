@@ -3,22 +3,23 @@
 import Link from "next/link";
 
 export const metadata = {
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "CAM Reconciliation Explained | Spot Overcharges & Protect Audit Rights | SaveOnLease",
   description:
     "Learn how CAM reconciliation works, common overcharge mistakes, and how commercial tenants can identify avoidable CAM costs before audit deadlines close.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/cam-reconciliation",
+    canonical: "https://www.saveonlease.com/marketing/cam-reconciliation",
   },
   openGraph: {
     title:
       "CAM Reconciliation Explained — How Tenants Spot Overcharges & Protect Audit Rights",
     description:
       "Understand CAM reconciliation mechanics, common overcharges, and how to preserve audit leverage before deadlines expire.",
-    url: "https://saveonlease.com/marketing/cam-reconciliation",
+    url: "https://www.saveonlease.com/marketing/cam-reconciliation",
     siteName: "SaveOnLease",
     images: [
       {
-        url: "https://saveonlease.com/og-cam-reconciliation.jpg",
+        url: "https://www.saveonlease.com/og-cam-reconciliation.jpg",
         width: 1200,
         height: 630,
       },
@@ -31,7 +32,7 @@ export const metadata = {
       "CAM Reconciliation Explained — Spot Overcharges Before Deadlines Close",
     description:
       "Learn how CAM reconciliation works and how commercial tenants identify avoidable charges.",
-    images: ["https://saveonlease.com/og-cam-reconciliation.jpg"],
+    images: ["https://www.saveonlease.com/og-cam-reconciliation.jpg"],
   },
 };
 
@@ -587,6 +588,39 @@ export default function CamReconciliationPage() {
         </p>
       </section>
 
+      {/* ARTICLE SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline:
+              "CAM Reconciliation Explained — How Commercial Tenants Spot Overcharges & Protect Audit Rights",
+            description:
+              "Complete guide to CAM reconciliation, common overcharges, audit deadlines, expense caps, and reconciliation math for commercial tenants.",
+            author: {
+              "@type": "Organization",
+              name: "SaveOnLease"
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "SaveOnLease",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.saveonlease.com/logo.png"
+              }
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://www.saveonlease.com/marketing/cam-reconciliation"
+            },
+            articleSection: ["Commercial Real Estate", "CAM", "NNN Lease"],
+            datePublished: "2026-02-01",
+            dateModified: "2026-02-22"
+          })
+        }}
+      />
       {/* ---------------- BREADCRUMB SCHEMA ---------------- */}
       <script
         type="application/ld+json"
@@ -599,19 +633,19 @@ export default function CamReconciliationPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Learn",
-                item: "https://saveonlease.com/marketing/learn",
+                item: "https://www.saveonlease.com/marketing/learn",
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: "CAM Reconciliation",
-                item: "https://saveonlease.com/marketing/cam-reconciliation",
+                item: "https://www.saveonlease.com/marketing/cam-reconciliation",
               },
             ],
           }),
