@@ -17,7 +17,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
-import { generateAuditPdfV3 as generateAuditPdf } from "../utils/generateAuditPdf_v3.ts";
+import { generateAuditPdfV4 as generateAuditPdf } from "../utils/generateAuditPdf_v4.ts";
 import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
 import { sendAuditEmail } from "../utils/sendAuditEmail.ts";
 

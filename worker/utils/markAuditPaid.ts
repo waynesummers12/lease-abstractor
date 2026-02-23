@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabase.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
-import { generateAuditPdfV3 as generateAuditPdf } from "./generateAuditPdf_v3.ts";
+import { generateAuditPdfV4 as generateAuditPdf } from "./generateAuditPdf_v4.ts";
 import { normalizeAuditForSuccess } from "./normalizeAuditForSuccess.ts";
 
 
