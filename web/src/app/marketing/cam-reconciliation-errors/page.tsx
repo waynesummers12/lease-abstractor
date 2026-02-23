@@ -202,6 +202,50 @@ export default function CamReconciliationErrorsPage() {
           Upload Your Lease
         </Link>
       </section>
+      {/* FAQ SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "What is a CAM reconciliation error?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "A CAM reconciliation error occurs when a landlord miscalculates or improperly allocates Common Area Maintenance expenses in a commercial lease, resulting in overcharges to tenants."
+                }
+              },
+              {
+                "@type": "Question",
+                name: "Can tenants dispute CAM reconciliation charges?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes. Most commercial leases include audit rights allowing tenants to review and dispute CAM reconciliation charges within a specific time window."
+                }
+              },
+              {
+                "@type": "Question",
+                name: "What are common CAM overcharges?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Common CAM overcharges include capital improvements passed through as operating expenses, inflated administrative fees, incorrect pro-rata share calculations, and duplicate billing."
+                }
+              },
+              {
+                "@type": "Question",
+                name: "How long do tenants have to audit CAM charges?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Audit windows vary by lease, but tenants typically have 6–12 months after receiving a reconciliation statement to initiate a dispute."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </main>
   );
 }

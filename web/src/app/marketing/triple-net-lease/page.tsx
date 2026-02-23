@@ -167,6 +167,19 @@ export default function TripleNetLeasePage() {
           Understanding how these expenses are calculated — and where allocation errors occur —
           is critical for commercial tenants seeking predictable occupancy costs.
         </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Many tenant disputes do not originate from base rent, but from
+          annual operating expense true‑ups. If you are reviewing year‑end
+          statements, study common
+          <Link
+            href="/marketing/cam-reconciliation-errors"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation errors
+          </Link>
+          , including capital expense pass‑throughs, administrative fee markups,
+          and pro‑rata allocation miscalculations.
+        </p>
       </section>
 
       {/* ---------------- NNN CLUSTER CONTEXTUAL AUTHORITY ---------------- */}
