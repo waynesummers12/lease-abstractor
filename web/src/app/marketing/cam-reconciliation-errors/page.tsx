@@ -202,6 +202,38 @@ export default function CamReconciliationErrorsPage() {
           Upload Your Lease
         </Link>
       </section>
+      {/* ARTICLE SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: "CAM Reconciliation Errors Tenants Should Watch For",
+            description:
+              "Common CAM reconciliation errors in commercial leases, how overcharges occur, and how tenants can dispute improper Common Area Maintenance charges.",
+            author: {
+              "@type": "Organization",
+              name: "SaveOnLease"
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "SaveOnLease",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.saveonlease.com/logo.png"
+              }
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://www.saveonlease.com/marketing/cam-reconciliation-errors"
+            },
+            articleSection: ["Commercial Real Estate", "CAM", "NNN Lease"],
+            datePublished: "2026-02-01",
+            dateModified: "2026-02-22"
+          })
+        }}
+      />
       {/* FAQ SCHEMA */}
       <script
         type="application/ld+json"
