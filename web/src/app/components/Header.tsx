@@ -52,7 +52,7 @@ export default function Header() {
         scrolled ? "bg-black shadow-md" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 text-white">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-white">
         <Link href="/marketing" className="flex items-center gap-2">
           <Image
             src="/logo.png"
@@ -67,7 +67,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden sm:flex items-center gap-6 text-sm relative text-white">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm relative text-white">
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
   <Link
@@ -294,7 +294,7 @@ export default function Header() {
 
           <Link
             href="/app/step-1-upload"
-            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
+            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black hover:bg-gray-200 transition"
           >
             Start Audit (Free Preview)
           </Link>
