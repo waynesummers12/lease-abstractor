@@ -3,10 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const pathname = usePathname();
+  const isAppPage = pathname.startsWith("/app");
 
   useEffect(() => {
     if (menuOpen) {
@@ -49,10 +53,18 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${
-        scrolled ? "bg-black shadow-md" : "bg-transparent"
+        isAppPage
+          ? "bg-white border-b border-gray-200"
+          : scrolled
+          ? "bg-black shadow-md"
+          : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-white">
+      <div
+        className={`mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 ${
+          isAppPage ? "text-gray-900" : "text-white"
+        }`}
+      >
         <Link
           href="/"
           className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-md"
@@ -70,7 +82,11 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm relative text-white">
+        <nav
+          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative ${
+            isAppPage ? "text-gray-900" : "text-white"
+          }`}
+        >
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
   <Link
