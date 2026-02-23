@@ -42,11 +42,40 @@ export default function TripleNetLeasePage() {
     ]
   };
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Triple Net Lease (NNN Lease) Explained for Commercial Tenants",
+    "description": "Learn how triple net leases allocate property taxes, insurance, and CAM expenses — and how tenants can identify reconciliation errors and overcharges.",
+    "author": {
+      "@type": "Organization",
+      "name": "SaveOnLease"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SaveOnLease",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://saveonlease.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://saveonlease.com/marketing/triple-net-lease"
+    },
+    "datePublished": "2026-02-22",
+    "dateModified": "2026-02-22"
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
       <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
