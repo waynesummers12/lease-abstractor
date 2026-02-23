@@ -86,12 +86,12 @@ export default function TripleNetLeasePage() {
       "name": "SaveOnLease",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://saveonlease.com/logo.png"
+        "url": "https://www.saveonlease.com/logo.png"
       }
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "https://saveonlease.com/marketing/triple-net-lease"
+      "@id": "https://www.saveonlease.com/marketing/triple-net-lease"
     },
     "datePublished": "2026-02-22",
     "dateModified": "2026-02-22"
@@ -105,19 +105,19 @@ export default function TripleNetLeasePage() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://saveonlease.com"
+        "item": "https://www.saveonlease.com"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Marketing",
-        "item": "https://saveonlease.com/marketing"
+        "item": "https://www.saveonlease.com/marketing"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Triple Net Lease",
-        "item": "https://saveonlease.com/marketing/triple-net-lease"
+        "item": "https://www.saveonlease.com/marketing/triple-net-lease"
       }
     ]
   };
