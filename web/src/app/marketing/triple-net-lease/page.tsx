@@ -180,6 +180,17 @@ export default function TripleNetLeasePage() {
           , including capital expense pass‑throughs, administrative fee markups,
           and pro‑rata allocation miscalculations.
         </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Before your reconciliation deadline expires, follow a structured
+          <Link
+            href="/marketing/cam-audit-checklist"
+            className="underline hover:text-black"
+          >
+            CAM audit checklist
+          </Link>
+          to systematically review allocation math, capital pass‑throughs,
+          management fee caps, and vacancy adjustments.
+        </p>
       </section>
 
       {/* ---------------- NNN CLUSTER CONTEXTUAL AUTHORITY ---------------- */}
@@ -365,6 +376,17 @@ export default function TripleNetLeasePage() {
           </Link>
           , including pro‑rata miscalculations, capital pass‑through violations,
           and administrative fee overages.
+        </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Tenants conducting a reconciliation review should also reference a
+          step‑by‑step
+          <Link
+            href="/marketing/cam-audit-checklist"
+            className="underline hover:text-black"
+          >
+            CAM audit checklist
+          </Link>
+          to ensure no expense category or audit deadline is overlooked.
         </p>
       </section>
 
