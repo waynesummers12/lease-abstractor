@@ -2,10 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.saveonlease.com"),
   title:
     "Triple Net Lease (NNN Lease) Explained for Commercial Tenants | SaveOnLease",
   description:
     "What is a triple net lease (NNN lease)? Learn how property taxes, insurance, and CAM charges work — and how tenants can identify overcharges in commercial leases.",
+  authors: [{ name: "SaveOnLease" }],
   alternates: {
     canonical: "https://www.saveonlease.com/marketing/triple-net-lease",
   },
