@@ -67,6 +67,31 @@ export default function TripleNetLeasePage() {
     "dateModified": "2026-02-22"
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://saveonlease.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Marketing",
+        "item": "https://saveonlease.com/marketing"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Triple Net Lease",
+        "item": "https://saveonlease.com/marketing/triple-net-lease"
+      }
+    ]
+  };
+
   return (
     <>
       <script
@@ -76,6 +101,10 @@ export default function TripleNetLeasePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
