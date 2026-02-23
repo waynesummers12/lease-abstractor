@@ -1,9 +1,35 @@
 import Link from "next/link";
 
 export const metadata = {
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "Tenant-First CAM Audit Checklist (Free Download) | SaveOnLease",
   description:
     "Download the Tenant-First CAM Audit Checklist for retail and office leases. Identify administrative overcharges, capital misclassification, pro rata errors, and audit window risks before exposure compounds.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/cam-audit-checklist",
+  },
+  openGraph: {
+    title: "Tenant-First CAM Audit Checklist | SaveOnLease",
+    description:
+      "Free CAM audit checklist for commercial tenants. Identify overcharges, allocation errors, and capital misclassification before audit windows close.",
+    url: "https://www.saveonlease.com/marketing/cam-audit-checklist",
+    siteName: "SaveOnLease",
+    images: [
+      {
+        url: "https://www.saveonlease.com/og-cam-audit-checklist.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tenant-First CAM Audit Checklist | SaveOnLease",
+    description:
+      "Download the CAM audit checklist built for retail and office tenants.",
+    images: ["https://www.saveonlease.com/og-cam-audit-checklist.jpg"],
+  },
 };
 
 export default function CamAuditChecklistPage() {
@@ -310,6 +336,71 @@ export default function CamAuditChecklistPage() {
           </Link>
         </div>
       </section>
+
+      {/* ARTICLE SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: "The Tenant-First CAM Audit Checklist",
+            description:
+              "Downloadable CAM audit checklist for commercial tenants to identify reconciliation errors, capital misclassification, and allocation overcharges.",
+            author: {
+              "@type": "Organization",
+              name: "SaveOnLease",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "SaveOnLease",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.saveonlease.com/logo.png",
+              },
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "https://www.saveonlease.com/marketing/cam-audit-checklist",
+            },
+            articleSection: ["Commercial Real Estate", "CAM", "NNN Lease"],
+            datePublished: "2026-02-01",
+            dateModified: "2026-02-22",
+          }),
+        }}
+      />
+
+      {/* BREADCRUMB SCHEMA */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://www.saveonlease.com/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Learn",
+                item: "https://www.saveonlease.com/marketing/learn",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: "CAM Audit Checklist",
+                item: "https://www.saveonlease.com/marketing/cam-audit-checklist",
+              },
+            ],
+          }),
+        }}
+      />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
