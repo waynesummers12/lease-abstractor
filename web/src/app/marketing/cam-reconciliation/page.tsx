@@ -141,7 +141,6 @@ export default function CamReconciliationPage() {
           </ul>
         </div>
       </section>
-      </section>
         
       {/* ---------------- WHAT IS CAM ---------------- */}
       <section className="mb-14">
