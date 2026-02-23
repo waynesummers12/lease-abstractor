@@ -1,20 +1,30 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "CAM Reconciliation Errors | Common Area Maintenance Audit Guide",
+  metadataBase: new URL("https://www.saveonlease.com"),
+  title:
+    "CAM Reconciliation Errors | Common Area Maintenance Audit Guide for Tenants",
   description:
-    "Learn the most common CAM reconciliation errors in commercial leases and how tenants can identify overcharges before audit windows close.",
+    "Learn the most common CAM reconciliation errors in commercial leases, how overcharges happen, and how tenants can identify billing violations before audit windows close.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/cam-reconciliation-errors",
+    canonical:
+      "https://www.saveonlease.com/marketing/cam-reconciliation-errors",
+  },
+  openGraph: {
+    title:
+      "CAM Reconciliation Errors | Common Area Maintenance Audit Guide",
+    description:
+      "Discover the most common CAM reconciliation errors in NNN leases and how tenants can dispute overcharges before deadlines expire.",
+    url: "https://www.saveonlease.com/marketing/cam-reconciliation-errors",
+    siteName: "SaveOnLease",
+    type: "article",
   },
 };
 
 export default function CamReconciliationErrorsPage() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-10">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
       {/* HERO */}
       <section className="space-y-6">
         <h1 className="text-4xl font-light tracking-tight">
@@ -23,83 +33,154 @@ export default function CamReconciliationErrorsPage() {
 
         <p className="text-lg text-gray-700 leading-relaxed">
           CAM reconciliation errors are one of the most common sources of
-          overcharges in commercial leases. If you lease space under a triple
-          net (NNN) structure, annual Common Area Maintenance (CAM)
-          reconciliations can materially impact your total occupancy cost.
+          overcharges in commercial leases. Under a
+          <Link
+            href="/marketing/triple-net-lease"
+            className="underline hover:text-black"
+          >
+            triple net (NNN) lease
+          </Link>
+          , annual Common Area Maintenance (CAM) true‑ups can materially impact
+          your total occupancy cost.
         </p>
 
         <p className="text-lg text-gray-700 leading-relaxed">
-          Understanding how CAM reconciliation works — and where landlords
-          frequently make mistakes — is critical before your{" "}
+          If you do not review your reconciliation carefully — and within your
           <Link
-            href="/marketing/audit-window-deadlines"
+            href="/marketing/nnn-audit-rights"
             className="underline hover:text-black"
           >
-            audit window closes
-          </Link>.
+            audit rights window
+          </Link>
+          — you may permanently lose the ability to challenge improper charges.
         </p>
       </section>
 
-      {/* WHAT IS CAM RECONCILIATION */}
-      <section className="space-y-4">
+      {/* HOW ERRORS HAPPEN */}
+      <section className="space-y-6">
         <h2 className="text-2xl font-light tracking-tight">
-          What Is CAM Reconciliation?
+          How CAM Reconciliation Errors Happen
         </h2>
 
         <p className="text-gray-700 leading-relaxed">
-          CAM reconciliation is the annual true‑up process where landlords
-          compare estimated CAM charges billed throughout the year against
-          actual expenses incurred. If estimates were too low, tenants may owe
-          additional payments. If too high, tenants may receive a credit.
+          CAM reconciliation compares estimated monthly CAM payments against
+          actual expenses incurred during the year. Errors typically occur
+          because of allocation mistakes, lease interpretation issues, or
+          structural billing practices that favor the landlord.
         </p>
 
         <p className="text-gray-700 leading-relaxed">
-          Errors in this process — whether accidental or structural — often
-          lead to inflated charges.
+          In many cases, overcharges are not obvious — they are embedded within
+          pro‑rata calculations, capital pass‑throughs, or administrative fee
+          layering.
         </p>
       </section>
 
       {/* COMMON ERRORS */}
-      <section className="space-y-6">
+      <section className="space-y-8">
         <h2 className="text-2xl font-light tracking-tight">
           Most Common CAM Reconciliation Errors
         </h2>
 
-        <ul className="list-disc pl-6 space-y-3 text-gray-700 leading-relaxed marker:text-green-600">
-          <li>
-            Incorrect pro‑rata share calculations (see{" "}
-            <Link
-              href="/marketing/pro-rata-share-explained"
-              className="underline hover:text-black"
-            >
-              pro‑rata share explained
-            </Link>
-            )
-          </li>
-          <li>Capital expenditures improperly included as operating expenses</li>
-          <li>Management or administrative fees exceeding lease caps</li>
-          <li>Vacant space costs allocated to active tenants</li>
-          <li>Duplicate charges across CAM and NNN categories</li>
-          <li>Insurance or property tax misallocations</li>
-          <li>Charges outside lease-defined allowable expense categories</li>
-        </ul>
+        <div className="space-y-6 text-gray-700 leading-relaxed">
+          <div>
+            <h3 className="text-lg font-medium">
+              1. Incorrect Pro‑Rata Share Calculations
+            </h3>
+            <p>
+              Your pro‑rata share determines what percentage of total CAM you
+              pay. Miscalculations often stem from incorrect building square
+              footage assumptions or improper vacancy allocations.
+              See
+              <Link
+                href="/marketing/pro-rata-share-explained"
+                className="underline hover:text-black"
+              >
+                pro‑rata share explained
+              </Link>
+              .
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium">
+              2. Capital Expenditures Passed Through as Operating Expenses
+            </h3>
+            <p>
+              Landlords may include capital improvements (roof replacements,
+              structural upgrades, parking lot reconstruction) inside CAM.
+              Many leases prohibit this unless amortized properly.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium">
+              3. Management & Administrative Fee Overages
+            </h3>
+            <p>
+              Administrative fees are often capped or narrowly defined. CAM
+              statements frequently exceed negotiated caps or apply fees to
+              ineligible expense categories.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium">
+              4. Vacancy Allocation Errors
+            </h3>
+            <p>
+              In multi‑tenant buildings, vacant space should not increase the
+              financial burden on active tenants beyond lease allowances.
+              Improper vacancy allocation can significantly inflate charges.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium">
+              5. Duplicate Charges Across CAM & NNN Categories
+            </h3>
+            <p>
+              Expenses may be double‑counted under CAM and property tax or
+              insurance line items. Careful reconciliation review is required
+              to detect these overlaps.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-medium">
+              6. Charges Outside Lease‑Defined Allowable Categories
+            </h3>
+            <p>
+              Some leases narrowly define allowable CAM expenses. Billing for
+              non‑allowable categories violates the lease agreement.
+            </p>
+          </div>
+        </div>
       </section>
 
-      {/* WHY IT MATTERS */}
-      <section className="space-y-4">
+      {/* FINANCIAL IMPACT */}
+      <section className="space-y-6">
         <h2 className="text-2xl font-light tracking-tight">
-          Why CAM Reconciliation Errors Matter
+          Financial Impact of CAM Reconciliation Errors
         </h2>
 
         <p className="text-gray-700 leading-relaxed">
-          Even small percentage errors can translate into thousands of dollars
-          annually for multi‑year leases. Many commercial tenants never review
-          reconciliations closely — or miss the audit deadline entirely.
+          Even small percentage misallocations can translate into thousands —
+          or tens of thousands — of dollars over multi‑year lease terms.
+          Tenants often focus on base rent negotiations while overlooking CAM
+          structure risk.
         </p>
 
         <p className="text-gray-700 leading-relaxed">
-          Reviewing CAM reconciliations before the deadline is often the only
-          opportunity to dispute questionable charges.
+          A formal
+          <Link
+            href="/marketing/commercial-lease-audit"
+            className="underline hover:text-black"
+          >
+            commercial lease audit
+          </Link>
+          can identify cap violations, improper expense pass‑throughs, and
+          allocation discrepancies before dispute windows expire.
         </p>
       </section>
 
@@ -111,14 +192,7 @@ export default function CamReconciliationErrorsPage() {
 
         <p className="text-gray-700 leading-relaxed">
           Upload your lease and reconciliation documents to identify potential
-          CAM and NNN overcharges through a formal{" "}
-          <Link
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            commercial lease audit
-          </Link>
-          , including cap violations and structural billing errors.
+          CAM and NNN overcharges before your audit window closes.
         </p>
 
         <Link

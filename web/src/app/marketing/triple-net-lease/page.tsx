@@ -340,6 +340,19 @@ export default function TripleNetLeasePage() {
             CAM reconciliation review
           </Link> or formal audit.
         </p>
+
+        <p className="text-lg text-gray-700 leading-relaxed">
+          For a detailed breakdown of billing mistakes landlords commonly make,
+          review our dedicated guide on{" "}
+          <Link
+            href="/marketing/cam-reconciliation-errors"
+            className="underline hover:text-black"
+          >
+            CAM reconciliation errors
+          </Link>
+          , including pro‑rata miscalculations, capital pass‑through violations,
+          and administrative fee overages.
+        </p>
       </section>
 
       {/* LEASE COMPARISON */}
