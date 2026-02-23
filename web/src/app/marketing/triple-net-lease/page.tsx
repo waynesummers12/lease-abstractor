@@ -11,8 +11,43 @@ export const metadata: Metadata = {
 };
 
 export default function TripleNetLeasePage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does a triple net lease include?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A triple net lease includes property taxes, building insurance, and common area maintenance (CAM) expenses in addition to base rent."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is a triple net lease good or bad?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A triple net lease can offer lower base rent but higher cost variability since tenants are responsible for taxes, insurance, and maintenance expenses that may fluctuate annually."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How are NNN expenses reconciled?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "NNN expenses are reconciled annually by comparing estimated operating expenses paid during the year to actual expenses incurred, with tenants either paying the difference or receiving a credit."
+        }
+      }
+    ]
+  };
+
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* HERO */}
       <section className="space-y-6">
