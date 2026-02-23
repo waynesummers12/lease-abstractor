@@ -3,11 +3,35 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "CAM Reconciliation Explained | Spot Overcharges & Save Money",
+  title: "CAM Reconciliation Explained | Spot Overcharges & Protect Audit Rights | SaveOnLease",
   description:
     "Learn how CAM reconciliation works, common overcharge mistakes, and how commercial tenants can identify avoidable CAM costs before audit deadlines close.",
   alternates: {
     canonical: "https://saveonlease.com/marketing/cam-reconciliation",
+  },
+  openGraph: {
+    title:
+      "CAM Reconciliation Explained — How Tenants Spot Overcharges & Protect Audit Rights",
+    description:
+      "Understand CAM reconciliation mechanics, common overcharges, and how to preserve audit leverage before deadlines expire.",
+    url: "https://saveonlease.com/marketing/cam-reconciliation",
+    siteName: "SaveOnLease",
+    images: [
+      {
+        url: "https://saveonlease.com/og-cam-reconciliation.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: "article",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "CAM Reconciliation Explained — Spot Overcharges Before Deadlines Close",
+    description:
+      "Learn how CAM reconciliation works and how commercial tenants identify avoidable charges.",
+    images: ["https://saveonlease.com/og-cam-reconciliation.jpg"],
   },
 };
 
