@@ -26,6 +26,21 @@ export default function NnnAuditRightsPage() {
         </p>
       </header>
 
+<section className="mb-10 border-t pt-8 text-lg text-gray-700 leading-relaxed">
+  <p>
+    Audit rights exist within the broader framework of a{" "}
+    <Link
+      href="/marketing/triple-net-lease"
+      className="underline hover:text-black"
+    >
+      Triple Net (NNN) lease
+    </Link>{" "}
+    where tenants are responsible for taxes, insurance, and common area
+    maintenance. If you haven’t reviewed how NNN structures allocate
+    operating expenses, start there before evaluating audit language.
+  </p>
+</section>
+
       {/* ---------- WHAT ARE NNN AUDIT RIGHTS ---------- */}
       <section className="mb-12">
         <h2 className="mb-3 text-2xl font-semibold">
@@ -69,6 +84,15 @@ export default function NnnAuditRightsPage() {
           statement.
         </p>
 
+<p className="mt-4 text-gray-700">
+  These windows typically begin after you receive a{" "}
+  <Link
+    href="/marketing/cam-reconciliation"
+    className="underline hover:text-black"
+  >
+    CAM reconciliation statement
+  </Link>, which details your annual operating expense true-up.
+</p>
         <p className="mt-4 text-gray-700">
           If you don’t dispute charges within that window:
         </p>
@@ -134,6 +158,23 @@ export default function NnnAuditRightsPage() {
         </p>
       </section>
 
+<section className="mb-12">
+  <h2 className="mb-3 text-2xl font-semibold">
+    How Audit Rights Translate Into Financial Recovery
+  </h2>
+
+  <p className="text-gray-700">
+    Identifying audit rights is only step one. The real leverage comes from
+    understanding whether expenses violate lease language, exceed caps,
+    or include non-allowable categories.
+  </p>
+
+  <p className="mt-4 text-gray-700">
+    Many tenants discover overcharges only after modeling exposure across
+    multiple reconciliation cycles.
+  </p>
+</section>
+
       {/* ---------- FINAL CTA ---------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
         <h2 className="mb-2 text-2xl font-semibold">
@@ -157,6 +198,36 @@ export default function NnnAuditRightsPage() {
         </p>
       </section>
 
+      {/* ---------- BREADCRUMB SCHEMA ---------- */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://saveonlease.com"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Triple Net Lease",
+                "item": "https://saveonlease.com/marketing/triple-net-lease"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "NNN Audit Rights",
+                "item": "https://saveonlease.com/marketing/nnn-audit-rights"
+              }
+            ]
+          }),
+        }}
+      />
       {/* ---------- FAQ SCHEMA ---------- */}
       <script
         type="application/ld+json"
