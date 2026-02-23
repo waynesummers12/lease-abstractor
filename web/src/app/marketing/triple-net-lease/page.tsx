@@ -43,11 +43,13 @@ export default function TripleNetLeasePage() {
   };
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -302,5 +304,6 @@ export default function TripleNetLeasePage() {
       </section>
 
     </main>
+    </>
   );
 }
