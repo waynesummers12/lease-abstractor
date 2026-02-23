@@ -88,6 +88,18 @@ export default function NnnAuditRightsPage() {
             CAM increase limits
           </a>.
         </p>
+        <p className="mt-4 text-gray-700">
+          Many audit disputes stem from identifiable billing mistakes such as
+          capital pass‑through violations or pro‑rata allocation errors. Review
+          common
+          <Link
+            href="/marketing/cam-reconciliation-errors"
+            className="ml-1 underline hover:text-black"
+          >
+            CAM reconciliation errors
+          </Link>
+          before initiating a formal dispute.
+        </p>
 
         <p className="mt-4 text-gray-700">
           These rights are almost always governed by strict lease language,
@@ -133,6 +145,17 @@ export default function NnnAuditRightsPage() {
           <li>Future overcharges may compound</li>
           <li>You lose leverage to negotiate corrections</li>
         </ul>
+        <p className="mt-4 text-gray-700">
+          Use a structured
+          <Link
+            href="/marketing/cam-audit-checklist"
+            className="ml-1 underline hover:text-black"
+          >
+            CAM audit checklist
+          </Link>
+          to document expense categories, confirm allocation math, and preserve
+          your audit leverage before the deadline closes.
+        </p>
 
         <p className="mt-4 text-gray-700">
           Many tenants assume they can “look later.” In reality, waiting can

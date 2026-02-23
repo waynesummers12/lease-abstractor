@@ -182,6 +182,36 @@ export default function CamReconciliationErrorsPage() {
           can identify cap violations, improper expense pass‑throughs, and
           allocation discrepancies before dispute windows expire.
         </p>
+
+        <div className="mt-6 rounded-lg border bg-white p-6 text-sm text-gray-700">
+          <p className="mb-3 font-medium">Related CAM & NNN Guides:</p>
+          <ul className="list-disc ml-6 space-y-2">
+            <li>
+              <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
+                Complete CAM Reconciliation Guide
+              </Link>
+              {' '}– Understand how annual true‑ups are calculated and where structural risk hides.
+            </li>
+            <li>
+              <Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">
+                NNN Audit Rights Explained
+              </Link>
+              {' '}– Review your dispute window and procedural requirements before it closes.
+            </li>
+            <li>
+              <Link href="/marketing/cam-audit-checklist" className="underline hover:text-black">
+                CAM Audit Checklist
+              </Link>
+              {' '}– Step‑by‑step checklist for reviewing reconciliation statements.
+            </li>
+            <li>
+              <Link href="/marketing/triple-net-lease" className="underline hover:text-black">
+                Triple Net Lease (NNN) Overview
+              </Link>
+              {' '}– See how CAM fits into the broader NNN cost structure.
+            </li>
+          </ul>
+        </div>
       </section>
 
       {/* CTA */}
