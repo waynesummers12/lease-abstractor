@@ -55,9 +55,7 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${
         isAppPage
           ? "bg-white border-b border-gray-200"
-          : scrolled
-          ? "bg-black shadow-md"
-          : "bg-transparent"
+          : "bg-black shadow-md"
       }`}
     >
       <div
