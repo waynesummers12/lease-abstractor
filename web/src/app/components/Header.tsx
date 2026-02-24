@@ -81,18 +81,18 @@ export default function Header() {
         </Link>
 
         <nav
-          className={`flex items-center gap-6 lg:gap-8 text-sm relative ${
+          className={`hidden sm:flex items-center gap-6 lg:gap-8 text-sm relative ${
             isAppPage ? "text-gray-900" : "text-white"
           }`}
         >
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
-  <Link
-    href="/marketing/learn"
-    className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
-  >
-    Education
-  </Link>
+          <Link
+            href="/marketing/learn"
+            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
+          >
+            Education
+          </Link>
 
   {/* Separate dropdown toggle */}
   <button
@@ -283,28 +283,28 @@ export default function Header() {
 
           <Link
             href="/marketing/what-we-find"
-            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
+            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
           >
             What We Find
           </Link>
 
           <Link
             href="/marketing/how-it-works"
-            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
+            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
           >
             How It Works
           </Link>
 
           <Link
             href="/marketing/pricing"
-            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
+            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
           >
             Pricing
           </Link>
 
           <Link
             href="/marketing/contact"
-            className={`${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100`}
+            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
           >
             Contact
           </Link>
