@@ -81,9 +81,7 @@ export default function Header() {
         </Link>
 
         <nav
-          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative ${
-            isAppPage ? "text-gray-900" : "text-white"
-          }`}
+          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative`}
         >
           <div ref={learnRef} className="relative flex items-center gap-1">
   {/* Clickable label → goes to Learn page */}
