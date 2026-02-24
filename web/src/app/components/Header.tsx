@@ -81,7 +81,7 @@ export default function Header() {
         </Link>
 
         <nav
-          className={`hidden sm:flex items-center gap-6 lg:gap-8 text-sm relative ${
+          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative ${
             isAppPage ? "text-gray-900" : "text-white"
           }`}
         >
@@ -318,7 +318,7 @@ export default function Header() {
         </nav>
 
         <button
-          className="sm:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+          className="md:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
