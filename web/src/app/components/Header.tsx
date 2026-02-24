@@ -81,7 +81,7 @@ export default function Header() {
         </Link>
 
         <nav
-          className={`flex items-center gap-6 lg:gap-8 text-sm relative ${
+          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative ${
             isAppPage ? "text-gray-900" : "text-white"
           }`}
         >
