@@ -318,7 +318,7 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+          className="sm:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Toggle navigation menu"
           aria-expanded={menuOpen}
