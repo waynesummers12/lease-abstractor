@@ -121,6 +121,10 @@ export default function UploadLeasePage() {
         loading={uploading}
       />
 
+      <p className="mt-3 text-xs text-gray-500">
+        ⏱ Results generated in ~10 seconds.
+      </p>
+
       <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4 text-center">
         <p className="text-sm font-semibold text-green-900">
           💰 Typical tenants uncover $5,000–$50,000+ in annual CAM exposure
