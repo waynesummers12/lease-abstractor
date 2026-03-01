@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Medical Office CAM Spikes | Why Healthcare Tenants See Sudden Cost Surges",
+    "Medical Office CAM Spikes (Why Healthcare Tenants See Sudden Cost Surges)",
   description:
     "Why CAM costs spike in medical office buildings. Insurance volatility, tax reassessments, capital pass-through abuse, admin fee stacking, and healthcare compliance upgrades explained with real exposure math.",
 };
@@ -55,7 +55,7 @@ export default function CAMSpikesMedical() {
         </p>
         <p className="text-gray-600">
           For imaging centers and outpatient practices, even a $2–$5 PSF increase
-          can materially alter profitability and long-term lease economics.
+          can materially alter profitability and long-term lease economics. For deeper analysis, review our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">Medical Office Lease Audit (CAM & NNN Review)</Link>.
         </p>
       </section>
 
@@ -72,6 +72,16 @@ export default function CAMSpikesMedical() {
           <li>Security, monitoring, and regulatory compliance expansions</li>
           <li>Capital improvements reclassified as operating expenses</li>
         </ul>
+      </section>
+
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In many outpatient medical office buildings, CAM spikes intersect with
+          triple net (NNN) lease structures, tax reassessment cycles, and insurance
+          repricing events. Without proactive reconciliation review, medical
+          tenants may absorb operating expense increases that exceed lease-defined
+          caps or permissible capital pass-through language.
+        </p>
       </section>
 
       {/* EXPOSURE MATH */}
@@ -138,7 +148,7 @@ export default function CAMSpikesMedical() {
             href="/marketing/medical-practice-lease-overcharges"
             className="text-emerald-600 underline"
           >
-            medical lease overcharge patterns
+            Medical Lease Overcharges &amp; Admin Fee Violations
           </Link>.
         </p>
       </section>
@@ -151,22 +161,22 @@ export default function CAMSpikesMedical() {
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical CAM Reconciliation Guide
+              Medical Office CAM Reconciliation Process
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-nnn-expenses">
-              Medical NNN Expense Breakdown
+              Medical Office NNN Expense Breakdown
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Lease Audit Checklist
+              Medical Office Lease Audit Checklist
             </Link>
           </li>
           <li>
             <Link href="/marketing/how-medical-practices-can-dispute-cam-charges">
-              How to Dispute CAM Charges
+              How Medical Practices Can Dispute CAM Charges
             </Link>
           </li>
         </ul>
