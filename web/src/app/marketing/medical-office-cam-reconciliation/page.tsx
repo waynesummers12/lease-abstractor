@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Medical Office CAM Reconciliation | How Healthcare Tenants Recover Overcharges",
+    "Medical Office CAM Reconciliation (Audit Guide for Healthcare Tenants)",
   description:
     "Deep-dive guide to CAM reconciliations in medical office buildings. Learn how imaging centers and outpatient practices identify overcharges, capital expense violations, admin fee stacking, and NNN allocation errors.",
 };
@@ -57,7 +57,7 @@ export default function MedicalOfficeCAM() {
         <p className="text-gray-600">
           Without structured review, medical tenants often absorb capital
           improvements, inflated admin allocations, and miscalculated
-          pro-rata shares that exceed lease limits.
+          pro-rata shares that exceed lease limits. For a full framework, see our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">Medical Office Lease Audit (CAM & NNN Review)</Link>.
         </p>
       </section>
 
@@ -141,6 +141,16 @@ export default function MedicalOfficeCAM() {
         </ul>
       </section>
 
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In outpatient medical office buildings, CAM reconciliations often
+          intersect with triple net (NNN) lease structures, insurance volatility,
+          and property tax reassessments. Understanding how operating expense
+          allocations interact with lease-defined caps and exclusions is critical
+          for preserving audit rights and minimizing cumulative exposure.
+        </p>
+      </section>
+
       {/* URGENCY */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
@@ -161,7 +171,7 @@ export default function MedicalOfficeCAM() {
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit Hub
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
@@ -171,12 +181,12 @@ export default function MedicalOfficeCAM() {
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              Medical Lease Overcharge Patterns
+              Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
           <li>
             <Link href="/marketing/how-medical-practices-can-dispute-cam-charges">
-              How to Dispute CAM Charges
+              How Medical Practices Can Dispute CAM Charges
             </Link>
           </li>
         </ul>
