@@ -275,6 +275,37 @@ export default function Header() {
                 >
                   Real Overcharge Examples
                 </Link>
+
+                <div className="px-4">
+                  <div className="h-px bg-white/10 my-2"></div>
+                </div>
+
+                {/* Medical */}
+                <span className={sectionTitle}>Medical</span>
+                <Link href="/marketing/medical-office-lease-audit" className={linkClass}>
+                  Medical Lease Audit
+                </Link>
+                <Link href="/marketing/medical-office-cam-reconciliation" className={linkClass}>
+                  Medical CAM Reconciliation
+                </Link>
+                <Link href="/marketing/medical-office-cam-spikes" className={linkClass}>
+                  Medical CAM Spikes
+                </Link>
+                <Link href="/marketing/medical-office-nnn-expenses" className={linkClass}>
+                  Medical NNN Expenses
+                </Link>
+                <Link href="/marketing/medical-practice-lease-overcharges" className={linkClass}>
+                  Medical Lease Overcharges
+                </Link>
+                <Link href="/marketing/multi-location-medical-lease-risk" className={linkClass}>
+                  Multi-Location Medical Risk
+                </Link>
+                <Link href="/marketing/medical-office-lease-audit-checklist" className={linkClass}>
+                  Medical Audit Checklist
+                </Link>
+                <Link href="/marketing/how-medical-practices-can-dispute-cam-charges" className={linkClass}>
+                  Dispute Medical CAM Charges
+                </Link>
               </div>
             )}
           </div>
@@ -414,6 +445,33 @@ export default function Header() {
       </Link>
       <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation Checklist
+      </Link>
+
+      <span className="uppercase text-xs opacity-60 mt-4">Medical</span>
+
+      <Link href="/marketing/medical-office-lease-audit" onClick={() => setMenuOpen(false)}>
+        Medical Lease Audit
+      </Link>
+      <Link href="/marketing/medical-office-cam-reconciliation" onClick={() => setMenuOpen(false)}>
+        Medical CAM Reconciliation
+      </Link>
+      <Link href="/marketing/medical-office-cam-spikes" onClick={() => setMenuOpen(false)}>
+        Medical CAM Spikes
+      </Link>
+      <Link href="/marketing/medical-office-nnn-expenses" onClick={() => setMenuOpen(false)}>
+        Medical NNN Expenses
+      </Link>
+      <Link href="/marketing/medical-practice-lease-overcharges" onClick={() => setMenuOpen(false)}>
+        Medical Lease Overcharges
+      </Link>
+      <Link href="/marketing/multi-location-medical-lease-risk" onClick={() => setMenuOpen(false)}>
+        Multi-Location Medical Risk
+      </Link>
+      <Link href="/marketing/medical-office-lease-audit-checklist" onClick={() => setMenuOpen(false)}>
+        Medical Audit Checklist
+      </Link>
+      <Link href="/marketing/how-medical-practices-can-dispute-cam-charges" onClick={() => setMenuOpen(false)}>
+        Dispute Medical CAM Charges
       </Link>
 
       <hr className="border-white/10 my-2" />
