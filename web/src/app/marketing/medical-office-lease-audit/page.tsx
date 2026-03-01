@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Medical Office Lease Audit | CAM & NNN Review for Healthcare Tenants",
+  title: "Medical Office Lease Audit (CAM & NNN Review for Healthcare Tenants)",
   description:
-    "Audit your medical office lease for CAM overcharges, NNN pass-through errors, admin fee violations, and capital expense misallocations. Built for imaging centers, urgent care, dental and multi-specialty practices.",
+    "Medical office lease audit for CAM overcharges, triple net (NNN) expense errors, admin fee cap violations, and capital pass-through misclassification. Built for imaging centers, urgent care, dental and multi-location healthcare operators.",
 };
 
 export default function MedicalOfficeLeaseAudit() {
@@ -79,6 +79,9 @@ export default function MedicalOfficeLeaseAudit() {
           <p className="font-semibold">
             Over a 7-year lease term, that can exceed $200,000 in preventable exposure.
           </p>
+          <p>
+            See how these exposures are uncovered in our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 underline">Medical Office CAM Reconciliation Process</Link>.
+          </p>
         </div>
       </section>
 
@@ -93,6 +96,17 @@ export default function MedicalOfficeLeaseAudit() {
           infection-control HVAC, parking structures, and extended-hour staffing
           materially increase operating expenses. Without clear caps and
           exclusions, tenants absorb unpredictable pass-through risk.
+        </p>
+      </section>
+
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In many outpatient medical office buildings, CAM and triple net (NNN)
+          lease structures intersect with insurance repricing cycles, property
+          tax reassessments, and capital improvement allocations. Without a
+          structured reconciliation review, healthcare tenants may absorb
+          operating expense increases that exceed lease-defined caps or
+          permissible amortization language.
         </p>
       </section>
 
@@ -155,22 +169,22 @@ export default function MedicalOfficeLeaseAudit() {
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical CAM Reconciliation Guide
+              Medical Office CAM Reconciliation Process
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-nnn-expenses">
-              Medical NNN Expense Breakdown
+              Medical Office NNN Expense Breakdown
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              Medical Lease Overcharge Patterns
+              Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
           <li>
             <Link href="/marketing/multi-location-medical-lease-risk">
-              Multi-Location Medical Lease Risk
+              Multi-Location Medical Lease Risk & Portfolio Audit
             </Link>
           </li>
         </ul>
