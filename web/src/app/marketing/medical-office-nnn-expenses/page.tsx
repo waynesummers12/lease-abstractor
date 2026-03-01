@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function MedicalNNNExpenses() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -22,6 +22,35 @@ export default function MedicalNNNExpenses() {
           For imaging centers, surgical suites, dialysis clinics, and specialty
           practices, these pass-through costs can quietly become six-figure exposures.
         </p>
+        <p className="text-gray-600">
+          Small allocation errors in property taxes, insurance, or CAM pass-throughs
+          compound across multi-year lease terms.
+        </p>
+      </section>
+
+      {/* FINANCIAL MULTIPLIER */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">How NNN Exposure Compounds</h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>15,000 SF medical tenant × $3 PSF NNN misallocation = $45,000/year</p>
+          <p className="font-semibold">
+            Over a 10-year lease term, that equals $450,000 in preventable exposure.
+          </p>
+        </div>
+      </section>
+
+      {/* WHY MEDICAL NNN IS HIGHER */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Why Medical NNN Costs Are Higher Than Standard Office
+        </h2>
+        <ul className="list-disc pl-6 text-gray-700 space-y-2">
+          <li>Higher insurance premiums due to medical occupancy</li>
+          <li>Increased property tax assessments tied to medical build-outs</li>
+          <li>Generator systems and electrical redundancy</li>
+          <li>High-load HVAC requirements</li>
+          <li>After-hours and compliance-driven building operations</li>
+        </ul>
       </section>
 
       {/* BREAKDOWN SECTION */}
@@ -61,6 +90,18 @@ export default function MedicalNNNExpenses() {
         </div>
       </section>
 
+      {/* SPIKE SCENARIO */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Example: Property Tax Reassessment in a Medical Office Building
+        </h2>
+        <p className="text-gray-700">
+          A local reassessment increases building taxes by 18%. A 15,000 SF
+          tenant absorbs a $1.75 PSF spike — increasing annual exposure by
+          $26,250 without any change in base rent.
+        </p>
+      </section>
+
       {/* REAL WORLD EXAMPLE */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
@@ -79,10 +120,10 @@ export default function MedicalNNNExpenses() {
         </p>
       </section>
 
-      {/* RISK SECTION */}
+      {/* OVERPAY RISK */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
-          Where Medical Tenants Overpay
+          Where Medical Tenants Commonly Overpay
         </h2>
         <ul className="list-disc pl-6 text-gray-700 space-y-2">
           <li>Uncapped capital expenditure pass-throughs</li>
@@ -97,7 +138,17 @@ export default function MedicalNNNExpenses() {
         </p>
       </section>
 
-      {/* INTERNAL LINKS / CLUSTERING */}
+      {/* AUDIT WINDOW */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">Audit Deadlines Matter</h2>
+        <p className="text-gray-700">
+          Most medical office leases allow only 6–12 months after reconciliation
+          delivery to formally dispute NNN allocations. Missing this window can
+          permanently waive recovery rights.
+        </p>
+      </section>
+
+      {/* INTERNAL LINKS */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">
           Related Medical Lease Resources
@@ -109,8 +160,8 @@ export default function MedicalNNNExpenses() {
             </Link>
           </li>
           <li>
-            <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Lease Audit Checklist
+            <Link href="/marketing/medical-office-cam-reconciliation">
+              Medical CAM Reconciliation Guide
             </Link>
           </li>
           <li>
@@ -121,12 +172,11 @@ export default function MedicalNNNExpenses() {
         </ul>
       </section>
 
-      {/* FAQ SECTION */}
+      {/* FAQ */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
           Frequently Asked Questions About Medical NNN Expenses
         </h2>
-
         <div className="space-y-4 text-gray-700">
           <div>
             <h3 className="font-semibold">
@@ -137,7 +187,6 @@ export default function MedicalNNNExpenses() {
               rent. In high-tax or high-insurance markets, it can exceed 40%.
             </p>
           </div>
-
           <div>
             <h3 className="font-semibold">
               Can medical tenants audit NNN expenses?
@@ -148,7 +197,6 @@ export default function MedicalNNNExpenses() {
               improper allocations.
             </p>
           </div>
-
           <div>
             <h3 className="font-semibold">
               Are capital improvements allowed in CAM?
@@ -168,7 +216,7 @@ export default function MedicalNNNExpenses() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Analyze My Medical NNN Charges
+          Review My Medical NNN Reconciliation Before Deadlines Expire
         </Link>
       </section>
 
