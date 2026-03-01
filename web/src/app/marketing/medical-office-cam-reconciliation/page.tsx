@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function MedicalOfficeCAM() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -26,42 +26,73 @@ export default function MedicalOfficeCAM() {
         </p>
         <p className="text-gray-600">
           Without structured review, medical tenants often absorb capital
-          improvements and inflated admin allocations that exceed lease limits.
+          improvements, inflated admin allocations, and miscalculated
+          pro-rata shares that exceed lease limits.
         </p>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
-          How CAM Reconciliations Work in Medical Buildings
-        </h2>
-        <p className="text-gray-700">
-          Landlords estimate operating expenses at the beginning of the year
-          and bill tenants monthly. After year-end, actual expenses are compared
-          against those estimates. Any shortfall is billed as a reconciliation.
-        </p>
-        <p className="text-gray-700">
-          In healthcare buildings, expense categories frequently include
-          infrastructure not seen in general office properties — including
-          medical-grade HVAC systems, emergency power testing, clinical security
-          monitoring, and high-load electrical balancing.
-        </p>
-      </section>
-
-      {/* COST EXAMPLE */}
-      <section className="space-y-4">
+      {/* FINANCIAL CONTEXT */}
+      <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
           Example: 12,000 SF Imaging Center Exposure
         </h2>
-        <div className="bg-gray-50 p-6 rounded-lg space-y-1">
+        <div className="bg-gray-50 p-6 rounded-lg space-y-1 text-gray-700">
           <p>$32 Base Rent = $384,000 Annual Base Rent</p>
           <p>$10 CAM/NNN = $120,000 Annual NNN</p>
           <p className="font-bold mt-2">Total Annual Occupancy Cost: $504,000</p>
         </div>
         <p className="text-gray-700">
-          A $2 PSF misallocation increases annual exposure by $24,000 for this
-          tenant. Over a 7-year term, that equals $168,000 in cumulative impact.
+          A $2 PSF misallocation increases annual exposure by $24,000.
+          Over a 7-year term, that equals $168,000 in cumulative impact.
         </p>
+      </section>
+
+      {/* ADMIN FEE MATH */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Admin Fee Cap Violations — The Hidden Multiplier
+        </h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>$300,000 Annual CAM × 15% Admin Fee = $45,000</p>
+          <p>Lease Cap = 10%</p>
+          <p className="font-semibold">Annual Overcharge = $15,000</p>
+        </div>
+        <p className="text-gray-700">
+          When CAM increases due to capital-heavy infrastructure, percentage-based
+          admin fees magnify exposure.
+        </p>
+      </section>
+
+      {/* CAPITAL VS OPERATING TEST */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          How to Evaluate Capital vs Operating Classification
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Does the project extend useful life of the system?</li>
+          <li>Is it a full replacement rather than routine repair?</li>
+          <li>Is amortization permitted under the lease?</li>
+          <li>Is the expense legally mandated or elective?</li>
+          <li>Does the lease explicitly exclude structural improvements?</li>
+        </ul>
+        <p className="text-gray-700">
+          Many medical tenants unknowingly pay for capital improvements
+          improperly categorized as operating expenses.
+        </p>
+      </section>
+
+      {/* MEDICAL-SPECIFIC ALLOCATION RISK */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Allocation Risks Unique to Medical Buildings
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>High electrical load imaging suites increasing shared costs</li>
+          <li>Parking structure reinforcement allocated equally instead of proportionally</li>
+          <li>Generator testing costs distributed without usage modeling</li>
+          <li>After-hours HVAC usage assumptions misapplied</li>
+          <li>Pro-rata share miscalculations tied to rentable vs usable square footage</li>
+        </ul>
       </section>
 
       {/* HIGH RISK ITEMS */}
@@ -80,25 +111,15 @@ export default function MedicalOfficeCAM() {
         </ul>
       </section>
 
-      {/* OVERCHARGE PATTERNS */}
-      <section className="space-y-4">
+      {/* URGENCY */}
+      <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
-          Where Overcharges Commonly Occur
+          Why Timing Is Critical in Medical CAM Reviews
         </h2>
         <p className="text-gray-700">
-          Overcharges frequently stem from capital improvements improperly
-          passed through, administrative fees exceeding negotiated caps,
-          duplicate vendor billing, or pro-rata share miscalculations.
-        </p>
-        <p className="text-gray-700">
-          See related examples of
-          {" "}
-          <Link
-            href="/marketing/medical-practice-lease-overcharges"
-            className="text-emerald-600 underline"
-          >
-            medical lease overcharges
-          </Link>.
+          Most medical office leases provide only 6–12 months after reconciliation
+          delivery to dispute charges. Missing this window may permanently waive
+          recovery rights for that year.
         </p>
       </section>
 
@@ -119,8 +140,8 @@ export default function MedicalOfficeCAM() {
             </Link>
           </li>
           <li>
-            <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Lease Audit Checklist
+            <Link href="/marketing/medical-practice-lease-overcharges">
+              Medical Lease Overcharge Patterns
             </Link>
           </li>
           <li>
@@ -131,51 +152,13 @@ export default function MedicalOfficeCAM() {
         </ul>
       </section>
 
-      {/* FAQ */}
-      <section className="space-y-8">
-        <h2 className="text-2xl font-semibold">
-          Medical CAM Reconciliation FAQ
-        </h2>
-
-        <div>
-          <h3 className="font-semibold">
-            Are capital improvements allowed in CAM reconciliations?
-          </h3>
-          <p className="text-gray-700">
-            Many medical leases prohibit capital expenditures from being passed
-            through as operating expenses unless tied to energy savings or
-            legally required upgrades.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="font-semibold">
-            How often do medical tenants overpay CAM?
-          </h3>
-          <p className="text-gray-700">
-            In complex outpatient buildings, discrepancies are common due to
-            allocation errors and infrastructure-heavy expense categories.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="font-semibold">
-            What is the audit window for medical CAM charges?
-          </h3>
-          <p className="text-gray-700">
-            Most leases provide 6–12 months after reconciliation delivery to
-            formally dispute charges.
-          </p>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="text-center pt-10">
         <Link
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Audit My Medical CAM Charges
+          Review My Medical CAM Reconciliation Before the Audit Window Closes
         </Link>
       </section>
 
