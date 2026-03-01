@@ -281,7 +281,9 @@ export default function Header() {
                 </div>
 
                 {/* Medical */}
-                <span className={sectionTitle}>Medical</span>
+                <Link href="/marketing/medical-hub" className={sectionTitle}>
+                  Medical
+                </Link>
                 <Link href="/marketing/medical-office-lease-audit" className={linkClass}>
                   Medical Lease Audit
                 </Link>
