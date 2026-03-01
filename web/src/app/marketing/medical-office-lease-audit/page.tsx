@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function MedicalOfficeLeaseAudit() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -24,8 +24,32 @@ export default function MedicalOfficeLeaseAudit() {
         <p className="text-gray-600">
           Imaging centers, urgent care operators, dental groups, and
           multi-specialty clinics face unique operating cost exposure that most
-          healthcare tenants never audit.
+          healthcare tenants never formally audit.
         </p>
+      </section>
+
+      {/* WHO THIS IS FOR */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">Built For Healthcare Operators</h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Independent imaging centers</li>
+          <li>Urgent care operators</li>
+          <li>Dental and specialty practices</li>
+          <li>Multi-specialty clinics</li>
+          <li>Growing multi-location healthcare platforms</li>
+        </ul>
+      </section>
+
+      {/* FINANCIAL MATH */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">What Small Errors Actually Cost</h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>10,000 SF practice × $3 PSF improper allocation = $30,000/year</p>
+          <p>15,000 SF medical tenant × $2.50 PSF overcharge = $37,500/year</p>
+          <p className="font-semibold">
+            Over a 7-year lease term, that can exceed $200,000 in preventable exposure.
+          </p>
+        </div>
       </section>
 
       {/* UNIQUE RISK */}
@@ -40,6 +64,31 @@ export default function MedicalOfficeLeaseAudit() {
           materially increase operating expenses. Without clear caps and
           exclusions, tenants absorb unpredictable pass-through risk.
         </p>
+      </section>
+
+      {/* BEFORE AFTER */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">Before vs. After a Lease Audit</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+            <p className="font-semibold">Before Audit</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Trust reconciliation summary totals</li>
+              <li>Assume landlord allocations are correct</li>
+              <li>Absorb unexplained increases</li>
+              <li>Miss admin cap violations</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+            <p className="font-semibold">After Audit</p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Identify capital misclassification</li>
+              <li>Verify admin fee cap compliance</li>
+              <li>Correct tax allocation errors</li>
+              <li>Preserve audit rights before deadlines</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       {/* COMMON OVERCHARGES */}
@@ -60,84 +109,50 @@ export default function MedicalOfficeLeaseAudit() {
         </p>
       </section>
 
-      {/* NNN RISK */}
+      {/* URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          NNN Pass-Through Risk in Healthcare Properties
-        </h2>
+        <h2 className="text-2xl font-semibold">Why Audit Timing Is Critical</h2>
         <p className="text-gray-700">
-          Insurance premiums and property tax reassessments in medical buildings
-          frequently outpace general office. Add layered CAM admin fees and
-          reserve funds, and practices often face 20–35% cost load above base rent.
-        </p>
-        <p className="text-gray-600">
-          Review full <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 underline">medical NNN expense breakdown</Link>.
+          Most medical office leases allow only 6–12 months after reconciliation
+          delivery to formally dispute charges. Missing this window can permanently
+          waive recovery rights for that reconciliation year.
         </p>
       </section>
 
-      {/* CASE STUDIES */}
+      {/* INTERNAL LINKS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Case Scenario: Imaging Center CAM Spike
-        </h2>
-        <p className="text-gray-700">
-          A 12,000 SF imaging tenant saw CAM increase from $7.50 PSF to $11.90 PSF
-          after generator replacement and security upgrades were pushed into CAM.
-          Estimated annual increase: $52,800.
-        </p>
-      </section>
-
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Case Scenario: Multi-Specialty Clinic Admin Fee Overcharge
-        </h2>
-        <p className="text-gray-700">
-          Lease capped CAM admin fees at 10%. Landlord billed 18% for two years.
-          Recoverable exposure exceeded $38,000 after reconciliation review.
-        </p>
-        <p className="text-gray-600">
-          Explore more <Link href="/marketing/medical-practice-lease-overcharges" className="text-emerald-600 underline">medical lease overcharge examples</Link>.
-        </p>
-      </section>
-
-      {/* WHAT WE FIND */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          What We Identify in Medical Leases
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Admin fee cap violations</li>
-          <li>Improper capital expense pass-through</li>
-          <li>Double-charged maintenance contracts</li>
-          <li>Tax allocation errors</li>
-          <li>Reserve fund misuse</li>
+        <h2 className="text-2xl font-semibold">Related Medical Lease Resources</h2>
+        <ul className="list-disc pl-6 space-y-2 text-emerald-700">
+          <li>
+            <Link href="/marketing/medical-office-cam-reconciliation">
+              Medical CAM Reconciliation Guide
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-nnn-expenses">
+              Medical NNN Expense Breakdown
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-practice-lease-overcharges">
+              Medical Lease Overcharge Patterns
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/multi-location-medical-lease-risk">
+              Multi-Location Medical Lease Risk
+            </Link>
+          </li>
         </ul>
-        <p className="text-gray-600">
-          Use our <Link href="/marketing/medical-office-lease-audit-checklist" className="text-emerald-600 underline">medical lease audit checklist</Link> before your reconciliation deadline.
-        </p>
-      </section>
-
-      {/* SAVINGS */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Estimated Savings Range
-        </h2>
-        <p className="text-gray-700">
-          Independent practices between 5,000–20,000 SF commonly uncover
-          $15,000–$85,000 in annual exposure depending on lease structure,
-          building age, and allocation methodology.
-        </p>
       </section>
 
       {/* FAQ */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Frequently Asked Questions
-        </h2>
+        <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
         <div className="space-y-4 text-gray-700">
           <div>
             <h3 className="font-semibold">How often should medical tenants audit their lease?</h3>
-            <p>Ideally every reconciliation cycle, and always before audit windows expire.</p>
+            <p>Ideally every reconciliation cycle and always before audit windows expire.</p>
           </div>
           <div>
             <h3 className="font-semibold">Are capital expenses always excluded from CAM?</h3>
@@ -156,7 +171,7 @@ export default function MedicalOfficeLeaseAudit() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Upload Your Medical Lease
+          Analyze My Medical Lease Before the Audit Window Closes
         </Link>
       </section>
 
