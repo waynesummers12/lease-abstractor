@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Multi-Location Medical Lease Risk | Scaling Healthcare Tenant Exposure",
+  title: "Multi-Location Medical Lease Risk (Portfolio CAM & NNN Exposure Guide)",
   description:
-    "How lease mistakes compound across multiple medical office locations. Built for dental chains, imaging networks, urgent care groups, and multi-site healthcare operators reviewing CAM and NNN risk.",
+    "How lease mistakes compound across multiple medical office locations. Portfolio-level CAM reconciliation, NNN allocation risk, admin fee caps, and capital pass-through exposure for healthcare platforms.",
 };
 
 export default function MultiLocationMedical() {
@@ -54,6 +54,16 @@ export default function MultiLocationMedical() {
         </p>
       </section>
 
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In multi-site healthcare portfolios, triple net (NNN) lease structures,
+          CAM reconciliation methodology, insurance repricing cycles, and
+          property tax reassessments may vary by location. Without centralized
+          oversight, these structural inconsistencies compound into systemic
+          portfolio-level exposure.
+        </p>
+      </section>
+
       {/* COMPOUNDING MATH */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
@@ -69,6 +79,9 @@ export default function MultiLocationMedical() {
         <p className="text-gray-700">
           What looks insignificant at a single property becomes a structural
           cash flow issue at scale.
+        </p>
+        <p>
+          See how systemic expense patterns are uncovered in our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 underline">Medical Office Lease Audit (CAM & NNN Review)</Link>.
         </p>
       </section>
 
@@ -133,22 +146,22 @@ export default function MultiLocationMedical() {
         <ul className="space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit Guide
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              Common Medical Lease Overcharges
+              Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-nnn-expenses">
-              Medical NNN Expense Exposure
+              Medical Office NNN Expense Breakdown
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Lease Audit Checklist
+              Medical Office Lease Audit Checklist
             </Link>
           </li>
         </ul>
@@ -194,6 +207,15 @@ export default function MultiLocationMedical() {
             </p>
           </div>
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <p className="text-gray-700">
+          A structured portfolio-level medical lease audit helps standardize
+          admin fee cap comparisons, validate NNN allocation methodology,
+          and identify recurring capital pass-through patterns before they
+          materially impact platform valuation.
+        </p>
       </section>
 
       {/* CTA */}
