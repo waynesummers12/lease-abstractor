@@ -96,7 +96,7 @@ export default function DisputeMedicalCAMChargesPage() {
           exclusions, amortization rules, audit rights, notice requirements,
           and reconciliation timelines. Medical leases often contain narrow
           dispute windows (commonly 12 months).
-          For deeper context, review our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 hover:underline">medical CAM reconciliation guide</Link> and <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 hover:underline">medical NNN expense breakdown</Link>.
+          For deeper context, review our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 hover:underline">Medical Office CAM Reconciliation Guide</Link> and <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 hover:underline">Medical Office NNN Expense Breakdown</Link>.
         </p>
       </section>
 
@@ -161,22 +161,22 @@ export default function DisputeMedicalCAMChargesPage() {
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit Guide
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical CAM Reconciliation Guide
+              Medical Office CAM Reconciliation Process
             </Link>
           </li>
           <li>
             <Link href="/marketing/multi-location-medical-lease-risk">
-              Multi-Location Medical Lease Risk
+              Multi-Location Medical Lease Risk & Portfolio Audit
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              Identifying Medical Lease Overcharges
+              Identifying Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
         </ul>
