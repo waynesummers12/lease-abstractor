@@ -9,6 +9,36 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalChecklist() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How often should medical practices audit CAM charges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical practices should review CAM reconciliations annually and always before the lease audit window expires."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are imaging centers at higher risk of CAM misallocation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Imaging centers often face complex HVAC, generator, and electrical infrastructure allocations that increase misallocation risk."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can tenants recover past medical lease overcharges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Recovery depends on lease language and whether dispute deadlines remain open under the audit provisions."
+        }
+      }
+    ]
+  };
     return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
@@ -188,6 +218,10 @@ export default function MedicalChecklist() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
