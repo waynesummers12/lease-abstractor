@@ -8,6 +8,36 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalOfficeLeaseAudit() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How often should medical tenants audit their lease?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ideally every reconciliation cycle and always before audit windows expire."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are capital expenses always excluded from CAM?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not always. It depends on lease definitions and amortization language."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can prior overcharges be recovered?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Recovery depends on lease audit rights and reconciliation timing."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
@@ -175,6 +205,10 @@ export default function MedicalOfficeLeaseAudit() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
