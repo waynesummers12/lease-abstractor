@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalChecklist() {
-  return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+    return (
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -18,15 +18,27 @@ export default function MedicalChecklist() {
           Medical Office Lease Audit Checklist — Healthcare Tenant Edition
         </h1>
         <p className="text-lg text-gray-700">
-          Medical office leases contain infrastructure-heavy expense categories
-          that rarely exist in traditional office properties. This checklist
-          helps imaging centers, urgent care operators, dental groups, and
-          multi-specialty practices systematically review CAM and NNN exposure.
+          Medical office buildings carry infrastructure-heavy expense categories
+          that rarely exist in traditional office properties. This checklist helps
+          imaging centers, urgent care operators, dental groups, and
+          multi-specialty practices systematically evaluate CAM and NNN exposure.
         </p>
         <p className="text-gray-600">
-          Even small allocation errors can compound into six-figure exposure
-          across a multi-year term.
+          Small allocation errors can compound into six-figure exposure across a
+          multi-year lease term.
         </p>
+      </section>
+
+      {/* FINANCIAL URGENCY */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">Why This Checklist Matters Financially</h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>12,000 SF imaging center × $2.75 PSF improper allocation = $33,000/year</p>
+          <p>15,000 SF clinic × $1.50 PSF miscalculation = $22,500/year</p>
+          <p className="font-semibold">
+            Over a 10-year lease term, that can exceed $200,000 in preventable exposure.
+          </p>
+        </div>
       </section>
 
       {/* SECTION 1 */}
@@ -74,6 +86,16 @@ export default function MedicalChecklist() {
         </ul>
       </section>
 
+      {/* AUDIT WINDOW URGENCY */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">Do Not Miss the Audit Window</h2>
+        <p className="text-gray-700">
+          Most medical office leases allow only 6–12 months after reconciliation
+          delivery to formally dispute charges. Missing this window can permanently
+          waive recovery rights for that reconciliation year.
+        </p>
+      </section>
+
       {/* EXPOSURE EXAMPLE */}
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">
@@ -85,27 +107,12 @@ export default function MedicalChecklist() {
           <p className="font-bold mt-2">Total Annual Occupancy: $555,000</p>
         </div>
         <p className="text-gray-700 mt-4">
-          A $1.50 PSF error equals $22,500 annually. Over a 10-year term, that
-          equals $225,000 in cumulative exposure.
+          A $1.50 PSF allocation error equals $22,500 annually. Over a 10-year term,
+          that equals $225,000 in cumulative exposure.
         </p>
       </section>
 
-      {/* WHY THIS MATTERS */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
-          Why This Checklist Matters for Healthcare Operators
-        </h2>
-        <p className="text-gray-700">
-          Medical tenants focus on patient care, staffing, and compliance — not
-          reconciliation math. Once audit windows close, recovery options are
-          often contractually limited.
-        </p>
-        <p className="text-gray-700">
-          Use this checklist annually before reconciliation deadlines expire.
-        </p>
-      </section>
-
-      {/* INTERNAL CLUSTER LINKS */}
+      {/* INTERNAL LINKS */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
           Related Medical Lease Resources
@@ -177,7 +184,7 @@ export default function MedicalChecklist() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Audit My Medical Lease Now
+          Analyze My Medical Lease Before the Audit Window Closes
         </Link>
       </section>
 
