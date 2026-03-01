@@ -90,11 +90,11 @@ export default function UploadLeasePage() {
   <main className="mx-auto max-w-4xl px-6 py-24">
     <div className="mb-12 text-center">
       <h1 className="text-4xl font-light tracking-tight">
-        Upload Your Lease (Free Preview)
+        Upload Your Lease (Free Preview – Medical & Commercial)
       </h1>
 
       <p className="mt-4 text-lg text-gray-800">
-        Upload your commercial lease PDF to identify CAM & NNN risks,
+        Upload your commercial or medical office lease PDF to identify CAM & NNN risks,
         hidden fees, and overcharges.
       </p>
 
