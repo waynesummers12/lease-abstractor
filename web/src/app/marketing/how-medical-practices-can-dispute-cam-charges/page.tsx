@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -11,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function DisputeMedicalCAMChargesPage() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
       {/* HERO */}
       <section className="space-y-6">
@@ -19,21 +17,37 @@ export default function DisputeMedicalCAMChargesPage() {
           How Medical Practices Can Dispute CAM Charges
         </h1>
         <p className="text-lg text-gray-700">
-          Medical office tenants have the right to review and dispute Common Area
-          Maintenance (CAM) charges when costs exceed lease caps or include
-          improperly classified capital expenses.
+          Medical office tenants often overpay thousands in CAM and NNN charges
+          due to improper admin fees, capital expense misclassification, and
+          incorrect cost allocation. Most leases grant audit rights — but only
+          within strict time windows.
         </p>
+      </section>
+
+      {/* FINANCIAL CONTEXT */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          What a CAM Dispute Can Actually Recover
+        </h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>8,000 SF practice × $3 PSF improper allocation = $24,000/year</p>
+          <p>10,000 SF imaging center × $4 PSF misclassification = $40,000/year</p>
+          <p className="font-semibold">
+            Over a 5-year term, unresolved CAM errors can exceed $150,000.
+          </p>
+        </div>
       </section>
 
       {/* STEP 1 */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">
-          Step 1: Review the Lease Language
+          Step 1: Review the Lease Language Carefully
         </h2>
         <p className="text-gray-700">
-          Confirm whether your lease contains caps on CAM admin fees,
-          exclusions for capital expenditures, audit rights, and formal
-          reconciliation timelines.
+          Confirm CAM definitions, admin fee caps, capital expenditure
+          exclusions, amortization rules, audit rights, notice requirements,
+          and reconciliation timelines. Medical leases often contain narrow
+          dispute windows (commonly 12 months).
         </p>
       </section>
 
@@ -43,20 +57,52 @@ export default function DisputeMedicalCAMChargesPage() {
           Step 2: Request Supporting Documentation
         </h2>
         <p className="text-gray-700">
-          Landlords should provide invoices, allocation schedules, and detailed
-          reconciliation statements supporting annual CAM charges.
+          Request invoices, vendor contracts, allocation schedules, and
+          supporting reconciliation detail. Tenants are generally entitled to
+          review backup documentation supporting CAM charges.
         </p>
       </section>
 
       {/* STEP 3 */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">
-          Step 3: Identify Overcharges
+          Step 3: Identify Healthcare-Specific Overcharges
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Generator replacements passed through as operating expense</li>
+          <li>Parking structure repairs classified as CAM</li>
+          <li>HVAC upgrades tied to imaging load treated as tenant expense</li>
+          <li>Admin fees exceeding stated percentage caps</li>
+          <li>Capital improvements amortized improperly</li>
+        </ul>
+      </section>
+
+      {/* DISPUTE STRUCTURE */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          How to Structure a CAM Dispute Letter
         </h2>
         <p className="text-gray-700">
-          Look for admin fees exceeding caps, capital replacements passed
-          through as operating expenses, disproportionate cost allocation,
-          and expense categories that violate lease exclusions.
+          Medical tenants typically structure disputes by:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Referencing the specific lease section governing CAM</li>
+          <li>Identifying the disputed category or calculation</li>
+          <li>Requesting detailed backup documentation</li>
+          <li>Preserving audit rights in writing</li>
+          <li>Reserving all contractual rights pending review</li>
+        </ul>
+      </section>
+
+      {/* URGENCY */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Why Timing Matters
+        </h2>
+        <p className="text-gray-700">
+          Most medical office leases require formal notice within a defined
+          audit window. Failure to dispute within that period may waive
+          recovery rights for that reconciliation year.
         </p>
       </section>
 
@@ -65,18 +111,18 @@ export default function DisputeMedicalCAMChargesPage() {
         <h2 className="text-2xl font-semibold">Related Medical Lease Resources</h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
+            <Link href="/marketing/medical-office-lease-audit">
+              Medical Office Lease Audit Guide
+            </Link>
+          </li>
+          <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical Office CAM Reconciliation Guide
+              Medical CAM Reconciliation Guide
             </Link>
           </li>
           <li>
-            <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Office Lease Audit Checklist
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/medical-office-nnn-expenses">
-              Medical Office NNN Expense Breakdown
+            <Link href="/marketing/multi-location-medical-lease-risk">
+              Multi-Location Medical Lease Risk
             </Link>
           </li>
           <li>
@@ -91,28 +137,32 @@ export default function DisputeMedicalCAMChargesPage() {
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
 
-        <div>
-          <h3 className="font-semibold">Can medical tenants legally dispute CAM charges?</h3>
-          <p className="text-gray-700">
-            Yes. Most medical office leases contain audit rights that allow tenants
-            to review and challenge CAM reconciliations within a defined time period.
-          </p>
-        </div>
+        <div className="space-y-4 text-gray-700">
+          <div>
+            <h3 className="font-semibold">Can medical tenants legally dispute CAM charges?</h3>
+            <p>
+              Yes. Most medical office leases include audit rights allowing
+              tenants to review and challenge CAM reconciliations within
+              defined timeframes.
+            </p>
+          </div>
 
-        <div>
-          <h3 className="font-semibold">What CAM charges are most commonly disputed?</h3>
-          <p className="text-gray-700">
-            Admin fees exceeding caps, capital improvements improperly passed through,
-            reserve fund allocations, and miscalculated pro-rata shares.
-          </p>
-        </div>
+          <div>
+            <h3 className="font-semibold">What CAM charges are most commonly disputed?</h3>
+            <p>
+              Admin fee cap violations, capital improvements improperly passed
+              through, reserve fund allocations, and incorrect pro-rata share
+              calculations.
+            </p>
+          </div>
 
-        <div>
-          <h3 className="font-semibold">How long do medical practices have to dispute charges?</h3>
-          <p className="text-gray-700">
-            Many leases provide a 12-month audit window after reconciliation delivery,
-            though terms vary by agreement.
-          </p>
+          <div>
+            <h3 className="font-semibold">How long do medical practices have to dispute charges?</h3>
+            <p>
+              Many leases provide a 12-month audit window after reconciliation
+              delivery, though timelines vary by agreement.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -122,7 +172,7 @@ export default function DisputeMedicalCAMChargesPage() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Audit My CAM Charges
+          Analyze My CAM Reconciliation Before the Audit Window Closes
         </Link>
       </section>
 
