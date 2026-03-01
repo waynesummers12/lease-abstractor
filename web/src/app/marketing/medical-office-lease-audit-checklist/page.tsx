@@ -2,101 +2,182 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Medical Office Lease Audit Checklist | CAM & NNN Review for Healthcare Tenants",
+  title:
+    "Medical Office Lease Audit Checklist | Complete CAM & NNN Review Framework",
   description:
-    "Download and use this medical office lease audit checklist to review CAM charges, NNN expenses, admin fee caps, HVAC allocation, generator costs, and capital expense pass-through risks.",
+    "Comprehensive medical office lease audit checklist for imaging centers, urgent care, dental and multi-specialty practices. Review CAM charges, NNN exposure, admin fee caps, capital pass-through risk, HVAC allocation and generator costs.",
 };
 
 export default function MedicalChecklist() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
-      {/* Hero */}
+      {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
-          Medical Office Lease Audit Checklist
+        <h1 className="text-4xl font-bold leading-tight">
+          Medical Office Lease Audit Checklist — Healthcare Tenant Edition
         </h1>
         <p className="text-lg text-gray-700">
-          Use this checklist to review CAM and NNN exposure in outpatient
-          buildings, imaging centers, urgent care clinics, dental practices,
-          and multi-tenant medical complexes.
+          Medical office leases contain infrastructure-heavy expense categories
+          that rarely exist in traditional office properties. This checklist
+          helps imaging centers, urgent care operators, dental groups, and
+          multi-specialty practices systematically review CAM and NNN exposure.
+        </p>
+        <p className="text-gray-600">
+          Even small allocation errors can compound into six-figure exposure
+          across a multi-year term.
         </p>
       </section>
 
-      {/* Checklist Sections */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          CAM & Operating Expense Review
+      {/* SECTION 1 */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          1. CAM & Operating Expense Controls
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Confirm CAM admin fee cap percentage and calculation method</li>
-          <li>Verify no stacking of management and admin fees</li>
+          <li>Confirm CAM admin fee cap percentage and calculation base</li>
+          <li>Verify no stacking of management, admin, or supervision fees</li>
           <li>Review capital expense exclusions and amortization rules</li>
+          <li>Confirm controllable expense caps (if applicable)</li>
           <li>Check reserve fund authorization language</li>
-          <li>Inspect parking structure and elevator allocations</li>
-          <li>Confirm compliance and security costs are contractually permitted</li>
+          <li>Inspect parking structure and elevator cost allocation</li>
+          <li>Confirm security, compliance, and monitoring costs are permitted</li>
         </ul>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Healthcare-Specific Risk Items
+      {/* SECTION 2 */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          2. Healthcare-Specific Infrastructure Risk
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Verify HVAC allocation methodology for imaging equipment</li>
+          <li>Verify HVAC allocation methodology for imaging equipment load</li>
           <li>Inspect generator testing, fuel, and replacement charges</li>
-          <li>Review electrical load cost allocation</li>
-          <li>Confirm medical waste and compliance costs are not misallocated</li>
+          <li>Review electrical balancing and high-load system costs</li>
+          <li>Confirm medical waste and compliance expenses are not misallocated</li>
           <li>Evaluate shared lobby staffing and concierge allocations</li>
+          <li>Check post-COVID ventilation upgrade amortization</li>
         </ul>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          NNN Expense Review
+      {/* SECTION 3 */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          3. NNN Expense Validation
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Validate property tax allocation formula</li>
+          <li>Validate property tax allocation formula and pro-rata share</li>
           <li>Confirm insurance premium breakdown and pass-through rights</li>
-          <li>Check for disproportionate increases year-over-year</li>
-          <li>Review reconciliation timing and audit window deadlines</li>
+          <li>Check for year-over-year spike anomalies</li>
+          <li>Confirm reconciliation delivery timing</li>
+          <li>Review formal audit window deadlines</li>
         </ul>
       </section>
 
-      {/* Urgency */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Why This Checklist Matters
+      {/* EXPOSURE EXAMPLE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">
+          Example: 15,000 SF Multi-Specialty Clinic
+        </h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-1">
+          <p>$28 Base Rent = $420,000 Annual Base</p>
+          <p>$9 NNN = $135,000 Annual NNN</p>
+          <p className="font-bold mt-2">Total Annual Occupancy: $555,000</p>
+        </div>
+        <p className="text-gray-700 mt-4">
+          A $1.50 PSF error equals $22,500 annually. Over a 10-year term, that
+          equals $225,000 in cumulative exposure.
+        </p>
+      </section>
+
+      {/* WHY THIS MATTERS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">
+          Why This Checklist Matters for Healthcare Operators
         </h2>
         <p className="text-gray-700">
-          Many medical tenants focus on operations and patient care, not lease
-          allocation math. Once reconciliation deadlines pass, recovery options
-          may be limited under the lease.
+          Medical tenants focus on patient care, staffing, and compliance — not
+          reconciliation math. Once audit windows close, recovery options are
+          often contractually limited.
+        </p>
+        <p className="text-gray-700">
+          Use this checklist annually before reconciliation deadlines expire.
         </p>
       </section>
 
-      {/* Internal Links */}
-      <section>
-        <div className="space-y-2">
-          <p>
-            Start with the <Link href="/marketing/medical-office-lease-audit" className="underline text-blue-600">medical lease audit hub</Link>.
+      {/* INTERNAL CLUSTER LINKS */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Related Medical Lease Resources
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-emerald-700">
+          <li>
+            <Link href="/marketing/medical-office-lease-audit">
+              Medical Lease Audit Hub
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-cam-reconciliation">
+              Medical CAM Reconciliation Guide
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-nnn-expenses">
+              Medical NNN Expense Breakdown
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-practice-lease-overcharges">
+              Common Medical Lease Overcharges
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      {/* FAQ */}
+      <section className="space-y-8">
+        <h2 className="text-2xl font-semibold">
+          Medical Lease Audit FAQ
+        </h2>
+
+        <div>
+          <h3 className="font-semibold">
+            How often should medical practices audit CAM charges?
+          </h3>
+          <p className="text-gray-700">
+            Annually, immediately after reconciliation delivery and before the
+            lease audit window expires.
           </p>
-          <p>
-            Understand <Link href="/marketing/medical-office-cam-reconciliation" className="underline text-blue-600">medical CAM reconciliations</Link>.
+        </div>
+
+        <div>
+          <h3 className="font-semibold">
+            Are imaging centers at higher risk of CAM misallocation?
+          </h3>
+          <p className="text-gray-700">
+            Yes. High-load HVAC, generator systems, and electrical infrastructure
+            create complex allocation categories.
           </p>
-          <p>
-            Review <Link href="/marketing/medical-office-nnn-expenses" className="underline text-blue-600">medical NNN expenses</Link>.
+        </div>
+
+        <div>
+          <h3 className="font-semibold">
+            Can tenants recover past overcharges?
+          </h3>
+          <p className="text-gray-700">
+            Recovery depends on lease language and whether dispute deadlines
+            remain open.
           </p>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="text-center pt-8">
+      <section className="text-center pt-10">
         <Link
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Upload My Medical Lease
+          Audit My Medical Lease Now
         </Link>
       </section>
 
