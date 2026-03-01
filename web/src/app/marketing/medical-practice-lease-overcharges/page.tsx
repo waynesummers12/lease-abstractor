@@ -8,6 +8,36 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalOvercharges() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can medical tenants recover past CAM overcharges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Recovery depends on the audit window and lease language. Many leases allow formal review within defined time limits after reconciliation issuance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are capital expenditures always prohibited in medical leases?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not always. Some leases allow amortized capital improvements under specific conditions, while others restrict them entirely based on lease definitions and caps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How common are medical lease overcharges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical office audits frequently uncover admin fee miscalculations, duplicate billing, capital pass-through issues, and allocation errors."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
@@ -208,6 +238,10 @@ export default function MedicalOvercharges() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
