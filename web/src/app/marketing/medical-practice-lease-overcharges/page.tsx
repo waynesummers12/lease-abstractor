@@ -9,91 +9,166 @@ export const metadata: Metadata = {
 
 export default function MedicalOvercharges() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
-      {/* Hero */}
+      {/* HERO */}
       <section className="space-y-6">
         <h1 className="text-4xl font-bold">
-          Common Lease Overcharges in Medical Properties
+          Medical Practice Lease Overcharges: Where Healthcare Tenants Lose Thousands
         </h1>
         <p className="text-lg text-gray-700">
           Medical office tenants frequently face layered and compounding CAM
-          and NNN overcharges. Specialized infrastructure and percentage-based
-          admin fees create exposure that many practices never detect.
+          and NNN overcharges. Specialized infrastructure, capital upgrades,
+          and percentage-based administrative fees create exposure that many
+          practices never detect until it is too late.
         </p>
       </section>
 
-      {/* Overcharge Types */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          1. Admin Fee Stacking Above Lease Caps
+      {/* REAL MONEY CONTEXT */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          What Overcharges Actually Cost Medical Tenants
         </h2>
-        <p className="text-gray-700">
-          Many medical leases cap CAM admin fees at 8–12%. Overcharges occur when
-          management fees are layered separately, or when percentage caps are
-          applied incorrectly to expanded expense categories.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          2. Double-Charged Maintenance Contracts
-        </h2>
-        <p className="text-gray-700">
-          Elevator servicing, HVAC maintenance, generator testing, and parking
-          structure upkeep may be embedded in both base building contracts and
-          line-item CAM allocations, resulting in duplicate billing.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          3. Capital Expenses Disguised as Operating Costs
-        </h2>
-        <p className="text-gray-700">
-          Roof replacements, structural repairs, major system upgrades, and
-          modernization projects are sometimes amortized through CAM despite
-          lease exclusions. Medical buildings see this frequently following
-          compliance-driven upgrades.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          4. Management Fees Exceeding Allowed Percentages
-        </h2>
-        <p className="text-gray-700">
-          Some leases restrict management compensation to a defined percentage
-          of operating expenses. When expenses spike, improper percentage
-          calculations can materially increase tenant exposure.
-        </p>
-      </section>
-
-      {/* Risk Framing */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Why Medical Tenants Are Vulnerable
-        </h2>
-        <p className="text-gray-700">
-          Imaging centers, urgent care clinics, dental groups, and
-          multi-specialty practices often prioritize patient operations over
-          lease math. Once reconciliation windows close, contractual recovery
-          options may be limited.
-        </p>
-      </section>
-
-      {/* Internal Linking */}
-      <section>
-        <div className="space-y-2">
-          <p>
-            Start with the <Link href="/marketing/medical-office-lease-audit" className="underline text-blue-600">medical lease audit hub</Link>.
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>10,000 SF practice × $2 PSF improper charge = $20,000/year</p>
+          <p>10,000 SF practice × $4 PSF error = $40,000/year</p>
+          <p className="font-semibold">
+            Over a 5-year term, that can exceed $200,000 in preventable exposure.
           </p>
-          <p>
-            Review <Link href="/marketing/medical-office-cam-reconciliation" className="underline text-blue-600">medical CAM reconciliations</Link>.
+        </div>
+        <p className="text-gray-700">
+          These overcharges often hide inside reconciliation statements that
+          appear routine and technical.
+        </p>
+      </section>
+
+      {/* OVERCHARGE TYPES */}
+      <section className="space-y-10">
+        <div>
+          <h2 className="text-2xl font-semibold mb-3">
+            1. Admin Fee Stacking Above Lease Caps
+          </h2>
+          <p className="text-gray-700">
+            Many medical leases cap CAM admin fees at 8–12%. Overcharges occur
+            when management fees are layered separately, when caps are applied
+            to expanded expense categories, or when percentage calculations are
+            performed incorrectly.
           </p>
-          <p>
-            Understand <Link href="/marketing/medical-office-nnn-expenses" className="underline text-blue-600">medical NNN expenses</Link>.
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-3">
+            2. Double-Charged Maintenance Contracts
+          </h2>
+          <p className="text-gray-700">
+            Elevator servicing, HVAC maintenance, generator testing, and
+            parking structure upkeep may appear both in master building
+            contracts and as individual CAM line items — resulting in
+            duplicate billing.
           </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-3">
+            3. Capital Expenses Disguised as Operating Costs
+          </h2>
+          <p className="text-gray-700">
+            Roof replacements, structural repairs, and major system upgrades
+            are sometimes amortized through CAM despite lease exclusions.
+            Medical properties frequently see this following compliance-driven
+            improvements.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-3">
+            4. Management Fees Exceeding Allowed Percentages
+          </h2>
+          <p className="text-gray-700">
+            Some leases restrict management compensation to a defined
+            percentage of operating expenses. When operating expenses spike,
+            improper percentage calculations can materially increase tenant
+            exposure.
+          </p>
+        </div>
+      </section>
+
+      {/* WHY HEALTHCARE IS TARGETED */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Why Medical Practices Are Especially Vulnerable
+        </h2>
+        <ul className="list-disc pl-6 text-gray-700 space-y-2">
+          <li>High infrastructure requirements (HVAC, electrical, backup power)</li>
+          <li>Regulatory-driven capital upgrades</li>
+          <li>Complex pro-rata share allocations in MOBs</li>
+          <li>Limited internal lease audit expertise</li>
+          <li>Short audit windows buried in lease language</li>
+        </ul>
+      </section>
+
+      {/* INTERNAL CLUSTERING */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">
+          Related Medical Lease Risk Guides
+        </h2>
+        <ul className="space-y-2 text-emerald-700">
+          <li>
+            <Link href="/marketing/medical-office-lease-audit">
+              Medical Office Lease Audit Guide
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-nnn-expenses">
+              Medical NNN Expense Breakdown
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-lease-audit-checklist">
+              Medical Lease Audit Checklist
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      {/* FAQ SECTION */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Frequently Asked Questions About Medical Lease Overcharges
+        </h2>
+
+        <div className="space-y-4 text-gray-700">
+          <div>
+            <h3 className="font-semibold">
+              Can medical tenants recover past CAM overcharges?
+            </h3>
+            <p>
+              Recovery depends on the audit window and lease language.
+              Many leases allow formal review within 12–24 months of
+              reconciliation issuance.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              Are capital expenditures always prohibited?
+            </h3>
+            <p>
+              Not always. Some leases allow amortized capital improvements.
+              The key is whether the improvement qualifies under lease
+              definitions and whether caps apply.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              How common are medical lease overcharges?
+            </h3>
+            <p>
+              In medical office audits, expense misallocations and improper
+              percentage applications are more common than tenants expect.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -103,7 +178,7 @@ export default function MedicalOvercharges() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Audit My Medical Lease
+          Analyze My Medical Lease for Overcharges
         </Link>
       </section>
 
