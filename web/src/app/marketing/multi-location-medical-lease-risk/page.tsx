@@ -8,6 +8,36 @@ export const metadata: Metadata = {
 };
 
 export default function MultiLocationMedical() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why is multi-location medical lease risk harder to detect?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each property may use different reconciliation formats, admin fee caps, capital allocation rules, and tax structures. Without centralized oversight, inconsistencies compound across the portfolio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much exposure can compound across multiple medical locations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Even $15,000–$20,000 in annual overcharges per site can exceed six figures per year when multiplied across five or more locations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should healthcare platforms perform a portfolio lease audit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Portfolio-level audits are most effective during expansion phases, refinancing events, recapitalizations, or before acquiring new locations."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
@@ -176,6 +206,10 @@ export default function MultiLocationMedical() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
