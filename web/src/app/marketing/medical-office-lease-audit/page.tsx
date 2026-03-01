@@ -1,14 +1,13 @@
 import Link from "next/link";
-import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Medical Office NNN Expenses | Healthcare Lease Cost Breakdown",
+  title: "Medical Office Lease Audit | CAM & NNN Review for Healthcare Tenants",
   description:
-    "Understand medical office NNN expenses including property taxes, insurance allocation, CAM admin fees, and reserve funds. Built for imaging centers, urgent care, and multi-specialty practices.",
+    "Audit your medical office lease for CAM overcharges, NNN pass-through errors, admin fee violations, and capital expense misallocations. Built for imaging centers, urgent care, dental and multi-specialty practices.",
 };
 
-export default function MedicalOfficeNNNExpenses() {
+export default function MedicalOfficeLeaseAudit() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
 
