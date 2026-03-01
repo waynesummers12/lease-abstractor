@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Medical Office Lease Audit Checklist | Complete CAM & NNN Review Framework",
+    "Medical Office Lease Audit Checklist (CAM & NNN Review for Healthcare Tenants)",
   description:
     "Comprehensive medical office lease audit checklist for imaging centers, urgent care, dental and multi-specialty practices. Review CAM charges, NNN exposure, admin fee caps, capital pass-through risk, HVAC allocation and generator costs.",
 };
@@ -48,10 +48,11 @@ export default function MedicalChecklist() {
           Medical Office Lease Audit Checklist — Healthcare Tenant Edition
         </h1>
         <p className="text-lg text-gray-700">
-          Medical office buildings carry infrastructure-heavy expense categories
-          that rarely exist in traditional office properties. This checklist helps
-          imaging centers, urgent care operators, dental groups, and
-          multi-specialty practices systematically evaluate CAM and NNN exposure.
+          Medical office buildings carry infrastructure-heavy operating expense
+          categories that rarely exist in traditional office properties. This
+          checklist helps imaging centers, urgent care operators, dental groups,
+          and multi-specialty practices systematically evaluate CAM reconciliation,
+          triple net (NNN) expense exposure, admin fee caps, and capital pass-through risk.
         </p>
         <p className="text-gray-600">
           Small allocation errors can compound into six-figure exposure across a
@@ -69,6 +70,13 @@ export default function MedicalChecklist() {
             Over a 10-year lease term, that can exceed $200,000 in preventable exposure.
           </p>
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <p className="text-gray-700">
+          For a deeper breakdown of allocation math, see our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 hover:underline">Medical Office CAM Reconciliation Process</Link>
+          and <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 hover:underline">Medical Office NNN Expense Breakdown</Link>.
+        </p>
       </section>
 
       {/* SECTION 1 */}
@@ -150,62 +158,35 @@ export default function MedicalChecklist() {
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Lease Audit Hub
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical CAM Reconciliation Guide
+              Medical Office CAM Reconciliation Process
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-nnn-expenses">
-              Medical NNN Expense Breakdown
+              Medical Office NNN Expense Breakdown
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              Common Medical Lease Overcharges
+              Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
         </ul>
       </section>
 
-      {/* FAQ */}
-      <section className="space-y-8">
-        <h2 className="text-2xl font-semibold">
-          Medical Lease Audit FAQ
-        </h2>
-
-        <div>
-          <h3 className="font-semibold">
-            How often should medical practices audit CAM charges?
-          </h3>
-          <p className="text-gray-700">
-            Annually, immediately after reconciliation delivery and before the
-            lease audit window expires.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="font-semibold">
-            Are imaging centers at higher risk of CAM misallocation?
-          </h3>
-          <p className="text-gray-700">
-            Yes. High-load HVAC, generator systems, and electrical infrastructure
-            create complex allocation categories.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="font-semibold">
-            Can tenants recover past overcharges?
-          </h3>
-          <p className="text-gray-700">
-            Recovery depends on lease language and whether dispute deadlines
-            remain open.
-          </p>
-        </div>
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          Healthcare real estate expense structures are materially more complex
+          than standard office assets due to imaging loads, generator redundancy,
+          infection-control HVAC systems, and regulatory compliance upgrades.
+          A structured medical lease audit helps preserve dispute rights while
+          minimizing long-term occupancy cost exposure.
+        </p>
       </section>
 
       {/* CTA */}
