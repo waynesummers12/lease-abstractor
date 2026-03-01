@@ -17,7 +17,7 @@ export default function MedicalHubPage() {
           Built specifically for medical office buildings.
         </p>
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
           Start Free Medical Lease Audit
@@ -120,7 +120,7 @@ export default function MedicalHubPage() {
       {/* FINAL CTA */}
       <section className="text-center pt-8">
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-block bg-black hover:bg-gray-900 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
           Review My Medical Lease Before Deadlines Expire

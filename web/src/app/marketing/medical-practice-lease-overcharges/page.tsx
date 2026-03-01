@@ -201,7 +201,7 @@ export default function MedicalOvercharges() {
       {/* CTA */}
       <section className="text-center pt-8">
         <Link
-          href="/app"
+          href="/app/step-1-upload"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
           Identify Medical Lease Overcharges Before the Audit Window Closes
