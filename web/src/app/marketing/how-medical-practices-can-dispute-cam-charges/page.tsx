@@ -8,6 +8,36 @@ export const metadata: Metadata = {
 };
 
 export default function DisputeMedicalCAMChargesPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can medical tenants legally dispute CAM charges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Most medical office leases include audit rights allowing tenants to review and challenge CAM reconciliations within defined timeframes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What CAM charges are most commonly disputed?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Admin fee cap violations, capital improvements improperly passed through, reserve fund allocations, and incorrect pro-rata share calculations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long do medical practices have to dispute charges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Many leases provide a 12-month audit window after reconciliation delivery, though timelines vary by agreement."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
@@ -175,6 +205,11 @@ export default function DisputeMedicalCAMChargesPage() {
           Analyze My CAM Reconciliation Before the Audit Window Closes
         </Link>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
 
     </main>
   );
