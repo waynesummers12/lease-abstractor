@@ -3,6 +3,36 @@
 import Link from "next/link";
 
 export default function MedicalHubPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What makes medical office leases different from standard office leases?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical office leases often include higher insurance premiums, specialized HVAC systems, generator infrastructure, and compliance-driven operational costs that increase CAM and NNN exposure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much do CAM and NNN charges typically add for medical tenants?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical tenants often see CAM and NNN charges add 20–35% on top of base rent, and in some markets even more."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can medical practices dispute CAM overcharges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most medical leases include audit rights allowing tenants to review and dispute improper allocations within specific time windows."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 space-y-24">
 
@@ -127,6 +157,10 @@ export default function MedicalHubPage() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
