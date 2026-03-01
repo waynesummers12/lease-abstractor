@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Medical Practice Lease Overcharges | CAM & NNN Audit Risks",
+  title: "Medical Practice Lease Overcharges (CAM & NNN Admin Fee Violations Guide)",
   description:
-    "Common medical office lease overcharges including admin fee stacking, capital expenses disguised as operating costs, double-billed maintenance, and management fees exceeding lease caps.",
+    "Medical office lease overcharges explained. Identify CAM admin fee stacking, capital expense pass-through errors, duplicate maintenance billing, and NNN percentage violations in healthcare properties.",
 };
 
 export default function MedicalOvercharges() {
@@ -54,6 +54,17 @@ export default function MedicalOvercharges() {
         </p>
       </section>
 
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In outpatient medical office buildings, lease overcharges frequently
+          stem from triple net (NNN) structures, percentage-based administrative
+          fees, insurance repricing cycles, and capital improvement allocation
+          language. Without structured CAM reconciliation review, healthcare
+          tenants may absorb expenses that exceed lease-defined caps or
+          permissible amortization provisions.
+        </p>
+      </section>
+
       {/* REAL MONEY CONTEXT */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">
@@ -70,6 +81,7 @@ export default function MedicalOvercharges() {
           These overcharges often hide inside reconciliation statements that
           appear routine and technical.
         </p>
+        For a full expense breakdown, see our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 underline">Medical Office CAM Reconciliation Process</Link>.
       </section>
 
       {/* OVERCHARGE TYPES */}
@@ -171,61 +183,28 @@ export default function MedicalOvercharges() {
         <ul className="space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit Guide
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-nnn-expenses">
-              Medical NNN Expense Breakdown
+              Medical Office NNN Expense Breakdown
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-lease-audit-checklist">
-              Medical Lease Audit Checklist
+              Medical Office Lease Audit Checklist
             </Link>
           </li>
         </ul>
       </section>
 
-      {/* FAQ SECTION */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Frequently Asked Questions About Medical Lease Overcharges
-        </h2>
-
-        <div className="space-y-4 text-gray-700">
-          <div>
-            <h3 className="font-semibold">
-              Can medical tenants recover past CAM overcharges?
-            </h3>
-            <p>
-              Recovery depends on the audit window and lease language.
-              Many leases allow formal review within 12–24 months of
-              reconciliation issuance.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold">
-              Are capital expenditures always prohibited?
-            </h3>
-            <p>
-              Not always. Some leases allow amortized capital improvements.
-              The key is whether the improvement qualifies under lease
-              definitions and whether caps apply.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-semibold">
-              How common are medical lease overcharges?
-            </h3>
-            <p>
-              In medical office audits, expense misallocations and improper
-              percentage applications are more common than tenants expect.
-            </p>
-          </div>
-        </div>
+      <section className="space-y-4">
+        <p className="text-gray-700">
+          A structured medical lease audit helps preserve dispute rights,
+          validate CAM percentage calculations, and challenge improper
+          capital pass-through allocations before audit windows expire.
+        </p>
       </section>
 
       {/* CTA */}
