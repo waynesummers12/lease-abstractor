@@ -97,6 +97,9 @@ export default function UploadLeasePage() {
         Upload your commercial or medical office lease PDF to identify CAM & NNN risks,
         hidden fees, and overcharges.
       </p>
+      <p className="mt-2 text-sm text-gray-500">
+        Built for retail, office, and medical tenants.
+      </p>
 
       <p className="mt-4 text-base text-gray-600">
         We run your PDF through our audit pipeline and estimate what you could
