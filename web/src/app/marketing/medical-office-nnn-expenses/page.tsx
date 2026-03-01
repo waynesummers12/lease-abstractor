@@ -13,7 +13,7 @@ export default function MedicalNNNExpenses() {
 
       <section className="space-y-6">
         <h1 className="text-4xl font-bold">
-          What Independent Medical Practices Actually Pay in NNN
+          What Independent Medical Practices Actually Pay in NNN Fees
         </h1>
         <p className="text-lg text-gray-700">
           NNN (Triple Net) expenses in medical office buildings often add
