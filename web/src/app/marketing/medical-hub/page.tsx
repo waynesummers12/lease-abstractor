@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export default function MedicalHubPage() {
@@ -42,9 +40,10 @@ export default function MedicalHubPage() {
           Medical Office Lease Audit & CAM Recovery Hub
         </h1>
         <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-          A complete guide for healthcare tenants navigating CAM reconciliation,
-          NNN expenses, audit rights, overcharges, and multi-location lease risk.
-          Built specifically for medical office buildings.
+          A complete guide for healthcare tenants navigating medical office CAM reconciliation,
+          triple net (NNN) lease expenses, audit rights, operating expense overcharges,
+          and multi-location portfolio risk. Built specifically for outpatient
+          medical office buildings and imaging-heavy properties.
         </p>
         <Link
           href="/app/step-1-upload"
@@ -63,7 +62,7 @@ export default function MedicalHubPage() {
           Medical office tenants often face elevated property taxes, higher
           insurance premiums, specialized HVAC requirements, and compliance-driven
           building operations. These cost structures create more opportunity for
-          misallocation and overcharges compared to standard office leases.
+          misallocation and overcharges compared to standard office leases. Explore our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">Medical Office Lease Audit (CAM & NNN Review)</Link> for a step-by-step breakdown.
         </p>
       </section>
 
@@ -76,7 +75,7 @@ export default function MedicalHubPage() {
         <div className="grid md:grid-cols-2 gap-8">
 
           <Link href="/marketing/medical-office-lease-audit" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Lease Audit Guide</h3>
+            <h3 className="font-semibold text-lg mb-2">Medical Office Lease Audit (CAM & NNN Review)</h3>
             <p className="text-gray-600">
               How healthcare tenants identify CAM and NNN overcharges before
               audit deadlines expire.
@@ -84,7 +83,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-cam-reconciliation" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical CAM Reconciliation</h3>
+            <h3 className="font-semibold text-lg mb-2">Medical Office CAM Reconciliation Process</h3>
             <p className="text-gray-600">
               Understanding annual reconciliations and common allocation errors
               in medical buildings.
@@ -92,7 +91,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-nnn-expenses" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical NNN Expenses</h3>
+            <h3 className="font-semibold text-lg mb-2">Medical Office NNN Expense Breakdown</h3>
             <p className="text-gray-600">
               Breakdown of property taxes, insurance, CAM fees, and capital
               expense pass-through risk.
@@ -100,7 +99,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-practice-lease-overcharges" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Lease Overcharges</h3>
+            <h3 className="font-semibold text-lg mb-2">Medical Lease Overcharges & Admin Fee Violations</h3>
             <p className="text-gray-600">
               Real-world examples of admin fee violations, capital pass-throughs,
               and inflated operating costs.
@@ -108,7 +107,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-cam-spikes" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical CAM Spikes</h3>
+            <h3 className="font-semibold text-lg mb-2">Medical CAM Spikes & Operating Expense Increases</h3>
             <p className="text-gray-600">
               How reassessments and insurance increases create sudden financial
               exposure for healthcare tenants.
@@ -116,7 +115,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/multi-location-medical-lease-risk" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Multi-Location Medical Risk</h3>
+            <h3 className="font-semibold text-lg mb-2">Multi-Location Medical Lease Risk & Portfolio Audit</h3>
             <p className="text-gray-600">
               Portfolio-level risk for growing medical groups and imaging
               networks.
@@ -145,6 +144,16 @@ export default function MedicalHubPage() {
             Dispute Medical CAM Charges
           </Link>
         </div>
+      </section>
+
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          Healthcare real estate carries unique infrastructure risk — including
+          high-voltage imaging loads, backup generators, infection-control HVAC
+          systems, and compliance-driven upgrades. These factors increase the
+          likelihood of CAM allocation errors and triple net lease exposure when
+          compared to traditional office assets.
+        </p>
       </section>
 
       {/* FINAL CTA */}
