@@ -9,85 +9,160 @@ export const metadata: Metadata = {
 
 export default function MultiLocationMedical() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
-      {/* Hero */}
+      {/* HERO */}
       <section className="space-y-6">
         <h1 className="text-4xl font-bold">
-          Multi-Location Medical Lease Risk
+          Multi-Location Medical Lease Risk: How Small Errors Become Six-Figure Exposure
         </h1>
         <p className="text-lg text-gray-700">
-          When medical operators expand to multiple locations, small lease
-          allocation errors compound into six-figure exposure. Admin fee caps,
-          capital pass-through rules, and CAM reconciliation language vary
-          widely between buildings.
+          Scaling from one clinic to five or fifteen locations multiplies
+          lease complexity. Minor CAM allocation inconsistencies, admin fee
+          stacking, and capital pass-through language variations can quietly
+          compound into recurring six-figure portfolio risk.
         </p>
       </section>
 
-      {/* Compounding Risk */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          How Lease Mistakes Multiply Across Locations
+      {/* COMPOUNDING MATH */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          How Small Errors Multiply Across Sites
         </h2>
+        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
+          <p>$15,000 annual overcharge × 5 locations = $75,000/year</p>
+          <p>$20,000 annual misallocation × 10 locations = $200,000/year</p>
+          <p className="font-semibold">
+            Over a 7-year portfolio horizon, systemic lease issues can exceed $1M.
+          </p>
+        </div>
         <p className="text-gray-700">
-          A $15,000 annual overcharge at one urgent care location becomes
-          $75,000 across five sites. At ten locations, that same structural
-          issue becomes a recurring six-figure cash flow drain.
+          What looks insignificant at a single property becomes a structural
+          cash flow issue at scale.
         </p>
       </section>
 
-      {/* Target Operators */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          High-Growth Medical Operators Most at Risk
+      {/* HIGH RISK OPERATORS */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Healthcare Operators Most Exposed
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Multi-location dental chains</li>
-          <li>Physical therapy groups expanding regionally</li>
-          <li>Urgent care networks</li>
-          <li>Imaging center operators</li>
-          <li>Specialty clinic platforms backed by private equity</li>
+          <li>Multi-location dental service organizations (DSOs)</li>
+          <li>Private equity–backed specialty clinic platforms</li>
+          <li>Regional urgent care networks</li>
+          <li>Imaging and radiology groups expanding rapidly</li>
+          <li>Physical therapy and rehabilitation chains</li>
+        </ul>
+        <p className="text-gray-700">
+          Growth often outpaces centralized lease oversight.
+        </p>
+      </section>
+
+      {/* OPERATIONAL BLIND SPOT */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          The Operational Blind Spot in Growing Healthcare Platforms
+        </h2>
+        <p className="text-gray-700">
+          Expanding medical operators prioritize provider recruitment,
+          reimbursement optimization, payer contracts, and patient acquisition.
+          Lease administration frequently becomes decentralized, leaving CAM
+          reconciliations and NNN allocation inconsistencies undetected.
+        </p>
+        <p className="text-gray-700">
+          Different buildings use different admin caps, tax allocation
+          structures, and capital improvement rules — creating inconsistent
+          exposure across the portfolio.
+        </p>
+      </section>
+
+      {/* PORTFOLIO STRATEGY */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Portfolio-Level Lease Review Strategy
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Standardize admin fee cap comparison across leases</li>
+          <li>Compare capital expenditure exclusions side-by-side</li>
+          <li>Identify recurring tax allocation disparities</li>
+          <li>Track reconciliation timing and audit window deadlines</li>
+          <li>Detect systemic overcharge patterns across properties</li>
+        </ul>
+        <p className="text-gray-700">
+          Reviewing leases individually misses structural patterns. Portfolio
+          analysis reveals repeatable allocation behavior.
+        </p>
+      </section>
+
+      {/* INTERNAL CLUSTERING */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">
+          Related Medical Lease Risk Resources
+        </h2>
+        <ul className="space-y-2 text-emerald-700">
+          <li>
+            <Link href="/marketing/medical-office-lease-audit">
+              Medical Office Lease Audit Guide
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-practice-lease-overcharges">
+              Common Medical Lease Overcharges
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-nnn-expenses">
+              Medical NNN Expense Exposure
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-lease-audit-checklist">
+              Medical Lease Audit Checklist
+            </Link>
+          </li>
         </ul>
       </section>
 
-      {/* Operational Blind Spot */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          The Operational Blind Spot
+      {/* FAQ */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Frequently Asked Questions About Multi-Site Medical Lease Risk
         </h2>
-        <p className="text-gray-700">
-          Growing healthcare platforms focus on provider recruitment,
-          reimbursement optimization, and patient acquisition. Lease
-          administration often becomes decentralized, leaving CAM and NNN
-          allocation inconsistencies undiscovered for years.
-        </p>
-      </section>
 
-      {/* Strategic Positioning */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Portfolio-Level Lease Review Strategy
-        </h2>
-        <p className="text-gray-700">
-          Reviewing leases individually misses systemic patterns. A
-          portfolio-level audit identifies recurring admin fee structures,
-          inconsistent capital exclusions, and disproportionate tax allocation
-          across buildings.
-        </p>
-      </section>
+        <div className="space-y-4 text-gray-700">
+          <div>
+            <h3 className="font-semibold">
+              Why is multi-location lease risk harder to detect?
+            </h3>
+            <p>
+              Each property may use different reconciliation formats, admin
+              percentages, and capital allocation structures. Without
+              centralized review, inconsistencies remain hidden.
+            </p>
+          </div>
 
-      {/* Internal Linking */}
-      <section>
-        <div className="space-y-2">
-          <p>
-            Start with the <Link href="/marketing/medical-office-lease-audit" className="underline text-blue-600">medical lease audit hub</Link>.
-          </p>
-          <p>
-            Review <Link href="/marketing/medical-practice-lease-overcharges" className="underline text-blue-600">common medical overcharges</Link>.
-          </p>
-          <p>
-            Understand <Link href="/marketing/medical-office-nnn-expenses" className="underline text-blue-600">medical NNN exposure</Link>.
-          </p>
+          <div>
+            <h3 className="font-semibold">
+              Should healthcare operators standardize lease language?
+            </h3>
+            <p>
+              As platforms scale, negotiating consistent admin caps and
+              capital exclusions reduces long-term exposure and simplifies
+              portfolio oversight.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              When should a portfolio-level audit be performed?
+            </h3>
+            <p>
+              Ideally during expansion phases, refinancing, recapitalization,
+              or before adding new locations — when structural issues can be
+              addressed early.
+            </p>
+          </div>
         </div>
       </section>
 
