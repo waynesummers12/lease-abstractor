@@ -281,7 +281,10 @@ export default function Header() {
                 </div>
 
                 {/* Medical */}
-                <Link href="/marketing/medical-hub" className={sectionTitle}>
+                <Link
+                  href="/marketing/medical-hub"
+                  className={`${sectionTitle} hover:text-white hover:font-semibold transition-all duration-200`}
+                >
                   Medical
                 </Link>
                 <Link href="/marketing/medical-office-lease-audit" className={linkClass}>
