@@ -9,6 +9,36 @@ export const metadata: Metadata = {
 };
 
 export default function CAMSpikesMedical() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why do CAM charges spike in medical office buildings?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical office buildings often face insurance volatility, property tax reassessments, compliance upgrades, HVAC infrastructure costs, and capital improvements that are sometimes pushed through CAM allocations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can capital improvements be included in CAM charges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on the lease language. Some leases allow amortized capital improvements if they reduce operating expenses, while others restrict them entirely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can medical tenants reduce exposure from CAM spikes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Medical tenants should review annual reconciliations, confirm admin fee caps, verify allocation percentages, and challenge improper capital pass-throughs within audit windows."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
 
@@ -189,6 +219,10 @@ export default function CAMSpikesMedical() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
