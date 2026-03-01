@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Medical Office NNN Expenses | What Healthcare Tenants Actually Pay",
+  title: "Medical Office NNN Expenses (Triple Net Cost Breakdown for Healthcare Tenants)",
   description:
-    "Breakdown of NNN expenses for medical office tenants including property taxes, insurance allocation, CAM admin fees, reserve funds, and real-world exposure examples.",
+    "Medical office NNN expense breakdown for healthcare tenants. Understand triple net (NNN) cost exposure including property taxes, insurance allocation, CAM admin fees, capital pass-through risk, and real-world medical lease examples.",
 };
 
 export default function MedicalNNNExpenses() {
@@ -58,6 +58,17 @@ export default function MedicalNNNExpenses() {
         </p>
       </section>
 
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In outpatient medical office buildings, triple net (NNN) lease structures
+          frequently intersect with property tax reassessment cycles, insurance
+          repricing volatility, and capital improvement allocation language.
+          Without structured reconciliation review, healthcare tenants may absorb
+          operating expense increases that exceed lease-defined caps or permissible
+          amortization terms.
+        </p>
+      </section>
+
       {/* FINANCIAL MULTIPLIER */}
       <section className="space-y-6">
         <h2 className="text-2xl font-semibold">How NNN Exposure Compounds</h2>
@@ -65,6 +76,9 @@ export default function MedicalNNNExpenses() {
           <p>15,000 SF medical tenant × $3 PSF NNN misallocation = $45,000/year</p>
           <p className="font-semibold">
             Over a 10-year lease term, that equals $450,000 in preventable exposure.
+          </p>
+          <p>
+            See how these exposures are identified in our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 underline">Medical Office CAM Reconciliation Process</Link>.
           </p>
         </div>
       </section>
@@ -186,58 +200,28 @@ export default function MedicalNNNExpenses() {
         <ul className="space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit Guide
+              Medical Office Lease Audit (CAM & NNN Review)
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical CAM Reconciliation Guide
+              Medical Office CAM Reconciliation Process
             </Link>
           </li>
           <li>
             <Link href="/marketing/medical-practice-lease-overcharges">
-              How Medical Practices Get Overcharged
+              Medical Lease Overcharges & Admin Fee Violations
             </Link>
           </li>
         </ul>
       </section>
 
-      {/* FAQ */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Frequently Asked Questions About Medical NNN Expenses
-        </h2>
-        <div className="space-y-4 text-gray-700">
-          <div>
-            <h3 className="font-semibold">
-              What percentage of rent do NNN charges usually add?
-            </h3>
-            <p>
-              For medical office tenants, NNN commonly adds 20–35% above base
-              rent. In high-tax or high-insurance markets, it can exceed 40%.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold">
-              Can medical tenants audit NNN expenses?
-            </h3>
-            <p>
-              Most leases contain audit rights with specific time windows.
-              These rights allow tenants to request documentation and dispute
-              improper allocations.
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold">
-              Are capital improvements allowed in CAM?
-            </h3>
-            <p>
-              It depends on the lease language. Some leases allow amortized
-              capital improvements; others restrict them. Clear drafting and
-              expense caps are critical.
-            </p>
-          </div>
-        </div>
+      <section className="space-y-4">
+        <p className="text-gray-700">
+          A structured medical lease audit helps preserve audit rights,
+          verify triple net allocations, and challenge improper expense
+          pass-throughs before dispute deadlines expire.
+        </p>
       </section>
 
       {/* CTA */}
