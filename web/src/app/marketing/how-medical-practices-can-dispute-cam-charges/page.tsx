@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How Medical Practices Can Dispute CAM Charges",
+  title: "How Medical Practices Can Dispute CAM Charges (Audit Rights & Recovery Guide)",
   description:
     "Step-by-step guidance for medical tenants disputing CAM charges, admin fee violations, and improper capital expense pass-through in outpatient buildings.",
 };
@@ -35,6 +35,14 @@ export default function DisputeMedicalCAMChargesPage() {
           "@type": "Answer",
           "text": "Many leases provide a 12-month audit window after reconciliation delivery, though timelines vary by agreement."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Do medical office leases typically include CAM caps?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Some medical office leases include caps on controllable CAM expenses or administrative fees, but many exclude taxes and insurance from caps. Lease language must be reviewed carefully."
+        }
       }
     ]
   };
@@ -51,6 +59,16 @@ export default function DisputeMedicalCAMChargesPage() {
           due to improper admin fees, capital expense misclassification, and
           incorrect cost allocation. Most leases grant audit rights — but only
           within strict time windows.
+        </p>
+      </section>
+
+      <section className="space-y-6">
+        <p className="text-gray-700">
+          In medical office buildings, CAM disputes often involve high-voltage
+          electrical loads, generator redundancy systems, infection-control
+          HVAC infrastructure, and healthcare compliance costs. These technical
+          components make operating expense audits more complex than traditional
+          retail or general office leases.
         </p>
       </section>
 
@@ -78,6 +96,7 @@ export default function DisputeMedicalCAMChargesPage() {
           exclusions, amortization rules, audit rights, notice requirements,
           and reconciliation timelines. Medical leases often contain narrow
           dispute windows (commonly 12 months).
+          For deeper context, review our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 hover:underline">medical CAM reconciliation guide</Link> and <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 hover:underline">medical NNN expense breakdown</Link>.
         </p>
       </section>
 
@@ -193,7 +212,25 @@ export default function DisputeMedicalCAMChargesPage() {
               delivery, though timelines vary by agreement.
             </p>
           </div>
+
+          <div>
+            <h3 className="font-semibold">Do medical office leases typically include CAM caps?</h3>
+            <p>
+              Some medical office leases include caps on controllable CAM
+              expenses or administrative fees, but many exclude taxes and
+              insurance from caps. Lease language must be reviewed carefully.
+            </p>
+          </div>
         </div>
+      </section>
+
+      <section className="space-y-4">
+        <p className="text-gray-700">
+          Need help reviewing your reconciliation before the audit window closes?
+          Our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">medical lease audit</Link>
+          identifies improper allocations, admin fee violations, and capital expense
+          misclassification while preserving your dispute rights.
+        </p>
       </section>
 
       {/* CTA */}
