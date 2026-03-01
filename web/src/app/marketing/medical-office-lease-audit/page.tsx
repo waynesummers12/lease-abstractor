@@ -1,44 +1,91 @@
 import Link from "next/link";
+import Link from "next/link";
+import type { Metadata } from "next";
 
-export default function MedicalOfficeLeaseAudit() {
+export const metadata: Metadata = {
+  title: "Medical Office NNN Expenses | Healthcare Lease Cost Breakdown",
+  description:
+    "Understand medical office NNN expenses including property taxes, insurance allocation, CAM admin fees, and reserve funds. Built for imaging centers, urgent care, and multi-specialty practices.",
+};
+
+export default function MedicalOfficeNNNExpenses() {
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
 
+      {/* Hero */}
       <section className="space-y-6">
         <h1 className="text-4xl font-bold">
-          CAM & NNN Lease Audit for Independent Medical Practices
+          Medical Office NNN Expenses Explained
         </h1>
         <p className="text-lg text-gray-700">
-          Independent medical practices frequently overpay $20,000–$100,000 per year
-          in CAM and NNN charges due to improper admin fees, capital expense
-          pass-throughs, tax allocation errors, and compliance-driven cost shifts.
-        </p>
-        <p className="text-gray-600">
-          Imaging centers, urgent care operators, dental groups, and
-          multi-specialty clinics face unique operating cost exposure that most
-          healthcare tenants never audit.
+          Independent practices often underestimate total NNN exposure. In
+          medical buildings, insurance premiums, tax reassessments, and layered
+          CAM admin fees can materially increase annual occupancy cost.
         </p>
       </section>
 
+      {/* Example Breakdown */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">
-          Why Medical Office Leases Are Uniquely Risky
+          Real Example: 10,000 SF Imaging Center
         </h2>
-        <p className="text-gray-700">
-          Outpatient buildings operate differently than retail or standard office.
-          High electrical loads for imaging equipment, generator redundancy,
-          infection-control HVAC, parking structures, and extended-hour staffing
-          materially increase operating expenses. Without clear caps and
-          exclusions, tenants absorb unpredictable pass-through risk.
+        <div className="bg-gray-50 p-6 rounded-lg text-gray-800 space-y-2">
+          <p>Base Rent: $30 PSF = $300,000</p>
+          <p>NNN: $9 PSF = $90,000</p>
+          <p className="font-semibold">Total Annual Occupancy: $390,000+</p>
+        </div>
+        <p className="mt-4 text-gray-700">
+          Small allocation errors in taxes, insurance, or CAM administration can
+          shift tens of thousands of dollars annually.
         </p>
       </section>
 
+      {/* NNN Components */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">
+          What Medical Tenants Actually Pay
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <li>Property taxes and reassessments</li>
+          <li>Building insurance allocation</li>
+          <li>Common Area Maintenance (CAM)</li>
+          <li>CAM administrative fees</li>
+          <li>Capital reserve contributions</li>
+        </ul>
+      </section>
+
+      {/* Risk Framing */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">
+          Why Healthcare Properties Carry Higher Exposure
+        </h2>
+        <p className="text-gray-700">
+          Medical buildings often carry higher operating intensity due to
+          extended hours, equipment loads, compliance infrastructure, and
+          redundancy systems. Without strict lease caps, tenants absorb these
+          increases through NNN pass-through.
+        </p>
+      </section>
+
+      {/* Internal Linking */}
+      <section>
+        <div className="space-y-2 text-gray-600">
+          <p>
+            Review the full <Link href="/marketing/medical-office-lease-audit" className="underline text-blue-600">medical lease audit hub</Link>.
+          </p>
+          <p>
+            Learn about <Link href="/marketing/medical-practice-lease-overcharges" className="underline text-blue-600">medical lease overcharges</Link>.
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
       <section className="text-center pt-10">
         <Link
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Upload Your Medical Lease
+          Audit My Medical Lease
         </Link>
       </section>
 
