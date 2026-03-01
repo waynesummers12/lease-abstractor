@@ -8,6 +8,36 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalNNNExpenses() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What percentage of rent do NNN charges usually add for medical tenants?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For medical office tenants, NNN commonly adds 20–35% above base rent and can exceed 40% in high-tax or high-insurance markets."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can medical tenants audit NNN expenses?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most medical leases include audit rights that allow tenants to review documentation and dispute improper allocations within defined time windows."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are capital improvements allowed in CAM or NNN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on lease language. Some leases allow amortized capital improvements under specific conditions, while others restrict them entirely."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
@@ -220,6 +250,10 @@ export default function MedicalNNNExpenses() {
         </Link>
       </section>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </main>
   );
 }
