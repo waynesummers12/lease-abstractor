@@ -82,6 +82,20 @@ export default function MedicalOvercharges() {
 
         <div>
           <h2 className="text-2xl font-semibold mb-3">
+            Real Example: Imaging Tenant Admin Fee Violation
+          </h2>
+          <p className="text-gray-700">
+            A 12,000 SF imaging center had CAM admin fees capped at 10%.
+            The landlord applied 18% for three consecutive years.
+          </p>
+          <p className="text-gray-700 mt-2">
+            Annual overcharge: approximately $28,800.<br />
+            Three-year exposure: over $86,000.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-semibold mb-3">
             4. Management Fees Exceeding Allowed Percentages
           </h2>
           <p className="text-gray-700">
@@ -105,6 +119,18 @@ export default function MedicalOvercharges() {
           <li>Limited internal lease audit expertise</li>
           <li>Short audit windows buried in lease language</li>
         </ul>
+      </section>
+
+      {/* TIMING URGENCY */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-semibold">
+          Why Timing Matters: Audit Windows Close Quickly
+        </h2>
+        <p className="text-gray-700">
+          Most medical office leases allow only 6–12 months after reconciliation
+          delivery to formally dispute CAM and NNN overcharges. Missing this
+          deadline can permanently waive recovery rights for that year.
+        </p>
       </section>
 
       {/* INTERNAL CLUSTERING */}
@@ -178,7 +204,7 @@ export default function MedicalOvercharges() {
           href="/app"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Analyze My Medical Lease for Overcharges
+          Identify Medical Lease Overcharges Before the Audit Window Closes
         </Link>
       </section>
 
