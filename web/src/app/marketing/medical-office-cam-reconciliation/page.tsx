@@ -9,6 +9,36 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalOfficeCAM() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a CAM reconciliation in a medical office building?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A CAM reconciliation is the annual true-up of operating expenses where medical tenants are billed for their pro-rata share of building costs such as maintenance, insurance, taxes, and shared services."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can imaging centers be overcharged in CAM allocations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Imaging centers often face higher electrical load allocations, generator expenses, HVAC adjustments, and admin fee stacking that may exceed lease-defined caps."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long do medical tenants have to dispute CAM charges?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most medical leases provide a 6 to 12 month audit window after reconciliation delivery to dispute improper allocations."
+        }
+      }
+    ]
+  };
   return (
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
 
@@ -161,6 +191,11 @@ export default function MedicalOfficeCAM() {
           Review My Medical CAM Reconciliation Before the Audit Window Closes
         </Link>
       </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
 
     </main>
   );
