@@ -47,7 +47,6 @@ export default function Footer() {
               >
                 <path d="M20.451 20.451h-3.554v-5.569c0-1.329-.024-3.039-1.852-3.039-1.853 0-2.137 1.446-2.137 2.94v5.668H9.354V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.368-1.852 3.6 0 4.266 2.37 4.266 5.455v6.287zM5.337 7.433a2.06 2.06 0 11.001-4.121 2.06 2.06 0 01-.001 4.121zM6.814 20.451H3.86V9h2.954v11.451z" />
               </svg>
-              <span className="hidden sm:inline">LinkedIn</span>
             </a>
             <span className="text-xs text-gray-400 hidden md:inline">
               Follow for CAM insights
