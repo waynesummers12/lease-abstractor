@@ -233,7 +233,7 @@ export default function RestaurantNNNOverchargesPage() {
             next reconciliation cycle.
           </p>
           <Link
-            href="/app"
+            href="/app/step-1-upload"
             className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
           >
             Start Lease Review

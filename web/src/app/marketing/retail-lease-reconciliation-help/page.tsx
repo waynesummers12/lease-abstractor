@@ -20,7 +20,7 @@ export default function RetailLeaseReconciliationHelpPage() {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
-              href="/app"
+              href="/app/step-1-upload"
               className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
             >
               Upload Your Lease
@@ -126,7 +126,7 @@ export default function RetailLeaseReconciliationHelpPage() {
               <p className="mt-2">
                 Even modest discrepancies can justify a review. For multi-unit
                 operators, small errors multiplied across sites often create
-                meaningful financial impact. <Link href="/app" className="text-emerald-600 underline">Upload your lease to evaluate your exposure.</Link>
+                meaningful financial impact. <Link href="/app/step-1-upload" className="text-emerald-600 underline">Upload your lease to evaluate your exposure.</Link>
               </p>
             </div>
           </div>
@@ -180,7 +180,7 @@ export default function RetailLeaseReconciliationHelpPage() {
             cycle.
           </p>
           <Link
-            href="/app"
+            href="/app/step-1-upload"
             className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
           >
             Start Lease Review
