@@ -144,7 +144,7 @@ export default function FranchiseCamAuditPage() {
                 How much does a CAM audit cost?
               </h3>
               <p className="mt-2">
-                CAM audit costs vary depending on lease complexity and portfolio size. Many tenant-focused reviews are priced per location, while others operate on contingency structures tied to identified savings. SaveOnLease provides transparent, fixed pricing per lease review.
+                CAM audit pricing depends on lease complexity and portfolio size, but most tenant reviews are modest compared to potential recovery. Even a single identified discrepancy often offsets the review cost. SaveOnLease offers transparent, fixed pricing per lease with no contingency surprises.
               </p>
             </div>
 
@@ -204,7 +204,7 @@ export default function FranchiseCamAuditPage() {
                   "name": "How much does a CAM audit cost?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "CAM audit costs vary depending on lease complexity and portfolio size. Many tenant-focused reviews are priced per location, while others operate on contingency structures tied to identified savings. SaveOnLease provides transparent, fixed pricing per lease review."
+                    "text": "CAM audit pricing depends on lease complexity and portfolio size, but most tenant reviews are modest compared to potential recovery. Even a single identified discrepancy often offsets the review cost. SaveOnLease offers transparent, fixed pricing per lease."
                   }
                 },
                 {
