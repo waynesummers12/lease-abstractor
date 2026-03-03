@@ -168,6 +168,9 @@ export default function TripleNetLeasePage() {
           is critical for commercial tenants seeking predictable occupancy costs.
         </p>
         <p className="text-lg text-gray-700 leading-relaxed">
+          Multi-location operators — especially restaurant and franchise tenants — face amplified exposure under NNN structures. Review our guidance on <Link href="/marketing/franchise-cam-audit" className="underline hover:text-black">franchise CAM audit strategies</Link> and common <Link href="/marketing/restaurant-nnn-overcharges" className="underline hover:text-black">restaurant NNN overcharges</Link> to understand how risks compound across portfolios.
+        </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
           Many tenant disputes do not originate from base rent, but from
           annual operating expense true‑ups. If you are reviewing year‑end
           statements, study common
@@ -387,6 +390,9 @@ export default function TripleNetLeasePage() {
             CAM audit checklist
           </Link>
           to ensure no expense category or audit deadline is overlooked.
+        </p>
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Operators managing multiple sites should also compare lease language across locations to detect systemic allocation inconsistencies. A structured <Link href="/marketing/franchise-cam-audit" className="underline hover:text-black">portfolio CAM audit approach</Link> can reveal patterns that are not visible when reviewing a single lease in isolation.
         </p>
       </section>
 
