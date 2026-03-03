@@ -74,9 +74,10 @@ export default function UploadLeasePage() {
 
       // 3️⃣ Redirect (working path)
       router.push(`/app/step-3-review?auditId=${auditId}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Upload failed:", err);
-      setError(err?.message ?? "Upload failed. Please try again.");
+      const errorMessage = err instanceof Error ? err.message : "Upload failed. Please try again.";
+      setError(errorMessage);
     } finally {
       // 🔥 ALWAYS reset state
       setUploading(false);

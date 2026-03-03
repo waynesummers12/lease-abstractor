@@ -80,6 +80,12 @@ export default function MultiLocationMedical() {
           What looks insignificant at a single property becomes a structural
           cash flow issue at scale.
         </p>
+        <p className="text-gray-700">
+          Growing healthcare platforms should treat lease oversight as a
+          structured <Link href="/marketing/franchise-cam-audit" className="text-emerald-600 underline">multi-location CAM audit strategy</Link>,
+          comparing admin caps, expense allocations, and capital exclusions
+          side-by-side across every property in the portfolio.
+        </p>
         <p>
           See how systemic expense patterns are uncovered in our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 underline">Medical Office Lease Audit (CAM & NNN Review)</Link>.
         </p>
@@ -162,6 +168,11 @@ export default function MultiLocationMedical() {
           <li>
             <Link href="/marketing/medical-office-lease-audit-checklist">
               Medical Office Lease Audit Checklist
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/franchise-cam-audit">
+              Franchise & Multi-Location CAM Audit Guide
             </Link>
           </li>
         </ul>

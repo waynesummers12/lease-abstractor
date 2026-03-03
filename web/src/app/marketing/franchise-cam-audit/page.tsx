@@ -1,0 +1,117 @@
+import Link from "next/link";
+
+export default function FranchiseCamAuditPage() {
+  return (
+    <main className="min-h-screen bg-white">
+      {/* HERO */}
+      <section className="bg-slate-900 text-white">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+            CAM & NNN Lease Audits for Franchise & Multi-Location Operators
+          </h1>
+          <p className="mt-6 text-lg text-slate-300 max-w-3xl">
+            If you operate 3–50 locations, small lease errors multiply fast. SaveOnLease uses AI to identify CAM overcharges, admin fee inflation, and hidden pass-through costs across your portfolio.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <Link
+              href="/app"
+              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
+            >
+              Upload a Lease
+            </Link>
+            <Link
+              href="/marketing/cam-audit-checklist"
+              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-semibold text-white hover:bg-slate-800"
+            >
+              Download Audit Checklist
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* PROBLEM */}
+      <section className="mx-auto max-w-5xl px-6 py-16">
+        <h2 className="text-3xl font-bold text-slate-900">
+          Why Franchise Tenants Are Most Exposed
+        </h2>
+        <div className="mt-8 grid md:grid-cols-3 gap-8 text-slate-700">
+          <div>
+            <h3 className="font-semibold text-lg">CAM Errors Multiply</h3>
+            <p className="mt-3">
+              A $12,000 annual CAM error across 8 locations becomes a $96,000 portfolio leak.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg">Inconsistent Lease Language</h3>
+            <p className="mt-3">
+              Different landlords. Different expense caps. Different admin fees. No standardized review.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg">Annual Reconciliation Surprises</h3>
+            <p className="mt-3">
+              True-ups spike unexpectedly due to insurance, tax, and capital expense pass-through adjustments.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SOLUTION */}
+      <section className="bg-slate-50">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <h2 className="text-3xl font-bold text-slate-900">
+            How SaveOnLease Helps Franchise Operators
+          </h2>
+          <p className="mt-4 text-slate-700 max-w-3xl">
+            Healthcare and urgent care operators managing multiple sites face similar exposure patterns. See our guidance on <Link href="/marketing/multi-location-medical-lease-risk" className="text-emerald-600 underline">multi-location healthcare lease risk</Link> to understand how expense leakage scales across outpatient portfolios.
+          </p>
+          <ul className="mt-8 space-y-4 text-slate-700 list-disc list-inside">
+            <li>Identifies CAM caps and expense exclusions</li>
+            <li>Flags administrative fee stacking</li>
+            <li>Highlights capital improvement pass-through risks</li>
+            <li>Calculates portfolio-wide exposure</li>
+            <li>Generates audit-ready summary report</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* ROI CALCULATOR SECTION */}
+      <section className="mx-auto max-w-5xl px-6 py-16">
+        <h2 className="text-3xl font-bold text-slate-900">
+          Portfolio Risk Multiplier
+        </h2>
+        <p className="mt-4 text-slate-700 max-w-3xl">
+          Even modest lease errors compound quickly across multi-unit operators. Reviewing just one location is not enough — risk scales with every new site.
+        </p>
+
+        <div className="mt-10 rounded-xl border border-slate-200 p-8">
+          <p className="text-lg font-semibold text-slate-900">
+            Example:
+          </p>
+          <p className="mt-4 text-slate-700">
+            10 locations × $8,500 average CAM discrepancy = <span className="font-bold text-emerald-600">$85,000 annual exposure</span>
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-slate-900 text-white">
+        <div className="mx-auto max-w-5xl px-6 py-20 text-center">
+          <h2 className="text-3xl font-bold">
+            Protect Your Portfolio Before Your Next CAM Reconciliation
+          </h2>
+          <p className="mt-6 text-slate-300">
+            Upload one lease today. Identify systemic risk across your entire franchise footprint.
+          </p>
+          <Link
+            href="/app"
+            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
+          >
+            Start Lease Review
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
