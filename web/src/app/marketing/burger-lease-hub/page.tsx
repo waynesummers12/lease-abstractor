@@ -114,6 +114,82 @@ export default function BurgerLeaseHubPage() {
           </Link>
         </div>
 
+        {/* FAQ Section */}
+        <div className="mt-20 max-w-4xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-900">
+            Frequently Asked Questions
+          </h2>
+
+          <div className="mt-6 space-y-6 text-gray-700">
+            <div>
+              <h3 className="font-semibold">
+                What percentage of revenue should burger restaurants spend on rent?
+              </h3>
+              <p className="mt-2">
+                Most operators target 6–10% of gross revenue for total occupancy
+                cost. Higher ratios may indicate lease structure or CAM issues.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                How often do CAM overcharges occur in burger franchises?
+              </h3>
+              <p className="mt-2">
+                3–7% discrepancies are commonly identified during structured
+                reconciliation reviews, especially in multi-unit portfolios.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold">
+                How long do franchisees have to challenge CAM charges?
+              </h3>
+              <p className="mt-2">
+                Most leases define audit windows between 30 and 120 days after
+                reconciliation statements are issued.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What percentage of revenue should burger restaurants spend on rent?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Most operators target 6–10% of gross revenue for total occupancy cost. Higher ratios may indicate lease structure or CAM issues."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "How often do CAM overcharges occur in burger franchises?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "3–7% discrepancies are commonly identified during structured reconciliation reviews, especially in multi-unit portfolios."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "How long do franchisees have to challenge CAM charges?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Most leases define audit windows between 30 and 120 days after reconciliation statements are issued."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
         {/* CTA */}
         <div className="mt-20 text-center">
           <Link
