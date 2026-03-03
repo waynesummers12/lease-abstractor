@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export const metadata = {
@@ -17,7 +15,7 @@ export default function BurgerRestaurantCamChecklistPage() {
         </h1>
 
         <p className="mt-4 text-lg text-gray-600">
-          A step-by-step review framework for franchisees and multi-unit operators in strip centers and inline retail.
+          A step-by-step review framework for franchisees and multi-unit operators in strip centers and inline retail. For a broader overview, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
         </p>
 
         <div className="mt-10 grid md:grid-cols-2 gap-8">
@@ -31,6 +29,9 @@ export default function BurgerRestaurantCamChecklistPage() {
               <li>Ensure vacancy is not improperly shifted to tenants</li>
               <li>Check for reallocation of anchor tenant space</li>
             </ul>
+            <p className="mt-4 text-sm text-gray-600">
+              Understanding how NNN structures affect allocations is critical — see our <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">Triple Net (NNN) guide for burger restaurants</Link>.
+            </p>
           </div>
 
           <div className="p-6 border rounded-lg bg-gray-50">
@@ -79,6 +80,9 @@ export default function BurgerRestaurantCamChecklistPage() {
             A $7,500 discrepancy per location becomes $75,000 across ten burger franchise stores.
             Reconciliation errors often go unnoticed without structured review.
           </p>
+          <p className="mt-4 text-indigo-800">
+            You can also benchmark total occupancy exposure using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link>.
+          </p>
         </div>
 
         <div className="mt-16">
@@ -89,6 +93,9 @@ export default function BurgerRestaurantCamChecklistPage() {
             Most commercial leases limit your ability to challenge CAM charges to a defined
             30–120 day window after reconciliation delivery. Once that period expires,
             overcharges may become permanently unchallengeable.
+          </p>
+          <p className="mt-4 text-gray-700 leading-relaxed">
+            Review your formal rights in our <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit Rights guide</Link> before the deadline passes.
           </p>
         </div>
 

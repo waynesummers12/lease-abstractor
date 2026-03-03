@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export const metadata = {
@@ -18,7 +16,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
 
         <p className="mt-4 text-lg text-gray-600">
           A practical guide for franchisees and multi-unit burger operators
-          reviewing CAM and NNN reconciliations.
+          reviewing CAM and NNN reconciliations. For a broader risk overview, see our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
         </p>
 
         <div className="mt-10 space-y-6 text-gray-700 leading-relaxed">
@@ -28,14 +26,14 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
 
           <p>
             Most commercial leases include audit provisions that allow tenants to
-            review and challenge Common Area Maintenance (CAM) and NNN charges.
+            review and challenge <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">CAM and NNN charges</Link>.
             However, these rights are typically subject to strict timing requirements.
           </p>
 
           <p>
             Audit windows commonly range from 30 to 120 days after the
             reconciliation statement is delivered. Missing this window may
-            permanently waive your ability to dispute charges.
+            permanently waive your ability to dispute charges. Before that window closes, follow our <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-indigo-600 font-medium hover:underline">CAM Reconciliation Checklist</Link> to structure your review.
           </p>
         </div>
 
@@ -75,6 +73,9 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
             A single overlooked discrepancy may seem minor. Across 10–20 stores,
             however, exposure can escalate quickly into six-figure annual impact.
           </p>
+          <p className="mt-4 text-indigo-800">
+            You can benchmark portfolio-level exposure using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link>.
+          </p>
         </div>
 
         <div className="mt-16">
@@ -112,7 +113,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
               </p>
               <p className="mt-2 text-gray-600">
                 Most leases provide between 30 and 120 days from delivery of the
-                reconciliation statement. Exact timing depends on lease language.
+                reconciliation statement. Exact timing depends on lease language. Learn how to identify discrepancies in our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Lease Audit overview</Link>.
               </p>
             </div>
 
