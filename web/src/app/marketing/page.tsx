@@ -44,6 +44,9 @@ export default function MarketingHomePage() {
           Used by SMB tenants nationwide to surface CAM / NNN issues before audit rights expire.
         </p>
         <p className="mx-auto mt-2 max-w-2xl text-sm font-medium tracking-wide text-gray-700">
+          <span className="mr-2 uppercase text-[10px] tracking-widest text-gray-500">
+            Industries:
+          </span>
           <Link href="/marketing/retail-lease-reconciliation-help" className="underline hover:text-black">
             Retail
           </Link>
