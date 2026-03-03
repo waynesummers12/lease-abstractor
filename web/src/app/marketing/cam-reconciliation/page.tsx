@@ -204,6 +204,9 @@ export default function CamReconciliationPage() {
           tenants may never know whether charges comply with caps, exclusions, or
           pro-rata share calculations defined in their lease.
         </p>
+        <p className="mt-4 text-gray-700">
+          Retail tenants navigating annual true‑ups may benefit from a more targeted walkthrough of reconciliation mechanics. See our dedicated guide on <Link href="/marketing/retail-lease-reconciliation-help" className="underline hover:text-black">retail lease reconciliation help</Link> for vertical‑specific risk examples and review strategies.
+        </p>
       </section>
 
       {/* ---------------- COMMON MISTAKES ---------------- */}
@@ -531,6 +534,54 @@ export default function CamReconciliationPage() {
         </p>
       </section>
 
+      {/* ---------------- VERTICAL RECONCILIATION COMPARISON ---------------- */}
+      <section className="mb-16 border-t pt-10">
+        <h2 className="mb-6 text-2xl font-semibold">
+          Retail vs Medical vs Restaurant CAM Reconciliation Differences
+        </h2>
+
+        <div className="grid gap-8 md:grid-cols-3 text-sm text-gray-700">
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-3 font-semibold text-gray-900">Retail</h3>
+            <ul className="list-disc ml-5 space-y-2">
+              <li>Shared common area allocations</li>
+              <li>High variability in snow, landscaping, and security</li>
+              <li>Admin fee stacking common</li>
+              <li>Pro‑rata share errors frequent in multi‑tenant centers</li>
+            </ul>
+            <p className="mt-4">
+              See <Link href="/marketing/retail-lease-reconciliation-help" className="underline hover:text-black">retail reconciliation guidance</Link> for vertical‑specific risk examples.
+            </p>
+          </div>
+
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-3 font-semibold text-gray-900">Medical Office</h3>
+            <ul className="list-disc ml-5 space-y-2">
+              <li>Higher HVAC and infrastructure costs</li>
+              <li>Specialized utility allocations</li>
+              <li>Longer lease terms increase compounding exposure</li>
+              <li>Capital improvements sometimes misclassified</li>
+            </ul>
+            <p className="mt-4">
+              Medical tenants should evaluate multi‑year exposure risk carefully.
+            </p>
+          </div>
+
+          <div className="rounded-lg border p-6">
+            <h3 className="mb-3 font-semibold text-gray-900">Restaurant</h3>
+            <ul className="list-disc ml-5 space-y-2">
+              <li>High maintenance & grease trap allocations</li>
+              <li>Common area cleaning spikes</li>
+              <li>Percentage rent interactions</li>
+              <li>Portfolio risk for multi‑location operators</li>
+            </ul>
+            <p className="mt-4">
+              Review common <Link href="/marketing/restaurant-nnn-overcharges" className="underline hover:text-black">restaurant NNN overcharges</Link> to understand margin impact.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ---------------- RELATED DEEP DIVES ---------------- */}
       <section className="mb-16 border-t pt-10">
         <h2 className="mb-6 text-2xl font-semibold">
@@ -542,6 +593,7 @@ export default function CamReconciliationPage() {
             <ul className="list-disc ml-6 space-y-1">
               <li><Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">CAM fee meaning</Link></li>
               <li><Link href="/marketing/triple-net-lease" className="underline hover:text-black">Triple net lease (NNN)</Link></li>
+              <li><Link href="/marketing/retail-lease-reconciliation-help" className="underline hover:text-black">Retail lease reconciliation help</Link></li>
               <li><Link href="/marketing/cam-vs-nnn" className="underline hover:text-black">CAM vs NNN comparison</Link></li>
             </ul>
           </div>
@@ -689,6 +741,30 @@ export default function CamReconciliationPage() {
                   text: "Yes. Lease uploads are private and reviewed securely.",
                 },
               },
+              {
+                "@type": "Question",
+                "name": "How does CAM reconciliation differ for retail tenants?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Retail CAM reconciliation often involves shared common area allocations, snow and landscaping variability, and pro-rata share calculations across multi-tenant shopping centers. Allocation errors are common in these environments."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are medical office CAM reconciliations more complex?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Medical office leases frequently include higher infrastructure, HVAC, and specialized utility costs. Longer lease terms can also compound reconciliation exposure over time."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What makes restaurant CAM reconciliation unique?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Restaurant tenants often face maintenance-intensive allocations, grease trap servicing, cleaning spikes, and percentage rent interactions. Multi-location operators may experience portfolio-level exposure."
+                }
+              }
             ],
           }),
         }}
@@ -696,3 +772,22 @@ export default function CamReconciliationPage() {
     </main>
   );
 }
+
+      {/* ---------------- CAM RECONCILIATION TRENDS 2026 ---------------- */}
+      <section className="mb-16 border-t pt-10">
+        <h2 className="mb-6 text-2xl font-semibold">
+          CAM Reconciliation Trends 2026
+        </h2>
+        <p className="mb-6 text-sm text-gray-500">
+          Updated: March 2026
+        </p>
+        <ul className="ml-6 list-disc space-y-2 text-gray-700">
+          <li>AI-driven reconciliation review tools are gaining adoption among national tenants.</li>
+          <li>Landlords are issuing more detailed backup documentation in response to increased tenant scrutiny.</li>
+          <li>States are clarifying audit window enforceability and notice requirements.</li>
+          <li>Expense cap language is becoming more specific in new lease drafts.</li>
+        </ul>
+        <p className="mt-6 text-gray-700">
+          Staying current on reconciliation trends and legal changes can help tenants preserve leverage and avoid overcharges.
+        </p>
+      </section>
