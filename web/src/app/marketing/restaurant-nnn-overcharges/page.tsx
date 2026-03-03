@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export default function RestaurantNNNOverchargesPage() {
@@ -149,6 +147,15 @@ export default function RestaurantNNNOverchargesPage() {
                 profitability due to tight operating margins in food service.
               </p>
             </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                How much does a restaurant NNN audit cost — and is it worth it?
+              </h3>
+              <p className="mt-2">
+                Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -181,6 +188,15 @@ export default function RestaurantNNNOverchargesPage() {
                   "acceptedAnswer": {
                     "@type": "Answer",
                     "text": "Even a few thousand dollars per year can materially impact profitability due to tight operating margins in food service."
+                  }
+                }
+                ,
+                {
+                  "@type": "Question",
+                  "name": "How much does a restaurant NNN audit cost — and is it worth it?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling."
                   }
                 }
               ]
