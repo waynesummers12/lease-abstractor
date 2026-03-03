@@ -15,7 +15,7 @@ export default function FranchiseCamAuditPage() {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
-              href="/app"
+              href="/app/step-1-upload"
               className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
             >
               Upload a Lease
