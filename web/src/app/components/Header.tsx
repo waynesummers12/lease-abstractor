@@ -269,6 +269,24 @@ export default function Header() {
                 >
                   Real Overcharge Examples
                 </Link>
+                <Link
+                  href="/marketing/retail-lease-reconciliation-help"
+                  className={linkClass}
+                >
+                  Retail Lease Reconciliation Help
+                </Link>
+                <Link
+                  href="/marketing/restaurant-nnn-overcharges"
+                  className={linkClass}
+                >
+                  Restaurant NNN Overcharges
+                </Link>
+                <Link
+                  href="/marketing/franchise-cam-audit"
+                  className={linkClass}
+                >
+                  Franchise CAM Audit
+                </Link>
 
                 <div className="px-4">
                   <div className="h-px bg-white/10 my-2"></div>
@@ -444,6 +462,15 @@ export default function Header() {
       </Link>
       <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation Checklist
+      </Link>
+      <Link href="/marketing/retail-lease-reconciliation-help" onClick={() => setMenuOpen(false)}>
+        Retail Lease Reconciliation Help
+      </Link>
+      <Link href="/marketing/restaurant-nnn-overcharges" onClick={() => setMenuOpen(false)}>
+        Restaurant NNN Overcharges
+      </Link>
+      <Link href="/marketing/franchise-cam-audit" onClick={() => setMenuOpen(false)}>
+        Franchise CAM Audit
       </Link>
 
       <span className="uppercase text-xs opacity-60 mt-4">Medical</span>
