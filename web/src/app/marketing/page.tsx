@@ -1,9 +1,10 @@
 // src/app/marketing/page.tsx
 import Link from "next/link";
 import { DemoVideo } from "./components/DemoVideo";
+import Image from "next/image";
 
 export const metadata = {
-  title: "CAM & NNN Lease Audit Built for Tenants | SaveOnLease",
+  title: "CAM & NNN Lease Audit for Retail, Restaurant & Franchise Tenants | SaveOnLease",
   description:
     "Upload your commercial lease and uncover hidden CAM / NNN overcharges, uncapped expenses, and missed audit rights — before deadlines expire.",
   alternates: {
@@ -17,13 +18,11 @@ export default function MarketingHomePage() {
       {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 pt-28 pb-20 text-center">
         <h1 className="mx-auto max-w-5xl text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
-          CAM & NNN Lease Audit
-          <span className="block">Built for Tenants</span>
+          Find Hidden CAM & NNN Overcharges
+          <span className="block">Before Your Audit Window Closes</span>
         </h1>
         <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-600">
-          Upload your commercial lease and uncover hidden CAM / NNN overcharges,
-          uncapped expenses, and missed audit rights
-          <span className="block mt-1">— before deadlines expire.</span>
+          Upload your commercial lease and instantly see potential CAM / NNN exposure — including uncapped fees, capital pass-throughs, and reconciliation risks.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -42,8 +41,13 @@ export default function MarketingHomePage() {
         </div>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
-          Used by SMB tenants nationwide to surface CAM / NNN issues before audit
-          rights expire.
+          Used by SMB tenants nationwide to surface CAM / NNN issues before audit rights expire.
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600">
+          Retail • Restaurant • Franchise • Medical Office
+        </p>
+        <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600">
+          Results generated in ~10 seconds. Secure. No subscription.
         </p>
         <p className="mx-auto mt-4 max-w-2xl text-sm text-gray-600">
           Learn more about{" "}
@@ -74,16 +78,16 @@ export default function MarketingHomePage() {
       <section className="border-y bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 py-10 grid gap-6 md:grid-cols-3 text-center">
           <div>
-            <p className="text-3xl font-semibold">$5k–$25k+</p>
-            <p className="mt-1 text-gray-600">Common savings identified</p>
+            <p className="text-3xl font-semibold">3-7%</p>
+            <p className="mt-1 text-gray-600">CAM discrepancies commonly identified</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold">30–120 days</p>
-            <p className="mt-1 text-gray-600">Typical audit windows</p>
+            <p className="text-3xl font-semibold">$5k-$25k+</p>
+            <p className="mt-1 text-gray-600">Typical annual exposure</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold">One-time</p>
-            <p className="mt-1 text-gray-600">No subscriptions or retainers</p>
+            <p className="text-3xl font-semibold">30-120 days</p>
+            <p className="mt-1 text-gray-600">Common audit windows</p>
           </div>
         </div>
       </section>
@@ -318,9 +322,11 @@ export default function MarketingHomePage() {
         No formatting is required — we securely analyze your lease as submitted.
       </p>
       <div className="rounded-2xl border shadow-sm overflow-hidden">
-        <img
+        <Image
           src="/demo/lease-example.png"
           alt="Commercial lease document example"
+          width={1200}
+          height={800}
           className="w-full h-auto"
         />
       </div>
@@ -336,9 +342,11 @@ export default function MarketingHomePage() {
         common CAM / NNN risk patterns in your lease — before any payment.
       </p>
       <div className="rounded-2xl border shadow-sm overflow-hidden">
-        <img
+        <Image
           src="/demo/free-preview.png"
           alt="Free CAM NNN exposure preview example"
+          width={1200}
+          height={800}
           className="w-full h-auto"
         />
       </div>
@@ -357,9 +365,11 @@ export default function MarketingHomePage() {
         Delivered as a professional PDF (typically 8–15 pages).
       </p>
       <div className="rounded-2xl border shadow-sm overflow-hidden">
-        <img
+        <Image
           src="/demo/final-report.png"
           alt="Full CAM NNN audit PDF example"
+          width={1200}
+          height={800}
           className="w-full h-auto"
         />
       </div>
