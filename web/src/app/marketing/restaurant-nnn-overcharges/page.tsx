@@ -16,6 +16,9 @@ export default function RestaurantNNNOverchargesPage() {
             admin fee stacking, and capital expense pass-throughs. Even small
             discrepancies can erode already tight operating margins.
           </p>
+          <p className="mt-4 text-lg text-slate-300 max-w-3xl">
+            If you are unfamiliar with how NNN structures allocate taxes, insurance, and CAM, review our foundational guide to the <Link href="/marketing/triple-net-lease" className="underline hover:text-white">triple net (NNN) lease structure</Link> before analyzing reconciliation discrepancies.
+          </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
@@ -72,7 +75,9 @@ export default function RestaurantNNNOverchargesPage() {
           <h2 className="text-3xl font-bold text-slate-900">
             Common NNN Lease Errors Found in Restaurants
           </h2>
-
+          <p className="mt-6 text-slate-700 max-w-3xl">
+            Many of these issues stem from how expenses are defined within the broader <Link href="/marketing/triple-net-lease" className="underline hover:text-black">triple net lease framework</Link>, particularly in retail centers where allocations are shared across tenants.
+          </p>
           <ul className="mt-8 space-y-4 text-slate-700 list-disc list-inside">
             <li>Administrative fee percentages exceeding lease caps</li>
             <li>Capital improvement expenses improperly allocated</li>
