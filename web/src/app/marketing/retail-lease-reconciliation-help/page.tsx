@@ -65,7 +65,7 @@ export default function RetailLeaseReconciliationHelpPage() {
 
           <ul className="mt-8 space-y-4 text-slate-700 list-disc list-inside">
             <li>
-              <Link href="/marketing/cam-admin-fees" className="text-emerald-600 underline">
+              <Link href="/marketing/cam-admin-page" className="text-emerald-600 underline">
                 Administrative fees exceeding lease caps
               </Link>
             </li>
