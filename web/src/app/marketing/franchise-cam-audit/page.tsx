@@ -95,6 +95,97 @@ export default function FranchiseCamAuditPage() {
         </div>
       </section>
 
+      {/* FAQ SECTION */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-5xl px-6 py-16">
+          <h2 className="text-3xl font-bold text-slate-900">
+            Franchise CAM Audit FAQs
+          </h2>
+
+          <div className="mt-8 space-y-8 text-slate-700">
+            <div>
+              <h3 className="font-semibold text-lg">
+                What is a franchise CAM audit?
+              </h3>
+              <p className="mt-2">
+                A franchise CAM audit reviews Common Area Maintenance (CAM), tax, insurance, and administrative charges across multiple leased locations to identify overcharges, cap violations, and improper expense allocations.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                Why are multi-location operators at higher risk?
+              </h3>
+              <p className="mt-2">
+                Small discrepancies compound across sites. A modest annual error at one property can scale into significant portfolio-wide exposure when multiplied across 5, 10, or 20 locations.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                How often should franchise tenants review CAM reconciliations?
+              </h3>
+              <p className="mt-2">
+                CAM reconciliations should be reviewed annually, ideally within the audit window defined in the lease. Early review preserves leverage and maximizes recovery potential.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                What common errors are found in franchise NNN leases?
+              </h3>
+              <p className="mt-2">
+                Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is a franchise CAM audit?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A franchise CAM audit reviews Common Area Maintenance (CAM), tax, insurance, and administrative charges across multiple leased locations to identify overcharges, cap violations, and improper expense allocations."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Why are multi-location operators at higher risk?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Small discrepancies compound across sites. A modest annual error at one property can scale into significant portfolio-wide exposure when multiplied across multiple locations."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How often should franchise tenants review CAM reconciliations?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CAM reconciliations should be reviewed annually within the audit window defined in the lease to preserve leverage and maximize recovery potential."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What common errors are found in franchise NNN leases?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+      </section>
+
       {/* CTA */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20 text-center">
