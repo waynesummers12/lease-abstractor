@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export default function RetailLeaseReconciliationHelpPage() {
@@ -16,6 +14,9 @@ export default function RetailLeaseReconciliationHelpPage() {
             allocation errors, and capital expense pass-throughs. Retail
             tenants often discover discrepancies only after margins are
             impacted.
+          </p>
+          <p className="mt-4 text-slate-300 max-w-3xl">
+            For a complete overview of retail lease risk, visit our <Link href="/marketing/retail-lease-hub" className="text-emerald-400 underline">Retail Lease Audit Hub</Link>.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -50,6 +51,9 @@ export default function RetailLeaseReconciliationHelpPage() {
           Reviewing this statement carefully is critical — especially under a
           <Link href="/marketing/triple-net-lease" className="text-emerald-600 underline">triple net (NNN) lease structure</Link> — where tenants bear most property-related expenses.
         </p>
+        <p className="mt-4 text-slate-700 max-w-3xl">
+          You can explore broader retail exposure signals in our <Link href="/marketing/retail-lease-hub" className="text-emerald-600 underline">Retail Lease Audit Hub</Link>.
+        </p>
       </section>
 
       {/* COMMON ISSUES */}
@@ -60,7 +64,11 @@ export default function RetailLeaseReconciliationHelpPage() {
           </h2>
 
           <ul className="mt-8 space-y-4 text-slate-700 list-disc list-inside">
-            <li>Administrative fees exceeding lease caps</li>
+            <li>
+              <Link href="/marketing/cam-admin-fees" className="text-emerald-600 underline">
+                Administrative fees exceeding lease caps
+              </Link>
+            </li>
             <li>Capital improvements improperly passed through</li>
             <li>Incorrect pro-rata share calculations</li>
             <li>Insurance cost markups</li>
@@ -103,9 +111,7 @@ export default function RetailLeaseReconciliationHelpPage() {
                 Can tenants dispute CAM reconciliation charges?
               </h3>
               <p className="mt-2">
-                Yes — most commercial leases define an audit window (often
-                12–24 months) during which tenants may review and dispute
-                improper allocations.
+                Yes — most commercial leases define an <Link href="/marketing/nnn-audit-rights" className="text-emerald-600 underline">audit window</Link> (often 12–24 months) during which tenants may review and dispute improper allocations.
               </p>
             </div>
 
@@ -126,7 +132,7 @@ export default function RetailLeaseReconciliationHelpPage() {
               <p className="mt-2">
                 Even modest discrepancies can justify a review. For multi-unit
                 operators, small errors multiplied across sites often create
-                meaningful financial impact. <Link href="/app/step-1-upload" className="text-emerald-600 underline">Upload your lease to evaluate your exposure.</Link>
+                meaningful financial impact. You may also review our <Link href="/marketing/commercial-lease-audit" className="text-emerald-600 underline">Commercial Lease Audit guide</Link> for a full risk assessment framework.
               </p>
             </div>
           </div>
