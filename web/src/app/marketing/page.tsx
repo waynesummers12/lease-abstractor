@@ -67,6 +67,18 @@ export default function MarketingHomePage() {
           Results generated in ~10 seconds. Secure. No subscription.
         </p>
         <p className="mx-auto mt-4 max-w-2xl text-sm text-gray-600">
+          Follow us on{" "}
+          <a
+            href="https://www.linkedin.com/company/saveonlease.com/about/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-black font-medium"
+          >
+            LinkedIn
+          </a>
+          {" "}for lease risk insights and CAM exposure updates.
+        </p>
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-gray-600">
           Learn more about{" "}
           <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
             CAM reconciliation errors
