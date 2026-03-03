@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export const metadata = {
@@ -50,6 +48,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
             Many franchisees assume corporate oversight protects them from lease risk.
             In reality, most CAM reconciliations and NNN pass-throughs are the
             responsibility of the individual operator.
+            For a full breakdown of structured review steps, see our <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-indigo-600 font-medium hover:underline">Burger Restaurant CAM Reconciliation Checklist</Link>.
           </p>
 
           <p>
@@ -67,6 +66,9 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
           <p>
             When operating margins are tight, a 3–7% discrepancy in CAM can wipe out
             location-level profitability.
+          </p>
+          <p>
+            If you want a broader overview of risk exposure across your lease, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
           </p>
         </div>
 
@@ -129,7 +131,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
               </p>
               <p className="mt-2 text-gray-600">
                 Most commercial leases include audit rights with defined deadlines.
-                Identifying discrepancies before the window closes is critical.
+                Identifying discrepancies before the window closes is critical. Learn more in our <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit Rights guide</Link>.
               </p>
             </div>
           </div>

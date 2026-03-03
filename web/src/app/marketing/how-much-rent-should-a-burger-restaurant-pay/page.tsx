@@ -59,13 +59,16 @@ export default function HowMuchRentBurgerRestaurantPage() {
 
           <p>
             Many operators focus on base rent per square foot but overlook
-            the impact of CAM, insurance, and tax pass-throughs in triple-net
-            lease structures.
+            the impact of CAM, insurance, and tax pass-throughs in{" "}
+            <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">triple-net lease structures</Link>.
           </p>
 
           <p>
             A location that appears to be 7% of revenue can quickly move into
             the 10–12% range when reconciliation discrepancies are present.
+          </p>
+          <p>
+            If discrepancies are suspected, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link> to understand common risk patterns.
           </p>
 
           <ul className="list-disc pl-6 space-y-2">
@@ -93,6 +96,9 @@ export default function HowMuchRentBurgerRestaurantPage() {
           <p className="mt-4 text-gray-700 leading-relaxed">
             If occupancy costs exceed 9–10% of gross revenue, or if year-over-year
             CAM increases outpace revenue growth, a structured lease review is warranted.
+          </p>
+          <p className="mt-4 text-gray-700 leading-relaxed">
+            You may also want to follow our structured <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-indigo-600 font-medium hover:underline">CAM Reconciliation Checklist</Link> and understand your <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-indigo-600 font-medium hover:underline">Lease Audit Rights</Link> before your audit window closes.
           </p>
         </div>
 

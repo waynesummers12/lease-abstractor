@@ -10,7 +10,7 @@ export default function FranchiseCamAuditPage() {
             CAM & NNN Lease Audits for Franchise & Multi-Location Operators
           </h1>
           <p className="mt-6 text-lg text-slate-300 max-w-3xl">
-            If you operate 3–50 locations, small lease errors multiply fast. SaveOnLease uses AI to identify CAM overcharges, admin fee inflation, and hidden pass-through costs across your portfolio.
+            If you operate 3–50 locations, small lease errors multiply fast. SaveOnLease uses AI to identify CAM overcharges, admin fee inflation, and hidden pass-through costs across your portfolio. Operators in food & beverage sectors can review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-emerald-400 underline">Burger Restaurant Lease Audit guide</Link> for vertical-specific risk insights.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -73,6 +73,9 @@ export default function FranchiseCamAuditPage() {
             <li>Calculates portfolio-wide exposure</li>
             <li>Generates audit-ready summary report</li>
           </ul>
+          <p className="mt-6 text-slate-700">
+            For structured reconciliation review steps, see our <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-emerald-600 underline">Burger Restaurant CAM Reconciliation Checklist</Link>. Understanding audit deadlines is also critical — review our <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-emerald-600 underline">Lease Audit Rights guide</Link>.
+          </p>
         </div>
       </section>
 
@@ -135,7 +138,7 @@ export default function FranchiseCamAuditPage() {
                 What common errors are found in franchise NNN leases?
               </h3>
               <p className="mt-2">
-                Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers.
+                Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers. See detailed industry examples in our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-emerald-600 underline">Burger Restaurant Rent Benchmark guide</Link>.
               </p>
             </div>
 
