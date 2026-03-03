@@ -138,6 +138,24 @@ export default function FranchiseCamAuditPage() {
                 Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers.
               </p>
             </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                How much does a CAM audit cost?
+              </h3>
+              <p className="mt-2">
+                CAM audit costs vary depending on lease complexity and portfolio size. Many tenant-focused reviews are priced per location, while others operate on contingency structures tied to identified savings. SaveOnLease provides transparent, fixed pricing per lease review.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-lg">
+                Can tenants recover past CAM overcharges?
+              </h3>
+              <p className="mt-2">
+                In many cases, yes — if the lease audit window remains open. Most commercial leases define a specific period (often 12–24 months) during which tenants can dispute reconciliation charges and seek recovery of improper allocations.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -178,6 +196,23 @@ export default function FranchiseCamAuditPage() {
                   "acceptedAnswer": {
                     "@type": "Answer",
                     "text": "Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers."
+                  }
+                }
+                ,
+                {
+                  "@type": "Question",
+                  "name": "How much does a CAM audit cost?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CAM audit costs vary depending on lease complexity and portfolio size. Many tenant-focused reviews are priced per location, while others operate on contingency structures tied to identified savings. SaveOnLease provides transparent, fixed pricing per lease review."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can tenants recover past CAM overcharges?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "In many cases, yes — if the lease audit window remains open. Most commercial leases define a specific period during which tenants can dispute reconciliation charges and seek recovery of improper allocations."
                   }
                 }
               ]
