@@ -43,8 +43,22 @@ export default function MarketingHomePage() {
         <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
           Used by SMB tenants nationwide to surface CAM / NNN issues before audit rights expire.
         </p>
-        <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600">
-          Retail • Restaurant • Franchise • Medical Office
+        <p className="mx-auto mt-2 max-w-2xl text-sm font-medium tracking-wide text-gray-700">
+          <Link href="/marketing/retail-lease-reconciliation-help" className="underline hover:text-black">
+            Retail
+          </Link>
+          {" • "}
+          <Link href="/marketing/restaurant-nnn-overcharges" className="underline hover:text-black">
+            Restaurant
+          </Link>
+          {" • "}
+          <Link href="/marketing/franchise-cam-audit" className="underline hover:text-black">
+            Franchise
+          </Link>
+          {" • "}
+          <Link href="/marketing/medical-office-lease-audit" className="underline hover:text-black">
+            Medical Office
+          </Link>
         </p>
         <p className="mx-auto mt-2 max-w-2xl text-sm text-gray-600">
           Results generated in ~10 seconds. Secure. No subscription.
