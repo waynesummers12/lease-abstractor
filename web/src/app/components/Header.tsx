@@ -24,9 +24,6 @@ export default function Header() {
   }, [menuOpen]);
   const [learnOpen, setLearnOpen] = useState(false);
   const learnRef = useRef<HTMLDivElement | null>(null);
-  type AuditCTAProps = {
-  variant?: "education" | "urgency" | "exposure";
-};
 
 
   useEffect(() => {
@@ -291,6 +288,33 @@ export default function Header() {
                 <div className="px-4">
                   <div className="h-px bg-white/10 my-2"></div>
                 </div>
+
+                {/* Industries */}
+                <span className={sectionTitle}>Industries</span>
+                <Link
+                  href="/marketing/retail-lease-reconciliation-help"
+                  className={linkClass}
+                >
+                  Retail
+                </Link>
+                <Link
+                  href="/marketing/restaurant-nnn-overcharges"
+                  className={linkClass}
+                >
+                  Restaurant
+                </Link>
+                <Link
+                  href="/marketing/franchise-cam-audit"
+                  className={linkClass}
+                >
+                  Franchise
+                </Link>
+                <Link
+                  href="/marketing/medical-hub"
+                  className={linkClass}
+                >
+                  Medical
+                </Link>
 
                 {/* Medical */}
                 <Link
