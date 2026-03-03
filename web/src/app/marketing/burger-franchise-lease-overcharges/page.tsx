@@ -28,7 +28,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
           <div className="p-4 bg-gray-50 rounded-lg border">
             <p className="font-semibold text-gray-900">Triple Net exposure</p>
             <p className="text-gray-600 mt-1">
-              Taxes, insurance, and maintenance often passed through without scrutiny.
+              Taxes, insurance, and maintenance often passed through without scrutiny. Learn how these structures work in our <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">Triple Net (NNN) guide for burger restaurants</Link>.
             </p>
           </div>
           <div className="p-4 bg-gray-50 rounded-lg border">
@@ -68,6 +68,9 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
             location-level profitability.
           </p>
           <p>
+            You can also benchmark total occupancy cost using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link> to see if your location is outside the healthy 6–10% range.
+          </p>
+          <p>
             If you want a broader overview of risk exposure across your lease, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
           </p>
         </div>
@@ -94,6 +97,9 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
             <li>✔ Highlight reconciliation irregularities</li>
             <li>✔ Surface audit window deadlines</li>
           </ul>
+          <p className="mt-6 text-gray-700">
+            Multi-brand franchise groups can also review our broader <Link href="/marketing/franchise-cam-audit" className="text-indigo-600 font-medium hover:underline">Franchise CAM Audit overview</Link> for portfolio-wide exposure strategies.
+          </p>
         </div>
 
         <div className="mt-16 text-center">
