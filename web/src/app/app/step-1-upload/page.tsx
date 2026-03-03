@@ -91,7 +91,7 @@ export default function UploadLeasePage() {
   <main className="mx-auto max-w-4xl px-6 py-24">
     <div className="mb-12 text-center">
       <h1 className="text-4xl font-light tracking-tight">
-        Upload Your Lease (Free Preview – Medical & Commercial)
+        Upload Your Lease (Free Preview – Retail, Restaurant, Franchise & Medical)
       </h1>
 
       <p className="mt-4 text-lg text-gray-800">
@@ -99,7 +99,7 @@ export default function UploadLeasePage() {
         hidden fees, and overcharges.
       </p>
       <p className="mt-2 text-sm text-gray-500">
-        Built for retail, office, and medical tenants.
+        Built for retail operators, restaurant owners, franchisees, office, and medical tenants.
       </p>
 
       <p className="mt-4 text-base text-gray-600">
