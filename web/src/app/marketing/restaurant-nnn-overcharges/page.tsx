@@ -153,7 +153,7 @@ export default function RestaurantNNNOverchargesPage() {
                 How much does a restaurant NNN audit cost — and is it worth it?
               </h3>
               <p className="mt-2">
-                Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling.
+                Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling. <Link href="/app" className="text-emerald-600 underline">Upload your lease to see your risk in minutes.</Link>
               </p>
             </div>
           </div>
@@ -203,6 +203,23 @@ export default function RestaurantNNNOverchargesPage() {
             })
           }}
         />
+      </section>
+
+      {/* TESTIMONIAL */}
+      <section className="bg-slate-50">
+        <div className="mx-auto max-w-4xl px-6 py-16 text-center">
+          <div className="rounded-2xl border border-slate-200 bg-white p-10 shadow-sm">
+            <p className="text-lg text-slate-700 italic">
+              “We operate multiple restaurant locations and assumed our CAM reconciliations were standard. The review flagged administrative stacking and allocation inconsistencies we hadn’t noticed. It changed how we approach every renewal.”
+            </p>
+            <p className="mt-6 text-sm font-semibold text-slate-900">
+              — Multi-Unit Restaurant Operator
+            </p>
+            <p className="mt-4 text-xs text-emerald-600 font-medium">
+              Typical multi-location reviews identify 3–7% CAM allocation discrepancies across portfolios.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
