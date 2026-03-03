@@ -310,6 +310,18 @@ export default function Header() {
                   Franchise
                 </Link>
                 <Link
+                  href="/marketing/burger-restaurant-lease-audit"
+                  className={linkClass}
+                >
+                  Burger Restaurants
+                </Link>
+                <Link
+                  href="/marketing/burger-franchise-lease-overcharges"
+                  className={linkClass}
+                >
+                  Burger Franchise Overcharges
+                </Link>
+                <Link
                   href="/marketing/medical-hub"
                   className={linkClass}
                 >
@@ -495,6 +507,18 @@ export default function Header() {
       </Link>
       <Link href="/marketing/franchise-cam-audit" onClick={() => setMenuOpen(false)}>
         Franchise CAM Audit
+      </Link>
+      <Link href="/marketing/burger-restaurant-lease-audit" onClick={() => setMenuOpen(false)}>
+        Burger Restaurants
+      </Link>
+      <Link href="/marketing/burger-franchise-lease-overcharges" onClick={() => setMenuOpen(false)}>
+        Burger Franchise Overcharges
+      </Link>
+      <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
+        Burger CAM Checklist
+      </Link>
+      <Link href="/marketing/burger-restaurant-lease-audit-rights" onClick={() => setMenuOpen(false)}>
+        Burger Audit Rights
       </Link>
 
       <span className="uppercase text-xs opacity-60 mt-4">Medical</span>

@@ -232,7 +232,30 @@ const sections: Section[] = [
       },
     ],
   },
-    {
+  {
+    label: "Industries",
+    articles: [
+      {
+        title: "Retail Lease Audit Hub",
+        description:
+          "Central resource for retail tenants reviewing CAM reconciliation, NNN charges, audit rights, and occupancy risk exposure.",
+        href: "/marketing/retail-lease-hub",
+      },
+      {
+        title: "Burger Restaurant Lease Audit Hub",
+        description:
+          "Complete resource center for burger franchisees and multi-unit operators reviewing CAM, NNN, audit rights, reconciliation risks, and occupancy exposure.",
+        href: "/marketing/burger-lease-hub",
+      },
+      {
+        title: "Franchise CAM Audit Overview",
+        description:
+          "Portfolio-level CAM and NNN audit strategies for franchisees and multi-location operators.",
+        href: "/marketing/franchise-cam-audit",
+      },
+    ],
+  },
+  {
     label: "Tools & Analysis",
     articles: [
       {
@@ -287,8 +310,12 @@ export default function LearnPage() {
       setStatus("success");
 
       // 🔥 GA4 lead tracking event
-      if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", "generate_lead", {
+      if (typeof window !== "undefined") {
+        const w = window as unknown as {
+          gtag?: (...args: unknown[]) => void;
+        };
+
+        w.gtag?.("event", "generate_lead", {
           event_category: "Checklist",
           event_label: "CAM Audit Checklist",
           value: 1,
@@ -296,7 +323,7 @@ export default function LearnPage() {
       }
 
       setEmail("");
-    } catch (err) {
+    } catch {
       setStatus("error");
     }
   };
