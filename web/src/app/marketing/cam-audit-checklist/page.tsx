@@ -136,7 +136,7 @@ export default function CamAuditChecklistPage() {
             <li>• Financial exposure compounding models</li>
           </ul>
           <p className="mt-8 text-gray-700">
-            If you're new to CAM structures, you may also want to review our{" "}
+            If you&apos;re new to CAM structures, you may also want to review our{" "}
             <Link href="/marketing/common-area-maintenance-cam" className="underline">
               overview of Common Area Maintenance (CAM)
             </Link>{" "}
