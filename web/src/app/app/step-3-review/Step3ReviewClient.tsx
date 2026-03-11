@@ -261,7 +261,9 @@ export default function Step3ReviewClient() {
       <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
         <h2 className="text-lg font-semibold">
           Unlock the Full CAM / NNN Audit — Limited Launch Price: $49.99
-         (Regular Price $249)
+          <span className="block text-sm font-normal text-gray-500 mt-1">
+            (Regular Price $249)
+          </span>
         </h2>
 
         <p className="text-gray-700">
