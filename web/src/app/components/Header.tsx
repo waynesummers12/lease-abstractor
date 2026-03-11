@@ -380,7 +380,7 @@ export default function Header() {
             href="/marketing/referral"
              className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
             >
-            Refer Clients & Earn
+            Refer Clients (Earn 20%)
           </Link>
           <Link
             href="/marketing/pricing"
@@ -562,7 +562,7 @@ export default function Header() {
         How It Works
       </Link>
       <Link href="/marketing/referral" onClick={() => setMenuOpen(false)}>
-       Refer Clients & Earn
+       Refer Clients (Earn 20%)
        </Link>
       <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
         Pricing
