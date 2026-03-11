@@ -263,7 +263,7 @@ Thought it might be useful.`;
             <li>Are there expense categories that should be excluded?</li>
             <li>Has the tenant been overpaying compared to similar leases?</li>
             <li>Are there negotiation opportunities before renewal?</li>
-            <li>Is there hidden risk or landlord&#39;s-friendly language in the lease?</li>
+            <li>Is there hidden risk or landlord-friendly language in the lease?</li>
           </ol>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -333,6 +333,69 @@ Thought it might be useful.`;
             </div>
           </div>
         </div>
+
+<div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
+  <h2 className="text-2xl font-semibold mb-4">Example Client Result</h2>
+
+  <p className="text-gray-700 mb-4">
+    One early analysis of a multi-location dental practice identified
+    significant lease cost issues that were previously unnoticed.
+  </p>
+
+  <div className="bg-white border rounded-lg p-5">
+    <div className="text-green-700 font-bold text-lg mb-2">
+      Dental Practice — Potential Savings Identified
+    </div>
+
+    <ul className="list-disc pl-6 space-y-2 text-gray-700">
+      <li>CAM reconciliation discrepancies flagged</li>
+      <li>Administrative fee calculations reviewed</li>
+      <li>Expense allocations identified for negotiation</li>
+    </ul>
+
+    <div className="mt-4 text-green-700 font-semibold text-lg">
+      Estimated savings opportunity: $14,800
+    </div>
+  </div>
+</div>
+
+<div className="bg-white border rounded-xl p-6 mt-10">
+  <h2 className="text-2xl font-semibold mb-4">
+    How Brokers Earn $500+ per Month Referring SaveOnLease
+  </h2>
+
+  <p className="text-gray-600 mb-6">
+    Brokers and tenant advisors often review dozens of leases each month.
+    Simply sharing your referral link during lease reviews can generate
+    recurring referral income.
+  </p>
+
+  <div className="grid md:grid-cols-3 gap-4">
+
+    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+      <div className="text-lg font-semibold text-gray-700">10 Audits</div>
+      <div className="text-2xl font-bold text-green-700 mt-1">$98</div>
+      <div className="text-sm text-gray-600 mt-1">per month</div>
+    </div>
+
+    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+      <div className="text-lg font-semibold text-gray-700">25 Audits</div>
+      <div className="text-2xl font-bold text-green-700 mt-1">$245</div>
+      <div className="text-sm text-gray-600 mt-1">per month</div>
+    </div>
+
+    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+      <div className="text-lg font-semibold text-gray-700">50 Audits</div>
+      <div className="text-2xl font-bold text-green-700 mt-1">$490</div>
+      <div className="text-sm text-gray-600 mt-1">per month</div>
+    </div>
+
+  </div>
+
+  <p className="text-sm text-gray-500 mt-4">
+    Example estimates assume a $49 lease audit and a 20% referral commission.
+  </p>
+</div>
 
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
           <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
