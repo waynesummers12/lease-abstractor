@@ -21,10 +21,10 @@ export default function MarketingHomePage() {
           Check Your Commercial Lease for Hidden Costs
           <span className="block">Before CAM & NNN Overcharges Add Up</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-3xl text-lg font-medium text-gray-800">
+        <p className="mx-auto mt-6 max-w-3xl text-lg font-semibold text-green-800">
           Free CAM / NNN risk scan — results in ~10 seconds.
         </p>
-        <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-600">
+        <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-500">
           Upload your commercial lease and instantly see potential CAM / NNN exposure — including uncapped fees, capital pass-throughs, and reconciliation risks.
         </p>
 
@@ -37,7 +37,7 @@ export default function MarketingHomePage() {
           </Link>
           <Link
             href="/marketing/what-we-find"
-            className="rounded-xl border px-8 py-4 text-sm font-semibold text-gray-900 hover:bg-gray-50 transition"
+            className="rounded-xl border px-8 py-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
           >
             See What We Check
           </Link>
