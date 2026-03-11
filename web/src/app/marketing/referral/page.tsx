@@ -165,6 +165,28 @@ Thought it might be useful.`;
           </p>
         </div>
 
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">
+            Industries Already Using SaveOnLease
+          </h2>
+
+          <p className="text-gray-600 mb-6">
+            Advisors across multiple industries are already sharing SaveOnLease
+            with their clients to quickly identify lease savings and negotiation
+            opportunities.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Dental Practices</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Medical Offices</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Retail Chains</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Franchise Operators</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Restaurants</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Fitness Studios</span>
+            <span className="bg-white border px-4 py-2 rounded-lg text-sm font-medium">Professional Offices</span>
+          </div>
+        </div>
+
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
           <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
 
