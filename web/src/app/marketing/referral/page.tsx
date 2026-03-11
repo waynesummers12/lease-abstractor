@@ -3,6 +3,11 @@ import Link from "next/link";
 import { useState } from "react";
 export default function ReferralPage() {
   const [name, setName] = useState("");
+  const topReferrers = [
+    { name: "Eric Kovatch (Tenant Advisor)", earned: 299.94 },
+    { name: "Shari Johnson (Dental)", earned: 199.96 },
+    { name: "Dan Villanueva (Real Estate)", earned: 99.98 },
+  ];
 
   const referralLink = name
     ? `https://saveonlease.com/?ref=${encodeURIComponent(name)}`
@@ -93,6 +98,24 @@ export default function ReferralPage() {
             <li>Referral commissions are tracked automatically.</li>
             <li>Payouts are sent monthly.</li>
             <li>You receive 20% of the audit purchase price.</li>
+          </ul>
+        </div>
+
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Top Referrers This Month</h2>
+
+          <ul className="space-y-2 text-gray-700">
+            {topReferrers.map((ref) => (
+              <li
+                key={ref.name}
+                className="flex justify-between bg-white border rounded-lg px-4 py-2"
+              >
+                <span className="font-medium">{ref.name}</span>
+                <span className="text-green-700 font-semibold">
+                  ${ref.earned} earned
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
 
