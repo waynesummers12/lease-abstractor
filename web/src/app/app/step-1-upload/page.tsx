@@ -1,4 +1,3 @@
-// web/src/app/step-1-upload/page.tsx
 "use client";
 
 /**
@@ -118,18 +117,22 @@ export default function UploadLeasePage() {
         loading={uploading}
       />
 
+      <p className="mt-4 text-sm font-semibold text-gray-800">
+        No credit card. No commitment.
+      </p>
+
+      <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-6 text-center">
+        <p className="text-base font-semibold text-green-900">
+          💰 Typical tenants uncover $5,000–$50,000+ in annual CAM exposure
+        </p>
+        <p className="mt-2 text-sm text-green-800">
+          Upload your lease to see your estimated avoidable cost before deciding on a full audit.
+        </p>
+      </div>
+
       <p className="mt-3 text-xs text-gray-500">
         ⏱ Results generated in ~10 seconds.
       </p>
-
-      <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-4 text-center">
-        <p className="text-sm font-semibold text-green-900">
-          💰 Typical tenants uncover $5,000–$50,000+ in annual CAM exposure
-        </p>
-        <p className="mt-1 text-sm text-green-800">
-          See your estimated avoidable cost before deciding on a full audit.
-        </p>
-      </div>
 
       <p className="mt-4 text-sm text-gray-500">
         🔒 Your lease is encrypted, never shared, and deleted after your audit.
