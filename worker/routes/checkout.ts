@@ -49,7 +49,7 @@ router.post("/create", async (ctx) => {
     return;
   }
 
-  const auditId = (body as { auditId?: string }).auditId;
+const { auditId, ref } = body as { auditId?: string; ref?: string };
 
   if (!auditId || typeof auditId !== "string") {
     ctx.response.status = 400;
@@ -115,6 +115,7 @@ router.post("/create", async (ctx) => {
       cancel_url: `${PUBLIC_APP_URL}/cancel`,
       metadata: {
         auditId,
+        referrer_code: ref ?? "none",
       },
     });
 

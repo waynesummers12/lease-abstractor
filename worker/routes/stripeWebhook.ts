@@ -124,6 +124,31 @@ const rawBody = await body.value;
     console.log("✅ Audit marked paid:", auditId);
 
     /* --------------------------------------------------
+       OPTIONAL: RECORD REFERRAL COMMISSION
+       (SAFE — DOES NOT AFFECT PAYMENT FLOW)
+    -------------------------------------------------- */
+
+    try {
+      const referrer = session.metadata?.referrer_code ?? "none";
+
+      if (referrer && referrer !== "none") {
+        const amountPaid = (session.amount_total ?? 0) / 100;
+        const commission = amountPaid * 0.20;
+
+        await supabase.from("referrals").insert({
+          audit_id: auditId,
+          referrer_code: referrer,
+          amount_paid: amountPaid,
+          commission,
+        });
+
+        console.log("💰 Referral recorded:", referrer, commission);
+      }
+    } catch (err) {
+      console.error("⚠️ Referral tracking failed (non‑blocking):", err);
+    }
+
+    /* --------------------------------------------------
        2) FETCH ANALYSIS
     -------------------------------------------------- */
     const { data, error } = await supabase
