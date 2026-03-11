@@ -187,6 +187,33 @@ Thought it might be useful.`;
           </div>
         </div>
 
+        <div className="bg-white border rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Average Lease Savings Identified</h2>
+
+          <p className="text-gray-600 mb-6">
+            Based on early analyses, many businesses discover meaningful savings
+            opportunities in their leases through overcharges, CAM reconciliations,
+            and negotiation opportunities.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-700">$12,400</div>
+              <div className="text-sm text-gray-600 mt-1">Dental Offices</div>
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-700">$18,700</div>
+              <div className="text-sm text-gray-600 mt-1">Retail Chains</div>
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-700">$9,800</div>
+              <div className="text-sm text-gray-600 mt-1">Medical Offices</div>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
           <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
 
