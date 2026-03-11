@@ -156,10 +156,14 @@ Thought it might be useful.`;
             </Link>
           </div>
           <div className="mt-6 border-t pt-4">
-            <p className="text-sm text-gray-500">
-              💡 <span className="font-medium">Pro Tip:</span> Add your referral link to your email signature so clients can instantly check leases when questions come up.
-            </p>
-          </div>
+          <p className="text-sm text-gray-500">
+          💡 <span className="font-medium">Pro Tip:</span> Add your referral link to your email signature so clients can instantly check leases when questions come up.
+           </p>
+
+  <p className="text-xs text-gray-400 mt-1">
+    Many brokers include this link when reviewing leases with clients.
+  </p>
+</div>
         </div>
         <h2 className="text-2xl font-semibold mb-4">Who This Is For</h2>
 
