@@ -225,6 +225,115 @@ Thought it might be useful.`;
           </div>
         </div>
 
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Broker Deal Review Tool</h2>
+
+          <p className="text-gray-700 mb-4">
+            Many brokers quickly run a lease through SaveOnLease before a renewal
+            or negotiation to identify potential CAM overcharges, expense
+            allocations, and negotiation opportunities.
+          </p>
+
+          <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-6">
+            <li>Quickly review a client lease before renewal</li>
+            <li>Identify CAM reconciliation issues</li>
+            <li>Spot negotiation leverage before landlord discussions</li>
+            <li>Share potential savings opportunities with clients</li>
+          </ul>
+
+          <div className="bg-white border rounded-lg p-4">
+            <p className="text-sm text-gray-600">
+              Many advisors use SaveOnLease as a quick &quot;deal review&quot; step when
+              evaluating leases for clients. The analysis typically generates in
+              about 10 seconds.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">5 Questions Brokers Ask Before Lease Renewal</h2>
+
+          <p className="text-gray-600 mb-6">
+            Before advising clients on a lease renewal or negotiation, many brokers
+            quickly review the lease to answer a few critical questions.
+          </p>
+
+          <ol className="list-decimal pl-6 space-y-2 text-gray-700 mb-6">
+            <li>Are CAM charges being calculated correctly?</li>
+            <li>Are there expense categories that should be excluded?</li>
+            <li>Has the tenant been overpaying compared to similar leases?</li>
+            <li>Are there negotiation opportunities before renewal?</li>
+            <li>Is there hidden risk or landlord&#39;s-friendly language in the lease?</li>
+          </ol>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="text-sm text-gray-700">
+              SaveOnLease helps surface these insights quickly so brokers and
+              advisors can walk into renewal discussions with better information.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-6">How Brokers Use SaveOnLease in 30 Seconds</h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white border rounded-lg p-4">
+              <div className="text-green-700 font-bold text-lg mb-2">1. Upload Lease</div>
+              <p className="text-sm text-gray-600">
+                Upload the client&#39;s lease document securely to quickly analyze
+                potential overcharges and hidden clauses.
+              </p>
+            </div>
+
+            <div className="bg-white border rounded-lg p-4">
+              <div className="text-green-700 font-bold text-lg mb-2">2. Review Insights</div>
+              <p className="text-sm text-gray-600">
+                Instantly see flagged CAM charges, expense allocations,
+                and negotiation opportunities.
+              </p>
+            </div>
+
+            <div className="bg-white border rounded-lg p-4">
+              <div className="text-green-700 font-bold text-lg mb-2">3. Share With Client</div>
+              <p className="text-sm text-gray-600">
+                Send the findings to your client and walk into renewal
+                discussions with stronger negotiation leverage.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Why Brokers Share SaveOnLease</h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="font-semibold text-green-700 mb-2">Uncover Hidden Lease Costs</div>
+              <p className="text-sm text-gray-600">
+                Brokers use SaveOnLease to help clients discover potential CAM
+                overcharges, expense allocation issues, and other hidden lease costs.
+              </p>
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="font-semibold text-green-700 mb-2">Stronger Negotiation Leverage</div>
+              <p className="text-sm text-gray-600">
+                By identifying savings opportunities early, brokers can walk into
+                lease renewal discussions with stronger data and negotiation leverage.
+              </p>
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="font-semibold text-green-700 mb-2">Look Proactive With Clients</div>
+              <p className="text-sm text-gray-600">
+                Sharing SaveOnLease helps advisors demonstrate proactive thinking
+                and adds extra value when guiding clients through lease decisions.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
           <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
 
