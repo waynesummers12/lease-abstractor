@@ -43,6 +43,17 @@ Thought it might be useful.`;
       console.error("Copy email failed", err);
     }
   };
+
+  const smsTemplate = `Quick lease savings check: upload your lease here and get a fast analysis (~10 seconds): ${referralLink}`;
+
+  const copySMS = async () => {
+    try {
+      await navigator.clipboard.writeText(smsTemplate);
+      alert("SMS text copied!");
+    } catch (err) {
+      console.error("Copy SMS failed", err);
+    }
+  };
   return (
     <main className="min-h-screen bg-white px-6 py-16">
       <div className="max-w-4xl mx-auto">
@@ -232,6 +243,12 @@ Thought it might be useful.`;
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
           >
             Copy Email Template
+          </button>
+          <button
+            onClick={copySMS}
+            className="ml-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg"
+          >
+            Copy Text Message
           </button>
         </div>
 
