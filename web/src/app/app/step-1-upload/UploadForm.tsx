@@ -61,7 +61,7 @@ export default function UploadForm({ onUpload, loading }: Props) {
       />
 
       <div className="flex items-center justify-center rounded-lg border border-dashed p-10 text-gray-500 hover:bg-gray-50">
-        {loading ? "Uploading…" : "Upload Your Lease PDF to See Potential Savings"}
+        {loading ? "Uploading…" : "Check Your Commercial Lease for Hidden Costs"}
       </div>
     </label>
   );
