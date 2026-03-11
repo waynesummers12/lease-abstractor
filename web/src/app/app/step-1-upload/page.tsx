@@ -98,28 +98,17 @@ export default function UploadLeasePage() {
         Free Preview – Retail, Restaurant, Franchise & Medical
       </p>
 
-      <p className="mt-4 text-lg text-gray-800">
-        Upload your commercial or medical office lease PDF to identify CAM & NNN risks,
-        hidden fees, and overcharges.
+      <p className="mt-6 text-xl text-gray-800 font-medium">
+        Identify hidden CAM & NNN overcharges in seconds.
       </p>
-      <p className="mt-2 text-sm text-gray-500">
-        Built for retail operators, restaurant owners, franchisees, office, and medical tenants.
-      </p>
-
-      <p className="mt-4 text-base text-gray-600">
-        We run your PDF through our audit pipeline and estimate what you could
-        recover over the next 12 months. 
-        </p>
-        
-        <p className="mt-4 text-base text-gray-600">
-        This estimate is based on your lease language, including CAM, NNN, escalation, and audit provisions. 
-        It reflects potential exposure identified from contractual terms — not a review of actual billed statements.
+      <p className="mt-3 text-sm text-gray-500">
+        Built for retail, restaurant, franchise, office, and medical tenants.
       </p>
 
-      <div className="mt-6 grid gap-3 text-sm text-gray-700 sm:grid-cols-3">
-        <div>✔ CAM & NNN overcharges</div>
-        <div>✔ Admin & management fee padding</div>
-        <div>✔ Missing caps & audit rights</div>
+      <div className="mt-8 flex flex-col items-center gap-2 text-sm text-gray-600 sm:flex-row sm:justify-center sm:gap-8">
+        <span>✔ CAM & NNN overcharges</span>
+        <span>✔ Admin fee padding</span>
+        <span>✔ Missing caps & audit rights</span>
       </div>
     </div>
 
