@@ -33,7 +33,7 @@ export default function MarketingHomePage() {
             href="/app/step-1-upload"
             className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
-            Run Free CAM Audit
+            Run Free Lease Risk Scan
           </Link>
           <Link
             href="/marketing/what-we-find"
