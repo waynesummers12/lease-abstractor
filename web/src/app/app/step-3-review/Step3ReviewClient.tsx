@@ -35,15 +35,13 @@ export default function Step3ReviewClient() {
 
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
   const pollRef = useRef<number | null>(null);
   const hasFiredLeaseUploaded = useRef(false);
 
   useEffect(() => {
     if (!auditId) {
-      setError("Missing auditId");
-      setLoading(false);
       return;
     }
 
@@ -91,11 +89,13 @@ export default function Step3ReviewClient() {
 
   // GA4: fire once when value is shown
   useEffect(() => {
-    if (annualExposure != null && !hasFiredLeaseUploaded.current) {
-      hasFiredLeaseUploaded.current = true;
+    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
 
-      if (typeof window !== "undefined" && (window as any).gtag) {
-        (window as any).gtag("event", "lease_uploaded", {
+    if (typeof window !== "undefined" && gtag) {
+      if (annualExposure != null && !hasFiredLeaseUploaded.current) {
+        hasFiredLeaseUploaded.current = true;
+
+        gtag("event", "lease_uploaded", {
           event_category: "funnel",
           event_label: "estimated_savings_shown",
           value: annualExposure,
@@ -103,6 +103,14 @@ export default function Step3ReviewClient() {
       }
     }
   }, [annualExposure]);
+
+  if (!auditId) {
+    return (
+      <main className="mx-auto max-w-3xl px-6 py-16">
+        <p className="text-red-600">Missing auditId</p>
+      </main>
+    );
+  }
 
   if (loading) {
     return (
@@ -252,7 +260,8 @@ export default function Step3ReviewClient() {
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
         <h2 className="text-lg font-semibold">
-          Unlock the Full CAM / NNN Audit — $49.99
+          Unlock the Full CAM / NNN Audit — Limited Launch Price: $49.99
+         (Regular Price $249)
         </h2>
 
         <p className="text-gray-700">
