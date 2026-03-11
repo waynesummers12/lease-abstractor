@@ -2,9 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+
 export default function ReferralPage() {
-  const searchParams = useSearchParams();
+
   const [name, setName] = useState(() => {
   if (typeof window === "undefined") return "";
 
@@ -24,21 +24,13 @@ export default function ReferralPage() {
   useEffect(() => {
   if (typeof window === "undefined") return;
 
-  const refFromUrl = searchParams.get("ref");
-  const saved = localStorage.getItem("saveonlease_ref");
+  const params = new URLSearchParams(window.location.search);
+  const refFromUrl = params.get("ref");
 
   if (refFromUrl) {
     localStorage.setItem("saveonlease_ref", refFromUrl);
-    return;
   }
-
-  if (saved) {
-    return;
-  }
-
-  const generated = `broker-${Math.floor(Math.random() * 90000) + 10000}`;
-  localStorage.setItem("saveonlease_ref", generated);
-}, [searchParams]);
+}, []);
 
   const topReferrers = [
     { name: "Eric Kovatch (Tenant Advisor)", earned: 299.94 },
