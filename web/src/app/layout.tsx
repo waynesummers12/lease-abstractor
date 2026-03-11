@@ -39,6 +39,19 @@ export default function RootLayout({
             gtag('config', 'G-EWG7MF2T77');
           `}
         </Script>
+        {/* Referral tracking */}
+        <Script id="referral-tracking" strategy="afterInteractive">
+          {`
+            (function() {
+              const params = new URLSearchParams(window.location.search);
+              const ref = params.get('ref');
+              if (ref) {
+                const maxAge = 60 * 60 * 24 * 30; // 30 days
+                document.cookie = "ref=" + ref + "; path=/; max-age=" + maxAge;
+              }
+            })();
+          `}
+        </Script>
       </head>
 
       <body className="min-h-screen flex flex-col bg-white text-gray-900">
