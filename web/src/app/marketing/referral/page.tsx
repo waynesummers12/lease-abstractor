@@ -21,6 +21,27 @@ export default function ReferralPage() {
       console.error("Copy failed", err);
     }
   };
+
+  const emailTemplate = `Subject: Quick Lease Savings Check
+
+Hi — I came across a simple tool that analyzes commercial leases and flags potential overcharges or negotiation opportunities.
+
+You can upload your lease securely here and get a quick report:
+
+${referralLink}
+
+It usually takes about 10 seconds to generate the analysis.
+
+Thought it might be useful.`;
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(emailTemplate);
+      alert("Email template copied!");
+    } catch (err) {
+      console.error("Copy email failed", err);
+    }
+  };
   return (
     <main className="min-h-screen bg-white px-6 py-16">
       <div className="max-w-4xl mx-auto">
@@ -117,6 +138,27 @@ export default function ReferralPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="bg-gray-50 border rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
+
+          <p className="text-gray-600 mb-4">
+            Brokers and advisors often forward this quick message to clients when reviewing leases.
+          </p>
+
+          <textarea
+            readOnly
+            value={emailTemplate}
+            className="w-full border rounded-lg p-4 text-sm font-mono h-40 mb-4"
+          />
+
+          <button
+            onClick={copyEmail}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
+          >
+            Copy Email Template
+          </button>
         </div>
 
         <div className="mt-12 text-center">
