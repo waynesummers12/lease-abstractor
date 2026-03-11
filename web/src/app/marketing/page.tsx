@@ -33,7 +33,7 @@ export default function MarketingHomePage() {
             href="/app/step-1-upload"
             className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
-            Start Free CAM Audit
+            Run Free CAM Audit
           </Link>
           <Link
             href="/marketing/what-we-find"
@@ -214,7 +214,7 @@ export default function MarketingHomePage() {
   href="/app/step-1-upload"
   className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
 >
-  Start Lease Audit (Free Preview)
+  Run Lease Audit (Free Preview)
 </Link>
     </div>
   </div>
@@ -308,7 +308,7 @@ export default function MarketingHomePage() {
             href="/app/step-1-upload"
             className="inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
-            Start Free CAM Audit
+            Run Free CAM Audit
           </Link>
         </div>
       </div>
@@ -446,7 +446,7 @@ export default function MarketingHomePage() {
           href="/app/step-1-upload"
           className="mt-10 inline-flex items-center rounded-xl bg-black px-10 py-5 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
-          Start Free Exposure Review
+          Run Free Exposure Review
         </Link>
       </section>
     </main>
