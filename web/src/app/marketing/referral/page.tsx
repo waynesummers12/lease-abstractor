@@ -5,30 +5,39 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 export default function ReferralPage() {
   const searchParams = useSearchParams();
-  const ref = searchParams.get("ref") || "";
   const [name, setName] = useState(() => {
   if (typeof window === "undefined") return "";
 
+  const params = new URLSearchParams(window.location.search);
+  const refFromUrl = params.get("ref");
   const saved = localStorage.getItem("saveonlease_ref");
 
-  if (ref) {
-    localStorage.setItem("saveonlease_ref", ref);
-    return ref;
-  }
+  const value =
+    refFromUrl ||
+    saved ||
+    `broker-${Math.floor(Math.random() * 90000) + 10000}`;
 
-  if (saved) return saved;
+  localStorage.setItem("saveonlease_ref", value);
 
-  const generated = `broker-${Math.floor(Math.random() * 90000) + 10000}`;
-
-  localStorage.setItem("saveonlease_ref", generated);
-  return generated;
+  return value;
 });
   useEffect(() => {
+  if (typeof window === "undefined") return;
+
   const refFromUrl = searchParams.get("ref");
+  const saved = localStorage.getItem("saveonlease_ref");
 
   if (refFromUrl) {
     localStorage.setItem("saveonlease_ref", refFromUrl);
+    return;
   }
+
+  if (saved) {
+    return;
+  }
+
+  const generated = `broker-${Math.floor(Math.random() * 90000) + 10000}`;
+  localStorage.setItem("saveonlease_ref", generated);
 }, [searchParams]);
 
   const topReferrers = [
