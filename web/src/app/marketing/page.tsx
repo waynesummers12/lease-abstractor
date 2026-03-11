@@ -18,8 +18,8 @@ export default function MarketingHomePage() {
       {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 pt-28 pb-20 text-center">
         <h1 className="mx-auto max-w-5xl text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
-          Find Hidden CAM & NNN Overcharges
-          <span className="block">Before Your Audit Window Closes</span>
+          Check Your Commercial Lease for Hidden Costs
+          <span className="block">Before CAM & NNN Overcharges Add Up</span>
         </h1>
         <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-600">
           Upload your commercial lease and instantly see potential CAM / NNN exposure — including uncapped fees, capital pass-throughs, and reconciliation risks.
