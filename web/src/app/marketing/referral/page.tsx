@@ -1,9 +1,19 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 export default function ReferralPage() {
-  const [name, setName] = useState("");
+  const searchParams = useSearchParams();
+  const ref = searchParams.get("ref") || "";
+  const [name, setName] = useState(() => ref || localStorage.getItem("saveonlease_ref") || "");
+  useEffect(() => {
+  const refFromUrl = searchParams.get("ref");
+
+  if (refFromUrl) {
+    localStorage.setItem("saveonlease_ref", refFromUrl);
+  }
+}, [searchParams]);
   const topReferrers = [
     { name: "Eric Kovatch (Tenant Advisor)", earned: 299.94 },
     { name: "Shari Johnson (Dental)", earned: 199.96 },
@@ -89,7 +99,11 @@ Thought it might be useful.`;
             type="text"
             placeholder="e.g. johnsmith or acmebrokerage"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+            const value = e.target.value;
+            setName(value);
+            localStorage.setItem("saveonlease_ref", value);
+             }}
             className="w-full border rounded-lg px-4 py-3 mb-4"
           />
 
