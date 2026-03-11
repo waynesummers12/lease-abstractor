@@ -75,7 +75,7 @@ export default function MarketingHomePage() {
             href="https://www.linkedin.com/company/saveonlease.com/about/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-black font-medium"
+            className="underline text-blue-600 hover:text-blue-800 font-medium"
           >
             LinkedIn
           </a>
