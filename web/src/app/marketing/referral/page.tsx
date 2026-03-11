@@ -96,6 +96,17 @@ Thought it might be useful.`;
           commission</strong>.
         </p>
 
+<div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-10">
+  <p className="text-blue-900 font-medium">
+    Already reviewing leases for clients?
+  </p>
+
+  <p className="text-blue-800 text-sm mt-1">
+    Add your referral link to your email signature or deal review emails so
+    clients can quickly check their leases when questions come up.
+  </p>
+</div>
+
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-10">
           <h2 className="text-xl font-semibold mb-3">Example Earnings</h2>
 
