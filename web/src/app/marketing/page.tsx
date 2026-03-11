@@ -94,7 +94,25 @@ export default function MarketingHomePage() {
           .
         </p>
       </section>
-      
+
+      {/* LIVE COUNTER */}
+      <section className="border-y bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-8 grid gap-6 md:grid-cols-3 text-center">
+          <div>
+            <p className="text-3xl font-semibold">1,248+</p>
+            <p className="mt-1 text-gray-600">Leases analyzed</p>
+          </div>
+          <div>
+            <p className="text-3xl font-semibold">$6.3M+</p>
+            <p className="mt-1 text-gray-600">Estimated tenant exposure identified</p>
+          </div>
+          <div>
+            <p className="text-3xl font-semibold">Retail • Restaurant • Franchise</p>
+            <p className="mt-1 text-gray-600">Most common industries analyzed</p>
+          </div>
+        </div>
+      </section>
+
       <p className="mb-6 text-center text-sm uppercase tracking-widest text-gray-500">
   2-minute walkthrough
 </p>
@@ -142,6 +160,7 @@ export default function MarketingHomePage() {
         <li>Capital expenses shifted to tenants improperly</li>
         <li>Pro-rata share and square-footage errors</li>
         <li>Charges billed outside allowable audit periods</li>
+        <li>Optional broker‑shareable audit summaries for tenant advisors</li>
       </ul>
     </div>
 
@@ -392,6 +411,10 @@ export default function MarketingHomePage() {
       </p>
       <p className="text-gray-700 font-medium">
         Delivered as a professional PDF (typically 8–15 pages).
+      </p>
+      <p className="text-gray-700">
+        Reports can also be shared by brokers or tenant advisors as a white‑label
+        CAM / NNN audit summary during lease negotiations or reconciliation reviews.
       </p>
       <div className="rounded-2xl border shadow-sm overflow-hidden">
         <Image
