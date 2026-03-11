@@ -6,7 +6,23 @@ import { useSearchParams } from "next/navigation";
 export default function ReferralPage() {
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref") || "";
-  const [name, setName] = useState(() => ref || localStorage.getItem("saveonlease_ref") || "");
+  const [name, setName] = useState(() => {
+  if (typeof window === "undefined") return "";
+
+  const saved = localStorage.getItem("saveonlease_ref");
+
+  if (ref) {
+    localStorage.setItem("saveonlease_ref", ref);
+    return ref;
+  }
+
+  if (saved) return saved;
+
+  const generated = `broker-${Math.floor(Math.random() * 90000) + 10000}`;
+
+  localStorage.setItem("saveonlease_ref", generated);
+  return generated;
+});
   useEffect(() => {
   const refFromUrl = searchParams.get("ref");
 
@@ -14,6 +30,7 @@ export default function ReferralPage() {
     localStorage.setItem("saveonlease_ref", refFromUrl);
   }
 }, [searchParams]);
+
   const topReferrers = [
     { name: "Eric Kovatch (Tenant Advisor)", earned: 299.94 },
     { name: "Shari Johnson (Dental)", earned: 199.96 },
