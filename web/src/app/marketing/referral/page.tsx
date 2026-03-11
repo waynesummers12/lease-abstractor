@@ -155,10 +155,12 @@ Thought it might be useful.`;
               Test Your Link
             </Link>
           </div>
+          <div className="mt-6 border-t pt-4">
+            <p className="text-sm text-gray-500">
+              💡 <span className="font-medium">Pro Tip:</span> Add your referral link to your email signature so clients can instantly check leases when questions come up.
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-gray-500 mt-4">
-        💡 Pro Tip: Add your referral link to your email signature so clients can instantly check leases when questions come up.
-          </p>
         <h2 className="text-2xl font-semibold mb-4">Who This Is For</h2>
 
         <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-12">
