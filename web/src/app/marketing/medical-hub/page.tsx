@@ -49,7 +49,7 @@ export default function MedicalHubPage() {
           href="/app/step-1-upload"
           className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
         >
-          Start Free Medical Lease Audit
+          Run Free Medical Lease Audit
         </Link>
       </section>
 

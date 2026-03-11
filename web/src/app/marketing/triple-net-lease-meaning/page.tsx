@@ -219,7 +219,7 @@ export default function TripleNetLeaseMeaningPage() {
           href="/app/step-1-upload"
           className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
         >
-          Start Lease Review
+          Run Lease Review
         </Link>
       </section>
     </main>

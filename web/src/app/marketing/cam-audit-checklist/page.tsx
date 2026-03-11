@@ -332,7 +332,7 @@ export default function CamAuditChecklistPage() {
             href="/app/step-1-upload"
             className="inline-block bg-white text-black px-8 py-4 text-lg font-semibold rounded-md hover:bg-gray-200 transition"
           >
-            Start Lease Review
+            Run Lease Review
           </Link>
         </div>
       </section>

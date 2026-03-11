@@ -170,7 +170,7 @@ export default function NnnLeasePage() {
           href="/app/step-1-upload"
           className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
         >
-          Start Free NNN Lease Review
+      Run Free NNN Lease Review
         </Link>
       </section>
     </main>
