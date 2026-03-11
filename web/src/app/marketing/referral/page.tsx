@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 export default function ReferralPage() {
   const [name, setName] = useState("");
@@ -138,6 +139,30 @@ Thought it might be useful.`;
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="bg-white border rounded-xl p-6 mt-10">
+          <h2 className="text-2xl font-semibold mb-4">What Your Client Will See</h2>
+
+          <p className="text-gray-600 mb-6">
+            When your client uploads their lease, they receive a fast analysis that
+            highlights potential overcharges, negotiation opportunities, and risk
+            areas. The report typically generates in about 10 seconds.
+          </p>
+
+          <div className="border rounded-lg overflow-hidden">
+            <Image
+              src="/green-box-preview.png"
+              alt="Example lease savings analysis"
+              width={1200}
+              height={700}
+              className="w-full h-auto"
+            />
+          </div>
+
+          <p className="text-sm text-gray-500 mt-3">
+            Example preview of the savings analysis your client will receive.
+          </p>
         </div>
 
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
