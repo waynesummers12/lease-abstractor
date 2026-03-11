@@ -156,9 +156,8 @@ Thought it might be useful.`;
             </Link>
           </div>
         </div>
-          <p className="text-sm text-gray-500 mt-4">
-        💡 Tip: Many brokers add their referral link to their email signature so
-        clients can quickly check leases when questions come up.
+        <p className="text-sm text-gray-500 mt-4">
+        💡 Pro Tip: Add your referral link to your email signature so clients can instantly check leases when questions come up.
           </p>
         <h2 className="text-2xl font-semibold mb-4">Who This Is For</h2>
 
