@@ -62,6 +62,22 @@ export default function CommercialLeaseChecklistPage() {
         Instant PDF download • No signup required • Tenant‑side lease review framework
       </p>
 
+      {/* CHECKLIST PREVIEW */}
+      <div className="max-w-3xl mx-auto text-left mb-16">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Inside the Commercial Lease Checklist
+        </h2>
+
+        <ul className="list-disc pl-6 space-y-3 text-gray-700 marker:text-green-600">
+          <li>CAM administrative fee review and lease limit comparison</li>
+          <li>Capital expense misclassification checks</li>
+          <li>Pro‑rata share and square‑footage allocation verification</li>
+          <li>CAM reconciliation variance testing</li>
+          <li>Gross‑up adjustments and vacancy impact review</li>
+          <li>Property tax and insurance pass‑through validation</li>
+        </ul>
+      </div>
+
       {/* TRUST SIGNAL */}
       <p className="text-sm text-gray-500 max-w-2xl mx-auto mb-12">
         Used by retail, restaurant, franchise, and medical tenants reviewing
@@ -88,6 +104,32 @@ export default function CommercialLeaseChecklistPage() {
           <span className="border rounded-md px-3 py-2">Dental Practices</span>
           <span className="border rounded-md px-3 py-2">Professional Offices</span>
         </div>
+      </div>
+
+      {/* HOW TENANTS USE THE CHECKLIST */}
+      <div className="max-w-3xl mx-auto mb-16 text-left">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          How Tenants Use This Lease Review Checklist
+        </h2>
+
+        <p className="text-gray-700 mb-4">
+          Commercial tenants typically use this checklist when reviewing
+          CAM reconciliation statements, preparing for lease renewals,
+          or validating operating expenses passed through by landlords.
+        </p>
+
+        <p className="text-gray-700 mb-4">
+          Because CAM and NNN costs can change significantly year to year,
+          tenants often discover administrative fee increases, expense
+          allocation changes, or capital cost pass‑throughs that were not
+          clearly disclosed in the original lease agreement.
+        </p>
+
+        <p className="text-gray-700">
+          A structured checklist helps tenants systematically review lease
+          language and reconciliation statements before audit rights
+          expire, allowing potential cost issues to be addressed early.
+        </p>
       </div>
 
       {/* BROKER SECTION */}
@@ -157,6 +199,31 @@ export default function CommercialLeaseChecklistPage() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* RELATED CAM RESOURCES */}
+      <div className="border-t pt-12 mt-16 max-w-3xl mx-auto text-left">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Related CAM Audit Resources
+        </h2>
+
+        <ul className="space-y-3 text-gray-700">
+          <li>
+            <Link href="/marketing/cam-reconciliation" className="underline">
+              Understanding CAM Reconciliation Statements
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/cam-admin-fees" className="underline">
+              CAM Administrative Fees Explained
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/nnn-expenses" className="underline">
+              What NNN Expenses Include in Commercial Leases
+            </Link>
+          </li>
+        </ul>
       </div>
 
       {/* CTA TO PRODUCT */}
