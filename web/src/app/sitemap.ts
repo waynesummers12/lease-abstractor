@@ -99,6 +99,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/marketing/cam-reconciliation-statement`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/marketing/cam-nnn-overcharges`,
       lastModified: now,
       changeFrequency: "monthly",
