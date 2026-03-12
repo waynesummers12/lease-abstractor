@@ -95,6 +95,12 @@ const sections: Section[] = [
         href: "/marketing/cam-reconciliation",
       },
       {
+        title: "CAM Reconciliation Statement Explained",
+        description:
+          "Understand what a CAM reconciliation statement is, how landlords calculate it, and the most common errors tenants uncover during reconciliation reviews.",
+        href: "/marketing/cam-reconciliation-statement",
+      },
+      {
         title: "CAM Expense Caps Explained",
         description:
           "What CAM caps are, how they are structured, and how uncapped leases increase tenant risk.",
