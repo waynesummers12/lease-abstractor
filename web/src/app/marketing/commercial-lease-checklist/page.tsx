@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export default function CommercialLeaseChecklistPage() {
@@ -24,6 +22,23 @@ export default function CommercialLeaseChecklistPage() {
       <p className="text-green-700 font-medium mb-10">
         ✓ Many tenants uncover $5K–$50K+ in CAM exposure using this review framework
       </p>
+
+      {/* WHAT THE CHECKLIST COVERS */}
+      <div className="max-w-3xl mx-auto text-left mb-16">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          What This Commercial Lease Checklist Helps Identify
+        </h2>
+
+        <ul className="list-disc pl-6 space-y-3 text-gray-700 marker:text-green-600">
+          <li>CAM reconciliation discrepancies and unexplained cost spikes</li>
+          <li>Administrative or management fees above lease limits</li>
+          <li>Capital expenses incorrectly billed to tenants</li>
+          <li>Incorrect pro‑rata share or square footage allocations</li>
+          <li>Gross‑up adjustments that inflate operating expenses</li>
+          <li>Insurance and property tax pass‑through errors</li>
+          <li>Charges billed outside the allowable audit window</li>
+        </ul>
+      </div>
 
       {/* DOWNLOAD + EMAIL */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
@@ -53,6 +68,28 @@ export default function CommercialLeaseChecklistPage() {
         commercial lease costs and CAM reconciliations nationwide.
       </p>
 
+      {/* INDUSTRIES */}
+      <div className="max-w-3xl mx-auto mb-16">
+        <h2 className="text-2xl font-semibold mb-6">
+          Industries That Commonly Use This Lease Checklist
+        </h2>
+
+        <p className="text-gray-700 mb-6">
+          Commercial lease cost issues are most commonly discovered in
+          retail, restaurant, franchise, healthcare, and office leases
+          where CAM and NNN expenses are passed through to tenants.
+        </p>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-700">
+          <span className="border rounded-md px-3 py-2">Retail Stores</span>
+          <span className="border rounded-md px-3 py-2">Restaurants</span>
+          <span className="border rounded-md px-3 py-2">Franchise Locations</span>
+          <span className="border rounded-md px-3 py-2">Medical Offices</span>
+          <span className="border rounded-md px-3 py-2">Dental Practices</span>
+          <span className="border rounded-md px-3 py-2">Professional Offices</span>
+        </div>
+      </div>
+
       {/* BROKER SECTION */}
       <div className="border-t pt-10 mt-10 max-w-2xl mx-auto">
         <h2 className="text-xl font-semibold mb-4">
@@ -76,6 +113,50 @@ export default function CommercialLeaseChecklistPage() {
         >
           Create Your Broker Referral Link →
         </Link>
+      </div>
+
+      {/* FAQ */}
+      <div className="border-t pt-12 mt-16 max-w-3xl mx-auto text-left">
+        <h2 className="text-2xl font-semibold mb-8 text-center">
+          Commercial Lease Checklist FAQs
+        </h2>
+
+        <div className="space-y-6 text-gray-700">
+          <div>
+            <h3 className="font-semibold mb-1">Why review CAM charges?</h3>
+            <p>
+              CAM reconciliations often include administrative fees,
+              capital expenses, or allocation errors that increase
+              tenant operating costs.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-1">When should tenants audit CAM expenses?</h3>
+            <p>
+              Most leases allow tenants to challenge operating expense
+              charges only within a limited audit window, often
+              12–24 months after reconciliation statements are issued.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-1">How much money can tenants recover?</h3>
+            <p>
+              Many commercial tenants uncover $5,000–$50,000+ in
+              avoidable exposure when reviewing CAM reconciliations
+              and lease cost allocations.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-1">What is the fastest way to check a lease?</h3>
+            <p>
+              Upload your lease to run an automated CAM / NNN risk
+              scan and identify potential overcharges in seconds.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* CTA TO PRODUCT */}
