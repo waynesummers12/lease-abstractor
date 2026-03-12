@@ -103,7 +103,7 @@ Thought it might be useful.`;
           </p>
 
           <Image
-            src="/assets/broker-referral.png"
+            src="/broker-referral.png"
             alt="SaveOnLease Broker Referral Program"
             width={1200}
             height={1600}
