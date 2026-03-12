@@ -107,7 +107,9 @@ export default function CamAuditChecklistPage() {
           drift, and structural exposure ranging from{" "}
           <strong>$5,000–$50,000+ annually</strong>.
         </p>
-
+        <p className="text-green-700 font-medium mb-8">
+          ✓ Identify $5K–$50K+ CAM overcharges before audit windows close
+        </p>
         <a
           href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
           target="_blank"
@@ -116,6 +118,9 @@ export default function CamAuditChecklistPage() {
         >
           Download Free Checklist (PDF)
         </a>
+        <p className="text-sm text-gray-500 mt-4">
+          Used by retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations nationwide.
+        </p>
       </section>
 
       {/* Authority Section */}
