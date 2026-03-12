@@ -96,6 +96,21 @@ Thought it might be useful.`;
           commission</strong>.
         </p>
 
+        {/* Broker Referral Graphic */}
+        <div className="max-w-3xl mx-auto my-10">
+          <p className="text-sm text-gray-500 text-center mb-3">
+            How the SaveOnLease broker referral program works
+          </p>
+
+          <Image
+            src="/assets/broker-referral.png"
+            alt="SaveOnLease Broker Referral Program"
+            width={900}
+            height={900}
+            className="rounded-xl shadow-lg border"
+          />
+        </div>
+
 <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-10">
   <p className="text-blue-900 font-medium">
     Already reviewing leases for clients?
