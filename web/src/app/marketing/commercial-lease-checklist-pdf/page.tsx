@@ -1,4 +1,4 @@
-
+"use client";
 
 import Link from "next/link";
 
@@ -26,22 +26,34 @@ export default function CommercialLeaseChecklistPdfPage() {
       </p>
 
       {/* DOWNLOAD SECTION */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const email = (e.currentTarget.elements.namedItem("email") as HTMLInputElement)?.value;
+
+          if (email) {
+            console.log("Checklist download email:", email);
+          }
+
+          window.open("/assets/Tenant-First-CAM-Audit-Checklistv1.pdf", "_blank");
+        }}
+        className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4"
+      >
         <input
+          name="email"
           type="email"
+          required
           placeholder="Enter your email to download the checklist"
           className="w-full sm:w-80 px-4 py-3 border border-gray-300 rounded-md text-gray-800"
         />
 
-        <a
-          href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="submit"
           className="inline-block bg-black text-white px-8 py-3 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
         >
           Download Checklist PDF →
-        </a>
-      </div>
+        </button>
+      </form>
 
       <p className="text-xs text-gray-500 mb-12">
         Instant PDF download • No signup required • Tenant-side review framework
