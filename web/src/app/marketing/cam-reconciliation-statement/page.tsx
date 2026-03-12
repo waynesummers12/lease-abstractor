@@ -73,7 +73,7 @@ export default function CamReconciliationStatementPage() {
           <li>Capital improvements billed as operating expenses</li>
           <li>Incorrect pro‑rata share calculations</li>
           <li>Insurance and tax allocation errors</li>
-          <li>Vacancy "gross‑up" adjustments inflating tenant costs</li>
+          <li>Vacancy &quot;gross‑up&quot; adjustments inflating tenant costs</li>
         </ul>
       </div>
 
