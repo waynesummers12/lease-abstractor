@@ -53,7 +53,7 @@ export default function CommercialLeaseChecklistPdfPage() {
         </p>
 
         <Image
-          src="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
+          src="/assets/checklist-preview.png"
           alt="Commercial Lease CAM Audit Checklist Preview"
           width={800}
           height={600}
