@@ -109,7 +109,7 @@ export default function CamAuditChecklistPage() {
         </p>
 
         <a
-          href="/assets/cam-audit-checklist-v1.pdf"
+          href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-black text-white px-8 py-4 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
