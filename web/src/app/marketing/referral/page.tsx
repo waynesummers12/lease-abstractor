@@ -105,9 +105,10 @@ Thought it might be useful.`;
           <Image
             src="/assets/broker-referral.png"
             alt="SaveOnLease Broker Referral Program"
-            width={900}
-            height={900}
-            className="rounded-xl shadow-lg border"
+            width={1200}
+            height={1600}
+            priority
+            className="rounded-xl shadow-lg border w-full h-auto"
           />
         </div>
 
