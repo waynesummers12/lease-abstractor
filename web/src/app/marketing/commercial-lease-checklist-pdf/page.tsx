@@ -1,6 +1,5 @@
-
-
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CommercialLeaseChecklistPdfPage() {
   return (
@@ -46,6 +45,21 @@ export default function CommercialLeaseChecklistPdfPage() {
       <p className="text-xs text-gray-500 mb-16">
         Instant PDF download • No signup required • Tenant-side review framework
       </p>
+
+      {/* CHECKLIST PREVIEW IMAGE */}
+      <div className="max-w-3xl mx-auto mb-16">
+        <p className="text-sm text-gray-600 mb-4">
+          Preview of the CAM audit checklist tenants use when reviewing commercial leases:
+        </p>
+
+        <Image
+          src="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
+          alt="Commercial Lease CAM Audit Checklist Preview"
+          width={800}
+          height={600}
+          className="rounded-lg border shadow-sm mx-auto"
+        />
+      </div>
 
       {/* CHECKLIST CONTENT PREVIEW */}
       <div className="max-w-3xl mx-auto text-left mb-16">
