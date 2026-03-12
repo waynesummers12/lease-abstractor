@@ -122,7 +122,35 @@ export default function CamAuditChecklistPage() {
           Used by retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations nationwide.
         </p>
       </section>
+{/* Broker Referral Section */}
+<div className="mt-10 border-t pt-8 max-w-2xl mx-auto">
+  <h3 className="text-lg font-semibold mb-3">
+    Commercial Broker? Use This With Your Clients
+  </h3>
 
+  <p className="text-gray-700 mb-4">
+    Many tenant representation brokers use this checklist when reviewing
+    CAM reconciliations with clients.
+  </p>
+
+  <p className="text-gray-700 mb-4">
+    It provides a structured framework to identify administrative fee
+    overcharges, capital misclassification, and pro-rata allocation
+    errors before formal audit rights expire.
+  </p>
+
+  <p className="text-gray-700 mb-6">
+    You are welcome to share this checklist with clients reviewing CAM
+    exposure.
+  </p>
+
+  <Link
+    href="/refer"
+    className="inline-block border border-gray-300 px-6 py-3 text-sm font-semibold rounded-md hover:bg-gray-100 transition"
+  >
+    Create Your Broker Referral Link →
+  </Link>
+</div>
       {/* Authority Section */}
       <section className="bg-gray-50 py-16 px-6">
         <div className="max-w-4xl mx-auto">
