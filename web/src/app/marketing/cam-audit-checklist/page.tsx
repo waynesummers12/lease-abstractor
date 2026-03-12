@@ -148,7 +148,7 @@ export default function CamAuditChecklistPage() {
   </p>
 
   <Link
-    href="/refer"
+    href="/marketing/referral"
     className="inline-block border border-gray-300 px-6 py-3 text-sm font-semibold rounded-md hover:bg-gray-100 transition"
   >
     Create Your Broker Referral Link →
