@@ -171,6 +171,12 @@ export default function Header() {
                   CAM Reconciliation
                 </Link>
                 <Link
+                  href="/marketing/cam-reconciliation-statement"
+                  className={linkClass}
+                >
+                  CAM Reconciliation Statement
+                </Link>
+                <Link
                   href="/marketing/common-area-maintenance"
                   className={linkClass}
                 >
@@ -205,6 +211,18 @@ export default function Header() {
                   className={linkClass}
                 >
                   CAM Reconciliation Checklist
+                </Link>
+                <Link
+                  href="/marketing/commercial-lease-checklist"
+                  className={linkClass}
+                >
+                  Commercial Lease Checklist
+                </Link>
+                <Link
+                  href="/marketing/commercial-lease-checklist-pdf"
+                  className={linkClass}
+                >
+                  Commercial Lease Checklist (PDF)
                 </Link>
                 <div className="px-4">
                   <div className="h-px bg-white/10 my-2"></div>
@@ -432,6 +450,9 @@ export default function Header() {
       <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation
       </Link>
+      <Link href="/marketing/cam-reconciliation-statement" onClick={() => setMenuOpen(false)}>
+        CAM Reconciliation Statement
+      </Link>
       <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
         CAM / NNN Overcharges
       </Link>
@@ -503,6 +524,12 @@ export default function Header() {
       </Link>
       <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
         CAM Reconciliation Checklist
+      </Link>
+      <Link href="/marketing/commercial-lease-checklist" onClick={() => setMenuOpen(false)}>
+        Commercial Lease Checklist
+      </Link>
+      <Link href="/marketing/commercial-lease-checklist-pdf" onClick={() => setMenuOpen(false)}>
+        Commercial Lease Checklist PDF
       </Link>
       <Link href="/marketing/retail-lease-reconciliation-help" onClick={() => setMenuOpen(false)}>
         Retail Lease Reconciliation Help
