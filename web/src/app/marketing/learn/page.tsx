@@ -264,6 +264,12 @@ const sections: Section[] = [
     "A structured tenant-first checklist used to review CAM charges, NNN expenses, reconciliation statements, and audit window exposure in commercial leases.",
   href: "/marketing/commercial-lease-checklist",
 },
+{
+  title: "Commercial Lease Checklist PDF",
+  description:
+    "Download the structured commercial lease review checklist used by tenants to identify CAM charges, NNN expenses, reconciliation errors, and audit window exposure.",
+  href: "/marketing/commercial-lease-checklist-pdf",
+},
       {
         title: "Commercial Lease Audit Explained",
         description:
