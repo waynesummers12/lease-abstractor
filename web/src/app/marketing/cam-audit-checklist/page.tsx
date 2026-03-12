@@ -116,8 +116,11 @@ export default function CamAuditChecklistPage() {
           rel="noopener noreferrer"
           className="inline-block bg-black text-white px-8 py-4 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
         >
-          Download Free Checklist (PDF)
+          Download Free CAM Audit Checklist →
         </a>
+        <p className="text-xs text-gray-500 mt-3">
+          Instant PDF download • No signup required • Tenant-side review framework
+        </p>
         <p className="text-sm text-gray-500 mt-4">
           Used by retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations nationwide.
         </p>
