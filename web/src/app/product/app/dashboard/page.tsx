@@ -201,6 +201,30 @@ export default function DashboardPage() {
 
         {selected && <StatusChips audit={selected} />}
 
+        {/* PLATFORM NAVIGATION */}
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/product/app/leases"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            View All Leases
+          </Link>
+
+          <Link
+            href="/product/app/portfolio"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            Portfolio Dashboard
+          </Link>
+
+          <Link
+            href="/app/step-1-upload"
+            className="rounded bg-black px-3 py-2 text-sm text-white"
+          >
+            Upload New Lease
+          </Link>
+        </div>
+
         <div className="rounded border border-gray-200 p-6">
           <div className="text-sm text-gray-500">
             Estimated Avoidable Exposure
