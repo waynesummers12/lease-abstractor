@@ -201,6 +201,29 @@ export default function DashboardPage() {
 
         {selected && <StatusChips audit={selected} />}
 
+        {/* DASHBOARD SUMMARY */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Total Leases</div>
+            <div className="text-xl font-semibold mt-1">—</div>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Annual Rent Exposure</div>
+            <div className="text-xl font-semibold mt-1">—</div>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">CAM / NNN Exposure</div>
+            <div className="text-xl font-semibold mt-1">—</div>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Upcoming Renewals</div>
+            <div className="text-xl font-semibold mt-1">—</div>
+          </div>
+        </div>
+
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
           <Link
