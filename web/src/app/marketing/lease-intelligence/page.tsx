@@ -53,7 +53,7 @@ export default function LeaseIntelligencePage() {
           href="/app/step-1-upload"
           className="bg-black text-white px-6 py-3 rounded-md inline-block"
         >
-          Upload Lease
+          Upload Lease to Analyze
         </a>
       </div>
     </main>
