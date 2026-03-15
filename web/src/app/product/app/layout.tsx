@@ -1,12 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function ProductLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const linkClass = (path: string) =>
+    `px-2 py-1 rounded ${
+      pathname === path
+        ? "bg-black text-white"
+        : "text-gray-600 hover:text-black"
+    }`;
+
   return (
     <div className="flex min-h-screen bg-white">
 
@@ -19,23 +29,23 @@ export default function ProductLayout({
 
         <nav className="flex flex-col gap-3 text-sm">
 
-          <Link href="/product/app/dashboard" className="text-gray-600 hover:text-black">
+          <Link href="/product/app/dashboard" className={linkClass("/product/app/dashboard")}>
             Dashboard
           </Link>
 
-          <Link href="/product/app/leases" className="text-gray-600 hover:text-black">
+          <Link href="/product/app/leases" className={linkClass("/product/app/leases")}>
             Leases
           </Link>
 
-          <Link href="/product/app/portfolio" className="text-gray-600 hover:text-black">
+          <Link href="/product/app/portfolio" className={linkClass("/product/app/portfolio")}>
             Portfolio
           </Link>
 
-          <Link href="/product/app/benchmarks" className="text-gray-600 hover:text-black">
+          <Link href="/product/app/benchmarks" className={linkClass("/product/app/benchmarks")}>
             Benchmarks
           </Link>
 
-          <Link href="/product/app/alerts" className="text-gray-600 hover:text-black">
+          <Link href="/product/app/alerts" className={linkClass("/product/app/alerts")}>
             Alerts
           </Link>
 
