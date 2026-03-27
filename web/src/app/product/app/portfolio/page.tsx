@@ -142,6 +142,33 @@ export default function PortfolioPage() {
         </button>
         <button
           onClick={() => {
+            const now = new Date();
+
+            // Build exposure-weighted monthly data (12 months)
+            const monthlyExposure = Array(12).fill(0);
+
+            sortedLeases.forEach(l => {
+              if (!l.renewal_date) return;
+              const diffMonths =
+                (new Date(l.renewal_date).getFullYear() - now.getFullYear()) * 12 +
+                (new Date(l.renewal_date).getMonth() - now.getMonth());
+
+              if (diffMonths >= 0 && diffMonths < 12) {
+                monthlyExposure[diffMonths] += l.estimated_exposure || 0;
+              }
+            });
+
+            const maxExposure = Math.max(...monthlyExposure, 1);
+
+            const chartBars = monthlyExposure
+              .map((value, i) => {
+                const height = (value / maxExposure) * 80;
+                const x = i * 28;
+                const y = 100 - height;
+                return `<rect x="${x}" y="${y}" width="20" height="${height}" fill="#2563eb" />`;
+              })
+              .join("");
+
             const html = `
               <html>
                 <head>
@@ -157,6 +184,7 @@ export default function PortfolioPage() {
                     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
                     th, td { border-bottom: 1px solid #eee; padding: 10px; text-align: left; font-size: 12px; }
                     th { background: #f9f9f9; }
+                    .chart-container { margin: 30px 0; }
                   </style>
                 </head>
                 <body>
@@ -176,6 +204,13 @@ export default function PortfolioPage() {
                       <div class="kpi-title">Total Portfolio Exposure</div>
                       <div class="kpi-value">$${totalExposure.toLocaleString()}</div>
                     </div>
+                  </div>
+
+                  <div class="chart-container">
+                    <h3 style="margin-bottom:10px;">12-Month Exposure Forecast</h3>
+                    <svg width="350" height="120" viewBox="0 0 350 120">
+                      ${chartBars}
+                    </svg>
                   </div>
 
                   <table>
