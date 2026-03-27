@@ -4,6 +4,8 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import SidebarNav from "@/app/components/SidebarNav";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductLayout({
   children,
 }: {
