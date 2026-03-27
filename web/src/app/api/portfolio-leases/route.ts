@@ -82,6 +82,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from("portfolio_leases")
       .select("*")
+      .is("deleted_at", null)
       .order("renewal_date", { ascending: true });
 
     if (error) {
@@ -190,7 +191,9 @@ export async function DELETE(req: Request) {
 
     const { error } = await supabase
       .from("portfolio_leases")
-      .delete()
+      .update({
+        deleted_at: new Date().toISOString(),
+      })
       .eq("id", id);
 
     if (error) {

@@ -164,10 +164,8 @@ export default function LeaseDetailPage() {
         </Link>
       </div>
 
-      {/* Risk Overview */}
       <div className="border rounded-lg p-6 bg-white">
         <h2 className="text-lg font-semibold mb-4">Renewal Risk Overview</h2>
-
         <div className="grid md:grid-cols-3 gap-6 text-sm">
           <div>
             <div className="text-gray-500">Renewal Date</div>
@@ -177,27 +175,21 @@ export default function LeaseDetailPage() {
                 : "Not set"}
             </div>
           </div>
-
           <div>
             <div className="text-gray-500">Days Until Renewal</div>
             <div className="font-medium">
               {daysUntil !== null ? `${daysUntil} days` : "—"}
             </div>
           </div>
-
           <div>
             <div className="text-gray-500">Risk Score</div>
-            <div className="font-semibold">
-              {riskScore} / 100
-            </div>
+            <div className="font-semibold">{riskScore} / 100</div>
           </div>
         </div>
       </div>
 
-      {/* Lease Details */}
       <div className="border rounded-lg p-6 bg-white">
         <h2 className="text-lg font-semibold mb-4">Lease Details</h2>
-
         <div className="grid md:grid-cols-2 gap-6 text-sm">
           <div>
             <div className="text-gray-500">Lease Type</div>
@@ -217,7 +209,6 @@ export default function LeaseDetailPage() {
               <div className="font-medium">{lease.leaseType || "—"}</div>
             )}
           </div>
-
           <div>
             <div className="text-gray-500">Square Footage</div>
             {editing ? (
@@ -251,25 +242,17 @@ export default function LeaseDetailPage() {
         )}
       </div>
 
-      {/* Negotiation Leverage Messaging */}
       <div className="border rounded-lg p-6 bg-gray-50">
         <h2 className="text-lg font-semibold mb-4">Negotiation Leverage Insight</h2>
-
         {daysUntil !== null && daysUntil <= 90 ? (
           <p className="text-sm text-gray-700">
-            This lease is approaching renewal within 90 days. This is a critical
-            negotiation window. You should evaluate CAM charges, escalations,
-            and renewal terms immediately to strengthen leverage before formal
-            renewal discussions begin.
+            This lease is approaching renewal within 90 days. This is a critical negotiation window. Evaluate CAM charges and renewal terms immediately.
           </p>
         ) : (
           <p className="text-sm text-gray-700">
-            While this lease is not in an immediate renewal window, early
-            analysis of cost structure and escalation terms can improve your
-            negotiation position well before renewal deadlines.
+            Early analysis of cost structure and escalation terms improves negotiation leverage well before renewal deadlines.
           </p>
         )}
-
         <div className="mt-6">
           <Link
             href="/app/step-1-upload"
