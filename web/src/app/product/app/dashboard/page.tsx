@@ -162,7 +162,25 @@ export default function DashboardPage() {
 
         if (!cancelled && json?.leases) {
           setAudits(json.leases);
-          setSelected(json.leases[0] ?? null);
+
+          // Auto-select highest urgency lease (highest risk first, then nearest renewal)
+          const sortedByUrgency = [...json.leases].sort((a, b) => {
+            const riskA = getRenewalRiskScore(a) ?? -1;
+            const riskB = getRenewalRiskScore(b) ?? -1;
+
+            if (riskA !== riskB) return riskB - riskA;
+
+            if (a.renewal_date && b.renewal_date) {
+              return (
+                new Date(a.renewal_date).getTime() -
+                new Date(b.renewal_date).getTime()
+              );
+            }
+
+            return 0;
+          });
+
+          setSelected(sortedByUrgency[0] ?? null);
         }
       } catch (err) {
         console.error("Dashboard load failed:", err);
@@ -285,40 +303,55 @@ export default function DashboardPage() {
         </div>
 
         <ul className="space-y-2">
-          {sortedLeases.map((audit) => (
-            <li
-              key={audit.id}
-              onClick={() => setSelected(audit)}
-              className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform ${
-                selected?.id === audit.id
-                  ? "bg-gray-200 scale-[1.01]"
-                  : "hover:bg-gray-100 hover:scale-[1.01]"
-              }`}
-            >
-              {(() => {
-                if (!audit.renewal_date) return null;
+          {sortedLeases.map((audit) => {
+            let tooltip = "";
 
-                const renewal = new Date(audit.renewal_date);
-                const today = new Date();
-                const diffMs = renewal.getTime() - today.getTime();
-                const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+            if (audit.renewal_date) {
+              const renewal = new Date(audit.renewal_date);
+              const today = new Date();
+              const diffMs = renewal.getTime() - today.getTime();
+              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-                if (daysRemaining <= 90) {
-                  return (
-                    <span className="inline-block h-2 w-2 rounded-full bg-red-600 mr-2 align-middle" />
-                  );
-                }
+              tooltip =
+                daysRemaining > 0
+                  ? `Renewal in ${daysRemaining} days`
+                  : "Lease expired";
+            }
 
-                return null;
-              })()}
-              <div className="flex items-center gap-2 font-medium">
-              {audit.property_name ?? "Unnamed Lease"}
-              </div>
-              <div className="mt-1 text-xs text-gray-500">
-                Health {getHealthScore()}
-              </div>
-            </li>
-          ))}
+            const showUrgentDot = (() => {
+              if (!audit.renewal_date) return false;
+
+              const renewal = new Date(audit.renewal_date);
+              const today = new Date();
+              const diffMs = renewal.getTime() - today.getTime();
+              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+              return daysRemaining <= 90;
+            })();
+
+            return (
+              <li
+                key={audit.id}
+                onClick={() => setSelected(audit)}
+                title={tooltip}
+                className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform ${
+                  selected?.id === audit.id
+                    ? "bg-gray-200 scale-[1.01]"
+                    : "hover:bg-gray-100 hover:scale-[1.01]"
+                }`}
+              >
+                <div className="flex items-center gap-2 font-medium">
+                  {showUrgentDot && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-red-600" />
+                  )}
+                  {audit.property_name ?? "Unnamed Lease"}
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Health {getHealthScore()}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </aside>
 
