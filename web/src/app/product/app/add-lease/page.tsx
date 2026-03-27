@@ -7,6 +7,9 @@ import Link from "next/link";
 export default function AddLeasePage() {
   const router = useRouter();
 
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [extracting, setExtracting] = useState(false);
+
   const [form, setForm] = useState({
     propertyName: "",
     landlord: "",
@@ -22,6 +25,27 @@ export default function AddLeasePage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFileName(file.name);
+    setExtracting(true);
+
+    // 🔮 Placeholder for real extraction API
+    // Simulate AI extraction delay
+    setTimeout(() => {
+      setForm({
+        propertyName: file.name.replace(".pdf", ""),
+        landlord: "Detected Landlord LLC",
+        squareFeet: "2500",
+        leaseType: "NNN",
+        renewalDate: "2026-12-31",
+      });
+      setExtracting(false);
+    }, 1500);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -54,10 +78,43 @@ export default function AddLeasePage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <h1 className="text-2xl font-semibold mb-6">
-        Add Lease to Portfolio
+        Upload Lease to Add to Portfolio
       </h1>
 
-      <div className="rounded border border-gray-200 p-6 bg-white">
+      <div className="rounded border border-gray-200 p-6 bg-white space-y-8">
+
+        {/* Upload Section */}
+        <div className="border-2 border-dashed border-gray-300 rounded p-6 text-center">
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={handleFileUpload}
+            className="hidden"
+            id="leaseUpload"
+          />
+
+          <label
+            htmlFor="leaseUpload"
+            className="cursor-pointer text-sm text-gray-600"
+          >
+            {fileName ? (
+              <div>
+                <div className="font-medium">{fileName}</div>
+                {extracting && (
+                  <div className="text-xs text-gray-500 mt-2">
+                    Extracting lease details...
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                Click to upload your lease (PDF)
+              </div>
+            )}
+          </label>
+        </div>
+
+        {/* Prefilled Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -140,7 +197,7 @@ export default function AddLeasePage() {
               disabled={loading}
               className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Save Lease"}
+              {loading ? "Saving..." : "Save Lease to Portfolio"}
             </button>
 
             <Link
