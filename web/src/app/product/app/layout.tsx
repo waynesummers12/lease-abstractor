@@ -11,7 +11,7 @@ export default async function ProductLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   // Prevent build-time crash when env vars are missing (e.g. during static prerender)
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
