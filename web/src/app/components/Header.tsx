@@ -66,34 +66,34 @@ export default function Header() {
       >
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
-          <span className="text-lg font-light">SaveOnLease</span>
+          <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm relative">
           <EducationDropdown />
 
-          <Link href="/marketing/what-we-find" className="opacity-80 hover:opacity-100">
+          <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
             What We Find
           </Link>
-          <Link href="/marketing/how-it-works" className="opacity-80 hover:opacity-100">
+          <Link href="/marketing/how-it-works" className="opacity-70 hover:opacity-100 transition">
             How It Works
           </Link>
-          <Link href="/marketing/pricing" className="opacity-80 hover:opacity-100">
+          <Link href="/marketing/pricing" className="opacity-70 hover:opacity-100 transition">
             Pricing
           </Link>
 
-          <div className="h-5 w-px bg-white/20" />
+          <div className="h-5 w-px bg-white/20 mx-2" />
 
           {!session ? (
             <>
-              <Link href="/login" className="opacity-80 hover:opacity-100">
+              <Link href="/login" className="opacity-70 hover:opacity-100 transition">
                 Login
               </Link>
               <Link
                 href="/app/step-1-upload"
-                className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200"
+                className="rounded-full bg-white px-6 py-2.5 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all"
               >
-                Run Audit
+                Run Audit (Free Preview)
               </Link>
             </>
           ) : (
