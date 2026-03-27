@@ -72,8 +72,23 @@ router.post("/portfolio-board-pdf", async (ctx) => {
       color: rgb(0.7, 0.8, 0.95),
     });
 
-    // Executive narrative
-    const narrative = `As of ${new Date().toLocaleDateString()}, the portfolio includes ${leases.length} active leases. ${riskBuckets.critical} leases require immediate attention within 90 days. Total modeled exposure across the portfolio is $${Number(totalExposure).toLocaleString()}.`;
+    // AI-driven portfolio risk scoring
+    const totalLeases = leases.length || 1;
+    const criticalRatio = riskBuckets.critical / totalLeases;
+    const watchRatio = riskBuckets.watch / totalLeases;
+
+    const portfolioRiskScore = Math.round(
+      (criticalRatio * 70 + watchRatio * 30) * 100
+    );
+
+    const riskLabel =
+      portfolioRiskScore > 60
+        ? "Elevated Risk"
+        : portfolioRiskScore > 30
+        ? "Moderate Risk"
+        : "Stable";
+
+    const narrative = `As of ${new Date().toLocaleDateString()}, the portfolio includes ${leases.length} active leases with a modeled exposure of $${Number(totalExposure).toLocaleString()}. The AI risk score is ${portfolioRiskScore}/100, indicating ${riskLabel}. ${riskBuckets.critical} leases require immediate attention within 90 days.`;
 
     page.drawText(narrative, {
       x: 40,
@@ -110,6 +125,19 @@ router.post("/portfolio-board-pdf", async (ctx) => {
       color: rgb(0.6, 0.9, 1),
     });
 
+    // Portfolio mix heat bar
+    const barWidth = 400;
+    const barX = 40;
+    const barY = height - 260;
+
+    const criticalWidth = (riskBuckets.critical / totalLeases) * barWidth;
+    const watchWidth = (riskBuckets.watch / totalLeases) * barWidth;
+    const safeWidth = (riskBuckets.safe / totalLeases) * barWidth;
+
+    page.drawRectangle({ x: barX, y: barY, width: criticalWidth, height: 14, color: rgb(1,0.4,0.4) });
+    page.drawRectangle({ x: barX + criticalWidth, y: barY, width: watchWidth, height: 14, color: rgb(1,0.75,0.2) });
+    page.drawRectangle({ x: barX + criticalWidth + watchWidth, y: barY, width: safeWidth, height: 14, color: rgb(0.4,0.8,0.4) });
+
     // Heat legend
     const legendY = height - 250;
 
@@ -122,13 +150,13 @@ router.post("/portfolio-board-pdf", async (ctx) => {
     });
 
     page.drawRectangle({ x: width - 260, y: legendY - 20, width: 12, height: 12, color: rgb(1,0.4,0.4) });
-    page.drawText("Critical (<90 days)", { x: width - 240, y: legendY - 18, size: 9, font, color: rgb(1,1,1) });
+    page.drawText(`Critical (${Math.round(criticalRatio*100)}%)`, { x: width - 240, y: legendY - 18, size: 9, font, color: rgb(1,1,1) });
 
     page.drawRectangle({ x: width - 260, y: legendY - 40, width: 12, height: 12, color: rgb(1,0.75,0.2) });
-    page.drawText("Watch (90–180 days)", { x: width - 240, y: legendY - 38, size: 9, font, color: rgb(1,1,1) });
+    page.drawText(`Watch (${Math.round(watchRatio*100)}%)`, { x: width - 240, y: legendY - 38, size: 9, font, color: rgb(1,1,1) });
 
     page.drawRectangle({ x: width - 260, y: legendY - 60, width: 12, height: 12, color: rgb(0.4,0.8,0.4) });
-    page.drawText("Safe (>180 days)", { x: width - 240, y: legendY - 58, size: 9, font, color: rgb(1,1,1) });
+    page.drawText(`Safe (${Math.round((riskBuckets.safe/totalLeases)*100)}%)`, { x: width - 240, y: legendY - 58, size: 9, font, color: rgb(1,1,1) });
 
     // Exposure-weighted 12 month forecast
     const now = new Date();
@@ -312,6 +340,45 @@ sortedLeases.forEach((lease) => {
       );
 
       currentY -= 18;
+    });
+
+    // Region breakout slides
+    const regions = Object.keys(exposureByRegion);
+
+    regions.forEach(regionName => {
+      const regionLeases = leases.filter(l => (l.region ?? "Unassigned") === regionName);
+      if (regionLeases.length === 0) return;
+
+      const regionPage = pdfDoc.addPage([842, 595]);
+      const { width: rw, height: rh } = regionPage.getSize();
+
+      regionPage.drawRectangle({ x:0, y:0, width:rw, height:rh, color: rgb(0.1,0.12,0.18) });
+
+      regionPage.drawText(`${regionName} — Regional Risk Overview`, {
+        x: 40,
+        y: rh - 60,
+        size: 20,
+        font: boldFont,
+        color: rgb(1,1,1),
+      });
+
+      const regionExposure = exposureByRegion[regionName] ?? 0;
+
+      regionPage.drawText(`Total Exposure: $${Number(regionExposure).toLocaleString()}`, {
+        x: 40,
+        y: rh - 100,
+        size: 14,
+        font,
+        color: rgb(0.6,0.9,1),
+      });
+
+      regionPage.drawText(`Lease Count: ${regionLeases.length}`, {
+        x: 40,
+        y: rh - 125,
+        size: 14,
+        font,
+        color: rgb(1,1,1),
+      });
     });
 
     // Confidential watermark
