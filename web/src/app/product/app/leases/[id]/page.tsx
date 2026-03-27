@@ -136,21 +136,23 @@ export default function LeaseDetailPage() {
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 space-y-10">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-6">
         <div>
-          <button
-            onClick={() => setEditing(!editing)}
-            className="text-sm bg-black text-white px-4 py-2 rounded mr-4"
-          >
-            {editing ? "Cancel" : "Edit Lease"}
-          </button>
-          <button
-            onClick={handleDelete}
-            className="text-sm bg-red-600 text-white px-4 py-2 rounded mr-4"
-          >
-            Delete
-          </button>
-          <h1 className="text-3xl font-bold">{lease.propertyName}</h1>
+          <div className="flex gap-3 mb-3">
+            <button
+              onClick={() => setEditing(!editing)}
+              className="text-sm border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+            >
+              {editing ? "Cancel" : "Edit Lease"}
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-sm bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+          </div>
+          <h1 className="text-3xl font-semibold">{lease.propertyName}</h1>
           <p className="text-gray-500 mt-1">
             {lease.landlord || "Landlord not specified"}
           </p>
@@ -184,6 +186,11 @@ export default function LeaseDetailPage() {
           <div>
             <div className="text-gray-500">Risk Score</div>
             <div className="font-semibold">{riskScore} / 100</div>
+            {daysUntil !== null && daysUntil <= 90 && (
+              <div className="mt-4 text-sm text-red-600 font-medium">
+                Renewal approaching — action recommended.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -256,10 +263,16 @@ export default function LeaseDetailPage() {
         <div className="mt-6">
           <Link
             href="/app/step-1-upload"
-            className="inline-block bg-black text-white px-5 py-3 rounded-md text-sm"
+            className="inline-block bg-black text-white px-5 py-3 rounded-md text-sm font-medium hover:bg-gray-800"
           >
-            Run CAM / NNN Audit
+            Run Audit (Free Preview)
           </Link>
+          <div className="mt-3 text-xs text-gray-500">
+            Managing another lease?
+            <Link href="/app/add-lease" className="ml-1 underline">
+              Add Lease →
+            </Link>
+          </div>
         </div>
       </div>
     </main>
