@@ -83,15 +83,7 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("portfolio_leases")
-      .select(`
-        id,
-        property_name,
-        landlord,
-        square_feet as square_footage,
-        lease_type,
-        renewal_date
-      `)
-      .order("renewal_date", { ascending: true });
+      .select("*");
 
     if (error) {
       console.error("Fetch error:", error);
