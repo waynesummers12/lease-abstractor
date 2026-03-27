@@ -10,6 +10,7 @@ import checkoutRoutes from "./routes/checkout.ts";
 import ingestLeasePdfRoutes from "./routes/ingestLeasePdf.ts";
 import auditPdfRoutes from "./routes/auditPdf.ts";
 import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
+import portfolioLeasesRoutes from "./routes/portfolioleases.ts";
 
 const app = new Application();
 
@@ -65,6 +66,9 @@ app.use(checkoutRoutes.allowedMethods());
 
 app.use(auditPdfRoutes.routes());
 app.use(auditPdfRoutes.allowedMethods());
+
+app.use(portfolioLeasesRoutes.routes());
+app.use(portfolioLeasesRoutes.allowedMethods());
 
 /* -------------------------------------------------
    START SERVER
