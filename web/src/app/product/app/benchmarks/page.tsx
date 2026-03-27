@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import Link from "next/link";
@@ -12,15 +10,28 @@ export default function BenchmarksPage() {
       <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">Lease Benchmarks</h1>
         <p className="text-gray-600">
-          Compare your lease costs to industry averages and identify abnormal CAM or NNN expenses.
+          See how your lease compares to industry benchmarks and identify potential overcharges instantly.
         </p>
+      </div>
+
+      <div className="border rounded-lg p-6 mb-12 bg-gray-50">
+        <h2 className="text-lg font-semibold mb-2">Your Portfolio vs Benchmark</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Upload a lease to see how your CAM, NNN, and escalation terms compare against real market data.
+        </p>
+        <Link
+          href="/app/step-1-upload"
+          className="inline-block bg-black text-white px-4 py-2 rounded-md font-medium hover:bg-gray-800"
+        >
+          Run Benchmark Analysis →
+        </Link>
       </div>
 
       {/* Benchmark Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
 
         <div className="border rounded-lg p-6">
-          <div className="text-sm text-gray-500 mb-1">Average CAM (Retail)</div>
+          <div className="text-sm text-gray-500 mb-1">Retail CAM Benchmark</div>
           <div className="text-2xl font-semibold">$6.30 / sq ft</div>
           <div className="text-xs text-gray-400 mt-2">
             Based on anonymized lease data
@@ -28,7 +39,7 @@ export default function BenchmarksPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <div className="text-sm text-gray-500 mb-1">Average Escalation</div>
+          <div className="text-sm text-gray-500 mb-1">Typical Escalation Range</div>
           <div className="text-2xl font-semibold">3.1%</div>
           <div className="text-xs text-gray-400 mt-2">
             Annual base rent increases
@@ -36,7 +47,7 @@ export default function BenchmarksPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <div className="text-sm text-gray-500 mb-1">Common CAM Admin Fee</div>
+          <div className="text-sm text-gray-500 mb-1">Typical CAM Admin Fee</div>
           <div className="text-2xl font-semibold">15%</div>
           <div className="text-xs text-gray-400 mt-2">
             Typical property management charge
@@ -50,9 +61,9 @@ export default function BenchmarksPage() {
         <h2 className="text-lg font-semibold mb-4">Insights</h2>
 
         <ul className="space-y-3 text-gray-700 text-sm">
-          <li>• CAM costs above $8 / sq ft are considered high for most retail properties.</li>
-          <li>• Escalation clauses above 4% may significantly increase long‑term lease costs.</li>
-          <li>• CAM admin fees commonly range between 10–15%.</li>
+          <li>• CAM costs above $8 / sq ft may indicate overcharges.</li>
+          <li>• Escalation clauses above 4% can significantly increase long-term lease costs.</li>
+          <li>• Admin fees above 15% are often negotiable or excessive.</li>
         </ul>
       </div>
 
@@ -60,9 +71,9 @@ export default function BenchmarksPage() {
       <div className="mt-10">
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-6 py-3 rounded-md"
+          className="inline-block bg-black text-white px-6 py-3 rounded-md font-medium hover:bg-gray-800"
         >
-          Upload Lease to Compare
+          Run Benchmark Audit (Free) →
         </Link>
       </div>
 
