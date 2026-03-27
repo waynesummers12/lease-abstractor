@@ -97,6 +97,15 @@ export default function PortfolioPage() {
 
   return (
     <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-semibold">Lease Portfolio Overview</h1>
+          <p className="text-gray-500 text-sm">
+            Institutional monitoring of renewal risk, exposure, and audit readiness.
+          </p>
+        </div>
+      </div>
+
       {/* Top KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="border rounded-lg p-4">
@@ -119,13 +128,57 @@ export default function PortfolioPage() {
         </div>
       </div>
 
+      {/* Portfolio Heat Bar */}
+      <div className="border rounded-lg p-4 space-y-3">
+        <p className="text-sm text-gray-500">Portfolio Risk Distribution</p>
+        <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100">
+          <div
+            className="bg-red-600"
+            style={{ width: `${(riskBuckets.critical / (sortedLeases.length || 1)) * 100}%` }}
+          />
+          <div
+            className="bg-yellow-400"
+            style={{ width: `${(riskBuckets.watch / (sortedLeases.length || 1)) * 100}%` }}
+          />
+          <div
+            className="bg-green-500"
+            style={{ width: `${(riskBuckets.safe / (sortedLeases.length || 1)) * 100}%` }}
+          />
+        </div>
+        <div className="flex justify-between text-xs text-gray-500">
+          <span>Critical: {riskBuckets.critical}</span>
+          <span>Watch: {riskBuckets.watch}</span>
+          <span>Safe: {riskBuckets.safe}</span>
+        </div>
+      </div>
+
+      {sortedLeases.length === 0 && (
+        <div className="border rounded-lg p-8 text-center bg-gray-50">
+          <h3 className="font-medium text-gray-700">No leases in portfolio</h3>
+          <p className="text-sm text-gray-500 mt-2">
+            Upload a lease to begin renewal monitoring and exposure tracking.
+          </p>
+        </div>
+      )}
+
       {/* Lease List */}
       <div className="border rounded-lg divide-y">
         {sortedLeases.map((lease) => {
           const isCritical = lease.diffDays !== null && lease.diffDays < 90;
 
           return (
-            <div key={lease.id} className="p-4 space-y-2">
+            <div
+              key={lease.id}
+              className="p-4 space-y-3 hover:bg-gray-50 transition border-l-4"
+              style={{
+                borderColor:
+                  lease.diffDays !== null && lease.diffDays < 90
+                    ? "#dc2626"
+                    : lease.diffDays !== null && lease.diffDays <= 180
+                    ? "#facc15"
+                    : "#22c55e",
+              }}
+            >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <p className="font-medium">{lease.property_name}</p>
@@ -171,7 +224,7 @@ export default function PortfolioPage() {
       {/* Drill-down Modal */}
       {selectedLease && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div className="bg-white w-full max-w-lg rounded-lg p-6 space-y-4">
+          <div className="bg-white w-full max-w-xl rounded-xl p-8 space-y-6 shadow-2xl">
             <div className="flex justify-between">
               <h2 className="text-lg font-semibold">
                 {selectedLease.property_name} Risk Analysis
