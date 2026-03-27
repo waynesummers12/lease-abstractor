@@ -11,7 +11,7 @@ export default async function ProductLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
 
   // Prevent build-time crash when env vars are missing (e.g. during static prerender)
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -37,11 +37,11 @@ export default async function ProductLayout({
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // 🔒 Server-side route guard
-  if (!session) {
+  if (!user) {
     redirect("/login");
   }
 
