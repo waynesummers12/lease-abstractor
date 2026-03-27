@@ -15,7 +15,10 @@ export default function MobileMenu({
   onClose,
   session,
 }: MobileMenuProps) {
-  const supabase = createBrowserClient();
+  const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
   if (!open) return null;
 

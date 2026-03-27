@@ -37,7 +37,10 @@ const navItems = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
-  const supabase = createBrowserClient();
+  const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
   const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [lockedModal, setLockedModal] = useState<string | null>(null);
