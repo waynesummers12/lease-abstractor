@@ -169,7 +169,7 @@ export default function DashboardPage() {
               {audit.property_name ?? "Unnamed Lease"}
               </div>
               <div className="mt-1 text-xs text-gray-500">
-                Health {getHealthScore(audit)}
+                Health {getHealthScore()}
               </div>
             </li>
           ))}
@@ -186,7 +186,7 @@ export default function DashboardPage() {
           </div>
 
           {selected && (
-            <HealthBadge score={getHealthScore(selected)} />
+            <HealthBadge score={getHealthScore()} />
           )}
         </div>
 
