@@ -137,9 +137,9 @@ export default function Step3ReviewClient() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Lease Audit Review</h1>
+        <h1 className="text-3xl font-bold">Your Lease Audit — Estimated Savings</h1>
         <p className="mt-2 text-gray-600">
-          Initial CAM / NNN risk assessment based on your lease.
+          We’ve identified potential CAM / NNN overcharges and cost risks in your lease.
         </p>
       </div>
 
@@ -172,14 +172,19 @@ export default function Step3ReviewClient() {
 
         {/* RANGE (IF AVAILABLE) */}
         {analysis.teaser_summary?.estimated_avoidable_range && (
-          <p className="mt-1 text-sm text-emerald-700">
-            Conservative estimate range:{" "}
-            <span className="font-semibold">
-              ${analysis.teaser_summary.estimated_avoidable_range.low.toLocaleString()}
-              {" – "}
-              ${analysis.teaser_summary.estimated_avoidable_range.high.toLocaleString()}
-            </span>
-          </p>
+          <>
+            <p className="mt-1 text-sm text-emerald-700">
+              Conservative estimate range:{" "}
+              <span className="font-semibold">
+                ${analysis.teaser_summary.estimated_avoidable_range.low.toLocaleString()}
+                {" – "}
+                ${analysis.teaser_summary.estimated_avoidable_range.high.toLocaleString()}
+              </span>
+            </p>
+            <p className="mt-2 text-xs text-emerald-700">
+              ⚠️ Many leases have time-limited audit windows — delays can reduce recovery.
+            </p>
+          </>
         )}
       </div>
     </div>
@@ -210,6 +215,12 @@ export default function Step3ReviewClient() {
             : "Lower confidence — lease language is unclear"}
         </p>
       </div>
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-emerald-800">
+      <div>✔ CAM charges reviewed</div>
+      <div>✔ Admin fees analyzed</div>
+      <div>✔ Escalations evaluated</div>
     </div>
 
     {/* How calculated */}
@@ -260,7 +271,7 @@ export default function Step3ReviewClient() {
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
         <h2 className="text-lg font-semibold">
-          Unlock the Full CAM / NNN Audit — Limited Launch Price: $49.99
+          Unlock the Full Audit — Limited Launch Price: $49.99
           <span className="block text-sm font-normal text-gray-500 mt-1">
             (Regular Price $249)
           </span>
@@ -270,6 +281,13 @@ export default function Step3ReviewClient() {
           This complete audit highlights potential CAM / NNN exposure based on
           your lease language. Unlocking this full audit provides a complete,
           downloadable PDF with the detail you need to take action.
+        </p>
+
+        <p className="text-sm text-gray-600">
+          One-time payment. No subscriptions. No auto-renewals.
+        </p>
+        <p className="text-xs text-gray-500">
+          If no meaningful issues are found, you’ll still receive a complete audit report for your records.
         </p>
 
         <ul className="list-disc list-inside space-y-2 text-gray-700">
@@ -290,10 +308,6 @@ export default function Step3ReviewClient() {
             A secure, downloadable PDF for your records
           </li>
         </ul>
-
-        <p className="text-sm text-gray-600">
-          One-time payment. No subscriptions. No auto-renewals.
-        </p>
       </div>
 
       {/* ---------- CHECKOUT BUTTON ---------- */}
@@ -322,10 +336,13 @@ export default function Step3ReviewClient() {
             alert("Failed to start checkout");
           }
         }}
-        className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
+        className="w-full rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800 font-medium text-center"
       >
-        Get Full Audit PDF
+        Unlock Full Audit & Download PDF
       </button>
+      <p className="text-xs text-gray-500 mt-2 text-center">
+        Secure checkout • Instant access after payment
+      </p>
     </main>
   );
 }
