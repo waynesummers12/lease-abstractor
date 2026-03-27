@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AddLeasePage() {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     propertyName: "",
     landlord: "",
@@ -12,16 +15,40 @@ export default function AddLeasePage() {
     renewalDate: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("Lease added (mock):", form);
-    alert("Lease saved to portfolio (mock). Backend coming next.");
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/portfolio-leases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to save lease");
+      }
+
+      router.push("/product/app/dashboard");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -101,12 +128,19 @@ export default function AddLeasePage() {
             </div>
           </div>
 
+          {error && (
+            <div className="text-sm text-red-600 font-medium">
+              {error}
+            </div>
+          )}
+
           <div className="flex items-center gap-4">
             <button
               type="submit"
-              className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800"
+              disabled={loading}
+              className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              Save Lease
+              {loading ? "Saving..." : "Save Lease"}
             </button>
 
             <Link
