@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { Session } from "@supabase/supabase-js";
 
 export default function Navbar() {
@@ -87,6 +87,26 @@ export default function Navbar() {
             )}
           </div>
 
+          <Link href="/marketing/what-we-find" className="text-sm hover:text-gray-300">
+            What We Find
+          </Link>
+
+          <Link href="/marketing/how-it-works" className="text-sm hover:text-gray-300">
+            How It Works
+          </Link>
+
+          <Link href="/marketing/referral" className="text-sm hover:text-gray-300">
+            Refer Clients (Earn 20%)
+          </Link>
+
+          <Link href="/marketing/pricing" className="text-sm hover:text-gray-300">
+            Pricing
+          </Link>
+
+          <Link href="/marketing/contact" className="text-sm hover:text-gray-300">
+            Contact
+          </Link>
+
           {/* Divider */}
           <div className="h-5 w-px bg-gray-700" />
 
@@ -100,7 +120,7 @@ export default function Navbar() {
                 href="/app/step-1-upload"
                 className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
               >
-                Run Audit
+                Run Audit (Free Preview)
               </Link>
             </>
           ) : (
@@ -123,7 +143,7 @@ export default function Navbar() {
 
               {avatarOpen && (
                 <div className="absolute right-0 mt-10 w-48 bg-white text-black rounded-md shadow-lg py-2">
-                  <Link href="/product/app/portfolio" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link href="/app/portfolio" className="block px-4 py-2 hover:bg-gray-100">
                     Dashboard
                   </Link>
                   <button
@@ -157,11 +177,11 @@ export default function Navbar() {
           {!session ? (
             <>
               <Link href="/login">Login</Link>
-              <Link href="/app/step-1-upload">Run Audit</Link>
+              <Link href="/app/step-1-upload">Run Audit (Free Preview)</Link>
             </>
           ) : (
             <>
-              <Link href="/product/app/portfolio">Dashboard</Link>
+              <Link href="/app/portfolio">Dashboard</Link>
               <button onClick={() => supabase.auth.signOut()}>
                 Logout
               </button>
