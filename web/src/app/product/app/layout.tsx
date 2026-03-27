@@ -48,17 +48,26 @@ export default async function ProductLayout({
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-      <aside className="w-64 border-r p-6 space-y-6 bg-gray-50">
-        <h2 className="text-lg font-semibold">SaveOnLease</h2>
+      <aside className="w-64 border-r p-6 space-y-6 bg-gray-50 text-sm">
+        <div>
+          <h2 className="text-lg font-semibold">SaveOnLease</h2>
+          <p className="text-xs text-gray-500">Lease Intelligence Platform</p>
+        </div>
 
         <SidebarNav />
 
-        <div className="pt-6 border-t">
+        <div className="pt-6 border-t space-y-2">
+          <Link
+            href="/app/add-lease"
+            className="block text-center border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100"
+          >
+            Add Lease
+          </Link>
           <Link
             href="/app/step-1-upload"
-            className="bg-black text-white px-4 py-2 rounded text-sm"
+            className="block text-center bg-black text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-800"
           >
-            Upload Lease
+            Run Audit (Free Preview)
           </Link>
         </div>
       </aside>
