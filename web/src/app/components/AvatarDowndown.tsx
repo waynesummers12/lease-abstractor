@@ -14,7 +14,10 @@ export default function AvatarDropdown({
   session,
   isProUser = false,
 }: AvatarDropdownProps) {
-  const supabase = createBrowserClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
