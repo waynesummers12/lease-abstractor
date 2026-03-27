@@ -121,6 +121,20 @@ export default function PortfolioPage() {
             </p>
           </div>
         </div>
+        <div className="flex gap-3">
+          <Link
+            href="/app/add-lease"
+            className="border border-gray-300 px-4 py-2 text-sm rounded hover:bg-gray-100"
+          >
+            Add Lease
+          </Link>
+          <Link
+            href="/app/step-1-upload"
+            className="bg-black text-white px-4 py-2 text-sm rounded font-medium hover:bg-gray-800"
+          >
+            Run Audit (Free Preview)
+          </Link>
+        </div>
       </div>
 
       <div className="flex justify-end">
@@ -383,13 +397,13 @@ export default function PortfolioPage() {
           <p className="text-2xl font-bold text-red-600">{riskBuckets.critical}</p>
         </div>
         <div className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">Total Portfolio Exposure</p>
+          <p className="text-sm text-gray-500">Estimated Exposure</p>
           <p className="text-2xl font-bold text-red-600">
             ${totalExposure.toLocaleString()}
           </p>
         </div>
         <div className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">Action Required</p>
+          <p className="text-sm text-gray-500">Immediate Action</p>
           <p className="text-2xl font-bold">{riskBuckets.critical}</p>
         </div>
       </div>
@@ -421,9 +435,23 @@ export default function PortfolioPage() {
       {sortedLeases.length === 0 && (
         <div className="border rounded-lg p-8 text-center bg-gray-50">
           <h3 className="font-medium text-gray-700">No leases in portfolio</h3>
-          <p className="text-sm text-gray-500 mt-2">
-            Upload a lease to begin renewal monitoring and exposure tracking.
+          <p className="text-sm text-gray-500 mt-2 mb-4">
+            Upload a lease to manage it or run an audit to uncover hidden costs.
           </p>
+          <div className="flex justify-center gap-3">
+            <Link
+              href="/app/add-lease"
+              className="border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100"
+            >
+              Add Lease
+            </Link>
+            <Link
+              href="/app/step-1-upload"
+              className="bg-black text-white px-4 py-2 rounded text-sm hover:bg-gray-800"
+            >
+              Run Audit (Free Preview)
+            </Link>
+          </div>
         </div>
       )}
 
@@ -435,7 +463,7 @@ export default function PortfolioPage() {
           return (
             <div
               key={lease.id}
-              className="p-4 space-y-3 hover:bg-gray-50 transition border-l-4"
+              className="p-4 space-y-3 hover:bg-gray-50 transition border-l-4 cursor-pointer"
               style={{
                 borderColor:
                   lease.diffDays !== null && lease.diffDays < 90
@@ -458,17 +486,17 @@ export default function PortfolioPage() {
                 <div className="flex gap-3">
                   <button
                     onClick={() => setSelectedLease(lease)}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm text-black font-medium hover:underline"
                   >
-                    View Risk
+                    View Details →
                   </button>
 
                   {isCritical && (
                     <Link
-                      href={`/app/leases/${lease.id}`}
+                      href="/app/step-1-upload"
                       className="text-sm px-3 py-1 bg-black text-white rounded"
                     >
-                      Start Audit
+                      Run Audit
                     </Link>
                   )}
                 </div>
