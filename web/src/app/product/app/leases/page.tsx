@@ -23,7 +23,23 @@ export default function LeasesPage() {
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.leases)) {
-          setLeases(data.leases);
+          const normalized = data.leases.map((lease: {
+            id: string;
+            property_name: string;
+            landlord?: string | null;
+            square_feet?: number | null;
+            lease_type?: string | null;
+            renewal_date?: string | null;
+          }) => ({
+            id: lease.id,
+            propertyName: lease.property_name,
+            landlord: lease.landlord,
+            squareFeet: lease.square_feet,
+            leaseType: lease.lease_type,
+            renewalDate: lease.renewal_date,
+          }));
+
+          setLeases(normalized);
         }
       } catch (err) {
         console.error("Failed to load leases:", err);
