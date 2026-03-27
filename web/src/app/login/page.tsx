@@ -27,18 +27,18 @@ export default function LoginPage() {
     if (error) {
       setMessage(error.message);
     } else {
-      setMessage("Check your email for login link.");
+      setMessage("Check your email and click the secure login link to access your dashboard.");
     }
 
     setLoading(false);
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-start justify-center px-4 pt-32">
       <div className="max-w-md w-full border rounded-lg p-8">
         <h1 className="text-2xl font-semibold mb-2">Login</h1>
         <p className="text-sm text-gray-600 mb-6">
-          Access your lease portfolio and insights
+          Enter your email and we&apos;ll send you a secure login link (no password required).
         </p>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -56,8 +56,11 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
           >
-            {loading ? "Sending..." : "Send Magic Link"}
+            {loading ? "Sending..." : "Email Me Login Link"}
           </button>
+          <p className="text-xs text-gray-500 text-center">
+            We&apos;ll email you a one-time secure link to log in instantly.
+          </p>
         </form>
 
         {message && (
