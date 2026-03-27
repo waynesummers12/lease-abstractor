@@ -5,20 +5,17 @@ import { supabase } from "../lib/supabase.ts";
 
 const router = new Router();
 
-// GET /portfolio-leases
 router.get("/portfolio-leases", async (ctx: Context) => {
   try {
     const { data, error } = await supabase
-      .from("leases")
-      .select(
-        "id, property_name, landlord, square_feet, lease_type, renewal_date, created_at"
-      )
+      .from("portfolio_leases")
+      .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Supabase error:", error);
       ctx.response.status = 500;
-      ctx.response.body = { error: "Failed to fetch leases" };
+      ctx.response.body = { error: error.message };
       return;
     }
 
