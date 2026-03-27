@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Lease = {
   id: string;
@@ -102,11 +103,21 @@ export default function PortfolioPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-semibold">Lease Portfolio Overview</h1>
-          <p className="text-gray-500 text-sm">
-            Institutional monitoring of renewal risk, exposure, and audit readiness.
-          </p>
+        <div className="flex items-center gap-4">
+          <Image
+            src="/logo.png"
+            alt="SaveOnLease"
+            width={120}
+            height={32}
+            className="h-8 w-auto"
+            priority
+          />
+          <div>
+            <h1 className="text-2xl font-semibold">SaveOnLease</h1>
+            <p className="text-gray-500 text-sm">
+              Institutional Lease Risk Intelligence Platform
+            </p>
+          </div>
         </div>
       </div>
 
@@ -188,7 +199,15 @@ export default function PortfolioPage() {
                   </style>
                 </head>
                 <body>
-                  <h1>Lease Portfolio Board Summary</h1>
+                  <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
+                    <img src="https://saveonlease.com/logo.png" height="40" />
+                    <div>
+                      <h1 style="margin:0;">SaveOnLease</h1>
+                      <div style="font-size:14px; color:#666;">Institutional Lease Risk Intelligence</div>
+                    </div>
+                  </div>
+
+                  <h2 style="margin-top:30px;">Portfolio Board Summary</h2>
                   <div class="sub">Snapshot generated ${new Date().toLocaleDateString()}</div>
 
                   <div class="kpi-grid">
