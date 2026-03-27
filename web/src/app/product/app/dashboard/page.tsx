@@ -42,6 +42,24 @@ function getHealthScore(audit: Audit): "A" | "B" | "C" | "D" {
   return "D";
 }
 
+function getRenewalInfo(audit: Audit) {
+  // Temporary mock: assume 1-year term from created_at
+  const created = new Date(audit.created_at);
+  const renewal = new Date(created);
+  renewal.setFullYear(created.getFullYear() + 1);
+
+  const today = new Date();
+  const diffMs = renewal.getTime() - today.getTime();
+  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  let status: "safe" | "warning" | "urgent" = "safe";
+
+  if (daysRemaining <= 90) status = "urgent";
+  else if (daysRemaining <= 180) status = "warning";
+
+  return { renewal, daysRemaining, status };
+}
+
 function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
   const styles = {
     A: "bg-green-100 text-green-800",
@@ -219,10 +237,29 @@ export default function DashboardPage() {
               <div className="font-medium">—</div>
             </div>
 
-            <div>
-              <div className="text-gray-500">Renewal Date</div>
-              <div className="font-medium">—</div>
-            </div>
+            {selected && (() => {
+              const { renewal, daysRemaining, status } = getRenewalInfo(selected);
+
+              const badgeStyles = {
+                safe: "bg-green-100 text-green-800",
+                warning: "bg-yellow-100 text-yellow-800",
+                urgent: "bg-red-100 text-red-800",
+              };
+
+              return (
+                <div>
+                  <div className="text-gray-500">Renewal Date</div>
+                  <div className="font-medium">
+                    {renewal.toLocaleDateString()}
+                  </div>
+                  <div className={`mt-1 inline-block rounded px-2 py-1 text-xs font-semibold ${badgeStyles[status]}`}>
+                    {daysRemaining > 0
+                      ? `${daysRemaining} days remaining`
+                      : "Expired"}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
 
