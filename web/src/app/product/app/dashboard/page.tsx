@@ -226,14 +226,22 @@ export default function DashboardPage() {
           No audits yet
         </h1>
         <p className="mb-4 text-gray-600">
-          Upload a lease to add it to your portfolio. You can run a paid CAM / NNN audit anytime.
+          Upload a lease to manage it, or run a full audit to uncover hidden costs.
         </p>
-        <Link
-          href="/app/add-lease"
-          className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
-        >
-          Add Lease to Portfolio
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/app/add-lease"
+            className="inline-block rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
+          >
+            Add Lease
+          </Link>
+          <Link
+            href="/app/step-1-upload"
+            className="inline-block rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          >
+            Run Audit (Free Preview)
+          </Link>
+        </div>
       </div>
     );
   }
@@ -405,12 +413,26 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
       {/* RIGHT — DETAIL */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
+            <p className="text-sm text-gray-600">
+              Monitor renewal risk, prioritize action, and run audits to uncover savings.
+            </p>
+          </div>
+          <Link
+            href="/app/step-1-upload"
+            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          >
+            Run Audit (Free Preview)
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-semibold">
               Lease Overview
             </h1>
           </div>
-
           {selected && (
             <div className="flex items-center gap-3">
               <HealthBadge score={getHealthScore()} />
@@ -521,7 +543,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                   href="/app/step-1-upload"
                   className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
                 >
-                  Run CAM / NNN Audit
+                  Run Audit (Free Preview)
                 </Link>
 
                 {status === "urgent" && (
@@ -570,6 +592,26 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
             </div>
           );
         })()}
+        </div>
+
+        {/* EXECUTIVE SUMMARY */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Total Leases</div>
+            <div className="text-xl font-semibold">{audits.length}</div>
+          </div>
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Urgent (≤ 90 days)</div>
+            <div className="text-xl font-semibold text-red-600">{urgentRenewals}</div>
+          </div>
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Upcoming (≤ 180 days)</div>
+            <div className="text-xl font-semibold text-yellow-600">{upcomingRenewals}</div>
+          </div>
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Avg Risk</div>
+            <div className="text-xl font-semibold">{averageRiskScore}/100</div>
+          </div>
         </div>
 
         {/* DASHBOARD SUMMARY — BAR STYLE */}
@@ -684,39 +726,26 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
           >
             View All Leases
           </Link>
-
           <Link
             href="/app/portfolio"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Portfolio Dashboard
           </Link>
-
           <Link
             href="/app/add-lease"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Add Lease (No Audit)
           </Link>
-
           <Link
-            href="/app/add-lease"
+            href="/app/step-1-upload"
             className="rounded bg-black px-3 py-2 text-sm text-white"
           >
-            Run CAM / NNN Audit
+            Run Audit (Free Preview)
           </Link>
         </div>
       </div>
     </div>
   );
 }
-
-        {/* SIDEBAR UPLOAD LEASE BUTTON */}
-        <div className="mb-4">
-          <Link
-            href="/app/add-lease"
-            className="w-full inline-block rounded bg-black px-4 py-2 text-sm text-white text-center"
-          >
-            Upload Lease
-          </Link>
-        </div>
