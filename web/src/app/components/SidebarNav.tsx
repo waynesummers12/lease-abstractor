@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-
-interface SidebarNavProps {
-  role: "admin" | "analyst" | "viewer";
-  plan?: "free" | "pro" | "enterprise";
-}
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const navItems = [
   {
@@ -39,8 +35,11 @@ const navItems = [
   },
 ];
 
-export default function SidebarNav({ role, plan = "free" }: SidebarNavProps) {
+export default function SidebarNav() {
   const pathname = usePathname();
+  const supabase = createClientComponentClient();
+  const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
+  const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [lockedModal, setLockedModal] = useState<string | null>(null);
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -53,22 +52,49 @@ export default function SidebarNav({ role, plan = "free" }: SidebarNavProps) {
     localStorage.setItem("sidebar-collapsed", String(collapsed));
   }, [collapsed]);
 
+  useEffect(() => {
+    async function loadSession() {
+      const { data } = await supabase.auth.getSession();
+      const user = data.session?.user;
+      if (!user) return;
+
+      const userRole = (user.user_metadata?.role ?? "viewer") as
+        | "admin"
+        | "analyst"
+        | "viewer";
+
+      const userPlan = (user.user_metadata?.plan ?? "free") as
+        | "free"
+        | "pro"
+        | "enterprise";
+
+      setRole(userRole);
+      setPlan(userPlan);
+    }
+
+    loadSession();
+  }, [supabase]);
+
   const filteredNav = useMemo(() => {
     return navItems.filter((item) => item.roles.includes(role));
   }, [role]);
 
-  const activeIndex = useMemo(() => {
-    const index = filteredNav.findIndex((item) =>
-      pathname.startsWith(item.href)
-    );
-    return index === -1 ? 0 : index;
-  }, [pathname, filteredNav]);
 
   useEffect(() => {
-    if (indicatorRef.current) {
-      indicatorRef.current.style.top = `${activeIndex * 40 + 40}px`;
+    const activeEl = document.querySelector("[data-active='true']") as HTMLElement | null;
+    if (activeEl && indicatorRef.current) {
+      indicatorRef.current.style.top = `${activeEl.offsetTop}px`;
+      indicatorRef.current.style.height = `${activeEl.offsetHeight}px`;
     }
-  }, [activeIndex]);
+  }, [pathname, collapsed]);
+
+  useEffect(() => {
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") setLockedModal(null);
+    }
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   return (
     <div
@@ -86,7 +112,7 @@ export default function SidebarNav({ role, plan = "free" }: SidebarNavProps) {
       <nav className="flex flex-col gap-2 text-sm relative">
         <div
           ref={indicatorRef}
-          className="absolute left-0 h-8 w-1 bg-black rounded transition-all duration-300"
+          className="absolute left-0 w-1 bg-black rounded transition-all duration-300"
           style={{ top: 0 }}
         />
         {filteredNav.map((item) => {
@@ -97,7 +123,11 @@ export default function SidebarNav({ role, plan = "free" }: SidebarNavProps) {
             plan !== "enterprise";
 
           return (
-            <div key={item.href} className="relative group">
+            <div
+              key={item.href}
+              className="relative group"
+              data-active={pathname.startsWith(item.href)}
+            >
               <Link
                 href={locked ? "#" : item.href}
                 onClick={(e) => {
@@ -134,8 +164,14 @@ export default function SidebarNav({ role, plan = "free" }: SidebarNavProps) {
       </nav>
 
       {lockedModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+          onClick={() => setLockedModal(null)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 w-96 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="text-lg font-semibold mb-2">Upgrade Required</h3>
             <p className="text-sm text-gray-600 mb-4">
               {lockedModal} is available on a higher-tier plan.
