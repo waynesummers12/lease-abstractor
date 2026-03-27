@@ -72,6 +72,36 @@ export default function PortfolioPage() {
 
   const totalLeases = leases.length;
 
+  const today = new Date();
+
+  const leasesWithRenewal = leases.filter(
+    (l) => l.renewal_date && !isNaN(new Date(l.renewal_date).getTime())
+  );
+
+  const upcomingRenewals = leasesWithRenewal.filter((lease) => {
+    const renewal = new Date(lease.renewal_date!);
+    const diffDays =
+      (renewal.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    return diffDays <= 180 && diffDays >= 0;
+  });
+
+  const leaseTypeCounts = leases.reduce<Record<string, number>>(
+    (acc, lease) => {
+      const type = lease.lease_type || "Unknown";
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
+
+  const healthScore =
+    totalLeases === 0
+      ? 0
+      : Math.max(
+          0,
+          100 - Math.round((upcomingRenewals.length / totalLeases) * 100)
+        );
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -89,17 +119,41 @@ export default function PortfolioPage() {
 
         <div className="border rounded-lg p-4">
           <p className="text-sm text-gray-500">Upcoming Renewals (≤180 days)</p>
-          <p className="text-2xl font-bold">0</p>
+          <p className="text-2xl font-bold">{upcomingRenewals.length}</p>
         </div>
 
         <div className="border rounded-lg p-4">
           <p className="text-sm text-gray-500">Portfolio Health</p>
-          <p className="text-2xl font-bold">—</p>
+          <p
+            className={`text-2xl font-bold ${
+              healthScore > 80
+                ? "text-green-600"
+                : healthScore > 50
+                ? "text-yellow-600"
+                : "text-red-600"
+            }`}
+          >
+            {healthScore}%
+          </p>
         </div>
 
         <div className="border rounded-lg p-4">
           <p className="text-sm text-gray-500">Locations</p>
           <p className="text-2xl font-bold">{totalLeases}</p>
+        </div>
+      </div>
+
+      <div className="border rounded-lg p-4">
+        <p className="text-sm text-gray-500 mb-2">Lease Type Breakdown</p>
+        <div className="flex flex-wrap gap-3">
+          {Object.entries(leaseTypeCounts).map(([type, count]) => (
+            <div
+              key={type}
+              className="px-3 py-1 text-sm rounded-full bg-gray-100"
+            >
+              {type}: {count}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -116,6 +170,23 @@ export default function PortfolioPage() {
               <p className="text-sm text-gray-500">
                 {lease.lease_type} • {lease.square_feet} sq ft • Renewal{" "}
                 {lease.renewal_date}
+                {lease.renewal_date && (() => {
+                  const renewal = new Date(lease.renewal_date);
+                  const diffDays = Math.round(
+                    (renewal.getTime() - today.getTime()) /
+                      (1000 * 60 * 60 * 24)
+                  );
+
+                  if (diffDays <= 180 && diffDays >= 0) {
+                    return (
+                      <span className="ml-2 px-2 py-0.5 text-xs bg-red-100 text-red-600 rounded">
+                        {diffDays} days
+                      </span>
+                    );
+                  }
+
+                  return null;
+                })()}
               </p>
             </div>
           ))}
