@@ -458,6 +458,38 @@ export default function DashboardPage() {
               </div>
             );
           })()}
+
+        {selected && (() => {
+          const risk = getRenewalRiskScore(selected);
+          if (risk === null) return null;
+
+          let message = "";
+          let style = "border-gray-200 bg-gray-50 text-gray-800";
+
+          if (risk >= 90) {
+            message =
+              "This lease is expired or critically close to renewal. You have maximum negotiation leverage right now. Use audit findings to push for concessions, caps, or tenant improvements.";
+            style = "border-red-400 bg-red-50 text-red-900";
+          } else if (risk >= 75) {
+            message =
+              "Renewal is imminent. Begin negotiation strategy now. Consider requesting CAM caps, administrative fee limits, and removal of capital pass-through language.";
+            style = "border-yellow-400 bg-yellow-50 text-yellow-900";
+          } else if (risk >= 60) {
+            message =
+              "You are within strategic review window. Audit exposure and prepare data-backed negotiation points before landlord outreach.";
+            style = "border-yellow-300 bg-yellow-50 text-yellow-800";
+          } else {
+            message =
+              "Low immediate renewal risk. Monitor lease health and begin pre-renewal modeling 12–18 months prior to expiration.";
+          }
+
+          return (
+            <div className={`mt-6 rounded border p-4 text-sm ${style}`}>
+              <div className="font-semibold mb-1">Negotiation Leverage Insight</div>
+              <div>{message}</div>
+            </div>
+          );
+        })()}
         </div>
 
         {/* DASHBOARD SUMMARY */}
