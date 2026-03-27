@@ -138,6 +138,15 @@ export default function DashboardPage() {
         )
       : 0;
 
+  const totalAtRiskSquareFootage = audits
+    .filter((lease) => {
+      const risk = getRenewalRiskScore(lease);
+      return risk !== null && risk >= 60; // warning + urgent
+    })
+    .reduce((sum, lease) => {
+      return sum + (lease.square_feet ?? 0);
+    }, 0);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -452,7 +461,7 @@ export default function DashboardPage() {
         </div>
 
         {/* DASHBOARD SUMMARY */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
           <div className="border rounded-lg p-4">
             <div className="text-xs text-gray-500">Total Leases</div>
             <div className="text-xl font-semibold mt-1">{audits.length}</div>
@@ -462,6 +471,13 @@ export default function DashboardPage() {
             <div className="text-xs text-gray-500">Average Risk Score</div>
             <div className="text-xl font-semibold mt-1">
               {averageRiskScore}/100
+            </div>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">At-Risk Square Footage</div>
+            <div className="text-xl font-semibold mt-1">
+              {totalAtRiskSquareFootage.toLocaleString()}
             </div>
           </div>
 
