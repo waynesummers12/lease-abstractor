@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 import EducationDropdown from "./EducationDropdown";
@@ -12,6 +12,7 @@ import MobileMenu from "./MobileMenu";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isAppPage = pathname.startsWith("/app");
 
   const supabase = createClientComponentClient();
@@ -32,6 +33,12 @@ export default function Header() {
 
     return () => listener.subscription.unsubscribe();
   }, [supabase]);
+
+  useEffect(() => {
+    if (pathname.startsWith("/app") && session === null) {
+      router.push("/login");
+    }
+  }, [pathname, session, router]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";

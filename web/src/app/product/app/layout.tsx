@@ -1,55 +1,32 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
+import SidebarNav from "@/app/components/SidebarNav";
 
-export default function ProductLayout({
+export default async function ProductLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const supabase = createServerComponentClient({ cookies });
 
-  const linkClass = (path: string) =>
-    `px-2 py-1 rounded ${
-      pathname === path
-        ? "bg-black text-white"
-        : "text-gray-600 hover:text-black"
-    }`;
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  // 🔒 Server-side route guard
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <div className="flex min-h-screen bg-white">
-
       {/* Sidebar */}
       <aside className="w-64 border-r p-6 space-y-6 bg-gray-50">
+        <h2 className="text-lg font-semibold">SaveOnLease</h2>
 
-        <h2 className="text-lg font-semibold">
-          SaveOnLease
-        </h2>
-
-        <nav className="flex flex-col gap-3 text-sm">
-
-          <Link href="/product/app/dashboard" className={linkClass("/product/app/dashboard")}>
-            Dashboard
-          </Link>
-
-          <Link href="/product/app/leases" className={linkClass("/product/app/leases")}>
-            Leases
-          </Link>
-
-          <Link href="/product/app/portfolio" className={linkClass("/product/app/portfolio")}>
-            Portfolio
-          </Link>
-
-          <Link href="/product/app/benchmarks" className={linkClass("/product/app/benchmarks")}>
-            Benchmarks
-          </Link>
-
-          <Link href="/product/app/alerts" className={linkClass("/product/app/alerts")}>
-            Alerts
-          </Link>
-
-        </nav>
+        <SidebarNav />
 
         <div className="pt-6 border-t">
           <Link
@@ -59,14 +36,10 @@ export default function ProductLayout({
             Upload Lease
           </Link>
         </div>
-
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
-        {children}
-      </main>
-
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }
