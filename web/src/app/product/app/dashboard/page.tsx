@@ -76,6 +76,17 @@ export default function DashboardPage() {
   const [selected, setSelected] = useState<Lease | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const upcomingRenewals = audits.filter((lease) => {
+    if (!lease.renewal_date) return false;
+
+    const renewal = new Date(lease.renewal_date);
+    const today = new Date();
+    const diffMs = renewal.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    return daysRemaining > 0 && daysRemaining <= 180;
+  }).length;
+
   useEffect(() => {
     let cancelled = false;
 
@@ -302,8 +313,10 @@ export default function DashboardPage() {
           </div>
 
           <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Upcoming Renewals</div>
-            <div className="text-xl font-semibold mt-1">—</div>
+            <div className="text-xs text-gray-500">Upcoming Renewals (≤ 180 days)</div>
+            <div className="text-xl font-semibold mt-1">
+              {upcomingRenewals}
+            </div>
           </div>
         </div>
 
