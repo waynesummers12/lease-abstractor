@@ -229,7 +229,7 @@ export default function DashboardPage() {
           Upload a lease to add it to your portfolio. You can run a paid CAM / NNN audit anytime.
         </p>
         <Link
-          href="/product/app/add-lease"
+          href="/app/add-lease"
           className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
           Add Lease to Portfolio
@@ -679,28 +679,28 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/product/app/leases"
+            href="/app/leases"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             View All Leases
           </Link>
 
           <Link
-            href="/product/app/portfolio"
+            href="/app/portfolio"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Portfolio Dashboard
           </Link>
 
           <Link
-            href="/product/app/add-lease"
+            href="/app/add-lease"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Add Lease (No Audit)
           </Link>
 
           <Link
-            href="/product/app/add-lease"
+            href="/app/add-lease"
             className="rounded bg-black px-3 py-2 text-sm text-white"
           >
             Run CAM / NNN Audit
@@ -714,7 +714,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         {/* SIDEBAR UPLOAD LEASE BUTTON */}
         <div className="mb-4">
           <Link
-            href="/product/app/add-lease"
+            href="/app/add-lease"
             className="w-full inline-block rounded bg-black px-4 py-2 text-sm text-white text-center"
           >
             Upload Lease

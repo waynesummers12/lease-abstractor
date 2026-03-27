@@ -62,7 +62,7 @@ export default function LeasesPage() {
         </div>
 
         <Link
-          href="/product/app/add-lease"
+          href="/app/add-lease"
           className="bg-black text-white px-5 py-3 rounded-md"
         >
           Add Lease
@@ -104,7 +104,7 @@ export default function LeasesPage() {
               </div>
 
               <Link
-                href={`/product/app/leases/${lease.id}`}
+                href={`/app/leases/${lease.id}`}
                 className="text-blue-600"
               >
                 View

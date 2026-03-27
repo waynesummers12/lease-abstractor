@@ -465,7 +465,7 @@ export default function PortfolioPage() {
 
                   {isCritical && (
                     <Link
-                      href={`/product/app/leases/${lease.id}`}
+                      href={`/app/leases/${lease.id}`}
                       className="text-sm px-3 py-1 bg-black text-white rounded"
                     >
                       Start Audit

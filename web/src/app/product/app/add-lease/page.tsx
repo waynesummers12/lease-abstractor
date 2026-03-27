@@ -92,7 +92,7 @@ export default function AddLeasePage() {
       }
 
       // Redirect to leases page after successful save
-      router.push("/product/app/leases");
+      router.push("/app/leases");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";
@@ -228,7 +228,7 @@ export default function AddLeasePage() {
             </button>
 
             <Link
-              href="/product/app/dashboard"
+              href="/app/dashboard"
               className="text-sm text-gray-600 hover:underline"
             >
               Cancel
