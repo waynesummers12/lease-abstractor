@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     if (error) {
       console.error("Insert error:", error);
       return NextResponse.json(
-        { error: "Failed to create lease" },
+        { error: error.message },
         { status: 500 }
       );
     }
