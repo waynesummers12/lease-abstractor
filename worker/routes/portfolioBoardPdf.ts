@@ -22,6 +22,7 @@ interface PortfolioRequest {
   };
   companyName: string;
   confidential: boolean;
+  priorExposure?: number;
 }
 
 const router = new Router();
@@ -36,6 +37,7 @@ router.post("/portfolio-board-pdf", async (ctx) => {
       riskBuckets = { critical: 0, watch: 0, safe: 0 },
       companyName = "SaveOnLease Client",
       confidential = false,
+      priorExposure = 0,
     } = body;
 
     const pdfDoc = await PDFDocument.create();
@@ -74,19 +76,41 @@ router.post("/portfolio-board-pdf", async (ctx) => {
 
     // AI-driven portfolio risk scoring
     const totalLeases = leases.length || 1;
-    const criticalRatio = riskBuckets.critical / totalLeases;
-    const watchRatio = riskBuckets.watch / totalLeases;
 
-    const portfolioRiskScore = Math.round(
-      (criticalRatio * 70 + watchRatio * 30) * 100
-    );
+    const nowDate = new Date();
+
+    // Exposure + time weighted scoring
+    let weightedRisk = 0;
+    let totalWeightedExposure = 0;
+
+    leases.forEach(l => {
+      const exposure = l.estimated_exposure ?? 0;
+      if (!l.renewal_date) return;
+
+      const renewal = new Date(l.renewal_date);
+      const diffDays = Math.max(
+        0,
+        Math.floor((renewal.getTime() - nowDate.getTime()) / (1000*60*60*24))
+      );
+
+      const timeWeight = diffDays < 90 ? 1.5 : diffDays < 180 ? 1.1 : 0.7;
+      weightedRisk += exposure * timeWeight;
+      totalWeightedExposure += exposure;
+    });
+
+    const portfolioRiskScore = totalWeightedExposure === 0
+      ? 0
+      : Math.min(100, Math.round((weightedRisk / totalWeightedExposure) * 40));
 
     const riskLabel =
-      portfolioRiskScore > 60
-        ? "Elevated Risk"
-        : portfolioRiskScore > 30
+      portfolioRiskScore > 70
+        ? "High Structural Risk"
+        : portfolioRiskScore > 40
         ? "Moderate Risk"
         : "Stable";
+
+    const criticalRatio = riskBuckets.critical / totalLeases;
+    const watchRatio = riskBuckets.watch / totalLeases;
 
     const narrative = `As of ${new Date().toLocaleDateString()}, the portfolio includes ${leases.length} active leases with a modeled exposure of $${Number(totalExposure).toLocaleString()}. The AI risk score is ${portfolioRiskScore}/100, indicating ${riskLabel}. ${riskBuckets.critical} leases require immediate attention within 90 days.`;
 
@@ -197,6 +221,71 @@ router.post("/portfolio-board-pdf", async (ctx) => {
         color: rgb(0.4, 0.65, 1),
       });
     });
+
+    /* -------------------------------------------------
+       PAGE 2 — EXECUTIVE SUMMARY (CFO BRIEF)
+    -------------------------------------------------- */
+
+    const summaryPage = pdfDoc.addPage([842, 595]);
+    const { width: sw, height: sh } = summaryPage.getSize();
+
+    summaryPage.drawRectangle({ x:0, y:0, width:sw, height:sh, color: rgb(0.08,0.1,0.16) });
+
+    summaryPage.drawText("Executive Portfolio Brief", {
+      x: 40,
+      y: sh - 60,
+      size: 24,
+      font: boldFont,
+      color: rgb(1,1,1),
+    });
+
+    const bulletStartY = sh - 110;
+
+    const bullets = [
+      `• AI Risk Score: ${portfolioRiskScore}/100 (${riskLabel})`,
+      `• Total Portfolio Exposure: $${Number(totalExposure).toLocaleString()}`,
+      `• Critical Leases (<90 days): ${riskBuckets.critical}`,
+      `• Exposure Concentration: ${Math.round(criticalRatio*100)}% high-risk` ,
+    ];
+
+    bullets.forEach((b, i) => {
+      summaryPage.drawText(b, {
+        x: 60,
+        y: bulletStartY - (i * 30),
+        size: 14,
+        font,
+        color: rgb(0.8,0.9,1),
+      });
+    });
+
+    const modeledSpike = Math.round(totalExposure * 1.2);
+
+    summaryPage.drawText(
+      `• Modeled 20% Expense Increase Scenario: $${Number(modeledSpike).toLocaleString()}`,
+      {
+        x: 60,
+        y: bulletStartY - (bullets.length * 30),
+        size: 14,
+        font,
+        color: rgb(1,0.6,0.4),
+      }
+    );
+
+    if (priorExposure > 0) {
+      const delta = totalExposure - priorExposure;
+      const direction = delta > 0 ? "increase" : "decrease";
+
+      summaryPage.drawText(
+        `• Trend vs Prior Report: ${direction} of $${Number(Math.abs(delta)).toLocaleString()}`,
+        {
+          x: 60,
+          y: bulletStartY - ((bullets.length + 1) * 30),
+          size: 14,
+          font,
+          color: delta > 0 ? rgb(1,0.4,0.4) : rgb(0.4,0.9,0.6),
+        }
+      );
+    }
 
     /* -------------------------------------------------
        PAGE 2 — LEASE DETAIL TABLE (BOARD APPENDIX)
