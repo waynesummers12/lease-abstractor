@@ -99,7 +99,7 @@ export default function Header() {
                 href="/app/step-1-upload"
                 className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
               >
-                Run Audit
+                Run Audit (Free Preview)
               </Link>
             </>
           ) : (
