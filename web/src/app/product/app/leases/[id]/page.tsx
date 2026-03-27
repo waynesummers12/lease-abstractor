@@ -36,6 +36,8 @@ export default function LeaseDetailPage() {
   const leaseId = params?.id as string;
 
   const [lease, setLease] = useState<Lease | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -83,10 +85,39 @@ export default function LeaseDetailPage() {
   const daysUntil = calculateDaysUntil(lease.renewalDate);
   const riskScore = calculateRiskScore(daysUntil);
 
+  async function handleSave() {
+    if (!lease) return;
+
+    setSaving(true);
+    try {
+      const res = await fetch("/api/portfolio-leases", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(lease),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update lease");
+      }
+
+      setEditing(false);
+    } catch (err) {
+      console.error("Update failed:", err);
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 space-y-10">
       <div className="flex items-center justify-between">
         <div>
+          <button
+            onClick={() => setEditing(!editing)}
+            className="text-sm bg-black text-white px-4 py-2 rounded mr-4"
+          >
+            {editing ? "Cancel" : "Edit Lease"}
+          </button>
           <h1 className="text-3xl font-bold">{lease.propertyName}</h1>
           <p className="text-gray-500 mt-1">
             {lease.landlord || "Landlord not specified"}
@@ -138,18 +169,54 @@ export default function LeaseDetailPage() {
         <div className="grid md:grid-cols-2 gap-6 text-sm">
           <div>
             <div className="text-gray-500">Lease Type</div>
-            <div className="font-medium">{lease.leaseType || "—"}</div>
+            {editing ? (
+              <select
+                value={lease.leaseType || ""}
+                onChange={(e) =>
+                  setLease({ ...lease, leaseType: e.target.value })
+                }
+                className="border px-2 py-1 rounded text-sm"
+              >
+                <option value="NNN">NNN</option>
+                <option value="Gross">Gross</option>
+                <option value="Modified Gross">Modified Gross</option>
+              </select>
+            ) : (
+              <div className="font-medium">{lease.leaseType || "—"}</div>
+            )}
           </div>
 
           <div>
             <div className="text-gray-500">Square Footage</div>
-            <div className="font-medium">
-              {lease.squareFeet
-                ? lease.squareFeet.toLocaleString()
-                : "—"}
-            </div>
+            {editing ? (
+              <input
+                type="number"
+                value={lease.squareFeet || ""}
+                onChange={(e) =>
+                  setLease({ ...lease, squareFeet: Number(e.target.value) })
+                }
+                className="border px-2 py-1 rounded text-sm"
+              />
+            ) : (
+              <div className="font-medium">
+                {lease.squareFeet
+                  ? lease.squareFeet.toLocaleString()
+                  : "—"}
+              </div>
+            )}
           </div>
         </div>
+        {editing && (
+          <div className="mt-6">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="bg-black text-white px-5 py-2 rounded text-sm"
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Negotiation Leverage Messaging */}
