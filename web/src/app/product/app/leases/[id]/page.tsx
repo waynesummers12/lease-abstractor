@@ -108,6 +108,32 @@ export default function LeaseDetailPage() {
     }
   }
 
+  async function handleDelete() {
+    if (!lease) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this lease? This action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch("/api/portfolio-leases", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: lease.id }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete lease");
+      }
+
+      router.push("/product/app/leases");
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  }
+
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 space-y-10">
       <div className="flex items-center justify-between">
@@ -117,6 +143,12 @@ export default function LeaseDetailPage() {
             className="text-sm bg-black text-white px-4 py-2 rounded mr-4"
           >
             {editing ? "Cancel" : "Edit Lease"}
+          </button>
+          <button
+            onClick={handleDelete}
+            className="text-sm bg-red-600 text-white px-4 py-2 rounded mr-4"
+          >
+            Delete
           </button>
           <h1 className="text-3xl font-bold">{lease.propertyName}</h1>
           <p className="text-gray-500 mt-1">

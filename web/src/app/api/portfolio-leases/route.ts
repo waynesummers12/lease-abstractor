@@ -163,3 +163,50 @@ export async function PATCH(req: Request) {
     );
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceKey) {
+      return NextResponse.json(
+        { error: "Server misconfigured" },
+        { status: 500 }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, serviceKey);
+    const body = await req.json();
+
+    const { id } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: "Lease ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const { error } = await supabase
+      .from("portfolio_leases")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Delete error:", error);
+      return NextResponse.json(
+        { error: "Failed to delete lease" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (err) {
+    console.error("Server error:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
