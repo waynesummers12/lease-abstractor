@@ -91,6 +91,7 @@ export default function DashboardPage() {
   const [audits, setAudits] = useState<Lease[]>([]);
   const [selected, setSelected] = useState<Lease | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sortMode, setSortMode] = useState<"risk" | "renewal" | "name">("risk");
 
   const upcomingRenewals = audits.filter((lease) => {
     if (!lease.renewal_date) return false;
@@ -124,6 +125,18 @@ export default function DashboardPage() {
 
     return daysRemaining > 0 && daysRemaining <= 90;
   }).length;
+
+  const riskScores = audits
+    .map((lease) => getRenewalRiskScore(lease))
+    .filter((score): score is number => score !== null);
+
+  const averageRiskScore =
+    riskScores.length > 0
+      ? Math.round(
+          riskScores.reduce((sum, score) => sum + score, 0) /
+            riskScores.length
+        )
+      : 0;
 
   useEffect(() => {
     let cancelled = false;
@@ -185,17 +198,36 @@ export default function DashboardPage() {
   /* ---------------- MAIN UI ---------------- */
 
   const sortedLeases = [...audits].sort((a, b) => {
-    const riskA = getRenewalRiskScore(a) ?? -1;
-    const riskB = getRenewalRiskScore(b) ?? -1;
+    if (sortMode === "risk") {
+      const riskA = getRenewalRiskScore(a) ?? -1;
+      const riskB = getRenewalRiskScore(b) ?? -1;
 
-    // Higher risk first
-    if (riskA !== riskB) {
-      return riskB - riskA;
+      if (riskA !== riskB) return riskB - riskA;
+
+      if (a.renewal_date && b.renewal_date) {
+        return (
+          new Date(a.renewal_date).getTime() -
+          new Date(b.renewal_date).getTime()
+        );
+      }
+
+      return 0;
     }
 
-    // Tie-breaker: nearest renewal date first
-    if (a.renewal_date && b.renewal_date) {
-      return new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime();
+    if (sortMode === "renewal") {
+      if (a.renewal_date && b.renewal_date) {
+        return (
+          new Date(a.renewal_date).getTime() -
+          new Date(b.renewal_date).getTime()
+        );
+      }
+      return 0;
+    }
+
+    if (sortMode === "name") {
+      const nameA = a.property_name ?? "";
+      const nameB = b.property_name ?? "";
+      return nameA.localeCompare(nameB);
     }
 
     return 0;
@@ -208,16 +240,50 @@ export default function DashboardPage() {
         <h2 className="mb-4 text-lg font-semibold">
           Your Leases
         </h2>
+        <div className="mb-4 flex gap-2 text-xs">
+          <button
+            onClick={() => setSortMode("risk")}
+            className={`rounded px-2 py-1 border ${
+              sortMode === "risk"
+                ? "bg-black text-white"
+                : "bg-white hover:bg-gray-100"
+            }`}
+          >
+            Risk
+          </button>
+
+          <button
+            onClick={() => setSortMode("renewal")}
+            className={`rounded px-2 py-1 border ${
+              sortMode === "renewal"
+                ? "bg-black text-white"
+                : "bg-white hover:bg-gray-100"
+            }`}
+          >
+            Renewal Date
+          </button>
+
+          <button
+            onClick={() => setSortMode("name")}
+            className={`rounded px-2 py-1 border ${
+              sortMode === "name"
+                ? "bg-black text-white"
+                : "bg-white hover:bg-gray-100"
+            }`}
+          >
+            Name
+          </button>
+        </div>
 
         <ul className="space-y-2">
           {sortedLeases.map((audit) => (
             <li
               key={audit.id}
               onClick={() => setSelected(audit)}
-              className={`cursor-pointer rounded p-3 text-sm transition ${
+              className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform ${
                 selected?.id === audit.id
-                  ? "bg-gray-200"
-                  : "hover:bg-gray-100"
+                  ? "bg-gray-200 scale-[1.01]"
+                  : "hover:bg-gray-100 hover:scale-[1.01]"
               }`}
             >
               {(() => {
@@ -386,10 +452,17 @@ export default function DashboardPage() {
         </div>
 
         {/* DASHBOARD SUMMARY */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <div className="border rounded-lg p-4">
             <div className="text-xs text-gray-500">Total Leases</div>
             <div className="text-xl font-semibold mt-1">{audits.length}</div>
+          </div>
+
+          <div className="border rounded-lg p-4">
+            <div className="text-xs text-gray-500">Average Risk Score</div>
+            <div className="text-xl font-semibold mt-1">
+              {averageRiskScore}/100
+            </div>
           </div>
 
           <div className="border rounded-lg p-4">
