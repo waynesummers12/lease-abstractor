@@ -24,6 +24,8 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLease, setSelectedLease] = useState<LeaseWithRisk | null>(null);
+  const [companyName] = useState<string>("SaveOnLease Client");
+  const [confidential] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchPortfolio() {
@@ -155,7 +157,13 @@ export default function PortfolioPage() {
           onClick={() => {
             const now = new Date();
 
-            // Build exposure-weighted monthly data (12 months)
+            const narrative = `
+    As of ${now.toLocaleDateString()}, the portfolio consists of ${sortedLeases.length} active leases. 
+    ${riskBuckets.critical} leases require immediate attention within 90 days. 
+    Total modeled exposure across the portfolio is $${totalExposure.toLocaleString()}. 
+    Renewal concentration over the next 12 months indicates elevated capital planning requirements.
+  `;
+
             const monthlyExposure = Array(12).fill(0);
 
             sortedLeases.forEach(l => {
@@ -173,92 +181,101 @@ export default function PortfolioPage() {
 
             const chartBars = monthlyExposure
               .map((value, i) => {
-                const height = (value / maxExposure) * 80;
+                const height = (value / maxExposure) * 100;
                 const x = i * 28;
-                const y = 100 - height;
-                return `<rect x="${x}" y="${y}" width="20" height="${height}" fill="#2563eb" />`;
+                const y = 120 - height;
+                return `<rect x="${x}" y="${y}" width="20" height="${height}" fill="#60a5fa" />`;
               })
               .join("");
 
             const html = `
-              <html>
-                <head>
-                  <title>Portfolio Board Summary</title>
-                  <style>
-                    body { font-family: Arial, sans-serif; padding: 40px; }
-                    h1 { font-size: 28px; margin-bottom: 8px; }
-                    .sub { color: #666; margin-bottom: 30px; }
-                    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-                    .kpi { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-                    .kpi-title { font-size: 12px; color: #666; }
-                    .kpi-value { font-size: 24px; font-weight: bold; margin-top: 5px; }
-                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    th, td { border-bottom: 1px solid #eee; padding: 10px; text-align: left; font-size: 12px; }
-                    th { background: #f9f9f9; }
-                    .chart-container { margin: 30px 0; }
-                  </style>
-                </head>
-                <body>
-                  <div style="display:flex; align-items:center; gap:15px; margin-bottom:20px;">
-                    <img src="https://saveonlease.com/logo.png" height="40" />
-                    <div>
-                      <h1 style="margin:0;">SaveOnLease</h1>
-                      <div style="font-size:14px; color:#666;">Institutional Lease Risk Intelligence</div>
-                    </div>
-                  </div>
+    <html>
+      <head>
+        <title>${companyName} Portfolio Summary</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; background:#0f172a; color:#f1f5f9; }
+          h1,h2,h3 { color:#ffffff; }
+          .kpi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:30px 0; }
+          .kpi { background:#1e293b; padding:20px; border-radius:10px; }
+          .kpi-title { font-size:12px; color:#94a3b8; }
+          .kpi-value { font-size:24px; font-weight:bold; margin-top:5px; }
+          table { width:100%; border-collapse:collapse; margin-top:30px; }
+          th,td { border-bottom:1px solid #334155; padding:10px; font-size:12px; }
+          th { background:#1e293b; }
+          .chart { margin:40px 0; }
+          .watermark {
+            position:fixed;
+            top:40%;
+            left:20%;
+            font-size:80px;
+            color:rgba(255,255,255,0.05);
+            transform:rotate(-30deg);
+          }
+        </style>
+      </head>
+      <body>
+        ${confidential ? `<div class="watermark">CONFIDENTIAL</div>` : ""}
 
-                  <h2 style="margin-top:30px;">Portfolio Board Summary</h2>
-                  <div class="sub">Snapshot generated ${new Date().toLocaleDateString()}</div>
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:30px;">
+          <img src="https://saveonlease.com/logo.png" height="40" />
+          <div>
+            <h1 style="margin:0;">${companyName}</h1>
+            <div style="color:#94a3b8; font-size:14px;">Institutional Lease Risk Intelligence</div>
+          </div>
+        </div>
 
-                  <div class="kpi-grid">
-                    <div class="kpi">
-                      <div class="kpi-title">Total Leases</div>
-                      <div class="kpi-value">${sortedLeases.length}</div>
-                    </div>
-                    <div class="kpi">
-                      <div class="kpi-title">Critical (&lt;90 days)</div>
-                      <div class="kpi-value">${riskBuckets.critical}</div>
-                    </div>
-                    <div class="kpi">
-                      <div class="kpi-title">Total Portfolio Exposure</div>
-                      <div class="kpi-value">$${totalExposure.toLocaleString()}</div>
-                    </div>
-                  </div>
+        <h2>Executive Portfolio Summary</h2>
+        <p style="color:#cbd5e1; font-size:14px; line-height:1.6;">${narrative}</p>
 
-                  <div class="chart-container">
-                    <h3 style="margin-bottom:10px;">12-Month Exposure Forecast</h3>
-                    <svg width="350" height="120" viewBox="0 0 350 120">
-                      ${chartBars}
-                    </svg>
-                  </div>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-title">Total Leases</div>
+            <div class="kpi-value">${sortedLeases.length}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-title">Critical (&lt;90 days)</div>
+            <div class="kpi-value">${riskBuckets.critical}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-title">Total Exposure</div>
+            <div class="kpi-value">$${totalExposure.toLocaleString()}</div>
+          </div>
+        </div>
 
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Property</th>
-                        <th>Lease Type</th>
-                        <th>Renewal</th>
-                        <th>Days Remaining</th>
-                        <th>Exposure</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${sortedLeases
-                        .map(l => `
-                          <tr>
-                            <td>${l.property_name}</td>
-                            <td>${l.lease_type ?? ""}</td>
-                            <td>${l.renewal_date ?? ""}</td>
-                            <td>${l.diffDays ?? ""}</td>
-                            <td>$${(l.estimated_exposure ?? 0).toLocaleString()}</td>
-                          </tr>
-                        `)
-                        .join("")}
-                    </tbody>
-                  </table>
-                </body>
-              </html>
-            `;
+        <div class="chart">
+          <h3>12-Month Exposure Forecast</h3>
+          <svg width="350" height="140" viewBox="0 0 350 140">
+            ${chartBars}
+          </svg>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Lease Type</th>
+              <th>Renewal</th>
+              <th>Days</th>
+              <th>Exposure</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sortedLeases
+              .map(l => `
+                <tr>
+                  <td>${l.property_name}</td>
+                  <td>${l.lease_type ?? ""}</td>
+                  <td>${l.renewal_date ?? ""}</td>
+                  <td>${l.diffDays ?? ""}</td>
+                  <td>$${(l.estimated_exposure ?? 0).toLocaleString()}</td>
+                </tr>
+              `)
+              .join("")}
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
 
             const win = window.open("", "_blank");
             if (!win) return;
