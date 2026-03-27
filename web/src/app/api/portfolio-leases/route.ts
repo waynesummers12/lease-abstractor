@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         {
           property_name,
           landlord: landlord || null,
-          square_footage: square_footage
+          square_feet: square_footage
             ? Number(square_footage)
             : null,
           lease_type: lease_type || null,
@@ -141,7 +141,7 @@ export async function PATCH(req: Request) {
       .update({
         property_name: propertyName,
         landlord: landlord || null,
-        square_footage: squareFeet ? Number(squareFeet) : null,
+        square_feet: squareFeet ? Number(squareFeet) : null,
         lease_type: leaseType || null,
         renewal_date: renewalDate || null,
       })
