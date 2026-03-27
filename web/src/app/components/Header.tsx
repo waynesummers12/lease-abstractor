@@ -69,7 +69,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm relative">
+        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
           <EducationDropdown />
 
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
@@ -79,7 +79,7 @@ export default function Header() {
             How It Works
           </Link>
           <Link href="/marketing/referral" className="opacity-90 hover:opacity-100 font-medium transition">
-            Refer Clients (Earn 20%)
+            Refer & Earn 20%
           </Link>
           <Link href="/marketing/contact" className="opacity-70 hover:opacity-100 transition">
             Contact
@@ -92,18 +92,23 @@ export default function Header() {
 
           {!session ? (
             <>
-              <Link href="/login" className="opacity-70 hover:opacity-100 transition">
+              <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
                 Login
               </Link>
               <Link
                 href="/app/step-1-upload"
-                className="rounded-full bg-white px-6 py-2.5 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all"
+                className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
               >
-                Run Audit (Free Preview)
+                Run Audit
               </Link>
             </>
           ) : (
-            <AvatarDropdown session={session} isProUser={isProUser} />
+            <>
+              <Link href="/app/portfolio" className="opacity-80 hover:opacity-100 transition font-medium">
+                Dashboard
+              </Link>
+              <AvatarDropdown session={session} isProUser={isProUser} />
+            </>
           )}
         </nav>
 
