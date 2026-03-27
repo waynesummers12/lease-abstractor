@@ -205,7 +205,23 @@ export default function DashboardPage() {
                   : "hover:bg-gray-100"
               }`}
             >
-              <div className="font-medium">
+              {(() => {
+                if (!audit.renewal_date) return null;
+
+                const renewal = new Date(audit.renewal_date);
+                const today = new Date();
+                const diffMs = renewal.getTime() - today.getTime();
+                const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+                if (daysRemaining <= 90) {
+                  return (
+                    <span className="inline-block h-2 w-2 rounded-full bg-red-600 mr-2 align-middle" />
+                  );
+                }
+
+                return null;
+              })()}
+              <div className="flex items-center gap-2 font-medium">
               {audit.property_name ?? "Unnamed Lease"}
               </div>
               <div className="mt-1 text-xs text-gray-500">
