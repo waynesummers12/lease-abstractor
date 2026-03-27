@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
-
-export default function ProductAppRedirect() {
-  redirect("/app/step-1-upload");
+export default function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <>{children}</>;
 }
