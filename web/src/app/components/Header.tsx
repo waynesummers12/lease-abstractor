@@ -109,8 +109,11 @@ export default function Header() {
 
       <MobileMenu
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
         session={session}
+        onLogout={async () => {
+          await supabase.auth.signOut();
+          setMenuOpen(false);
+        }}
       />
     </header>
   );
