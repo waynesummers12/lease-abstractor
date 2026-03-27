@@ -140,6 +140,83 @@ export default function PortfolioPage() {
         >
           Export CSV
         </button>
+        <button
+          onClick={() => {
+            const html = `
+              <html>
+                <head>
+                  <title>Portfolio Board Summary</title>
+                  <style>
+                    body { font-family: Arial, sans-serif; padding: 40px; }
+                    h1 { font-size: 28px; margin-bottom: 8px; }
+                    .sub { color: #666; margin-bottom: 30px; }
+                    .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+                    .kpi { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
+                    .kpi-title { font-size: 12px; color: #666; }
+                    .kpi-value { font-size: 24px; font-weight: bold; margin-top: 5px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border-bottom: 1px solid #eee; padding: 10px; text-align: left; font-size: 12px; }
+                    th { background: #f9f9f9; }
+                  </style>
+                </head>
+                <body>
+                  <h1>Lease Portfolio Board Summary</h1>
+                  <div class="sub">Snapshot generated ${new Date().toLocaleDateString()}</div>
+
+                  <div class="kpi-grid">
+                    <div class="kpi">
+                      <div class="kpi-title">Total Leases</div>
+                      <div class="kpi-value">${sortedLeases.length}</div>
+                    </div>
+                    <div class="kpi">
+                      <div class="kpi-title">Critical (&lt;90 days)</div>
+                      <div class="kpi-value">${riskBuckets.critical}</div>
+                    </div>
+                    <div class="kpi">
+                      <div class="kpi-title">Total Portfolio Exposure</div>
+                      <div class="kpi-value">$${totalExposure.toLocaleString()}</div>
+                    </div>
+                  </div>
+
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Property</th>
+                        <th>Lease Type</th>
+                        <th>Renewal</th>
+                        <th>Days Remaining</th>
+                        <th>Exposure</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${sortedLeases
+                        .map(l => `
+                          <tr>
+                            <td>${l.property_name}</td>
+                            <td>${l.lease_type ?? ""}</td>
+                            <td>${l.renewal_date ?? ""}</td>
+                            <td>${l.diffDays ?? ""}</td>
+                            <td>$${(l.estimated_exposure ?? 0).toLocaleString()}</td>
+                          </tr>
+                        `)
+                        .join("")}
+                    </tbody>
+                  </table>
+                </body>
+              </html>
+            `;
+
+            const win = window.open("", "_blank");
+            if (!win) return;
+            win.document.write(html);
+            win.document.close();
+            win.focus();
+            win.print();
+          }}
+          className="text-sm px-4 py-2 bg-blue-600 text-white rounded ml-3"
+        >
+          Export Board PDF
+        </button>
       </div>
 
       {/* 12-Month Renewal Forecast */}
