@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 
 export default function Navbar() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient();
 
   const [session, setSession] = useState<Session | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
