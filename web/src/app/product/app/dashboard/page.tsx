@@ -24,40 +24,24 @@ import Link from "next/link";
 
 /* ================== TYPES ================== */
 
-type Audit = {
+type Lease = {
   id: string;
   created_at: string;
-  avoidable_exposure: number | null;
-  signedUrl: string | null;
-  email_sent?: boolean;
+  property_name: string | null;
+  landlord: string | null;
+  square_feet: number | null;
+  lease_type: string | null;
+  renewal_date: string | null;
 };
 
 /* ================== HELPERS ================== */
 
-function getHealthScore(audit: Audit): "A" | "B" | "C" | "D" {
-  const v = audit.avoidable_exposure ?? 0;
+function getHealthScore(): "A" | "B" | "C" | "D" {
+  const v = 0;
   if (v <= 1000) return "A";
   if (v <= 5000) return "B";
   if (v <= 15000) return "C";
   return "D";
-}
-
-function getRenewalInfo(audit: Audit) {
-  // Temporary mock: assume 1-year term from created_at
-  const created = new Date(audit.created_at);
-  const renewal = new Date(created);
-  renewal.setFullYear(created.getFullYear() + 1);
-
-  const today = new Date();
-  const diffMs = renewal.getTime() - today.getTime();
-  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-  let status: "safe" | "warning" | "urgent" = "safe";
-
-  if (daysRemaining <= 90) status = "urgent";
-  else if (daysRemaining <= 180) status = "warning";
-
-  return { renewal, daysRemaining, status };
 }
 
 function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
@@ -75,24 +59,12 @@ function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
   );
 }
 
-function StatusChips({ audit }: { audit: Audit }) {
+function StatusChips() {
   return (
     <div className="flex gap-2">
       <span className="rounded bg-gray-100 px-2 py-1 text-xs">
         Paid
       </span>
-
-      {audit.email_sent && (
-        <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
-          Email sent
-        </span>
-      )}
-
-      {audit.signedUrl && (
-        <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
-          PDF ready
-        </span>
-      )}
     </div>
   );
 }
@@ -100,23 +72,16 @@ function StatusChips({ audit }: { audit: Audit }) {
 /* ================== PAGE ================== */
 
 export default function DashboardPage() {
-  const [audits, setAudits] = useState<Audit[]>([]);
-  const [selected, setSelected] = useState<Audit | null>(null);
+  const [audits, setAudits] = useState<Lease[]>([]);
+  const [selected, setSelected] = useState<Lease | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadAudits() {
+    async function loadLeases() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-
-        if (!baseUrl) {
-          console.error("Missing NEXT_PUBLIC_WORKER_URL");
-          return;
-        }
-
-        const res = await fetch(`${baseUrl}/audit/latest`, {
+        const res = await fetch("/api/portfolio-leases", {
           cache: "no-store",
         });
 
@@ -124,9 +89,9 @@ export default function DashboardPage() {
 
         const json = await res.json();
 
-        if (!cancelled && json?.audit) {
-          setAudits([json.audit]);
-          setSelected(json.audit);
+        if (!cancelled && json?.leases) {
+          setAudits(json.leases);
+          setSelected(json.leases[0] ?? null);
         }
       } catch (err) {
         console.error("Dashboard load failed:", err);
@@ -135,7 +100,7 @@ export default function DashboardPage() {
       }
     }
 
-    loadAudits();
+    loadLeases();
     return () => {
       cancelled = true;
     };
@@ -190,7 +155,7 @@ export default function DashboardPage() {
               }`}
             >
               <div className="font-medium">
-              Lease – {new Date(audit.created_at).toLocaleDateString()}
+              {audit.property_name ?? "Unnamed Lease"}
               </div>
               <div className="mt-1 text-xs text-gray-500">
                 Health {getHealthScore(audit)}
@@ -214,7 +179,7 @@ export default function DashboardPage() {
           )}
         </div>
 
-        {selected && <StatusChips audit={selected} />}
+        {selected && <StatusChips />}
 
         <div className="rounded border border-gray-200 p-6">
           <div className="text-sm text-gray-500 mb-4">
@@ -224,21 +189,37 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <div className="text-gray-500">Property</div>
-              <div className="font-medium">—</div>
+              <div className="font-medium">{selected?.property_name ?? "—"}</div>
             </div>
 
             <div>
               <div className="text-gray-500">Lease Type</div>
-              <div className="font-medium">NNN</div>
+              <div className="font-medium">{selected?.lease_type ?? "NNN"}</div>
             </div>
 
             <div>
               <div className="text-gray-500">Square Footage</div>
-              <div className="font-medium">—</div>
+              <div className="font-medium">{selected?.square_feet ? selected.square_feet.toLocaleString() : "—"}</div>
             </div>
 
             {selected && (() => {
-              const { renewal, daysRemaining, status } = getRenewalInfo(selected);
+              if (!selected.renewal_date) {
+                return (
+                  <div>
+                    <div className="text-gray-500">Renewal Date</div>
+                    <div className="font-medium">—</div>
+                  </div>
+                );
+              }
+
+              const renewal = new Date(selected.renewal_date);
+              const today = new Date();
+              const diffMs = renewal.getTime() - today.getTime();
+              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+              let status: "safe" | "warning" | "urgent" = "safe";
+              if (daysRemaining <= 90) status = "urgent";
+              else if (daysRemaining <= 180) status = "warning";
 
               const badgeStyles = {
                 safe: "bg-green-100 text-green-800",
@@ -263,7 +244,14 @@ export default function DashboardPage() {
           </div>
 
           {selected && (() => {
-            const { status } = getRenewalInfo(selected);
+            const renewal = selected.renewal_date ? new Date(selected.renewal_date) : null;
+            const today = new Date();
+            const diffMs = renewal ? renewal.getTime() - today.getTime() : 0;
+            const daysRemaining = renewal ? Math.ceil(diffMs / (1000 * 60 * 60 * 24)) : 0;
+
+            let status: "safe" | "warning" | "urgent" = "safe";
+            if (daysRemaining <= 90) status = "urgent";
+            else if (daysRemaining <= 180) status = "warning";
 
             const buttonStyles = {
               safe: "border border-gray-300 hover:bg-gray-100",
@@ -349,28 +337,6 @@ export default function DashboardPage() {
             Run CAM / NNN Audit
           </Link>
         </div>
-
-        <div className="rounded border border-gray-200 p-6">
-          <div className="text-sm text-gray-500">
-            Portfolio Avoidable Exposure (Audited Leases Only)
-          </div>
-          <div className="mt-2 text-3xl font-bold">
-            {selected?.avoidable_exposure
-              ? `$${selected.avoidable_exposure.toLocaleString()}`
-              : "—"}
-          </div>
-        </div>
-
-        {selected?.signedUrl && (
-          <a
-            href={selected.signedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block rounded bg-black px-4 py-2 text-white"
-          >
-            Download PDF
-          </a>
-        )}
       </div>
     </div>
   );
