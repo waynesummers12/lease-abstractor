@@ -346,15 +346,18 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                   : "Lease expired";
             }
 
-            const showUrgentDot = (() => {
-              if (!audit.renewal_date) return false;
+            const renewalInfo = (() => {
+              if (!audit.renewal_date) return { show: false, pulse: false };
 
               const renewal = new Date(audit.renewal_date);
               const today = new Date();
               const diffMs = renewal.getTime() - today.getTime();
               const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-              return daysRemaining <= 90;
+              return {
+                show: daysRemaining <= 90,
+                pulse: daysRemaining <= 30,
+              };
             })();
 
             return (
@@ -378,8 +381,12 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                 }`}
               >
                 <div className="flex items-center gap-2 font-medium">
-                  {showUrgentDot && (
-                    <span className="inline-block h-2 w-2 rounded-full bg-red-600" />
+                  {renewalInfo.show && (
+                    <span
+                      className={`inline-block h-2 w-2 rounded-full bg-red-600 ${
+                        renewalInfo.pulse ? "animate-ping" : ""
+                      }`}
+                    />
                   )}
                   {audit.property_name ?? "Unnamed Lease"}
                 </div>
