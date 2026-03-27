@@ -261,6 +261,39 @@ export default function DashboardPage() {
               );
             })()}
           </div>
+
+          {selected && (() => {
+            const { status } = getRenewalInfo(selected);
+
+            const buttonStyles = {
+              safe: "border border-gray-300 hover:bg-gray-100",
+              warning: "border border-yellow-400 bg-yellow-50 text-yellow-800 hover:bg-yellow-100",
+              urgent: "bg-red-600 text-white hover:bg-red-700",
+            };
+
+            return (
+              <div className="mt-6">
+                <Link
+                  href="/app/step-1-upload"
+                  className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
+                >
+                  Run CAM / NNN Audit
+                </Link>
+
+                {status === "urgent" && (
+                  <div className="mt-2 text-xs text-red-600 font-medium">
+                    Renewal approaching — audit recommended before negotiation.
+                  </div>
+                )}
+
+                {status === "warning" && (
+                  <div className="mt-2 text-xs text-yellow-700 font-medium">
+                    Renewal within 6 months — consider reviewing exposure.
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         {/* DASHBOARD SUMMARY */}
