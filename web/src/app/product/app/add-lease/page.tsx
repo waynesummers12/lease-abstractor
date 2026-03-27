@@ -34,18 +34,35 @@ export default function AddLeasePage() {
     setFileName(file.name);
     setExtracting(true);
 
-    // 🔮 Placeholder for real extraction API
-    // Simulate AI extraction delay
-    setTimeout(() => {
-      setForm({
-        propertyName: file.name.replace(".pdf", ""),
-        landlord: "Detected Landlord LLC",
-        squareFeet: "2500",
-        leaseType: "NNN",
-        renewalDate: "2026-12-31",
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/extract-lease-metadata", {
+        method: "POST",
+        body: formData,
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Extraction failed");
+      }
+
+      setForm({
+        propertyName: data.metadata?.propertyName || "",
+        landlord: data.metadata?.landlord || "",
+        squareFeet: data.metadata?.squareFeet
+          ? String(data.metadata.squareFeet)
+          : "",
+        leaseType: data.metadata?.leaseType || "NNN",
+        renewalDate: data.metadata?.renewalDate || "",
+      });
+    } catch (err) {
+      console.error("Extraction error:", err);
+    } finally {
       setExtracting(false);
-    }, 1500);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
