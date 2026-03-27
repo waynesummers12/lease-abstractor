@@ -92,6 +92,7 @@ export default function DashboardPage() {
   const [selected, setSelected] = useState<Lease | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortMode, setSortMode] = useState<"risk" | "renewal" | "name">("risk");
+  const [activeMonth, setActiveMonth] = useState<string | null>(null);
 
   const upcomingRenewals = audits.filter((lease) => {
     if (!lease.renewal_date) return false;
@@ -239,41 +240,53 @@ export default function DashboardPage() {
 
   /* ---------------- MAIN UI ---------------- */
 
-  const sortedLeases = [...audits].sort((a, b) => {
-    if (sortMode === "risk") {
-      const riskA = getRenewalRiskScore(a) ?? -1;
-      const riskB = getRenewalRiskScore(b) ?? -1;
+  const filteredLeases = activeMonth
+  ? audits.filter((lease) => {
+      if (!lease.renewal_date) return false;
+      const r = new Date(lease.renewal_date);
+      const label = r.toLocaleString("default", {
+        month: "short",
+        year: "numeric",
+      });
+      return label === activeMonth;
+    })
+  : audits;
 
-      if (riskA !== riskB) return riskB - riskA;
+const sortedLeases = [...filteredLeases].sort((a, b) => {
+  if (sortMode === "risk") {
+    const riskA = getRenewalRiskScore(a) ?? -1;
+    const riskB = getRenewalRiskScore(b) ?? -1;
 
-      if (a.renewal_date && b.renewal_date) {
-        return (
-          new Date(a.renewal_date).getTime() -
-          new Date(b.renewal_date).getTime()
-        );
-      }
+    if (riskA !== riskB) return riskB - riskA;
 
-      return 0;
-    }
-
-    if (sortMode === "renewal") {
-      if (a.renewal_date && b.renewal_date) {
-        return (
-          new Date(a.renewal_date).getTime() -
-          new Date(b.renewal_date).getTime()
-        );
-      }
-      return 0;
-    }
-
-    if (sortMode === "name") {
-      const nameA = a.property_name ?? "";
-      const nameB = b.property_name ?? "";
-      return nameA.localeCompare(nameB);
+    if (a.renewal_date && b.renewal_date) {
+      return (
+        new Date(a.renewal_date).getTime() -
+        new Date(b.renewal_date).getTime()
+      );
     }
 
     return 0;
-  });
+  }
+
+  if (sortMode === "renewal") {
+    if (a.renewal_date && b.renewal_date) {
+      return (
+        new Date(a.renewal_date).getTime() -
+        new Date(b.renewal_date).getTime()
+      );
+    }
+    return 0;
+  }
+
+  if (sortMode === "name") {
+    const nameA = a.property_name ?? "";
+    const nameB = b.property_name ?? "";
+    return nameA.localeCompare(nameB);
+  }
+
+  return 0;
+});
 
   return (
     <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
@@ -599,7 +612,14 @@ export default function DashboardPage() {
               return (
                 <div
                   key={m.label}
-                  className={`rounded p-3 text-center ${intensity}`}
+                  onClick={() =>
+                    setActiveMonth(activeMonth === m.label ? null : m.label)
+                  }
+                  className={`rounded p-3 text-center cursor-pointer border transition ${
+                    activeMonth === m.label
+                      ? "border-black ring-1 ring-black"
+                      : "border-transparent"
+                  } ${intensity}`}
                 >
                   <div className="font-medium">{m.label}</div>
                   <div className="mt-1 text-lg font-semibold">{m.count}</div>
