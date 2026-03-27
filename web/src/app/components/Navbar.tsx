@@ -7,10 +7,13 @@ import { Session } from "@supabase/supabase-js";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
-  const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+  // ✅ Stable Supabase client (no re-creation on render)
+  const supabase = useState(() =>
+    createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  )[0];
 
   const [session, setSession] = useState<Session | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
@@ -20,7 +23,7 @@ export default function Navbar() {
   const learnRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
 
-  // Get session
+  // ✅ Get session safely
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
@@ -37,7 +40,7 @@ export default function Navbar() {
     };
   }, [supabase]);
 
-  // Outside click close
+  // ✅ Close dropdowns on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (learnRef.current && !learnRef.current.contains(e.target as Node)) {
@@ -52,7 +55,11 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const isProUser = false; // Replace later with real plan logic
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
+  const isProUser = false; // TODO: replace with real plan logic
 
   return (
     <nav className="w-full bg-black text-white px-6 py-4">
@@ -64,7 +71,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          {/* Marketing Dropdown */}
+          {/* Learn Dropdown */}
           <div ref={learnRef} className="relative">
             <button
               onClick={() => setLearnOpen(!learnOpen)}
@@ -74,7 +81,7 @@ export default function Navbar() {
             </button>
 
             {learnOpen && (
-              <div className="absolute mt-2 w-52 bg-white text-black rounded-md shadow-lg py-2">
+              <div className="absolute mt-2 w-56 bg-white text-black rounded-md shadow-lg py-2">
                 <Link href="/marketing/what-we-find" className="block px-4 py-2 hover:bg-gray-100">
                   What We Find
                 </Link>
@@ -84,34 +91,22 @@ export default function Navbar() {
                 <Link href="/marketing/pricing" className="block px-4 py-2 hover:bg-gray-100">
                   Pricing
                 </Link>
+                <Link href="/marketing/contact" className="block px-4 py-2 hover:bg-gray-100">
+                  Contact
+                </Link>
               </div>
             )}
           </div>
 
-          <Link href="/marketing/what-we-find" className="text-sm hover:text-gray-300">
-            What We Find
-          </Link>
-
-          <Link href="/marketing/how-it-works" className="text-sm hover:text-gray-300">
-            How It Works
-          </Link>
-
+          {/* Referral */}
           <Link href="/marketing/referral" className="text-sm hover:text-gray-300">
             Refer Clients (Earn 20%)
-          </Link>
-
-          <Link href="/marketing/pricing" className="text-sm hover:text-gray-300">
-            Pricing
-          </Link>
-
-          <Link href="/marketing/contact" className="text-sm hover:text-gray-300">
-            Contact
           </Link>
 
           {/* Divider */}
           <div className="h-5 w-px bg-gray-700" />
 
-          {/* App Zone */}
+          {/* Auth / App */}
           {!session ? (
             <>
               <Link href="/login" className="text-sm text-gray-300 hover:text-white">
@@ -139,7 +134,7 @@ export default function Navbar() {
                 onClick={() => setAvatarOpen(!avatarOpen)}
                 className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold"
               >
-                {session.user.email?.[0].toUpperCase()}
+                {session.user.email?.[0]?.toUpperCase() || "U"}
               </button>
 
               {avatarOpen && (
@@ -148,7 +143,7 @@ export default function Navbar() {
                     Dashboard
                   </Link>
                   <button
-                    onClick={() => supabase.auth.signOut()}
+                    onClick={handleLogout}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100"
                   >
                     Logout
@@ -172,7 +167,7 @@ export default function Navbar() {
       <MobileMenu
         open={mobileOpen}
         session={session}
-        onLogout={() => supabase.auth.signOut()}
+        onLogout={handleLogout}
       />
     </nav>
   );
