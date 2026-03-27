@@ -288,6 +288,38 @@ export default function PortfolioPage() {
         >
           Export Board PDF
         </button>
+        <button
+          onClick={() => {
+            const now = new Date();
+            const html = `
+              <html>
+                <head>
+                  <title>${companyName} Portfolio Preview</title>
+                  <style>
+                    body { font-family: Arial, sans-serif; padding:40px; }
+                    h1 { font-size:24px; }
+                  </style>
+                </head>
+                <body>
+                  <h1>${companyName} Portfolio Snapshot</h1>
+                  <p>Generated ${now.toLocaleDateString()}</p>
+                  <p>Total Leases: ${sortedLeases.length}</p>
+                  <p>Total Exposure: $${totalExposure.toLocaleString()}</p>
+                </body>
+              </html>
+            `;
+
+            const win = window.open("", "_blank");
+            if (!win) return;
+            win.document.write(html);
+            win.document.close();
+            win.focus();
+            win.print();
+          }}
+          className="text-sm px-4 py-2 bg-gray-200 text-black rounded ml-3"
+        >
+          Quick Print Preview
+        </button>
       </div>
 
       {/* 12-Month Renewal Forecast */}
