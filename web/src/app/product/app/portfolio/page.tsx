@@ -110,8 +110,90 @@ export default function PortfolioPage() {
         </div>
       </div>
 
+      <div className="flex justify-end">
+        <button
+          onClick={() => {
+            const headers = ["Property", "Lease Type", "SF", "Renewal", "Exposure"];
+            const rows = sortedLeases.map(l => [
+              l.property_name,
+              l.lease_type ?? "",
+              l.square_feet ?? "",
+              l.renewal_date ?? "",
+              l.estimated_exposure ?? 0
+            ]);
+
+            const csvContent =
+              "data:text/csv;charset=utf-8," +
+              [headers, ...rows]
+                .map(e => e.join(","))
+                .join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "portfolio_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }}
+          className="text-sm px-4 py-2 bg-black text-white rounded"
+        >
+          Export CSV
+        </button>
+      </div>
+
+      {/* 12-Month Renewal Forecast */}
+      <div className="border rounded-lg p-4">
+        <p className="text-sm font-medium mb-4">12-Month Renewal Forecast</p>
+        <svg width="100%" height="120" viewBox="0 0 400 120">
+          {(() => {
+            const now = new Date();
+            const monthlyCounts = Array(12).fill(0);
+
+            sortedLeases.forEach(l => {
+              if (!l.renewal_date) return;
+              const diffMonths =
+                (new Date(l.renewal_date).getFullYear() - now.getFullYear()) * 12 +
+                (new Date(l.renewal_date).getMonth() - now.getMonth());
+              if (diffMonths >= 0 && diffMonths < 12) {
+                monthlyCounts[diffMonths]++;
+              }
+            });
+
+            const max = Math.max(...monthlyCounts, 1);
+            const points = monthlyCounts
+              .map((count, i) => {
+                const x = (i / 11) * 380 + 10;
+                const y = 100 - (count / max) * 80;
+                return `${x},${y}`;
+              })
+              .join(" ");
+
+            return <polyline fill="none" stroke="#2563eb" strokeWidth="3" points={points} />;
+          })()}
+        </svg>
+      </div>
+
+      {/* Grouped by Lease Type */}
+      <div className="border rounded-lg p-4">
+        <p className="text-sm font-medium mb-2">Portfolio Grouping</p>
+        {Object.entries(
+          sortedLeases.reduce((acc, lease) => {
+            const key = lease.lease_type || "Unspecified";
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(lease);
+            return acc;
+          }, {} as Record<string, typeof sortedLeases>)
+        ).map(([type, leases]) => (
+          <div key={type} className="flex justify-between text-sm py-1">
+            <span>{type}</span>
+            <span>{leases.length} leases</span>
+          </div>
+        ))}
+      </div>
+
       {/* Top KPI Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="sticky top-0 z-10 bg-white grid grid-cols-1 md:grid-cols-4 gap-4 pb-4">
         <div className="border rounded-lg p-4">
           <p className="text-sm text-gray-500">Total Leases</p>
           <p className="text-2xl font-bold">{sortedLeases.length}</p>
