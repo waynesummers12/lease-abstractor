@@ -22,6 +22,12 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 /* ================= TYPES ================= */
 
 type AuditResponse = {
@@ -131,13 +137,13 @@ useEffect(() => {
   if (
   data?.status === "complete" &&
   typeof window !== "undefined" &&
-  (window as any).gtag
+  window.gtag
 ) {
-  (window as any).gtag("event", "report_purchased", {
+  window.gtag("event", "report_purchased", {
     event_category: "funnel",
     event_label: "audit_pdf_unlocked",
     value: 49.99,
-  });
+  } as Record<string, unknown>);
 }
 }, [data?.status]);
 
