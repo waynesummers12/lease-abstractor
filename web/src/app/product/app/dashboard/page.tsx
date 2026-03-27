@@ -98,6 +98,17 @@ export default function DashboardPage() {
     return daysRemaining <= 0;
   }).length;
 
+  const urgentRenewals = audits.filter((lease) => {
+    if (!lease.renewal_date) return false;
+
+    const renewal = new Date(lease.renewal_date);
+    const today = new Date();
+    const diffMs = renewal.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    return daysRemaining > 0 && daysRemaining <= 90;
+  }).length;
+
   useEffect(() => {
     let cancelled = false;
 
@@ -321,8 +332,10 @@ export default function DashboardPage() {
           </div>
 
           <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">CAM / NNN Exposure</div>
-            <div className="text-xl font-semibold mt-1">—</div>
+            <div className="text-xs text-gray-500">Urgent Renewals (≤ 90 days)</div>
+            <div className="text-xl font-semibold mt-1 text-red-600">
+              {urgentRenewals}
+            </div>
           </div>
 
           <div className="border rounded-lg p-4">
