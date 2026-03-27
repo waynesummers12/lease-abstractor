@@ -27,7 +27,7 @@ export default function PortfolioPage() {
     async function load() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/portfolio-leases`
+          `${process.env.NEXT_PUBLIC_WORKER_URL}/portfolio-leases`
         );
         const data: ApiLease[] = await res.json();
 
