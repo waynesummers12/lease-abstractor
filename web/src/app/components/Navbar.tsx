@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { createBrowserClient } from "@supabase/ssr";
 import { Session } from "@supabase/supabase-js";
+import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
   const supabase = createBrowserClient(
@@ -168,27 +169,11 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {mobileOpen && (
-        <div className="md:hidden mt-4 flex flex-col gap-4">
-          <Link href="/marketing/what-we-find">What We Find</Link>
-          <Link href="/marketing/how-it-works">How It Works</Link>
-          <Link href="/marketing/pricing">Pricing</Link>
-
-          {!session ? (
-            <>
-              <Link href="/login">Login</Link>
-              <Link href="/app/step-1-upload">Run Audit (Free Preview)</Link>
-            </>
-          ) : (
-            <>
-              <Link href="/app/portfolio">Dashboard</Link>
-              <button onClick={() => supabase.auth.signOut()}>
-                Logout
-              </button>
-            </>
-          )}
-        </div>
-      )}
+      <MobileMenu
+        open={mobileOpen}
+        session={session}
+        onLogout={() => supabase.auth.signOut()}
+      />
     </nav>
   );
 }
