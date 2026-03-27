@@ -229,7 +229,7 @@ export default function DashboardPage() {
           Upload a lease to add it to your portfolio. You can run a paid CAM / NNN audit anytime.
         </p>
         <Link
-          href="/app/step-1-upload"
+          href="/product/app/add-lease"
           className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
           Add Lease to Portfolio
@@ -340,10 +340,13 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
               const diffMs = renewal.getTime() - today.getTime();
               const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-              tooltip =
-                daysRemaining > 0
-                  ? `Renewal in ${daysRemaining} days`
-                  : "Lease expired";
+              if (daysRemaining <= 0) {
+                tooltip = "Lease expired";
+              } else if (daysRemaining <= 30) {
+                tooltip = "Critical Renewal Window";
+              } else {
+                tooltip = `Renewal in ${daysRemaining} days`;
+              }
             }
 
             const renewalInfo = (() => {
@@ -384,7 +387,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                   {renewalInfo.show && (
                     <span
                       className={`inline-block h-2 w-2 rounded-full bg-red-600 ${
-                        renewalInfo.pulse ? "animate-ping" : ""
+                        renewalInfo.pulse ? "animate-pulse opacity-80" : ""
                       }`}
                     />
                   )}
@@ -697,7 +700,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
           </Link>
 
           <Link
-            href="/app/step-1-upload"
+            href="/product/app/add-lease"
             className="rounded bg-black px-3 py-2 text-sm text-white"
           >
             Run CAM / NNN Audit
