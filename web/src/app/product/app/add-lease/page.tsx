@@ -74,7 +74,15 @@ export default function AddLeasePage() {
       const res = await fetch("/api/portfolio-leases", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          property_name: form.propertyName,
+          landlord: form.landlord,
+          square_footage: form.squareFeet
+            ? Number(form.squareFeet)
+            : null,
+          lease_type: form.leaseType,
+          renewal_date: form.renewalDate || null,
+        }),
       });
 
       const data = await res.json();
@@ -83,9 +91,11 @@ export default function AddLeasePage() {
         throw new Error(data.error || "Failed to save lease");
       }
 
-      router.push("/product/app/dashboard");
+      // Redirect to leases page after successful save
+      router.push("/product/app/leases");
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
       setError(message);
     } finally {
       setLoading(false);
