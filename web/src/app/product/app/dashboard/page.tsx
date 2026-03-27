@@ -138,13 +138,13 @@ export default function DashboardPage() {
           No audits yet
         </h1>
         <p className="mb-4 text-gray-600">
-          Upload a lease to generate your first CAM / NNN audit.
+          Upload a lease to add it to your portfolio. You can run a paid CAM / NNN audit anytime.
         </p>
         <Link
           href="/app/step-1-upload"
           className="inline-block rounded bg-black px-4 py-2 text-sm text-white"
         >
-          Upload Lease (Free Preview)
+          Add Lease to Portfolio
         </Link>
       </div>
     );
@@ -205,7 +205,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="border rounded-lg p-4">
             <div className="text-xs text-gray-500">Total Leases</div>
-            <div className="text-xl font-semibold mt-1">—</div>
+            <div className="text-xl font-semibold mt-1">{audits.length}</div>
           </div>
 
           <div className="border rounded-lg p-4">
@@ -241,16 +241,23 @@ export default function DashboardPage() {
           </Link>
 
           <Link
+            href="/product/app/add-lease"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            Add Lease (No Audit)
+          </Link>
+
+          <Link
             href="/app/step-1-upload"
             className="rounded bg-black px-3 py-2 text-sm text-white"
           >
-            Upload New Lease
+            Run CAM / NNN Audit
           </Link>
         </div>
 
         <div className="rounded border border-gray-200 p-6">
           <div className="text-sm text-gray-500">
-            Estimated Avoidable Exposure
+            Portfolio Avoidable Exposure (Audited Leases Only)
           </div>
           <div className="mt-2 text-3xl font-bold">
             {selected?.avoidable_exposure
