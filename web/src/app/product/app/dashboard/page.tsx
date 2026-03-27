@@ -553,47 +553,74 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         })()}
         </div>
 
-        {/* DASHBOARD SUMMARY */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Total Leases</div>
-            <div className="text-xl font-semibold mt-1">{audits.length}</div>
-          </div>
+        {/* DASHBOARD SUMMARY — BAR STYLE */}
+        <div className="space-y-4 mb-6">
+          {[
+            {
+              label: "Expired Leases",
+              value: expiredLeases,
+              color: "bg-red-500",
+            },
+            {
+              label: "Urgent Renewals (≤ 90 days)",
+              value: urgentRenewals,
+              color: "bg-orange-500",
+            },
+            {
+              label: "Upcoming Renewals (≤ 180 days)",
+              value: upcomingRenewals,
+              color: "bg-yellow-500",
+            },
+            {
+              label: "Average Risk Score",
+              value: averageRiskScore,
+              suffix: "/100",
+              color: "bg-purple-500",
+              max: 100,
+            },
+            {
+              label: "At-Risk Square Footage",
+              value: totalAtRiskSquareFootage,
+              color: "bg-blue-500",
+            },
+            {
+              label: "Total Leases",
+              value: audits.length,
+              color: "bg-gray-800",
+            },
+          ].map((item) => {
+            const max =
+              item.max ??
+              Math.max(
+                expiredLeases,
+                urgentRenewals,
+                upcomingRenewals,
+                audits.length,
+                1
+              );
 
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Average Risk Score</div>
-            <div className="text-xl font-semibold mt-1">
-              {averageRiskScore}/100
-            </div>
-          </div>
+            const percent =
+              max > 0 ? Math.min((item.value / max) * 100, 100) : 0;
 
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">At-Risk Square Footage</div>
-            <div className="text-xl font-semibold mt-1">
-              {totalAtRiskSquareFootage.toLocaleString()}
-            </div>
-          </div>
+            return (
+              <div key={item.label}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-600">{item.label}</span>
+                  <span className="font-semibold">
+                    {item.value.toLocaleString()}
+                    {item.suffix ?? ""}
+                  </span>
+                </div>
 
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Expired Leases</div>
-            <div className="text-xl font-semibold mt-1">
-              {expiredLeases}
-            </div>
-          </div>
-
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Urgent Renewals (≤ 90 days)</div>
-            <div className="text-xl font-semibold mt-1 text-red-600">
-              {urgentRenewals}
-            </div>
-          </div>
-
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Upcoming Renewals (≤ 180 days)</div>
-            <div className="text-xl font-semibold mt-1">
-              {upcomingRenewals}
-            </div>
-          </div>
+                <div className="h-3 w-full bg-gray-100 rounded">
+                  <div
+                    className={`h-3 rounded ${item.color} transition-all duration-500`}
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* CALENDAR TIMELINE */}
