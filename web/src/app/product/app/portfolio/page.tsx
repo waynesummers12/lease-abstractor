@@ -19,9 +19,18 @@ export default function PortfolioPage() {
   useEffect(() => {
     async function fetchPortfolio() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_WORKER_URL}/portfolio-leases`
-        );
+        const baseUrl =
+          process.env.NEXT_PUBLIC_WORKER_URL ??
+          "https://lease-abstractor-worker.onrender.com";
+
+        console.log("WORKER URL:", baseUrl);
+
+        const res = await fetch(`${baseUrl}/portfolio-leases`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!res.ok) {
           throw new Error("Failed to fetch portfolio leases");
