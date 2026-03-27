@@ -710,3 +710,13 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
     </div>
   );
 }
+
+        {/* SIDEBAR UPLOAD LEASE BUTTON */}
+        <div className="mb-4">
+          <Link
+            href="/product/app/add-lease"
+            className="w-full inline-block rounded bg-black px-4 py-2 text-sm text-white text-center"
+          >
+            Upload Lease
+          </Link>
+        </div>
