@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { usePathname } from "next/navigation";
+import { createBrowserClient } from "@supabase/ssr";
 import { Session } from "@supabase/supabase-js";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
@@ -12,13 +12,19 @@ import MobileMenu from "./MobileMenu";
 
 export default function Header() {
   const pathname = usePathname();
-  const router = useRouter();
   const isAppPage = pathname.startsWith("/app");
 
   const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+      },
+    }
+  );
 
   const [session, setSession] = useState<Session | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -36,12 +42,6 @@ export default function Header() {
 
     return () => listener.subscription.unsubscribe();
   }, [supabase]);
-
-  useEffect(() => {
-    if (pathname.startsWith("/app") && session === null) {
-      router.push("/login");
-    }
-  }, [pathname, session, router]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
