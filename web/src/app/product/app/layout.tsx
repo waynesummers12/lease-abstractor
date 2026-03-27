@@ -11,6 +11,11 @@ export default async function ProductLayout({
 }) {
   const cookieStore = await cookies();
 
+  // Prevent build-time crash when env vars are missing (e.g. during static prerender)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return <div>{children}</div>;
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
