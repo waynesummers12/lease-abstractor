@@ -14,11 +14,15 @@ type Lease = {
   estimated_exposure?: number;
 };
 
+type LeaseWithRisk = Lease & {
+  diffDays: number | null;
+};
+
 export default function PortfolioPage() {
   const [leases, setLeases] = useState<Lease[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedLease, setSelectedLease] = useState<Lease | null>(null);
+  const [selectedLease, setSelectedLease] = useState<LeaseWithRisk | null>(null);
 
   useEffect(() => {
     async function fetchPortfolio() {
@@ -42,7 +46,7 @@ export default function PortfolioPage() {
     fetchPortfolio();
   }, []);
 
-  const leasesWithRisk = useMemo(() => {
+  const leasesWithRisk = useMemo<LeaseWithRisk[]>(() => {
     const today = new Date();
 
     return leases.map((lease) => {
