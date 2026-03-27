@@ -9,7 +9,11 @@ export default async function ProductLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerClient({ cookies });
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies }
+  );
 
   const {
     data: { session },
