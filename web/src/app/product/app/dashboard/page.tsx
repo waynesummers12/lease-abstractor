@@ -44,6 +44,22 @@ function getHealthScore(): "A" | "B" | "C" | "D" {
   return "D";
 }
 
+function getRenewalRiskScore(lease: Lease | null): number | null {
+  if (!lease || !lease.renewal_date) return null;
+
+  const renewal = new Date(lease.renewal_date);
+  const today = new Date();
+  const diffMs = renewal.getTime() - today.getTime();
+  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  if (daysRemaining <= 0) return 100;        // expired
+  if (daysRemaining <= 30) return 90;
+  if (daysRemaining <= 60) return 75;
+  if (daysRemaining <= 90) return 60;
+  if (daysRemaining <= 180) return 40;
+  return 10;                                 // low risk
+}
+
 function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
   const styles = {
     A: "bg-green-100 text-green-800",
@@ -242,7 +258,26 @@ export default function DashboardPage() {
           </div>
 
           {selected && (
-            <HealthBadge score={getHealthScore()} />
+            <div className="flex items-center gap-3">
+              <HealthBadge score={getHealthScore()} />
+              {(() => {
+                const risk = getRenewalRiskScore(selected);
+                if (risk === null) return null;
+
+                const riskColor =
+                  risk >= 80
+                    ? "bg-red-100 text-red-800"
+                    : risk >= 60
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-green-100 text-green-800";
+
+                return (
+                  <span className={`rounded px-2 py-1 text-xs font-semibold ${riskColor}`}>
+                    Renewal Risk: {risk}/100
+                  </span>
+                );
+              })()}
+            </div>
           )}
         </div>
 
