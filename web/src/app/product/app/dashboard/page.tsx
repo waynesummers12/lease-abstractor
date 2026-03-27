@@ -362,7 +362,16 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                 key={audit.id}
                 onClick={() => setSelected(audit)}
                 title={tooltip}
-                className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform ${
+                className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform border-l-4 ${
+                  (() => {
+                    const risk = getRenewalRiskScore(audit);
+                    if (risk === null) return "border-gray-200";
+                    if (risk >= 90) return "border-red-600";
+                    if (risk >= 75) return "border-orange-500";
+                    if (risk >= 60) return "border-yellow-400";
+                    return "border-green-400";
+                  })()
+                } ${
                   selected?.id === audit.id
                     ? "bg-gray-200 scale-[1.01]"
                     : "hover:bg-gray-100 hover:scale-[1.01]"
