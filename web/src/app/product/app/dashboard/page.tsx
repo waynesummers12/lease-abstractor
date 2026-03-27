@@ -147,6 +147,21 @@ export default function DashboardPage() {
       return sum + (lease.square_feet ?? 0);
     }, 0);
 
+  // Build 12-month renewal timeline
+  const today = new Date();
+  const timelineMonths = Array.from({ length: 12 }).map((_, i) => {
+    const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
+    const label = d.toLocaleString("default", { month: "short", year: "numeric" });
+
+    const count = audits.filter((lease) => {
+      if (!lease.renewal_date) return false;
+      const r = new Date(lease.renewal_date);
+      return r.getFullYear() === d.getFullYear() && r.getMonth() === d.getMonth();
+    }).length;
+
+    return { label, count };
+  });
+
   useEffect(() => {
     let cancelled = false;
 
@@ -565,6 +580,33 @@ export default function DashboardPage() {
             <div className="text-xl font-semibold mt-1">
               {upcomingRenewals}
             </div>
+          </div>
+        </div>
+
+        {/* CALENDAR TIMELINE */}
+        <div className="rounded border border-gray-200 p-6">
+          <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
+
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+            {timelineMonths.map((m) => {
+              const intensity =
+                m.count >= 5
+                  ? "bg-red-100 text-red-800"
+                  : m.count >= 3
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-800";
+
+              return (
+                <div
+                  key={m.label}
+                  className={`rounded p-3 text-center ${intensity}`}
+                >
+                  <div className="font-medium">{m.label}</div>
+                  <div className="mt-1 text-lg font-semibold">{m.count}</div>
+                  <div className="text-xs">renewals</div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
