@@ -96,7 +96,7 @@ export async function GET() {
     if (error) {
       console.error("Fetch error:", error);
       return NextResponse.json(
-        { error: "Failed to fetch leases" },
+        { error: error.message },
         { status: 500 }
       );
     }
