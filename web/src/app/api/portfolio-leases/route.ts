@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceKey) {
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
         {
           property_name: propertyName,
           landlord: landlord || null,
-          square_feet: squareFeet ? Number(squareFeet) : null,
+          square_footage: squareFeet ? Number(squareFeet) : null,
           lease_type: leaseType || null,
           renewal_date: renewalDate || null,
         },
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceKey) {
@@ -105,7 +105,7 @@ export async function GET() {
 
 export async function PATCH(req: Request) {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceKey) {
@@ -139,7 +139,7 @@ export async function PATCH(req: Request) {
       .update({
         property_name: propertyName,
         landlord: landlord || null,
-        square_feet: squareFeet ? Number(squareFeet) : null,
+        square_footage: squareFeet ? Number(squareFeet) : null,
         lease_type: leaseType || null,
         renewal_date: renewalDate || null,
       })
@@ -167,7 +167,7 @@ export async function PATCH(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceKey) {
