@@ -1,10 +1,8 @@
-
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {
@@ -16,7 +14,7 @@ export default function AvatarDropdown({
   session,
   isProUser = false,
 }: AvatarDropdownProps) {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient();
 
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);

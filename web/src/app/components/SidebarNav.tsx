@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 
 const navItems = [
   {
@@ -37,7 +37,7 @@ const navItems = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient();
   const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [lockedModal, setLockedModal] = useState<string | null>(null);
