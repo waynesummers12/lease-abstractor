@@ -6,7 +6,10 @@ import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 
 export default function Navbar() {
-  const supabase = createBrowserClient();
+  const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
   const [session, setSession] = useState<Session | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
