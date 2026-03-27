@@ -88,7 +88,7 @@ export default function LeasesPage() {
               </div>
 
               <Link
-                href="/product/app/dashboard"
+                href={`/product/app/leases/${lease.id}`}
                 className="text-blue-600"
               >
                 View
