@@ -64,3 +64,40 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceKey) {
+      return NextResponse.json(
+        { error: "Server misconfigured" },
+        { status: 500 }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, serviceKey);
+
+    const { data, error } = await supabase
+      .from("portfolio_leases")
+      .select("*")
+      .order("renewal_date", { ascending: true });
+
+    if (error) {
+      console.error("Fetch error:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch leases" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ leases: data }, { status: 200 });
+  } catch (err) {
+    console.error("Server error:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
