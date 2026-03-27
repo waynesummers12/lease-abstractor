@@ -4,611 +4,169 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Session } from "@supabase/supabase-js";
+import EducationDropdown from "./EducationDropdown";
 
 export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   const pathname = usePathname();
   const isAppPage = pathname.startsWith("/app");
 
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+  const supabase = createClientComponentClient();
 
+  const [session, setSession] = useState<Session | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
+
+  const avatarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        setSession(newSession);
+      }
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, [supabase]);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
-  const [learnOpen, setLearnOpen] = useState(false);
-  const learnRef = useRef<HTMLDivElement | null>(null);
-
 
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (learnRef.current && !learnRef.current.contains(e.target as Node)) {
-        setLearnOpen(false);
+    function handleClick(e: MouseEvent) {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
+        setAvatarOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const sectionTitle =
-    "block px-4 pt-4 pb-2 text-[11px] font-semibold tracking-wider uppercase text-white/50 border-t border-white/10 mt-2";
-  const linkClass =
-    "block px-4 py-1.5 text-sm text-white opacity-90 hover:bg-white/10";
+  const isProUser = false; // Replace with real plan logic later
+
+  const navTextColor = isAppPage ? "text-gray-900" : "text-white";
+  const bgClass = isAppPage
+    ? "bg-white border-b border-gray-200"
+    : "bg-black shadow-md";
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${
-        isAppPage
-          ? "bg-white border-b border-gray-200"
-          : "bg-black shadow-md"
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-[1000] ${bgClass}`}>
       <div
-        className={`mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-4 ${
-          isAppPage ? "text-gray-900" : "text-white"
-        }`}
+        className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-4 ${navTextColor}`}
       >
-        <Link
-          href="/"
-          className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-md"
-        >
-          <Image
-            src="/logo.png"
-            alt="SaveOnLease"
-            width={24}
-            height={44}
-            className="h-11 w-auto"
-            priority
-          />
-          <span className="text-lg font-light tracking-tight leading-none">
-            SaveOnLease
-          </span>
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
+          <span className="text-lg font-light">SaveOnLease</span>
         </Link>
 
-        <nav
-          className={`hidden md:flex items-center gap-6 lg:gap-8 text-sm relative`}
-        >
-          <div ref={learnRef} className="relative flex items-center gap-1">
-  {/* Clickable label → goes to Learn page */}
-          <Link
-            href="/marketing/learn"
-            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-          >
-            Education
-          </Link>
+        <nav className="hidden md:flex items-center gap-8 text-sm relative">
+          <EducationDropdown />
 
-  {/* Separate dropdown toggle */}
-  <button
-    onClick={(e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setLearnOpen((v) => !v);
-    }}
-    onMouseEnter={() => setLearnOpen(true)}
-    className="text-3xl leading-none opacity-80 hover:opacity-100 transition-transform duration-200 hover:scale-110"
-    aria-label="Toggle education menu"
-  >
-    ▾
-  </button>
-
-  {learnOpen && (
-    <div
-      onMouseLeave={() => setLearnOpen(false)}
-      className="absolute left-0 top-full pt-2 w-80 max-h-[70vh] overflow-y-auto rounded-lg bg-black border border-white/10 shadow-xl py-2"
-              >
-                <div className="px-4">
-                  <div className="h-px bg-white/10 mb-2"></div>
-                </div>
-                {/* Foundations */}
-                <span className={sectionTitle}>Foundations</span>
-                <Link href="/marketing/cam-vs-nnn" className={linkClass}>
-                  CAM vs NNN
-                </Link>
-                <Link
-                  href="/marketing/triple-net-lease"
-                  className={linkClass}
-                >
-                  Triple Net Lease (NNN)
-                </Link>
-                <Link
-                  href="/marketing/triple-net-lease-meaning"
-                  className={linkClass}
-                >
-                  Triple Net Lease Meaning
-                </Link>
-                <Link
-                  href="/marketing/triple-net-lease-vs-gross"
-                  className={linkClass}
-                >
-                  Triple Net Lease vs Gross
-                </Link>
-                <Link
-                  href="/marketing/pro-rata-share-explained"
-                  className={linkClass}
-                >
-                  Pro Rata Share
-                </Link>
-                <Link
-                  href="/marketing/nnn-calculation-examples"
-                  className={linkClass}
-                >
-                  NNN Calculation Examples
-                </Link>
-                <div className="px-4">
-                  <div className="h-px bg-white/10 my-2"></div>
-                </div>
-
-                {/* Audit Rights */}
-                <span className={sectionTitle}>Audit Rights</span>
-                <Link href="/marketing/audit-rights" className={linkClass}>
-                  Audit Rights
-                </Link>
-                <Link href="/marketing/nnn-audit-rights" className={linkClass}>
-                  NNN Audit Rights
-                </Link>
-                <Link
-                  href="/marketing/audit-window-deadlines"
-                  className={linkClass}
-                >
-                  Audit Window Deadlines
-                </Link>
-                <div className="px-4">
-                  <div className="h-px bg-white/10 my-2"></div>
-                </div>
-
-                {/* CAM Topics */}
-                <span className={sectionTitle}>CAM Topics</span>
-                <Link
-                  href="/marketing/cam-reconciliation"
-                  className={linkClass}
-                >
-                  CAM Reconciliation
-                </Link>
-                <Link
-                  href="/marketing/cam-reconciliation-statement"
-                  className={linkClass}
-                >
-                  CAM Reconciliation Statement
-                </Link>
-                <Link
-                  href="/marketing/common-area-maintenance"
-                  className={linkClass}
-                >
-                  Common Area Maintenance (CAM)
-                </Link>
-                <Link
-                  href="/marketing/cam-fee-meaning"
-                  className={linkClass}
-                >
-                  CAM Fee Meaning
-                </Link>
-                <Link
-                  href="/marketing/cam-expense-caps"
-                  className={linkClass}
-                >
-                  CAM Expense Caps
-                </Link>
-                <Link
-                  href="/marketing/cam-admin-page"
-                  className={linkClass}
-                >
-                  CAM Admin Fees
-                </Link>
-                <Link
-                  href="/marketing/common-cam-fees"
-                  className={linkClass}
-                >
-                  Common CAM Fees
-                </Link>
-                <Link
-                  href="/marketing/cam-reconciliation-checklist"
-                  className={linkClass}
-                >
-                  CAM Reconciliation Checklist
-                </Link>
-                <Link
-                  href="/marketing/commercial-lease-checklist"
-                  className={linkClass}
-                >
-                  Commercial Lease Checklist
-                </Link>
-                <Link
-                  href="/marketing/commercial-lease-checklist-pdf"
-                  className={linkClass}
-                >
-                  Commercial Lease Checklist (PDF)
-                </Link>
-                <div className="px-4">
-                  <div className="h-px bg-white/10 my-2"></div>
-                </div>
-
-                {/* NNN Topics */}
-                <span className={sectionTitle}>NNN Topics</span>
-                <Link
-                  href="/marketing/nnn-reconciliation"
-                  className={linkClass}
-                >
-                  NNN Reconciliation
-                </Link>
-                <Link
-                  href="/marketing/nnn-insurance-charges-explained"
-                  className={linkClass}
-                >
-                  NNN Insurance Charges
-                </Link>
-                <Link
-                  href="/marketing/nnn-property-tax-charges-explained"
-                  className={linkClass}
-                >
-                  NNN Property Tax Charges
-                </Link>
-                <div className="px-4">
-                  <div className="h-px bg-white/10 my-2"></div>
-                </div>
-
-                {/* Risk & Overcharges */}
-                <span className={sectionTitle}>Risk & Overcharges</span>
-                <Link
-                  href="/marketing/cam-nnn-overcharges"
-                  className={linkClass}
-                >
-                  CAM / NNN Overcharges
-                </Link>
-                <Link
-                  href="/marketing/lease-overcharge"
-                  className={linkClass}
-                >
-                  Lease Overcharge
-                </Link>
-                <Link
-                  href="/marketing/cam-reconciliation-errors"
-                  className={linkClass}
-                >
-                  CAM Reconciliation Errors
-                </Link>
-                <Link
-                  href="/marketing/non-allowable-cam-nnn-expenses"
-                  className={linkClass}
-                >
-                  Non-Allowable CAM / NNN
-                </Link>
-                <Link
-                  href="/marketing/real-cam-nnn-overcharge-examples"
-                  className={linkClass}
-                >
-                  Real Overcharge Examples
-                </Link>
-                <Link
-                  href="/marketing/retail-lease-reconciliation-help"
-                  className={linkClass}
-                >
-                  Retail Lease Reconciliation Help
-                </Link>
-                <Link
-                  href="/marketing/restaurant-nnn-overcharges"
-                  className={linkClass}
-                >
-                  Restaurant NNN Overcharges
-                </Link>
-                <Link
-                  href="/marketing/franchise-cam-audit"
-                  className={linkClass}
-                >
-                  Franchise CAM Audit
-                </Link>
-
-                <div className="px-4">
-                  <div className="h-px bg-white/10 my-2"></div>
-                </div>
-
-                {/* Industries */}
-                <span className={sectionTitle}>Industries</span>
-                <Link
-                  href="/marketing/retail-lease-reconciliation-help"
-                  className={linkClass}
-                >
-                  Retail
-                </Link>
-                <Link
-                  href="/marketing/restaurant-nnn-overcharges"
-                  className={linkClass}
-                >
-                  Restaurant
-                </Link>
-                <Link
-                  href="/marketing/franchise-cam-audit"
-                  className={linkClass}
-                >
-                  Franchise
-                </Link>
-                <Link
-                  href="/marketing/burger-restaurant-lease-audit"
-                  className={linkClass}
-                >
-                  Burger Restaurants
-                </Link>
-                <Link
-                  href="/marketing/burger-franchise-lease-overcharges"
-                  className={linkClass}
-                >
-                  Burger Franchise Overcharges
-                </Link>
-                <Link
-                  href="/marketing/medical-hub"
-                  className={linkClass}
-                >
-                  Medical
-                </Link>
-
-                {/* Medical */}
-                <Link
-                  href="/marketing/medical-hub"
-                  className={`${sectionTitle} hover:text-white hover:font-semibold transition-all duration-200`}
-                >
-                  Medical
-                </Link>
-                <Link href="/marketing/medical-office-lease-audit" className={linkClass}>
-                  Medical Lease Audit
-                </Link>
-                <Link href="/marketing/medical-office-cam-reconciliation" className={linkClass}>
-                  Medical CAM Reconciliation
-                </Link>
-                <Link href="/marketing/medical-office-cam-spikes" className={linkClass}>
-                  Medical CAM Spikes
-                </Link>
-                <Link href="/marketing/medical-office-nnn-expenses" className={linkClass}>
-                  Medical NNN Expenses
-                </Link>
-                <Link href="/marketing/medical-practice-lease-overcharges" className={linkClass}>
-                  Medical Lease Overcharges
-                </Link>
-                <Link href="/marketing/multi-location-medical-lease-risk" className={linkClass}>
-                  Multi-Location Medical Risk
-                </Link>
-                <Link href="/marketing/medical-office-lease-audit-checklist" className={linkClass}>
-                  Medical Audit Checklist
-                </Link>
-                <Link href="/marketing/how-medical-practices-can-dispute-cam-charges" className={linkClass}>
-                  Dispute Medical CAM Charges
-                </Link>
-              </div>
-            )}
-          </div>
-
-          <Link
-            href="/marketing/what-we-find"
-            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-          >
+          <Link href="/marketing/what-we-find" className="opacity-80 hover:opacity-100">
             What We Find
           </Link>
-
-          <Link
-            href="/marketing/how-it-works"
-            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-          >
+          <Link href="/marketing/how-it-works" className="opacity-80 hover:opacity-100">
             How It Works
           </Link>
-          <Link
-            href="/marketing/referral"
-             className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-            >
-            Refer Clients (Earn 20%)
-          </Link>
-          <Link
-            href="/marketing/pricing"
-            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-          >
+          <Link href="/marketing/pricing" className="opacity-80 hover:opacity-100">
             Pricing
           </Link>
 
-          <Link
-            href="/marketing/contact"
-            className={`relative ${isAppPage ? "text-gray-900" : "text-white"} opacity-80 hover:opacity-100 after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-          >
-            Contact
-          </Link>
+          <div className="h-5 w-px bg-white/20" />
 
-          <Link
-            href="/app/step-1-upload"
-            className="rounded-full bg-white px-5 py-2 text-sm font-semibold text-black hover:bg-gray-200 transition"
-          >
-            Run Audit (Free Preview)
-          </Link>
+          {!session ? (
+            <>
+              <Link href="/login" className="opacity-80 hover:opacity-100">
+                Login
+              </Link>
+              <Link
+                href="/app/step-1-upload"
+                className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200"
+              >
+                Run Audit
+              </Link>
+            </>
+          ) : (
+            <div ref={avatarRef} className="flex items-center gap-4 relative">
+              {!isProUser && (
+                <Link
+                  href="/upgrade"
+                  className="text-xs bg-yellow-500 text-black px-2 py-1 rounded-full font-semibold"
+                >
+                  Upgrade
+                </Link>
+              )}
+
+              <button
+                onClick={() => setAvatarOpen((v) => !v)}
+                className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center font-bold"
+              >
+                {session.user.email?.[0].toUpperCase()}
+              </button>
+
+              {avatarOpen && (
+                <div className="absolute right-0 mt-12 w-48 bg-white text-black rounded-md shadow-lg py-2">
+                  <Link href="/app/dashboard" className="block px-4 py-2 hover:bg-gray-100">
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => supabase.auth.signOut()}
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
 
         <button
-          className="md:hidden inline-flex items-center justify-center rounded-md border border-white/30 px-3 py-2 text-lg font-medium transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
+          className="md:hidden"
+          onClick={() => setMenuOpen((v) => !v)}
         >
           ☰
         </button>
       </div>
 
-      
-{menuOpen && (
-  <div className="fixed inset-0 z-[1001] md:hidden bg-black/95 backdrop-blur-sm px-6 pt-24 pb-10 text-white overflow-y-auto">
-    <div className="flex justify-end mb-6">
-      <button
-        onClick={() => setMenuOpen(false)}
-        className="text-2xl font-light"
-        aria-label="Close menu"
-      >
-        ✕
-      </button>
-    </div>
-    <div className="flex flex-col gap-4 text-sm">
-      <span className="uppercase text-xs opacity-60">Education</span>
+      {menuOpen && (
+        <div className="fixed inset-0 bg-black text-white z-[1001] px-6 pt-24 overflow-y-auto">
+          <div className="flex justify-end mb-6">
+            <button onClick={() => setMenuOpen(false)}>✕</button>
+          </div>
 
-      <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>
-        CAM Reconciliation
-      </Link>
-      <Link href="/marketing/cam-reconciliation-statement" onClick={() => setMenuOpen(false)}>
-        CAM Reconciliation Statement
-      </Link>
-      <Link href="/marketing/cam-nnn-overcharges" onClick={() => setMenuOpen(false)}>
-        CAM / NNN Overcharges
-      </Link>
-      <Link href="/marketing/real-cam-nnn-overcharge-examples" onClick={() => setMenuOpen(false)}>
-        Real CAM / NNN Overcharge Examples
-      </Link>
-      <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>
-        NNN Audit Rights
-      </Link>
-      <Link href="/marketing/audit-rights" onClick={() => setMenuOpen(false)}>
-        Audit Rights
-      </Link>
-      <Link href="/marketing/audit-window-deadlines" onClick={() => setMenuOpen(false)}>
-        Audit Window Deadlines
-      </Link>
-      <Link href="/marketing/cam-expense-caps" onClick={() => setMenuOpen(false)}>
-        CAM Expense Caps
-      </Link>
-      <Link href="/marketing/cam-admin-page" onClick={() => setMenuOpen(false)}>
-        CAM Admin Fees
-      </Link>
-      <Link href="/marketing/cam-vs-nnn" onClick={() => setMenuOpen(false)}>
-        CAM vs NNN
-      </Link>
-      <Link href="/marketing/triple-net-lease" onClick={() => setMenuOpen(false)}>
-        Triple Net Lease (NNN)
-      </Link>
-      <Link href="/marketing/triple-net-lease-meaning" onClick={() => setMenuOpen(false)}>
-        Triple Net Lease Meaning
-      </Link>
-      <Link href="/marketing/triple-net-lease-vs-gross" onClick={() => setMenuOpen(false)}>
-        Triple Net Lease vs Gross
-      </Link>
-      <Link href="/marketing/lease-overcharge" onClick={() => setMenuOpen(false)}>
-        Lease Overcharge
-      </Link>
-      <Link href="/marketing/cam-reconciliation-errors" onClick={() => setMenuOpen(false)}>
-        CAM Reconciliation Errors
-      </Link>
-      <Link href="/marketing/common-area-maintenance" onClick={() => setMenuOpen(false)}>
-        Common Area Maintenance (CAM)
-      </Link>
-      <Link href="/marketing/cam-fee-meaning" onClick={() => setMenuOpen(false)}>
-        CAM Fee Meaning
-      </Link>
-      <Link href="/marketing/common-cam-fees" onClick={() => setMenuOpen(false)}>
-        Common CAM Fees
-      </Link>
-      <Link href="/marketing/non-allowable-cam-nnn-expenses" onClick={() => setMenuOpen(false)}>
-        Non-Allowable CAM / NNN
-      </Link>
-      <Link href="/marketing/nnn-expenses-explained" onClick={() => setMenuOpen(false)}>
-        NNN Expenses Explained
-      </Link>
-      <Link href="/marketing/nnn-calculation-examples" onClick={() => setMenuOpen(false)}>
-        NNN Calculation Examples
-      </Link>
-      <Link href="/marketing/nnn-insurance-charges-explained" onClick={() => setMenuOpen(false)}>
-        NNN Insurance Charges
-      </Link>
-      <Link href="/marketing/nnn-property-tax-charges-explained" onClick={() => setMenuOpen(false)}>
-        NNN Property Tax Charges
-      </Link>
-      <Link href="/marketing/nnn-reconciliation" onClick={() => setMenuOpen(false)}>
-        NNN Reconciliation
-      </Link>
-      <Link href="/marketing/pro-rata-share-explained" onClick={() => setMenuOpen(false)}>
-        Pro Rata Share Explained
-      </Link>
-      <Link href="/marketing/cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
-        CAM Reconciliation Checklist
-      </Link>
-      <Link href="/marketing/commercial-lease-checklist" onClick={() => setMenuOpen(false)}>
-        Commercial Lease Checklist
-      </Link>
-      <Link href="/marketing/commercial-lease-checklist-pdf" onClick={() => setMenuOpen(false)}>
-        Commercial Lease Checklist PDF
-      </Link>
-      <Link href="/marketing/retail-lease-reconciliation-help" onClick={() => setMenuOpen(false)}>
-        Retail Lease Reconciliation Help
-      </Link>
-      <Link href="/marketing/restaurant-nnn-overcharges" onClick={() => setMenuOpen(false)}>
-        Restaurant NNN Overcharges
-      </Link>
-      <Link href="/marketing/franchise-cam-audit" onClick={() => setMenuOpen(false)}>
-        Franchise CAM Audit
-      </Link>
-      <Link href="/marketing/burger-restaurant-lease-audit" onClick={() => setMenuOpen(false)}>
-        Burger Restaurants
-      </Link>
-      <Link href="/marketing/burger-franchise-lease-overcharges" onClick={() => setMenuOpen(false)}>
-        Burger Franchise Overcharges
-      </Link>
-      <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" onClick={() => setMenuOpen(false)}>
-        Burger CAM Checklist
-      </Link>
-      <Link href="/marketing/burger-restaurant-lease-audit-rights" onClick={() => setMenuOpen(false)}>
-        Burger Audit Rights
-      </Link>
+          <div className="flex flex-col gap-4 text-sm">
+            <Link href="/marketing/cam-reconciliation" onClick={() => setMenuOpen(false)}>CAM Reconciliation</Link>
+            <Link href="/marketing/nnn-audit-rights" onClick={() => setMenuOpen(false)}>NNN Audit Rights</Link>
+            <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>What We Find</Link>
+            <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>How It Works</Link>
+            <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>Pricing</Link>
 
-      <span className="uppercase text-xs opacity-60 mt-4">Medical</span>
+            <hr className="border-white/20 my-4" />
 
-      <Link href="/marketing/medical-office-lease-audit" onClick={() => setMenuOpen(false)}>
-        Medical Lease Audit
-      </Link>
-      <Link href="/marketing/medical-office-cam-reconciliation" onClick={() => setMenuOpen(false)}>
-        Medical CAM Reconciliation
-      </Link>
-      <Link href="/marketing/medical-office-cam-spikes" onClick={() => setMenuOpen(false)}>
-        Medical CAM Spikes
-      </Link>
-      <Link href="/marketing/medical-office-nnn-expenses" onClick={() => setMenuOpen(false)}>
-        Medical NNN Expenses
-      </Link>
-      <Link href="/marketing/medical-practice-lease-overcharges" onClick={() => setMenuOpen(false)}>
-        Medical Lease Overcharges
-      </Link>
-      <Link href="/marketing/multi-location-medical-lease-risk" onClick={() => setMenuOpen(false)}>
-        Multi-Location Medical Risk
-      </Link>
-      <Link href="/marketing/medical-office-lease-audit-checklist" onClick={() => setMenuOpen(false)}>
-        Medical Audit Checklist
-      </Link>
-      <Link href="/marketing/how-medical-practices-can-dispute-cam-charges" onClick={() => setMenuOpen(false)}>
-        Dispute Medical CAM Charges
-      </Link>
-
-      <hr className="border-white/10 my-2" />
-
-      <Link href="/marketing/what-we-find" onClick={() => setMenuOpen(false)}>
-        What We Find
-      </Link>
-      <Link href="/marketing/how-it-works" onClick={() => setMenuOpen(false)}>
-        How It Works
-      </Link>
-      <Link href="/marketing/referral" onClick={() => setMenuOpen(false)}>
-       Refer Clients (Earn 20%)
-       </Link>
-      <Link href="/marketing/pricing" onClick={() => setMenuOpen(false)}>
-        Pricing
-      </Link>
-      <Link href="/marketing/contact" onClick={() => setMenuOpen(false)}>
-        Contact
-      </Link>
-
-      <Link
-        href="/app/step-1-upload"
-        className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200"
-        onClick={() => setMenuOpen(false)}
-      >
-        Run Audit
-      </Link>
-     </div>
-  </div>
-)}
-
+            {!session ? (
+              <>
+                <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+                <Link href="/app/step-1-upload" onClick={() => setMenuOpen(false)}>Run Audit</Link>
+              </>
+            ) : (
+              <>
+                <Link href="/app/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+                <button onClick={() => supabase.auth.signOut()}>Logout</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
