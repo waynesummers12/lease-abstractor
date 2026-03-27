@@ -157,7 +157,7 @@ export default function DashboardPage() {
       {/* LEFT — HISTORY */}
       <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
-          Your Audits
+          Your Leases
         </h2>
 
         <ul className="space-y-2">
@@ -172,7 +172,7 @@ export default function DashboardPage() {
               }`}
             >
               <div className="font-medium">
-              Audit {new Date(audit.created_at).toLocaleDateString()}
+              Lease – {new Date(audit.created_at).toLocaleDateString()}
               </div>
               <div className="mt-1 text-xs text-gray-500">
                 Health {getHealthScore(audit)}
@@ -187,11 +187,8 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-semibold">
-              Lease Audit Summary
+              Lease Overview
             </h1>
-            <span className="rounded bg-gray-100 px-2 py-1 text-xs">
-              Paid
-            </span>
           </div>
 
           {selected && (
@@ -200,6 +197,34 @@ export default function DashboardPage() {
         </div>
 
         {selected && <StatusChips audit={selected} />}
+
+        <div className="rounded border border-gray-200 p-6">
+          <div className="text-sm text-gray-500 mb-4">
+            Lease Details
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <div className="text-gray-500">Property</div>
+              <div className="font-medium">—</div>
+            </div>
+
+            <div>
+              <div className="text-gray-500">Lease Type</div>
+              <div className="font-medium">NNN</div>
+            </div>
+
+            <div>
+              <div className="text-gray-500">Square Footage</div>
+              <div className="font-medium">—</div>
+            </div>
+
+            <div>
+              <div className="text-gray-500">Renewal Date</div>
+              <div className="font-medium">—</div>
+            </div>
+          </div>
+        </div>
 
         {/* DASHBOARD SUMMARY */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
