@@ -185,21 +185,20 @@ export default function DashboardPage() {
   /* ---------------- MAIN UI ---------------- */
 
   const sortedLeases = [...audits].sort((a, b) => {
-    function getPriority(lease: Lease) {
-      if (!lease.renewal_date) return 4;
+    const riskA = getRenewalRiskScore(a) ?? -1;
+    const riskB = getRenewalRiskScore(b) ?? -1;
 
-      const renewal = new Date(lease.renewal_date);
-      const today = new Date();
-      const diffMs = renewal.getTime() - today.getTime();
-      const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-      if (daysRemaining <= 0) return 0; // expired highest priority
-      if (daysRemaining <= 90) return 1; // urgent
-      if (daysRemaining <= 180) return 2; // warning
-      return 3; // safe
+    // Higher risk first
+    if (riskA !== riskB) {
+      return riskB - riskA;
     }
 
-    return getPriority(a) - getPriority(b);
+    // Tie-breaker: nearest renewal date first
+    if (a.renewal_date && b.renewal_date) {
+      return new Date(a.renewal_date).getTime() - new Date(b.renewal_date).getTime();
+    }
+
+    return 0;
   });
 
   return (
