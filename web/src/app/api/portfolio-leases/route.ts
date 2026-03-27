@@ -19,14 +19,14 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
-      propertyName,
+      property_name,
       landlord,
-      squareFeet,
-      leaseType,
-      renewalDate,
+      square_footage,
+      lease_type,
+      renewal_date,
     } = body;
 
-    if (!propertyName) {
+    if (!property_name) {
       return NextResponse.json(
         { error: "Property name is required" },
         { status: 400 }
@@ -37,11 +37,13 @@ export async function POST(req: Request) {
       .from("portfolio_leases")
       .insert([
         {
-          property_name: propertyName,
+          property_name,
           landlord: landlord || null,
-          square_footage: squareFeet ? Number(squareFeet) : null,
-          lease_type: leaseType || null,
-          renewal_date: renewalDate || null,
+          square_footage: square_footage
+            ? Number(square_footage)
+            : null,
+          lease_type: lease_type || null,
+          renewal_date: renewal_date || null,
         },
       ])
       .select()
