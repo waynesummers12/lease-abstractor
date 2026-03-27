@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
@@ -15,7 +15,7 @@ export default function Header() {
   const router = useRouter();
   const isAppPage = pathname.startsWith("/app");
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient();
 
   const [session, setSession] = useState<Session | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
