@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/supabase-js";
 
 interface MobileMenuProps {
@@ -15,7 +15,7 @@ export default function MobileMenu({
   onClose,
   session,
 }: MobileMenuProps) {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient();
 
   if (!open) return null;
 
