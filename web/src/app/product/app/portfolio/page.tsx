@@ -15,13 +15,17 @@ type Lease = {
 export default function PortfolioPage() {
   const [leases, setLeases] = useState<Lease[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPortfolio() {
       try {
-        const baseUrl =
-          process.env.NEXT_PUBLIC_WORKER_URL ??
-          "https://lease-abstractor-worker.onrender.com";
+        const baseUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+
+        if (!baseUrl) {
+          console.error("❌ NEXT_PUBLIC_WORKER_URL is not defined");
+          throw new Error("Worker URL not configured");
+        }
 
         console.log("WORKER URL:", baseUrl);
 
@@ -42,6 +46,7 @@ export default function PortfolioPage() {
         setLeases(data.leases || []);
       } catch (err) {
         console.error("Portfolio fetch error:", err);
+        setError("Unable to load portfolio. Please try again.");
         setLeases([]);
       } finally {
         setLoading(false);
@@ -53,6 +58,16 @@ export default function PortfolioPage() {
 
   if (loading) {
     return <div className="p-6">Loading portfolio...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="border border-red-300 bg-red-50 text-red-700 rounded-lg p-4">
+          {error}
+        </div>
+      </div>
+    );
   }
 
   const totalLeases = leases.length;
