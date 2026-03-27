@@ -104,9 +104,12 @@ export default function AddLeasePage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-2xl font-semibold mb-6">
-        Upload Lease to Add to Portfolio
+      <h1 className="text-2xl font-semibold mb-2">
+        Add Lease to Portfolio
       </h1>
+      <p className="text-sm text-gray-600 mb-6">
+        Upload a lease to manage it, or run a full audit to uncover hidden costs.
+      </p>
 
       <div className="rounded border border-gray-200 p-6 bg-white space-y-8">
 
@@ -139,6 +142,15 @@ export default function AddLeasePage() {
               </div>
             )}
           </label>
+          <div className="mt-4 text-xs text-gray-500">
+            Want a full audit instead?
+            <Link
+              href="/app/step-1-upload"
+              className="ml-1 text-black font-medium hover:underline"
+            >
+              Run Audit (Free Preview) →
+            </Link>
+          </div>
         </div>
 
         {/* Prefilled Form */}
