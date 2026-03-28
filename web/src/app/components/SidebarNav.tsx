@@ -8,29 +8,34 @@ import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 const navItems = [
   {
     label: "Dashboard",
-    href: "/app/dashboard",
+    href: "/product/app/dashboard",
     roles: ["admin", "analyst", "viewer"],
   },
   {
     label: "Leases",
-    href: "/app/leases",
+    href: "/product/app/leases",
     roles: ["admin", "analyst"],
   },
   {
     label: "Portfolio",
-    href: "/app/portfolio",
+    href: "/product/app/portfolio",
     roles: ["admin", "analyst"],
     planRequired: "pro",
   },
   {
     label: "Benchmarks",
-    href: "/app/benchmarks",
+    href: "/product/app/benchmarks",
     roles: ["admin"],
     planRequired: "enterprise",
   },
   {
+    label: "Insights",
+    href: "/product/app/insights",
+    roles: ["admin", "analyst"],
+  },
+  {
     label: "Alerts",
-    href: "/app/alerts",
+    href: "/product/app/alerts",
     roles: ["admin", "analyst"],
   },
 ];
