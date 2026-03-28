@@ -25,7 +25,12 @@ export default function LoginPage() {
     });
 
     if (error) {
-      setMessage(error.message);
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("rate") || msg.includes("limit")) {
+        setMessage("Please wait a moment before requesting another login link.");
+      } else {
+        setMessage(error.message);
+      }
     } else {
       setMessage("Check your email and click the secure login link to access your dashboard.");
     }
