@@ -42,18 +42,20 @@ const navItems = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
+
   const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
   const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [lockedModal, setLockedModal] = useState<string | null>(null);
   const indicatorRef = useRef<HTMLDivElement | null>(null);
+
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    const saved = window.localStorage.getItem("sidebar-collapsed");
-    return saved === "true";
+    return localStorage.getItem("sidebar-collapsed") === "true";
   });
 
   useEffect(() => {
@@ -66,18 +68,12 @@ export default function SidebarNav() {
       const user = data.session?.user;
       if (!user) return;
 
-      const userRole = (user.user_metadata?.role ?? "viewer") as
-        | "admin"
-        | "analyst"
-        | "viewer";
-
-      const userPlan = (user.user_metadata?.plan ?? "free") as
-        | "free"
-        | "pro"
-        | "enterprise";
-
-      setRole(userRole);
-      setPlan(userPlan);
+      setRole(
+        (user.user_metadata?.role ?? "viewer") as "admin" | "analyst" | "viewer"
+      );
+      setPlan(
+        (user.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise"
+      );
     }
 
     loadSession();
@@ -86,7 +82,6 @@ export default function SidebarNav() {
   const filteredNav = useMemo(() => {
     return navItems.filter((item) => item.roles.includes(role));
   }, [role]);
-
 
   useEffect(() => {
     const activeEl = document.querySelector("[data-active='true']") as HTMLElement | null;
@@ -97,83 +92,108 @@ export default function SidebarNav() {
   }, [pathname, collapsed]);
 
   useEffect(() => {
-    function handleEsc(e: KeyboardEvent) {
+    const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLockedModal(null);
-    }
+    };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
   return (
     <div
-      className={`relative transition-all duration-300 ease-in-out ${
+      className={`h-screen border-r bg-gray-50 flex flex-col transition-all duration-300 ${
         collapsed ? "w-16" : "w-64"
       }`}
     >
-      <button
-        onClick={() => setCollapsed((v) => !v)}
-        className="mb-4 text-xs text-gray-500 hover:text-black"
-      >
-        {collapsed ? "→" : "Collapse"}
-      </button>
+      {/* HEADER */}
+      <div className="p-4 border-b">
+        {!collapsed && (
+          <div>
+            <div className="font-semibold text-sm">SaveOnLease</div>
+            <div className="text-xs text-gray-500">Lease Intelligence Platform</div>
+          </div>
+        )}
 
-      <nav className="flex flex-col gap-2 text-sm relative">
+        <button
+          onClick={() => setCollapsed((v) => !v)}
+          className="mt-2 text-xs text-gray-500 hover:text-black"
+        >
+          {collapsed ? "→" : "Collapse"}
+        </button>
+      </div>
+
+      {/* NAV */}
+      <nav className="flex-1 px-2 py-4 relative text-sm">
         <div
           ref={indicatorRef}
           className="absolute left-0 w-1 bg-black rounded transition-all duration-300"
-          style={{ top: 0 }}
         />
-        {filteredNav.map((item) => {
-          const isActive = pathname.startsWith(item.href);
-          const locked =
-            item.planRequired &&
-            plan !== item.planRequired &&
-            plan !== "enterprise";
 
-          return (
-            <div
-              key={item.href}
-              className="relative group"
-              data-active={pathname.startsWith(item.href)}
-            >
-              <Link
-                href={locked ? "#" : item.href}
-                onClick={(e) => {
-                  if (locked) {
-                    e.preventDefault();
-                    setLockedModal(item.label);
-                  }
-                }}
-                className={`flex items-center justify-between px-3 py-2 rounded transition-all duration-200 h-8 ${
-                  isActive
-                    ? "bg-gray-900 text-white"
-                    : "text-gray-600 hover:text-black hover:bg-gray-100"
-                } ${locked ? "opacity-70" : ""}`}
-              >
-                <span className="flex items-center gap-3">
+        <div className="flex flex-col gap-1">
+          {filteredNav.map((item) => {
+            const isActive = pathname.startsWith(item.href);
+            const locked =
+              item.planRequired &&
+              plan !== item.planRequired &&
+              plan !== "enterprise";
+
+            return (
+              <div key={item.href} className="relative group" data-active={isActive}>
+                <Link
+                  href={locked ? "#" : item.href}
+                  onClick={(e) => {
+                    if (locked) {
+                      e.preventDefault();
+                      setLockedModal(item.label);
+                    }
+                  }}
+                  className={`flex items-center justify-between px-3 py-2 rounded transition ${
+                    isActive
+                      ? "bg-black text-white"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-black"
+                  } ${locked ? "opacity-60" : ""}`}
+                >
                   {!collapsed && <span>{item.label}</span>}
-                </span>
 
-                {!collapsed && item.planRequired && (
-                  <span className="text-[10px] bg-yellow-400 text-black px-2 py-0.5 rounded">
-                    {item.planRequired.toUpperCase()}
+                  {!collapsed && item.planRequired && (
+                    <span className="text-[10px] bg-yellow-400 px-2 py-0.5 rounded">
+                      {item.planRequired.toUpperCase()}
+                    </span>
+                  )}
+                </Link>
+
+                {collapsed && (
+                  <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                    {item.label}
                   </span>
                 )}
-              </Link>
-
-              {collapsed && (
-                <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
-                  {item.label}
-                </span>
-              )}
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </nav>
 
+      {/* ACTIONS */}
+      <div className="p-4 border-t flex flex-col gap-2">
+        <Link
+          href="/product/app/add-lease"
+          className="w-full text-center border rounded px-3 py-2 text-sm hover:bg-gray-100"
+        >
+          Add Lease
+        </Link>
+
+        <Link
+          href="/app/step-1-upload"
+          className="w-full text-center bg-black text-white rounded px-3 py-2 text-sm"
+        >
+          Run Audit (Free Preview)
+        </Link>
+      </div>
+
+      {/* LOCK MODAL */}
       {lockedModal && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
           onClick={() => setLockedModal(null)}
         >
           <div
@@ -184,6 +204,7 @@ export default function SidebarNav() {
             <p className="text-sm text-gray-600 mb-4">
               {lockedModal} is available on a higher-tier plan.
             </p>
+
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setLockedModal(null)}
@@ -191,6 +212,7 @@ export default function SidebarNav() {
               >
                 Close
               </button>
+
               <a
                 href="/pricing"
                 className="text-sm bg-black text-white px-4 py-2 rounded"
