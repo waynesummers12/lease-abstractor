@@ -55,7 +55,7 @@ export default async function ProductLayout({
 
         <div className="pt-6 border-t space-y-2">
           <Link
-            href="/app/add-lease"
+            href="/product/app/add-lease"
             className="block text-center border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100"
           >
             Add Lease

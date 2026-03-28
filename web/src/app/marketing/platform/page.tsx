@@ -49,7 +49,7 @@ export default function PlatformPage() {
 
       <div className="mt-16 flex gap-3">
         <Link
-          href="/app/add-lease"
+          href="/product/app/add-lease"
           className="border border-gray-300 px-6 py-3 rounded-md text-sm hover:bg-gray-100"
         >
           Add Lease to Portfolio

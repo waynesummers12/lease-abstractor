@@ -123,7 +123,7 @@ export default function PortfolioPage() {
         </div>
         <div className="flex gap-3">
           <Link
-            href="/app/add-lease"
+            href="/product/app/add-lease"
             className="border border-gray-300 px-4 py-2 text-sm rounded hover:bg-gray-100"
           >
             Add Lease
@@ -440,7 +440,7 @@ export default function PortfolioPage() {
           </p>
           <div className="flex justify-center gap-3">
             <Link
-              href="/app/add-lease"
+              href="/product/app/add-lease"
               className="border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100"
             >
               Add Lease

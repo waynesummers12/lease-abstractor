@@ -230,7 +230,7 @@ export default function DashboardPage() {
         </p>
         <div className="flex gap-3">
           <Link
-            href="/app/add-lease"
+            href="/product/app/add-lease"
             className="inline-block rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
           >
             Add Lease
@@ -297,7 +297,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 });
 
   return (
-    <div className="grid h-full grid-cols-[18rem_1fr] gap-6 p-6">
+    <div className="p-6 space-y-5">
       {/* LEFT — HISTORY */}
       <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
@@ -442,7 +442,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 
           <div className="flex gap-2">
             <Link
-              href="/app/add-lease"
+              href="/product/app/add-lease"
               className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
             >
               Add Lease
@@ -750,7 +750,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/app/leases"
+            href="/product/app/portfolio"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             View All Leases
@@ -762,7 +762,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
             Portfolio Dashboard
           </Link>
           <Link
-            href="/app/add-lease"
+            href="/product/app/add-lease"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Add Lease (No Audit)

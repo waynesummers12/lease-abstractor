@@ -159,7 +159,7 @@ export default function LeaseDetailPage() {
         </div>
 
         <Link
-          href="/app/leases"
+          href="/product/app/portfolio"
           className="text-sm text-gray-600 hover:underline"
         >
           Back to Portfolio
@@ -269,7 +269,7 @@ export default function LeaseDetailPage() {
           </Link>
           <div className="mt-3 text-xs text-gray-500">
             Managing another lease?
-            <Link href="/app/add-lease" className="ml-1 underline">
+            <Link href="/product/app/add-lease" className="ml-1 underline">
               Add Lease →
             </Link>
           </div>

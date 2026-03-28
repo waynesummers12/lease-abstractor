@@ -11,7 +11,7 @@ export default function LeaseIntelligencePage() {
 
       <div className="mt-8 flex gap-3">
         <a
-          href="/app/add-lease"
+          href="/product/app/add-lease"
           className="border border-gray-300 px-6 py-3 rounded-md text-sm hover:bg-gray-100"
         >
           Add Lease to Portfolio
