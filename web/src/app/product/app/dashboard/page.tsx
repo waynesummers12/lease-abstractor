@@ -321,7 +321,7 @@ return (
     </div>
 
 {/* CALENDAR TIMELINE — HERO */}
-<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm">
+<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full overflow-hidden">
   <div className="flex items-center justify-between mb-5">
     <div>
       <div className="text-[11px] text-gray-500 uppercase tracking-wide">
@@ -342,7 +342,7 @@ return (
     )}
   </div>
 
-  <div className="flex gap-4 overflow-x-auto pb-3">
+  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
@@ -360,7 +360,7 @@ return (
           className={`min-w-[180px] lg:min-w-[200px] rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
             activeMonth === m.label
               ? "border-black ring-1 ring-black scale-[1.02]"
-              : "border-transparent"
+              : "border-gray-200"
           } ${intensity}`}
         >
           <div className="text-sm font-medium tracking-tight">
@@ -374,6 +374,19 @@ return (
           <div className="text-xs mt-1 opacity-80">
             renewals
           </div>
+
+          {/* INLINE SAVINGS PREVIEW */}
+          {m.count > 0 && (
+            <div className="mt-3 text-[11px] font-medium text-green-700">
+              ${Math.round(m.count * 3500).toLocaleString()}+
+            </div>
+          )}
+
+          {m.count > 0 && (
+            <div className="text-[10px] text-gray-500">
+              potential savings
+            </div>
+          )}
         </div>
       );
     })}
