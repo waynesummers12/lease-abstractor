@@ -72,8 +72,10 @@ export default async function ProductLayout({
         </aside>
 
         {/* Main Content (FIXED OFFSET + FLEX BEHAVIOR) */}
-        <main className="flex-1 min-w-0 px-6 py-4 lg:px-8 lg:py-6 max-w-[1400px] w-full mx-auto overflow-x-hidden">
-          {children}
+        <main className="flex-1 min-w-0 px-6 py-4 lg:px-8 lg:py-6 overflow-x-hidden">
+          <div className="max-w-[1400px] w-full">
+            {children}
+          </div>
         </main>
 
       </div>
