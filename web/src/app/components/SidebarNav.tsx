@@ -9,7 +9,7 @@ const navItems = [
   { label: "Dashboard", href: "/product/app/dashboard", roles: ["admin", "analyst", "viewer"] },
   { label: "Leases", href: "/product/app/leases", roles: ["admin", "analyst"] },
   { label: "Portfolio", href: "/product/app/portfolio", roles: ["admin", "analyst"], planRequired: "pro" },
-  { label: "Benchmark", href: "/product/app/benchmarks", roles: ["admin"], planRequired: "enterprise" },
+  { label: "Benchmarks", href: "/product/app/benchmarks", roles: ["admin"], planRequired: "enterprise" },
   { label: "Alerts", href: "/product/app/alerts", roles: ["admin", "analyst"] },
 ];
 
@@ -55,7 +55,7 @@ export default function SidebarNav() {
   const filteredNav = useMemo(() => {
   if (role === "viewer") {
     return navItems.filter((item) =>
-      ["Dashboard", "Leases", "Portfolio", "Alerts"].includes(item.label)
+      ["Dashboard", "Leases", "Portfolio", "Alerts", "Benchmarks"].includes(item.label)
     );
   }
   return navItems;
@@ -101,7 +101,7 @@ export default function SidebarNav() {
       </div>
 
       {/* NAV */}
-      <nav className="flex-1 px-3 py-3 text-sm overflow-y-auto">
+      <nav className="flex-1 px-3 py-3 text-sm overflow-y-auto relative">
         <div
           ref={indicatorRef}
           className="absolute left-0 w-1 bg-black rounded transition-all duration-300 hidden"
@@ -127,8 +127,8 @@ export default function SidebarNav() {
                   }}
                   className={`flex items-center justify-between px-3 py-1 rounded-md transition-all text-[12.5px] font-medium ${
                     isActive
-                      ? "bg-black text-white"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-black"
+                      ? "bg-black text-white border-l-2 border-black"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-black border-l-2 border-transparent"
                   } ${locked ? "opacity-60" : ""}`}
                 >
                   {!collapsed && <span>{item.label}</span>}
@@ -141,7 +141,7 @@ export default function SidebarNav() {
                 </Link>
 
                 {collapsed && (
-                  <span className="absolute left-14 top-1/2 -translate-y-1/2 bg-black text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                  <span className="absolute left-12 top-1/2 -translate-y-1/2 bg-black text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
                     {item.label}
                   </span>
                 )}
