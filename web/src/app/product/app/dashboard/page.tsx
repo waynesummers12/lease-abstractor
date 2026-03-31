@@ -148,6 +148,9 @@ export default function DashboardPage() {
       return sum + (lease.square_feet ?? 0);
     }, 0);
 
+  // Pricing trigger logic
+  const showPremiumCTA = averageRiskScore >= 60 || urgentRenewals > 0;
+
   // Build 12-month renewal timeline
   const today = new Date();
   const timelineMonths = Array.from({ length: 12 }).map((_, i) => {
@@ -311,7 +314,7 @@ return (
         href="/app/step-1-upload"
         className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
       >
-        Run Lease Audit →
+        {showPremiumCTA ? "Unlock Full Audit →" : "Run Lease Audit →"}
       </Link>
     </div>
 
@@ -391,7 +394,7 @@ return (
       href="/app/step-1-upload"
       className="rounded bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-700"
     >
-      Run Audit Now
+      {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit Now"}
     </Link>
   </div>
 </div>
@@ -521,7 +524,7 @@ return (
             href="/app/step-1-upload"
             className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
           >
-            Run Audit →
+            {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit →"}
           </Link>
         </div>
       </div>
@@ -758,8 +761,13 @@ return (
                   href="/app/step-1-upload"
                   className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
                 >
-                  Run Full Audit →
+                  {showPremiumCTA ? "Unlock Full Audit →" : "Run Full Audit →"}
                 </Link>
+                {showPremiumCTA && (
+                  <div className="text-[11px] text-gray-500 mt-1">
+                    Includes savings breakdown + negotiation insights
+                  </div>
+                )}
 
                 {status === "urgent" && (
                   <div className="mt-2 text-xs text-red-600 font-medium">
