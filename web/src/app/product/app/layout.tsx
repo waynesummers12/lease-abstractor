@@ -12,8 +12,11 @@ export default async function ProductLayout({
 }) {
   const cookieStore = await cookies();
 
-  // Prevent build-time crash when env vars are missing (e.g. during static prerender)
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  // Prevent build-time crash when env vars are missing
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
     return <div>{children}</div>;
   }
 
@@ -35,39 +38,45 @@ export default async function ProductLayout({
     }
   );
 
-  // TEMP: disable auth guard during development to unblock dashboard access
+  // TEMP: disable auth guard during development
   await supabase.auth.getUser();
 
-  // if (!user) {
-  //   redirect("/login");
-  // }
-
   return (
-    <div className="flex min-h-screen bg-white">
-      {/* Sidebar */}
-      <aside className="w-64 border-r bg-gray-50 text-sm flex flex-col">
-        <div className="flex-1 overflow-y-auto p-4">
-          <SidebarNav />
-        </div>
+    <div className="min-h-screen bg-white">
+      <div className="flex w-full">
+        
+        {/* Sidebar (LOCKED WIDTH — CRITICAL FIX) */}
+        <aside className="w-60 shrink-0 border-r bg-gray-50 flex flex-col">
+          
+          {/* Nav (NO EXTRA PADDING — SidebarNav handles it) */}
+          <div className="flex-1 overflow-y-auto">
+            <SidebarNav />
+          </div>
 
-        <div className="p-4 border-t space-y-2">
-          <Link
-            href="/product/app/add-lease"
-            className="block text-center border border-gray-300 px-4 py-2 rounded text-sm hover:bg-gray-100"
-          >
-            Add Lease
-          </Link>
-          <Link
-            href="/app/step-1-upload"
-            className="block text-center bg-black text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-800"
-          >
-            Run Audit (Free Preview)
-          </Link>
-        </div>
-      </aside>
+          {/* Actions */}
+          <div className="px-4 py-3 border-t space-y-2">
+            <Link
+              href="/product/app/add-lease"
+              className="block text-center border border-gray-300 rounded-md px-3 py-1.5 text-[13px] hover:bg-gray-100"
+            >
+              Add Lease
+            </Link>
 
-      {/* Main Content */}
-      <main className="flex-1 p-6 overflow-x-auto">{children}</main>
+            <Link
+              href="/app/step-1-upload"
+              className="block text-center bg-black text-white rounded-md px-3 py-1.5 text-[13px]"
+            >
+              Run Audit (Free Preview)
+            </Link>
+          </div>
+        </aside>
+
+        {/* Main Content (FIXED OFFSET + FLEX BEHAVIOR) */}
+        <main className="flex-1 min-w-0 px-6 py-4 lg:px-8 lg:py-6 max-w-[1400px] w-full mx-auto overflow-x-hidden">
+          {children}
+        </main>
+
+      </div>
     </div>
   );
 }
