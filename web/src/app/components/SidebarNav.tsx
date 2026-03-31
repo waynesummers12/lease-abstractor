@@ -53,8 +53,13 @@ export default function SidebarNav() {
   }, [supabase]);
 
   const filteredNav = useMemo(() => {
-    return navItems.filter((item) => item.roles.includes(role));
-  }, [role]);
+  if (role === "viewer") {
+    return navItems.filter((item) =>
+      ["Dashboard", "Leases", "Portfolio", "Alerts"].includes(item.label)
+    );
+  }
+  return navItems;
+}, [role]);
 
   useEffect(() => {
     const activeEl = document.querySelector("[data-active='true']") as HTMLElement | null;
