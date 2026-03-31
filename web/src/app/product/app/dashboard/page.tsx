@@ -85,6 +85,11 @@ function StatusChips() {
   );
 }
 
+function estimateMonthlyLoss(lease: Lease) {
+  const savings = estimateLeaseSavings(lease);
+  return Math.round(savings / 12);
+}
+
 /* ================== PAGE ================== */
 
 export default function DashboardPage() {
@@ -153,6 +158,9 @@ export default function DashboardPage() {
   const showPremiumCTA = averageRiskScore >= 60 || urgentRenewals > 0;
   const estimatedSavings = Math.max(5000, Math.round(averageRiskScore * 150));
   const selectedSavings = selected ? estimateLeaseSavings(selected) : estimatedSavings;
+  const selectedMonthlyLoss = selected
+  ? estimateMonthlyLoss(selected)
+  : Math.round(estimatedSavings / 12);
   const selectedRisk = selected ? getRenewalRiskScore(selected) : null;
 
   // Build 12-month renewal timeline
@@ -1010,6 +1018,9 @@ return (
                   <div className="text-[12px] text-gray-600 mb-3">
                     Estimated savings: ${selectedSavings.toLocaleString()}+ on this lease
                   </div>
+                  <div className="text-[11px] text-red-700 font-medium mb-3">
+  You may be losing ~${selectedMonthlyLoss.toLocaleString()}/month until resolved
+</div>
 
                   <div className="text-[11px] text-gray-500 mb-2">
   Most tenants uncover $5K–$20K in hidden costs
