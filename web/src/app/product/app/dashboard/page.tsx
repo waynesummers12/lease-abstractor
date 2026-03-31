@@ -93,6 +93,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [sortMode, setSortMode] = useState<"risk" | "renewal" | "name">("risk");
   const [activeMonth, setActiveMonth] = useState<string | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const upcomingRenewals = audits.filter((lease) => {
     if (!lease.renewal_date) return false;
@@ -310,12 +311,12 @@ return (
           Monitor renewal risk, prioritize action, and run audits to uncover savings.
         </p>
       </div>
-      <Link
-        href="/app/step-1-upload"
+      <button
+        onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
         className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
       >
         {showPremiumCTA ? "Unlock Full Audit →" : "Run Lease Audit →"}
-      </Link>
+      </button>
     </div>
 
 {/* CALENDAR TIMELINE — HERO */}
@@ -390,12 +391,12 @@ return (
       </div>
     </div>
 
-    <Link
-      href="/app/step-1-upload"
+    <button
+      onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
       className="rounded bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-700"
     >
       {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit Now"}
-    </Link>
+    </button>
   </div>
 </div>
     {/* DASHBOARD SUMMARY — BAR STYLE */}
@@ -490,12 +491,12 @@ return (
           >
             Add Lease (No Audit)
           </Link>
-          <Link
-            href="/app/step-1-upload"
+          <button
+            onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
             className="rounded bg-black px-3 py-2 text-sm text-white"
           >
             Run Audit (Free Preview)
-          </Link>
+          </button>
   </div>
 </div>
 
@@ -520,12 +521,12 @@ return (
           >
             Add Lease
           </Link>
-          <Link
-            href="/app/step-1-upload"
+          <button
+            onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
             className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
           >
             {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit →"}
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -757,12 +758,12 @@ return (
 
             return (
               <div className="mt-4">
-                <Link
-                  href="/app/step-1-upload"
+                <button
+                  onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
                   className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
                 >
                   {showPremiumCTA ? "Unlock Full Audit →" : "Run Full Audit →"}
-                </Link>
+                </button>
                 {showPremiumCTA && (
                   <div className="text-[11px] text-gray-500 mt-1">
                     Includes savings breakdown + negotiation insights
@@ -837,9 +838,46 @@ return (
                   </div>
                 </div>
               </div>
-              </div>
             </div>
-          );
-        }
+
+            {/* PAYWALL MODAL */}
+            {showPaywall && (
+              <div
+                className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+                onClick={() => setShowPaywall(false)}
+              >
+                <div
+                  className="bg-white rounded-lg p-6 w-[400px] shadow-xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 className="text-lg font-semibold mb-2">Unlock Full Audit</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Get a full savings breakdown, CAM overcharge detection, and negotiation insights.
+                  </p>
+
+                  <div className="text-2xl font-semibold mb-1">$249 / lease</div>
+                  <div className="text-[12px] text-gray-600 mb-4">Typical savings: $5,000–$20,000 per lease</div>
+
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => setShowPaywall(false)}
+                      className="text-sm text-gray-500"
+                    >
+                      Not now
+                    </button>
+                    <button
+                      onClick={() => window.location.href = "/app/step-1-upload"}
+                      className="bg-black text-white px-4 py-2 rounded text-sm"
+                    >
+                      Continue →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
 
         
+      
