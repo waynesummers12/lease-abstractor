@@ -439,7 +439,7 @@ return (
     )}
   </div>
 
-  <div className="timeline-scroll flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory min-w-full">
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full pt-1">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
@@ -455,11 +455,11 @@ return (
             setActiveMonth(activeMonth === m.label ? null : m.label)
           }
           data-has-renewals={m.count > 0 ? "true" : "false"}
-          className={`min-w-[180px] lg:min-w-[200px] flex-shrink-0 snap-start rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
-            activeMonth === m.label
-              ? "border-black ring-1 ring-black scale-[1.02]"
-              : "border-gray-200"
-          } ${intensity}`}
+          className={`rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
+  activeMonth === m.label
+    ? "border-black ring-2 ring-black"
+    : "border-gray-200"
+} ${intensity}`}
         >
           <div className="text-sm font-medium tracking-tight">
             {m.label}
