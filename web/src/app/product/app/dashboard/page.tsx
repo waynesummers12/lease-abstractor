@@ -296,90 +296,192 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
   return 0;
 });
 
-  return (
-    <div className="space-y-5">
-      {/* RIGHT — DETAIL */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
-            <p className="text-sm text-gray-600">
-              Monitor renewal risk, prioritize action, and run audits to uncover savings.
-            </p>
-          </div>
+return (
+  <div className="min-h-screen bg-white">
+    <div className="p-6 space-y-5">
+      {/* HEADER — DETAIL */}
+      <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
+        <p className="text-sm text-gray-600">
+          Monitor renewal risk, prioritize action, and run audits to uncover savings.
+        </p>
+      </div>
+      <Link
+        href="/app/step-1-upload"
+        className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+      >
+        Run Audit (Free Preview)
+      </Link>
+    </div>
+
+    {/* DASHBOARD SUMMARY — BAR STYLE */}
+    <div className="space-y-4 mb-6">
+          {[
+            {
+              label: "Expired Leases",
+              value: expiredLeases,
+              color: "bg-red-500",
+            },
+            {
+              label: "Urgent Renewals (≤ 90 days)",
+              value: urgentRenewals,
+              color: "bg-orange-500",
+            },
+            {
+              label: "Upcoming Renewals (≤ 180 days)",
+              value: upcomingRenewals,
+              color: "bg-yellow-500",
+            },
+            {
+              label: "Average Risk Score",
+              value: averageRiskScore,
+              suffix: "/100",
+              color: "bg-purple-500",
+              max: 100,
+            },
+            {
+              label: "At-Risk Square Footage",
+              value: totalAtRiskSquareFootage,
+              color: "bg-blue-500",
+            },
+            {
+              label: "Total Leases",
+              value: audits.length,
+              color: "bg-gray-800",
+            },
+          ].map((item) => {
+            const max =
+              item.max ??
+              Math.max(
+                expiredLeases,
+                urgentRenewals,
+                upcomingRenewals,
+                audits.length,
+                1
+              );
+
+            const percent =
+              max > 0 ? Math.min((item.value / max) * 100, 100) : 0;
+
+            return (
+              <div key={item.label}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-600">{item.label}</span>
+                  <span className="font-semibold">
+                    {item.value.toLocaleString()}
+                    {item.suffix ?? ""}
+                  </span>
+                </div>
+
+                <div className="h-3 w-full bg-gray-100 rounded">
+                  <div
+                    className={`h-3 rounded ${item.color} transition-all duration-500`}
+                    style={{ width: `${percent}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        
+
+        {/* PLATFORM NAVIGATION */}
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/product/app/portfolio"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            View All Leases
+          </Link>
+          <Link
+            href="/app/portfolio"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            Portfolio Dashboard
+          </Link>
+          <Link
+            href="/product/app/add-lease"
+            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+          >
+            Add Lease (No Audit)
+          </Link>
           <Link
             href="/app/step-1-upload"
-            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="rounded bg-black px-3 py-2 text-sm text-white"
           >
             Run Audit (Free Preview)
           </Link>
+  </div>
+</div>
+
+{/* CALENDAR TIMELINE */}
+      <div className="rounded border border-gray-200 p-6">
+        <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
+
+        <div className="flex gap-4 overflow-x-auto pb-2">
+          {timelineMonths.map((m) => {
+            const intensity =
+              m.count >= 5
+                ? "bg-red-100 text-red-800"
+                : m.count >= 3
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-gray-100 text-gray-800";
+
+            return (
+              <div
+                key={m.label}
+                onClick={() =>
+                  setActiveMonth(activeMonth === m.label ? null : m.label)
+                }
+                className={`min-w-[140px] md:min-w-[180px] rounded-lg p-4 text-center cursor-pointer border transition shadow-sm hover:shadow-md ${
+                  activeMonth === m.label
+                    ? "border-black ring-1 ring-black"
+                    : "border-transparent"
+                } ${intensity}`}
+              >
+                <div className="font-medium">{m.label}</div>
+                <div className="mt-1 text-lg font-semibold">{m.count}</div>
+                <div className="text-xs">renewals</div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-    <div className="p-6 space-y-5">
-      {/* CALENDAR TIMELINE */}
-        <div className="rounded border border-gray-200 p-6">
-          <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
-
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {timelineMonths.map((m) => {
-              const intensity =
-                m.count >= 5
-                  ? "bg-red-100 text-red-800"
-                  : m.count >= 3
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-gray-100 text-gray-800";
-
-              return (
-                <div
-                  key={m.label}
-                  onClick={() =>
-                    setActiveMonth(activeMonth === m.label ? null : m.label)
-                  }
-                  className={`min-w-[140px] md:min-w-[180px] rounded-lg p-4 text-center cursor-pointer border transition shadow-sm hover:shadow-md ${
-                    activeMonth === m.label
-                      ? "border-black ring-1 ring-black"
-                      : "border-transparent"
-                  } ${intensity}`}
-                >
-                  <div className="font-medium">{m.label}</div>
-                  <div className="mt-1 text-lg font-semibold">{m.count}</div>
-                  <div className="text-xs">renewals</div>
-                </div>
-              );
-            })}
+      {/* NEXT BEST ACTION — REVENUE DRIVER */}
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between">
+        <div>
+          <div className="text-sm font-semibold">
+            {selected?.property_name
+              ? `Run an audit for ${selected.property_name}`
+              : "Run your first lease audit"}
+          </div>
+          <div className="text-xs text-gray-600">
+            Identify CAM overcharges, admin fee padding, and negotiation leverage in minutes.
           </div>
         </div>
 
-        {/* NEXT BEST ACTION — REVENUE DRIVER */}
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between">
-          <div>
-            <div className="text-sm font-semibold">
-              {selected?.property_name
-                ? `Run an audit for ${selected.property_name}`
-                : "Run your first lease audit"}
-            </div>
-            <div className="text-xs text-gray-600">
-              Identify CAM overcharges, admin fee padding, and negotiation leverage in minutes.
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Link
-              href="/product/app/add-lease"
-              className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
-            >
-              Add Lease
-            </Link>
-            <Link
-              href="/app/step-1-upload"
-              className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
-            >
-              Run Audit
-            </Link>
-          </div>
+        <div className="flex gap-2">
+          <Link
+            href="/product/app/add-lease"
+            className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
+          >
+            Add Lease
+          </Link>
+          <Link
+            href="/app/step-1-upload"
+            className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
+          >
+            Run Audit
+          </Link>
         </div>
+      </div>
 
-      {/* LEFT — HISTORY */}
-      <aside className="border-r border-gray-200 pr-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* LEFT — HISTORY */}
+        <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
           Your Leases
         </h2>
@@ -490,6 +592,8 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         </ul>
       </aside>
 
+      {/* RIGHT — DETAIL */}
+      <div className="lg:col-span-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-semibold">
@@ -657,126 +761,29 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         })()}
         </div>
 
-        {/* EXECUTIVE SUMMARY */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Total Leases</div>
-            <div className="text-xl font-semibold">{audits.length}</div>
-          </div>
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Urgent (≤ 90 days)</div>
-            <div className="text-xl font-semibold text-red-600">{urgentRenewals}</div>
-          </div>
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Upcoming (≤ 180 days)</div>
-            <div className="text-xl font-semibold text-yellow-600">{upcomingRenewals}</div>
-          </div>
-          <div className="border rounded-lg p-4">
-            <div className="text-xs text-gray-500">Avg Risk</div>
-            <div className="text-xl font-semibold">{averageRiskScore}/100</div>
-          </div>
-        </div>
-
-        {/* DASHBOARD SUMMARY — BAR STYLE */}
-        <div className="space-y-4 mb-6">
-          {[
-            {
-              label: "Expired Leases",
-              value: expiredLeases,
-              color: "bg-red-500",
-            },
-            {
-              label: "Urgent Renewals (≤ 90 days)",
-              value: urgentRenewals,
-              color: "bg-orange-500",
-            },
-            {
-              label: "Upcoming Renewals (≤ 180 days)",
-              value: upcomingRenewals,
-              color: "bg-yellow-500",
-            },
-            {
-              label: "Average Risk Score",
-              value: averageRiskScore,
-              suffix: "/100",
-              color: "bg-purple-500",
-              max: 100,
-            },
-            {
-              label: "At-Risk Square Footage",
-              value: totalAtRiskSquareFootage,
-              color: "bg-blue-500",
-            },
-            {
-              label: "Total Leases",
-              value: audits.length,
-              color: "bg-gray-800",
-            },
-          ].map((item) => {
-            const max =
-              item.max ??
-              Math.max(
-                expiredLeases,
-                urgentRenewals,
-                upcomingRenewals,
-                audits.length,
-                1
-              );
-
-            const percent =
-              max > 0 ? Math.min((item.value / max) * 100, 100) : 0;
-
-            return (
-              <div key={item.label}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600">{item.label}</span>
-                  <span className="font-semibold">
-                    {item.value.toLocaleString()}
-                    {item.suffix ?? ""}
-                  </span>
-                </div>
-
-                <div className="h-3 w-full bg-gray-100 rounded">
-                  <div
-                    className={`h-3 rounded ${item.color} transition-all duration-500`}
-                    style={{ width: `${percent}%` }}
-                  />
+                {/* EXECUTIVE SUMMARY */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="border rounded-lg p-4">
+                    <div className="text-xs text-gray-500">Total Leases</div>
+                    <div className="text-xl font-semibold">{audits.length}</div>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <div className="text-xs text-gray-500">Urgent (≤ 90 days)</div>
+                    <div className="text-xl font-semibold text-red-600">{urgentRenewals}</div>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <div className="text-xs text-gray-500">Upcoming (≤ 180 days)</div>
+                    <div className="text-xl font-semibold text-yellow-600">{upcomingRenewals}</div>
+                  </div>
+                  <div className="border rounded-lg p-4">
+                    <div className="text-xs text-gray-500">Avg Risk</div>
+                    <div className="text-xl font-semibold">{averageRiskScore}/100</div>
+                  </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
+              </div>
+            </div>
+          );
+        }
 
         
-
-        {/* PLATFORM NAVIGATION */}
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/product/app/portfolio"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            View All Leases
-          </Link>
-          <Link
-            href="/app/portfolio"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            Portfolio Dashboard
-          </Link>
-          <Link
-            href="/product/app/add-lease"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            Add Lease (No Audit)
-          </Link>
-          <Link
-            href="/app/step-1-upload"
-            className="rounded bg-black px-3 py-2 text-sm text-white"
-          >
-            Run Audit (Free Preview)
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
