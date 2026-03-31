@@ -2,42 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
 
 const navItems = [
-  {
-    label: "Dashboard",
-    href: "/product/app/dashboard",
-    roles: ["admin", "analyst", "viewer"],
-  },
-  {
-    label: "Leases",
-    href: "/product/app/leases",
-    roles: ["admin", "analyst"],
-  },
-  {
-    label: "Portfolio",
-    href: "/product/app/portfolio",
-    roles: ["admin", "analyst"],
-    planRequired: "pro",
-  },
-  {
-    label: "Benchmarks",
-    href: "/product/app/benchmarks",
-    roles: ["admin"],
-    planRequired: "enterprise",
-  },
-  {
-    label: "Insights",
-    href: "/product/app/insights",
-    roles: ["admin", "analyst"],
-  },
-  {
-    label: "Alerts",
-    href: "/product/app/alerts",
-    roles: ["admin", "analyst"],
-  },
+  { label: "Dashboard", href: "/product/app/dashboard", roles: ["admin", "analyst", "viewer"] },
+  { label: "Leases", href: "/product/app/leases", roles: ["admin", "analyst"] },
+  { label: "Portfolio", href: "/product/app/portfolio", roles: ["admin", "analyst"], planRequired: "pro" },
+  { label: "Benchmarks", href: "/product/app/benchmarks", roles: ["admin"], planRequired: "enterprise" },
+  { label: "Insights", href: "/product/app/insights", roles: ["admin", "analyst"] },
+  { label: "Alerts", href: "/product/app/alerts", roles: ["admin", "analyst"] },
 ];
 
 export default function SidebarNav() {
@@ -51,7 +25,6 @@ export default function SidebarNav() {
   const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
   const [lockedModal, setLockedModal] = useState<string | null>(null);
-  const indicatorRef = useRef<HTMLDivElement | null>(null);
 
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -68,12 +41,8 @@ export default function SidebarNav() {
       const user = data.session?.user;
       if (!user) return;
 
-      setRole(
-        (user.user_metadata?.role ?? "viewer") as "admin" | "analyst" | "viewer"
-      );
-      setPlan(
-        (user.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise"
-      );
+      setRole((user.user_metadata?.role ?? "viewer") as "admin" | "analyst" | "viewer");
+      setPlan((user.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise");
     }
 
     loadSession();
@@ -83,62 +52,46 @@ export default function SidebarNav() {
     return navItems.filter((item) => item.roles.includes(role));
   }, [role]);
 
-  useEffect(() => {
-    const activeEl = document.querySelector("[data-active='true']") as HTMLElement | null;
-    if (activeEl && indicatorRef.current) {
-      indicatorRef.current.style.top = `${activeEl.offsetTop}px`;
-      indicatorRef.current.style.height = `${activeEl.offsetHeight}px`;
-    }
-  }, [pathname, collapsed]);
-
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLockedModal(null);
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
-
   return (
     <div
-      className={`border-r bg-gray-50 flex flex-col transition-all duration-300 ${
+      className={`h-full flex flex-col bg-gray-50 border-r ${
         collapsed ? "w-16" : "w-60"
       }`}
     >
       {/* HEADER */}
-      <div className="px-4 py-3 border-b space-y-1">
+      <div className="px-4 py-3 border-b">
         {!collapsed && (
           <>
-            <div className="font-semibold text-sm leading-tight">SaveOnLease</div>
-            <div className="text-[11px] text-gray-500 leading-tight">Lease Intelligence Platform</div>
+            <div className="text-sm font-semibold leading-tight">
+              SaveOnLease
+            </div>
+            <div className="text-[11px] text-gray-500 leading-tight">
+              Lease Intelligence Platform
+            </div>
           </>
         )}
 
         <button
           onClick={() => setCollapsed((v) => !v)}
-          className="text-xs text-gray-500 hover:text-black"
+          className="mt-2 text-xs text-gray-400 hover:text-black"
         >
           {collapsed ? "→" : "Collapse"}
         </button>
       </div>
 
       {/* NAV */}
-      <nav className="flex-1 px-3 py-3 text-sm overflow-y-auto">
-        <div
-          ref={indicatorRef}
-          className="absolute left-0 w-1 bg-black rounded transition-all duration-300 hidden"
-        />
-
+      <div className="flex-1 overflow-y-auto px-3 py-3">
         <div className="flex flex-col gap-0.5">
           {filteredNav.map((item) => {
             const isActive = pathname.startsWith(item.href);
+
             const locked =
               item.planRequired &&
               plan !== item.planRequired &&
               plan !== "enterprise";
 
             return (
-              <div key={item.href} className="relative group" data-active={isActive}>
+              <div key={item.href} className="relative group">
                 <Link
                   href={locked ? "#" : item.href}
                   onClick={(e) => {
@@ -147,7 +100,7 @@ export default function SidebarNav() {
                       setLockedModal(item.label);
                     }
                   }}
-                  className={`flex items-center justify-between px-3 py-1.5 rounded-md transition-all text-[13px] ${
+                  className={`flex items-center justify-between px-3 py-1.5 text-[13px] rounded-md transition ${
                     isActive
                       ? "bg-black text-white"
                       : "text-gray-600 hover:bg-gray-100 hover:text-black"
@@ -171,26 +124,26 @@ export default function SidebarNav() {
             );
           })}
         </div>
-      </nav>
+      </div>
 
       {/* ACTIONS */}
-      <div className="px-4 py-3 border-t flex flex-col gap-2 mt-auto">
+      <div className="px-4 py-3 border-t mt-auto flex flex-col gap-2">
         <Link
           href="/product/app/add-lease"
-          className="w-full text-center border rounded-md px-3 py-1.5 text-[13px] hover:bg-gray-100"
+          className="text-center border border-gray-300 rounded-md px-3 py-1.5 text-[13px] hover:bg-gray-100"
         >
           Add Lease
         </Link>
 
         <Link
           href="/app/step-1-upload"
-          className="w-full text-center bg-black text-white rounded-md px-3 py-1.5 text-[13px]"
+          className="text-center bg-black text-white rounded-md px-3 py-1.5 text-[13px]"
         >
           Run Audit (Free Preview)
         </Link>
       </div>
 
-      {/* LOCK MODAL */}
+      {/* MODAL */}
       {lockedModal && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
@@ -200,7 +153,10 @@ export default function SidebarNav() {
             className="bg-white rounded-lg p-6 w-96 shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-semibold mb-2">Upgrade Required</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Upgrade Required
+            </h3>
+
             <p className="text-sm text-gray-600 mb-4">
               {lockedModal} is available on a higher-tier plan.
             </p>
