@@ -151,6 +151,7 @@ export default function DashboardPage() {
 
   // Pricing trigger logic
   const showPremiumCTA = averageRiskScore >= 60 || urgentRenewals > 0;
+  const estimatedSavings = Math.max(5000, Math.round(averageRiskScore * 150));
 
   // Build 12-month renewal timeline
   const today = new Date();
@@ -856,7 +857,20 @@ return (
                   </p>
 
                   <div className="text-2xl font-semibold mb-1">$249 / lease</div>
-                  <div className="text-[12px] text-gray-600 mb-4">Typical savings: $5,000–$20,000 per lease</div>
+
+<div className="text-[11px] text-red-600 mb-2">
+  {urgentRenewals > 0
+    ? "Time-sensitive: renewal risk detected"
+    : "Unlock full financial insights"}
+</div>
+
+<div className="text-[12px] text-gray-600 mb-3">
+  Estimated savings: ${estimatedSavings.toLocaleString()}+ based on your portfolio
+</div>
+
+<div className="text-[11px] text-gray-500 mb-4">
+  Most tenants uncover $5K–$20K in hidden costs
+</div>
 
                   <div className="flex justify-end gap-3">
                     <button
@@ -869,7 +883,7 @@ return (
                       onClick={() => window.location.href = "/app/step-1-upload"}
                       className="bg-black text-white px-4 py-2 rounded text-sm"
                     >
-                      Continue →
+                      Unlock My Savings →
                     </button>
                   </div>
                 </div>
