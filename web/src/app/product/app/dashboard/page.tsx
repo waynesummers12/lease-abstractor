@@ -672,7 +672,15 @@ return (
             return (
               <li
                 key={audit.id}
-                onClick={() => setSelected(audit)}
+                onClick={() => {
+                setSelected(audit);
+
+                 const isTop = estimateLeaseSavings(audit) === topSavings;
+
+                 if (isTop && showPremiumCTA) {
+                setTimeout(() => setShowPaywall(true), 300);
+              }
+              }}
                 title={tooltip}
                 className={`cursor-pointer rounded-md px-3 py-2 text-[12.5px] transition-all duration-150 ease-in-out transform border-l-4 ${
                   (() => {
