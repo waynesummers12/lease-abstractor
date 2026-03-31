@@ -689,6 +689,20 @@ return (
           </button>
         </div>
 
+        <div className="mb-3 text-[11px] text-gray-600 flex items-center justify-between">
+          <span>Click any lease to preview savings</span>
+          <button
+            onClick={() =>
+              showPremiumCTA
+                ? setShowPaywall(true)
+                : (window.location.href = "/app/step-1-upload")
+            }
+            className="text-blue-600 hover:underline"
+          >
+            Run audit →
+          </button>
+        </div>
+
         <ul className="space-y-1.5">
           {sortedLeases.map((audit) => {
             let tooltip = "";
@@ -725,14 +739,14 @@ return (
               <li
                 key={audit.id}
                 onClick={() => {
-                setSelected(audit);
+                  setSelected(audit);
 
-                 const isTop = estimateLeaseSavings(audit) === topSavings;
+                  const isTop = estimateLeaseSavings(audit) === topSavings;
 
-                 if (isTop && showPremiumCTA) {
-                setTimeout(() => setShowPaywall(true), 300);
-              }
-              }}
+                  if (isTop && showPremiumCTA) {
+                    setTimeout(() => setShowPaywall(true), 300);
+                  }
+                }}
                 title={tooltip}
                 className={`cursor-pointer rounded-md px-3 py-2 text-[12.5px] transition-all duration-150 ease-in-out transform border-l-4 ${
                   (() => {
@@ -764,30 +778,28 @@ return (
                   {audit.property_name ?? "Unnamed Lease"}
                 </div>
                 <div className="mt-0.5 text-[11px] text-gray-500">
-  Health {getHealthScore()}
-</div>
-
-<div className="text-[11px] text-gray-500 mb-2">
-  Most tenants uncover $5K–$20K in hidden costs
-</div>
-
-<div className="text-[11px] text-gray-700 mb-3">
-  • 2,100+ leases analyzed
-</div>
-
-<div className="text-[11px] text-gray-700 mb-4">
-  • Avg. savings: $8,400 per lease
-</div>
-
-<div className="text-[11px] text-gray-500 border-t pt-3 mb-4">
-  Secure checkout • No long-term contracts • Cancel anytime
-</div>
-
-<div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
+                  Health {getHealthScore()}
+                </div>
+                <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
               </li>
             );
           })}
         </ul>
+
+        <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3 text-[11px] space-y-1">
+          <div className="font-medium text-gray-800">
+            Typical Results
+          </div>
+          <div className="text-gray-600">
+            • $5K–$20K savings per lease
+          </div>
+          <div className="text-gray-600">
+            • 2,100+ leases analyzed
+          </div>
+          <div className="text-gray-600">
+            • Avg. savings: $8,400
+          </div>
+        </div>
       </aside>
 
       {/* RIGHT — DETAIL */}
