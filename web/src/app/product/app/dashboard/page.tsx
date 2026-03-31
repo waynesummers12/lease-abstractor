@@ -780,6 +780,9 @@ return (
                 <div className="mt-0.5 text-[11px] text-gray-500">
                   Health {getHealthScore()}
                 </div>
+                <div className="text-[11px] text-green-700 font-medium">
+                  ${estimateLeaseSavings(audit).toLocaleString()} potential
+                </div>
                 <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
               </li>
             );
