@@ -717,8 +717,20 @@ return (
   Health {getHealthScore()}
 </div>
 
-<div className="text-[11px] text-green-700 font-semibold mt-0.5">
-  ${estimateLeaseSavings(audit).toLocaleString()} potential savings
+<div className="text-[11px] text-gray-500 mb-2">
+  Most tenants uncover $5K–$20K in hidden costs
+</div>
+
+<div className="text-[11px] text-gray-700 mb-3">
+  • 2,100+ leases analyzed
+</div>
+
+<div className="text-[11px] text-gray-700 mb-4">
+  • Avg. savings: $8,400 per lease
+</div>
+
+<div className="text-[11px] text-gray-500 border-t pt-3 mb-4">
+  Secure checkout • No long-term contracts • Cancel anytime
 </div>
 
 <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
