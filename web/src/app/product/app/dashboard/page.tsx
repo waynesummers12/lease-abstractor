@@ -416,7 +416,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
         <div className="rounded border border-gray-200 p-6">
           <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
 
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+          <div className="flex gap-4 overflow-x-auto pb-2">
             {timelineMonths.map((m) => {
               const intensity =
                 m.count >= 5
@@ -431,7 +431,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
                   onClick={() =>
                     setActiveMonth(activeMonth === m.label ? null : m.label)
                   }
-                  className={`rounded p-3 text-center cursor-pointer border transition ${
+                  className={`min-w-[140px] md:min-w-[180px] rounded-lg p-4 text-center cursor-pointer border transition shadow-sm hover:shadow-md ${
                     activeMonth === m.label
                       ? "border-black ring-1 ring-black"
                       : "border-transparent"
