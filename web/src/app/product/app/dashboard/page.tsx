@@ -331,6 +331,36 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
             })}
           </div>
         </div>
+
+        {/* NEXT BEST ACTION — REVENUE DRIVER */}
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between">
+          <div>
+            <div className="text-sm font-semibold">
+              {selected?.property_name
+                ? `Run an audit for ${selected.property_name}`
+                : "Run your first lease audit"}
+            </div>
+            <div className="text-xs text-gray-600">
+              Identify CAM overcharges, admin fee padding, and negotiation leverage in minutes.
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Link
+              href="/product/app/add-lease"
+              className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
+            >
+              Add Lease
+            </Link>
+            <Link
+              href="/app/step-1-upload"
+              className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
+            >
+              Run Audit
+            </Link>
+          </div>
+        </div>
+        
       {/* LEFT — HISTORY */}
       <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
@@ -458,35 +488,6 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
           >
             Run Audit (Free Preview)
           </Link>
-        </div>
-
-        {/* NEXT BEST ACTION — REVENUE DRIVER */}
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between">
-          <div>
-            <div className="text-sm font-semibold">
-              {selected?.property_name
-                ? `Run an audit for ${selected.property_name}`
-                : "Run your first lease audit"}
-            </div>
-            <div className="text-xs text-gray-600">
-              Identify CAM overcharges, admin fee padding, and negotiation leverage in minutes.
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Link
-              href="/product/app/add-lease"
-              className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
-            >
-              Add Lease
-            </Link>
-            <Link
-              href="/app/step-1-upload"
-              className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
-            >
-              Run Audit
-            </Link>
-          </div>
         </div>
 
         <div className="flex items-center justify-between">
