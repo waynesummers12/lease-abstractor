@@ -156,6 +156,7 @@ export default function DashboardPage() {
   // Build 12-month renewal timeline
   const today = new Date();
   const timelineMonths = Array.from({ length: 12 }).map((_, i) => {
+    // ensures newest/highest activity month auto-focus later
     const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
     const label = d.toLocaleString("default", { month: "short", year: "numeric" });
 
@@ -211,6 +212,13 @@ export default function DashboardPage() {
     }
 
     loadLeases();
+    // Auto-scroll to first active month with leases
+    setTimeout(() => {
+      const el = document.querySelector("[data-has-renewals='true']");
+      if (el) {
+        (el as HTMLElement).scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+    }, 200);
     return () => {
       cancelled = true;
     };
@@ -342,7 +350,7 @@ return (
     )}
   </div>
 
-  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin">
+  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
@@ -357,7 +365,8 @@ return (
           onClick={() =>
             setActiveMonth(activeMonth === m.label ? null : m.label)
           }
-          className={`min-w-[180px] lg:min-w-[200px] rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
+          data-has-renewals={m.count > 0 ? "true" : "false"}
+          className={`min-w-[180px] lg:min-w-[200px] snap-start rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
             activeMonth === m.label
               ? "border-black ring-1 ring-black scale-[1.02]"
               : "border-gray-200"
