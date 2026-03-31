@@ -379,6 +379,35 @@ return (
         {showPremiumCTA ? "Unlock Full Audit →" : "Run Lease Audit →"}
       </button>
     </div>
+{/* PORTFOLIO SAVINGS HERO */}
+<div className="rounded-xl border border-green-200 bg-green-50 p-5 flex items-center justify-between shadow-sm">
+  <div>
+    <div className="text-[12px] text-green-700 uppercase tracking-wide">
+      Estimated Portfolio Savings
+    </div>
+    <div className="text-2xl font-semibold text-green-900">
+      $
+      {sortedLeases
+        .reduce((sum, l) => sum + estimateLeaseSavings(l), 0)
+        .toLocaleString()}
+      +
+    </div>
+    <div className="text-[12px] text-green-700 mt-1">
+      Based on renewal risk + lease exposure
+    </div>
+  </div>
+
+  <button
+    onClick={() =>
+      showPremiumCTA
+        ? setShowPaywall(true)
+        : (window.location.href = "/app/step-1-upload")
+    }
+    className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700"
+  >
+    Unlock Savings →
+  </button>
+</div>
 
 {/* CALENDAR TIMELINE — HERO */}
 <div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full">
