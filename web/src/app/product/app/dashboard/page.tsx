@@ -85,6 +85,13 @@ function StatusChips() {
   );
 }
 
+function estimateLeaseSavings(lease: Lease) {
+  const risk = getRenewalRiskScore(lease) ?? 0;
+  const base = lease.square_feet ?? 2000;
+
+  return Math.max(1500, Math.round((risk / 100) * base * 1.5));
+}
+
 function estimateMonthlyLoss(lease: Lease) {
   const savings = estimateLeaseSavings(lease);
   return Math.round(savings / 12);
@@ -361,13 +368,6 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 const topSavings = sortedLeases.length
   ? Math.max(...sortedLeases.map((l) => estimateLeaseSavings(l)))
   : 0;
-
-function estimateLeaseSavings(lease: Lease) {
-  const risk = getRenewalRiskScore(lease) ?? 0;
-  const base = lease.square_feet ?? 2000;
-
-  return Math.max(1500, Math.round((risk / 100) * base * 1.5));
-}
 
 return (
   <div className="min-h-screen bg-white">
