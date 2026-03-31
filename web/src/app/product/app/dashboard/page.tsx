@@ -418,7 +418,7 @@ return (
 </div>
 
 {/* CALENDAR TIMELINE — HERO */}
-<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full">
+<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full mb-2">
   <div className="flex items-center justify-between mb-5">
     <div>
       <div className="text-[11px] text-gray-500 uppercase tracking-wide">
@@ -439,7 +439,7 @@ return (
     )}
   </div>
 
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full pt-1">
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full pt-2">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
@@ -455,11 +455,11 @@ return (
             setActiveMonth(activeMonth === m.label ? null : m.label)
           }
           data-has-renewals={m.count > 0 ? "true" : "false"}
-          className={`rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
-  activeMonth === m.label
-    ? "border-black ring-2 ring-black"
-    : "border-gray-200"
-} ${intensity}`}
+          className={`rounded-xl h-[140px] flex flex-col justify-center p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
+            activeMonth === m.label
+              ? "border-black ring-2 ring-black"
+              : "border-gray-200"
+          } ${intensity}`}
         >
           <div className="text-sm font-medium tracking-tight">
             {m.label}
@@ -491,7 +491,7 @@ return (
   </div>
 
   {/* CONVERSION BANNER */}
-  <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-4 flex items-center justify-between">
+  <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-5 py-4 flex items-center justify-between">
     <div>
       <div className="text-sm font-semibold text-red-900">
         {urgentRenewals > 0
