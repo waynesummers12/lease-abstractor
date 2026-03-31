@@ -297,6 +297,23 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 });
 
   return (
+    <div className="space-y-5">
+      {/* RIGHT — DETAIL */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
+            <p className="text-sm text-gray-600">
+              Monitor renewal risk, prioritize action, and run audits to uncover savings.
+            </p>
+          </div>
+          <Link
+            href="/app/step-1-upload"
+            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          >
+            Run Audit (Free Preview)
+          </Link>
+        </div>
+
     <div className="p-6 space-y-5">
       {/* CALENDAR TIMELINE */}
         <div className="rounded border border-gray-200 p-6">
@@ -360,7 +377,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
             </Link>
           </div>
         </div>
-        
+
       {/* LEFT — HISTORY */}
       <aside className="border-r border-gray-200 pr-6">
         <h2 className="mb-4 text-lg font-semibold">
@@ -472,23 +489,6 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
           })}
         </ul>
       </aside>
-
-      {/* RIGHT — DETAIL */}
-      <div className="space-y-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
-            <p className="text-sm text-gray-600">
-              Monitor renewal risk, prioritize action, and run audits to uncover savings.
-            </p>
-          </div>
-          <Link
-            href="/app/step-1-upload"
-            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-          >
-            Run Audit (Free Preview)
-          </Link>
-        </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
