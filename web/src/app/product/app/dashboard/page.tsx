@@ -412,6 +412,40 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 
       {/* RIGHT — DETAIL */}
       <div className="space-y-5">
+{/* CALENDAR TIMELINE */}
+        <div className="rounded border border-gray-200 p-6">
+          <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
+
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+            {timelineMonths.map((m) => {
+              const intensity =
+                m.count >= 5
+                  ? "bg-red-100 text-red-800"
+                  : m.count >= 3
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-800";
+
+              return (
+                <div
+                  key={m.label}
+                  onClick={() =>
+                    setActiveMonth(activeMonth === m.label ? null : m.label)
+                  }
+                  className={`rounded p-3 text-center cursor-pointer border transition ${
+                    activeMonth === m.label
+                      ? "border-black ring-1 ring-black"
+                      : "border-transparent"
+                  } ${intensity}`}
+                >
+                  <div className="font-medium">{m.label}</div>
+                  <div className="mt-1 text-lg font-semibold">{m.count}</div>
+                  <div className="text-xs">renewals</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
@@ -713,39 +747,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
           })}
         </div>
 
-        {/* CALENDAR TIMELINE */}
-        <div className="rounded border border-gray-200 p-6">
-          <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
-
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
-            {timelineMonths.map((m) => {
-              const intensity =
-                m.count >= 5
-                  ? "bg-red-100 text-red-800"
-                  : m.count >= 3
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-gray-100 text-gray-800";
-
-              return (
-                <div
-                  key={m.label}
-                  onClick={() =>
-                    setActiveMonth(activeMonth === m.label ? null : m.label)
-                  }
-                  className={`rounded p-3 text-center cursor-pointer border transition ${
-                    activeMonth === m.label
-                      ? "border-black ring-1 ring-black"
-                      : "border-transparent"
-                  } ${intensity}`}
-                >
-                  <div className="font-medium">{m.label}</div>
-                  <div className="mt-1 text-lg font-semibold">{m.count}</div>
-                  <div className="text-xs">renewals</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        
 
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
