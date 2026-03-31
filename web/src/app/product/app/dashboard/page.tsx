@@ -315,39 +315,65 @@ return (
       </Link>
     </div>
 
-{/* CALENDAR TIMELINE */}
-      <div className="rounded border border-gray-200 p-6">
-        <div className="mb-4 text-sm text-gray-500">Renewal Timeline (Next 12 Months)</div>
-
-        <div className="flex gap-4 overflow-x-auto pb-2">
-          {timelineMonths.map((m) => {
-            const intensity =
-              m.count >= 5
-                ? "bg-red-100 text-red-800"
-                : m.count >= 3
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-gray-100 text-gray-800";
-
-            return (
-              <div
-                key={m.label}
-                onClick={() =>
-                  setActiveMonth(activeMonth === m.label ? null : m.label)
-                }
-                className={`min-w-[140px] md:min-w-[180px] rounded-lg p-4 text-center cursor-pointer border transition shadow-sm hover:shadow-md ${
-                  activeMonth === m.label
-                    ? "border-black ring-1 ring-black"
-                    : "border-transparent"
-                } ${intensity}`}
-              >
-                <div className="font-medium">{m.label}</div>
-                <div className="mt-1 text-lg font-semibold">{m.count}</div>
-                <div className="text-xs">renewals</div>
-              </div>
-            );
-          })}
-        </div>
+{/* CALENDAR TIMELINE — HERO */}
+<div className="rounded-xl border border-gray-200 p-6 lg:p-8">
+  <div className="flex items-center justify-between mb-5">
+    <div>
+      <div className="text-[11px] text-gray-500 uppercase tracking-wide">
+        Renewal Timeline
       </div>
+      <div className="text-lg font-semibold">
+        Next 12 Months
+      </div>
+    </div>
+
+    {activeMonth && (
+      <button
+        onClick={() => setActiveMonth(null)}
+        className="text-xs text-gray-500 hover:text-black"
+      >
+        Clear filter
+      </button>
+    )}
+  </div>
+
+  <div className="flex gap-4 overflow-x-auto pb-3">
+    {timelineMonths.map((m) => {
+      const intensity =
+        m.count >= 5
+          ? "bg-red-100 text-red-900"
+          : m.count >= 3
+          ? "bg-yellow-100 text-yellow-900"
+          : "bg-gray-100 text-gray-800";
+
+      return (
+        <div
+          key={m.label}
+          onClick={() =>
+            setActiveMonth(activeMonth === m.label ? null : m.label)
+          }
+          className={`min-w-[180px] lg:min-w-[200px] rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
+            activeMonth === m.label
+              ? "border-black ring-1 ring-black scale-[1.02]"
+              : "border-transparent"
+          } ${intensity}`}
+        >
+          <div className="text-sm font-medium tracking-tight">
+            {m.label}
+          </div>
+
+          <div className="mt-2 text-2xl font-semibold">
+            {m.count}
+          </div>
+
+          <div className="text-xs mt-1 opacity-80">
+            renewals
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>
     {/* DASHBOARD SUMMARY — BAR STYLE */}
     <div className="space-y-4 mb-6">
           {[
@@ -481,14 +507,14 @@ return (
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* LEFT — HISTORY */}
-        <aside className="border-r border-gray-200 pr-6">
-        <h2 className="mb-4 text-lg font-semibold">
+        <aside className="border-r border-gray-200 pr-5">
+        <h2 className="mb-3 text-base font-semibold">
           Your Leases
         </h2>
-        <div className="mb-4 flex gap-2 text-xs">
+        <div className="mb-3 flex gap-1.5 text-[11.5px]">
           <button
             onClick={() => setSortMode("risk")}
-            className={`rounded px-2 py-1 border ${
+            className={`rounded px-2 py-[2px] border ${
               sortMode === "risk"
                 ? "bg-black text-white"
                 : "bg-white hover:bg-gray-100"
@@ -499,7 +525,7 @@ return (
 
           <button
             onClick={() => setSortMode("renewal")}
-            className={`rounded px-2 py-1 border ${
+            className={`rounded px-2 py-[2px] border ${
               sortMode === "renewal"
                 ? "bg-black text-white"
                 : "bg-white hover:bg-gray-100"
@@ -510,7 +536,7 @@ return (
 
           <button
             onClick={() => setSortMode("name")}
-            className={`rounded px-2 py-1 border ${
+            className={`rounded px-2 py-[2px] border ${
               sortMode === "name"
                 ? "bg-black text-white"
                 : "bg-white hover:bg-gray-100"
@@ -520,7 +546,7 @@ return (
           </button>
         </div>
 
-        <ul className="space-y-2">
+        <ul className="space-y-1.5">
           {sortedLeases.map((audit) => {
             let tooltip = "";
 
@@ -558,7 +584,7 @@ return (
                 key={audit.id}
                 onClick={() => setSelected(audit)}
                 title={tooltip}
-                className={`cursor-pointer rounded p-3 text-sm transition-all duration-200 ease-in-out transform border-l-4 ${
+                className={`cursor-pointer rounded-md px-3 py-2 text-[12.5px] transition-all duration-150 ease-in-out transform border-l-4 ${
                   (() => {
                     const risk = getRenewalRiskScore(audit);
                     if (risk === null) return "border-gray-200";
@@ -573,7 +599,7 @@ return (
                     : "hover:bg-gray-100 hover:scale-[1.01]"
                 }`}
               >
-                <div className="flex items-center gap-2 font-medium">
+                <div className="flex items-center gap-1.5 font-medium leading-tight">
                   {renewalInfo.show && (
                     <span
                       className={`inline-block h-2 w-2 rounded-full bg-red-600 ${
@@ -583,7 +609,7 @@ return (
                   )}
                   {audit.property_name ?? "Unnamed Lease"}
                 </div>
-                <div className="mt-1 text-xs text-gray-500">
+                <div className="mt-0.5 text-[11px] text-gray-500">
                   Health {getHealthScore()}
                 </div>
               </li>
