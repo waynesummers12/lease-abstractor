@@ -298,7 +298,7 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 
 return (
   <div className="min-h-screen bg-white">
-    <div className="p-5 lg:p-6 space-y-6">
+    <div className="p-5 lg:p-6 space-y-6 pb-20">
       {/* HEADER — DETAIL */}
       <div className="flex items-center justify-between">
       <div>
@@ -311,7 +311,7 @@ return (
         href="/app/step-1-upload"
         className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
       >
-        Run Audit (Free Preview)
+        Run Lease Audit →
       </Link>
     </div>
 
@@ -352,7 +352,7 @@ return (
           onClick={() =>
             setActiveMonth(activeMonth === m.label ? null : m.label)
           }
-          className={`min-w-[180px] lg:min-w-[200px] rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
+          className={`min-w-[180px] lg:min-w-[200px] rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
             activeMonth === m.label
               ? "border-black ring-1 ring-black scale-[1.02]"
               : "border-transparent"
@@ -372,6 +372,27 @@ return (
         </div>
       );
     })}
+  </div>
+
+  {/* CONVERSION BANNER */}
+  <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-4 flex items-center justify-between">
+    <div>
+      <div className="text-sm font-semibold text-red-900">
+        {urgentRenewals > 0
+          ? `${urgentRenewals} leases need immediate attention`
+          : "Stay ahead of renewal risk"}
+      </div>
+      <div className="text-xs text-red-700">
+        Audit now to uncover hidden costs and strengthen negotiation leverage.
+      </div>
+    </div>
+
+    <Link
+      href="/app/step-1-upload"
+      className="rounded bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-700"
+    >
+      Run Audit Now
+    </Link>
   </div>
 </div>
     {/* DASHBOARD SUMMARY — BAR STYLE */}
@@ -500,7 +521,7 @@ return (
             href="/app/step-1-upload"
             className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
           >
-            Run Audit
+            Run Audit →
           </Link>
         </div>
       </div>
@@ -612,6 +633,7 @@ return (
                 <div className="mt-0.5 text-[11px] text-gray-500">
                   Health {getHealthScore()}
                 </div>
+                <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
               </li>
             );
           })}
@@ -736,7 +758,7 @@ return (
                   href="/app/step-1-upload"
                   className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
                 >
-                  Run Audit (Free Preview)
+                  Run Full Audit →
                 </Link>
 
                 {status === "urgent" && (
