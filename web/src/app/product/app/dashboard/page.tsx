@@ -298,12 +298,12 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 
 return (
   <div className="min-h-screen bg-white">
-    <div className="p-6 space-y-5">
+    <div className="p-5 lg:p-6 space-y-6">
       {/* HEADER — DETAIL */}
       <div className="flex items-center justify-between">
       <div>
-        <h1 className="text-2xl font-semibold">Portfolio Dashboard</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-2xl font-semibold tracking-tight">Portfolio Dashboard</h1>
+        <p className="text-[13px] text-gray-600 mt-1">
           Monitor renewal risk, prioritize action, and run audits to uncover savings.
         </p>
       </div>
@@ -316,7 +316,7 @@ return (
     </div>
 
 {/* CALENDAR TIMELINE — HERO */}
-<div className="rounded-xl border border-gray-200 p-6 lg:p-8">
+<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm">
   <div className="flex items-center justify-between mb-5">
     <div>
       <div className="text-[11px] text-gray-500 uppercase tracking-wide">
@@ -375,7 +375,7 @@ return (
   </div>
 </div>
     {/* DASHBOARD SUMMARY — BAR STYLE */}
-    <div className="space-y-4 mb-6">
+    <div className="space-y-3 mb-6">
           {[
             {
               label: "Expired Leases",
@@ -425,7 +425,7 @@ return (
 
             return (
               <div key={item.label}>
-                <div className="flex justify-between text-sm mb-1">
+                <div className="flex justify-between text-[13px] mb-1">
                   <span className="text-gray-600">{item.label}</span>
                   <span className="font-semibold">
                     {item.value.toLocaleString()}
@@ -433,9 +433,9 @@ return (
                   </span>
                 </div>
 
-                <div className="h-3 w-full bg-gray-100 rounded">
+                <div className="h-2.5 w-full bg-gray-100 rounded-full">
                   <div
-                    className={`h-3 rounded ${item.color} transition-all duration-500`}
+                    className={`h-2.5 rounded-full ${item.color} transition-all duration-500`}
                     style={{ width: `${percent}%` }}
                   />
                 </div>
@@ -477,7 +477,7 @@ return (
 
 
       {/* NEXT BEST ACTION — REVENUE DRIVER */}
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between shadow-sm">
         <div>
           <div className="text-sm font-semibold">
             {selected?.property_name
@@ -595,8 +595,8 @@ return (
                   })()
                 } ${
                   selected?.id === audit.id
-                    ? "bg-gray-200 scale-[1.01]"
-                    : "hover:bg-gray-100 hover:scale-[1.01]"
+                    ? "bg-gray-200 scale-[1.01] shadow-sm"
+                    : "hover:bg-gray-100 hover:scale-[1.01] hover:shadow-sm"
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-medium leading-tight">
@@ -652,7 +652,7 @@ return (
 
         {selected && <StatusChips />}
 
-        <div className="rounded-lg border border-gray-200 p-5">
+        <div className="rounded-lg border border-gray-200 p-5 bg-white shadow-sm">
           <div className="text-xs text-gray-500 mb-3">
             Lease Details
           </div>
@@ -788,7 +788,7 @@ return (
         </div>
 
                 {/* EXECUTIVE SUMMARY */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                   <div className="border rounded-lg p-3">
                     <div className="text-[11px] text-gray-500">Total Leases</div>
                     <div className="text-lg font-semibold">{audits.length}</div>
