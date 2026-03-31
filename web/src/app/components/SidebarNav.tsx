@@ -102,15 +102,15 @@ export default function SidebarNav() {
   return (
     <div
       className={`border-r bg-gray-50 flex flex-col transition-all duration-300 ${
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-60"
       }`}
     >
       {/* HEADER */}
-      <div className="p-4 border-b space-y-2">
+      <div className="px-4 py-3 border-b space-y-1">
         {!collapsed && (
           <>
-            <div className="font-semibold text-sm">SaveOnLease</div>
-            <div className="text-xs text-gray-500">Lease Intelligence Platform</div>
+            <div className="font-semibold text-sm leading-tight">SaveOnLease</div>
+            <div className="text-[11px] text-gray-500 leading-tight">Lease Intelligence Platform</div>
           </>
         )}
 
@@ -123,13 +123,13 @@ export default function SidebarNav() {
       </div>
 
       {/* NAV */}
-      <nav className="flex-1 px-2 py-4 text-sm overflow-y-auto">
+      <nav className="flex-1 px-3 py-3 text-sm overflow-y-auto">
         <div
           ref={indicatorRef}
           className="absolute left-0 w-1 bg-black rounded transition-all duration-300 hidden"
         />
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {filteredNav.map((item) => {
             const isActive = pathname.startsWith(item.href);
             const locked =
@@ -147,7 +147,7 @@ export default function SidebarNav() {
                       setLockedModal(item.label);
                     }
                   }}
-                  className={`flex items-center justify-between px-3 py-2 rounded transition-all ${
+                  className={`flex items-center justify-between px-3 py-1.5 rounded-md transition-all text-[13px] ${
                     isActive
                       ? "bg-black text-white"
                       : "text-gray-600 hover:bg-gray-100 hover:text-black"
@@ -163,7 +163,7 @@ export default function SidebarNav() {
                 </Link>
 
                 {collapsed && (
-                  <span className="absolute left-16 top-1/2 -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                  <span className="absolute left-14 top-1/2 -translate-y-1/2 bg-black text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
                     {item.label}
                   </span>
                 )}
@@ -174,17 +174,17 @@ export default function SidebarNav() {
       </nav>
 
       {/* ACTIONS */}
-      <div className="p-4 border-t flex flex-col gap-2 mt-auto">
+      <div className="px-4 py-3 border-t flex flex-col gap-2 mt-auto">
         <Link
           href="/product/app/add-lease"
-          className="w-full text-center border rounded px-3 py-2 text-sm hover:bg-gray-100"
+          className="w-full text-center border rounded-md px-3 py-1.5 text-[13px] hover:bg-gray-100"
         >
           Add Lease
         </Link>
 
         <Link
           href="/app/step-1-upload"
-          className="w-full text-center bg-black text-white rounded px-3 py-2 text-sm"
+          className="w-full text-center bg-black text-white rounded-md px-3 py-1.5 text-[13px]"
         >
           Run Audit (Free Preview)
         </Link>
