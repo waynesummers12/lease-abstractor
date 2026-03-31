@@ -214,13 +214,26 @@ export default function DashboardPage() {
     }
 
     loadLeases();
-    // Auto-scroll to first active month with leases
+    // Auto-scroll to first active month with leases (improved horizontal focus)
     setTimeout(() => {
+      const container = document.querySelector(".timeline-scroll");
       const el = document.querySelector("[data-has-renewals='true']");
-      if (el) {
-        (el as HTMLElement).scrollIntoView({ behavior: "smooth", inline: "center" });
+
+      if (container && el) {
+        const containerEl = container as HTMLElement;
+        const targetEl = el as HTMLElement;
+
+        const offset =
+          targetEl.offsetLeft -
+          containerEl.offsetWidth / 2 +
+          targetEl.offsetWidth / 2;
+
+        containerEl.scrollTo({
+          left: offset,
+          behavior: "smooth",
+        });
       }
-    }, 200);
+    }, 250);
     return () => {
       cancelled = true;
     };
@@ -389,7 +402,7 @@ return (
     )}
   </div>
 
-  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory min-w-full">
+  <div className="timeline-scroll flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory min-w-full">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
