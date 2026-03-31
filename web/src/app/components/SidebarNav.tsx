@@ -80,11 +80,11 @@ export default function SidebarNav() {
   return (
     <div
       className={`border-r bg-gray-50 flex flex-col transition-all duration-300 ${
-        collapsed ? "w-16" : "w-60"
+        collapsed ? "w-14" : "w-56"
       }`}
     >
       {/* HEADER */}
-      <div className="px-4 py-3 border-b space-y-1">
+      <div className="px-4 py-2 border-b space-y-[2px]">
         {!collapsed && (
           <>
             <div className="font-semibold text-sm leading-tight">SaveOnLease</div>
@@ -107,7 +107,7 @@ export default function SidebarNav() {
           className="absolute left-0 w-1 bg-black rounded transition-all duration-300 hidden"
         />
 
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col gap-[2px]">
           {filteredNav.map((item) => {
             const isActive = pathname.startsWith(item.href);
             const locked =
@@ -125,7 +125,7 @@ export default function SidebarNav() {
                       setLockedModal(item.label);
                     }
                   }}
-                  className={`flex items-center justify-between px-3 py-1.5 rounded-md transition-all text-[13px] ${
+                  className={`flex items-center justify-between px-3 py-1 rounded-md transition-all text-[12.5px] font-medium ${
                     isActive
                       ? "bg-black text-white"
                       : "text-gray-600 hover:bg-gray-100 hover:text-black"
@@ -134,7 +134,7 @@ export default function SidebarNav() {
                   {!collapsed && <span>{item.label}</span>}
 
                   {!collapsed && item.planRequired && (
-                    <span className="text-[10px] bg-yellow-400 px-2 py-0.5 rounded">
+                    <span className="text-[10px] bg-yellow-400 px-1.5 py-[2px] rounded ml-2">
                       {item.planRequired.toUpperCase()}
                     </span>
                   )}
@@ -155,14 +155,14 @@ export default function SidebarNav() {
       <div className="px-4 py-3 border-t flex flex-col gap-2 mt-auto">
         <Link
           href="/product/app/add-lease"
-          className="w-full text-center border rounded-md px-3 py-1.5 text-[13px] hover:bg-gray-100"
+          className="w-full text-center border rounded-md px-3 py-1 text-[12.5px] font-medium hover:bg-gray-100"
         >
           Add Lease
         </Link>
 
         <Link
           href="/app/step-1-upload"
-          className="w-full text-center bg-black text-white rounded-md px-3 py-1.5 text-[13px]"
+          className="w-full text-center bg-black text-white rounded-md px-3 py-1 text-[12.5px] font-medium"
         >
           Run Audit (Free Preview)
         </Link>
