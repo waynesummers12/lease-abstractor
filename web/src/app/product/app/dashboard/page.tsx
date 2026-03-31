@@ -619,15 +619,15 @@ return (
       </aside>
 
       {/* RIGHT — DETAIL */}
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold">
               Lease Overview
             </h1>
           </div>
           {selected && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <HealthBadge score={getHealthScore()} />
               {(() => {
                 const risk = getRenewalRiskScore(selected);
@@ -652,24 +652,24 @@ return (
 
         {selected && <StatusChips />}
 
-        <div className="rounded border border-gray-200 p-6">
-          <div className="text-sm text-gray-500 mb-4">
+        <div className="rounded-lg border border-gray-200 p-5">
+          <div className="text-xs text-gray-500 mb-3">
             Lease Details
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-[13px]">
             <div>
-              <div className="text-gray-500">Property</div>
+              <div className="text-gray-500 text-[11px]">Property</div>
               <div className="font-medium">{selected?.property_name ?? "—"}</div>
             </div>
 
             <div>
-              <div className="text-gray-500">Lease Type</div>
+              <div className="text-gray-500 text-[11px]">Lease Type</div>
               <div className="font-medium">{selected?.lease_type ?? "NNN"}</div>
             </div>
 
             <div>
-              <div className="text-gray-500">Square Footage</div>
+              <div className="text-gray-500 text-[11px]">Square Footage</div>
               <div className="font-medium">{selected?.square_feet ? selected.square_feet.toLocaleString() : "—"}</div>
             </div>
 
@@ -677,7 +677,7 @@ return (
               if (!selected.renewal_date) {
                 return (
                   <div>
-                    <div className="text-gray-500">Renewal Date</div>
+                    <div className="text-gray-500 text-[11px]">Renewal Date</div>
                     <div className="font-medium">—</div>
                   </div>
                 );
@@ -700,7 +700,7 @@ return (
 
               return (
                 <div>
-                  <div className="text-gray-500">Renewal Date</div>
+                  <div className="text-gray-500 text-[11px]">Renewal Date</div>
                   <div className="font-medium">
                     {renewal.toLocaleDateString()}
                   </div>
@@ -731,7 +731,7 @@ return (
             };
 
             return (
-              <div className="mt-6">
+              <div className="mt-4">
                 <Link
                   href="/app/step-1-upload"
                   className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
@@ -779,7 +779,7 @@ return (
           }
 
           return (
-            <div className={`mt-6 rounded border p-4 text-sm ${style}`}>
+            <div className={`mt-4 rounded-md border p-3 text-[13px] ${style}`}>
               <div className="font-semibold mb-1">Negotiation Leverage Insight</div>
               <div>{message}</div>
             </div>
@@ -788,22 +788,22 @@ return (
         </div>
 
                 {/* EXECUTIVE SUMMARY */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="border rounded-lg p-4">
-                    <div className="text-xs text-gray-500">Total Leases</div>
-                    <div className="text-xl font-semibold">{audits.length}</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="border rounded-lg p-3">
+                    <div className="text-[11px] text-gray-500">Total Leases</div>
+                    <div className="text-lg font-semibold">{audits.length}</div>
                   </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="text-xs text-gray-500">Urgent (≤ 90 days)</div>
-                    <div className="text-xl font-semibold text-red-600">{urgentRenewals}</div>
+                  <div className="border rounded-lg p-3">
+                    <div className="text-[11px] text-gray-500">Urgent (≤ 90 days)</div>
+                    <div className="text-lg font-semibold text-red-600">{urgentRenewals}</div>
                   </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="text-xs text-gray-500">Upcoming (≤ 180 days)</div>
-                    <div className="text-xl font-semibold text-yellow-600">{upcomingRenewals}</div>
+                  <div className="border rounded-lg p-3">
+                    <div className="text-[11px] text-gray-500">Upcoming (≤ 180 days)</div>
+                    <div className="text-lg font-semibold text-yellow-600">{upcomingRenewals}</div>
                   </div>
-                  <div className="border rounded-lg p-4">
-                    <div className="text-xs text-gray-500">Avg Risk</div>
-                    <div className="text-xl font-semibold">{averageRiskScore}/100</div>
+                  <div className="border rounded-lg p-3">
+                    <div className="text-[11px] text-gray-500">Avg Risk</div>
+                    <div className="text-lg font-semibold">{averageRiskScore}/100</div>
                   </div>
                 </div>
               </div>
