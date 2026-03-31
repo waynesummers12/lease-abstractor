@@ -224,6 +224,32 @@ export default function DashboardPage() {
     };
   }, []);
 
+  /* Auto-effect for month filtering */
+  useEffect(() => {
+    if (!activeMonth) return;
+
+    // Auto-select first lease in filtered set
+    const first = audits.find((lease) => {
+      if (!lease.renewal_date) return false;
+
+      const r = new Date(lease.renewal_date);
+      const label = r.toLocaleString("default", {
+        month: "short",
+        year: "numeric",
+      });
+
+      return label === activeMonth;
+    });
+
+    if (first) setSelected(first);
+
+    // Scroll list into view
+    setTimeout(() => {
+      const el = document.getElementById("lease-list");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }, [activeMonth, audits]);
+
   /* ---------------- LOADING ---------------- */
 
   if (loading) {
@@ -259,9 +285,9 @@ export default function DashboardPage() {
     );
   }
 
-  /* ---------------- MAIN UI ---------------- */
+/* ---------------- MAIN UI ---------------- */
 
-  const filteredLeases = activeMonth
+const filteredLeases = activeMonth
   ? audits.filter((lease) => {
       if (!lease.renewal_date) return false;
       const r = new Date(lease.renewal_date);
@@ -308,6 +334,17 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
 
   return 0;
 });
+
+const topSavings = sortedLeases.length
+  ? Math.max(...sortedLeases.map((l) => estimateLeaseSavings(l)))
+  : 0;
+
+function estimateLeaseSavings(lease: Lease) {
+  const risk = getRenewalRiskScore(lease) ?? 0;
+  const base = lease.square_feet ?? 2000;
+
+  return Math.max(1500, Math.round((risk / 100) * base * 1.5));
+}
 
 return (
   <div className="min-h-screen bg-white">
@@ -555,11 +592,17 @@ return (
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* LEFT — HISTORY */}
-        <aside className="border-r border-gray-200 pr-5">
-        <h2 className="mb-3 text-base font-semibold">
-          Your Leases
-        </h2>
-        <div className="mb-3 flex gap-1.5 text-[11.5px]">
+<aside id="lease-list" className="border-r border-gray-200 pr-5">
+  <h2 className="mb-1 text-base font-semibold">
+    {activeMonth ? `${activeMonth} Renewals` : "Your Leases"}
+  </h2>
+
+  {activeMonth && (
+    <div className="text-[11px] text-gray-500 mb-2">
+      Showing leases expiring this month
+    </div>
+  )}
+  <div className="mb-3 flex gap-1.5 text-[11.5px]">
           <button
             onClick={() => setSortMode("risk")}
             className={`rounded px-2 py-[2px] border ${
@@ -620,7 +663,6 @@ return (
               const today = new Date();
               const diffMs = renewal.getTime() - today.getTime();
               const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
               return {
                 show: daysRemaining <= 90,
                 pulse: daysRemaining <= 30,
@@ -645,6 +687,10 @@ return (
                   selected?.id === audit.id
                     ? "bg-gray-200 scale-[1.01] shadow-sm"
                     : "hover:bg-gray-100 hover:scale-[1.01] hover:shadow-sm"
+                } ${
+                  estimateLeaseSavings(audit) === topSavings
+                    ? "ring-1 ring-green-400"
+                    : ""
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-medium leading-tight">
@@ -658,9 +704,14 @@ return (
                   {audit.property_name ?? "Unnamed Lease"}
                 </div>
                 <div className="mt-0.5 text-[11px] text-gray-500">
-                  Health {getHealthScore()}
-                </div>
-                <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
+  Health {getHealthScore()}
+</div>
+
+<div className="text-[11px] text-green-700 font-semibold mt-0.5">
+  ${estimateLeaseSavings(audit).toLocaleString()} potential savings
+</div>
+
+<div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
               </li>
             );
           })}
