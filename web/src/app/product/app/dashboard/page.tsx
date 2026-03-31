@@ -368,7 +368,7 @@ return (
     </div>
 
 {/* CALENDAR TIMELINE — HERO */}
-<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full overflow-hidden">
+<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full">
   <div className="flex items-center justify-between mb-5">
     <div>
       <div className="text-[11px] text-gray-500 uppercase tracking-wide">
@@ -389,7 +389,7 @@ return (
     )}
   </div>
 
-  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory">
+  <div className="flex gap-4 overflow-x-auto pb-3 w-full scrollbar-thin snap-x snap-mandatory min-w-full">
     {timelineMonths.map((m) => {
       const intensity =
         m.count >= 5
@@ -405,7 +405,7 @@ return (
             setActiveMonth(activeMonth === m.label ? null : m.label)
           }
           data-has-renewals={m.count > 0 ? "true" : "false"}
-          className={`min-w-[180px] lg:min-w-[200px] snap-start rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
+          className={`min-w-[180px] lg:min-w-[200px] flex-shrink-0 snap-start rounded-xl p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.03] ${
             activeMonth === m.label
               ? "border-black ring-1 ring-black scale-[1.02]"
               : "border-gray-200"
@@ -969,9 +969,27 @@ return (
                     Estimated savings: ${selectedSavings.toLocaleString()}+ on this lease
                   </div>
 
-                  <div className="text-[11px] text-gray-500 mb-4">
-                    Most tenants uncover $5K–$20K in hidden costs
-                  </div>
+                  <div className="text-[11px] text-gray-500 mb-2">
+  Most tenants uncover $5K–$20K in hidden costs
+</div>
+
+<div className="text-[11px] text-gray-700 mb-3">
+  • 2,100+ leases analyzed
+</div>
+
+<div className="text-[11px] text-gray-700 mb-2">
+  • Avg. savings: $8,400 per lease
+</div>
+
+<div className="text-[11px] text-red-600 font-medium mb-3">
+  {urgentRenewals > 0
+    ? `⚠️ ${urgentRenewals} leases approaching renewal — pricing advantage decreases after renewal`
+    : "Limited-time insight advantage before renewal window closes"}
+</div>
+
+<div className="text-[11px] text-gray-500 border-t pt-3 mb-4">
+  Secure checkout • No long-term contracts • Cancel anytime
+</div>
 
                   <div className="flex justify-end gap-3">
                     <button
