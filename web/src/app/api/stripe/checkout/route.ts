@@ -6,10 +6,18 @@ import { createServerClient } from "@supabase/ssr";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function GET(req: Request) {
+  const cookieStore = cookies();
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies }
+    {
+      cookies: {
+        get: (name: string) => cookieStore.get(name)?.value,
+        set: () => {},
+        remove: () => {},
+      },
+    }
   );
 
   const {
