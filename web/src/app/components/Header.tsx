@@ -10,6 +10,8 @@ import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
 import MobileMenu from "./MobileMenu";
 
+console.log("HEADER SESSION:", session);
+
 export default function Header() {
   const pathname = usePathname();
   const isAppPage =
