@@ -33,9 +33,19 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       console.log("[HEADER] initial session:", data.session);
-      setSession(data.session);
+
+      if (data.session) {
+        setSession(data.session);
+      } else {
+        // fallback for cases where session isn't hydrated yet (common on marketing pages)
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData?.user) {
+          setSession({ user: userData.user } as unknown as Session);
+        }
+      }
+
       setLoading(false);
     });
 
