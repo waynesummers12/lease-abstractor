@@ -236,7 +236,7 @@ export default function Header() {
                 </Link>
               )}
 
-              <AvatarDropdown session={session} isProUser={isProUser} />
+              {session && <AvatarDropdown session={session!} isProUser={isProUser} />}
               {isEnterprise && (
                 <span className="text-[10px] text-gray-500 ml-2">
                   Enterprise
