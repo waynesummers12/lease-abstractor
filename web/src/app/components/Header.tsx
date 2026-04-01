@@ -67,7 +67,7 @@ export default function Header() {
       }
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => listener?.subscription?.unsubscribe();
   }, [supabase]);
 
   useEffect(() => {
