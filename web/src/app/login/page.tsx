@@ -20,14 +20,17 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/product/app/dashboard`,
       },
     });
 
     if (error) {
       const msg = (error.message || "").toLowerCase();
+
       if (msg.includes("rate") || msg.includes("limit")) {
         setMessage("Please wait a moment before requesting another login link.");
+      } else if (msg.includes("expired") || msg.includes("invalid")) {
+        setMessage("Your login link expired. Please request a new one and click it right away.");
       } else {
         setMessage(error.message);
       }
@@ -64,7 +67,7 @@ export default function LoginPage() {
             {loading ? "Sending..." : "Email Me Login Link"}
           </button>
           <p className="text-xs text-gray-500 text-center">
-            We&apos;ll email you a one-time secure link to log in instantly.
+            We&apos;ll email you a one-time secure link. Open it immediately (links expire quickly).
           </p>
         </form>
 
