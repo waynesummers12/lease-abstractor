@@ -33,29 +33,36 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      console.log("[HEADER] initial session:", data.session);
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, newSession) => {
+        console.log("[HEADER] auth change:", event, newSession);
 
-      if (data.session) {
-        setSession(data.session);
-      } else {
-        // fallback for cases where session isn't hydrated yet (common on marketing pages)
+        if (newSession) {
+          setSession(newSession);
+          setLoading(false);
+          return;
+        }
+
+        // fallback if still no session
         const { data: userData } = await supabase.auth.getUser();
+        console.log("[HEADER] fallback getUser:", userData);
+
         if (userData?.user) {
           setSession({ user: userData.user } as unknown as Session);
         }
-      }
 
-      setLoading(false);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, newSession) => {
-        console.log("[HEADER] auth change:", event, newSession);
-        setSession(newSession);
         setLoading(false);
       }
     );
+
+    // trigger initial check
+    supabase.auth.getSession().then(({ data }) => {
+      console.log("[HEADER] initial session:", data.session);
+      if (data.session) {
+        setSession(data.session);
+        setLoading(false);
+      }
+    });
 
     return () => listener.subscription.unsubscribe();
   }, [supabase]);
