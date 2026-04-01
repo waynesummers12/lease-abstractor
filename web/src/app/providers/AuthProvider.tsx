@@ -32,31 +32,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const init = async () => {
-      // 🔥 Force refresh to hydrate session after OAuth redirect
-      await supabase.auth.refreshSession();
+      try {
+        // 🔥 Handle OAuth redirect (CRITICAL)
+        if (typeof window !== "undefined" && window.location.search.includes("code=")) {
+          await supabase.auth.exchangeCodeForSession(window.location.href);
+        }
 
-      const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
 
-      if (error) {
-        console.error("Session error:", error);
-      }
+        if (error) {
+          console.error("Session error:", error);
+        }
 
-      const session = data.session;
-      setSession(session);
+        const session = data.session;
+        setSession(session);
 
-      if (session?.user && session.user.email) {
-        await ensureProfile({
-          ...session.user,
-          email: session.user.email!,
-        });
+        if (session?.user && session.user.email) {
+          await ensureProfile({
+            ...session.user,
+            email: session.user.email!,
+          });
 
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("plan")
-          .eq("id", session.user.id)
-          .single();
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("plan")
+            .eq("id", session.user.id)
+            .single();
 
-        if (profile?.plan) setPlan(profile.plan);
+          if (profile?.plan) setPlan(profile.plan);
+        }
+      } catch (err) {
+        console.error("Init error:", err);
       }
 
       setLoading(false);
