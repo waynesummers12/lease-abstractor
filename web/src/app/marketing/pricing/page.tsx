@@ -10,12 +10,6 @@ interface WindowWithAnalytics extends Window {
   };
 }
 
-export const metadata = {
-  title: "SaveOnLease | CAM & NNN Lease Audit for Commercial Tenants",
-  description:
-    "Upload your commercial lease and identify CAM and NNN overcharges, uncapped expenses, and audit-window risk in minutes.",
-};
-
 export default function PricingPage() {
   useEffect(() => {
     // Generic analytics hook (safe if not installed yet)
