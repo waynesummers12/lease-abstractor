@@ -33,6 +33,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
+        // ✅ Handle OAuth redirect (CRITICAL for production)
+        if (typeof window !== "undefined") {
+          const url = window.location.href;
+
+          if (url.includes("code=") || url.includes("access_token")) {
+            await supabase.auth.exchangeCodeForSession(url);
+          }
+        }
+
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
