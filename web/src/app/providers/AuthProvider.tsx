@@ -33,18 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
-        // 🔥 Handle OAuth redirect (covers both ?code= and #access_token flows)
-        if (typeof window !== "undefined") {
-          try {
-            await supabase.auth.exchangeCodeForSession(window.location.href);
-          } catch {
-            // ignore if no code present
-          }
-        }
-
-        // 🔥 Force session refresh (critical for hydration)
-        await supabase.auth.refreshSession();
-
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
@@ -52,6 +40,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         const session = data.session;
+        console.log("INIT SESSION:", session);
+
         setSession(session);
 
         if (session?.user && session.user.email) {
@@ -79,7 +69,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("AUTH EVENT:", event, session);
       setSession(session);
 
       if (session?.user && session.user.email) {
@@ -95,6 +86,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
 
         if (profile?.plan) setPlan(profile.plan);
+      }
+
+      if (event === "SIGNED_IN") {
+        window.location.reload();
       }
 
       setLoading(false);
