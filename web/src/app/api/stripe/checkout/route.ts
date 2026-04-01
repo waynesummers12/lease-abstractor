@@ -6,7 +6,7 @@ import { createServerClient } from "@supabase/ssr";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function GET(req: Request) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,7 +37,7 @@ export async function GET(req: Request) {
   }
 
   const userId = user.id;
-  const userEmail = user.email;
+  const userEmail = user.email ?? undefined;
 
   const priceId =
     plan === "pro"
