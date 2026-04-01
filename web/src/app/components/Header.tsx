@@ -125,26 +125,52 @@ export default function Header() {
               {/* FEATURE LINKS (ROLE-AWARE) */}
               <div className="flex items-center gap-3 ml-3">
                 {/* Portfolio */}
-                <Link
-                  href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
-                  className={`text-sm transition ${
-                    isAppPage ? "text-gray-700" : "text-white/80"
-                  } hover:opacity-100 flex items-center gap-1`}
-                >
-                  Portfolio
-                  {plan === "free" && <span className="text-xs">🔒</span>}
-                </Link>
+                <div className="relative group">
+                  <Link
+                    href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
+                    className={`text-sm transition ${
+                      isAppPage ? "text-gray-700" : "text-white/80"
+                    } hover:opacity-100 flex items-center gap-1`}
+                  >
+                    Portfolio
+                    {plan === "free" && <span className="text-xs">🔒</span>}
+                  </Link>
+
+                  {plan === "free" && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
+                      <div className="flex items-center gap-2">
+                        <span>Available on Pro plan</span>
+                        <Link href="/marketing/pricing" className="underline hover:opacity-80">
+                          Upgrade →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* Benchmarks */}
-                <Link
-                  href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
-                  className={`text-sm transition ${
-                    isAppPage ? "text-gray-700" : "text-white/80"
-                  } hover:opacity-100 flex items-center gap-1`}
-                >
-                  Benchmarks
-                  {plan !== "enterprise" && <span className="text-xs">🔒</span>}
-                </Link>
+                <div className="relative group">
+                  <Link
+                    href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
+                    className={`text-sm transition ${
+                      isAppPage ? "text-gray-700" : "text-white/80"
+                    } hover:opacity-100 flex items-center gap-1`}
+                  >
+                    Benchmarks
+                    {plan !== "enterprise" && <span className="text-xs">🔒</span>}
+                  </Link>
+
+                  {plan !== "enterprise" && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
+                      <div className="flex items-center gap-2">
+                        <span>Available on Enterprise plan</span>
+                        <Link href="/marketing/pricing" className="underline hover:opacity-80">
+                          Upgrade →
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {plan === "free" && !isAppPage && (
