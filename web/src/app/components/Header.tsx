@@ -29,18 +29,21 @@ export default function Header() {
   )[0];
 
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       console.log("[HEADER] initial session:", data.session);
       setSession(data.session);
+      setLoading(false);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
         console.log("[HEADER] auth change:", event, newSession);
         setSession(newSession);
+        setLoading(false);
       }
     );
 
@@ -80,7 +83,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
         <span className="text-[10px] opacity-60">
-          {session ? "auth" : "anon"}
+          {loading ? "..." : session ? "auth" : "anon"}
         </span>
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
@@ -104,7 +107,7 @@ export default function Header() {
 
           <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
-          {!session ? (
+          {loading ? null : !session ? (
             <>
               <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
                 Login
