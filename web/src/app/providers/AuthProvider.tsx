@@ -32,19 +32,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const init = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
+      // 🔥 Force refresh to hydrate session after OAuth redirect
+      await supabase.auth.refreshSession();
 
-      if (data.session?.user && data.session.user.email) {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error("Session error:", error);
+      }
+
+      const session = data.session;
+      setSession(session);
+
+      if (session?.user && session.user.email) {
         await ensureProfile({
-          ...data.session.user,
-          email: data.session.user.email!,
+          ...session.user,
+          email: session.user.email!,
         });
 
         const { data: profile } = await supabase
           .from("profiles")
           .select("plan")
-          .eq("id", data.session.user.id)
+          .eq("id", session.user.id)
           .single();
 
         if (profile?.plan) setPlan(profile.plan);
