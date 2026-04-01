@@ -118,18 +118,18 @@ export default function SidebarNav() {
             return (
               <div key={item.href} className="relative group" data-active={isActive}>
                 <Link
-                  href={locked ? "#" : item.href}
+                  href={locked ? "/pricing" : item.href}
                   onClick={(e) => {
                     if (locked) {
                       e.preventDefault();
-                      setLockedModal(item.label);
+                      window.location.href = "/pricing";
                     }
                   }}
                   className={`flex items-center justify-between px-3 py-1 rounded-md transition-all text-[12.5px] font-medium ${
                     isActive
                       ? "bg-black text-white border-l-2 border-black"
                       : "text-gray-600 hover:bg-gray-100 hover:text-black border-l-2 border-transparent"
-                  } ${locked ? "opacity-60" : ""}`}
+                  } ${locked ? "opacity-70 cursor-pointer hover:bg-gray-100" : ""}`}
                 >
                   {!collapsed && <span>{item.label}</span>}
 
