@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error("Missing STRIPE_SECRET_KEY environment variable");
+  }
+  return new Stripe(key);
+}
 
 const supabase = createClient(
 process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -15,12 +21,14 @@ const body = await req.text();
 
 let event: Stripe.Event;
 
+const stripe = getStripe();
+
 try {
-event = stripe.webhooks.constructEvent(
-body,
-sig,
-process.env.STRIPE_WEBHOOK_SECRET!
-);
+  event = stripe.webhooks.constructEvent(
+    body,
+    sig,
+    process.env.STRIPE_WEBHOOK_SECRET!
+  );
 } catch (err: unknown) {
   const message = err instanceof Error ? err.message : "Unknown webhook error";
   return new NextResponse(`Webhook Error: ${message}`, { status: 400 });
