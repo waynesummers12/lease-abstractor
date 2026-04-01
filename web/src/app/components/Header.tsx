@@ -33,11 +33,13 @@ export default function Header() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
+      console.log("[HEADER] initial session:", data.session);
       setSession(data.session);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
+      (event, newSession) => {
+        console.log("[HEADER] auth change:", event, newSession);
         setSession(newSession);
       }
     );
@@ -77,6 +79,9 @@ export default function Header() {
           <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
+        <span className="text-[10px] opacity-60">
+          {session ? "auth" : "anon"}
+        </span>
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
           <EducationDropdown />
