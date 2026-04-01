@@ -92,7 +92,7 @@ export default function AddLeasePage() {
       }
 
       // Redirect to leases page after successful save
-      router.push("/app/leases");
+      router.push("/product/app/leases");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Something went wrong";
@@ -105,10 +105,10 @@ export default function AddLeasePage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <h1 className="text-2xl font-semibold mb-2">
-        Add Lease to Portfolio
+        Add Lease (Free Portfolio)
       </h1>
       <p className="text-sm text-gray-600 mb-6">
-        Upload a lease to manage it, or run a full audit to uncover hidden costs.
+        Upload a lease to track renewals, risk, and portfolio insights — no audit required.
       </p>
 
       <div className="rounded border border-gray-200 p-6 bg-white space-y-8">
@@ -142,13 +142,13 @@ export default function AddLeasePage() {
               </div>
             )}
           </label>
-          <div className="mt-4 text-xs text-gray-500">
-            Want a full audit instead?
+          <div className="mt-4 text-xs text-gray-400">
+            Need deeper analysis?
             <Link
               href="/app/step-1-upload"
-              className="ml-1 text-black font-medium hover:underline"
+              className="ml-1 text-gray-600 hover:underline"
             >
-              Run Audit (Free Preview) →
+              Run full audit →
             </Link>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function AddLeasePage() {
               disabled={loading}
               className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Save Lease to Portfolio"}
+              {loading ? "Saving..." : "Add Lease (Free)"}
             </button>
 
             <Link
