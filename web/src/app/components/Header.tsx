@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 import { createBrowserClient } from "@supabase/ssr";
-import { Session, User } from "@supabase/supabase-js";
+import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
 import MobileMenu from "./MobileMenu";
@@ -14,61 +15,17 @@ export default function Header() {
   const pathname = usePathname();
   const isAppPage = pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
+  const { session, loading } = useAuth();
+  const user: User | null = session?.user ?? null;
+
   const supabase = useState(() =>
     createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-        },
-      }
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
   )[0];
 
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
-        console.log("[HEADER] auth change:", event, newSession);
-
-        if (newSession) {
-          setSession(newSession);
-          setUser(newSession.user);
-          setLoading(false);
-          return;
-        }
-
-        // fallback if still no session
-        const { data: userData } = await supabase.auth.getUser();
-        console.log("[HEADER] fallback getUser:", userData);
-
-        if (userData?.user) {
-          setUser(userData.user);
-        }
-
-        setLoading(false);
-      }
-    );
-
-    // trigger initial check
-    supabase.auth.getSession().then(({ data }) => {
-      console.log("[HEADER] initial session:", data.session);
-      if (data.session) {
-        setSession(data.session);
-        setUser(data.session.user);
-        setLoading(false);
-      }
-    });
-
-    return () => listener?.subscription?.unsubscribe();
-  }, [supabase]);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -81,9 +38,8 @@ export default function Header() {
   const isProUser = plan === "pro" || plan === "enterprise";
   const isEnterprise = plan === "enterprise";
 
-  const trackUpgradeClick = (source: string) => {
+  const trackUpgradeClick = () => {
     try {
-      console.log("upgrade_click", { source, plan });
       // future: send to analytics (PostHog, Segment, etc.)
     } catch {}
   };
@@ -177,7 +133,7 @@ export default function Header() {
                         <span>Available on Pro plan</span>
                         <Link
                           href="/marketing/pricing"
-                          onClick={() => trackUpgradeClick("portfolio_tooltip")}
+                          onClick={() => trackUpgradeClick()}
                           className="underline hover:opacity-80"
                         >
                           Upgrade →
@@ -205,7 +161,7 @@ export default function Header() {
                         <span>Available on Enterprise plan</span>
                         <Link
                           href="/marketing/pricing"
-                          onClick={() => trackUpgradeClick("benchmarks_tooltip")}
+                          onClick={() => trackUpgradeClick()}
                           className="underline hover:opacity-80"
                         >
                           Upgrade →
@@ -219,7 +175,7 @@ export default function Header() {
               {plan === "free" && !isAppPage && (
                 <Link
                   href="/marketing/pricing"
-                  onClick={() => trackUpgradeClick("header_button")}
+                  onClick={() => trackUpgradeClick()}
                   className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
                 >
                   Upgrade
