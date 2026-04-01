@@ -52,7 +52,9 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const isProUser = false; // Replace with real plan logic later
+  const plan = (session?.user?.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise";
+  const isProUser = plan === "pro" || plan === "enterprise";
+  const isEnterprise = plan === "enterprise";
 
   const navTextColor = isAppPage ? "text-gray-900" : "text-white";
   const bgClass = isAppPage
@@ -88,7 +90,7 @@ export default function Header() {
             Pricing
           </Link>
 
-          <div className={`h-5 w-px mx-2 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
+          <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
           {!session ? (
             <>
@@ -105,12 +107,54 @@ export default function Header() {
           ) : (
             <>
               {/* Dashboard (PRIMARY NAV FOR LOGGED IN USERS) */}
-              <Link
-                href="/product/app/dashboard"
-                className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}
-              >
-                Dashboard
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/product/app/dashboard"
+                  className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}
+                >
+                  Dashboard
+                </Link>
+
+                {plan !== "enterprise" && (
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-yellow-400 text-black font-semibold">
+                    {plan === "pro" ? "PRO" : "FREE"}
+                  </span>
+                )}
+              </div>
+
+              {/* FEATURE LINKS (ROLE-AWARE) */}
+              <div className="flex items-center gap-3 ml-3">
+                {/* Portfolio */}
+                <Link
+                  href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
+                  className={`text-sm transition ${
+                    isAppPage ? "text-gray-700" : "text-white/80"
+                  } hover:opacity-100 flex items-center gap-1`}
+                >
+                  Portfolio
+                  {plan === "free" && <span className="text-xs">🔒</span>}
+                </Link>
+
+                {/* Benchmarks */}
+                <Link
+                  href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
+                  className={`text-sm transition ${
+                    isAppPage ? "text-gray-700" : "text-white/80"
+                  } hover:opacity-100 flex items-center gap-1`}
+                >
+                  Benchmarks
+                  {plan !== "enterprise" && <span className="text-xs">🔒</span>}
+                </Link>
+              </div>
+
+              {plan === "free" && !isAppPage && (
+                <Link
+                  href="/marketing/pricing"
+                  className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
+                >
+                  Upgrade
+                </Link>
+              )}
 
               {/* Only show marketing links when NOT inside app */}
               {!isAppPage && (
@@ -123,6 +167,11 @@ export default function Header() {
               )}
 
               <AvatarDropdown session={session} isProUser={isProUser} />
+              {isEnterprise && (
+                <span className="text-[10px] text-gray-500 ml-2">
+                  Enterprise
+                </span>
+              )}
             </>
           )}
         </nav>
