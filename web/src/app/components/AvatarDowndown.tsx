@@ -39,7 +39,7 @@ export default function AvatarDropdown({
     <div ref={ref} className="relative flex items-center gap-4">
       {!isProUser && (
         <Link
-          href="/upgrade"
+          href="/marketing/pricing"
           className="text-xs bg-yellow-500 text-black px-2 py-1 rounded-full font-semibold"
         >
           Upgrade
@@ -65,21 +65,21 @@ export default function AvatarDropdown({
           </div>
 
           <Link
-            href="/app/dashboard"
+            href="/product/app/dashboard"
             className="block px-4 py-2 hover:bg-gray-100"
           >
             Dashboard
           </Link>
 
           <Link
-            href="/app/portfolio"
+            href="/product/app/portfolio"
             className="block px-4 py-2 hover:bg-gray-100"
           >
             Portfolio
           </Link>
 
           <Link
-            href="/app/settings"
+            href="/product/app/settings"
             className="block px-4 py-2 hover:bg-gray-100"
           >
             Settings
