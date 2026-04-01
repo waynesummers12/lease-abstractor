@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
 
 export default function PortfolioMonitoringPage() {
+  const [spot, setSpot] = useState({ x: 50, y: 50 });
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
       <h1 className="text-3xl font-bold mb-4">
@@ -56,7 +58,16 @@ export default function PortfolioMonitoringPage() {
           </p>
         </div>
 
-        <a href="/app/step-1-upload" className="group block relative border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer active:scale-[0.99]">
+        <a
+          href="/app/step-1-upload"
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            setSpot({ x, y });
+          }}
+          className="group block relative border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer active:scale-[0.99]"
+        >
           <Image
             src="/demo/final-report.png"
             alt="Lease audit report preview"
@@ -68,7 +79,12 @@ export default function PortfolioMonitoringPage() {
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none">
             <div className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:animate-[shimmer_1.2s_linear]" />
           </div>
-
+          <div
+            className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300"
+            style={{
+              background: `radial-gradient(circle at ${spot.x}% ${spot.y}%, rgba(255,255,255,0.15), transparent 60%)`
+            }}
+          />
           <div className="absolute inset-0 flex items-end justify-end p-3">
             <span className="bg-black/80 backdrop-blur text-white text-xs px-3 py-1.5 rounded-md transition-transform duration-200 group-hover:translate-y-[-2px]">
               Preview Your Report →
