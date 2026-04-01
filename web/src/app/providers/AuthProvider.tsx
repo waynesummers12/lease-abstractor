@@ -3,15 +3,18 @@
 import { createBrowserClient } from "@supabase/ssr";
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { ensureProfile } from "@/lib/supabase/createProfile";
 
 type AuthContextType = {
   session: Session | null;
   loading: boolean;
+  plan: "free" | "pro" | "enterprise";
 };
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
   loading: true,
+  plan: "free",
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -25,16 +28,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }, []);
 
+  const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
+    const init = async () => {
+      const { data } = await supabase.auth.getSession();
       setSession(data.session);
+
+      if (data.session?.user) {
+        await ensureProfile(data.session.user);
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("plan")
+          .eq("id", data.session.user.id)
+          .single();
+
+        if (profile?.plan) setPlan(profile.plan);
+      }
+
       setLoading(false);
-    });
+    };
+
+    init();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session: Session | null) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
+
+      if (session?.user) {
+        await ensureProfile(session.user);
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("plan")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profile?.plan) setPlan(profile.plan);
+      }
+
       setLoading(false);
     });
 
@@ -42,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   return (
-    <AuthContext.Provider value={{ session, loading }}>
+    <AuthContext.Provider value={{ session, loading, plan }}>
       {children}
     </AuthContext.Provider>
   );

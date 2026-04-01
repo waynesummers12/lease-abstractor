@@ -15,7 +15,7 @@ export default function Header() {
   const pathname = usePathname();
   const isAppPage = pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
-  const { session, loading } = useAuth();
+  const { session, loading, plan } = useAuth();
   const user: User | null = session?.user ?? null;
 
   const supabase = useState(() =>
@@ -34,7 +34,6 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const plan = (user?.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise";
   const isProUser = plan === "pro" || plan === "enterprise";
   const isEnterprise = plan === "enterprise";
 
