@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
-import { Session } from "@supabase/supabase-js";
+import { Session, User } from "@supabase/supabase-js";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
 import MobileMenu from "./MobileMenu";
@@ -29,6 +29,7 @@ export default function Header() {
   )[0];
 
   const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -39,6 +40,7 @@ export default function Header() {
 
         if (newSession) {
           setSession(newSession);
+          setUser(newSession.user);
           setLoading(false);
           return;
         }
@@ -48,7 +50,7 @@ export default function Header() {
         console.log("[HEADER] fallback getUser:", userData);
 
         if (userData?.user) {
-          setSession({ user: userData.user } as unknown as Session);
+          setUser(userData.user);
         }
 
         setLoading(false);
@@ -60,6 +62,7 @@ export default function Header() {
       console.log("[HEADER] initial session:", data.session);
       if (data.session) {
         setSession(data.session);
+        setUser(data.session.user);
         setLoading(false);
       }
     });
@@ -74,7 +77,7 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const plan = (session?.user?.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise";
+  const plan = (user?.user_metadata?.plan ?? "free") as "free" | "pro" | "enterprise";
   const isProUser = plan === "pro" || plan === "enterprise";
   const isEnterprise = plan === "enterprise";
 
@@ -100,7 +103,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
         <span className="text-[10px] opacity-60">
-          {loading ? "..." : session ? "auth" : "anon"}
+          {loading ? "..." : user ? "auth" : "anon"}
         </span>
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
@@ -124,7 +127,7 @@ export default function Header() {
 
           <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
-          {loading ? null : !session ? (
+          {loading ? null : !user ? (
             <>
               <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
                 Login
