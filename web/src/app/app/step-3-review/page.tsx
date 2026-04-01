@@ -33,15 +33,18 @@ function Loading() {
       <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
 
       <h1 className="text-xl font-semibold mb-2">
-        Analyzing Your Lease
+        Generating Your Savings Preview
       </h1>
 
       <p className="text-gray-600 mb-4">
-        We’re identifying CAM overcharges, admin fees, and hidden risks…
+        We’re estimating potential savings and identifying key risk areas before your full audit…
       </p>
 
       <div className="text-xs text-gray-500">
-        This usually takes ~10 seconds
+        Preview ready in ~10 seconds • Full audit unlocks deeper insights
+      </div>
+      <div className="mt-3 text-[11px] text-gray-400">
+        2,100+ leases analyzed • Avg. savings $8,400
       </div>
     </main>
   );
