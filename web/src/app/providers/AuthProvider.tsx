@@ -36,7 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(data.session);
 
       if (data.session?.user && data.session.user.email) {
-        await ensureProfile(data.session.user);
+        await ensureProfile({
+          ...data.session.user,
+          email: data.session.user.email!,
+        });
 
         const { data: profile } = await supabase
           .from("profiles")
@@ -58,7 +61,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
 
       if (session?.user && session.user.email) {
-        await ensureProfile(session.user);
+        await ensureProfile({
+          ...session.user,
+          email: session.user.email!,
+        });
 
         const { data: profile } = await supabase
           .from("profiles")
