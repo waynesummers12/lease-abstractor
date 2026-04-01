@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.auth.getSession();
       setSession(data.session);
 
-      if (data.session?.user) {
+      if (data.session?.user && data.session.user.email) {
         await ensureProfile(data.session.user);
 
         const { data: profile } = await supabase
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
 
-      if (session?.user) {
+      if (session?.user && session.user.email) {
         await ensureProfile(session.user);
 
         const { data: profile } = await supabase
