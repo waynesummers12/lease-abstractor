@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { createBrowserClient } from "@supabase/ssr";
-import { Session } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
@@ -15,7 +15,7 @@ export default function Navbar() {
     )
   )[0];
 
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,12 +26,12 @@ export default function Navbar() {
   // ✅ Get session safely
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+      setUser(data.session?.user ?? null);
     });
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
-        setSession(newSession);
+        setUser(newSession?.user ?? null);
       }
     );
 
@@ -107,7 +107,7 @@ export default function Navbar() {
           <div className="h-5 w-px bg-gray-700" />
 
           {/* Auth / App */}
-          {!session ? (
+          {!user ? (
             <>
               <Link href="/login" className="text-sm text-gray-300 hover:text-white">
                 Login
@@ -134,7 +134,7 @@ export default function Navbar() {
                 onClick={() => setAvatarOpen(!avatarOpen)}
                 className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold"
               >
-                {session.user.email?.[0]?.toUpperCase() || "U"}
+                {user.email?.[0]?.toUpperCase() || "U"}
               </button>
 
               {avatarOpen && (
@@ -166,7 +166,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <MobileMenu
         open={mobileOpen}
-        session={session}
+        user={user}
         onLogout={handleLogout}
       />
     </nav>
