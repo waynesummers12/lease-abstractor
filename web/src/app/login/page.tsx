@@ -44,14 +44,18 @@ export default function LoginPage() {
   async function handleGoogleLogin() {
     setLoading(true);
 
+    console.log("Starting Google OAuth...");
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/product/app/dashboard`,
+        // 🔥 IMPORTANT: redirect to root so Supabase can set cookies correctly
+        redirectTo: `${window.location.origin}`,
       },
     });
 
     if (error) {
+      console.error("OAuth error:", error);
       setMessage(error.message);
       setLoading(false);
     }
