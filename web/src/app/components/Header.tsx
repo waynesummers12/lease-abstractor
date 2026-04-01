@@ -12,7 +12,7 @@ import MobileMenu from "./MobileMenu";
 
 export default function Header() {
   const pathname = usePathname();
-  const isAppPage = pathname.startsWith("/app");
+  const isAppPage = pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
   const supabase = useState(() =>
     createBrowserClient(
@@ -88,7 +88,7 @@ export default function Header() {
             Pricing
           </Link>
 
-          <div className="h-5 w-px bg-white/20 mx-2" />
+          <div className={`h-5 w-px mx-2 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
           {!session ? (
             <>
@@ -104,9 +104,24 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/app/portfolio" className="opacity-80 hover:opacity-100 transition font-medium">
+              {/* Dashboard (PRIMARY NAV FOR LOGGED IN USERS) */}
+              <Link
+                href="/product/app/dashboard"
+                className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}
+              >
                 Dashboard
               </Link>
+
+              {/* Only show marketing links when NOT inside app */}
+              {!isAppPage && (
+                <Link
+                  href="/app/step-1-upload"
+                  className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
+                >
+                  Run Audit
+                </Link>
+              )}
+
               <AvatarDropdown session={session} isProUser={isProUser} />
             </>
           )}
