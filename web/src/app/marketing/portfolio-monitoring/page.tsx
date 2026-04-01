@@ -43,23 +43,29 @@ export default function PortfolioMonitoringPage() {
 
       </div>
 
-      <div className="mt-12 flex gap-3">
-        <a
-          href="/product/app/add-lease"
-          className="border border-gray-300 px-6 py-3 rounded-md text-sm hover:bg-gray-100"
-        >
-          Add Lease to Portfolio
-        </a>
-        <a
-          href="/app/step-1-upload"
-          className="bg-black text-white px-6 py-3 rounded-md text-sm font-medium hover:bg-gray-800"
-        >
-          Run Audit (Free Preview)
-        </a>
+      <div className="mt-12">
+        <div className="flex flex-col sm:flex-row gap-3">
+
+          <a
+            href="/product/app/add-lease"
+            className="bg-black text-white px-6 py-3 rounded-md text-sm font-medium hover:bg-gray-800 text-center"
+          >
+            Upload Your Lease (Free)
+          </a>
+
+          <a
+            href="/app/step-1-upload"
+            className="border border-gray-300 px-6 py-3 rounded-md text-sm hover:bg-gray-100 text-center"
+          >
+            Preview Potential Savings
+          </a>
+
+        </div>
+
+        <p className="text-sm text-gray-600 mt-4 max-w-xl">
+          Most tenants uncover $5,000–$50,000+ in avoidable lease costs. Start with a free upload, then decide if a full audit is worth it.
+        </p>
       </div>
-      <p className="text-xs text-gray-500 mt-3">
-        Identify hidden CAM & NNN overcharges before they impact your bottom line.
-      </p>
     </main>
   );
 }
