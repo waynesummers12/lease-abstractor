@@ -33,10 +33,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
-        // 🔥 Handle OAuth redirect (CRITICAL)
-        if (typeof window !== "undefined" && window.location.search.includes("code=")) {
-          await supabase.auth.exchangeCodeForSession(window.location.href);
+        // 🔥 Handle OAuth redirect (covers both ?code= and #access_token flows)
+        if (typeof window !== "undefined") {
+          try {
+            await supabase.auth.exchangeCodeForSession(window.location.href);
+          } catch {
+            // ignore if no code present
+          }
         }
+
+        // 🔥 Force session refresh (critical for hydration)
+        await supabase.auth.refreshSession();
 
         const { data, error } = await supabase.auth.getSession();
 
