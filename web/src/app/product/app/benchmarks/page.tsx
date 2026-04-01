@@ -45,7 +45,7 @@ export default function BenchmarksPage() {
       {/* INLINE COMPARISON PREVIEW (HIGH-CONVERSION) */}
       <div className="border rounded-lg p-6 bg-white">
         <div className="text-sm font-semibold mb-3">
-          Example Benchmark Comparison
+          How Your Lease Likely Compares
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
