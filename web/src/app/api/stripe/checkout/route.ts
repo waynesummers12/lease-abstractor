@@ -3,7 +3,13 @@ import Stripe from "stripe";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error("Missing STRIPE_SECRET_KEY environment variable");
+  }
+  return new Stripe(key);
+}
 
 export async function GET(req: Request) {
   const cookieStore = await cookies();
@@ -48,6 +54,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing Stripe price ID" }, { status: 500 });
   }
 
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
 
