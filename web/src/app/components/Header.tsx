@@ -56,6 +56,13 @@ export default function Header() {
   const isProUser = plan === "pro" || plan === "enterprise";
   const isEnterprise = plan === "enterprise";
 
+  const trackUpgradeClick = (source: string) => {
+    try {
+      console.log("upgrade_click", { source, plan });
+      // future: send to analytics (PostHog, Segment, etc.)
+    } catch {}
+  };
+
   const navTextColor = isAppPage ? "text-gray-900" : "text-white";
   const bgClass = isAppPage
     ? "bg-white border-b border-gray-200"
@@ -140,7 +147,11 @@ export default function Header() {
                     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
                       <div className="flex items-center gap-2">
                         <span>Available on Pro plan</span>
-                        <Link href="/marketing/pricing" className="underline hover:opacity-80">
+                        <Link
+                          href="/marketing/pricing"
+                          onClick={() => trackUpgradeClick("portfolio_tooltip")}
+                          className="underline hover:opacity-80"
+                        >
                           Upgrade →
                         </Link>
                       </div>
@@ -164,7 +175,11 @@ export default function Header() {
                     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
                       <div className="flex items-center gap-2">
                         <span>Available on Enterprise plan</span>
-                        <Link href="/marketing/pricing" className="underline hover:opacity-80">
+                        <Link
+                          href="/marketing/pricing"
+                          onClick={() => trackUpgradeClick("benchmarks_tooltip")}
+                          className="underline hover:opacity-80"
+                        >
                           Upgrade →
                         </Link>
                       </div>
@@ -176,6 +191,7 @@ export default function Header() {
               {plan === "free" && !isAppPage && (
                 <Link
                   href="/marketing/pricing"
+                  onClick={() => trackUpgradeClick("header_button")}
                   className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
                 >
                   Upgrade
