@@ -1,11 +1,27 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { cookies } from "next/headers";
+import { createServerClient } from "@supabase/ssr";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 });
 
 export async function GET(req: Request) {
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies }
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(req.url);
   const plan = searchParams.get("plan");
 
@@ -14,14 +30,17 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
-  // TODO: replace with real user (next step)
-  const userId = "temp-user-id"; // will fix in webhook step
-  const userEmail = "test@example.com"; // replace soon
+  const userId = user.id;
+  const userEmail = user.email;
 
   const priceId =
     plan === "pro"
       ? process.env.STRIPE_PRO_PRICE_ID
       : process.env.STRIPE_ENTERPRISE_PRICE_ID;
+
+  if (!priceId) {
+    return NextResponse.json({ error: "Missing Stripe price ID" }, { status: 500 });
+  }
 
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
