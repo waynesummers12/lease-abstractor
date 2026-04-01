@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User } from "@supabase/supabase-js";
 import { createBrowserClient } from "@supabase/ssr";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
@@ -13,10 +12,11 @@ import MobileMenu from "./MobileMenu";
 
 export default function Header() {
   const pathname = usePathname();
-  const isAppPage = pathname.startsWith("/app") || pathname.startsWith("/product/app");
+  const isAppPage =
+    pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
   const { session, loading, plan } = useAuth();
-  const user: User | null = session?.user ?? null;
+  const user = session?.user ?? null;
 
   const supabase = useState(() =>
     createBrowserClient(
@@ -37,12 +37,6 @@ export default function Header() {
   const isProUser = plan === "pro" || plan === "enterprise";
   const isEnterprise = plan === "enterprise";
 
-  const trackUpgradeClick = () => {
-    try {
-      // future: send to analytics (PostHog, Segment, etc.)
-    } catch {}
-  };
-
   const navTextColor = isAppPage ? "text-gray-900" : "text-white";
   const bgClass = isAppPage
     ? "bg-white border-b border-gray-200"
@@ -53,12 +47,15 @@ export default function Header() {
       <div
         className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-4 ${navTextColor}`}
       >
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
+
+        {/* 🔥 DEBUG STATUS (you can remove later) */}
         <span className="text-[10px] opacity-60">
-          {loading ? "..." : user ? "auth" : "anon"}
+          {loading ? "..." : user ? plan.toUpperCase() : "anon"}
         </span>
 
         <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
@@ -82,6 +79,9 @@ export default function Header() {
 
           <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
+          {/* =============================
+              NOT LOGGED IN
+          ============================= */}
           {loading ? null : !user ? (
             <>
               <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
@@ -96,92 +96,54 @@ export default function Header() {
             </>
           ) : (
             <>
-              {/* Dashboard (PRIMARY NAV FOR LOGGED IN USERS) */}
+              {/* =============================
+                  LOGGED IN
+              ============================= */}
+
+              {/* Dashboard */}
               <div className="flex items-center gap-2">
                 <Link
                   href="/product/app/dashboard"
-                  className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}
+                  className={`font-semibold transition ${
+                    isAppPage ? "text-black" : "text-white"
+                  }`}
                 >
                   Dashboard
                 </Link>
 
-                {plan !== "enterprise" && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-yellow-400 text-black font-semibold">
-                    {plan === "pro" ? "PRO" : "FREE"}
-                  </span>
-                )}
+                {/* PLAN BADGE */}
+                <span className="text-[10px] px-2 py-0.5 rounded bg-yellow-400 text-black font-semibold">
+                  {plan.toUpperCase()}
+                </span>
               </div>
 
-              {/* FEATURE LINKS (ROLE-AWARE) */}
-              <div className="flex items-center gap-3 ml-3">
-                {/* Portfolio */}
-                <div className="relative group">
-                  <Link
-                    href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
-                    className={`text-sm transition ${
-                      isAppPage ? "text-gray-700" : "text-white/80"
-                    } hover:opacity-100 flex items-center gap-1`}
-                  >
-                    Portfolio
-                    {plan === "free" && <span className="text-xs">🔒</span>}
-                  </Link>
+              {/* Portfolio */}
+              <Link
+                href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
+                className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
+              >
+                Portfolio {plan === "free" && "🔒"}
+              </Link>
 
-                  {plan === "free" && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
-                      <div className="flex items-center gap-2">
-                        <span>Available on Pro plan</span>
-                        <Link
-                          href="/marketing/pricing"
-                          onClick={() => trackUpgradeClick()}
-                          className="underline hover:opacity-80"
-                        >
-                          Upgrade →
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
+              {/* Benchmarks */}
+              <Link
+                href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
+                className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
+              >
+                Benchmarks {plan !== "enterprise" && "🔒"}
+              </Link>
 
-                {/* Benchmarks */}
-                <div className="relative group">
-                  <Link
-                    href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
-                    className={`text-sm transition ${
-                      isAppPage ? "text-gray-700" : "text-white/80"
-                    } hover:opacity-100 flex items-center gap-1`}
-                  >
-                    Benchmarks
-                    {plan !== "enterprise" && <span className="text-xs">🔒</span>}
-                  </Link>
-
-                  {plan !== "enterprise" && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-md bg-black text-white text-[11px] px-3 py-2 opacity-0 group-hover:opacity-100 transition pointer-events-auto">
-                      <div className="flex items-center gap-2">
-                        <span>Available on Enterprise plan</span>
-                        <Link
-                          href="/marketing/pricing"
-                          onClick={() => trackUpgradeClick()}
-                          className="underline hover:opacity-80"
-                        >
-                          Upgrade →
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
+              {/* Upgrade CTA */}
               {plan === "free" && !isAppPage && (
                 <Link
                   href="/marketing/pricing"
-                  onClick={() => trackUpgradeClick()}
                   className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
                 >
                   Upgrade
                 </Link>
               )}
 
-              {/* Only show marketing links when NOT inside app */}
+              {/* Run Audit */}
               {!isAppPage && (
                 <Link
                   href="/app/step-1-upload"
@@ -191,7 +153,12 @@ export default function Header() {
                 </Link>
               )}
 
-              {session && <AvatarDropdown session={session!} isProUser={isProUser} />}
+              {/* Avatar */}
+              {session && (
+                <AvatarDropdown session={session} isProUser={isProUser} />
+              )}
+
+              {/* Enterprise Label */}
               {isEnterprise && (
                 <span className="text-[10px] text-gray-500 ml-2">
                   Enterprise
@@ -201,10 +168,8 @@ export default function Header() {
           )}
         </nav>
 
-        <button
-          className="md:hidden"
-          onClick={() => setMenuOpen((v) => !v)}
-        >
+        {/* Mobile */}
+        <button className="md:hidden" onClick={() => setMenuOpen((v) => !v)}>
           ☰
         </button>
       </div>
