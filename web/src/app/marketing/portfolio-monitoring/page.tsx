@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function PortfolioMonitoringPage() {
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
@@ -41,6 +43,32 @@ export default function PortfolioMonitoringPage() {
           </p>
         </div>
 
+      </div>
+
+      {/* EXAMPLE AUDIT PREVIEW */}
+      <div className="mt-14 border rounded-xl p-6 bg-gray-50">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold mb-1">
+            See What Your Audit Looks Like
+          </h2>
+          <p className="text-sm text-gray-600 max-w-xl">
+            Get a clear breakdown of potential overcharges, savings opportunities, and negotiation insights before taking action.
+          </p>
+        </div>
+
+        <div className="border rounded-lg overflow-hidden shadow-sm">
+          <Image
+            src="/demo/final-report.png"
+            alt="Lease audit report preview"
+            width={1200}
+            height={800}
+            className="w-full h-auto"
+          />
+        </div>
+
+        <div className="mt-3 text-xs text-gray-500">
+          Example report — your results will be personalized based on your lease
+        </div>
       </div>
 
       <div className="mt-12">
