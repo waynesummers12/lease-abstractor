@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { Session } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 
 interface MobileMenuProps {
   open: boolean;
-  session: Session | null;
+  user: User | null;
   onLogout: () => Promise<void>;
 }
 
 export default function MobileMenu({
   open,
-  session,
+  user,
   onLogout,
 }: MobileMenuProps) {
 
@@ -49,21 +49,21 @@ export default function MobileMenu({
 
         <hr className="border-white/20 my-4" />
 
-        {!session ? (
+        {!user ? (
           <>
             <Link href="/login" onClick={() => window.location.reload()}>
               Login
             </Link>
-            <Link href="/app/step-1-upload" onClick={() => window.location.reload()}>
+            <Link href="/product/app/step-1-upload" onClick={() => window.location.reload()}>
               Run Audit
             </Link>
           </>
         ) : (
           <>
-            <Link href="/app/dashboard" onClick={() => window.location.reload()}>
+            <Link href="/product/app/dashboard" onClick={() => window.location.reload()}>
               Dashboard
             </Link>
-            <Link href="/app/portfolio" onClick={() => window.location.reload()}>
+            <Link href="/product/app/portfolio" onClick={() => window.location.reload()}>
               Portfolio
             </Link>
             <button
