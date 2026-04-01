@@ -90,11 +90,11 @@ export default function UploadLeasePage() {
   <main className="mx-auto max-w-4xl px-6 py-24">
     <div className="mb-12 text-center">
       <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
-        Upload Your Lease for a Free Audit
+        Analyze Your Lease (Free Preview)
       </h1>
 
       <p className="mt-4 text-lg text-gray-600">
-        Identify hidden CAM & NNN overcharges in minutes
+        Get a quick preview of hidden CAM & NNN overcharges
       </p>
 
       <p className="mt-6 text-xl text-gray-800 font-medium">
@@ -111,8 +111,12 @@ export default function UploadLeasePage() {
       </div>
     </div>
 
-    <p className="text-center text-xs uppercase tracking-wide text-gray-400 mb-3">
-      Start your free analysis
+    <p className="text-center text-xs uppercase tracking-wide text-gray-400 mb-2">
+      Step 2: Analyze your lease
+    </p>
+
+    <p className="text-center text-sm text-gray-600 mb-4">
+      You already added your lease — now preview potential savings before running a full audit.
     </p>
 
     <div className="rounded-2xl border bg-white p-8 shadow-sm text-center">
@@ -127,10 +131,10 @@ export default function UploadLeasePage() {
 
       <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-6 text-center">
         <p className="text-base font-semibold text-green-900">
-          💰 Typical tenants uncover $5,000–$50,000+ in avoidable lease costs
+          💰 Preview your potential savings before committing to a full audit
         </p>
         <p className="mt-2 text-sm text-green-800">
-          Upload your lease to see your estimated avoidable cost before deciding on a full audit.
+          We’ll estimate your potential savings first — then you can decide if a full audit is worth it.
         </p>
       </div>
 
