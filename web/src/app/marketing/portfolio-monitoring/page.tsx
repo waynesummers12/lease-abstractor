@@ -56,15 +56,28 @@ export default function PortfolioMonitoringPage() {
           </p>
         </div>
 
-        <div className="border rounded-lg overflow-hidden shadow-sm">
+        <a href="/app/step-1-upload" className="group block relative border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer active:scale-[0.99]">
           <Image
             src="/demo/final-report.png"
             alt="Lease audit report preview"
             width={1200}
             height={800}
-            className="w-full h-auto"
+            className="w-full h-auto transition-transform duration-300 ease-out group-hover:scale-105"
           />
-        </div>
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none">
+            <div className="absolute -left-1/2 top-0 h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:animate-[shimmer_1.2s_linear]" />
+          </div>
+
+          <div className="absolute inset-0 flex items-end justify-end p-3">
+            <span className="bg-black/80 backdrop-blur text-white text-xs px-3 py-1.5 rounded-md transition-transform duration-200 group-hover:translate-y-[-2px]">
+              Preview Your Report →
+            </span>
+          </div>
+          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <span className="h-0 w-0 rounded-full bg-white/30 opacity-0 group-active:animate-[ripple_0.5s_ease-out]" />
+          </span>
+        </a>
 
         <div className="mt-3 text-xs text-gray-500">
           Example report — your results will be personalized based on your lease
@@ -94,6 +107,24 @@ export default function PortfolioMonitoringPage() {
           Most tenants uncover $5,000–$50,000+ in avoidable lease costs. Start with a free upload, then decide if a full audit is worth it.
         </p>
       </div>
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(200%); }
+        }
+        @keyframes ripple {
+          0% {
+            width: 0;
+            height: 0;
+            opacity: 0.6;
+          }
+          100% {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+          }
+        }
+      `}</style>
     </main>
   );
 }
