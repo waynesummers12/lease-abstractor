@@ -41,7 +41,7 @@ export default function CamReconciliationPage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* ---------------- HERO ---------------- */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM Reconciliation Explained — How Commercial Tenants Spot Overcharges & Protect Audit Rights
         </h1>
 
@@ -87,7 +87,7 @@ export default function CamReconciliationPage() {
       </section>
       {/* ---------------- NNN PILLAR AUTHORITY BRIDGE ---------------- */}
       <section className="mb-16 border-t pt-10 text-lg text-gray-700 leading-relaxed">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Reconciliation Fits Within a Triple Net (NNN) Lease
         </h2>
 
@@ -123,7 +123,7 @@ export default function CamReconciliationPage() {
       </section>
       {/* ---------------- PILLAR OVERVIEW ---------------- */}
       <section className="mb-16 rounded-xl border bg-gray-50 p-8">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Complete CAM Reconciliation Guide for Commercial Tenants
         </h2>
         <div className="grid gap-6 md:grid-cols-2 text-sm text-gray-700">
@@ -144,7 +144,7 @@ export default function CamReconciliationPage() {
         
       {/* ---------------- WHAT IS CAM ---------------- */}
       <section className="mb-14">
-        <h2 id="what-is-cam-reconciliation" className="mb-3 text-2xl font-semibold">
+        <h2 id="what-is-cam-reconciliation" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Is CAM Reconciliation? (Plain English)
         </h2>
 
@@ -170,7 +170,7 @@ export default function CamReconciliationPage() {
           their lease.
         </p>
         <div className="mt-6 rounded-lg border p-6 text-sm text-gray-700">
-          <p className="mb-2 font-semibold">Important:</p>
+          <p className="mb-2 font-light tracking-tight">Important:</p>
           <p>
             CAM reconciliation is not the same as base rent adjustment. It strictly relates to recoverable operating expenses defined in your lease. Misunderstanding this distinction is one of the most common reasons tenants overpay without realizing it.
           </p>
@@ -179,7 +179,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- WHY ERRORS ---------------- */}
       <section className="mb-14">
-        <h2 id="common-cam-mistakes" className="mb-3 text-2xl font-semibold">
+        <h2 id="common-cam-mistakes" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM Reconciliation Errors Are So Common
         </h2>
 
@@ -211,13 +211,13 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COMMON MISTAKES ---------------- */}
       <section className="mb-14">
-        <h2 id="common-cam-mistakes-detail" className="mb-3 text-2xl font-semibold">
+        <h2 id="common-cam-mistakes-detail" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           The Most Common CAM Reconciliation Mistakes
         </h2>
 
         <div className="space-y-6 text-gray-700">
           <div>
-            <h3 className="font-semibold">Inflated or Improper Admin Fees</h3>
+            <h3 className="font-light tracking-tight">Inflated or Improper Admin Fees</h3>
             <p>
               Management or admin fees are often higher than allowed by the
               lease, calculated incorrectly, or applied to expenses they
@@ -226,7 +226,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">Non-Allowable Expenses</h3>
+            <h3 className="font-light tracking-tight">Non-Allowable Expenses</h3>
             <p>
               Capital improvements, major repairs, landlord overhead, marketing,
               and leasing costs often appear despite being excluded by the
@@ -235,7 +235,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">Math & Allocation Errors</h3>
+            <h3 className="font-light tracking-tight">Math & Allocation Errors</h3>
             <p>
               Pro-rata share mistakes, square footage errors, double counting,
               and inconsistent categories can significantly inflate charges.
@@ -246,7 +246,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- COST ---------------- */}
       <section className="mb-14">
-        <h2 id="how-much-cam-errors-cost" className="mb-3 text-2xl font-semibold">
+        <h2 id="how-much-cam-errors-cost" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How Much CAM Errors Typically Cost Tenants
         </h2>
 
@@ -264,7 +264,7 @@ export default function CamReconciliationPage() {
           Because <Link href="/marketing/cam-charges" className="underline hover:text-black">CAM charges</Link> recur every year, unchallenged errors compound over time. Reviewing your structure against a formal <Link href="/marketing/cam-reconciliation-checklist" className="underline hover:text-black">CAM reconciliation checklist</Link> can help quantify exposure before deadlines close.
         </p>
         <div className="mt-6 rounded-lg border p-6 text-sm text-gray-700">
-          <h3 className="mb-2 font-semibold">Exposure Compounds Over Time</h3>
+          <h3 className="mb-2 font-light tracking-tight">Exposure Compounds Over Time</h3>
           <p className="mb-2">
             Even a $1.25 per square foot overcharge on a 10,000 SF space equals $12,500 annually.
           </p>
@@ -276,7 +276,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- REAL WORLD EXAMPLE ---------------- */}
       <section className="mb-14 border-t pt-10">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Example: How Small CAM Errors Become Large Costs
         </h2>
 
@@ -308,7 +308,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- WHAT CAN BE CHALLENGED ---------------- */}
       <section className="mb-14">
-        <h2 id="what-you-can-challenge" className="mb-3 text-2xl font-semibold">
+        <h2 id="what-you-can-challenge" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Tenants Can (and Can’t) Challenge
         </h2>
         <p className="mb-6 text-gray-700">
@@ -322,7 +322,7 @@ export default function CamReconciliationPage() {
         </p>
         <div className="grid gap-6 md:grid-cols-2 text-gray-700">
           <div>
-            <h3 className="mb-2 font-semibold">Often Challengeable</h3>
+            <h3 className="mb-2 font-light tracking-tight">Often Challengeable</h3>
             <ul className="ml-6 list-disc space-y-1">
               <li>Admin fees above lease caps</li>
               <li>Excluded expense categories</li>
@@ -332,7 +332,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold">Often Not Challengeable</h3>
+            <h3 className="mb-2 font-light tracking-tight">Often Not Challengeable</h3>
             <ul className="ml-6 list-disc space-y-1">
               <li>Clearly defined allowable expenses</li>
               <li>Properly calculated lease-compliant costs</li>
@@ -343,7 +343,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- AUDIT WINDOW ---------------- */}
 <section className="mb-16">
-  <h2 id="audit-deadlines" className="mb-3 text-2xl font-semibold">
+  <h2 id="audit-deadlines" className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
     Audit Windows Matter More Than Most Tenants Realize
   </h2>
 
@@ -380,7 +380,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- RECONCILIATION CALCULATION EXAMPLE ---------------- */}
       <section className="mb-16 border-t pt-10">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           CAM Reconciliation Calculation Example (With Math)
         </h2>
 
@@ -437,7 +437,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- SAMPLE STATEMENT BREAKDOWN ---------------- */}
       <section className="mb-16">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Sample CAM Reconciliation Statement Breakdown
         </h2>
 
@@ -472,16 +472,16 @@ export default function CamReconciliationPage() {
 
         <div className="grid gap-4 md:grid-cols-3 text-sm text-gray-700">
           <div>
-            <p className="font-semibold">Space Size</p>
+            <p className="font-light tracking-tight">Space Size</p>
             <p>12,000 SF</p>
           </div>
           <div>
-            <p className="font-semibold">Potential Overcharge</p>
+            <p className="font-light tracking-tight">Potential Overcharge</p>
             <p>$1.50 / SF</p>
           </div>
           <div>
-            <p className="font-semibold">Annual Exposure</p>
-            <p className="font-semibold">$18,000</p>
+            <p className="font-light tracking-tight">Annual Exposure</p>
+            <p className="font-light tracking-tight">$18,000</p>
           </div>
         </div>
 
@@ -493,7 +493,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- STATE-SPECIFIC VARIATIONS ---------------- */}
       <section className="mb-16 border-t pt-10">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           State‑Specific Audit Window Variations
         </h2>
 
@@ -504,7 +504,7 @@ export default function CamReconciliationPage() {
 
         <div className="space-y-6 text-gray-700 text-sm">
           <div>
-            <h3 className="font-semibold">California</h3>
+            <h3 className="font-light tracking-tight">California</h3>
             <p>
               Commercial tenants often negotiate detailed audit clauses. Courts generally enforce
               clearly written notice deadlines strictly.
@@ -512,7 +512,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">Texas</h3>
+            <h3 className="font-light tracking-tight">Texas</h3>
             <p>
               Strong contract enforcement environment. Missing audit deadlines may significantly
               reduce leverage in disputes.
@@ -520,7 +520,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">New York</h3>
+            <h3 className="font-light tracking-tight">New York</h3>
             <p>
               Complex commercial leasing market. Detailed lease language governs reconciliation,
               and expense categorization disputes are common.
@@ -536,13 +536,13 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- VERTICAL RECONCILIATION COMPARISON ---------------- */}
       <section className="mb-16 border-t pt-10">
-        <h2 className="mb-6 text-2xl font-semibold">
+        <h2 className="mb-6 text-2xl sm:text-3xl font-light tracking-tight">
           Retail vs Medical vs Restaurant CAM Reconciliation Differences
         </h2>
 
         <div className="grid gap-8 md:grid-cols-3 text-sm text-gray-700">
           <div className="rounded-lg border p-6">
-            <h3 className="mb-3 font-semibold text-gray-900">Retail</h3>
+            <h3 className="mb-3 font-light tracking-tight text-gray-900">Retail</h3>
             <ul className="list-disc ml-5 space-y-2">
               <li>Shared common area allocations</li>
               <li>High variability in snow, landscaping, and security</li>
@@ -555,7 +555,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div className="rounded-lg border p-6">
-            <h3 className="mb-3 font-semibold text-gray-900">Medical Office</h3>
+            <h3 className="mb-3 font-light tracking-tight text-gray-900">Medical Office</h3>
             <ul className="list-disc ml-5 space-y-2">
               <li>Higher HVAC and infrastructure costs</li>
               <li>Specialized utility allocations</li>
@@ -568,7 +568,7 @@ export default function CamReconciliationPage() {
           </div>
 
           <div className="rounded-lg border p-6">
-            <h3 className="mb-3 font-semibold text-gray-900">Restaurant</h3>
+            <h3 className="mb-3 font-light tracking-tight text-gray-900">Restaurant</h3>
             <ul className="list-disc ml-5 space-y-2">
               <li>High maintenance & grease trap allocations</li>
               <li>Common area cleaning spikes</li>
@@ -584,12 +584,12 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- RELATED DEEP DIVES ---------------- */}
       <section className="mb-16 border-t pt-10">
-        <h2 className="mb-6 text-2xl font-semibold">
+        <h2 className="mb-6 text-2xl sm:text-3xl font-light tracking-tight">
           Related CAM & NNN Deep Dive Resources
         </h2>
         <div className="grid gap-6 md:grid-cols-3 text-sm text-gray-700">
           <div>
-            <h3 className="font-semibold mb-2">Definitions & Structure</h3>
+            <h3 className="font-light tracking-tight mb-2">Definitions & Structure</h3>
             <ul className="list-disc ml-6 space-y-1">
               <li><Link href="/marketing/cam-fee-meaning" className="underline hover:text-black">CAM fee meaning</Link></li>
               <li><Link href="/marketing/triple-net-lease" className="underline hover:text-black">Triple net lease (NNN)</Link></li>
@@ -598,7 +598,7 @@ export default function CamReconciliationPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">Overcharges & Errors</h3>
+            <h3 className="font-light tracking-tight mb-2">Overcharges & Errors</h3>
             <ul className="list-disc ml-6 space-y-1">
               <li><Link href="/marketing/real-cam-nnn-overcharge-examples" className="underline hover:text-black">Real overcharge examples</Link></li>
               <li><Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline hover:text-black">Non-allowable expenses</Link></li>
@@ -606,7 +606,7 @@ export default function CamReconciliationPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-2">Audit & Deadlines</h3>
+            <h3 className="font-light tracking-tight mb-2">Audit & Deadlines</h3>
             <ul className="list-disc ml-6 space-y-1">
               <li><Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">Audit window deadlines</Link></li>
               <li><Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">NNN audit rights</Link></li>
@@ -618,7 +618,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- FINAL CTA ---------------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Check Your CAM Charges Before It’s Too Late
         </h2>
 
@@ -775,7 +775,7 @@ export default function CamReconciliationPage() {
 
       {/* ---------------- CAM RECONCILIATION TRENDS 2026 ---------------- */}
       <section className="mb-16 border-t pt-10">
-        <h2 className="mb-6 text-2xl font-semibold">
+        <h2 className="mb-6 text-2xl sm:text-3xl font-light tracking-tight">
           CAM Reconciliation Trends 2026
         </h2>
         <p className="mb-6 text-sm text-gray-500">
