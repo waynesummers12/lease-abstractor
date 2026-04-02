@@ -111,14 +111,6 @@ export default function UploadLeasePage() {
       </div>
     </div>
 
-    <p className="text-center text-xs uppercase tracking-wide text-gray-400 mb-2">
-      Step 2: Analyze your lease
-    </p>
-
-    <p className="text-center text-sm text-gray-600 mb-4">
-      You already added your lease — now preview potential savings before running a full audit.
-    </p>
-
     <div className="rounded-2xl border bg-white p-8 shadow-sm text-center">
       <UploadForm
         onUpload={handleUpload}
