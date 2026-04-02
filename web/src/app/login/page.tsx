@@ -11,7 +11,8 @@ export default function LoginPage() {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true, // 🔥 CRITICAL for OAuth redirect handling
+        detectSessionInUrl: true,
+        storage: typeof window !== "undefined" ? window.localStorage : undefined,
       },
     }
   );
@@ -54,7 +55,7 @@ export default function LoginPage() {
     console.log("Starting Google OAuth...");
 
     // 🔥 Clear any existing session (prevents instant redirect loop)
-    await supabase.auth.signOut();
+    // await supabase.auth.signOut();
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
