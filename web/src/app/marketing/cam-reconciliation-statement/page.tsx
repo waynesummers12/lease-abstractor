@@ -28,7 +28,7 @@ export default function CamReconciliationStatementPage() {
 
       {/* EXAMPLE TABLE */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           Example CAM Reconciliation Statement
         </h2>
 
@@ -64,7 +64,7 @@ export default function CamReconciliationStatementPage() {
 
       {/* COMMON ERRORS */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           Common CAM Reconciliation Errors
         </h2>
 
@@ -79,7 +79,7 @@ export default function CamReconciliationStatementPage() {
 
       {/* AUDIT WINDOW */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           CAM Audit Window Deadlines
         </h2>
 
@@ -98,7 +98,7 @@ export default function CamReconciliationStatementPage() {
 
       {/* CHECKLIST CTA */}
       <div className="border-t pt-12 mt-16">
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight mb-4">
           Download the CAM Audit Checklist
         </h3>
 
@@ -110,7 +110,7 @@ export default function CamReconciliationStatementPage() {
 
         <Link
           href="/marketing/cam-audit-checklist"
-          className="inline-block border border-gray-300 px-6 py-3 text-sm font-semibold rounded-md hover:bg-gray-100 transition"
+          className="inline-block border border-gray-300 px-6 py-3 text-sm font-medium rounded-md hover:bg-gray-100 transition"
         >
           View CAM Audit Checklist →
         </Link>
@@ -118,7 +118,7 @@ export default function CamReconciliationStatementPage() {
 
       {/* TOOL CTA */}
       <div className="border-t pt-12 mt-16">
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight mb-4">
           Want an Instant Lease Risk Review?
         </h3>
 
@@ -130,7 +130,7 @@ export default function CamReconciliationStatementPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-8 py-4 text-sm font-semibold rounded-md hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-8 py-4 text-sm font-medium rounded-md hover:bg-gray-800 transition"
         >
           Check Your Commercial Lease for Hidden Costs
         </Link>

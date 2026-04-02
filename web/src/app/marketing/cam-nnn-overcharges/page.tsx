@@ -49,7 +49,7 @@ export default function CamNnnOverchargesPage() {
     <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
       {/* HERO */}
       <section>
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           CAM & NNN Overcharges Explained — How Commercial Tenants Identify Avoidable Costs
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
@@ -75,7 +75,7 @@ export default function CamNnnOverchargesPage() {
           incorrectly.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           What CAM & NNN Overcharges Can Actually Cost
         </h2>
 
@@ -91,7 +91,7 @@ export default function CamNnnOverchargesPage() {
           more over multi-year lease terms.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Common CAM & NNN Overcharge Examples
         </h2>
 
@@ -103,7 +103,7 @@ export default function CamNnnOverchargesPage() {
           <li>Expenses billed outside allowable CAM definitions</li>
         </ul>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Why Audit Windows Matter
         </h2>
 
@@ -114,7 +114,7 @@ export default function CamNnnOverchargesPage() {
           even if errors exist.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           How Tenants Can Protect Themselves
         </h2>
 
@@ -127,7 +127,7 @@ export default function CamNnnOverchargesPage() {
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Think you might be overpaying?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">

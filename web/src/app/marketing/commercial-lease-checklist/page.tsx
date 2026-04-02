@@ -25,7 +25,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* WHAT THE CHECKLIST COVERS */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           What This Commercial Lease Checklist Helps Identify
         </h2>
 
@@ -52,7 +52,7 @@ export default function CommercialLeaseChecklistPage() {
           href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-black text-white px-8 py-3 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-8 py-3 text-lg font-medium rounded-md hover:bg-gray-800 transition"
         >
           Download Commercial Lease Checklist →
         </a>
@@ -64,7 +64,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* CHECKLIST PREVIEW */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           Inside the Commercial Lease Checklist
         </h2>
 
@@ -86,7 +86,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* INDUSTRIES */}
       <div className="max-w-3xl mx-auto mb-16">
-        <h2 className="text-2xl font-semibold mb-6">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">
           Industries That Commonly Use This Lease Checklist
         </h2>
 
@@ -108,7 +108,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* HOW TENANTS USE THE CHECKLIST */}
       <div className="max-w-3xl mx-auto mb-16 text-left">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           How Tenants Use This Lease Review Checklist
         </h2>
 
@@ -134,7 +134,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* BROKER SECTION */}
       <div className="border-t pt-10 mt-10 max-w-2xl mx-auto">
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-4">
           Commercial Broker? Share This With Your Clients
         </h2>
 
@@ -151,7 +151,7 @@ export default function CommercialLeaseChecklistPage() {
 
         <Link
           href="/refer"
-          className="inline-block border border-gray-300 px-6 py-3 text-sm font-semibold rounded-md hover:bg-gray-100 transition"
+          className="inline-block border border-gray-300 px-6 py-3 text-sm font-medium rounded-md hover:bg-gray-100 transition"
         >
           Create Your Broker Referral Link →
         </Link>
@@ -159,13 +159,13 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* FAQ */}
       <div className="border-t pt-12 mt-16 max-w-3xl mx-auto text-left">
-        <h2 className="text-2xl font-semibold mb-8 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-8 text-center">
           Commercial Lease Checklist FAQs
         </h2>
 
         <div className="space-y-6 text-gray-700">
           <div>
-            <h3 className="font-semibold mb-1">Why review CAM charges?</h3>
+            <h3 className="font-light tracking-tight mb-1">Why review CAM charges?</h3>
             <p>
               CAM reconciliations often include administrative fees,
               capital expenses, or allocation errors that increase
@@ -174,7 +174,7 @@ export default function CommercialLeaseChecklistPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-1">When should tenants audit CAM expenses?</h3>
+            <h3 className="font-light tracking-tight mb-1">When should tenants audit CAM expenses?</h3>
             <p>
               Most leases allow tenants to challenge operating expense
               charges only within a limited audit window, often
@@ -183,7 +183,7 @@ export default function CommercialLeaseChecklistPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-1">How much money can tenants recover?</h3>
+            <h3 className="font-light tracking-tight mb-1">How much money can tenants recover?</h3>
             <p>
               Many commercial tenants uncover $5,000–$50,000+ in
               avoidable exposure when reviewing CAM reconciliations
@@ -192,7 +192,7 @@ export default function CommercialLeaseChecklistPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-1">What is the fastest way to check a lease?</h3>
+            <h3 className="font-light tracking-tight mb-1">What is the fastest way to check a lease?</h3>
             <p>
               Upload your lease to run an automated CAM / NNN risk
               scan and identify potential overcharges in seconds.
@@ -203,7 +203,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* RELATED CAM RESOURCES */}
       <div className="border-t pt-12 mt-16 max-w-3xl mx-auto text-left">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           Related CAM Audit Resources
         </h2>
 
@@ -228,7 +228,7 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* CTA TO PRODUCT */}
       <div className="border-t pt-12 mt-16">
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight mb-4">
           Want a Faster CAM / NNN Risk Review?
         </h3>
 
@@ -239,7 +239,7 @@ export default function CommercialLeaseChecklistPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-8 py-4 text-sm font-semibold rounded-md hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-8 py-4 text-sm font-medium rounded-md hover:bg-gray-800 transition"
         >
           Run Free Lease Risk Scan
         </Link>

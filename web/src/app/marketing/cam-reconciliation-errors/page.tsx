@@ -27,7 +27,7 @@ export default function CamReconciliationErrorsPage() {
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           CAM Reconciliation Errors Tenants Should Watch For
         </h1>
 
@@ -58,7 +58,7 @@ export default function CamReconciliationErrorsPage() {
 
       {/* HOW ERRORS HAPPEN */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Reconciliation Errors Happen
         </h2>
 
@@ -78,13 +78,13 @@ export default function CamReconciliationErrorsPage() {
 
       {/* COMMON ERRORS */}
       <section className="space-y-8">
-        <h2 className="text-2xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Most Common CAM Reconciliation Errors
         </h2>
 
         <div className="space-y-6 text-gray-700 leading-relaxed">
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               1. Incorrect Pro‑Rata Share Calculations
             </h3>
             <p>
@@ -103,7 +103,7 @@ export default function CamReconciliationErrorsPage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               2. Capital Expenditures Passed Through as Operating Expenses
             </h3>
             <p>
@@ -114,7 +114,7 @@ export default function CamReconciliationErrorsPage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               3. Management & Administrative Fee Overages
             </h3>
             <p>
@@ -125,7 +125,7 @@ export default function CamReconciliationErrorsPage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               4. Vacancy Allocation Errors
             </h3>
             <p>
@@ -136,7 +136,7 @@ export default function CamReconciliationErrorsPage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               5. Duplicate Charges Across CAM & NNN Categories
             </h3>
             <p>
@@ -147,7 +147,7 @@ export default function CamReconciliationErrorsPage() {
           </div>
 
           <div>
-            <h3 className="text-lg font-medium">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
               6. Charges Outside Lease‑Defined Allowable Categories
             </h3>
             <p>
@@ -160,7 +160,7 @@ export default function CamReconciliationErrorsPage() {
 
       {/* FINANCIAL IMPACT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Financial Impact of CAM Reconciliation Errors
         </h2>
 
@@ -216,7 +216,7 @@ export default function CamReconciliationErrorsPage() {
 
       {/* CTA */}
       <section className="bg-gray-50 p-8 rounded-xl space-y-4">
-        <h2 className="text-2xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Review Your CAM Reconciliation Before It’s Too Late
         </h2>
 

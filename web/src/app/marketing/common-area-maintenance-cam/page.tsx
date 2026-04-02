@@ -17,7 +17,7 @@ export default function CommonAreaMaintenanceCamPage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight">
+        <h1 className="mb-6 text-4xl sm:text-5xl font-light tracking-tight">
           Common Area Maintenance (CAM) Explained for Commercial Tenants
         </h1>
 
@@ -54,7 +54,7 @@ export default function CommonAreaMaintenanceCamPage() {
 
       {/* WHAT IS CAM */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Is Common Area Maintenance (CAM)?
         </h2>
 
@@ -86,7 +86,7 @@ export default function CommonAreaMaintenanceCamPage() {
 
       {/* HOW CAM IS STRUCTURED */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Is Structured in Commercial Leases
         </h2>
 
@@ -113,7 +113,7 @@ export default function CommonAreaMaintenanceCamPage() {
 
       {/* COMMON CAM ISSUES */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Common CAM Errors & Overcharges
         </h2>
 
@@ -138,7 +138,7 @@ export default function CommonAreaMaintenanceCamPage() {
 
       {/* FINANCIAL IMPACT */}
       <section className="mb-16 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM Matters Financially
         </h2>
 
@@ -162,7 +162,7 @@ export default function CommonAreaMaintenanceCamPage() {
 
       {/* FINAL CTA */}
       <section className="rounded-2xl border bg-gray-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight">
           Review Your CAM Provisions Before Deadlines Close
         </h2>
         <p className="mt-4 text-gray-700 max-w-2xl mx-auto">

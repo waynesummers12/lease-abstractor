@@ -12,7 +12,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM Reconciliation Checklist — What to Review Before You Pay
         </h1>
 
@@ -38,7 +38,7 @@ export default function Page() {
 
       {/* WHY A CHECKLIST */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM Reconciliation Needs a Checklist
         </h2>
 
@@ -57,7 +57,7 @@ export default function Page() {
 
       {/* CHECKLIST */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           CAM Reconciliation Checklist
         </h2>
 
@@ -83,7 +83,7 @@ export default function Page() {
 
       {/* COMMON ERRORS */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Common CAM Reconciliation Errors This Checklist Catches
         </h2>
 
@@ -98,7 +98,7 @@ export default function Page() {
 
       {/* AUDIT WINDOW */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Don’t Miss the CAM Audit Window
         </h2>
 
@@ -124,7 +124,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Skip the Manual Checklist — Automate It
         </h3>
 

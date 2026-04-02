@@ -8,7 +8,7 @@ export default function CommercialLeaseChecklistPdfPage() {
       {/* HERO */}
       <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
         Commercial Lease Checklist (PDF)
-        <span className="block font-medium">
+        <span className="block font-light tracking-tight">
           Free Tenant‑First CAM & NNN Audit Checklist
         </span>
       </h1>
@@ -36,7 +36,7 @@ export default function CommercialLeaseChecklistPdfPage() {
           href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block bg-black text-white px-8 py-3 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-8 py-3 text-lg font-medium rounded-md hover:bg-gray-800 transition"
         >
           Download Checklist PDF →
         </a>
@@ -63,7 +63,7 @@ export default function CommercialLeaseChecklistPdfPage() {
 
       {/* CHECKLIST CONTENT PREVIEW */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           What the Commercial Lease Checklist Covers
         </h2>
 
@@ -79,7 +79,7 @@ export default function CommercialLeaseChecklistPdfPage() {
 
       {/* WHY THIS MATTERS */}
       <div className="max-w-3xl mx-auto text-left mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-center">
           Why Commercial Tenants Use Lease Checklists
         </h2>
 
@@ -98,7 +98,7 @@ export default function CommercialLeaseChecklistPdfPage() {
 
       {/* CTA TO TOOL */}
       <div className="border-t pt-12 mt-16">
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight mb-4">
           Want an Instant Lease Risk Review?
         </h3>
 
@@ -110,7 +110,7 @@ export default function CommercialLeaseChecklistPdfPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-8 py-4 text-sm font-semibold rounded-md hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-8 py-4 text-sm font-medium rounded-md hover:bg-gray-800 transition"
         >
           Check Your Commercial Lease for Hidden Costs
         </Link>

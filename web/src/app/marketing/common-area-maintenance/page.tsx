@@ -12,7 +12,7 @@ export default function CommonAreaMaintenancePage() {
     <main className="max-w-4xl mx-auto px-6 py-16 space-y-10">
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Common Area Maintenance (CAM) in Commercial Leases
         </h1>
         <p className="text-lg text-gray-700 leading-relaxed">
@@ -26,7 +26,7 @@ export default function CommonAreaMaintenancePage() {
 
       {/* WHAT IS CAM */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Is Common Area Maintenance?
         </h2>
         <p>
@@ -57,7 +57,7 @@ export default function CommonAreaMaintenancePage() {
 
       {/* WHAT CAM INCLUDES */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Do CAM Fees Typically Include?
         </h2>
         <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
@@ -78,7 +78,7 @@ export default function CommonAreaMaintenancePage() {
 
       {/* CAM VS NNN */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           CAM vs. NNN: What’s the Difference?
         </h2>
         <p>
@@ -108,7 +108,7 @@ export default function CommonAreaMaintenancePage() {
 
       {/* COMMON ISSUES */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Common CAM Billing Issues
         </h2>
         <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
@@ -139,7 +139,7 @@ export default function CommonAreaMaintenancePage() {
 
       {/* CTA */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Concerned About CAM Overcharges?
         </h2>
         <p className="text-lg text-gray-700 leading-relaxed">

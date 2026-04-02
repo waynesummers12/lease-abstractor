@@ -16,7 +16,7 @@ export default function CommercialLeaseAuditPage() {
     <main className="max-w-4xl mx-auto px-6 py-16">
       {/* ---------------- HERO ---------------- */}
       <section className="mb-12">
-        <h1 className="text-4xl font-bold mb-6">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
           Commercial Lease Audit for Tenants
         </h1>
 
@@ -35,7 +35,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- WHAT IS A LEASE AUDIT ---------------- */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           What Is a Commercial Lease Audit?
         </h2>
 
@@ -59,7 +59,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- WHY TENANTS NEED ONE ---------------- */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Why Commercial Tenants Often Need a Lease Audit
         </h2>
 
@@ -84,7 +84,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- COMMON FINDINGS ---------------- */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Common Findings in Commercial Lease Audits
         </h2>
 
@@ -114,7 +114,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- FINANCIAL CONSEQUENCE ---------------- */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Why Timing Matters
         </h2>
 
@@ -138,7 +138,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- INTERNAL LINKS ---------------- */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Related Guides
         </h2>
 
@@ -172,7 +172,7 @@ export default function CommercialLeaseAuditPage() {
 
       {/* ---------------- CTA ---------------- */}
       <section className="bg-gray-50 border rounded-xl p-8 text-center">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-4">
           Not Sure If Your Lease Was Billed Correctly?
         </h2>
 

@@ -9,7 +9,7 @@ export default function CamVsNnnPage() {
     <main className="mx-auto max-w-3xl px-6 py-20">
       {/* ---------- HERO ---------- */}
       <header className="mb-10">
-        <h1 className="mb-4 text-4xl font-extrabold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM vs NNN Charges: What’s the Difference — and Why It Matters
         </h1>
         <p className="text-lg text-gray-600">
@@ -26,7 +26,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- SECTION 1 ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What CAM (Common Area Maintenance) Charges Are
         </h2>
         <p className="text-gray-700">
@@ -57,7 +57,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- REAL TENANT EXAMPLES (NEW) ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Real Tenant CAM Examples We See Often
         </h2>
         <p className="text-gray-700">
@@ -78,7 +78,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- SECTION 2 ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What NNN (Triple Net) Charges Include
         </h2>
         <p className="text-gray-700">
@@ -106,7 +106,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- COMMON SURPRISES (NEW) ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Common NNN Surprises Tenants Report
         </h2>
         <p className="text-gray-700">
@@ -125,7 +125,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- SECTION 3 ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           CAM vs NNN: The Key Differences
         </h2>
 
@@ -197,7 +197,7 @@ export default function CamVsNnnPage() {
 
       {/* ---------- CTA ---------- */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-6">
-        <h3 className="mb-2 text-xl font-bold">
+        <h3 className="mb-2 text-xl sm:text-2xl font-light tracking-tight">
           Not sure whether your charges are CAM or NNN?
         </h3>
         <p className="mb-4 text-gray-700">

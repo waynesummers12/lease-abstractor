@@ -18,7 +18,7 @@ export default function CamRealEstatePage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM in Real Estate — What Common Area Maintenance Really Means for Tenants
         </h1>
 
@@ -48,7 +48,7 @@ export default function CamRealEstatePage() {
 
       {/* WHAT IS CAM IN REAL ESTATE */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Is CAM in Real Estate?
         </h2>
 
@@ -73,7 +73,7 @@ export default function CamRealEstatePage() {
 
       {/* HOW CAM IS CALCULATED */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Is Calculated in Commercial Real Estate
         </h2>
 
@@ -97,7 +97,7 @@ export default function CamRealEstatePage() {
 
       {/* WHY IT MATTERS FINANCIALLY */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM in Real Estate Matters Financially
         </h2>
 
@@ -120,7 +120,7 @@ export default function CamRealEstatePage() {
 
       {/* FINAL CTA */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Review Your CAM Exposure Before the Deadline
         </h2>
 
