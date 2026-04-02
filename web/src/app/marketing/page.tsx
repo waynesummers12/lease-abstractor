@@ -18,14 +18,14 @@ export default function MarketingHomePage() {
       {/* HERO */}
       <section className="mx-auto max-w-7xl px-6 pt-28 pb-20 text-center">
         <h1 className="mx-auto max-w-5xl text-6xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]">
-          Check Your Commercial Lease for Hidden Costs
-          <span className="block">Before CAM & NNN Overcharges Add Up</span>
+          Manage & Audit Your Commercial Leases for Hidden Costs
+          <span className="block">Before CAM & NNN Overcharges Add Up Across Your Portfolio</span>
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-lg font-semibold text-green-800">
           Free CAM / NNN risk scan — results in ~10 seconds.
         </p>
         <p className="mx-auto mt-8 max-w-3xl text-xl sm:text-2xl tracking-wide leading-relaxed text-gray-500">
-          Upload your commercial lease and instantly see potential CAM / NNN exposure — including uncapped fees, capital pass-throughs, and reconciliation risks.
+          Upload your commercial lease and instantly see potential CAM / NNN exposure — then track, manage, and monitor your leases over time in one place.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -33,7 +33,7 @@ export default function MarketingHomePage() {
             href="/app/step-1-upload"
             className="rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
           >
-            Run Free Lease Risk Scan
+            Upload Lease & Run Free Risk Scan
           </Link>
           <Link
             href="/marketing/what-we-find"
@@ -44,7 +44,7 @@ export default function MarketingHomePage() {
         </div>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
-          Used by SMB tenants nationwide to surface CAM / NNN issues before audit rights expire.
+          Used by SMB tenants nationwide to surface CAM / NNN issues and manage lease risk before audit rights expire.
         </p>
         <p className="mx-auto mt-2 max-w-2xl text-sm font-medium tracking-wide text-gray-700">
           <span className="mr-2 uppercase text-[10px] tracking-widest text-gray-500">
