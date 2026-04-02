@@ -10,14 +10,16 @@ const sectionStyle: React.CSSProperties = {
 };
 
 const headingStyle: React.CSSProperties = {
-  fontSize: 28,
-  fontWeight: 800,
+  fontSize: 36,
+  fontWeight: 300,
+  letterSpacing: "-0.02em",
   marginBottom: 12,
 };
 
 const subHeadingStyle: React.CSSProperties = {
-  fontSize: 18,
-  fontWeight: 700,
+  fontSize: 20,
+  fontWeight: 300,
+  letterSpacing: "-0.01em",
   marginBottom: 8,
 };
 
@@ -127,7 +129,7 @@ export default function CamAdminFeesPage() {
     border: "1px solid #e5e7eb",
   }}
 >
-  <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>
+  <h3 style={{ fontSize: 20, fontWeight: 300, letterSpacing: "-0.01em", marginBottom: 8 }}>
     What CAM admin fees really cost
   </h3>
 
@@ -202,7 +204,7 @@ export default function CamAdminFeesPage() {
     background: "#f9fafb",
   }}
 >
-  <h4 style={{ fontSize: 16, fontWeight: 800 }}>
+  <h4 style={{ fontSize: 18, fontWeight: 300, letterSpacing: "-0.01em" }}>
     Colorado tenant insight
   </h4>
 
@@ -257,7 +259,7 @@ export default function CamAdminFeesPage() {
           gap: 16,
         }}
       >
-        <h2 style={{ fontSize: 22, fontWeight: 800 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 300, letterSpacing: "-0.01em" }}>
           CAM Admin Fees — Common Questions
         </h2>
 
