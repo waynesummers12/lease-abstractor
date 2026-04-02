@@ -1,5 +1,3 @@
-
-
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white">
@@ -7,7 +5,7 @@ export default function PricingPage() {
 
         {/* HEADER */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl font-semibold mb-3">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-3">
             Simple, ROI-Driven Pricing
           </h1>
           <p className="text-gray-600 text-sm">
@@ -20,7 +18,7 @@ export default function PricingPage() {
 
           <div className="text-center mb-6">
             <div className="text-sm text-gray-500 mb-1">Per Lease Audit</div>
-            <div className="text-4xl font-semibold">$249</div>
+            <div className="text-4xl font-medium">$249</div>
             <div className="text-sm text-gray-500 mt-1">
               One-time • No subscription
             </div>
