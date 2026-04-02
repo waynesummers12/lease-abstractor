@@ -1,7 +1,7 @@
 "use client";
 
 import { createBrowserClient } from "@supabase/ssr";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";
 
@@ -21,7 +21,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const isBrowser = typeof window !== "undefined";
+
   const supabase = useMemo(() => {
+    if (!isBrowser) return null as unknown as SupabaseClient;
+
     return createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -30,15 +34,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           persistSession: true,
           autoRefreshToken: true,
           detectSessionInUrl: true,
-          storage: typeof window !== "undefined" ? window.localStorage : undefined, // 🔥 FIX
+          storage: window.localStorage, // 🔥 force browser storage ONLY
         },
       }
     );
-  }, []);
+  }, [isBrowser]);
 
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
 
   useEffect(() => {
+    if (!supabase) return;
+
     const init = async () => {
       try {
         // 🔥 Handle OAuth redirect code (ensures session is created)
