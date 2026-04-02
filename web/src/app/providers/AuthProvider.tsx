@@ -26,7 +26,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+      }
     );
   });
 
@@ -43,8 +50,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error("Session error:", error);
         }
 
-        const session = data.session;
+        let session = data.session;
         console.log("INIT SESSION:", session);
+
+        // 🔥 Retry once if session is null (handles redirect timing)
+        if (!session) {
+          await new Promise((r) => setTimeout(r, 500));
+          const retry = await supabase.auth.getSession();
+          session = retry.data.session;
+          console.log("RETRY SESSION:", session);
+        }
 
         setSession(session);
 
