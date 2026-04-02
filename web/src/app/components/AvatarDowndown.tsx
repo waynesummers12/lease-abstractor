@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {
@@ -14,19 +14,6 @@ export default function AvatarDropdown({
   session,
   isProUser = false,
 }: AvatarDropdownProps) {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== "undefined" ? window.localStorage : undefined,
-      },
-    }
-  );
-
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 

@@ -1,21 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { createBrowserClient } from "@supabase/ssr";
+import { supabase } from "@/lib/supabase/client";
 
 export default function LoginPage() {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== "undefined" ? window.localStorage : undefined,
-      },
-    }
-  );
 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,26 +38,29 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    console.log("Starting Google OAuth...");
+      console.log("Starting Google OAuth...");
 
-    // 🔥 Clear any existing session (prevents instant redirect loop)
-    // await supabase.auth.signOut();
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/product/app/dashboard`,
-        queryParams: {
-          prompt: "select_account", // 🔥 forces Google screen
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/product/app/dashboard`,
+          queryParams: {
+            prompt: "select_account",
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
-      console.error("OAuth error:", error);
-      setMessage(error.message);
+      if (error) {
+        console.error("OAuth error:", error);
+        setMessage(error.message);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Unexpected OAuth error:", err);
+      setMessage("Something went wrong. Please try again.");
       setLoading(false);
     }
   }

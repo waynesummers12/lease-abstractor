@@ -2,27 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
+import { supabase } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
-  // ✅ Stable Supabase client (no re-creation on render)
-  const supabase = useState(() =>
-    createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-          storage: typeof window !== "undefined" ? window.localStorage : undefined,
-        },
-      }
-    )
-  )[0];
-
   const [user, setUser] = useState<User | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
@@ -46,7 +30,7 @@ export default function Navbar() {
     return () => {
       listener.subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []);
 
   // ✅ Close dropdowns on outside click
   useEffect(() => {

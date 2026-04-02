@@ -1,7 +1,7 @@
 "use client";
 
-import { createClient } from "@supabase/supabase-js";
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";
 
@@ -21,26 +21,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [supabase] = useState<SupabaseClient | null>(() => {
-    if (typeof window === "undefined") return null;
-
-    return createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-        },
-      }
-    );
-  });
-
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
 
   useEffect(() => {
-    if (!supabase) return;
+    // supabase singleton is always available
 
     const init = async () => {
       try {
@@ -119,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ session, loading, plan }}>

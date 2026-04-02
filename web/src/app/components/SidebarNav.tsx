@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { supabase } from "@/lib/supabase/client";
 
 const navItems = [
   { label: "Dashboard", href: "/product/app/dashboard", roles: ["admin", "analyst", "viewer"] },
@@ -15,19 +15,6 @@ const navItems = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== "undefined" ? window.localStorage : undefined,
-      },
-    }
-  );
 
   const [role, setRole] = useState<"admin" | "analyst" | "viewer">("viewer");
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
@@ -58,7 +45,7 @@ export default function SidebarNav() {
     }
 
     loadSession();
-  }, [supabase]);
+  }, []);
 
   const filteredNav = useMemo(() => {
   if (role === "viewer") {

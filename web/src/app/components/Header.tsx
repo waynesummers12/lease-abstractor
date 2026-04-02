@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
@@ -20,12 +20,6 @@ export default function Header() {
   const user = session?.user ?? null;
   console.log("HEADER SESSION:", session);
 
-  const supabase = useState(() =>
-    createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-  )[0];
 
   const [menuOpen, setMenuOpen] = useState(false);
 
