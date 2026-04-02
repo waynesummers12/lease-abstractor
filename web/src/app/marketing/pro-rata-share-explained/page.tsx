@@ -12,7 +12,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           Pro-Rata Share Explained — How CAM & NNN Charges Are Really Calculated
         </h1>
 
@@ -24,7 +24,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check pro-rata errors (Free Preview)
         </Link>
@@ -36,7 +36,7 @@ export default function Page() {
 
       {/* WHAT IS PRO RATA */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Is Pro-Rata Share?
         </h2>
 
@@ -60,7 +60,7 @@ export default function Page() {
 
       {/* HOW IT SHOULD BE CALCULATED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How Pro-Rata Share Should Be Calculated
         </h2>
 
@@ -78,7 +78,7 @@ export default function Page() {
 
       {/* COMMON PRO RATA ERRORS */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Common Pro-Rata Share Errors
         </h2>
 
@@ -97,7 +97,7 @@ export default function Page() {
 
       {/* WHY TENANTS MISS IT */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Tenants Rarely Catch Pro-Rata Errors
         </h2>
 
@@ -111,7 +111,7 @@ export default function Page() {
 
       {/* CAN IT BE CHALLENGED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Can Pro-Rata Share Be Challenged?
         </h2>
 
@@ -143,7 +143,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Verify Your Pro-Rata Share Automatically
         </h3>
 
@@ -154,7 +154,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check pro-rata share (Free Preview)
         </Link>

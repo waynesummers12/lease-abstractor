@@ -12,7 +12,7 @@ export default function RealCamNnnExamplesPage() {
     <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
       {/* HERO */}
       <section>
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Real CAM & NNN Overcharge Examples Tenants Encounter
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
@@ -25,7 +25,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* SECTION 1 */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 1: “My CAM Went Up, But Nothing Changed”
         </h2>
 
@@ -45,7 +45,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* SECTION 2 */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 2: Sudden NNN Tax Spikes After Reassessment
         </h2>
 
@@ -64,7 +64,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* SECTION 3 */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 3: Insurance Costs Passed Through Without Explanation
         </h2>
 
@@ -84,7 +84,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* SECTION 4 */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 4: Capital Improvements Treated as Operating Expenses
         </h2>
 
@@ -103,7 +103,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* WHEN THIS CROSSES THE LINE */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           When These Charges Cross the Line
         </h2>
 
@@ -122,7 +122,7 @@ export default function RealCamNnnExamplesPage() {
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Think your situation sounds familiar?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
@@ -131,7 +131,7 @@ export default function RealCamNnnExamplesPage() {
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
+          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
         >
           Upload Your Lease & Check Now (Free Preview)
         </Link>

@@ -6,7 +6,7 @@ export default function PortfolioMonitoringPage() {
   const [spot, setSpot] = useState({ x: 50, y: 50 });
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold mb-4">
+      <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">
         Lease Portfolio Monitoring & Risk Alerts
       </h1>
 
@@ -17,7 +17,7 @@ export default function PortfolioMonitoringPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
         <div className="border rounded-lg p-6">
-          <h2 className="font-semibold mb-2">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
             Expense Spike Alerts
           </h2>
           <p className="text-sm text-gray-600">
@@ -27,7 +27,7 @@ export default function PortfolioMonitoringPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <h2 className="font-semibold mb-2">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
             Portfolio Cost Insights
           </h2>
           <p className="text-sm text-gray-600">
@@ -37,7 +37,7 @@ export default function PortfolioMonitoringPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <h2 className="font-semibold mb-2">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
             AI Lease Analysis
           </h2>
           <p className="text-sm text-gray-600">
@@ -51,7 +51,7 @@ export default function PortfolioMonitoringPage() {
       {/* EXAMPLE AUDIT PREVIEW */}
       <div className="mt-14 border rounded-xl p-6 bg-gray-50">
         <div className="mb-4">
-          <h2 className="text-xl font-semibold mb-1">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-1">
             See What Your Audit Looks Like
           </h2>
           <p className="text-sm text-gray-600 max-w-xl">

@@ -7,7 +7,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-10 px-6">
-      <h1 className="text-3xl font-bold">Privacy Policy</h1>
+      <h1 className="text-4xl sm:text-5xl font-light tracking-tight">Privacy Policy</h1>
 
       <p className="text-gray-700">
         SaveOnLease is committed to protecting your privacy. This policy
@@ -16,7 +16,7 @@ export default function PrivacyPage() {
       </p>
 
       <section>
-        <h2 className="text-xl font-semibold">Information We Collect</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">Information We Collect</h2>
         <p className="mt-2 text-gray-700">
           We may collect the following types of information:
         </p>
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">How We Use Information</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">How We Use Information</h2>
         <ul className="mt-2 list-disc pl-6 text-gray-700 space-y-2">
           <li>To generate your CAM / NNN lease audit</li>
           <li>To deliver audit results and PDFs</li>
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Data Sharing</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">Data Sharing</h2>
         <p className="mt-2 text-gray-700">
           SaveOnLease does not sell, rent, or trade your personal
           information or lease documents.
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Data Security</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">Data Security</h2>
         <p className="mt-2 text-gray-700">
           We use reasonable technical and organizational safeguards to
           protect your information, including secure connections and
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Data Retention</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">Data Retention</h2>
         <p className="mt-2 text-gray-700">
           Lease documents and audit results are retained only as long as
           necessary to provide the service and comply with legal or
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold">Contact</h2>
+        <h2 className="text-lg sm:text-xl font-light tracking-tight">Contact</h2>
         <p className="mt-2 text-gray-700">
           If you have questions about this Privacy Policy, please contact
           us through the SaveOnLease website.

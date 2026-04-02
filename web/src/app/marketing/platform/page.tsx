@@ -4,7 +4,7 @@ export default function PlatformPage() {
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
 
-      <h1 className="text-4xl font-bold mb-6">
+      <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
         Lease Intelligence Platform for Cost Reduction & Risk Management
       </h1>
 
@@ -15,7 +15,7 @@ export default function PlatformPage() {
       <div className="grid md:grid-cols-3 gap-10 mt-10">
 
         <div className="border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-3">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">
             Audit & Cost Analysis
           </h2>
           <p className="text-gray-600">
@@ -26,7 +26,7 @@ export default function PlatformPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-3">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">
             Portfolio Tracking
           </h2>
           <p className="text-gray-600">
@@ -36,7 +36,7 @@ export default function PlatformPage() {
         </div>
 
         <div className="border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-3">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">
             Benchmark & Compare
           </h2>
           <p className="text-gray-600">

@@ -85,7 +85,7 @@ Thought it might be useful.`;
   return (
     <main className="min-h-screen bg-white px-6 py-16">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900 mb-6">
           Earn 20% for Every Lease Audit You Refer
         </h1>
 
@@ -124,7 +124,7 @@ Thought it might be useful.`;
 </div>
 
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-10">
-          <h2 className="text-xl font-semibold mb-3">Example Earnings</h2>
+          <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">Example Earnings</h2>
 
           <ul className="space-y-2 text-gray-700">
             <li>$49 lease audit → You earn $9.80</li>
@@ -133,7 +133,7 @@ Thought it might be useful.`;
           </ul>
         </div>
 
-        <h2 className="text-2xl font-semibold mb-4">Create Your Referral Link</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Create Your Referral Link</h2>
 
         <div className="bg-gray-50 border rounded-xl p-6 mb-10">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -159,14 +159,14 @@ Thought it might be useful.`;
           <div className="flex gap-4 flex-wrap">
             <button
               onClick={copyLink}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
+              className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg"
             >
               Copy Referral Link
             </button>
 
             <Link
               href={`/?ref=${encodeURIComponent(name || "YOURNAME")}`}
-              className="border border-gray-300 px-6 py-3 rounded-lg font-semibold"
+              className="border border-gray-300 px-6 py-3 rounded-lg font-medium"
             >
               Test Your Link
             </Link>
@@ -181,7 +181,7 @@ Thought it might be useful.`;
   </p>
 </div>
         </div>
-        <h2 className="text-2xl font-semibold mb-4">Who This Is For</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Who This Is For</h2>
 
         <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-12">
           <li>Commercial real estate brokers</li>
@@ -192,7 +192,7 @@ Thought it might be useful.`;
         </ul>
 
         <div className="bg-gray-50 border rounded-xl p-6">
-          <h3 className="text-xl font-semibold mb-3">How Payouts Work</h3>
+          <h3 className="text-lg sm:text-xl font-light tracking-tight mb-3">How Payouts Work</h3>
 
           <ul className="space-y-2 text-gray-700">
             <li>Referral commissions are tracked automatically.</li>
@@ -202,7 +202,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">Top Referrers This Month</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Top Referrers This Month</h2>
 
           <ul className="space-y-2 text-gray-700">
             {topReferrers.map((ref) => (
@@ -211,7 +211,7 @@ Thought it might be useful.`;
                 className="flex justify-between bg-white border rounded-lg px-4 py-2"
               >
                 <span className="font-medium">{ref.name}</span>
-                <span className="text-green-700 font-semibold">
+                <span className="text-green-700 font-medium">
                   ${ref.earned} earned
                 </span>
               </li>
@@ -220,7 +220,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-white border rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">What Your Client Will See</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">What Your Client Will See</h2>
 
           <p className="text-gray-600 mb-6">
             When your client uploads their lease, they receive a fast analysis that
@@ -244,7 +244,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
             Industries Already Using SaveOnLease
           </h2>
 
@@ -266,7 +266,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-white border rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">Average Lease Savings Identified</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Average Lease Savings Identified</h2>
 
           <p className="text-gray-600 mb-6">
             Based on early analyses, many businesses discover meaningful savings
@@ -293,7 +293,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">Broker Deal Review Tool</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Broker Deal Review Tool</h2>
 
           <p className="text-gray-700 mb-4">
             Many brokers quickly run a lease through SaveOnLease before a renewal
@@ -318,7 +318,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-white border rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">5 Questions Brokers Ask Before Lease Renewal</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">5 Questions Brokers Ask Before Lease Renewal</h2>
 
           <p className="text-gray-600 mb-6">
             Before advising clients on a lease renewal or negotiation, many brokers
@@ -342,7 +342,7 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-6">How Brokers Use SaveOnLease in 30 Seconds</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">How Brokers Use SaveOnLease in 30 Seconds</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white border rounded-lg p-4">
@@ -372,11 +372,11 @@ Thought it might be useful.`;
         </div>
 
         <div className="bg-white border rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">Why Brokers Share SaveOnLease</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Why Brokers Share SaveOnLease</h2>
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="font-semibold text-green-700 mb-2">Uncover Hidden Lease Costs</div>
+              <div className="font-medium text-green-700 mb-2">Uncover Hidden Lease Costs</div>
               <p className="text-sm text-gray-600">
                 Brokers use SaveOnLease to help clients discover potential CAM
                 overcharges, expense allocation issues, and other hidden lease costs.
@@ -384,7 +384,7 @@ Thought it might be useful.`;
             </div>
 
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="font-semibold text-green-700 mb-2">Stronger Negotiation Leverage</div>
+              <div className="font-medium text-green-700 mb-2">Stronger Negotiation Leverage</div>
               <p className="text-sm text-gray-600">
                 By identifying savings opportunities early, brokers can walk into
                 lease renewal discussions with stronger data and negotiation leverage.
@@ -392,7 +392,7 @@ Thought it might be useful.`;
             </div>
 
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="font-semibold text-green-700 mb-2">Look Proactive With Clients</div>
+              <div className="font-medium text-green-700 mb-2">Look Proactive With Clients</div>
               <p className="text-sm text-gray-600">
                 Sharing SaveOnLease helps advisors demonstrate proactive thinking
                 and adds extra value when guiding clients through lease decisions.
@@ -402,7 +402,7 @@ Thought it might be useful.`;
         </div>
 
 <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
-  <h2 className="text-2xl font-semibold mb-4">Example Client Result</h2>
+  <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Example Client Result</h2>
 
   <p className="text-gray-700 mb-4">
     One early analysis of a multi-location dental practice identified
@@ -420,14 +420,14 @@ Thought it might be useful.`;
       <li>Expense allocations identified for negotiation</li>
     </ul>
 
-    <div className="mt-4 text-green-700 font-semibold text-lg">
+    <div className="mt-4 text-green-700 font-medium text-lg">
       Estimated savings opportunity: $14,800
     </div>
   </div>
 </div>
 
 <div className="bg-white border rounded-xl p-6 mt-10">
-  <h2 className="text-2xl font-semibold mb-4">
+  <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
     How Brokers Earn $500+ per Month Referring SaveOnLease
   </h2>
 
@@ -439,23 +439,23 @@ Thought it might be useful.`;
 
   <div className="grid md:grid-cols-3 gap-4">
 
-    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-      <div className="text-lg font-semibold text-gray-700">10 Audits</div>
-      <div className="text-2xl font-bold text-green-700 mt-1">$98</div>
-      <div className="text-sm text-gray-600 mt-1">per month</div>
-    </div>
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <div className="text-lg font-medium text-gray-700">10 Audits</div>
+        <div className="text-2xl font-bold text-green-700 mt-1">$98</div>
+        <div className="text-sm text-gray-600 mt-1">per month</div>
+      </div>
 
-    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-      <div className="text-lg font-semibold text-gray-700">25 Audits</div>
-      <div className="text-2xl font-bold text-green-700 mt-1">$245</div>
-      <div className="text-sm text-gray-600 mt-1">per month</div>
-    </div>
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <div className="text-lg font-medium text-gray-700">25 Audits</div>
+        <div className="text-2xl font-bold text-green-700 mt-1">$245</div>
+        <div className="text-sm text-gray-600 mt-1">per month</div>
+      </div>
 
-    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-      <div className="text-lg font-semibold text-gray-700">50 Audits</div>
-      <div className="text-2xl font-bold text-green-700 mt-1">$490</div>
-      <div className="text-sm text-gray-600 mt-1">per month</div>
-    </div>
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <div className="text-lg font-medium text-gray-700">50 Audits</div>
+        <div className="text-2xl font-bold text-green-700 mt-1">$490</div>
+        <div className="text-sm text-gray-600 mt-1">per month</div>
+      </div>
 
   </div>
 
@@ -465,7 +465,7 @@ Thought it might be useful.`;
 </div>
 
         <div className="bg-gray-50 border rounded-xl p-6 mt-10">
-          <h2 className="text-2xl font-semibold mb-4">Send This To Your Client</h2>
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Send This To Your Client</h2>
 
           <p className="text-gray-600 mb-4">
             Brokers and advisors often forward this quick message to clients when reviewing leases.
@@ -479,13 +479,13 @@ Thought it might be useful.`;
 
           <button
             onClick={copyEmail}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg"
+            className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg"
           >
             Copy Email Template
           </button>
           <button
             onClick={copySMS}
-            className="ml-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg"
+            className="ml-3 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg"
           >
             Copy Text Message
           </button>
@@ -494,7 +494,7 @@ Thought it might be useful.`;
         <div className="mt-12 text-center">
           <Link
             href="/?ref=YOURNAME"
-            className="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-4 rounded-lg shadow transition"
+            className="inline-block bg-green-600 hover:bg-green-700 text-white font-medium px-8 py-4 rounded-lg shadow transition"
           >
             Start Sharing Your Referral Link
           </Link>
