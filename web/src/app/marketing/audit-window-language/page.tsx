@@ -16,7 +16,7 @@ export default function AuditWindowRightsPage() {
 
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           Audit Window Rights in Commercial Leases — What Tenants Must Know
         </h1>
 
@@ -46,7 +46,7 @@ export default function AuditWindowRightsPage() {
 
       {/* WHAT IS AN AUDIT WINDOW */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           What Is an Audit Window?
         </h2>
 
@@ -66,7 +66,7 @@ export default function AuditWindowRightsPage() {
 
       {/* TYPICAL DEADLINES */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Typical CAM & NNN Audit Deadlines
         </h2>
 
@@ -85,7 +85,7 @@ export default function AuditWindowRightsPage() {
 
       {/* WHAT HAPPENS IF MISSED */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           What Happens If the Audit Window Closes?
         </h2>
 
@@ -103,7 +103,7 @@ export default function AuditWindowRightsPage() {
 
       {/* INTERNAL LINKS SECTION */}
       <section className="mb-16 space-y-4">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Audit Windows Connect to CAM & NNN Reviews
         </h2>
 
@@ -129,7 +129,7 @@ export default function AuditWindowRightsPage() {
 
       {/* FINAL CTA */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Don’t Miss Your Audit Window
         </h2>
 

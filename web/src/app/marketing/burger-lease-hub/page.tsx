@@ -10,7 +10,7 @@ export default function BurgerLeaseHubPage() {
   return (
     <main className="bg-white">
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Burger Restaurant Lease Audit Hub
         </h1>
 
@@ -21,7 +21,7 @@ export default function BurgerLeaseHubPage() {
 
         {/* Primary Pillar */}
         <div className="mt-12 p-8 border rounded-xl bg-gray-50">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Start Here: Full Lease Audit Overview
           </h2>
           <p className="mt-3 text-gray-700">
@@ -38,7 +38,7 @@ export default function BurgerLeaseHubPage() {
         {/* Knowledge Grid */}
         <div className="mt-14 grid md:grid-cols-2 gap-8">
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               NNN Explained for Burgers
             </h3>
             <p className="mt-2 text-gray-600">
@@ -53,7 +53,7 @@ export default function BurgerLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               CAM Reconciliation Checklist
             </h3>
             <p className="mt-2 text-gray-600">
@@ -68,7 +68,7 @@ export default function BurgerLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               Lease Audit Rights
             </h3>
             <p className="mt-2 text-gray-600">
@@ -83,7 +83,7 @@ export default function BurgerLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               Rent Benchmarks
             </h3>
             <p className="mt-2 text-gray-600">
@@ -100,7 +100,7 @@ export default function BurgerLeaseHubPage() {
 
         {/* Franchise Angle */}
         <div className="mt-16 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Franchise & Multi-Unit Exposure
           </h2>
           <p className="mt-3 text-indigo-800">
@@ -116,13 +116,13 @@ export default function BurgerLeaseHubPage() {
 
         {/* FAQ Section */}
         <div className="mt-20 max-w-4xl mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Frequently Asked Questions
           </h2>
 
           <div className="mt-6 space-y-6 text-gray-700">
             <div>
-              <h3 className="font-semibold">
+              <h3 className="font-light tracking-tight">
                 What percentage of revenue should burger restaurants spend on rent?
               </h3>
               <p className="mt-2">
@@ -132,7 +132,7 @@ export default function BurgerLeaseHubPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold">
+              <h3 className="font-light tracking-tight">
                 How often do CAM overcharges occur in burger franchises?
               </h3>
               <p className="mt-2">
@@ -142,7 +142,7 @@ export default function BurgerLeaseHubPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold">
+              <h3 className="font-light tracking-tight">
                 How long do franchisees have to challenge CAM charges?
               </h3>
               <p className="mt-2">

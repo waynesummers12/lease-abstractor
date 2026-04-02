@@ -10,7 +10,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
   return (
     <main className="bg-white">
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Burger Franchise Lease Overcharges
         </h1>
 
@@ -40,7 +40,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
         </div>
 
         <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Why Burger Franchisees Are Vulnerable
           </h2>
 
@@ -76,7 +76,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
         </div>
 
         <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Multi-Unit Operators: Portfolio Risk Multiplies
           </h2>
           <p className="mt-3 text-indigo-800">
@@ -87,7 +87,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
         </div>
 
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             How SaveOnLease Helps Burger Franchisees
           </h2>
 
@@ -115,7 +115,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
         </div>
 
         <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl font-semibold text-gray-900">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
             Frequently Asked Questions
           </h3>
 
