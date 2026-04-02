@@ -2,7 +2,7 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";
 
 type AuthContextType = {
@@ -21,10 +21,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isBrowser = typeof window !== "undefined";
-
-  const supabase = useMemo(() => {
-    if (!isBrowser) return null as unknown as SupabaseClient;
+  const [supabase] = useState<SupabaseClient | null>(() => {
+    if (typeof window === "undefined") return null;
 
     return createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,11 +32,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           persistSession: true,
           autoRefreshToken: true,
           detectSessionInUrl: true,
-          storage: window.localStorage, // 🔥 force browser storage ONLY
+          storage: window.localStorage,
         },
       }
     );
-  }, [isBrowser]);
+  });
 
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
 
