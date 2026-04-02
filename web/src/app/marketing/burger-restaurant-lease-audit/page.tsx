@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 
 export const metadata = {
@@ -12,7 +10,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
   return (
     <main className="bg-white">
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Burger Restaurant Lease Audit
         </h1>
 
@@ -43,7 +41,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
         </div>
 
         <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Why Burger Restaurants Face Elevated Lease Risk
           </h2>
 
@@ -68,7 +66,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
         </div>
 
         <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Portfolio-Level Impact for Multi-Unit Operators
           </h2>
           <p className="mt-3 text-indigo-800">
@@ -78,7 +76,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
         </div>
 
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             What a Burger Lease Audit Includes
           </h2>
 
@@ -104,7 +102,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
         </div>
 
         <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl font-semibold text-gray-900">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
             FAQ
           </h3>
 

@@ -11,7 +11,7 @@ export default function CamFeeMeaningPage() {
     <main className="max-w-4xl mx-auto px-6 py-16">
       {/* Hero */}
       <section className="mb-12">
-        <h1 className="text-4xl font-bold mb-6">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
           CAM Fee Meaning (Common Area Maintenance Fee Explained)
         </h1>
         <p className="text-lg text-gray-700 mb-4">
@@ -34,7 +34,7 @@ export default function CamFeeMeaningPage() {
 
       {/* What Is Included */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           What Is Included in a CAM Fee?
         </h2>
         <p className="text-gray-700 mb-4">
@@ -57,7 +57,7 @@ export default function CamFeeMeaningPage() {
 
       {/* What’s Often Hidden */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           What Tenants Often Miss
         </h2>
         <p className="text-gray-700 mb-4">
@@ -88,7 +88,7 @@ export default function CamFeeMeaningPage() {
 
       {/* Why It Matters */}
       <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Why CAM Fees Matter for Tenants
         </h2>
         <p className="text-gray-700 mb-4">
@@ -109,7 +109,7 @@ export default function CamFeeMeaningPage() {
 
       {/* CTA */}
       <section className="bg-gray-50 border rounded-xl p-8 text-center">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-4">
           Not Sure If Your CAM Fees Are Correct?
         </h2>
         <p className="text-gray-700 mb-6">

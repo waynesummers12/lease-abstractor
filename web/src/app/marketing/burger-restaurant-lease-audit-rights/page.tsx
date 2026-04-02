@@ -10,7 +10,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
   return (
     <main className="bg-white">
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Burger Restaurant Lease Audit Rights
         </h1>
 
@@ -20,7 +20,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
         </p>
 
         <div className="mt-10 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Do Burger Franchisees Have Audit Rights?
           </h2>
 
@@ -39,7 +39,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
 
         <div className="mt-12 grid md:grid-cols-2 gap-8">
           <div className="p-6 border rounded-lg bg-gray-50">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
               Key Audit Clauses to Review
             </h2>
             <ul className="mt-4 list-disc pl-6 space-y-2 text-gray-700">
@@ -52,7 +52,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
           </div>
 
           <div className="p-6 border rounded-lg bg-gray-50">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
               Common Dispute Areas
             </h2>
             <ul className="mt-4 list-disc pl-6 space-y-2 text-gray-700">
@@ -66,7 +66,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
         </div>
 
         <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Multi-Location Operators Face Compounded Risk
           </h2>
           <p className="mt-3 text-indigo-800">
@@ -79,7 +79,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
         </div>
 
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             What Happens If You Miss the Deadline?
           </h2>
           <p className="mt-4 text-gray-700 leading-relaxed">
@@ -102,7 +102,7 @@ export default function BurgerRestaurantLeaseAuditRightsPage() {
         </div>
 
         <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl font-semibold text-gray-900">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
             FAQ
           </h3>
 

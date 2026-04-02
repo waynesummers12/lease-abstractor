@@ -21,7 +21,7 @@ export default function CamCommercialRealEstatePage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM in Commercial Real Estate — What Tenants Need to Know
         </h1>
 
@@ -156,7 +156,7 @@ export default function CamCommercialRealEstatePage() {
 
       {/* FINAL CTA */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Review Your CAM Charges Before They Compound
         </h2>
 

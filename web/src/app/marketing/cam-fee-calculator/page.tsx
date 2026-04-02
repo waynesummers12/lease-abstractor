@@ -16,7 +16,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM Fee Calculator — How to Estimate Your Common Area Maintenance Costs
         </h1>
 
@@ -47,7 +47,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* HOW CAM FEES ARE CALCULATED */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Fees Are Typically Calculated
         </h2>
 
@@ -67,7 +67,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* ESTIMATE FORMULA */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Simple CAM Fee Estimation Formula
         </h2>
 
@@ -89,7 +89,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* COMMON ERRORS */}
       <section className="mb-14">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM Fee Calculations Are Often Incorrect
         </h2>
 
@@ -122,7 +122,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* FINANCIAL IMPACT */}
       <section className="mb-16">
-        <h2 className="mb-4 text-3xl font-light tracking-tight">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           What Small CAM Errors Can Cost
         </h2>
 
@@ -151,7 +151,7 @@ export default function CamFeeCalculatorPage() {
 
       {/* FINAL CTA */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Want a Lease-Based CAM Fee Review Instead of a Rough Estimate?
         </h2>
 

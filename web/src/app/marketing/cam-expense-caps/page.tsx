@@ -15,7 +15,7 @@ export default function CamExpenseCapsPage() {
           Lease Education
         </p>
 
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           CAM Expense Caps Explained — How Tenants Limit Annual Increases
         </h1>
 
@@ -39,7 +39,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- WHAT IS A CAM CAP ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Is a CAM Expense Cap?
         </h2>
 
@@ -57,7 +57,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- TYPICAL CAP RANGES ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Typical CAM Expense Cap Ranges
         </h2>
 
@@ -76,7 +76,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- COMMON VIOLATIONS ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How CAM Expense Caps Are Commonly Violated
         </h2>
 
@@ -96,7 +96,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- WHY TENANTS MISS THIS ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Most Tenants Miss CAM Cap Violations
         </h2>
 
@@ -115,7 +115,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- WHAT CAN BE CHALLENGED ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Tenants Can Challenge
         </h2>
 
@@ -134,7 +134,7 @@ export default function CamExpenseCapsPage() {
 
       {/* ---------- CTA ---------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-2 text-2xl font-semibold">
+        <h2 className="mb-2 text-xl sm:text-2xl font-light tracking-tight">
           Your CAM Cap May Already Be Violated
         </h2>
 

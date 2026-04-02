@@ -92,7 +92,7 @@ export default function CamAuditChecklistPage() {
           Free Download
         </p>
 
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight mb-6">
           The Tenant-First CAM Audit Checklist
         </h1>
 
@@ -127,7 +127,7 @@ export default function CamAuditChecklistPage() {
       </section>
 {/* Broker Referral Section */}
 <div className="mt-10 border-t pt-8 max-w-2xl mx-auto">
-  <h3 className="text-lg font-semibold mb-3">
+  <h3 className="text-lg sm:text-xl font-light tracking-tight mb-3">
     Commercial Broker? Use This With Your Clients
   </h3>
 
@@ -157,7 +157,7 @@ export default function CamAuditChecklistPage() {
       {/* Authority Section */}
       <section className="bg-gray-50 py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">
             What This Guide Covers
           </h2>
 
@@ -188,7 +188,7 @@ export default function CamAuditChecklistPage() {
       {/* Positioning Section */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">
             Why CAM Reviews Are Increasing
           </h2>
 
@@ -230,14 +230,14 @@ export default function CamAuditChecklistPage() {
       {/* Visible FAQ Section */}
       <section className="py-20 px-6 bg-white border-t">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-10">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-10">
             Frequently Asked Questions
           </h2>
 
           <div className="space-y-8 text-gray-700">
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
                 What is a CAM audit checklist in a commercial lease?
               </h3>
               <p>
@@ -246,7 +246,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
                 What are common CAM reconciliation errors in retail and office leases?
               </h3>
               <p>
@@ -261,7 +261,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
                 How much money can a CAM audit identify or recover?
               </h3>
               <p>
@@ -270,7 +270,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
                 When should a tenant review CAM reconciliation charges?
               </h3>
               <p>
@@ -285,7 +285,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold mb-2">
+              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
                 What should I do if CAM charges increase significantly year over year?
               </h3>
               <p>
@@ -310,13 +310,13 @@ export default function CamAuditChecklistPage() {
           <p className="text-center text-gray-600 mb-6">
             Continue your CAM & NNN lease research with these structured tenant-side guides.
           </p>
-          <h2 className="text-2xl font-bold mb-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-8 text-center">
             Related CAM & NNN Guides
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 text-gray-700">
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-semibold mb-3">CAM Reconciliation Guide</h3>
+              <h3 className="font-light tracking-tight mb-3">CAM Reconciliation Guide</h3>
               <p className="text-sm mb-4">
                 Step-by-step breakdown of how CAM reconciliations are calculated,
                 where errors occur, and how to review allocations.
@@ -327,7 +327,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-semibold mb-3">Audit Window Deadlines</h3>
+              <h3 className="font-light tracking-tight mb-3">Audit Window Deadlines</h3>
               <p className="text-sm mb-4">
                 Understand 30, 60, and 90-day audit notice requirements and how
                 missed deadlines eliminate dispute leverage.
@@ -338,7 +338,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-semibold mb-3">CAM vs. NNN Explained</h3>
+              <h3 className="font-light tracking-tight mb-3">CAM vs. NNN Explained</h3>
               <p className="text-sm mb-4">
                 Compare CAM charges and Triple Net lease structures to understand
                 how operating expenses are passed through.
@@ -354,7 +354,7 @@ export default function CamAuditChecklistPage() {
       {/* CTA Section */}
       <section className="bg-black text-white py-20 px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 text-white">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-white">
             Before Your Audit Window Closes
           </h2>
 
