@@ -101,7 +101,7 @@ function estimateMonthlyLoss(lease: Lease) {
 /* ================== PAGE ================== */
 
 export default function DashboardPage() {
-  const { session, loading: authLoading } = useAuth();
+  const { loading: authLoading } = useAuth();
   const [audits, setAudits] = useState<Lease[]>([]);
   const [selected, setSelected] = useState<Lease | null>(null);
   const [loading, setLoading] = useState(true);
@@ -286,17 +286,6 @@ export default function DashboardPage() {
 
   if (authLoading || loading) {
     return <div className="p-6">Loading your dashboard…</div>;
-  }
-
-  if (!authLoading && !session) {
-    return (
-      <div className="p-6">
-        <h1 className="text-2xl font-semibold mb-2">Please log in</h1>
-        <p className="text-gray-600">
-          You must be logged in to view your dashboard.
-        </p>
-      </div>
-    );
   }
 
   /* ---------------- EMPTY STATE ---------------- */
