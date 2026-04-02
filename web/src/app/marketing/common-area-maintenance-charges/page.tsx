@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -19,7 +17,7 @@ export default function CommonAreaMaintenanceChargesPage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight">
+        <h1 className="mb-6 text-4xl sm:text-5xl font-light tracking-tight">
           Common Area Maintenance Charges (CAM Charges) Explained
         </h1>
 
@@ -38,7 +36,7 @@ export default function CommonAreaMaintenanceChargesPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Lease (Free Preview)
         </Link>
@@ -149,7 +147,7 @@ export default function CommonAreaMaintenanceChargesPage() {
 
       {/* FINAL CTA */}
       <section className="rounded-2xl border bg-gray-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight">
           Review Your CAM Charges Before Deadlines Close
         </h2>
         <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
@@ -158,7 +156,7 @@ export default function CommonAreaMaintenanceChargesPage() {
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Lease (Free Preview)
         </Link>

@@ -46,7 +46,7 @@ export default function CommonCamFeesPage() {
     <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
       {/* HERO */}
       <section>
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Common CAM Fees Explained
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
@@ -64,7 +64,7 @@ export default function CommonCamFeesPage() {
           billed as CAM are limited, capped, or excluded entirely by the lease.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Typical CAM Fee Categories
         </h2>
 
@@ -77,7 +77,7 @@ export default function CommonCamFeesPage() {
           <li>Security and monitoring services</li>
         </ul>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Fees That Often Raise Red Flags
         </h2>
 
@@ -94,7 +94,7 @@ export default function CommonCamFeesPage() {
           <li>Expenses unrelated to property operations</li>
         </ul>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Why CAM Fees Are Often Overstated
         </h2>
 
@@ -109,7 +109,7 @@ export default function CommonCamFeesPage() {
           into significant dollar exposure.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           How Tenants Can Review CAM Fees
         </h2>
 
@@ -122,7 +122,7 @@ export default function CommonCamFeesPage() {
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Unsure which CAM fees apply to your lease?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
@@ -131,7 +131,7 @@ export default function CommonCamFeesPage() {
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
+          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
         >
           Run CAM Audit (Free Preview)
         </Link>

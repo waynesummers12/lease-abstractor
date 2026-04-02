@@ -12,7 +12,7 @@ export default function HowItWorksPage() {
     <div className="mx-auto max-w-6xl px-6 py-16 space-y-24">
       {/* HERO */}
       <section className="text-center">
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           How SaveOnLease Works
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
@@ -26,8 +26,8 @@ export default function HowItWorksPage() {
       {/* STEPS GRID */}
       <section className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Step 1</h2>
-          <h3 className="mt-1 text-lg font-medium">Upload Your Lease</h3>
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight">Step 1</h2>
+          <h3 className="mt-1 text-lg sm:text-xl font-light tracking-tight">Upload Your Lease</h3>
           <p className="mt-3 text-gray-700">
             Upload your commercial lease agreement, including amendments and exhibits.
           </p>
@@ -39,8 +39,8 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Step 2</h2>
-          <h3 className="mt-1 text-lg font-medium">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight">Step 2</h2>
+          <h3 className="mt-1 text-lg sm:text-xl font-light tracking-tight">
             Automated CAM / NNN Analysis
           </h3>
           <p className="mt-3 text-gray-700">
@@ -56,8 +56,8 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Step 3</h2>
-          <h3 className="mt-1 text-lg font-medium">Review Your Results</h3>
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight">Step 3</h2>
+          <h3 className="mt-1 text-lg sm:text-xl font-light tracking-tight">Review Your Results</h3>
           <p className="mt-3 text-gray-700">
             Receive a clear summary of CAM and NNN risks with estimated avoidable
             exposure.
@@ -71,8 +71,8 @@ export default function HowItWorksPage() {
         </div>
 
         <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Step 4</h2>
-          <h3 className="mt-1 text-lg font-medium">Decide What to Do Next</h3>
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight">Step 4</h2>
+          <h3 className="mt-1 text-lg sm:text-xl font-light tracking-tight">Decide What to Do Next</h3>
           <p className="mt-3 text-gray-700">
             Use the audit to pursue corrections, negotiations, or further review —
             with no pressure.
@@ -83,7 +83,7 @@ export default function HowItWorksPage() {
       {/* VISUAL WALKTHROUGH */}
       <section className="space-y-16">
         <div className="text-center space-y-4">
-          <h2 className="text-4xl font-light tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-light tracking-tight">
             What You’ll See
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-gray-700">
@@ -93,7 +93,7 @@ export default function HowItWorksPage() {
 
         {/* Upload Visual */}
 <div className="space-y-6">
-  <h3 className="text-2xl font-semibold">1. Upload Your Lease</h3>
+  <h3 className="text-xl sm:text-2xl font-light tracking-tight">1. Upload Your Lease</h3>
 
   <p className="text-gray-700 max-w-2xl">
     Upload your commercial lease agreement, including any amendments or exhibits. 
@@ -113,7 +113,7 @@ export default function HowItWorksPage() {
 
         {/* Free Preview Visual */}
         <div className="space-y-6">
-          <h3 className="text-2xl font-semibold">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight">
             2. Instant Exposure Estimate (Free Analysis)
           </h3>
           <p className="text-gray-700 max-w-2xl">
@@ -132,7 +132,7 @@ export default function HowItWorksPage() {
 
         {/* Final Report Visual */}
 <div className="space-y-6">
-  <h3 className="text-2xl font-semibold">
+  <h3 className="text-xl sm:text-2xl font-light tracking-tight">
     3. CAM / NNN Audit Summary (Sample)
   </h3>
 
@@ -160,13 +160,13 @@ export default function HowItWorksPage() {
 
       {/* CTA */}
       <section className="rounded-3xl bg-gray-50 p-10 text-center">
-        <h3 className="text-2xl font-semibold">Ready to get started?</h3>
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">Ready to get started?</h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
           Upload your lease and see what your CAM and NNN charges really allow.
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
+          className="mt-6 inline-flex items-center rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
         >
           Upload Lease (Free Preview)
         </Link>

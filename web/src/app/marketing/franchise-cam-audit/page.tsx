@@ -6,7 +6,7 @@ export default function FranchiseCamAuditPage() {
       {/* HERO */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
             CAM & NNN Lease Audits for Franchise & Multi-Location Operators
           </h1>
           <p className="mt-6 text-lg text-slate-300 max-w-3xl">
@@ -16,13 +16,13 @@ export default function FranchiseCamAuditPage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
               href="/app/step-1-upload"
-              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
+            className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
             >
               Upload a Lease
             </Link>
             <Link
               href="/marketing/cam-audit-checklist"
-              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-semibold text-white hover:bg-slate-800"
+            className="rounded-lg border border-slate-400 px-6 py-3 text-center font-medium text-white hover:bg-slate-800"
             >
               Download Audit Checklist
             </Link>
@@ -32,24 +32,24 @@ export default function FranchiseCamAuditPage() {
 
       {/* PROBLEM */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           Why Franchise Tenants Are Most Exposed
         </h2>
         <div className="mt-8 grid md:grid-cols-3 gap-8 text-slate-700">
           <div>
-            <h3 className="font-semibold text-lg">CAM Errors Multiply</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">CAM Errors Multiply</h3>
             <p className="mt-3">
               A $12,000 annual CAM error across 8 locations becomes a $96,000 portfolio leak.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-lg">Inconsistent Lease Language</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Inconsistent Lease Language</h3>
             <p className="mt-3">
               Different landlords. Different expense caps. Different admin fees. No standardized review.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-lg">Annual Reconciliation Surprises</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Annual Reconciliation Surprises</h3>
             <p className="mt-3">
               True-ups spike unexpectedly due to insurance, tax, and capital expense pass-through adjustments.
             </p>
@@ -60,7 +60,7 @@ export default function FranchiseCamAuditPage() {
       {/* SOLUTION */}
       <section className="bg-slate-50">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             How SaveOnLease Helps Franchise Operators
           </h2>
           <p className="mt-4 text-slate-700 max-w-3xl">
@@ -81,7 +81,7 @@ export default function FranchiseCamAuditPage() {
 
       {/* ROI CALCULATOR SECTION */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           Portfolio Risk Multiplier
         </h2>
         <p className="mt-4 text-slate-700 max-w-3xl">
@@ -101,13 +101,13 @@ export default function FranchiseCamAuditPage() {
       {/* FAQ SECTION */}
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             Franchise CAM Audit FAQs
           </h2>
 
           <div className="mt-8 space-y-8 text-slate-700">
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 What is a franchise CAM audit?
               </h3>
               <p className="mt-2">
@@ -116,7 +116,7 @@ export default function FranchiseCamAuditPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 Why are multi-location operators at higher risk?
               </h3>
               <p className="mt-2">
@@ -125,7 +125,7 @@ export default function FranchiseCamAuditPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 How often should franchise tenants review CAM reconciliations?
               </h3>
               <p className="mt-2">
@@ -134,7 +134,7 @@ export default function FranchiseCamAuditPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 What common errors are found in franchise NNN leases?
               </h3>
               <p className="mt-2">
@@ -143,7 +143,7 @@ export default function FranchiseCamAuditPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 How much does a CAM audit cost?
               </h3>
               <p className="mt-2">
@@ -152,7 +152,7 @@ export default function FranchiseCamAuditPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 Can tenants recover past CAM overcharges?
               </h3>
               <p className="mt-2">
@@ -227,7 +227,7 @@ export default function FranchiseCamAuditPage() {
       {/* CTA */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
             Protect Your Portfolio Before Your Next CAM Reconciliation
           </h2>
           <p className="mt-6 text-slate-300">
@@ -235,7 +235,7 @@ export default function FranchiseCamAuditPage() {
           </p>
           <Link
             href="/app/step-1-upload"
-            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
+            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-medium text-white hover:bg-emerald-600"
           >
             Run Lease Review
           </Link>
