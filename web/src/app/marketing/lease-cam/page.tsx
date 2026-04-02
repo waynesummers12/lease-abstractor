@@ -16,7 +16,7 @@ export default function LeaseCamPage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-6 text-4xl font-bold tracking-tight">
+        <h1 className="mb-6 text-4xl sm:text-5xl font-light tracking-tight">
           Lease CAM Explained — What Common Area Maintenance Means for Tenants
         </h1>
 
@@ -53,7 +53,7 @@ export default function LeaseCamPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Lease (Free Preview)
         </Link>
@@ -64,7 +64,7 @@ export default function LeaseCamPage() {
 
       {/* WHAT IS LEASE CAM */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Is Lease CAM?
         </h2>
         <p>
@@ -94,7 +94,7 @@ export default function LeaseCamPage() {
 
       {/* HOW LEASE CAM IS STRUCTURED */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Lease CAM Is Structured in a Commercial Lease
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -116,7 +116,7 @@ export default function LeaseCamPage() {
 
       {/* COMMON LEASE CAM ISSUES */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Common Lease CAM Issues
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -136,7 +136,7 @@ export default function LeaseCamPage() {
 
       {/* FINANCIAL CONSEQUENCES */}
       <section className="mb-16 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Lease CAM Matters Financially
         </h2>
         <p>
@@ -155,7 +155,7 @@ export default function LeaseCamPage() {
 
       {/* FINAL CTA */}
       <section className="rounded-2xl border bg-gray-50 p-8 text-center">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight">
           Review Your Lease CAM Before Audit Windows Close
         </h2>
         <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
@@ -164,7 +164,7 @@ export default function LeaseCamPage() {
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Lease (Free Preview)
         </Link>

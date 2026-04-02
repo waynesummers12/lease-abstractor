@@ -51,7 +51,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           How Medical Practices Can Dispute CAM Charges
         </h1>
         <p className="text-lg text-gray-700">
@@ -74,7 +74,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* FINANCIAL CONTEXT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What a CAM Dispute Can Actually Recover
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
@@ -88,7 +88,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* STEP 1 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Step 1: Review the Lease Language Carefully
         </h2>
         <p className="text-gray-700">
@@ -102,7 +102,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* STEP 2 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Step 2: Request Supporting Documentation
         </h2>
         <p className="text-gray-700">
@@ -114,7 +114,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* STEP 3 */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Step 3: Identify Healthcare-Specific Overcharges
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -128,7 +128,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* DISPUTE STRUCTURE */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How to Structure a CAM Dispute Letter
         </h2>
         <p className="text-gray-700">
@@ -145,7 +145,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Timing Matters
         </h2>
         <p className="text-gray-700">
@@ -157,7 +157,7 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* INTERNAL CLUSTER LINKS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">Related Medical Lease Resources</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Related Medical Lease Resources</h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-lease-audit">
@@ -184,11 +184,11 @@ export default function DisputeMedicalCAMChargesPage() {
 
       {/* FAQ SECTION */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Frequently Asked Questions</h2>
 
         <div className="space-y-4 text-gray-700">
           <div>
-            <h3 className="font-semibold">Can medical tenants legally dispute CAM charges?</h3>
+            <h3 className="font-light tracking-tight">Can medical tenants legally dispute CAM charges?</h3>
             <p>
               Yes. Most medical office leases include audit rights allowing
               tenants to review and challenge CAM reconciliations within
@@ -197,7 +197,7 @@ export default function DisputeMedicalCAMChargesPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">What CAM charges are most commonly disputed?</h3>
+            <h3 className="font-light tracking-tight">What CAM charges are most commonly disputed?</h3>
             <p>
               Admin fee cap violations, capital improvements improperly passed
               through, reserve fund allocations, and incorrect pro-rata share
@@ -206,7 +206,7 @@ export default function DisputeMedicalCAMChargesPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">How long do medical practices have to dispute charges?</h3>
+            <h3 className="font-light tracking-tight">How long do medical practices have to dispute charges?</h3>
             <p>
               Many leases provide a 12-month audit window after reconciliation
               delivery, though timelines vary by agreement.
@@ -214,7 +214,7 @@ export default function DisputeMedicalCAMChargesPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold">Do medical office leases typically include CAM caps?</h3>
+            <h3 className="font-light tracking-tight">Do medical office leases typically include CAM caps?</h3>
             <p>
               Some medical office leases include caps on controllable CAM
               expenses or administrative fees, but many exclude taxes and

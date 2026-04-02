@@ -349,7 +349,7 @@ export default function LearnPage() {
     <main className="mx-auto max-w-7xl px-6 py-20 space-y-20">
       {/* HERO */}
       <section className="text-center">
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           CAM & NNN Lease Education
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-xl text-gray-700 leading-relaxed">
@@ -371,7 +371,7 @@ export default function LearnPage() {
           </span>
         </div>
 
-        <h2 className="text-4xl font-semibold tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-light tracking-tight">
           The Tenant‑First CAM Audit Checklist
         </h2>
 
@@ -451,7 +451,7 @@ export default function LearnPage() {
 
       {/* Core Anchor Block */}
       <section className="rounded-2xl border bg-gray-50 p-10 text-center space-y-5">
-        <h2 className="text-3xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Start With CAM Reconciliation
         </h2>
 
@@ -500,7 +500,7 @@ export default function LearnPage() {
                 href={article.href}
                 className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
               >
-                <h2 className="text-xl font-semibold group-hover:underline">
+                <h2 className="text-xl sm:text-2xl font-light tracking-tight group-hover:underline">
                   {article.title}
                 </h2>
                 <p className="mt-3 text-gray-700 leading-relaxed">
@@ -517,7 +517,7 @@ export default function LearnPage() {
 
       {/* Why This Matters Financially */}
       <section className="mx-auto max-w-4xl text-center space-y-6">
-        <h3 className="text-3xl font-semibold tracking-tight">
+        <h3 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why This Matters Financially
         </h3>
         <p className="text-gray-700 leading-relaxed">

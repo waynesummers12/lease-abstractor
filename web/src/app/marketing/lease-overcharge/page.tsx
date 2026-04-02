@@ -1,5 +1,3 @@
-
-
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -17,7 +15,7 @@ export default function LeaseOverchargePage() {
     <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Commercial Lease Overcharge: What Tenants Can Do
         </h1>
 
@@ -35,7 +33,7 @@ export default function LeaseOverchargePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Your Lease (Free Preview)
         </Link>
@@ -43,7 +41,7 @@ export default function LeaseOverchargePage() {
 
       {/* HOW OVERCHARGES HAPPEN */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Lease Overcharges Happen
         </h2>
 
@@ -77,7 +75,7 @@ export default function LeaseOverchargePage() {
 
       {/* WHAT TENANTS CAN CHALLENGE */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Tenants Can Challenge
         </h2>
 
@@ -111,7 +109,7 @@ export default function LeaseOverchargePage() {
 
       {/* FINANCIAL CONSEQUENCES */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Lease Overcharges Matter Financially
         </h2>
 
@@ -128,7 +126,7 @@ export default function LeaseOverchargePage() {
 
       {/* INTERNAL LINKS */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Guides
         </h2>
 
@@ -162,7 +160,7 @@ export default function LeaseOverchargePage() {
 
       {/* FINAL CTA */}
       <section className="border-t pt-10 space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Think You’ve Been Overcharged?
         </h2>
 
@@ -173,7 +171,7 @@ export default function LeaseOverchargePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Review My Lease
         </Link>
