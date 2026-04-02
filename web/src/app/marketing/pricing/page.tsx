@@ -21,62 +21,64 @@ export default function PricingPage() {
     <div className="mx-auto max-w-3xl space-y-10 px-6">
       {/* HERO */}
       <section>
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">Simple, Transparent Pricing</h1>
-        <p className="mt-4 text-lg text-gray-700">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
+          Simple, Transparent Pricing
+        </h1>
+        <p className="mt-4 text-lg text-gray-600">
           One lease. One audit. One clear answer.
         </p>
-        <p className="mt-2 text-gray-700">
+        <p className="mt-2 text-gray-500">
           No subscriptions, no retainers, no pressure.
         </p>
       </section>
 
       {/* PRICE CARD */}
-      <section className="rounded border p-8">
-        <div className="flex items-baseline gap-2">
-          <div className="text-5xl font-medium">$49.99</div>
-          <div className="text-[24px] text-gray-600">one-time</div>
+      <section className="rounded-2xl border border-gray-200 p-8 shadow-sm bg-white">
+        <div className="flex items-baseline gap-3">
+          <div className="text-5xl font-bold">$49.99</div>
+          <div className="text-lg text-gray-500">one-time</div>
         </div>
 
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 text-gray-600">
           Includes a full CAM / NNN lease audit with a downloadable PDF
           summary and email delivery.
         </p>
 
-        <p className="mt-3 text-sm text-red-600 font-medium">
+        <p className="mt-3 text-sm text-red-500 font-medium">
           Most tenants uncover $5,000–$20,000+ in avoidable costs — often within minutes
         </p>
 
-        <ul className="mt-6 space-y-3 text-gray-700 list-none">
+        <ul className="mt-6 space-y-2 text-gray-600 list-none">
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Lease language review</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>CAM & NNN risk identification</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Administrative & management fee analysis</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Capital expenditure responsibility review</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Insurance and tax pass-through review</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Pro-rata share & allocation checks</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Estimated avoidable exposure (when applicable)</span>
           </li>
           <li className="flex items-start gap-2">
-            <span className="text-green-600">✔</span>
+            <span className="text-green-500">✔</span>
             <span>Secure PDF + email delivery</span>
           </li>
         </ul>
@@ -84,27 +86,27 @@ export default function PricingPage() {
         <Link
           href="/app/step-1-upload"
           onClick={() => console.log("pricing_cta_click_top")}
-          className="mt-6 inline-block rounded bg-black px-6 py-3 text-white hover:bg-gray-800 transition font-medium"
+          className="mt-6 inline-flex items-center justify-center rounded-lg bg-black px-6 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
         >
           Preview Your Savings →
         </Link>
       </section>
 
       {/* VALUE COMPARISON (HIGH-CONVERSION) */}
-      <section className="rounded-lg border p-6 bg-white">
-        <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">
+      <section className="rounded-2xl border border-gray-200 p-6 bg-white shadow-sm">
+        <h2 className="text-xl font-semibold mb-3">
           $49.99 vs. What You Might Be Losing
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div>
-            <div className="text-sm text-gray-500">Audit Cost</div>
-            <div className="text-3xl font-medium text-black">$49.99</div>
+            <div className="text-sm text-gray-400">Audit Cost</div>
+            <div className="text-3xl font-bold text-black">$49.99</div>
           </div>
 
           <div>
-            <div className="text-sm text-gray-500">Typical Avoidable Costs</div>
-            <div className="text-3xl font-medium text-red-600">$5,000 – $20,000+</div>
+            <div className="text-sm text-gray-400">Typical Avoidable Costs</div>
+            <div className="text-3xl font-bold text-red-600">$5,000 – $20,000+</div>
           </div>
         </div>
 
@@ -114,16 +116,16 @@ export default function PricingPage() {
         <Link
           href="/app/step-1-upload"
           onClick={() => console.log("pricing_cta_click_value_block")}
-          className="mt-3 inline-block text-sm font-semibold underline hover:opacity-80"
+          className="mt-3 inline-block text-sm font-medium underline hover:opacity-80"
         >
           See My Potential Savings →
         </Link>
       </section>
 
       {/* ROI */}
-      <section className="rounded bg-gray-50 p-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Typical ROI for Tenants</h2>
-        <p className="mt-3 text-gray-700">
+      <section className="rounded-2xl bg-gray-50 p-6">
+        <h2 className="text-2xl font-semibold">Typical ROI for Tenants</h2>
+        <p className="mt-3 text-gray-600">
           CAM and NNN charges often represent 15–35% of total rent. Even
           small errors can add up over time.
         </p>
@@ -132,14 +134,14 @@ export default function PricingPage() {
           <li>Administrative fees frequently exceed lease limits</li>
           <li>Insurance and tax pass-throughs are often misapplied</li>
         </ul>
-        <p className="mt-3 text-gray-700">
+        <p className="mt-3 text-gray-600">
           Many tenants recover the cost of the audit many times over.
         </p>
       </section>
 
       {/* FAQ (VISIBLE) */}
       <section>
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Common Questions</h2>
+        <h2 className="text-2xl font-semibold">Common Questions</h2>
 
         <div className="mt-4 space-y-4 text-gray-700">
           <div>
@@ -184,9 +186,7 @@ export default function PricingPage() {
         <Link
           href="/app/step-1-upload"
           onClick={() => console.log("pricing_cta_click_bottom")}
-          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition
-               hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md
-               active:translate-y-0"
+          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
         >
           Analyze My Lease →
         </Link>
