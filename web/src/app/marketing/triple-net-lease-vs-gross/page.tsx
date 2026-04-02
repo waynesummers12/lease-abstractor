@@ -15,7 +15,7 @@ export default function TripleNetLeaseVsGrossPage() {
     <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Triple Net Lease vs Gross Lease: What’s the Difference?
         </h1>
 
@@ -37,7 +37,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Upload Your Lease (Free Preview)
         </Link>
@@ -45,13 +45,13 @@ export default function TripleNetLeaseVsGrossPage() {
 
       {/* SIDE-BY-SIDE COMPARISON */}
       <section className="space-y-8 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Side‑by‑Side Comparison
         </h2>
 
         <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Triple Net (NNN) Lease</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Triple Net (NNN) Lease</h3>
             <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
               <li>Tenant pays base rent</li>
               <li>Tenant pays property taxes</li>
@@ -62,7 +62,7 @@ export default function TripleNetLeaseVsGrossPage() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Gross Lease</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Gross Lease</h3>
             <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
               <li>Tenant pays one all‑inclusive rent</li>
               <li>Landlord covers most operating expenses</li>
@@ -75,7 +75,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
       {/* FINANCIAL IMPACT */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Financial Impact for Tenants
         </h2>
 
@@ -103,7 +103,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
       {/* WHERE RISK OCCURS */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Where Overcharge Risk Appears
         </h2>
 
@@ -123,7 +123,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
       {/* INTERNAL LINKS */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Guides
         </h2>
 
@@ -157,7 +157,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
       {/* FINAL CTA */}
       <section className="border-t pt-10 space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Unsure Which Lease Structure You Signed?
         </h2>
 
@@ -169,7 +169,7 @@ export default function TripleNetLeaseVsGrossPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition"
+          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
         >
           Review My Lease
         </Link>

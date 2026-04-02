@@ -7,7 +7,7 @@ export default function WhatWeFindPage() {
       
       {/* HERO */}
       <section className="max-w-3xl">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           What We Find in CAM & NNN Audits
         </h1>
         <p className="mt-4 text-lg text-gray-700">
@@ -26,7 +26,7 @@ export default function WhatWeFindPage() {
         
         {/* CARD */}
         <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">CAM Reconciliation Errors</h2>
+          <h2 className="text-lg sm:text-xl font-light tracking-tight">CAM Reconciliation Errors</h2>
           <p className="mt-3 text-gray-700">
             CAM charges are usually estimated throughout the year, then “trued up”
             in a reconciliation statement — one of the most error-prone parts of a lease.
@@ -40,7 +40,7 @@ export default function WhatWeFindPage() {
         </div>
 
         <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight">
             Administrative & Management Fee Abuse
           </h2>
           <p className="mt-3 text-gray-700">
@@ -55,7 +55,7 @@ export default function WhatWeFindPage() {
         </div>
 
         <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight">
             Improper Capital Expenditures
           </h2>
           <p className="mt-3 text-gray-700">
@@ -69,7 +69,7 @@ export default function WhatWeFindPage() {
         </div>
 
         <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight">
             Insurance & Tax Pass-Through Issues
           </h2>
           <p className="mt-3 text-gray-700">
@@ -83,7 +83,7 @@ export default function WhatWeFindPage() {
         </div>
 
         <div className="rounded-xl border p-6 shadow-sm md:col-span-2">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg sm:text-xl font-light tracking-tight">
             Pro-Rata Share & Allocation Errors
           </h2>
           <p className="mt-3 text-gray-700">
@@ -101,7 +101,7 @@ export default function WhatWeFindPage() {
       {/* CTA STRIP */}
       <section className="rounded-xl bg-black p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
-          <h3 className="text-2xl font-semibold text-white">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-white">
   These issues add up quietly —
   <span className="block text-gray-300">
     until they’re expensive
@@ -199,7 +199,7 @@ export default function WhatWeFindPage() {
 
       {/* WHAT THIS MEANS */}
       <section className="rounded-xl bg-gray-50 p-8 max-w-3xl">
-        <h3 className="text-xl font-semibold">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight">
           What This Means for You
         </h3>
         <p className="mt-3 text-gray-700">
