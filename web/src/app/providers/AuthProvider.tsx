@@ -1,6 +1,6 @@
 "use client";
 
-import { createBrowserClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [supabase] = useState<SupabaseClient | null>(() => {
     if (typeof window === "undefined") return null;
 
-    return createBrowserClient(
+    return createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
