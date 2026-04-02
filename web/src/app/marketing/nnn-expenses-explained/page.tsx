@@ -45,7 +45,7 @@ export default function NnnExpensesExplainedPage() {
     <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
       {/* HERO */}
       <section>
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           NNN Expenses Explained
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
@@ -70,7 +70,7 @@ export default function NnnExpensesExplainedPage() {
           unexpected and escalating costs over time.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           The Three Core NNN Expense Categories
         </h2>
 
@@ -92,7 +92,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* REAL TENANT EXAMPLES (NEW) */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Real NNN Cost Surprises Tenants Encounter
         </h2>
 
@@ -114,7 +114,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* COMMON ISSUES */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Common NNN Billing Issues
         </h2>
 
@@ -137,7 +137,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* WHY COSTS RISE */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Why NNN Expenses Increase Over Time
         </h2>
 
@@ -156,7 +156,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* WHEN THIS CROSSES THE LINE (NEW) */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           When NNN Charges Cross the Line
         </h2>
 
@@ -176,7 +176,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* TENANT ACTION */}
       <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           How Tenants Can Manage NNN Exposure
         </h2>
 
@@ -194,7 +194,7 @@ export default function NnnExpensesExplainedPage() {
       </section>
 
 <section className="space-y-4 text-lg text-gray-700 leading-relaxed">
-  <h2 className="text-3xl font-light tracking-tight">
+  <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
     Why NNN Errors Matter Financially
   </h2>
 
@@ -212,7 +212,7 @@ export default function NnnExpensesExplainedPage() {
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Unsure if your NNN charges are accurate?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
@@ -221,7 +221,7 @@ export default function NnnExpensesExplainedPage() {
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
+          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
         >
        Run CAM & NNN Audit (Free Preview)
         </Link>

@@ -43,7 +43,7 @@ export default function MedicalOvercharges() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Medical Practice Lease Overcharges: Where Healthcare Tenants Lose Thousands
         </h1>
         <p className="text-lg text-gray-700">
@@ -67,13 +67,13 @@ export default function MedicalOvercharges() {
 
       {/* REAL MONEY CONTEXT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Overcharges Actually Cost Medical Tenants
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>10,000 SF practice × $2 PSF improper charge = $20,000/year</p>
           <p>10,000 SF practice × $4 PSF error = $40,000/year</p>
-          <p className="font-semibold">
+          <p className="font-medium">
             Over a 5-year term, that can exceed $200,000 in preventable exposure.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function MedicalOvercharges() {
       {/* OVERCHARGE TYPES */}
       <section className="space-y-10">
         <div>
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-3">
             1. Admin Fee Stacking Above Lease Caps
           </h2>
           <p className="text-gray-700">
@@ -99,7 +99,7 @@ export default function MedicalOvercharges() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-3">
             2. Double-Charged Maintenance Contracts
           </h2>
           <p className="text-gray-700">
@@ -111,7 +111,7 @@ export default function MedicalOvercharges() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-3">
             3. Capital Expenses Disguised as Operating Costs
           </h2>
           <p className="text-gray-700">
@@ -123,7 +123,7 @@ export default function MedicalOvercharges() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-3">
             Real Example: Imaging Tenant Admin Fee Violation
           </h2>
           <p className="text-gray-700">
@@ -137,7 +137,7 @@ export default function MedicalOvercharges() {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-3">
             4. Management Fees Exceeding Allowed Percentages
           </h2>
           <p className="text-gray-700">
@@ -151,7 +151,7 @@ export default function MedicalOvercharges() {
 
       {/* WHY HEALTHCARE IS TARGETED */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Medical Practices Are Especially Vulnerable
         </h2>
         <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -165,7 +165,7 @@ export default function MedicalOvercharges() {
 
       {/* TIMING URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Timing Matters: Audit Windows Close Quickly
         </h2>
         <p className="text-gray-700">
@@ -177,7 +177,7 @@ export default function MedicalOvercharges() {
 
       {/* INTERNAL CLUSTERING */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Risk Guides
         </h2>
         <ul className="space-y-2 text-emerald-700">

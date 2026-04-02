@@ -43,7 +43,7 @@ export default function MultiLocationMedical() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Multi-Location Medical Lease Risk: How Small Errors Become Six-Figure Exposure
         </h1>
         <p className="text-lg text-gray-700">
@@ -66,13 +66,13 @@ export default function MultiLocationMedical() {
 
       {/* COMPOUNDING MATH */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Small Errors Multiply Across Sites
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>$15,000 annual overcharge × 5 locations = $75,000/year</p>
           <p>$20,000 annual misallocation × 10 locations = $200,000/year</p>
-          <p className="font-semibold">
+          <p className="font-medium">
             Over a 7-year portfolio horizon, systemic lease issues can exceed $1M.
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function MultiLocationMedical() {
 
       {/* HIGH RISK OPERATORS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Healthcare Operators Most Exposed
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -110,7 +110,7 @@ export default function MultiLocationMedical() {
 
       {/* OPERATIONAL BLIND SPOT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           The Operational Blind Spot in Growing Healthcare Platforms
         </h2>
         <p className="text-gray-700">
@@ -128,7 +128,7 @@ export default function MultiLocationMedical() {
 
       {/* PORTFOLIO STRATEGY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Portfolio-Level Lease Review Strategy
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -146,7 +146,7 @@ export default function MultiLocationMedical() {
 
       {/* INTERNAL CLUSTERING */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Risk Resources
         </h2>
         <ul className="space-y-2 text-emerald-700">
@@ -180,13 +180,13 @@ export default function MultiLocationMedical() {
 
       {/* FAQ */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Frequently Asked Questions About Multi-Site Medical Lease Risk
         </h2>
 
         <div className="space-y-4 text-gray-700">
           <div>
-            <h3 className="font-semibold">
+            <h3 className="font-light tracking-tight">
               Why is multi-location lease risk harder to detect?
             </h3>
             <p>
@@ -197,7 +197,7 @@ export default function MultiLocationMedical() {
           </div>
 
           <div>
-            <h3 className="font-semibold">
+            <h3 className="font-light tracking-tight">
               Should healthcare operators standardize lease language?
             </h3>
             <p>
@@ -208,7 +208,7 @@ export default function MultiLocationMedical() {
           </div>
 
           <div>
-            <h3 className="font-semibold">
+            <h3 className="font-light tracking-tight">
               When should a portfolio-level audit be performed?
             </h3>
             <p>

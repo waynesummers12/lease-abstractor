@@ -45,7 +45,7 @@ export default function NnnAuditRightsPage() {
           Lease Education
         </p>
 
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           NNN Audit Rights — What Tenants Can Challenge (and When)
         </h1>
 
@@ -73,7 +73,7 @@ export default function NnnAuditRightsPage() {
 
       {/* ---------- WHAT ARE NNN AUDIT RIGHTS ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Are NNN Audit Rights?
         </h2>
 
@@ -116,7 +116,7 @@ export default function NnnAuditRightsPage() {
 
       {/* ---------- WHY TIMING MATTERS ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Timing Matters More Than Most Tenants Realize
         </h2>
 
@@ -165,13 +165,13 @@ export default function NnnAuditRightsPage() {
 
       {/* ---------- WHAT YOU CAN CHALLENGE ---------- */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           What Tenants Can (and Can’t) Challenge
         </h2>
 
         <div className="grid gap-8 md:grid-cols-2">
           <div>
-            <h3 className="mb-2 font-semibold">Often Challengeable</h3>
+            <h3 className="mb-2 text-lg sm:text-xl font-light tracking-tight">Often Challengeable</h3>
             <ul className="list-disc pl-6 text-gray-700">
               <li>Admin fees above lease caps</li>
               <li>Excluded expense categories</li>
@@ -182,7 +182,7 @@ export default function NnnAuditRightsPage() {
           </div>
 
           <div>
-            <h3 className="mb-2 font-semibold">Often Not Challengeable</h3>
+            <h3 className="mb-2 text-lg sm:text-xl font-light tracking-tight">Often Not Challengeable</h3>
             <ul className="list-disc pl-6 text-gray-700">
               <li>Clearly permitted operating expenses</li>
               <li>Properly calculated lease-compliant costs</li>
@@ -194,7 +194,7 @@ export default function NnnAuditRightsPage() {
 
       {/* ---------- WHY TENANTS MISS THIS ---------- */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Most Tenants Miss Audit Rights
         </h2>
 
@@ -212,7 +212,7 @@ export default function NnnAuditRightsPage() {
       </section>
 
 <section className="mb-12">
-  <h2 className="mb-3 text-2xl font-semibold">
+  <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
     How Audit Rights Translate Into Financial Recovery
   </h2>
 
@@ -230,7 +230,7 @@ export default function NnnAuditRightsPage() {
 
       {/* ---------- FINAL CTA ---------- */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-2 text-2xl font-semibold">
+        <h2 className="mb-2 text-xl sm:text-2xl font-light tracking-tight">
           Check Your Audit Rights Before It’s Too Late
         </h2>
 
@@ -241,7 +241,7 @@ export default function NnnAuditRightsPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to review audit rights (Free Preview)
         </Link>

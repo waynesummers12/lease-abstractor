@@ -1,5 +1,3 @@
-// web/src/app/marketing/nnn-calculation-examples/page.tsx
-
 import Link from "next/link";
 
 export const metadata = {
@@ -12,7 +10,7 @@ export default function NNNCalculationExamplesPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* ---------- HERO ---------- */}
-      <h1 className="text-4xl font-bold mb-4">
+      <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">
         NNN Calculation Examples (Plain English)
       </h1>
 
@@ -24,7 +22,7 @@ export default function NNNCalculationExamplesPage() {
 
       <Link
         href="/app/step-1-upload"
-        className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+        className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
       >
         Upload your lease to calculate your NNN charges (Free Preview)
       </Link>
@@ -35,7 +33,7 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- SECTION ---------- */}
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           What Are NNN Charges?
         </h2>
 
@@ -57,12 +55,12 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- EXAMPLE 1 ---------- */}
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Example 1: Simple NNN Calculation
         </h2>
 
         <div className="rounded-lg border p-5 bg-gray-50">
-          <p className="font-semibold mb-2">Assumptions</p>
+          <p className="font-medium mb-2">Assumptions</p>
           <ul className="list-disc pl-6 text-gray-700 space-y-1">
             <li>Total building size: 20,000 sq ft</li>
             <li>Your leased space: 2,000 sq ft</li>
@@ -70,7 +68,7 @@ export default function NNNCalculationExamplesPage() {
             <li>Annual NNN expenses: $120,000</li>
           </ul>
 
-          <p className="mt-4 font-semibold">Calculation</p>
+          <p className="mt-4 font-medium">Calculation</p>
           <p className="text-gray-700">
             $120,000 × 10% = <strong>$12,000 per year</strong>
           </p>
@@ -88,12 +86,12 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- EXAMPLE 2 ---------- */}
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Example 2: NNN With CAM Admin Fees
         </h2>
 
         <div className="rounded-lg border p-5 bg-gray-50">
-          <p className="font-semibold mb-2">Added detail</p>
+          <p className="font-medium mb-2">Added detail</p>
           <ul className="list-disc pl-6 text-gray-700 space-y-1">
             <li>CAM portion: $60,000</li>
             <li>Admin fee: 15% of CAM</li>
@@ -123,7 +121,7 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- EXAMPLE 3 ---------- */}
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Example 3: NNN Errors That Inflate Costs
         </h2>
 
@@ -143,7 +141,7 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- WHY TENANTS MISS THIS ---------- */}
       <section className="mt-16">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
           Why Most Tenants Never Catch NNN Errors
         </h2>
 
@@ -157,7 +155,7 @@ export default function NNNCalculationExamplesPage() {
 
       {/* ---------- CTA ---------- */}
       <section className="mt-20 rounded-xl border p-8 text-center bg-gray-50">
-        <h3 className="text-2xl font-semibold mb-3">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-3">
           Want to See Your Actual NNN Calculation?
         </h3>
 
@@ -168,7 +166,7 @@ export default function NNNCalculationExamplesPage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Check my NNN charges (Free Preview)
         </Link>

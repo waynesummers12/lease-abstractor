@@ -10,7 +10,7 @@ export default function NnnForBurgerRestaurantsPage() {
   return (
     <main className="bg-white">
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Triple Net (NNN) Leases for Burger Restaurants
         </h1>
 
@@ -19,7 +19,7 @@ export default function NnnForBurgerRestaurantsPage() {
         </p>
 
         <div className="mt-10 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             What Is a Triple Net (NNN) Lease?
           </h2>
 
@@ -63,7 +63,7 @@ export default function NnnForBurgerRestaurantsPage() {
         </div>
 
         <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Why NNN Leases Create Risk for Burger Franchisees
           </h2>
 
@@ -85,7 +85,7 @@ export default function NnnForBurgerRestaurantsPage() {
         </div>
 
         <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Multi-Unit Operators: NNN Exposure Scales Fast
           </h2>
           <p className="mt-3 text-indigo-800">
@@ -95,7 +95,7 @@ export default function NnnForBurgerRestaurantsPage() {
         </div>
 
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             How to Protect Your Burger Restaurant Lease
           </h2>
 
@@ -115,7 +115,7 @@ export default function NnnForBurgerRestaurantsPage() {
         <div className="mt-16 text-center">
           <Link
             href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
+            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition"
           >
             Upload Your Lease — Results in ~10 Seconds
           </Link>
@@ -125,7 +125,7 @@ export default function NnnForBurgerRestaurantsPage() {
         </div>
 
         <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl font-semibold text-gray-900">
+          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
             FAQ
           </h3>
 
