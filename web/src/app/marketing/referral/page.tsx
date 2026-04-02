@@ -33,8 +33,8 @@ export default function ReferralPage() {
 }, []);
 
   const topReferrers = [
-    { name: "Eric Kovatch (Tenant Advisor)", earned: 299.94 },
-    { name: "Shari Johnson (Dental)", earned: 199.96 },
+    { name: "Eric Kovatch (Tenant Advisor)", earned: 399.94 },
+    { name: "Shari Johnson (Dental)", earned: 299.96 },
     { name: "Dan Villanueva (Real Estate)", earned: 99.98 },
   ];
 
@@ -126,7 +126,7 @@ Thought it might be useful.`;
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-10">
           <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">Example Earnings</h2>
 
-          <ul className="space-y-2 text-gray-700">
+          <ul className="space-y-2 text-gray-600">
             <li>$49 lease audit → You earn $9.80</li>
             <li>10 referrals per month → $98</li>
             <li>50 referrals per month → $490</li>
@@ -136,7 +136,7 @@ Thought it might be useful.`;
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Create Your Referral Link</h2>
 
         <div className="bg-gray-50 border rounded-xl p-6 mb-10">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-600 mb-2">
             Enter your name, brokerage, or company
           </label>
 
@@ -183,7 +183,7 @@ Thought it might be useful.`;
         </div>
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Who This Is For</h2>
 
-        <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-12">
+        <ul className="list-disc pl-6 space-y-2 6 mb-12">
           <li>Commercial real estate brokers</li>
           <li>Tenant representation advisors</li>
           <li>Franchise consultants</li>
@@ -194,7 +194,7 @@ Thought it might be useful.`;
         <div className="bg-gray-50 border rounded-xl p-6">
           <h3 className="text-lg sm:text-xl font-light tracking-tight mb-3">How Payouts Work</h3>
 
-          <ul className="space-y-2 text-gray-700">
+          <ul className="space-y-2 text-gray-600">
             <li>Referral commissions are tracked automatically.</li>
             <li>Payouts are sent monthly.</li>
             <li>You receive 20% of the audit purchase price.</li>
@@ -204,7 +204,7 @@ Thought it might be useful.`;
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
           <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Top Referrers This Month</h2>
 
-          <ul className="space-y-2 text-gray-700">
+          <ul className="space-y-2 text-gray-600">
             {topReferrers.map((ref) => (
               <li
                 key={ref.name}
@@ -219,7 +219,7 @@ Thought it might be useful.`;
           </ul>
         </div>
 
-        <div className="bg-white border rounded-xl p-6 mt-10">
+        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mt-10">
           <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">What Your Client Will See</h2>
 
           <p className="text-gray-600 mb-6">
@@ -295,13 +295,13 @@ Thought it might be useful.`;
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
           <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Broker Deal Review Tool</h2>
 
-          <p className="text-gray-700 mb-4">
+          <p className="text-gray-600 mb-4">
             Many brokers quickly run a lease through SaveOnLease before a renewal
             or negotiation to identify potential CAM overcharges, expense
             allocations, and negotiation opportunities.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-6">
+          <ul className="list-disc pl-6 space-y-2 text-gray-600 mb-6">
             <li>Quickly review a client lease before renewal</li>
             <li>Identify CAM reconciliation issues</li>
             <li>Spot negotiation leverage before landlord discussions</li>
@@ -334,7 +334,7 @@ Thought it might be useful.`;
           </ol>
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-gray-600">
               SaveOnLease helps surface these insights quickly so brokers and
               advisors can walk into renewal discussions with better information.
             </p>
@@ -404,7 +404,7 @@ Thought it might be useful.`;
 <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-10">
   <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">Example Client Result</h2>
 
-  <p className="text-gray-700 mb-4">
+  <p className="text-gray-600 mb-4">
     One early analysis of a multi-location dental practice identified
     significant lease cost issues that were previously unnoticed.
   </p>
@@ -414,7 +414,7 @@ Thought it might be useful.`;
       Dental Practice — Potential Savings Identified
     </div>
 
-    <ul className="list-disc pl-6 space-y-2 text-gray-700">
+    <ul className="list-disc pl-6 space-y-2 text-gray-600">
       <li>CAM reconciliation discrepancies flagged</li>
       <li>Administrative fee calculations reviewed</li>
       <li>Expense allocations identified for negotiation</li>
@@ -440,19 +440,19 @@ Thought it might be useful.`;
   <div className="grid md:grid-cols-3 gap-4">
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-        <div className="text-lg font-medium text-gray-700">10 Audits</div>
+        <div className="text-lg font-medium text-gray-600">10 Audits</div>
         <div className="text-2xl font-bold text-green-700 mt-1">$98</div>
         <div className="text-sm text-gray-600 mt-1">per month</div>
       </div>
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-        <div className="text-lg font-medium text-gray-700">25 Audits</div>
+        <div className="text-lg font-medium text-gray-600">25 Audits</div>
         <div className="text-2xl font-bold text-green-700 mt-1">$245</div>
         <div className="text-sm text-gray-600 mt-1">per month</div>
       </div>
 
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-        <div className="text-lg font-medium text-gray-700">50 Audits</div>
+        <div className="text-lg font-medium text-gray-600">50 Audits</div>
         <div className="text-2xl font-bold text-green-700 mt-1">$490</div>
         <div className="text-sm text-gray-600 mt-1">per month</div>
       </div>

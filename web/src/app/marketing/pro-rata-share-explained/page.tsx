@@ -24,7 +24,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
+          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
         >
           Upload your lease to check pro-rata errors (Free Preview)
         </Link>
@@ -40,19 +40,19 @@ export default function Page() {
           What Is Pro-Rata Share?
         </h2>
 
-        <p className="text-gray-700">
+        <p className="text-gray-600">
           Pro-rata share is the percentage of a building’s operating expenses
           that a tenant is responsible for paying. It is typically based on the
           tenant’s square footage divided by the total leasable area.
         </p>
 
-        <div className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-700">
-          <strong>Example:</strong>  
+        <div className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
+          <span className="font-medium">Example:</span>  
           If your space is 2,500 sq ft in a 25,000 sq ft building, your pro-rata
-          share is <strong>10%</strong>.
+          share is <span className="font-medium">10%</span>.
         </div>
 
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 text-gray-600">
           That percentage is then applied to CAM, taxes, insurance, or other NNN
           expenses — year after year.
         </p>
@@ -64,14 +64,14 @@ export default function Page() {
           How Pro-Rata Share Should Be Calculated
         </h2>
 
-        <ol className="list-decimal space-y-2 pl-5 text-gray-700">
+        <ol className="list-decimal space-y-2 pl-5 text-gray-600">
           <li>Determine your leased square footage</li>
           <li>Determine the building’s total leasable area</li>
           <li>Divide tenant space by total leasable space</li>
           <li>Apply that percentage consistently to allowed expenses only</li>
         </ol>
 
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 text-gray-600">
           Sounds simple — but this is where many overcharges begin.
         </p>
       </section>
@@ -82,7 +82,7 @@ export default function Page() {
           Common Pro-Rata Share Errors
         </h2>
 
-        <ul className="list-disc space-y-2 pl-5 text-gray-700">
+        <ul className="list-disc space-y-2 pl-5 text-gray-600">
           <li>Inflated total building square footage</li>
           <li>Including vacant or non-leasable space</li>
           <li>Using gross building size instead of leasable area</li>
@@ -90,7 +90,7 @@ export default function Page() {
           <li>Applying pro-rata share to non-allowable expenses</li>
         </ul>
 
-        <p className="mt-4 text-gray-700">
+        <p className="mt-4 text-gray-600">
           Even a 1–2% error can compound into thousands of dollars annually.
         </p>
       </section>
@@ -101,7 +101,7 @@ export default function Page() {
           Why Tenants Rarely Catch Pro-Rata Errors
         </h2>
 
-        <ul className="list-disc space-y-2 pl-5 text-gray-700">
+        <ul className="list-disc space-y-2 pl-5 text-gray-600">
           <li>Square footage assumptions go unchecked</li>
           <li>Reconciliation statements don’t show calculations</li>
           <li>Tenants trust landlord-provided numbers</li>
@@ -115,18 +115,18 @@ export default function Page() {
           Can Pro-Rata Share Be Challenged?
         </h2>
 
-        <p className="text-gray-700">
+        <p className="text-gray-600">
           Yes. Most leases allow tenants to dispute incorrect calculations —
           including square footage errors and improper allocations — but only
           within a defined audit window.
         </p>
 
-        <p className="mt-3 text-gray-700">
+        <p className="mt-3 text-gray-600">
           Once that window closes, incorrect pro-rata percentages may become
           locked in permanently.
         </p>
 
-        <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
+        <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
           <Link href="/marketing/cam-expense-caps" className="underline">
             CAM expense caps →
           </Link>
@@ -142,7 +142,7 @@ export default function Page() {
       </section>
 
       {/* CTA */}
-      <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
+      <section className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-center shadow-sm">
         <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Verify Your Pro-Rata Share Automatically
         </h3>
@@ -154,7 +154,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
+          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
         >
           Upload your lease to check pro-rata share (Free Preview)
         </Link>

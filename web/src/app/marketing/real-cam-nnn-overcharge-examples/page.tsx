@@ -15,7 +15,7 @@ export default function RealCamNnnExamplesPage() {
         <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Real CAM & NNN Overcharge Examples Tenants Encounter
         </h1>
-        <p className="mt-6 text-xl text-gray-700 leading-relaxed">
+        <p className="mt-6 text-lg sm:text-xl text-gray-600 leading-relaxed">
           Many tenants don’t realize there’s a problem until CAM or NNN charges
           jump unexpectedly. The examples below reflect common situations
           tenants report — situations that often feel confusing, frustrating,
@@ -24,7 +24,7 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* SECTION 1 */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="space-y-5 text-lg text-gray-600 leading-relaxed">
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 1: “My CAM Went Up, But Nothing Changed”
         </h2>
@@ -44,7 +44,7 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* SECTION 2 */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="space-y-5 text-lg text-gray-600 leading-relaxed">
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 2: Sudden NNN Tax Spikes After Reassessment
         </h2>
@@ -63,7 +63,7 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* SECTION 3 */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="space-y-5 text-lg text-gray-600 leading-relaxed">
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 3: Insurance Costs Passed Through Without Explanation
         </h2>
@@ -83,7 +83,7 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* SECTION 4 */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="space-y-5 text-lg text-gray-600 leading-relaxed">
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example 4: Capital Improvements Treated as Operating Expenses
         </h2>
@@ -102,7 +102,7 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* WHEN THIS CROSSES THE LINE */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
+      <section className="space-y-5 text-lg text-gray-600 leading-relaxed">
         <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           When These Charges Cross the Line
         </h2>
@@ -121,17 +121,17 @@ export default function RealCamNnnExamplesPage() {
       </section>
 
       {/* CTA */}
-      <section className="rounded-2xl bg-gray-50 p-8 text-center">
+      <section className="rounded-2xl bg-gray-50 p-8 text-center shadow-sm border border-gray-200">
         <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Think your situation sounds familiar?
         </h3>
-        <p className="mx-auto mt-4 max-w-xl text-gray-700">
+        <p className="mx-auto mt-4 max-w-xl text-gray-600 leading-relaxed">
           Upload your lease to identify CAM and NNN risks, flag potential
           overcharges, and understand what your lease actually allows.
         </p>
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
+          className="mt-6 inline-flex items-center justify-center rounded-xl bg-black px-8 py-4 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
         >
           Upload Your Lease & Check Now (Free Preview)
         </Link>

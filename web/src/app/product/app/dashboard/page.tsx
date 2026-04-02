@@ -285,19 +285,19 @@ export default function DashboardPage() {
   /* ---------------- LOADING ---------------- */
 
   if (authLoading || loading) {
-  return <div className="p-6">Loading your dashboard…</div>;
-}
+    return <div className="p-6">Loading your dashboard…</div>;
+  }
 
-if (!session) {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-2">Please log in</h1>
-      <p className="text-gray-600">
-        You must be logged in to view your dashboard.
-      </p>
-    </div>
-  );
-}
+  if (!authLoading && !session) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-semibold mb-2">Please log in</h1>
+        <p className="text-gray-600">
+          You must be logged in to view your dashboard.
+        </p>
+      </div>
+    );
+  }
 
   /* ---------------- EMPTY STATE ---------------- */
 
@@ -605,7 +605,7 @@ return (
             View All Leases
           </Link>
           <Link
-            href="/app/portfolio"
+            href="/product/app/dashboard"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             Portfolio Dashboard
@@ -622,7 +622,7 @@ return (
           >
             Run Audit (Free Preview)
           </button>
-  </div>
+        </div>
 </div>
 
 
