@@ -46,26 +46,22 @@ export default function LoginPage() {
 
     console.log("Starting Google OAuth...");
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    // 🔥 Clear any existing session (prevents instant redirect loop)
+    await supabase.auth.signOut();
+
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}`,
-        skipBrowserRedirect: true, // 🔥 ensures we control navigation
+        queryParams: {
+          prompt: "select_account", // 🔥 forces Google screen
+        },
       },
     });
 
     if (error) {
       console.error("OAuth error:", error);
       setMessage(error.message);
-      setLoading(false);
-      return;
-    }
-
-    // 🔥 Force redirect manually (fixes Next.js App Router issues)
-    if (data?.url) {
-      window.location.href = data.url;
-    } else {
-      console.error("No OAuth URL returned");
       setLoading(false);
     }
   }
