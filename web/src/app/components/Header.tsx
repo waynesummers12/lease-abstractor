@@ -17,7 +17,7 @@ export default function Header() {
     pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
   const { session, loading, plan } = useAuth();
-  const user = session?.user;
+  const user = session?.user ?? null;
   console.log("HEADER SESSION:", session);
 
 
