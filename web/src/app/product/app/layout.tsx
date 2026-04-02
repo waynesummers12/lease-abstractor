@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import SidebarNav from "@/app/components/SidebarNav";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,13 @@ export default async function ProductLayout({
   );
 
   // TEMP: disable auth guard during development
-  await supabase.auth.getUser();
+  const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+if (!user) {
+  redirect("/login");
+}
 
   return (
     <div className="min-h-screen bg-white">
