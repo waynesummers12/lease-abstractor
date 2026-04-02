@@ -46,7 +46,7 @@ export default function AuditRightsPage() {
     <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
       {/* HERO */}
       <section>
-        <h1 className="text-5xl sm:text-6xl font-light tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Commercial Lease Audit Rights Explained
         </h1>
         <p className="mt-6 text-xl text-gray-700 leading-relaxed">
@@ -71,7 +71,7 @@ export default function AuditRightsPage() {
           their opportunity to object.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           What Audit Rights Typically Cover
         </h2>
 
@@ -83,7 +83,7 @@ export default function AuditRightsPage() {
           <li>Potential reimbursement or credits for overcharges</li>
         </ul>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           Common Audit Deadlines
         </h2>
 
@@ -103,7 +103,7 @@ export default function AuditRightsPage() {
           typically deemed final — even if they are incorrect.
         </p>
 
-        <h2 className="pt-6 text-3xl font-light tracking-tight">
+        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
           How to Preserve Your Audit Rights
         </h2>
 
@@ -117,7 +117,7 @@ export default function AuditRightsPage() {
 
       {/* CTA */}
       <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-2xl font-semibold">
+        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
           Not sure if your audit window is still open?
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
