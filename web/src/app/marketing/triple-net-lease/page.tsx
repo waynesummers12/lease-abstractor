@@ -143,7 +143,7 @@ export default function TripleNetLeasePage() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-light tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           What Is a Triple Net Lease (NNN Lease)?
         </h1>
 
@@ -198,7 +198,7 @@ export default function TripleNetLeasePage() {
 
       {/* ---------------- NNN CLUSTER CONTEXTUAL AUTHORITY ---------------- */}
       <section className="space-y-6 border-t pt-12 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Triple Net (NNN) Lease Risk Areas
         </h2>
 
@@ -253,7 +253,7 @@ export default function TripleNetLeasePage() {
 
       {/* CORE STRUCTURE */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Expenses Are Included in a Triple Net Lease?
         </h2>
 
@@ -301,7 +301,7 @@ export default function TripleNetLeasePage() {
 
       {/* DETAILED BREAKDOWN */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Triple Net Charges Are Calculated
         </h2>
 
@@ -322,7 +322,7 @@ export default function TripleNetLeasePage() {
 
       {/* EXAMPLE */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Triple Net Lease Example: Total Occupancy Cost
         </h2>
 
@@ -349,7 +349,7 @@ export default function TripleNetLeasePage() {
 
       {/* RISK SECTION */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Where Tenants Commonly Overpay in NNN Leases
         </h2>
 
@@ -398,7 +398,7 @@ export default function TripleNetLeasePage() {
 
       {/* LEASE COMPARISON */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Triple Net vs Gross vs Modified Gross Lease
         </h2>
 
@@ -442,7 +442,7 @@ export default function TripleNetLeasePage() {
 
       {/* NEGOTIATION */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Are Triple Net Lease Expenses Negotiable?
         </h2>
 
@@ -461,7 +461,7 @@ export default function TripleNetLeasePage() {
 
       {/* NNN EXPENSE RECONCILIATION AUTHORITY SECTION */}
       <section className="space-y-6 border-t pt-12 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How Triple Net Lease (NNN) Expense Reconciliation Works
         </h2>
 
@@ -508,7 +508,7 @@ export default function TripleNetLeasePage() {
 
       {/* FAQ */}
       <section className="space-y-6">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Frequently Asked Questions About NNN Leases
         </h2>
 
@@ -532,7 +532,7 @@ export default function TripleNetLeasePage() {
 
       {/* CTA */}
       <section className="pt-8 border-t space-y-6">
-        <h2 className="text-2xl font-light tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-light tracking-tight">
           Unsure How Your Triple Net Charges Are Calculated?
         </h2>
 
@@ -543,7 +543,7 @@ export default function TripleNetLeasePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
+          className="inline-block bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition font-medium"
         >
           Upload Your Lease
         </Link>

@@ -10,7 +10,7 @@ export default function RetailLeaseHubPage() {
   return (
     <main className="bg-white">
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Retail Lease Audit Hub
         </h1>
 
@@ -21,7 +21,7 @@ export default function RetailLeaseHubPage() {
 
         {/* Primary Pillar */}
         <div className="mt-12 p-8 border rounded-xl bg-gray-50">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
             Start Here: Retail Lease Audit Overview
           </h2>
           <p className="mt-3 text-gray-700">
@@ -39,7 +39,7 @@ export default function RetailLeaseHubPage() {
         {/* Knowledge Grid */}
         <div className="mt-14 grid md:grid-cols-2 gap-8">
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               CAM Reconciliation Explained
             </h3>
             <p className="mt-2 text-gray-600">
@@ -54,7 +54,7 @@ export default function RetailLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               NNN Lease Guide
             </h3>
             <p className="mt-2 text-gray-600">
@@ -70,7 +70,7 @@ export default function RetailLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               CAM Admin Fee Caps
             </h3>
             <p className="mt-2 text-gray-600">
@@ -85,7 +85,7 @@ export default function RetailLeaseHubPage() {
           </div>
 
           <div className="p-6 border rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg sm:text-xl font-light tracking-tight text-gray-900">
               Audit Rights & Deadlines
             </h3>
             <p className="mt-2 text-gray-600">
@@ -102,7 +102,7 @@ export default function RetailLeaseHubPage() {
 
         {/* Exposure Section */}
         <div className="mt-16 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-indigo-900">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
             Retail Occupancy Risk Signals
           </h2>
           <ul className="mt-4 space-y-2 text-indigo-800">
@@ -116,7 +116,7 @@ export default function RetailLeaseHubPage() {
         <div className="mt-20 text-center">
           <Link
             href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
+            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition"
           >
             Upload Your Lease — Results in ~10 Seconds
           </Link>

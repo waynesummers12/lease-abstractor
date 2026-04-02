@@ -6,7 +6,7 @@ export default function RestaurantNNNOverchargesPage() {
       {/* HERO */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
             Restaurant NNN Lease Overcharges: Hidden CAM Costs That Hurt Margins
           </h1>
           <p className="mt-6 text-lg text-slate-300 max-w-3xl">
@@ -21,13 +21,13 @@ export default function RestaurantNNNOverchargesPage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
               href="/app"
-              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
+              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
             >
               Upload Your Lease
             </Link>
             <Link
               href="/marketing/franchise-cam-audit"
-              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-semibold text-white hover:bg-slate-800"
+              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-medium text-white hover:bg-slate-800"
             >
               Franchise CAM Audit Guide
             </Link>
@@ -37,13 +37,13 @@ export default function RestaurantNNNOverchargesPage() {
 
       {/* PROBLEM */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           Why Restaurants Are Vulnerable to NNN Overcharges
         </h2>
 
         <div className="mt-8 grid md:grid-cols-3 gap-8 text-slate-700">
           <div>
-            <h3 className="font-semibold text-lg">High CAM Allocation</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">High CAM Allocation</h3>
             <p className="mt-3">
               Restaurants typically occupy prime retail frontage, increasing
               exposure to shared maintenance, landscaping, security, and
@@ -51,14 +51,14 @@ export default function RestaurantNNNOverchargesPage() {
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-lg">Thin Profit Margins</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Thin Profit Margins</h3>
             <p className="mt-3">
               A modest annual reconciliation spike can materially impact cash
               flow in food service operations.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold text-lg">Frequent Build-Out Costs</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight">Frequent Build-Out Costs</h3>
             <p className="mt-3">
               Landlords may attempt to pass through capital improvements under
               CAM language that exceeds lease allowances.
@@ -70,7 +70,7 @@ export default function RestaurantNNNOverchargesPage() {
       {/* COMMON ERRORS */}
       <section className="bg-slate-50">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             Common NNN Lease Errors Found in Restaurants
           </h2>
           <p className="mt-6 text-slate-700 max-w-3xl">
@@ -95,16 +95,16 @@ export default function RestaurantNNNOverchargesPage() {
 
       {/* ROI EXAMPLE */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           Margin Impact Example
         </h2>
 
         <div className="mt-8 rounded-xl border border-slate-200 p-8">
-          <p className="text-lg font-semibold text-slate-900">
+          <p className="text-lg font-medium text-slate-900">
             Example Scenario:
           </p>
           <p className="mt-4 text-slate-700">
-            6 locations × $7,500 average CAM discrepancy = <span className="font-bold text-emerald-600">$45,000 annual margin erosion</span>
+            6 locations × $7,500 average CAM discrepancy = <span className="font-medium text-emerald-600">$45,000 annual margin erosion</span>
           </p>
         </div>
       </section>
@@ -112,13 +112,13 @@ export default function RestaurantNNNOverchargesPage() {
       {/* FAQ SECTION */}
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             Restaurant NNN Lease FAQ
           </h2>
 
           <div className="mt-8 space-y-8 text-slate-700">
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 What are NNN charges in restaurant leases?
               </h3>
               <p className="mt-2">
@@ -129,7 +129,7 @@ export default function RestaurantNNNOverchargesPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 Can restaurants dispute CAM reconciliation charges?
               </h3>
               <p className="mt-2">
@@ -139,7 +139,7 @@ export default function RestaurantNNNOverchargesPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 How much can NNN overcharges impact a restaurant?
               </h3>
               <p className="mt-2">
@@ -149,7 +149,7 @@ export default function RestaurantNNNOverchargesPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 How much does a restaurant NNN audit cost — and is it worth it?
               </h3>
               <p className="mt-2">
@@ -225,7 +225,7 @@ export default function RestaurantNNNOverchargesPage() {
       {/* CTA */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
             Protect Your Restaurant Margins
           </h2>
           <p className="mt-6 text-slate-300">
@@ -234,7 +234,7 @@ export default function RestaurantNNNOverchargesPage() {
           </p>
           <Link
             href="/app/step-1-upload"
-            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
+            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-medium text-white hover:bg-emerald-600"
           >
             Run Lease Review
           </Link>

@@ -6,7 +6,7 @@ export default function RetailLeaseReconciliationHelpPage() {
       {/* HERO */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
             Retail Lease Reconciliation Help: Review CAM & NNN Charges Before You Overpay
           </h1>
           <p className="mt-6 text-lg text-slate-300 max-w-3xl">
@@ -22,13 +22,13 @@ export default function RetailLeaseReconciliationHelpPage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Link
               href="/app/step-1-upload"
-              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-semibold text-white hover:bg-emerald-600"
+              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
             >
               Upload Your Lease
             </Link>
             <Link
               href="/marketing/cam-audit-checklist"
-              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-semibold text-white hover:bg-slate-800"
+              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-medium text-white hover:bg-slate-800"
             >
               CAM Audit Checklist
             </Link>
@@ -38,7 +38,7 @@ export default function RetailLeaseReconciliationHelpPage() {
 
       {/* WHAT IS RECONCILIATION */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           What Is a Retail Lease Reconciliation?
         </h2>
         <p className="mt-6 text-slate-700 max-w-3xl">
@@ -59,7 +59,7 @@ export default function RetailLeaseReconciliationHelpPage() {
       {/* COMMON ISSUES */}
       <section className="bg-slate-50">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             Common Errors in Retail CAM Reconciliations
           </h2>
 
@@ -84,16 +84,16 @@ export default function RetailLeaseReconciliationHelpPage() {
 
       {/* ROI EXAMPLE */}
       <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
           Reconciliation Risk Example
         </h2>
 
         <div className="mt-8 rounded-xl border border-slate-200 p-8">
-          <p className="text-lg font-semibold text-slate-900">
+          <p className="text-lg font-medium text-slate-900">
             Example Scenario:
           </p>
           <p className="mt-4 text-slate-700">
-            4 locations × $6,000 CAM discrepancy = <span className="font-bold text-emerald-600">$24,000 annual exposure</span>
+            4 locations × $6,000 CAM discrepancy = <span className="font-medium text-emerald-600">$24,000 annual exposure</span>
           </p>
         </div>
       </section>
@@ -101,13 +101,13 @@ export default function RetailLeaseReconciliationHelpPage() {
       {/* FAQ SECTION */}
       <section className="bg-white">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-3xl font-bold text-slate-900">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
             Retail Lease Reconciliation FAQ
           </h2>
 
           <div className="mt-8 space-y-8 text-slate-700">
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 Can tenants dispute CAM reconciliation charges?
               </h3>
               <p className="mt-2">
@@ -116,7 +116,7 @@ export default function RetailLeaseReconciliationHelpPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 How quickly should a reconciliation be reviewed?
               </h3>
               <p className="mt-2">
@@ -126,7 +126,7 @@ export default function RetailLeaseReconciliationHelpPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold text-lg">
+              <h3 className="text-lg sm:text-xl font-light tracking-tight">
                 Is a retail lease reconciliation review worth it?
               </h3>
               <p className="mt-2">
@@ -178,7 +178,7 @@ export default function RetailLeaseReconciliationHelpPage() {
       {/* CTA */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
             Review Your Retail Lease Before the Audit Window Closes
           </h2>
           <p className="mt-6 text-slate-300">
@@ -187,7 +187,7 @@ export default function RetailLeaseReconciliationHelpPage() {
           </p>
           <Link
             href="/app/step-1-upload"
-            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-semibold text-white hover:bg-emerald-600"
+            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-medium text-white hover:bg-emerald-600"
           >
             Start Lease Review
           </Link>

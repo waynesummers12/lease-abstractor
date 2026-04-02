@@ -1,9 +1,11 @@
+import Link from 'next/link';
+
 export default function SecurityPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-10 px-6">
       {/* HERO */}
       <section>
-        <h1 className="text-4xl font-bold">Security & Data Protection</h1>
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">Security & Data Protection</h1>
         <p className="mt-4 text-lg text-gray-700">
           SaveOnLease is built to handle sensitive lease documents safely,
           privately, and responsibly.
@@ -12,7 +14,7 @@ export default function SecurityPage() {
 
       {/* DOCUMENT HANDLING */}
       <section>
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How We Handle Your Lease Documents
         </h2>
         <p className="mt-3 text-gray-700">
@@ -30,7 +32,7 @@ export default function SecurityPage() {
 
       {/* STORAGE */}
       <section>
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Secure Storage & Access Control
         </h2>
         <p className="mt-3 text-gray-700">
@@ -48,7 +50,7 @@ export default function SecurityPage() {
 
       {/* DATA USAGE */}
       <section>
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Data Usage & Privacy
         </h2>
         <p className="mt-3 text-gray-700">
@@ -65,7 +67,7 @@ export default function SecurityPage() {
 
       {/* AI & AUTOMATION */}
       <section>
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Use of Automation & AI
         </h2>
         <p className="mt-3 text-gray-700">
@@ -80,7 +82,7 @@ export default function SecurityPage() {
 
       {/* COMPLIANCE POSITIONING */}
       <section className="rounded bg-gray-50 p-6">
-        <h3 className="text-xl font-semibold">
+        <h3 className="text-lg sm:text-xl font-light tracking-tight">
           Designed with Business Standards in Mind
         </h3>
         <p className="mt-3 text-gray-700">
@@ -96,12 +98,12 @@ export default function SecurityPage() {
 
       {/* CTA */}
       <section>
-        <a
+        <Link
           href="/"
-          className="inline-block rounded bg-black px-6 py-3 text-white"
+          className="inline-block rounded bg-black px-6 py-3 text-white font-medium"
         >
           Upload a Lease Securely
-        </a>
+        </Link>
       </section>
     </div>
   );
