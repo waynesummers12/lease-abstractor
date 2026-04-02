@@ -21,7 +21,7 @@ export default function PricingPage() {
     <div className="mx-auto max-w-3xl space-y-10 px-6">
       {/* HERO */}
       <section>
-        <h1 className="text-4xl font-bold">Simple, Transparent Pricing</h1>
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">Simple, Transparent Pricing</h1>
         <p className="mt-4 text-lg text-gray-700">
           One lease. One audit. One clear answer.
         </p>
@@ -33,7 +33,7 @@ export default function PricingPage() {
       {/* PRICE CARD */}
       <section className="rounded border p-8">
         <div className="flex items-baseline gap-2">
-          <div className="text-5xl font-bold">$49.99</div>
+          <div className="text-5xl font-medium">$49.99</div>
           <div className="text-[24px] text-gray-600">one-time</div>
         </div>
 
@@ -84,7 +84,7 @@ export default function PricingPage() {
         <Link
           href="/app/step-1-upload"
           onClick={() => console.log("pricing_cta_click_top")}
-          className="mt-6 inline-block rounded bg-black px-6 py-3 text-white hover:bg-gray-800 transition"
+          className="mt-6 inline-block rounded bg-black px-6 py-3 text-white hover:bg-gray-800 transition font-medium"
         >
           Preview Your Savings →
         </Link>
@@ -92,19 +92,19 @@ export default function PricingPage() {
 
       {/* VALUE COMPARISON (HIGH-CONVERSION) */}
       <section className="rounded-lg border p-6 bg-white">
-        <h2 className="text-xl font-semibold mb-3">
+        <h2 className="text-lg sm:text-xl font-light tracking-tight mb-3">
           $49.99 vs. What You Might Be Losing
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div>
             <div className="text-sm text-gray-500">Audit Cost</div>
-            <div className="text-3xl font-bold text-black">$49.99</div>
+            <div className="text-3xl font-medium text-black">$49.99</div>
           </div>
 
           <div>
             <div className="text-sm text-gray-500">Typical Avoidable Costs</div>
-            <div className="text-3xl font-bold text-red-600">$5,000 – $20,000+</div>
+            <div className="text-3xl font-medium text-red-600">$5,000 – $20,000+</div>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export default function PricingPage() {
 
       {/* ROI */}
       <section className="rounded bg-gray-50 p-6">
-        <h2 className="text-2xl font-semibold">Typical ROI for Tenants</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Typical ROI for Tenants</h2>
         <p className="mt-3 text-gray-700">
           CAM and NNN charges often represent 15–35% of total rent. Even
           small errors can add up over time.
@@ -139,7 +139,7 @@ export default function PricingPage() {
 
       {/* FAQ (VISIBLE) */}
       <section>
-        <h2 className="text-2xl font-semibold">Common Questions</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Common Questions</h2>
 
         <div className="mt-4 space-y-4 text-gray-700">
           <div>
@@ -184,7 +184,7 @@ export default function PricingPage() {
         <Link
           href="/app/step-1-upload"
           onClick={() => console.log("pricing_cta_click_bottom")}
-          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white transition
+          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition
                hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md
                active:translate-y-0"
         >
