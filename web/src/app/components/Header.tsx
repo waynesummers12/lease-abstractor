@@ -16,7 +16,7 @@ export default function Header() {
   const isAppPage =
     pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
-  const { session, loading, plan } = useAuth();
+  const { session, plan } = useAuth();
   const user = session?.user ?? null;
   console.log("HEADER SESSION:", session);
 
@@ -49,11 +49,6 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        {/* 🔥 DEBUG STATUS (you can remove later) */}
-        <span className="text-[10px] opacity-60">
-          {loading ? "..." : user ? plan.toUpperCase() : "anon"}
-        </span>
-
         <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
           <EducationDropdown />
 
@@ -78,7 +73,7 @@ export default function Header() {
           {/* =============================
               NOT LOGGED IN
           ============================= */}
-          {loading ? null : !user ? (
+          {!user ? (
             <>
               <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
                 Login
