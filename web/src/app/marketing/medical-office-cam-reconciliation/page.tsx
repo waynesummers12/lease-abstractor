@@ -44,7 +44,7 @@ export default function MedicalOfficeCAM() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Medical Office CAM Reconciliation — What Healthcare Tenants Must Review
         </h1>
         <p className="text-lg text-gray-700">
@@ -63,13 +63,13 @@ export default function MedicalOfficeCAM() {
 
       {/* FINANCIAL CONTEXT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example: 12,000 SF Imaging Center Exposure
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-1 text-gray-700">
           <p>$32 Base Rent = $384,000 Annual Base Rent</p>
           <p>$10 CAM/NNN = $120,000 Annual NNN</p>
-          <p className="font-bold mt-2">Total Annual Occupancy Cost: $504,000</p>
+          <p className="font-medium mt-2">Total Annual Occupancy Cost: $504,000</p>
         </div>
         <p className="text-gray-700">
           A $2 PSF misallocation increases annual exposure by $24,000.
@@ -85,7 +85,7 @@ export default function MedicalOfficeCAM() {
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>$300,000 Annual CAM × 15% Admin Fee = $45,000</p>
           <p>Lease Cap = 10%</p>
-          <p className="font-semibold">Annual Overcharge = $15,000</p>
+          <p className="font-medium">Annual Overcharge = $15,000</p>
         </div>
         <p className="text-gray-700">
           When CAM increases due to capital-heavy infrastructure, percentage-based
@@ -95,7 +95,7 @@ export default function MedicalOfficeCAM() {
 
       {/* CAPITAL VS OPERATING TEST */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How to Evaluate Capital vs Operating Classification
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -113,7 +113,7 @@ export default function MedicalOfficeCAM() {
 
       {/* MEDICAL-SPECIFIC ALLOCATION RISK */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Allocation Risks Unique to Medical Buildings
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -127,7 +127,7 @@ export default function MedicalOfficeCAM() {
 
       {/* HIGH RISK ITEMS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           High-Risk CAM Line Items in Medical Buildings
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -153,7 +153,7 @@ export default function MedicalOfficeCAM() {
 
       {/* URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Timing Is Critical in Medical CAM Reviews
         </h2>
         <p className="text-gray-700">
@@ -165,7 +165,7 @@ export default function MedicalOfficeCAM() {
 
       {/* INTERNAL CLUSTER LINKS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Resources
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">

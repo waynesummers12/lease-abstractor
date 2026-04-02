@@ -43,7 +43,7 @@ export default function MedicalNNNExpenses() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Medical Office NNN Expenses: What Healthcare Tenants Actually Pay
         </h1>
         <p className="text-lg text-gray-700">
@@ -71,10 +71,10 @@ export default function MedicalNNNExpenses() {
 
       {/* FINANCIAL MULTIPLIER */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">How NNN Exposure Compounds</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">How NNN Exposure Compounds</h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>15,000 SF medical tenant × $3 PSF NNN misallocation = $45,000/year</p>
-          <p className="font-semibold">
+          <p className="font-medium">
             Over a 10-year lease term, that equals $450,000 in preventable exposure.
           </p>
           <p>
@@ -85,7 +85,7 @@ export default function MedicalNNNExpenses() {
 
       {/* WHY MEDICAL NNN IS HIGHER */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Medical NNN Costs Are Higher Than Standard Office
         </h2>
         <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -99,33 +99,33 @@ export default function MedicalNNNExpenses() {
 
       {/* BREAKDOWN SECTION */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Is Included in Medical NNN Charges?
         </h2>
         <div className="grid md:grid-cols-2 gap-6 text-gray-700">
           <div className="space-y-2">
-            <h3 className="font-semibold">Property Taxes</h3>
+            <h3 className="font-light tracking-tight">Property Taxes</h3>
             <p>
               Often the largest component. Medical build-outs increase assessed
               value, which increases tenant tax allocation.
             </p>
           </div>
           <div className="space-y-2">
-            <h3 className="font-semibold">Insurance Premiums</h3>
+            <h3 className="font-light tracking-tight">Insurance Premiums</h3>
             <p>
               Healthcare occupancy increases building risk profiles, which may
               raise insurance premiums allocated to tenants.
             </p>
           </div>
           <div className="space-y-2">
-            <h3 className="font-semibold">Common Area Maintenance (CAM)</h3>
+            <h3 className="font-light tracking-tight">Common Area Maintenance (CAM)</h3>
             <p>
               Includes HVAC service, janitorial, landscaping, snow removal,
               parking lot maintenance, and building systems upkeep.
             </p>
           </div>
           <div className="space-y-2">
-            <h3 className="font-semibold">CAM Administrative Fees</h3>
+            <h3 className="font-light tracking-tight">CAM Administrative Fees</h3>
             <p>
               Frequently 10–15% of total CAM spend — sometimes layered on top
               of capital expenditures and reserves.
@@ -136,7 +136,7 @@ export default function MedicalNNNExpenses() {
 
       {/* SPIKE SCENARIO */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example: Property Tax Reassessment in a Medical Office Building
         </h2>
         <p className="text-gray-700">
@@ -148,13 +148,13 @@ export default function MedicalNNNExpenses() {
 
       {/* REAL WORLD EXAMPLE */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Real Example: 10,000 SF Imaging Center
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-1">
           <p>$30 PSF Base Rent = $300,000 Annual Base Rent</p>
           <p>$9 PSF NNN = $90,000 Annual NNN</p>
-          <p className="font-bold mt-2">
+          <p className="font-medium mt-2">
             Total Annual Occupancy Cost: $390,000
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function MedicalNNNExpenses() {
 
       {/* OVERPAY RISK */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Where Medical Tenants Commonly Overpay
         </h2>
         <ul className="list-disc pl-6 text-gray-700 space-y-2">
@@ -184,7 +184,7 @@ export default function MedicalNNNExpenses() {
 
       {/* AUDIT WINDOW */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Audit Deadlines Matter</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Audit Deadlines Matter</h2>
         <p className="text-gray-700">
           Most medical office leases allow only 6–12 months after reconciliation
           delivery to formally dispute NNN allocations. Missing this window can
@@ -194,7 +194,7 @@ export default function MedicalNNNExpenses() {
 
       {/* INTERNAL LINKS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Resources
         </h2>
         <ul className="space-y-2 text-emerald-700">

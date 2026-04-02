@@ -44,7 +44,7 @@ export default function CAMSpikesMedical() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           CAM Spikes in Medical Office Buildings — What Actually Causes Them
         </h1>
         <p className="text-lg text-gray-700">
@@ -61,7 +61,7 @@ export default function CAMSpikesMedical() {
 
       {/* WHY SPIKES HAPPEN */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Medical CAM Costs Rise Faster Than Traditional Office
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -86,7 +86,7 @@ export default function CAMSpikesMedical() {
 
       {/* EXPOSURE MATH */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Real Exposure Example — 10,000 SF Imaging Center
         </h2>
         <table className="w-full border border-gray-300 text-left">
@@ -118,7 +118,7 @@ export default function CAMSpikesMedical() {
 
       {/* ADMIN FEE STACKING */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Hidden Multiplier: Admin Fee Stacking
         </h2>
         <p className="text-gray-700">
@@ -133,7 +133,7 @@ export default function CAMSpikesMedical() {
 
       {/* CAPITAL PASS-THROUGH RISK */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Capital Improvements Disguised as CAM
         </h2>
         <p className="text-gray-700">
@@ -155,7 +155,7 @@ export default function CAMSpikesMedical() {
 
       {/* INTERNAL CLUSTERING */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Resources
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
@@ -184,12 +184,12 @@ export default function CAMSpikesMedical() {
 
       {/* FAQ */}
       <section className="space-y-8">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           CAM Spike FAQ for Medical Tenants
         </h2>
 
         <div>
-          <h3 className="font-semibold">
+          <h3 className="font-light tracking-tight">
             Why are insurance premiums rising so fast for medical buildings?
           </h3>
           <p className="text-gray-700">
@@ -199,7 +199,7 @@ export default function CAMSpikesMedical() {
         </div>
 
         <div>
-          <h3 className="font-semibold">
+          <h3 className="font-light tracking-tight">
             Can landlords increase CAM without limits?
           </h3>
           <p className="text-gray-700">
@@ -209,7 +209,7 @@ export default function CAMSpikesMedical() {
         </div>
 
         <div>
-          <h3 className="font-semibold">
+          <h3 className="font-light tracking-tight">
             How do I protect my practice from sudden CAM spikes?
           </h3>
           <p className="text-gray-700">

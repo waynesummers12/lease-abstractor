@@ -44,7 +44,7 @@ export default function MedicalChecklist() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
           Medical Office Lease Audit Checklist — Healthcare Tenant Edition
         </h1>
         <p className="text-lg text-gray-700">
@@ -62,11 +62,11 @@ export default function MedicalChecklist() {
 
       {/* FINANCIAL URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Why This Checklist Matters Financially</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Why This Checklist Matters Financially</h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>12,000 SF imaging center × $2.75 PSF improper allocation = $33,000/year</p>
           <p>15,000 SF clinic × $1.50 PSF miscalculation = $22,500/year</p>
-          <p className="font-semibold">
+          <p className="font-medium">
             Over a 10-year lease term, that can exceed $200,000 in preventable exposure.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function MedicalChecklist() {
 
       {/* SECTION 1 */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           1. CAM & Operating Expense Controls
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -97,7 +97,7 @@ export default function MedicalChecklist() {
 
       {/* SECTION 2 */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           2. Healthcare-Specific Infrastructure Risk
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -112,7 +112,7 @@ export default function MedicalChecklist() {
 
       {/* SECTION 3 */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           3. NNN Expense Validation
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -126,7 +126,7 @@ export default function MedicalChecklist() {
 
       {/* AUDIT WINDOW URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Do Not Miss the Audit Window</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Do Not Miss the Audit Window</h2>
         <p className="text-gray-700">
           Most medical office leases allow only 6–12 months after reconciliation
           delivery to formally dispute charges. Missing this window can permanently
@@ -136,13 +136,13 @@ export default function MedicalChecklist() {
 
       {/* EXPOSURE EXAMPLE */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Example: 15,000 SF Multi-Specialty Clinic
         </h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-1">
           <p>$28 Base Rent = $420,000 Annual Base</p>
           <p>$9 NNN = $135,000 Annual NNN</p>
-          <p className="font-bold mt-2">Total Annual Occupancy: $555,000</p>
+          <p className="font-medium mt-2">Total Annual Occupancy: $555,000</p>
         </div>
         <p className="text-gray-700 mt-4">
           A $1.50 PSF allocation error equals $22,500 annually. Over a 10-year term,
@@ -152,7 +152,7 @@ export default function MedicalChecklist() {
 
       {/* INTERNAL LINKS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Related Medical Lease Resources
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">

@@ -43,7 +43,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* HERO */}
       <section className="space-y-6">
-        <h1 className="text-4xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           CAM & NNN Lease Audit for Independent Medical Practices
         </h1>
         <p className="text-lg text-gray-700">
@@ -60,7 +60,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* WHO THIS IS FOR */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Built For Healthcare Operators</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Built For Healthcare Operators</h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
           <li>Independent imaging centers</li>
           <li>Urgent care operators</li>
@@ -72,11 +72,11 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* FINANCIAL MATH */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">What Small Errors Actually Cost</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">What Small Errors Actually Cost</h2>
         <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
           <p>10,000 SF practice × $3 PSF improper allocation = $30,000/year</p>
           <p>15,000 SF medical tenant × $2.50 PSF overcharge = $37,500/year</p>
-          <p className="font-semibold">
+          <p className="font-medium">
             Over a 7-year lease term, that can exceed $200,000 in preventable exposure.
           </p>
           <p>
@@ -87,7 +87,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* UNIQUE RISK */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Medical Office Leases Are Uniquely Risky
         </h2>
         <p className="text-gray-700">
@@ -112,7 +112,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* BEFORE AFTER */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Before vs. After a Lease Audit</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Before vs. After a Lease Audit</h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
             <p className="font-semibold">Before Audit</p>
@@ -137,7 +137,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* COMMON OVERCHARGES */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Common CAM Overcharges in Outpatient Buildings
         </h2>
         <ul className="list-disc pl-6 space-y-2 text-gray-700">
@@ -155,7 +155,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* URGENCY */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Why Audit Timing Is Critical</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Why Audit Timing Is Critical</h2>
         <p className="text-gray-700">
           Most medical office leases allow only 6–12 months after reconciliation
           delivery to formally dispute charges. Missing this window can permanently
@@ -165,7 +165,7 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* INTERNAL LINKS */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Related Medical Lease Resources</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Related Medical Lease Resources</h2>
         <ul className="list-disc pl-6 space-y-2 text-emerald-700">
           <li>
             <Link href="/marketing/medical-office-cam-reconciliation">
@@ -192,18 +192,18 @@ export default function MedicalOfficeLeaseAudit() {
 
       {/* FAQ */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Frequently Asked Questions</h2>
         <div className="space-y-4 text-gray-700">
           <div>
-            <h3 className="font-semibold">How often should medical tenants audit their lease?</h3>
+            <h3 className="font-light tracking-tight">How often should medical tenants audit their lease?</h3>
             <p>Ideally every reconciliation cycle and always before audit windows expire.</p>
           </div>
           <div>
-            <h3 className="font-semibold">Are capital expenses always excluded from CAM?</h3>
+            <h3 className="font-light tracking-tight">Are capital expenses always excluded from CAM?</h3>
             <p>Not always. It depends on lease definitions and amortization language.</p>
           </div>
           <div>
-            <h3 className="font-semibold">Can prior overcharges be recovered?</h3>
+            <h3 className="font-light tracking-tight">Can prior overcharges be recovered?</h3>
             <p>Recovery depends on lease audit rights and reconciliation timing.</p>
           </div>
         </div>
