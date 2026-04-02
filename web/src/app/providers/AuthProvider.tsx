@@ -33,10 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           autoRefreshToken: true,
           detectSessionInUrl: true,
           storage: window.localStorage,
-          cookieOptions: {
-            domain: ".saveonlease.com",
-            sameSite: "lax",
-          },
         },
       }
     );
