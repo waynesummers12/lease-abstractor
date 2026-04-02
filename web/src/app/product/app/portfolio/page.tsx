@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 type Lease = {
   id: string;
@@ -20,12 +22,20 @@ type LeaseWithRisk = Lease & {
 };
 
 export default function PortfolioPage() {
+  const { session, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [leases, setLeases] = useState<Lease[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLease, setSelectedLease] = useState<LeaseWithRisk | null>(null);
   const [companyName] = useState<string>("SaveOnLease Client");
   const [confidential] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!authLoading && !session) {
+      router.push("/login");
+    }
+  }, [session, authLoading, router]);
 
   useEffect(() => {
     async function fetchPortfolio() {
@@ -92,7 +102,13 @@ export default function PortfolioPage() {
     return { critical, watch, safe };
   }, [sortedLeases]);
 
-  if (loading) return <div className="p-6">Loading portfolio...</div>;
+  if (authLoading || loading) {
+  return <div className="p-6">Loading portfolio...</div>;
+}
+
+if (!session) {
+  return null;
+}
   if (error)
     return (
       <div className="p-6">
