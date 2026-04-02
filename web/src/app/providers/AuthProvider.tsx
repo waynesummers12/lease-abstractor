@@ -29,7 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         auth: {
           persistSession: true,
           autoRefreshToken: true,
-          detectSessionInUrl: true, // 🔥 critical for OAuth redirect handling
+          detectSessionInUrl: true,
+          storage: typeof window !== "undefined" ? window.localStorage : undefined, // 🔥 FIX
         },
       }
     );
