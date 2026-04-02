@@ -40,6 +40,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
+        // 🔥 Handle OAuth redirect code (ensures session is created)
+        if (typeof window !== "undefined") {
+          const url = window.location.href;
+          if (url.includes("code=") || url.includes("access_token")) {
+            try {
+              await supabase.auth.exchangeCodeForSession(url);
+            } catch {
+              // ignore if already exchanged
+            }
+          }
+        }
+
         const { data, error } = await supabase.auth.getSession();
 
         if (error) {
@@ -95,8 +107,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (profile?.plan) setPlan(profile.plan);
       }
 
-      if (event === "SIGNED_IN") {
-        window.location.reload();
+      // 🔥 Handle initial + sign-in events without full reload
+      if (event === "INITIAL_SESSION" || event === "SIGNED_IN") {
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          setSession(data.session);
+        }
       }
 
       setLoading(false);
