@@ -14,7 +14,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           Non-Allowable CAM & NNN Expenses — What Tenants Should Never Pay
         </h1>
 
@@ -27,7 +27,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check for non-allowable charges (Free Preview)
         </Link>
@@ -39,7 +39,7 @@ export default function Page() {
 
       {/* WHAT DOES NON-ALLOWABLE MEAN */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Does “Non-Allowable” Mean?
         </h2>
 
@@ -57,7 +57,7 @@ export default function Page() {
 
       {/* COMMON NON-ALLOWABLE EXPENSES */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Common Non-Allowable CAM / NNN Expenses
         </h2>
 
@@ -79,7 +79,7 @@ export default function Page() {
 
       {/* HOW THEY SLIP THROUGH */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How Non-Allowable Charges Slip Through
         </h2>
 
@@ -98,7 +98,7 @@ export default function Page() {
 
       {/* CHALLENGE RIGHTS */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Can Tenants Challenge Non-Allowable Expenses?
         </h2>
 
@@ -137,7 +137,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Find Non-Allowable Charges Hidden in Your Lease
         </h3>
 
@@ -148,7 +148,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check CAM / NNN charges (Free Preview)
         </Link>

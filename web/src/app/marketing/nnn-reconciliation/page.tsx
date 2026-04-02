@@ -13,7 +13,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           NNN Reconciliation Explained — How Tenants Spot Errors & Overcharges
         </h1>
 
@@ -26,7 +26,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check NNN overcharges (Free Preview)
         </Link>
@@ -38,7 +38,7 @@ export default function Page() {
 
       {/* WHAT IS NNN RECONCILIATION */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Is NNN Reconciliation?
         </h2>
 
@@ -63,7 +63,7 @@ export default function Page() {
 
       {/* WHY ERRORS HAPPEN */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why NNN Reconciliation Errors Are So Common
         </h2>
 
@@ -83,7 +83,7 @@ export default function Page() {
 
       {/* WHAT TENANTS SHOULD CHECK */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Tenants Should Review in an NNN Reconciliation
         </h2>
 
@@ -103,7 +103,7 @@ export default function Page() {
 
       {/* AUDIT RIGHTS */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Do Tenants Have the Right to Audit NNN Charges?
         </h2>
 
@@ -127,7 +127,7 @@ export default function Page() {
 
       {/* CTA BOX */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Check Your NNN Reconciliation Before It’s Too Late
         </h3>
 
@@ -138,7 +138,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to review NNN charges (Free Preview)
         </Link>

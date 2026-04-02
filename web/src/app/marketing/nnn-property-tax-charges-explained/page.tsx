@@ -12,7 +12,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           NNN Property Tax Charges Explained — Why Your Costs Keep Rising
         </h1>
 
@@ -24,7 +24,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to review property tax charges (Free Preview)
         </Link>
@@ -36,7 +36,7 @@ export default function Page() {
 
       {/* WHAT ARE PROPERTY TAX CHARGES */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Are NNN Property Tax Charges?
         </h2>
 
@@ -59,7 +59,7 @@ export default function Page() {
 
       {/* HOW TAXES ARE CALCULATED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How Property Taxes Should Be Passed Through
         </h2>
 
@@ -78,7 +78,7 @@ export default function Page() {
 
       {/* COMMON TAX OVERCHARGES */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Common Property Tax Overcharges
         </h2>
 
@@ -98,7 +98,7 @@ export default function Page() {
 
       {/* BASE YEAR & CAPS */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Base Year and Property Tax Caps
         </h2>
 
@@ -122,7 +122,7 @@ export default function Page() {
 
       {/* WHY TENANTS MISS TAX ERRORS */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Tenants Rarely Question Property Taxes
         </h2>
 
@@ -140,7 +140,7 @@ export default function Page() {
 
       {/* CAN IT BE CHALLENGED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Can Property Tax Charges Be Challenged?
         </h2>
 
@@ -167,7 +167,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Check Your NNN Property Tax Charges Automatically
         </h3>
 
@@ -178,7 +178,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to review tax charges (Free Preview)
         </Link>

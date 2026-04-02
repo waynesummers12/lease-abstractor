@@ -14,7 +14,7 @@ export default function Page() {
     <main className="mx-auto max-w-3xl px-6 py-24">
       {/* HERO */}
       <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl font-bold">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           NNN Insurance Charges Explained — What Tenants Really Pay
         </h1>
 
@@ -26,7 +26,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to review NNN insurance charges (Free Preview)
         </Link>
@@ -38,7 +38,7 @@ export default function Page() {
 
       {/* WHAT ARE NNN INSURANCE CHARGES */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           What Are NNN Insurance Charges?
         </h2>
 
@@ -62,7 +62,7 @@ export default function Page() {
 
       {/* HOW IT SHOULD WORK */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           How Insurance Charges Should Be Calculated
         </h2>
 
@@ -81,7 +81,7 @@ export default function Page() {
 
       {/* COMMON INSURANCE OVERCHARGES */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold">
+        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
           Common NNN Insurance Overcharges
         </h2>
 
@@ -101,7 +101,7 @@ export default function Page() {
 
       {/* WHEN INSURANCE IS NOT ALLOWED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           When Insurance Charges Are Not Allowed
         </h2>
 
@@ -120,7 +120,7 @@ export default function Page() {
 
       {/* WHY TENANTS MISS IT */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Why Tenants Rarely Review Insurance Charges
         </h2>
 
@@ -138,7 +138,7 @@ export default function Page() {
 
       {/* CAN IT BE CHALLENGED */}
       <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
           Can NNN Insurance Charges Be Challenged?
         </h2>
 
@@ -165,7 +165,7 @@ export default function Page() {
 
       {/* CTA */}
       <section className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="mb-3 text-xl font-semibold">
+        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Review Your NNN Insurance Charges Automatically
         </h3>
 
@@ -176,7 +176,7 @@ export default function Page() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload your lease to check insurance charges (Free Preview)
         </Link>

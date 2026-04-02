@@ -17,7 +17,7 @@ export default function NnnLeasePage() {
     <main className="mx-auto max-w-4xl px-6 py-20">
       {/* HERO */}
       <section className="mb-16">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight">
+        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
           NNN Lease (Triple Net Lease) Explained for Commercial Tenants
         </h1>
 
@@ -46,7 +46,7 @@ export default function NnnLeasePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
           Upload Lease to Review NNN Charges (Free Preview)
         </Link>
@@ -58,7 +58,7 @@ export default function NnnLeasePage() {
 
       {/* WHAT IS NNN */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           What Does NNN Mean?
         </h2>
 
@@ -105,7 +105,7 @@ export default function NnnLeasePage() {
 
       {/* HOW NNN LEASES IMPACT TENANTS */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           How NNN Leases Impact Commercial Tenants
         </h2>
 
@@ -133,7 +133,7 @@ export default function NnnLeasePage() {
 
       {/* FINANCIAL CONSEQUENCES */}
       <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Reviewing Your NNN Lease Matters
         </h2>
 
@@ -157,7 +157,7 @@ export default function NnnLeasePage() {
 
       {/* FINAL CTA */}
       <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-2xl font-semibold">
+        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
           Review Your NNN Lease Before Charges Compound
         </h2>
 
@@ -168,7 +168,7 @@ export default function NnnLeasePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
+          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
         >
       Run Free NNN Lease Review
         </Link>
