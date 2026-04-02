@@ -36,7 +36,7 @@ export default function MedicalHubPage() {
 
       {/* HERO */}
       <section className="space-y-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
           Medical Office Lease Audit & CAM Recovery Hub
         </h1>
         <p className="text-lg text-gray-700 max-w-3xl mx-auto">
@@ -55,7 +55,7 @@ export default function MedicalHubPage() {
 
       {/* WHY MEDICAL IS DIFFERENT */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Why Medical Office Leases Carry Higher Financial Risk
         </h2>
         <p className="text-gray-700">
@@ -68,14 +68,14 @@ export default function MedicalHubPage() {
 
       {/* CORE GUIDES GRID */}
       <section className="space-y-8">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Core Medical Lease Guides
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">
 
           <Link href="/marketing/medical-office-lease-audit" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Office Lease Audit (CAM & NNN Review)</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Medical Office Lease Audit (CAM & NNN Review)</h3>
             <p className="text-gray-600">
               How healthcare tenants identify CAM and NNN overcharges before
               audit deadlines expire.
@@ -83,7 +83,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-cam-reconciliation" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Office CAM Reconciliation Process</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Medical Office CAM Reconciliation Process</h3>
             <p className="text-gray-600">
               Understanding annual reconciliations and common allocation errors
               in medical buildings.
@@ -91,7 +91,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-nnn-expenses" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Office NNN Expense Breakdown</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Medical Office NNN Expense Breakdown</h3>
             <p className="text-gray-600">
               Breakdown of property taxes, insurance, CAM fees, and capital
               expense pass-through risk.
@@ -99,7 +99,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-practice-lease-overcharges" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical Lease Overcharges & Admin Fee Violations</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Medical Lease Overcharges & Admin Fee Violations</h3>
             <p className="text-gray-600">
               Real-world examples of admin fee violations, capital pass-throughs,
               and inflated operating costs.
@@ -107,7 +107,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/medical-office-cam-spikes" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Medical CAM Spikes & Operating Expense Increases</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Medical CAM Spikes & Operating Expense Increases</h3>
             <p className="text-gray-600">
               How reassessments and insurance increases create sudden financial
               exposure for healthcare tenants.
@@ -115,7 +115,7 @@ export default function MedicalHubPage() {
           </Link>
 
           <Link href="/marketing/multi-location-medical-lease-risk" className="border rounded-lg p-6 hover:shadow-lg transition">
-            <h3 className="font-semibold text-lg mb-2">Multi-Location Medical Lease Risk & Portfolio Audit</h3>
+            <h3 className="text-lg sm:text-xl font-light tracking-tight mb-2">Multi-Location Medical Lease Risk & Portfolio Audit</h3>
             <p className="text-gray-600">
               Portfolio-level risk for growing medical groups and imaging
               networks.
@@ -127,7 +127,7 @@ export default function MedicalHubPage() {
 
       {/* AUDIT RIGHTS SECTION */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Audit Rights & Deadlines for Medical Tenants
         </h2>
         <p className="text-gray-700">

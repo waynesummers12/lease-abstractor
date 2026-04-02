@@ -11,7 +11,7 @@ export default function LeaseScorePage() {
     <main className="mx-auto max-w-4xl px-6 py-24">
       {/* ---------- HERO ---------- */}
       <section className="text-center">
-  <h1 className="text-4xl font-bold tracking-tight">
+  <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
     Lease Score Explained — How We Evaluate CAM / NNN Risk
   </h1>
   <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
@@ -22,7 +22,7 @@ export default function LeaseScorePage() {
 
       {/* ---------- WHAT IT IS ---------- */}
       <section className="mt-20 rounded-xl border bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold">What Is Lease Score?</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">What Is Lease Score?</h2>
         <p className="mt-4 text-gray-700">
           Lease Score is a tenant-first assessment that evaluates the lease
           provisions most likely to affect your total occupancy cost — not just
@@ -38,7 +38,7 @@ export default function LeaseScorePage() {
       <section className="mt-16 grid gap-6 md:grid-cols-3">
         {/* LOW */}
         <div className="rounded-xl border border-green-200 bg-green-50 p-6">
-          <h3 className="font-semibold text-green-900">Low Risk Lease</h3>
+          <h3 className="font-light tracking-tight text-green-900">Low Risk Lease</h3>
           <p className="mt-2 text-sm text-green-900">
             Strong tenant protections with defined CAM limits, excluded capital
             expenses, and enforceable audit rights. These leases typically limit
@@ -48,7 +48,7 @@ export default function LeaseScorePage() {
 
         {/* MEDIUM */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-6">
-          <h3 className="font-semibold text-amber-900">Medium Risk Lease</h3>
+          <h3 className="font-light tracking-tight text-amber-900">Medium Risk Lease</h3>
           <p className="mt-2 text-sm text-amber-900">
             Some tenant protections exist, but key terms are ambiguous or
             partially uncapped. These leases often require proactive monitoring
@@ -58,7 +58,7 @@ export default function LeaseScorePage() {
 
         {/* HIGH */}
         <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-          <h3 className="font-semibold text-red-900">High Risk Lease</h3>
+          <h3 className="font-light tracking-tight text-red-900">High Risk Lease</h3>
           <p className="mt-2 text-sm text-red-900">
             Limited tenant protections with broadly defined or uncapped CAM /
             NNN charges. These leases are most likely to produce recoverable
@@ -69,7 +69,7 @@ export default function LeaseScorePage() {
 
       {/* ---------- WHY IT MATTERS ---------- */}
       <section className="mt-20 rounded-xl border bg-gray-50 p-8">
-        <h2 className="text-2xl font-semibold">Why Lease Score Matters</h2>
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Why Lease Score Matters</h2>
         <p className="mt-4 text-gray-700">
           Most CAM / NNN disputes are governed by strict audit windows —
           typically <strong>30–120 days</strong> after reconciliation. Lease
@@ -84,7 +84,7 @@ export default function LeaseScorePage() {
 
       {/* ---------- CTA ---------- */}
       <section className="mt-20 rounded-2xl bg-black px-8 py-12 text-center text-white">
-        <h2 className="text-2xl font-semibold">
+        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
           Want to know your Lease Score?
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-gray-300">
@@ -94,7 +94,7 @@ export default function LeaseScorePage() {
 
         <Link
           href="/app/step-1-upload"
-          className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-sm font-semibold text-black hover:bg-gray-200"
+          className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-sm font-medium text-black hover:bg-gray-200"
         >
           Run CAM & NNN Audit (Free Preview)
         </Link>
