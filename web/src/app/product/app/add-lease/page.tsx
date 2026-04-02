@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 export default function AddLeasePage() {
+  const { session, loading: authLoading } = useAuth();
+
   const router = useRouter();
 
   const [fileName, setFileName] = useState<string | null>(null);
@@ -100,6 +103,14 @@ export default function AddLeasePage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (authLoading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
+  if (!session) {
+    return null;
   }
 
   return (
