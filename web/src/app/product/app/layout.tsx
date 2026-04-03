@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 import {
@@ -22,7 +21,7 @@ export function AvatarDropdown() {
         <Avatar>
           <AvatarImage src="/avatar.jpg" alt="User avatar" />
           <AvatarFallback>
-            <User className="h-4 w-4" />
+            <span className="text-xs">U</span>
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
