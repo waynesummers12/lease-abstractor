@@ -44,12 +44,12 @@ export default function Header() {
         className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-4 ${navTextColor}`}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
           <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap ml-4">
+        <nav className="hidden md:flex items-center gap-8 text-sm relative whitespace-nowrap ml-6">
           <EducationDropdown />
 
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
