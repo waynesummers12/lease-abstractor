@@ -49,7 +49,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap">
+        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap ml-4">
           <EducationDropdown />
 
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
