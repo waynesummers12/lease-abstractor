@@ -16,11 +16,6 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
     if (session && !pathname.startsWith("/product/app")) {
       router.replace("/product/app/dashboard");
     }
-
-    // If not logged in and trying to access app → block
-    if (!session && pathname.startsWith("/product/app")) {
-      router.replace("/login");
-    }
   }, [session, loading, pathname, router]);
 
   return <>{children}</>;
