@@ -45,7 +45,7 @@ export default function MobileMenu({
         <Link href="/marketing/how-it-works" onClick={() => setOpen(false)}>
           How It Works
         </Link>
-        <Link href="/marketing/pricing" onClick={() => setOpen(false)}>
+        <Link href="/pricing" onClick={() => setOpen(false)}>
           Pricing
         </Link>
 

@@ -80,7 +80,7 @@ export default function Navbar() {
                 <Link href="/marketing/how-it-works" className="block px-4 py-2 hover:bg-gray-100">
                   How It Works
                 </Link>
-                <Link href="/marketing/pricing" className="block px-4 py-2 hover:bg-gray-100">
+                <Link href="/pricing" className="block px-4 py-2 hover:bg-gray-100">
                   Pricing
                 </Link>
                 <Link href="/marketing/contact" className="block px-4 py-2 hover:bg-gray-100">
