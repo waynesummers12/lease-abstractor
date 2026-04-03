@@ -170,8 +170,8 @@ export default function Header() {
         user={user}
         onLogout={async () => {
           await supabase.auth.signOut();
-          setMenuOpen(false);
         }}
+        setOpen={setMenuOpen}
       />
     </header>
   );

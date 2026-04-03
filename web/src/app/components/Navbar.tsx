@@ -131,7 +131,7 @@ export default function Navbar() {
 
               {avatarOpen && (
                 <div className="absolute right-0 mt-10 w-48 bg-white text-black rounded-md shadow-lg py-2">
-                  <Link href="/app/portfolio" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link href="/product/app/dashboard" className="block px-4 py-2 hover:bg-gray-100">
                     Dashboard
                   </Link>
                   <button
@@ -160,6 +160,7 @@ export default function Navbar() {
         open={mobileOpen}
         user={user}
         onLogout={handleLogout}
+        setOpen={setMobileOpen}
       />
     </nav>
   );
