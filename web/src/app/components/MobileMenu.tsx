@@ -54,7 +54,7 @@ export default function MobileMenu({
             <Link href="/login" onClick={() => window.location.reload()}>
               Login
             </Link>
-            <Link href="/product/app/step-1-upload" onClick={() => window.location.reload()}>
+            <Link href="/app/step-1-upload" onClick={() => window.location.reload()}>
               Run Audit
             </Link>
           </>
