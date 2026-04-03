@@ -16,7 +16,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
   email,
   options: {
-    emailRedirectTo: `${window.location.origin}/product/app/dashboard`,
+    emailRedirectTo: `${window.location.origin}/auth/callback?next=/product/app/dashboard`,
   },
 });
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/product/app/dashboard`,
+          redirectTo: `${window.location.origin}/auth/callback?next=/product/app/dashboard`,
           queryParams: {
             prompt: "select_account",
           },

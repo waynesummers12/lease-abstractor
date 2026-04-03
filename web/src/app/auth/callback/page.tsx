@@ -2,10 +2,11 @@
 
 import { useEffect } from "react";
 import { createBrowserClient } from "@supabase/ssr";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,11 +24,12 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuth = async () => {
       await supabase.auth.exchangeCodeForSession(window.location.href);
-      router.replace("/product/app/dashboard");
+      const next = searchParams.get("next") || "/product/app/dashboard";
+      router.replace(next);
     };
 
     handleAuth();
-  }, [router, supabase]);
+  }, [router, supabase, searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
