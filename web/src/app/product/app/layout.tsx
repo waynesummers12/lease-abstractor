@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { User } from "lucide-react";
 
@@ -17,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function AvatarDropdown() {
-  const pathname = usePathname();
 
   return (
     <DropdownMenu>
