@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/app/lib/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";
@@ -24,6 +24,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState<"free" | "pro" | "enterprise">("free");
 
   useEffect(() => {
+    const supabase = createClient();
+
     // supabase singleton is always available
 
     const init = async () => {
