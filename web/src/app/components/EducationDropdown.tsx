@@ -38,7 +38,9 @@ export default function EducationDropdown() {
           <div className="grid grid-cols-2 gap-6 text-sm">
             {/* Core CAM */}
             <div>
-              <p className="text-white/50 text-xs mb-2 uppercase">CAM</p>
+              <Link href="/marketing/cam-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+                CAM
+              </Link>
               <Link href="/marketing/cam-reconciliation" className="block py-1 hover:opacity-70">CAM Reconciliation</Link>
               <Link href="/marketing/cam-reconciliation-errors" className="block py-1 hover:opacity-70">Reconciliation Errors</Link>
               <Link href="/marketing/cam-expense-caps" className="block py-1 hover:opacity-70">Expense Caps</Link>
@@ -48,7 +50,9 @@ export default function EducationDropdown() {
 
             {/* NNN */}
             <div>
-              <p className="text-white/50 text-xs mb-2 uppercase">NNN</p>
+              <Link href="/marketing/nnn-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+                NNN
+              </Link>
               <Link href="/marketing/nnn-audit-rights" className="block py-1 hover:opacity-70">Audit Rights</Link>
               <Link href="/marketing/nnn-expenses-explained" className="block py-1 hover:opacity-70">NNN Expenses Explained</Link>
               <Link href="/marketing/nnn-reconciliation" className="block py-1 hover:opacity-70">NNN Reconciliation</Link>
@@ -58,7 +62,9 @@ export default function EducationDropdown() {
 
             {/* Medical */}
             <div>
-              <p className="text-white/50 text-xs mb-2 uppercase">Medical</p>
+              <Link href="/marketing/medical-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+                Medical
+              </Link>
               <Link href="/marketing/medical-office-lease-audit" className="block py-1 hover:opacity-70">Medical Lease Audit</Link>
               <Link href="/marketing/medical-office-cam-reconciliation" className="block py-1 hover:opacity-70">Medical CAM</Link>
               <Link href="/marketing/medical-office-nnn-expenses" className="block py-1 hover:opacity-70">Medical NNN</Link>
@@ -67,7 +73,9 @@ export default function EducationDropdown() {
 
             {/* Retail / Franchise */}
             <div>
-              <p className="text-white/50 text-xs mb-2 uppercase">Retail / Franchise</p>
+              <Link href="/marketing/retail-lease-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+                Retail / Franchise
+              </Link>
               <Link href="/marketing/retail-lease-hub" className="block py-1 hover:opacity-70">Retail Lease Hub</Link>
               <Link href="/marketing/franchise-cam-audit" className="block py-1 hover:opacity-70">Franchise CAM Audit</Link>
               <Link href="/marketing/restaurant-nnn-overcharges" className="block py-1 hover:opacity-70">Restaurant NNN</Link>
