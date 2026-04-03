@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SidebarNav from "@/app/components/SidebarNav";
+import Header from "@/app/components/Header";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,8 @@ export default function ProductLayout({
 }) {
   return (
     <div className="min-h-screen bg-white">
+      <Header />
+
       <div className="flex w-full">
         
         {/* Sidebar */}
