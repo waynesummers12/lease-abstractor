@@ -64,7 +64,7 @@ export default function Header() {
           <Link href="/marketing/contact" className="opacity-70 hover:opacity-100 transition">
             Contact
           </Link>
-          <Link href="/marketing/pricing" className="opacity-70 hover:opacity-100 transition">
+          <Link href="/pricing" className="opacity-70 hover:opacity-100 transition">
             Pricing
           </Link>
 
@@ -110,7 +110,7 @@ export default function Header() {
 
               {/* Portfolio */}
               <Link
-                href={plan === "free" ? "/marketing/pricing" : "/product/app/portfolio"}
+                href={plan === "free" ? "/pricing" : "/product/app/portfolio"}
                 className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
               >
                 Portfolio {plan === "free" && "🔒"}
@@ -118,7 +118,7 @@ export default function Header() {
 
               {/* Benchmarks */}
               <Link
-                href={plan !== "enterprise" ? "/marketing/pricing" : "/product/app/benchmarks"}
+                href={plan !== "enterprise" ? "/pricing" : "/product/app/benchmarks"}
                 className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
               >
                 Benchmarks {plan !== "enterprise" && "🔒"}
@@ -127,7 +127,7 @@ export default function Header() {
               {/* Upgrade CTA */}
               {plan === "free" && !isAppPage && (
                 <Link
-                  href="/marketing/pricing"
+                  href="/pricing"
                   className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
                 >
                   Upgrade
