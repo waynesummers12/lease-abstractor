@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
 import { User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
@@ -13,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/app/components/ui/dropdown-menu";
 
 export function AvatarDropdown() {
 
@@ -37,8 +36,14 @@ export function AvatarDropdown() {
           <Link href="/product/app/dashboard">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>Sign out</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuItem
+  onClick={() => {
+    window.location.href = "/login";
+  }}
+>
+  Sign out
+</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
   );
 }
