@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/app/lib/supabase/client";
 
 interface User {
   id: string;
@@ -6,6 +6,7 @@ interface User {
 }
 
 export async function ensureProfile(user: User) {
+  const supabase = createClient();
 
   const { data } = await supabase
     .from("profiles")
