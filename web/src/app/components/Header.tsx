@@ -166,13 +166,13 @@ export default function Header() {
       </div>
 
       <MobileMenu
-        open={menuOpen}
-        user={user}
-        onLogout={async () => {
-          await supabase.auth.signOut();
-        }}
-        setOpen={setMenuOpen}
-      />
+open={menuOpen}
+user={user}
+onLogout={async () => {
+await supabase.auth.signOut();
+}}
+setOpen={setMenuOpen}
+/>
     </header>
   );
 }
