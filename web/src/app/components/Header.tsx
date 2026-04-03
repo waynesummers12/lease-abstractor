@@ -94,7 +94,7 @@ export default function Header() {
               {/* Dashboard */}
               <div className="flex items-center gap-2">
                 <Link
-                  href="/product/app/dashboard"
+                  href="/app/dashboard"
                   className={`font-semibold transition ${
                     isAppPage ? "text-black" : "text-white"
                   }`}
