@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/app/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {
@@ -16,6 +16,8 @@ export default function AvatarDropdown({
 }: AvatarDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
+
+  const supabase = createClient();
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {

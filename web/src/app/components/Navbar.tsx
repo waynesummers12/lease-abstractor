@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/app/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import MobileMenu from "./MobileMenu";
 
@@ -15,8 +15,12 @@ export default function Navbar() {
   const learnRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
 
+  // Removed: const supabase = createClient();
+
   // ✅ Get session safely
   useEffect(() => {
+    const supabase = createClient();
+
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
     });
@@ -48,6 +52,7 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
   };
 
