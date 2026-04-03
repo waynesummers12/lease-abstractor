@@ -40,8 +40,12 @@ export default function PricingPage() {
 
           {/* PRO */}
           <div className="border-2 border-black rounded-xl p-8 text-center shadow-sm">
-            <div className="text-sm text-gray-500 mb-1">Pro</div>
-            <div className="text-3xl font-medium mb-2">$29.99</div>
+            <div className="text-xs text-green-600 font-medium mb-2">
+            Most popular
+           </div>
+
+           <div className="text-sm text-gray-500 mb-1">Pro</div>
+           <div className="text-3xl font-medium mb-2">$29.99</div>
             <div className="text-xs text-gray-500 mb-6">per lease</div>
 
             <div className="space-y-2 text-sm text-gray-700 mb-6">
