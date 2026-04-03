@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/app/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";
@@ -22,6 +22,8 @@ export default function Header() {
 
 
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const supabase = createClient();
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
