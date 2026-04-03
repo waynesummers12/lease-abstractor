@@ -38,7 +38,7 @@ export default function EducationDropdown() {
           <div className="grid grid-cols-2 gap-6 text-sm">
             {/* Core CAM */}
             <div>
-              <Link href="/marketing/cam-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+              <Link href="/marketing/cam-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white hover:underline transition cursor-pointer">
                 CAM
               </Link>
               <Link href="/marketing/cam-reconciliation" className="block py-1 hover:opacity-70">CAM Reconciliation</Link>
@@ -50,7 +50,7 @@ export default function EducationDropdown() {
 
             {/* NNN */}
             <div>
-              <Link href="/marketing/nnn-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+              <Link href="/marketing/nnn-reconciliation" className="block text-white/50 text-xs mb-2 uppercase hover:text-white hover:underline transition cursor-pointer">
                 NNN
               </Link>
               <Link href="/marketing/nnn-audit-rights" className="block py-1 hover:opacity-70">Audit Rights</Link>
@@ -62,7 +62,7 @@ export default function EducationDropdown() {
 
             {/* Medical */}
             <div>
-              <Link href="/marketing/medical-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+              <Link href="/marketing/medical-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white hover:underline transition cursor-pointer">
                 Medical
               </Link>
               <Link href="/marketing/medical-office-lease-audit" className="block py-1 hover:opacity-70">Medical Lease Audit</Link>
@@ -73,7 +73,7 @@ export default function EducationDropdown() {
 
             {/* Retail / Franchise */}
             <div>
-              <Link href="/marketing/retail-lease-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white transition">
+              <Link href="/marketing/retail-lease-hub" className="block text-white/50 text-xs mb-2 uppercase hover:text-white hover:underline transition cursor-pointer">
                 Retail / Franchise
               </Link>
               <Link href="/marketing/retail-lease-hub" className="block py-1 hover:opacity-70">Retail Lease Hub</Link>
