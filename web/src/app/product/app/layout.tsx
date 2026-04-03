@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import SidebarNav from "@/app/components/SidebarNav";
 import Header from "@/app/components/Header";
+import { usePathname } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -9,9 +12,11 @@ export default function ProductLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      {pathname.startsWith("/product") && <Header />}
 
       <div className="flex w-full">
         
