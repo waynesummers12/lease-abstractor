@@ -14,11 +14,11 @@ export default function LoginPage() {
     setLoading(true);
 
     const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/product/app/dashboard`,
-      },
-    });
+  email,
+  options: {
+    emailRedirectTo: `${window.location.origin}/product/app/dashboard`,
+  },
+});
 
     if (error) {
       const msg = (error.message || "").toLowerCase();
