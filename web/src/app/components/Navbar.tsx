@@ -54,15 +54,15 @@ export default function Navbar() {
   const isProUser = false; // TODO: replace with real plan logic
 
   return (
-    <nav className="w-full bg-black text-white px-6 py-4">
-      <div className="flex items-center justify-between">
+    <nav className="w-full bg-black text-white px-4 sm:px-6 py-4">
+      <div className="flex w-full max-w-full items-center justify-between">
         {/* Brand */}
-        <Link href="/" className="text-lg font-bold">
+        <Link href="/" className="text-lg font-bold shrink-0">
           SaveOnLease
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 ml-4">
           {/* Learn Dropdown */}
           <div ref={learnRef} className="relative">
             <button
