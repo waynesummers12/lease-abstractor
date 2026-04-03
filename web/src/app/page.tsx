@@ -23,7 +23,7 @@ export default async function HomePage() {
 
   // If logged in → go straight to dashboard
   if (user) {
-    redirect("/app/dashboard");
+    redirect("/product/app/dashboard");
   }
 
   // If not logged in → marketing site

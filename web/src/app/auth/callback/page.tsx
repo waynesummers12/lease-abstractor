@@ -23,7 +23,7 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuth = async () => {
       await supabase.auth.exchangeCodeForSession(window.location.href);
-      router.replace("/app/dashboard");
+      router.replace("/product/app/dashboard");
     };
 
     handleAuth();

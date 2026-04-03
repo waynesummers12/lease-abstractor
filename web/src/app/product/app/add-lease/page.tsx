@@ -251,7 +251,7 @@ export default function AddLeasePage() {
             </button>
 
             <Link
-              href="/app/dashboard"
+              href="/product/app/dashboard"
               className="text-sm text-gray-600 hover:underline"
             >
               Cancel
