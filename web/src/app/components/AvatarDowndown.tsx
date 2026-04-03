@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {

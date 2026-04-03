@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
 import AvatarDropdown from "./AvatarDowndown";

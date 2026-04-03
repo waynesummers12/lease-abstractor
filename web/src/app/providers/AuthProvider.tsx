@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ensureProfile } from "@/lib/supabase/createProfile";

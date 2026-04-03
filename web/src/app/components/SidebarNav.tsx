@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createClient } from "@/app/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
   { label: "Dashboard", href: "/product/app/dashboard", roles: ["admin", "analyst", "viewer"] },
