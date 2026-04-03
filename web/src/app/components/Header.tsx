@@ -41,7 +41,7 @@ export default function Header() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-[1000] ${bgClass}`}>
       <div
-        className={`mx-auto flex max-w-6xl items-center justify-between px-6 py-4 ${navTextColor}`}
+        className={`mx-auto flex w-full max-w-full items-center justify-between px-4 sm:px-6 py-4 ${navTextColor}`}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -49,7 +49,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm relative whitespace-nowrap ml-6">
+        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap ml-4">
           <EducationDropdown />
 
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
