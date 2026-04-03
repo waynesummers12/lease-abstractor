@@ -3,19 +3,15 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 
 export function AvatarDropdown() {
 
   return (
   <div className="relative group">
     <button className="flex items-center rounded-full bg-gray-100 p-1">
-      <Avatar>
-        <AvatarImage src="/avatar.jpg" alt="User avatar" />
-        <AvatarFallback>
-          <span className="text-xs">U</span>
-        </AvatarFallback>
-      </Avatar>
+      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium">
+        U
+      </div>
     </button>
 
     <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
