@@ -6,7 +6,7 @@ export default function PricingPage() {
         {/* HEADER */}
         <div className="text-center mb-14">
           <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-3">
-            Simple, ROI-Driven Pricing
+            Simple, ROI-Driven CAM Rec Pricing
           </h1>
           <p className="text-gray-600 text-sm">
             Most tenants uncover $5K–$20K in hidden lease costs
