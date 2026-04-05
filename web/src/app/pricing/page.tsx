@@ -45,7 +45,7 @@ export default function PricingPage() {
             </div>
 
            <div className="text-sm text-gray-500 mb-1">Pro</div>
-           <div className="text-3xl font-medium mb-2">$29.99</div>
+           <div className="text-3xl font-medium mb-2">$49.99</div>
             <div className="text-xs text-gray-500 mb-6">per lease</div>
 
             <div className="space-y-2 text-sm text-gray-700 mb-6">
@@ -67,12 +67,14 @@ export default function PricingPage() {
           {/* ENTERPRISE */}
           <div className="border rounded-xl p-8 text-center">
             <div className="text-sm text-gray-500 mb-1">Enterprise</div>
-            <div className="text-3xl font-medium mb-2">$39.99</div>
+            <div className="text-3xl font-medium mb-2">$99.99</div>
             <div className="text-xs text-gray-500 mb-6">per lease</div>
 
             <div className="space-y-2 text-sm text-gray-700 mb-6">
               <div>✔ Everything in Pro</div>
+              <div>✔ Custom integrations</div>
               <div>✔ Portfolio-level insights</div>
+              <div>✔ 3-audit leases included</div>
               <div>✔ Renewal timeline tracking</div>
               <div>✔ Risk scoring across leases</div>
               <div>✔ Priority support</div>
