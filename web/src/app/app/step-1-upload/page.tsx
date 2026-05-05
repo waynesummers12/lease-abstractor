@@ -112,7 +112,7 @@ export default function UploadLeasePage() {
     </div>
 
     <div className="rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-12 shadow-xl text-center text-white ring-1 ring-white/10">
-      <h2 className="text-2xl font-semibold tracking-tight mb-6">
+      <h2 className="text-2xl font-semibold tracking-tight mb-6 text-black">
         Upload Your Lease & Get Instant Savings Insights
       </h2>
       <p className="text-white/90 text-sm mb-8">
