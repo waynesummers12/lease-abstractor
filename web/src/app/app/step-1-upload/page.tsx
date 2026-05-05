@@ -111,7 +111,7 @@ export default function UploadLeasePage() {
       </div>
     </div>
 
-    <div className="rounded-2xl bg-gray-100 p-10 shadow-sm text-center">
+    <div className="rounded-2xl bg-green-600 p-10 shadow-lg text-center text-white">
       <UploadForm
         onUpload={handleUpload}
         loading={uploading}
