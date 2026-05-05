@@ -1,79 +1,153 @@
 "use client";
 
-import { useCallback, useState } from "react";
+/**
+ * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
+ *
+ * Rules:
+ * - Client-side only
+ * - No Supabase imports
+ * - No Stripe imports
+ * - No server-only logic
+ * - No process.env (except NEXT_PUBLIC_*)
+ *
+ * Allowed:
+ * - fetch("/api/...")
+ * - useState / useRouter
+ *
+ * Violation = production regression
+ */
 
-export default function UploadForm({
-  onUpload,
-  loading,
-}: {
-  onUpload: (file: File) => Promise<void>;
-  loading: boolean;
-}) {
-  const [dragActive, setDragActive] = useState(false);
+export const dynamic = "force-dynamic";
 
-  const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import UploadForm from "./UploadForm";
 
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
+export default function UploadLeasePage() {
+  const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  async function handleUpload(file: File) {
+    setError(null);
+    setUploading(true);
+
+    const auditId = crypto.randomUUID();
+    const objectPath = `leases/${auditId}.pdf`; // ✅ REQUIRED
+
+    try {
+      // 1️⃣ Create audit row
+      const createRes = await fetch("/api/audits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ auditId, objectPath }),
+      });
+
+      if (!createRes.ok) {
+        const text = await createRes.text();
+        throw new Error(text || "Failed to create audit");
+      }
+
+      // 2️⃣ Upload lease PDF to worker
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("auditId", auditId);
+      formData.append("objectPath", objectPath);
+
+      const ingestRes = await fetch(
+        `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
+        {
+          method: "POST",
+          headers: {
+            "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+          },
+          body: formData,
+        }
+      );
+
+      if (!ingestRes.ok) {
+        const text = await ingestRes.text();
+        throw new Error(text || "Failed to upload lease");
+      }
+
+      // 3️⃣ Redirect (working path)
+      router.push(`/app/step-3-review?auditId=${auditId}`);
+    } catch (err: unknown) {
+      console.error("Upload failed:", err);
+      const errorMessage = err instanceof Error ? err.message : "Upload failed. Please try again.";
+      setError(errorMessage);
+    } finally {
+      // 🔥 ALWAYS reset state
+      setUploading(false);
     }
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      setDragActive(false);
-
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        onUpload(e.dataTransfer.files[0]);
-      }
-    },
-    [onUpload]
-  );
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files[0]) {
-        onUpload(e.target.files[0]);
-      }
-    },
-    [onUpload]
-  );
-
+  }
+// =======================================================
+// ⛔ DO NOT MODIFY ABOVE THIS LINE ⛔
+// Only edit JSX BELOW the return() statement.
+// =======================================================
   return (
-    <form
-      className="relative"
-      onDragEnter={handleDrag}
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <input
-        type="file"
-        id="file-upload"
-        className="hidden"
-        accept="application/pdf"
-        onChange={handleChange}
-        disabled={loading}
+  <main className="mx-auto max-w-4xl px-6 py-24">
+    <div className="mb-12 text-center">
+      <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
+        Analyze Your Lease (Free Preview)
+      </h1>
+
+      <p className="mt-4 text-lg text-gray-600">
+        Get a quick preview of hidden CAM & NNN overcharges
+      </p>
+
+      <p className="mt-6 text-xl text-gray-800 font-medium">
+        See exactly where you&apos;re overpaying — before your next renewal.
+      </p>
+      <p className="mt-3 text-sm text-gray-500">
+        Built for retail, restaurant, franchise, office, and medical tenants.
+      </p>
+
+      <div className="mt-8 flex flex-col items-center gap-2 text-sm text-gray-600 sm:flex-row sm:justify-center sm:gap-8">
+        <span>✔ Detect inflated CAM charges</span>
+        <span>✔ Identify admin fee padding</span>
+        <span>✔ Flag missing caps & audit rights</span>
+      </div>
+    </div>
+
+    <div className="rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-12 shadow-xl text-center text-white ring-1 ring-white/10">
+      <h2 className="text-2xl font-semibold tracking-tight mb-6">
+        Upload Your Lease & Get Instant Savings Insights
+      </h2>
+      <p className="text-white/90 text-sm mb-8">
+        Drag and drop your lease below or click to upload. We’ll analyze it in seconds.
+      </p>
+      <UploadForm
+        onUpload={handleUpload}
+        loading={uploading}
       />
-      <label
-        htmlFor="file-upload"
-        className="border-2 border-dashed border-white/70 bg-white/20 rounded-2xl py-16 text-white font-semibold shadow-lg backdrop-blur-sm transition-all duration-200 hover:scale-[1.02] hover:bg-white/30 hover:shadow-2xl"
-      >
-        {loading ? "Uploading..." : "Drag & drop your lease here, or click to select"}
-      </label>
-      {dragActive && (
-        <div
-          className="absolute inset-0"
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-        />
+
+      <p className="mt-6 text-sm font-semibold text-white/90">
+        No credit card. No commitment.
+      </p>
+
+      <div className="mt-6 rounded-xl bg-white p-6 text-center text-gray-900">
+        <p className="text-base font-semibold text-green-900">
+          💰 Preview your potential savings before committing to a full audit
+        </p>
+        <p className="mt-2 text-sm text-green-800">
+          We’ll estimate your potential savings first — then you can decide if a full audit is worth it.
+        </p>
+      </div>
+
+      <p className="mt-6 text-xs text-white/70">
+        ⏱ Results generated in ~10 seconds
+      </p>
+
+      <p className="mt-2 text-sm text-white/70">
+        🔒 Secure, private, and never shared
+      </p>
+
+      {error && (
+        <p className="mt-4 text-sm text-red-600">{error}</p>
       )}
-    </form>
-  );
+    </div>
+  </main>
+);
 }
