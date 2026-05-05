@@ -111,17 +111,17 @@ export default function UploadLeasePage() {
       </div>
     </div>
 
-    <div className="rounded-2xl border bg-white p-8 shadow-sm text-center">
+    <div className="rounded-2xl bg-green-600 p-10 shadow-lg text-center text-white">
       <UploadForm
         onUpload={handleUpload}
         loading={uploading}
       />
 
-      <p className="mt-4 text-sm font-semibold text-gray-800">
+      <p className="mt-4 text-sm font-semibold text-white">
         No credit card. No commitment.
       </p>
 
-      <div className="mt-6 rounded-xl border border-green-200 bg-green-50 p-6 text-center">
+      <div className="mt-6 rounded-xl bg-white p-6 text-center text-gray-900">
         <p className="text-base font-semibold text-green-900">
           💰 Preview your potential savings before committing to a full audit
         </p>
@@ -130,11 +130,11 @@ export default function UploadLeasePage() {
         </p>
       </div>
 
-      <p className="mt-3 text-xs text-gray-500">
+      <p className="mt-3 text-xs text-white/80">
         ⏱ Results generated in ~10 seconds
       </p>
 
-      <p className="mt-2 text-sm text-gray-500">
+      <p className="mt-2 text-sm text-white/80">
         🔒 Secure, private, and never shared
       </p>
 
