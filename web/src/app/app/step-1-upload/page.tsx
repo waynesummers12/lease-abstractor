@@ -111,13 +111,19 @@ export default function UploadLeasePage() {
       </div>
     </div>
 
-    <div className="rounded-2xl bg-green-600 p-10 shadow-lg text-center text-white">
+    <div className="rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-12 shadow-xl text-center text-white ring-1 ring-white/10">
+      <h2 className="text-2xl font-semibold tracking-tight mb-6">
+        Upload Your Lease & Get Instant Savings Insights
+      </h2>
+      <p className="text-white/90 text-sm mb-8">
+        Drag and drop your lease below or click to upload. We’ll analyze it in seconds.
+      </p>
       <UploadForm
         onUpload={handleUpload}
         loading={uploading}
       />
 
-      <p className="mt-4 text-sm font-semibold text-gray-800">
+      <p className="mt-6 text-sm font-semibold text-white/90">
         No credit card. No commitment.
       </p>
 
@@ -130,11 +136,11 @@ export default function UploadLeasePage() {
         </p>
       </div>
 
-      <p className="mt-3 text-xs text-gray-500">
+      <p className="mt-6 text-xs text-white/70">
         ⏱ Results generated in ~10 seconds
       </p>
 
-      <p className="mt-2 text-sm text-gray-500">
+      <p className="mt-2 text-sm text-white/70">
         🔒 Secure, private, and never shared
       </p>
 
