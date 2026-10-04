@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { waitForAnalysis } from "../step-2-analysis/analysis.wait";
 
 type Analysis = {
   tenant: string | null;
@@ -32,44 +34,31 @@ function midpoint(range?: { low: number; high: number } | null) {
 export default function Step3ReviewClient() {
   const searchParams = useSearchParams();
   const auditId = searchParams.get("auditId");
+  return <AuditReviewClient key={auditId ?? "missing"} auditId={auditId} />;
+}
 
+function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error] = useState<string | null>(null);
+  const [failure, setFailure] = useState<"timeout" | "not-found" | "unavailable" | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const pollRef = useRef<number | null>(null);
   const hasFiredLeaseUploaded = useRef(false);
 
   useEffect(() => {
-    if (!auditId) {
-      return;
-    }
-
-    async function poll() {
-      try {
-        const res = await fetch(`/api/audits/${auditId}`, {
-          cache: "no-store",
-        });
-        if (!res.ok) return;
-
-        const data = await res.json();
-        if (data?.analysis) {
-          setAnalysis(data.analysis);
-          setLoading(false);
-          if (pollRef.current) clearInterval(pollRef.current);
-        }
-      } catch {
-        // swallow
+    if (!auditId) return;
+    const controller = new AbortController();
+    waitForAnalysis<Analysis>(auditId, controller.signal).then((result) => {
+      if (controller.signal.aborted) return;
+      if (result.status === "ready") {
+        setAnalysis(result.analysis);
+      } else {
+        setFailure(result.status);
       }
-    }
-
-    poll();
-    pollRef.current = window.setInterval(poll, 2000);
-
-    return () => {
-      if (pollRef.current) clearInterval(pollRef.current);
-    };
-  }, [auditId]);
+      setLoading(false);
+    });
+    return () => controller.abort();
+  }, [auditId, retryCount]);
 
     const range = analysis?.teaser_summary?.estimated_avoidable_range;
 
@@ -109,7 +98,8 @@ export default function Step3ReviewClient() {
   if (!auditId) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p className="text-red-600">Missing auditId</p>
+        <p className="mb-4 text-red-600">We need your audit link to load this preview.</p>
+        <Link href="/app/step-1-upload" className="text-sm font-medium underline">Upload a Lease</Link>
       </main>
     );
   }
@@ -117,15 +107,40 @@ export default function Step3ReviewClient() {
   if (loading) {
     return (
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p className="text-gray-600">Analysis in progress…</p>
+        <h1 className="text-xl font-semibold">Generating Your Savings Preview</h1>
+        <p className="mt-3 text-gray-600">We’re checking your lease analysis. This can take up to a minute.</p>
       </main>
     );
   }
 
-  if (error || !analysis) {
+  if (failure || !analysis) {
+    const message = failure === "not-found"
+      ? "We couldn't find this audit. Check the link or upload the lease again."
+      : failure === "unavailable"
+        ? "We couldn't access this audit right now. Please try again."
+        : "Your preview is taking longer than expected. You can check again without re-uploading.";
+    const supportHref = `mailto:audits@saveonlease.com?subject=${encodeURIComponent("Lease preview help")}&body=${encodeURIComponent(`Please help with audit ID: ${auditId}`)}`;
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
-        <p className="text-red-600">{error ?? "Failed to load analysis"}</p>
+      <main className="mx-auto max-w-3xl px-6 py-16 space-y-5">
+        <h1 className="text-xl font-semibold">Preview Not Ready</h1>
+        <p className="text-gray-700">{message}</p>
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <button
+            type="button"
+            onClick={() => {
+              setAnalysis(null);
+              setFailure(null);
+              setLoading(true);
+              setRetryCount((count) => count + 1);
+            }}
+            className="rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
+          >
+            Try Checking Again
+          </button>
+          <Link href="/app/step-1-upload" className="font-medium underline">Upload Again</Link>
+          <a href={supportHref} className="font-medium underline">Contact Support</a>
+        </div>
+        <p className="text-xs text-gray-500">Audit ID: {auditId}</p>
       </main>
     );
   }

@@ -41,10 +41,7 @@ function Loading() {
       </p>
 
       <div className="text-xs text-gray-500">
-        Preview ready in ~10 seconds • Full audit unlocks deeper insights
-      </div>
-      <div className="mt-3 text-[11px] text-gray-400">
-        2,100+ leases analyzed • Avg. savings $8,400
+        We’ll offer a retry and support path if the preview takes longer than a minute.
       </div>
     </main>
   );
