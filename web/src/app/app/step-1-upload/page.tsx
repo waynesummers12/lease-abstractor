@@ -22,9 +22,11 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadForm from "./UploadForm";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 export default function UploadLeasePage() {
   const router = useRouter();
+  const { session } = useAuth();
 
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -38,10 +40,14 @@ export default function UploadLeasePage() {
 
     try {
       // 1️⃣ Create audit row
+      const portfolioLeaseId = new URLSearchParams(window.location.search).get("portfolioLeaseId");
       const createRes = await fetch("/api/audits", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ auditId, objectPath }),
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ auditId, objectPath, portfolioLeaseId }),
       });
 
       if (!createRes.ok) {

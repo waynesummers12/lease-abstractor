@@ -15,6 +15,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { portfolioAccess } from "@/lib/server/portfolioAccess";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { auditId, objectPath } = body ?? {};
+    const { auditId, objectPath, portfolioLeaseId } = body ?? {};
 
     if (!auditId || !objectPath) {
       return NextResponse.json(
@@ -31,6 +32,24 @@ export async function POST(req: Request) {
       );
     }
 
+    if (req.headers.has("authorization")) {
+      const access = await portfolioAccess(req);
+      if (!access) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+      if (portfolioLeaseId) {
+        const { data: lease, error } = await access.db.from("portfolio_leases")
+          .select("id").eq("id", portfolioLeaseId).eq("user_id", access.userId)
+          .is("deleted_at", null).maybeSingle();
+        if (error || !lease) return NextResponse.json({ error: "Lease not found" }, { status: 404 });
+      }
+      const { error } = await access.db.from("lease_audits").insert({
+        id: auditId, audit_pdf_path: objectPath, status: "uploaded",
+        user_id: access.userId, portfolio_lease_id: portfolioLeaseId || null,
+      });
+      if (error) return NextResponse.json({ error: "Failed to create audit" }, { status: 500 });
+      return NextResponse.json({ success: true, auditId }, { headers: { "Cache-Control": "private, no-store" } });
+    }
+
+    if (portfolioLeaseId) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
       {

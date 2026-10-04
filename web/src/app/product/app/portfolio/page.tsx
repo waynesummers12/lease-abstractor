@@ -7,6 +7,7 @@ import { useAuth } from "@/app/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { portfolioFetch } from "@/lib/portfolioFetch";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
+import { PortfolioAuditList } from "@/components/PortfolioAuditList";
 
 type Lease = {
   id: string;
@@ -149,6 +150,8 @@ if (!session) {
           </Link>
         </div>
       </div>
+
+      <PortfolioAuditList leases={leases.map((lease) => ({ id: lease.id, propertyName: lease.property_name }))} />
 
       <div className="flex justify-end">
         <button

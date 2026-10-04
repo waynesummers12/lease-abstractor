@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { portfolioFetch } from "@/lib/portfolioFetch";
+import { PortfolioAuditList } from "@/components/PortfolioAuditList";
 
 interface PortfolioLease {
   id: string;
@@ -145,6 +146,9 @@ export default function LeasesPage() {
             </div>
           ))
         )}
+      </div>
+      <div className="mt-8">
+        <PortfolioAuditList leases={leases.map(({ id, propertyName }) => ({ id, propertyName }))} />
       </div>
     </main>
   );

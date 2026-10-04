@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { portfolioFetch } from "@/lib/portfolioFetch";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { PortfolioAuditList } from "@/components/PortfolioAuditList";
 
 interface Lease {
   id: string;
@@ -287,6 +288,8 @@ export default function LeaseDetailPage() {
         )}
       </div>
 
+      <PortfolioAuditList leaseId={lease.id} />
+
       <div className="border rounded-lg p-6 bg-gray-50">
         <h2 className="text-lg font-semibold mb-4">Negotiation Leverage Insight</h2>
         {daysUntil !== null && daysUntil <= 90 ? (
@@ -300,7 +303,7 @@ export default function LeaseDetailPage() {
         )}
         <div className="mt-6">
           <Link
-            href="/app/step-1-upload"
+            href={`/app/step-1-upload?portfolioLeaseId=${encodeURIComponent(lease.id)}`}
             className="inline-block bg-black text-white px-5 py-3 rounded-md text-sm font-medium hover:bg-gray-800"
           >
             Run Audit (Free Preview)
