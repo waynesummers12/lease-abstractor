@@ -555,6 +555,12 @@ if (!session) {
             <div className="border rounded p-3 text-sm">
               Renewal Timeline & Cost Impact modeling coming next phase.
             </div>
+            <Link
+              href={`/product/app/leases/${encodeURIComponent(selectedLease.id)}`}
+              className="inline-block rounded bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            >
+              Open Lease Details
+            </Link>
           </div>
         </div>
       )}

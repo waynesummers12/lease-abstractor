@@ -137,7 +137,7 @@ export default function LeasesPage() {
                 })() : "—"}
               </div>
               <Link
-                href={`/product/app/leases/${lease.id}`}
+                href={`/product/app/leases/${encodeURIComponent(lease.id)}`}
                 className="text-black font-medium hover:underline"
               >
                 View Lease →

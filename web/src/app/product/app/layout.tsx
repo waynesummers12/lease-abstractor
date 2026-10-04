@@ -24,7 +24,7 @@ export function AvatarDropdown() {
         Profile
       </Link>
 
-      <Link href="/product/app/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">
+      <Link href="/product/app/settings" className="block px-4 py-2 text-sm hover:bg-gray-100">
         Settings
       </Link>
 

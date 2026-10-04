@@ -589,16 +589,16 @@ return (
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/product/app/portfolio"
+            href="/product/app/leases"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
             View All Leases
           </Link>
           <Link
-            href="/product/app/dashboard"
+            href="/product/app/portfolio"
             className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
           >
-            Portfolio Dashboard
+            Portfolio Overview
           </Link>
           <Link
             href="/product/app/add-lease"
@@ -818,6 +818,12 @@ return (
           </div>
           {selected && (
             <div className="flex items-center gap-2">
+              <Link
+                href={`/product/app/leases/${encodeURIComponent(selected.id)}`}
+                className="text-sm font-medium text-black hover:underline"
+              >
+                Open Lease Details →
+              </Link>
               <HealthBadge score={getHealthScore()} />
               {(() => {
                 const risk = getRenewalRiskScore(selected);

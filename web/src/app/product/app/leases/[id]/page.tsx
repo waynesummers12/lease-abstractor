@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { portfolioFetch } from "@/lib/portfolioFetch";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 interface Lease {
   id: string;
@@ -44,16 +45,19 @@ export default function LeaseDetailPage() {
   const params = useParams();
   const router = useRouter();
   const leaseId = params?.id as string;
+  const { session, loading: authLoading } = useAuth();
 
   const [lease, setLease] = useState<Lease | null>(null);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchLease() {
       try {
         const res = await portfolioFetch();
+        if (!res.ok) throw new Error("Failed to load lease details");
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.leases)) {
@@ -69,18 +73,35 @@ export default function LeaseDetailPage() {
         }
       } catch (err) {
         console.error("Failed to load lease:", err);
+        setError("Unable to load lease details. Please try again.");
       } finally {
         setLoading(false);
       }
     }
 
+    if (authLoading) return;
+    if (!session) {
+      router.replace("/login");
+      return;
+    }
     if (leaseId) fetchLease();
-  }, [leaseId]);
+  }, [leaseId, authLoading, session, router]);
 
-  if (loading) {
+  if (authLoading || !session || loading) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16 text-gray-500">
         Loading lease details...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto px-6 py-16">
+        <p className="text-red-700 mb-4">{error}</p>
+        <Link href="/product/app/leases" className="text-blue-600 underline">
+          Back to Leases
+        </Link>
       </div>
     );
   }

@@ -68,6 +68,9 @@ export default function MobileMenu({
             <Link href="/product/app/portfolio" onClick={() => setOpen(false)}>
               Portfolio
             </Link>
+            <Link href="/product/app/settings" onClick={() => setOpen(false)}>
+              Settings
+            </Link>
             <button
               onClick={async () => {
                 await onLogout();
