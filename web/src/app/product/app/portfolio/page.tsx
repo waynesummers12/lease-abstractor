@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { portfolioFetch } from "@/lib/portfolioFetch";
+import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 
 type Lease = {
   id: string;
@@ -15,7 +16,6 @@ type Lease = {
   lease_type?: string;
   renewal_date?: string;
   created_at?: string;
-  estimated_exposure?: number;
 };
 
 type LeaseWithRisk = Lease & {
@@ -24,6 +24,7 @@ type LeaseWithRisk = Lease & {
 
 export default function PortfolioPage() {
   const { session, loading: authLoading } = useAuth();
+  const userId = session?.user.id;
   const router = useRouter();
   const [leases, setLeases] = useState<Lease[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,40 +34,41 @@ export default function PortfolioPage() {
   const [confidential] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!authLoading && !session) {
-      router.push("/login");
+    if (!authLoading && !userId) {
+      router.replace("/login");
     }
-  }, [session, authLoading, router]);
+  }, [userId, authLoading, router]);
 
   useEffect(() => {
+    if (authLoading || !userId) return;
+    let cancelled = false;
+    setLeases([]);
+    setError(null);
+    setLoading(true);
     async function fetchPortfolio() {
       try {
         const res = await portfolioFetch();
         if (!res.ok) throw new Error("Failed to fetch portfolio leases");
 
         const data: { leases: Lease[] } = await res.json();
-        setLeases(data.leases || []);
+        if (!cancelled) setLeases(data.leases || []);
       } catch (err) {
         console.error(err);
-        setError("Unable to load portfolio. Please try again.");
+        if (!cancelled) setError("Unable to load portfolio. Please try again.");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchPortfolio();
-  }, []);
+    return () => { cancelled = true; };
+  }, [authLoading, userId]);
 
   const leasesWithRisk = useMemo<LeaseWithRisk[]>(() => {
     const today = new Date();
 
     return leases.map((lease) => {
-      const diffDays = lease.renewal_date
-        ? Math.round(
-            (new Date(lease.renewal_date).getTime() - today.getTime()) /
-              (1000 * 60 * 60 * 24)
-          )
-        : null;
+      const diffDays = daysUntilSavedDate(lease.renewal_date, today);
 
       return {
         ...lease,
@@ -81,23 +83,20 @@ export default function PortfolioPage() {
     });
   }, [leasesWithRisk]);
 
-  const totalExposure = useMemo(() => {
-    return sortedLeases.reduce((sum, l) => sum + (l.estimated_exposure || 0), 0);
-  }, [sortedLeases]);
-
   const riskBuckets = useMemo(() => {
     let critical = 0;
     let watch = 0;
     let safe = 0;
+    let unknown = 0;
 
     sortedLeases.forEach((lease) => {
-      if (lease.diffDays === null || lease.diffDays < 0) safe++;
-      else if (lease.diffDays < 90) critical++;
+      if (lease.diffDays === null) unknown++;
+      else if (lease.diffDays <= 90) critical++;
       else if (lease.diffDays <= 180) watch++;
       else safe++;
     });
 
-    return { critical, watch, safe };
+    return { critical, watch, safe, unknown };
   }, [sortedLeases]);
 
   if (authLoading || loading) {
@@ -154,13 +153,12 @@ if (!session) {
       <div className="flex justify-end">
         <button
           onClick={() => {
-            const headers = ["Property", "Lease Type", "SF", "Renewal", "Exposure"];
+            const headers = ["Property", "Lease Type", "SF", "Renewal"];
             const rows = sortedLeases.map(l => [
               l.property_name,
               l.lease_type ?? "",
               l.square_feet ?? "",
-              l.renewal_date ?? "",
-              l.estimated_exposure ?? 0
+              l.renewal_date ?? ""
             ]);
 
             const csvContent =
@@ -187,12 +185,12 @@ if (!session) {
 
             const narrative = `
     As of ${now.toLocaleDateString()}, the portfolio consists of ${sortedLeases.length} active leases. 
-    ${riskBuckets.critical} leases require immediate attention within 90 days. 
-    Total modeled exposure across the portfolio is $${totalExposure.toLocaleString()}. 
-    Renewal concentration over the next 12 months indicates elevated capital planning requirements.
+    ${riskBuckets.critical} saved renewal dates have passed or fall within 90 days.
+    ${riskBuckets.unknown} leases have no saved renewal date.
+    Dates should be confirmed against the lease before action.
   `;
 
-            const monthlyExposure = Array(12).fill(0);
+            const monthlyRenewals = Array(12).fill(0);
 
             sortedLeases.forEach(l => {
               if (!l.renewal_date) return;
@@ -201,15 +199,15 @@ if (!session) {
                 (new Date(l.renewal_date).getMonth() - now.getMonth());
 
               if (diffMonths >= 0 && diffMonths < 12) {
-                monthlyExposure[diffMonths] += l.estimated_exposure || 0;
+                monthlyRenewals[diffMonths]++;
               }
             });
 
-            const maxExposure = Math.max(...monthlyExposure, 1);
+            const maxRenewals = Math.max(...monthlyRenewals, 1);
 
-            const chartBars = monthlyExposure
+            const chartBars = monthlyRenewals
               .map((value, i) => {
-                const height = (value / maxExposure) * 100;
+                const height = (value / maxRenewals) * 100;
                 const x = i * 28;
                 const y = 120 - height;
                 return `<rect x="${x}" y="${y}" width="20" height="${height}" fill="#60a5fa" />`;
@@ -261,17 +259,17 @@ if (!session) {
             <div class="kpi-value">${sortedLeases.length}</div>
           </div>
           <div class="kpi">
-            <div class="kpi-title">Critical (&lt;90 days)</div>
+            <div class="kpi-title">Renewal date passed or within 90 days</div>
             <div class="kpi-value">${riskBuckets.critical}</div>
           </div>
           <div class="kpi">
-            <div class="kpi-title">Total Exposure</div>
-            <div class="kpi-value">$${totalExposure.toLocaleString()}</div>
+            <div class="kpi-title">Renewal Date Missing</div>
+            <div class="kpi-value">${riskBuckets.unknown}</div>
           </div>
         </div>
 
         <div class="chart">
-          <h3>12-Month Exposure Forecast</h3>
+          <h3>Saved renewal dates by month</h3>
           <svg width="350" height="140" viewBox="0 0 350 140">
             ${chartBars}
           </svg>
@@ -284,7 +282,6 @@ if (!session) {
               <th>Lease Type</th>
               <th>Renewal</th>
               <th>Days</th>
-              <th>Exposure</th>
             </tr>
           </thead>
           <tbody>
@@ -295,7 +292,6 @@ if (!session) {
                   <td>${l.lease_type ?? ""}</td>
                   <td>${l.renewal_date ?? ""}</td>
                   <td>${l.diffDays ?? ""}</td>
-                  <td>$${(l.estimated_exposure ?? 0).toLocaleString()}</td>
                 </tr>
               `)
               .join("")}
@@ -332,7 +328,7 @@ if (!session) {
                   <h1>${companyName} Portfolio Snapshot</h1>
                   <p>Generated ${now.toLocaleDateString()}</p>
                   <p>Total Leases: ${sortedLeases.length}</p>
-                  <p>Total Exposure: $${totalExposure.toLocaleString()}</p>
+                  <p>Renewal Dates Missing: ${riskBuckets.unknown}</p>
                 </body>
               </html>
             `;
@@ -407,24 +403,23 @@ if (!session) {
           <p className="text-2xl font-bold">{sortedLeases.length}</p>
         </div>
         <div className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">Critical (&lt;90 days)</p>
+          <p className="text-sm text-gray-500">Renewal date passed or within 90 days</p>
           <p className="text-2xl font-bold text-red-600">{riskBuckets.critical}</p>
         </div>
         <div className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">Estimated Exposure</p>
-          <p className="text-2xl font-bold text-red-600">
-            ${totalExposure.toLocaleString()}
-          </p>
+          <p className="text-sm text-gray-500">Renewal dates saved</p>
+          <p className="text-2xl font-bold">{sortedLeases.length - riskBuckets.unknown}</p>
         </div>
         <div className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">Immediate Action</p>
-          <p className="text-2xl font-bold">{riskBuckets.critical}</p>
+          <p className="text-sm text-gray-500">Renewal date missing</p>
+          <p className="text-2xl font-bold">{riskBuckets.unknown}</p>
         </div>
       </div>
 
       {/* Portfolio Heat Bar */}
       <div className="border rounded-lg p-4 space-y-3">
-        <p className="text-sm text-gray-500">Portfolio Risk Distribution</p>
+        <p className="text-sm text-gray-500">Saved renewal date timing</p>
+        <p className="text-xs text-gray-500">Based on dates you saved. Confirm renewal and notice terms in each lease.</p>
         <div className="flex h-3 w-full overflow-hidden rounded-full bg-gray-100">
           <div
             className="bg-red-600"
@@ -438,11 +433,16 @@ if (!session) {
             className="bg-green-500"
             style={{ width: `${(riskBuckets.safe / (sortedLeases.length || 1)) * 100}%` }}
           />
+          <div
+            className="bg-gray-300"
+            style={{ width: `${(riskBuckets.unknown / (sortedLeases.length || 1)) * 100}%` }}
+          />
         </div>
         <div className="flex justify-between text-xs text-gray-500">
-          <span>Critical: {riskBuckets.critical}</span>
-          <span>Watch: {riskBuckets.watch}</span>
-          <span>Safe: {riskBuckets.safe}</span>
+          <span>Passed/≤90 days: {riskBuckets.critical}</span>
+          <span>91–180 days: {riskBuckets.watch}</span>
+          <span>Later: {riskBuckets.safe}</span>
+          <span>Unknown: {riskBuckets.unknown}</span>
         </div>
       </div>
 
@@ -472,7 +472,7 @@ if (!session) {
       {/* Lease List */}
       <div className="border rounded-lg divide-y">
         {sortedLeases.map((lease) => {
-          const isCritical = lease.diffDays !== null && lease.diffDays < 90;
+          const isCritical = lease.diffDays !== null && lease.diffDays <= 90;
 
           return (
             <div
@@ -480,7 +480,7 @@ if (!session) {
               className="p-4 space-y-3 hover:bg-gray-50 transition border-l-4 cursor-pointer"
               style={{
                 borderColor:
-                  lease.diffDays !== null && lease.diffDays < 90
+                  lease.diffDays !== null && lease.diffDays <= 90
                     ? "#dc2626"
                     : lease.diffDays !== null && lease.diffDays <= 180
                     ? "#facc15"
@@ -492,7 +492,7 @@ if (!session) {
                   <p className="font-medium">{lease.property_name}</p>
                   {isCritical && (
                     <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded">
-                      ACTION REQUIRED
+                      REVIEW DATE
                     </span>
                   )}
                 </div>
@@ -518,11 +518,9 @@ if (!session) {
 
               <div className="flex justify-between text-sm text-gray-500">
                 <span>
-                  {lease.lease_type} • {lease.square_feet} sq ft • Renewal {lease.renewal_date}
+                  {lease.lease_type || "Type not set"} • {lease.square_feet ? `${lease.square_feet} sq ft` : "Area not set"} • Renewal {lease.renewal_date || "date not set"}
                 </span>
-                <span>
-                  ${lease.estimated_exposure?.toLocaleString() ?? "—"}
-                </span>
+                <span>Cost exposure not assessed</span>
               </div>
             </div>
           );
@@ -535,7 +533,7 @@ if (!session) {
           <div className="bg-white w-full max-w-xl rounded-xl p-8 space-y-6 shadow-2xl">
             <div className="flex justify-between">
               <h2 className="text-lg font-semibold">
-                {selectedLease.property_name} Risk Analysis
+                {selectedLease.property_name} Saved Lease Overview
               </h2>
               <button onClick={() => setSelectedLease(null)}>✕</button>
             </div>
@@ -544,9 +542,7 @@ if (!session) {
               <p>
                 Renewal Date: {selectedLease.renewal_date}
               </p>
-              <p>
-                Estimated Exposure: ${selectedLease.estimated_exposure?.toLocaleString() ?? "—"}
-              </p>
+              <p>Cost exposure has not been assessed for this portfolio entry.</p>
               <p>
                 Days Remaining: {selectedLease.diffDays}
               </p>

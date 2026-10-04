@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { portfolioFetch } from "@/lib/portfolioFetch";
+import { authenticatedPortfolioFetch, portfolioFetch } from "@/lib/portfolioFetch";
 
 export default function AddLeasePage() {
   const { session, loading: authLoading } = useAuth();
@@ -13,12 +13,14 @@ export default function AddLeasePage() {
 
   const [fileName, setFileName] = useState<string | null>(null);
   const [extracting, setExtracting] = useState(false);
+  const [extractionNote, setExtractionNote] = useState<string | null>(null);
+  const uploadSequence = useRef(0);
 
   const [form, setForm] = useState({
     propertyName: "",
     landlord: "",
     squareFeet: "",
-    leaseType: "NNN",
+    leaseType: "",
     renewalDate: "",
   });
 
@@ -34,15 +36,19 @@ export default function AddLeasePage() {
   async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    const sequence = ++uploadSequence.current;
 
     setFileName(file.name);
     setExtracting(true);
+    setError(null);
+    setExtractionNote(null);
+    setForm({ propertyName: "", landlord: "", squareFeet: "", leaseType: "", renewalDate: "" });
 
     try {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("/api/extract-lease-metadata", {
+      const res = await authenticatedPortfolioFetch("/api/extract-lease-metadata", {
         method: "POST",
         body: formData,
       });
@@ -52,6 +58,7 @@ export default function AddLeasePage() {
       if (!res.ok) {
         throw new Error(data.error || "Extraction failed");
       }
+      if (sequence !== uploadSequence.current) return;
 
       setForm({
         propertyName: data.metadata?.propertyName || "",
@@ -59,13 +66,17 @@ export default function AddLeasePage() {
         squareFeet: data.metadata?.squareFeet
           ? String(data.metadata.squareFeet)
           : "",
-        leaseType: data.metadata?.leaseType || "NNN",
+        leaseType: data.metadata?.leaseType || "",
         renewalDate: data.metadata?.renewalDate || "",
       });
+      const found = Object.values(data.metadata ?? {}).filter(Boolean).length;
+      setExtractionNote(`Read ${data.pageCount} PDF page${data.pageCount === 1 ? "" : "s"} and suggested ${found} field${found === 1 ? "" : "s"}. Review every field before saving.`);
     } catch (err) {
+      if (sequence !== uploadSequence.current) return;
       console.error("Extraction error:", err);
+      setError(err instanceof Error ? err.message : "Could not read this PDF. Enter details manually.");
     } finally {
-      setExtracting(false);
+      if (sequence === uploadSequence.current) setExtracting(false);
     }
   }
 
@@ -120,7 +131,7 @@ export default function AddLeasePage() {
         Add Lease (Free Portfolio)
       </h1>
       <p className="text-sm text-gray-600 mb-6">
-        Upload a lease to track renewals, risk, and portfolio insights — no audit required.
+        Add confirmed lease details to track renewal dates. PDF text can suggest fields for you to review; no audit is required.
       </p>
 
       <div className="rounded border border-gray-200 p-6 bg-white space-y-8">
@@ -155,6 +166,9 @@ export default function AddLeasePage() {
             )}
           </label>
           <div className="mt-4 text-xs text-gray-400">
+            The PDF is read for field suggestions and is not saved to your portfolio.
+          </div>
+          <div className="mt-2 text-xs text-gray-400">
             Need deeper analysis?
             <Link
               href="/app/step-1-upload"
@@ -164,6 +178,8 @@ export default function AddLeasePage() {
             </Link>
           </div>
         </div>
+
+        {extractionNote && <p className="text-sm text-blue-700">{extractionNote}</p>}
 
         {/* Prefilled Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -216,15 +232,16 @@ export default function AddLeasePage() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
               >
+                <option value="">Select lease type</option>
                 <option value="NNN">NNN</option>
                 <option value="Gross">Gross</option>
-                <option value="Modified">Modified Gross</option>
+                <option value="Modified Gross">Modified Gross</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm text-gray-600 mb-1">
-                Renewal Date
+                Renewal Date (if stated)
               </label>
               <input
                 name="renewalDate"
@@ -245,10 +262,10 @@ export default function AddLeasePage() {
           <div className="flex items-center gap-4">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || extracting}
               className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Add Lease (Free)"}
+              {loading ? "Saving..." : extracting ? "Reading PDF..." : "Add Lease (Free)"}
             </button>
 
             <Link
