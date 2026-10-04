@@ -16,6 +16,7 @@
 
 import { NextResponse } from "next/server";
 import { portfolioAccess } from "@/lib/server/portfolioAccess";
+import { auditCapability, setAuditCookie, workerProof } from "@/lib/server/auditAccess";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,12 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    if (typeof auditId !== "string" || !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(auditId) ||
+        objectPath !== `leases/${auditId}.pdf`) {
+      return NextResponse.json({ error: "Invalid audit reference" }, { status: 400 });
+    }
+    const capability = await auditCapability(auditId);
+    if (!capability) return NextResponse.json({ error: "Audit access is unavailable" }, { status: 503 });
 
     if (req.headers.has("authorization")) {
       const access = await portfolioAccess(req);
@@ -46,17 +53,20 @@ export async function POST(req: Request) {
         user_id: access.userId, portfolio_lease_id: portfolioLeaseId || null,
       });
       if (error) return NextResponse.json({ error: "Failed to create audit" }, { status: 500 });
-      return NextResponse.json({ success: true, auditId }, { headers: { "Cache-Control": "private, no-store" } });
+      return setAuditCookie(NextResponse.json({ success: true, auditId, capability },
+        { headers: { "Cache-Control": "private, no-store" } }), auditId);
     }
 
     if (portfolioLeaseId) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    const proof = await workerProof("POST", "/audits");
+    if (!proof) return NextResponse.json({ error: "Audit access is unavailable" }, { status: 503 });
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_WORKER_URL}/audits`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+          "X-Audit-Proxy-Proof": proof,
         },
         body: JSON.stringify({ auditId, objectPath }),
         cache: "no-store",
@@ -72,10 +82,9 @@ export async function POST(req: Request) {
       );
     }
 
-    return new NextResponse(text, {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    void text;
+    return setAuditCookie(NextResponse.json({ success: true, auditId, capability },
+      { headers: { "Cache-Control": "private, no-store" } }), auditId);
   } catch (err) {
     console.error("POST /api/audits failed", err);
     return NextResponse.json(

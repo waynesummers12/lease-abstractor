@@ -18,7 +18,8 @@ function pause(ms: number, signal: AbortSignal): Promise<void> {
 export async function waitForAnalysis<T>(
   auditId: string,
   signal: AbortSignal,
-  maxDurationMs = 60_000
+  maxDurationMs = 60_000,
+  accessToken?: string
 ): Promise<AnalysisWaitResult<T>> {
   const deadline = Date.now() + maxDurationMs;
 
@@ -33,6 +34,7 @@ export async function waitForAnalysis<T>(
       const response = await fetch(`/api/audits/${encodeURIComponent(auditId)}`, {
         cache: "no-store",
         signal: request.signal,
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
       });
       if (response.status === 404) return { status: "not-found" };
       if (response.status === 401 || response.status === 403) return { status: "unavailable" };

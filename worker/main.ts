@@ -37,9 +37,44 @@ app.use(
       "Content-Type",
       "Authorization",
       "X-Lease-Worker-Key",
+      "X-Audit-Capability",
     ],
   })
 );
+
+// Report routes are callable only by the web server after it checks audit access.
+app.use(async (ctx, next) => {
+  const path = ctx.request.url.pathname;
+  if (ctx.request.method === "GET" && ["/audits", "/audit/latest", "/api/audits/latest"].includes(path)) {
+    ctx.response.status = 403;
+    ctx.response.body = { error: "Use your account to view audits" };
+    return;
+  }
+  const protectedRoute = path.startsWith("/auditById/") ||
+    path.startsWith("/downloadAuditPdf/") ||
+    (path === "/audits" && ctx.request.method === "POST") ||
+    path === "/checkout/create" || path === "/audit/generate-pdf";
+  if (protectedRoute) {
+    const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!secret) {
+      ctx.response.status = 503;
+      return;
+    }
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    const signed = new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(`worker:${ctx.request.method}:${path}`)));
+    const expected = Array.from(signed, (byte) => byte.toString(16).padStart(2, "0")).join("");
+    const supplied = ctx.request.headers.get("X-Audit-Proxy-Proof") ?? "";
+    let difference = expected.length ^ supplied.length;
+    for (let index = 0; index < expected.length; index++) difference |= expected.charCodeAt(index) ^ (supplied.charCodeAt(index) || 0);
+    if (difference !== 0) {
+      ctx.response.status = 403;
+      ctx.response.body = { error: "Access denied" };
+      return;
+    }
+  }
+  await next();
+});
 
 /* -------------------------------------------------
    ROUTES

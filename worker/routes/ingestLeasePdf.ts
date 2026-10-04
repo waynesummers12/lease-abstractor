@@ -43,6 +43,25 @@ router.post("/pdf", async (ctx) => {
       return;
     }
 
+    const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const supplied = ctx.request.headers.get("X-Audit-Capability") ?? "";
+    if (!secret || !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(auditId)) {
+      ctx.response.status = 403;
+      ctx.response.body = { error: "Access denied" };
+      return;
+    }
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    const signature = new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(`audit:${auditId}`)));
+    const expected = Array.from(signature, (byte) => byte.toString(16).padStart(2, "0")).join("");
+    let difference = expected.length ^ supplied.length;
+    for (let index = 0; index < expected.length; index++) difference |= expected.charCodeAt(index) ^ (supplied.charCodeAt(index) || 0);
+    if (difference !== 0) {
+      ctx.response.status = 403;
+      ctx.response.body = { error: "Access denied" };
+      return;
+    }
+
     const objectPath = `leases/${auditId}.pdf`;
 
     console.info("[ingest] uploading lease pdf", { objectPath });
@@ -83,15 +102,21 @@ router.post("/pdf", async (ctx) => {
     // Normalization happens later (Stripe / PDF step).
 
     // 4️⃣ Persist audit + analysis (✅ CORRECT COLUMN)
+    const { data: existingAudit } = await supabase.from("lease_audits")
+      .select("id").eq("id", auditId).maybeSingle();
+    if (!existingAudit) {
+      ctx.response.status = 404;
+      ctx.response.body = { error: "Audit not found" };
+      return;
+    }
     const { error: dbError } = await supabase
       .from("lease_audits")
-      .upsert({
-        id: auditId,
+      .update({
         object_path: objectPath, // original uploaded lease
         analysis: rawAnalysis, // 🔥 FIX: persist full analysis
         status: "analyzed",
         created_at: new Date().toISOString(),
-      });
+      }).eq("id", auditId);
 
     if (dbError) {
       console.error("❌ DB update failed:", dbError);

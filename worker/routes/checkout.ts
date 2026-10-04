@@ -67,10 +67,10 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
     return;
   }
 
-  /* ---------- ENSURE lease_audits ROW EXISTS ---------- */
+  /* ---------- REQUIRE AN EXISTING ANALYZED AUDIT ---------- */
   const { data: existingAudit, error: selectError } = await supabase
     .from("lease_audits")
-    .select("id")
+    .select("id,status,analysis")
     .eq("id", auditId)
     .maybeSingle();
 
@@ -81,24 +81,10 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
     return;
   }
 
-  if (!existingAudit) {
-    const { error: insertError } = await supabase
-      .from("lease_audits")
-      .insert({
-        id: auditId,
-        status: "unpaid",
-        amount_paid: 4999,
-        currency: "usd",
-      });
-
-    if (insertError) {
-      console.error("❌ Supabase insert error:", insertError);
-      ctx.response.status = 500;
-      ctx.response.body = { error: "Failed to create audit record" };
-      return;
-    }
-
-    console.log("🧾 lease_audits row created:", auditId);
+  if (!existingAudit || !existingAudit.analysis || existingAudit.status !== "analyzed") {
+    ctx.response.status = 409;
+    ctx.response.body = { error: "Audit is not ready for checkout" };
+    return;
   }
 
   /* ---------- CREATE STRIPE CHECKOUT SESSION ---------- */

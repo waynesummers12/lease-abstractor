@@ -1,6 +1,7 @@
 // web/src/app/api/audits/[auditId]/download/route.ts
 
 import { NextResponse } from "next/server";
+import { canReadAudit, workerProof } from "@/lib/server/auditAccess";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export const dynamic = "force-dynamic";
  */
 
 export async function GET(
-  _req: Request,
+  req: Request,
   context: { params: Promise<{ auditId: string }> }
 ) {
   const { auditId } = await context.params;
@@ -30,12 +31,18 @@ export async function GET(
     );
   }
 
+  if (!(await canReadAudit(req, auditId))) {
+    return NextResponse.json({ error: "Audit not found" }, { status: 404 });
+  }
+  const path = `/downloadAuditPdf/${encodeURIComponent(auditId)}`;
+  const proof = await workerProof("GET", path);
+  if (!proof) return NextResponse.json({ error: "PDF unavailable" }, { status: 503 });
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_WORKER_URL}/downloadAuditPdf/${auditId}`,
+    `${process.env.NEXT_PUBLIC_WORKER_URL}${path}`,
     {
       headers: {
-        "X-Lease-Worker-Key":
-          process.env.NEXT_PUBLIC_WORKER_KEY!,
+        "X-Audit-Proxy-Proof": proof,
       },
       cache: "no-store",
     }
@@ -50,5 +57,5 @@ export async function GET(
 
   const data = await res.json();
 
-  return NextResponse.json(data);
+  return NextResponse.json(data, { headers: { "Cache-Control": "private, no-store" } });
 }

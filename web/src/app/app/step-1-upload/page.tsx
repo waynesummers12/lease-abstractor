@@ -54,6 +54,8 @@ export default function UploadLeasePage() {
         const text = await createRes.text();
         throw new Error(text || "Failed to create audit");
       }
+      const createdAudit = await createRes.json();
+      if (typeof createdAudit.capability !== "string") throw new Error("Audit access is unavailable");
 
       // 2️⃣ Upload lease PDF to worker
       const formData = new FormData();
@@ -67,6 +69,7 @@ export default function UploadLeasePage() {
           method: "POST",
           headers: {
             "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+            "X-Audit-Capability": createdAudit.capability,
           },
           body: formData,
         }

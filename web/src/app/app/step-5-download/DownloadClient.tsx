@@ -21,6 +21,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 declare global {
   interface Window {
@@ -70,6 +71,7 @@ function explainScore(score?: number | null) {
 /* ================= PAGE ================= */
 
 export default function SuccessPage() {
+  const { session, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
   const auditId = searchParams.get("auditId");
@@ -81,6 +83,7 @@ export default function SuccessPage() {
 
   /* ---------- POLL AUDIT STATUS ---------- */
   useEffect(() => {
+    if (authLoading) return;
     if (!auditId) {
       setFatalError("Missing audit reference.");
       setLoading(false);
@@ -93,6 +96,7 @@ export default function SuccessPage() {
       try {
         const res = await fetch(`/api/audits/${auditId}`, {
           cache: "no-store",
+          headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
         });
 
         if (!res.ok) {
@@ -130,7 +134,7 @@ if (status !== "complete") {
     return () => {
       if (pollTimer) clearTimeout(pollTimer);
     };
-  }, [auditId]);
+  }, [auditId, authLoading, session?.access_token]);
 
         /* ---------- GA4: REPORT PURCHASED ---------- */
 useEffect(() => {
@@ -156,6 +160,7 @@ useEffect(() => {
 
     const res = await fetch(`/api/audits/${auditId}/download`, {
       cache: "no-store",
+      headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
     });
 
     if (!res.ok) {
@@ -196,6 +201,14 @@ useEffect(() => {
         <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-900">
           <p className="font-semibold">Something went wrong</p>
           <p className="mt-2">{fatalError}</p>
+          {auditId && (
+            <a
+              href={`mailto:audits@saveonlease.com?subject=${encodeURIComponent("Lease audit access")}&body=${encodeURIComponent(`Please help me access audit ${auditId}.`)}`}
+              className="mt-3 inline-block underline"
+            >
+              Contact support about this audit
+            </a>
+          )}
           <button
             onClick={() => router.push("/app/step-1-upload")}
             className="mt-4 underline"

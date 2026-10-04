@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { waitForAnalysis } from "../step-2-analysis/analysis.wait";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 type Analysis = {
   tenant: string | null;
@@ -38,6 +39,7 @@ export default function Step3ReviewClient() {
 }
 
 function AuditReviewClient({ auditId }: { auditId: string | null }) {
+  const { session, loading: authLoading } = useAuth();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
   const [failure, setFailure] = useState<"timeout" | "not-found" | "unavailable" | null>(null);
@@ -46,9 +48,9 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const hasFiredLeaseUploaded = useRef(false);
 
   useEffect(() => {
-    if (!auditId) return;
+    if (!auditId || authLoading) return;
     const controller = new AbortController();
-    waitForAnalysis<Analysis>(auditId, controller.signal).then((result) => {
+    waitForAnalysis<Analysis>(auditId, controller.signal, 60_000, session?.access_token).then((result) => {
       if (controller.signal.aborted) return;
       if (result.status === "ready") {
         setAnalysis(result.analysis);
@@ -58,7 +60,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       setLoading(false);
     });
     return () => controller.abort();
-  }, [auditId, retryCount]);
+  }, [auditId, retryCount, authLoading, session?.access_token]);
 
     const range = analysis?.teaser_summary?.estimated_avoidable_range;
 
@@ -379,13 +381,12 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
           if (!auditId) return;
 
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_WORKER_URL}/checkout/create`,
+            "/api/audit-checkout",
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "X-Lease-Worker-Key":
-                  process.env.NEXT_PUBLIC_WORKER_KEY!,
+                ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
               },
               body: JSON.stringify({ auditId }),
             }
