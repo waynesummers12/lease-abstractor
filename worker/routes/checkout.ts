@@ -112,7 +112,7 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
         },
       ],
       success_url: `${PUBLIC_APP_URL}/success?auditId=${auditId}`,
-      cancel_url: `${PUBLIC_APP_URL}/cancel`,
+      cancel_url: `${PUBLIC_APP_URL}/cancel?auditId=${encodeURIComponent(auditId)}`,
       metadata: {
         auditId,
         referrer_code: ref ?? "none",
