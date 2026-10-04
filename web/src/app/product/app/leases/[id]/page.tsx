@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { portfolioFetch } from "@/lib/portfolioFetch";
 
 interface Lease {
   id: string;
@@ -11,6 +12,15 @@ interface Lease {
   squareFeet?: number;
   leaseType?: string;
   renewalDate?: string;
+}
+
+interface PortfolioLeaseRow {
+  id: string;
+  property_name: string;
+  landlord: string | null;
+  square_feet: number | null;
+  lease_type: string | null;
+  renewal_date: string | null;
 }
 
 function calculateDaysUntil(date?: string) {
@@ -43,12 +53,19 @@ export default function LeaseDetailPage() {
   useEffect(() => {
     async function fetchLease() {
       try {
-        const res = await fetch("/api/portfolio-leases");
+        const res = await portfolioFetch();
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.leases)) {
-          const found = data.leases.find((l: Lease) => l.id === leaseId);
-          setLease(found || null);
+          const found = (data.leases as PortfolioLeaseRow[]).find((l) => l.id === leaseId);
+          setLease(found ? {
+            id: found.id,
+            propertyName: found.property_name,
+            landlord: found.landlord ?? undefined,
+            squareFeet: found.square_feet ?? undefined,
+            leaseType: found.lease_type ?? undefined,
+            renewalDate: found.renewal_date ?? undefined,
+          } : null);
         }
       } catch (err) {
         console.error("Failed to load lease:", err);
@@ -73,7 +90,7 @@ export default function LeaseDetailPage() {
       <div className="max-w-4xl mx-auto px-6 py-16">
         <p className="text-gray-600 mb-4">Lease not found.</p>
         <button
-          onClick={() => router.push("/app/leases")}
+          onClick={() => router.push("/product/app/leases")}
           className="text-blue-600 underline"
         >
           Back to Leases
@@ -90,7 +107,7 @@ export default function LeaseDetailPage() {
 
     setSaving(true);
     try {
-      const res = await fetch("/api/portfolio-leases", {
+      const res = await portfolioFetch({
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(lease),
@@ -118,7 +135,7 @@ export default function LeaseDetailPage() {
     if (!confirmed) return;
 
     try {
-      const res = await fetch("/api/portfolio-leases", {
+      const res = await portfolioFetch({
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: lease.id }),
@@ -128,7 +145,7 @@ export default function LeaseDetailPage() {
         throw new Error("Failed to delete lease");
       }
 
-      router.push("/app/leases");
+      router.push("/product/app/leases");
     } catch (err) {
       console.error("Delete failed:", err);
     }

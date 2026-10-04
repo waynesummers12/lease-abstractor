@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { portfolioFetch } from "@/lib/portfolioFetch";
 
 interface PortfolioLease {
   id: string;
@@ -19,7 +20,7 @@ export default function LeasesPage() {
   useEffect(() => {
     async function fetchLeases() {
       try {
-        const res = await fetch("/api/portfolio-leases");
+        const res = await portfolioFetch();
         const data = await res.json();
 
         if (res.ok && Array.isArray(data.leases)) {
@@ -136,7 +137,7 @@ export default function LeasesPage() {
                 })() : "—"}
               </div>
               <Link
-                href={`/app/leases/${lease.id}`}
+                href={`/product/app/leases/${lease.id}`}
                 className="text-black font-medium hover:underline"
               >
                 View Lease →

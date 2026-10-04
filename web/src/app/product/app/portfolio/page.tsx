@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useRouter } from "next/navigation";
+import { portfolioFetch } from "@/lib/portfolioFetch";
 
 type Lease = {
   id: string;
@@ -40,10 +41,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     async function fetchPortfolio() {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_WORKER_URL;
-        if (!baseUrl) throw new Error("Worker URL not configured");
-
-        const res = await fetch(`${baseUrl}/portfolio-leases`);
+        const res = await portfolioFetch();
         if (!res.ok) throw new Error("Failed to fetch portfolio leases");
 
         const data: { leases: Lease[] } = await res.json();

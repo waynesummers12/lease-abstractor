@@ -22,6 +22,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { portfolioFetch } from "@/lib/portfolioFetch";
 
 /* ================== TYPES ================== */
 
@@ -193,7 +194,7 @@ export default function DashboardPage() {
 
     async function loadLeases() {
       try {
-        const res = await fetch("/api/portfolio-leases", {
+        const res = await portfolioFetch({
           cache: "no-store",
         });
 
@@ -1081,6 +1082,3 @@ return (
           </div>
         );
       }
-
-        
-      

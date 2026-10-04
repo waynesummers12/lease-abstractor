@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { portfolioFetch } from "@/lib/portfolioFetch";
 
 export default function AddLeasePage() {
   const { session, loading: authLoading } = useAuth();
@@ -74,7 +75,7 @@ export default function AddLeasePage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/portfolio-leases", {
+      const res = await portfolioFetch({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

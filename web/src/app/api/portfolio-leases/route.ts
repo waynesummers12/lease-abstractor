@@ -1,21 +1,48 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+export const dynamic = "force-dynamic";
+
+type PortfolioAccess =
+  | { db: SupabaseClient; userId: string; error?: never }
+  | { error: NextResponse; db?: never; userId?: never };
+
+async function getPortfolioAccess(req: Request): Promise<PortfolioAccess> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !anonKey || !serviceKey) {
+    return { error: NextResponse.json({ error: "Server misconfigured" }, { status: 500 }) };
+  }
+
+  const token = req.headers.get("authorization")?.match(/^Bearer (\S+)$/i)?.[1];
+  if (!token) {
+    return { error: NextResponse.json({ error: "Authentication required" }, { status: 401 }) };
+  }
+
+  const auth = createClient(supabaseUrl, anonKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  const { data: { user }, error } = await auth.auth.getUser(token);
+  if (error || !user) {
+    return { error: NextResponse.json({ error: "Authentication required" }, { status: 401 }) };
+  }
+
+  const db = createClient(supabaseUrl, serviceKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  return { db, userId: user.id };
+}
+
+const privateHeaders = { "Cache-Control": "private, no-store" };
 
 export async function POST(req: Request) {
+  const access = await getPortfolioAccess(req);
+  if (access.error) return access.error;
+  const { db, userId } = access;
+
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceKey) {
-      console.error("Missing Supabase environment variables");
-      return NextResponse.json(
-        { error: "Server misconfigured" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, serviceKey);
     const body = await req.json();
 
     const {
@@ -24,20 +51,21 @@ export async function POST(req: Request) {
       square_footage,
       lease_type,
       renewal_date,
-    } = body;
+    } = body ?? {};
 
-    if (!property_name) {
+    if (typeof property_name !== "string" || !property_name.trim()) {
       return NextResponse.json(
         { error: "Property name is required" },
         { status: 400 }
       );
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from("portfolio_leases")
       .insert([
         {
-          property_name,
+          user_id: userId,
+          property_name: property_name.trim(),
           landlord: landlord || null,
           square_feet: square_footage
             ? Number(square_footage)
@@ -52,12 +80,12 @@ export async function POST(req: Request) {
     if (error) {
       console.error("Insert error:", error);
       return NextResponse.json(
-        { error: error.message },
+        { error: "Failed to save lease" },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ lease: data }, { status: 201 });
+    return NextResponse.json({ lease: data }, { status: 201, headers: privateHeaders });
   } catch (err) {
     console.error("Server error:", err);
     return NextResponse.json(
@@ -67,34 +95,28 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const access = await getPortfolioAccess(req);
+  if (access.error) return access.error;
+  const { db, userId } = access;
+
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceKey) {
-      return NextResponse.json(
-        { error: "Server misconfigured" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, serviceKey);
-
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from("portfolio_leases")
       .select("*")
+      .eq("user_id", userId)
+      .is("deleted_at", null)
       .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Fetch error:", error);
       return NextResponse.json(
-        { error: error.message },
+        { error: "Failed to load leases" },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ leases: data }, { status: 200 });
+    return NextResponse.json({ leases: data }, { status: 200, headers: privateHeaders });
   } catch (err) {
     console.error("Server error:", err);
     return NextResponse.json(
@@ -105,18 +127,11 @@ export async function GET() {
 }
 
 export async function PATCH(req: Request) {
+  const access = await getPortfolioAccess(req);
+  if (access.error) return access.error;
+  const { db, userId } = access;
+
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceKey) {
-      return NextResponse.json(
-        { error: "Server misconfigured" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, serviceKey);
     const body = await req.json();
 
     const {
@@ -126,27 +141,32 @@ export async function PATCH(req: Request) {
       squareFeet,
       leaseType,
       renewalDate,
-    } = body;
+    } = body ?? {};
 
-    if (!id) {
+    if (typeof id !== "string" || !id) {
       return NextResponse.json(
         { error: "Lease ID is required" },
         { status: 400 }
       );
     }
+    if (typeof propertyName !== "string" || !propertyName.trim()) {
+      return NextResponse.json({ error: "Property name is required" }, { status: 400 });
+    }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from("portfolio_leases")
       .update({
-        property_name: propertyName,
+        property_name: propertyName.trim(),
         landlord: landlord || null,
         square_feet: squareFeet ? Number(squareFeet) : null,
         lease_type: leaseType || null,
         renewal_date: renewalDate || null,
       })
       .eq("id", id)
+      .eq("user_id", userId)
+      .is("deleted_at", null)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Update error:", error);
@@ -156,7 +176,8 @@ export async function PATCH(req: Request) {
       );
     }
 
-    return NextResponse.json({ lease: data }, { status: 200 });
+    if (!data) return NextResponse.json({ error: "Lease not found" }, { status: 404 });
+    return NextResponse.json({ lease: data }, { status: 200, headers: privateHeaders });
   } catch (err) {
     console.error("Server error:", err);
     return NextResponse.json(
@@ -167,35 +188,32 @@ export async function PATCH(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const access = await getPortfolioAccess(req);
+  if (access.error) return access.error;
+  const { db, userId } = access;
+
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-    if (!supabaseUrl || !serviceKey) {
-      return NextResponse.json(
-        { error: "Server misconfigured" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, serviceKey);
     const body = await req.json();
 
-    const { id } = body;
+    const { id } = body ?? {};
 
-    if (!id) {
+    if (typeof id !== "string" || !id) {
       return NextResponse.json(
         { error: "Lease ID is required" },
         { status: 400 }
       );
     }
 
-    const { error } = await supabase
+    const { data, error } = await db
       .from("portfolio_leases")
       .update({
         deleted_at: new Date().toISOString(),
       })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", userId)
+      .is("deleted_at", null)
+      .select("id")
+      .maybeSingle();
 
     if (error) {
       console.error("Delete error:", error);
@@ -205,7 +223,8 @@ export async function DELETE(req: Request) {
       );
     }
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    if (!data) return NextResponse.json({ error: "Lease not found" }, { status: 404 });
+    return NextResponse.json({ success: true }, { status: 200, headers: privateHeaders });
   } catch (err) {
     console.error("Server error:", err);
     return NextResponse.json(
