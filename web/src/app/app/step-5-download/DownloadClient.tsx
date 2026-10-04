@@ -32,7 +32,7 @@ declare global {
 /* ================= TYPES ================= */
 
 type AuditResponse = {
-  status: "unpaid" | "paid" | "complete";
+  status: string;
   analysis: {
     tenant?: string | null;
     risk_level?: string | null;
@@ -42,6 +42,10 @@ type AuditResponse = {
     cam_total_avoidable_exposure?: number | null;
   } | null;
 };
+
+const REPORT_WAIT_MS = 120_000;
+const POLL_INTERVAL_MS = 4_000;
+const REQUEST_TIMEOUT_MS = 10_000;
 
 /* ================= HELPERS ================= */
 
@@ -80,6 +84,8 @@ export default function SuccessPage() {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
+  const [waitTimedOut, setWaitTimedOut] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   /* ---------- POLL AUDIT STATUS ---------- */
   useEffect(() => {
@@ -89,52 +95,97 @@ export default function SuccessPage() {
       setLoading(false);
       return;
     }
+    const currentAuditId = auditId;
+    setFatalError(null);
 
-    let pollTimer: NodeJS.Timeout | null = null;
+    let active = true;
+    let pollTimer: ReturnType<typeof setTimeout> | null = null;
+    let requestTimer: ReturnType<typeof setTimeout> | null = null;
+    let requestController: AbortController | null = null;
+    const deadline = Date.now() + REPORT_WAIT_MS;
+
+    function retryLater() {
+      if (!active) return;
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) {
+        setWaitTimedOut(true);
+        setLoading(false);
+      } else {
+        pollTimer = setTimeout(loadAudit, Math.min(POLL_INTERVAL_MS, remaining));
+      }
+    }
 
     async function loadAudit() {
+      if (!active) return;
+      if (Date.now() >= deadline) {
+        setWaitTimedOut(true);
+        setLoading(false);
+        return;
+      }
+      requestController = new AbortController();
+      requestTimer = setTimeout(() => requestController?.abort(),
+        Math.min(REQUEST_TIMEOUT_MS, deadline - Date.now()));
       try {
-        const res = await fetch(`/api/audits/${auditId}`, {
+        const res = await fetch(`/api/audits/${encodeURIComponent(currentAuditId)}`, {
           cache: "no-store",
           headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {},
+          signal: requestController.signal,
         });
 
+        if (!active) return;
+
+        if (res.status === 401 || res.status === 403 || res.status === 404) {
+          setFatalError("We couldn't access this audit. Please contact support with your audit reference.");
+          return;
+        }
         if (!res.ok) {
-          setFatalError("Audit not found.");
+          retryLater();
           return;
         }
 
         const json = await res.json();
+        if (!active) return;
 
-// Normalize status regardless of API shape
-const status =
-  json?.status ??
-  json?.audit?.status ??
-  "paid";
+        const status = json?.status ?? json?.audit?.status;
+        if (status === "failed" || status === "error") {
+          setFatalError("We couldn't prepare your report. Please contact support with your audit reference.");
+          return;
+        }
+        if (typeof status !== "string") {
+          retryLater();
+          return;
+        }
 
-setData({
-  status,
-  analysis: json?.analysis ?? json?.audit?.analysis ?? null,
-});
+        setData({
+          status,
+          analysis: json?.analysis ?? json?.audit?.analysis ?? null,
+        });
 
-if (status !== "complete") {
-  pollTimer = setTimeout(loadAudit, 4000);
-}
+        if (status === "complete") setWaitTimedOut(false);
+        else retryLater();
 
       } catch (err) {
-        console.error("Audit polling failed", err);
-        setFatalError("Unable to load audit.");
+        if (active) {
+          console.error("Audit polling failed", err);
+          retryLater();
+        }
       } finally {
-        setLoading(false);
+        if (requestTimer) clearTimeout(requestTimer);
+        requestTimer = null;
+        requestController = null;
+        if (active) setLoading(false);
       }
     }
 
     loadAudit();
 
     return () => {
+      active = false;
       if (pollTimer) clearTimeout(pollTimer);
+      if (requestTimer) clearTimeout(requestTimer);
+      requestController?.abort();
     };
-  }, [auditId, authLoading, session?.access_token]);
+  }, [auditId, authLoading, session?.access_token, retryCount]);
 
         /* ---------- GA4: REPORT PURCHASED ---------- */
 useEffect(() => {
@@ -220,6 +271,39 @@ useEffect(() => {
     );
   }
 
+  if (waitTimedOut) {
+    return (
+      <main className="mx-auto max-w-xl px-6 py-20 text-center">
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6">
+          <h1 className="text-xl font-semibold">Your report is taking longer than expected</h1>
+          <p className="mt-3 text-sm text-gray-700">
+            Keep this audit link. Checking again will not start another payment.
+          </p>
+          <div className="mt-6 flex flex-col items-center gap-3 text-sm">
+            <button
+              type="button"
+              onClick={() => {
+                setWaitTimedOut(false);
+                setRetryCount((count) => count + 1);
+              }}
+              className="rounded-lg bg-black px-5 py-3 font-medium text-white hover:bg-gray-800"
+            >
+              Check report again
+            </button>
+            {auditId && (
+              <a
+                href={`mailto:audits@saveonlease.com?subject=${encodeURIComponent("Lease audit report delay")}&body=${encodeURIComponent(`Please help with audit ID: ${auditId}`)}`}
+                className="underline"
+              >
+                Contact support about this audit
+              </a>
+            )}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   if (loading || !data) {
     return (
       <main className="mx-auto max-w-xl px-6 py-28 text-center">
@@ -235,8 +319,11 @@ useEffect(() => {
         <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
         <h1 className="text-xl font-semibold">Finalizing your audit report</h1>
         <p className="mt-3 text-sm text-gray-600">
-          Payment received. We’re generating your PDF now.
+          {data.status === "paid"
+            ? "Payment received. We’re generating your PDF now."
+            : "We’re confirming your payment and preparing your PDF."}
         </p>
+        <p className="mt-2 text-xs text-gray-500">We’ll check for up to two minutes.</p>
       </main>
     );
   }
