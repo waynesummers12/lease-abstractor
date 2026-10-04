@@ -31,6 +31,9 @@ export default function PricingPage() {
       <p className="mt-2 text-gray-500">
         No subscriptions, no retainers, no pressure.
       </p>
+      <p className="mt-2 text-sm text-gray-500">
+        Start with a free preview. Pay $49.99 only if you choose to unlock the full audit.
+      </p>
     </section>
 
     {/* PRICE CARD */}
@@ -202,7 +205,7 @@ export default function PricingPage() {
         {
           question: "How much does a CAM or NNN audit cost?",
           answer:
-            "SaveOnLease offers a one-time CAM and NNN lease audit for $249.99 with no subscription or ongoing fees.",
+            "SaveOnLease offers a one-time CAM and NNN lease audit for $49.99 with no subscription or ongoing fees.",
         },
         {
           question: "Is the CAM audit fee refundable?",

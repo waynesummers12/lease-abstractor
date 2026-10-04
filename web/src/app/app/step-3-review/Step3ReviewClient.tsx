@@ -304,10 +304,7 @@ export default function Step3ReviewClient() {
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
         <h2 className="text-lg font-semibold">
-          Unlock ${annualExposure?.toLocaleString() ?? "your"} in Potential Savings — Limited Launch Price: $49.99
-          <span className="block text-sm font-normal text-gray-500 mt-1">
-            (Regular Price $249)
-          </span>
+          Unlock the Full Audit — $49.99 One-Time
         </h2>
         <p className="text-sm text-red-600 font-medium">
           Audit windows are time-sensitive — delays can reduce recoverable savings
