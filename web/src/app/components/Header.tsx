@@ -18,7 +18,6 @@ export default function Header() {
 
   const { session, plan } = useAuth();
   const user = session?.user ?? null;
-  console.log("HEADER SESSION:", session);
 
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -51,7 +50,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm relative whitespace-nowrap ml-4">
+        <nav className="relative ml-4 hidden items-center gap-6 whitespace-nowrap text-sm xl:flex">
           <EducationDropdown />
 
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
@@ -162,8 +161,16 @@ export default function Header() {
         </nav>
 
         {/* Mobile */}
-        <button className="md:hidden" onClick={() => setMenuOpen((v) => !v)}>
-          ☰
+        <button
+          id="mobile-menu-toggle"
+          type="button"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-controls="mobile-navigation"
+          aria-expanded={menuOpen}
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-current/30 xl:hidden"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span aria-hidden="true" className="text-2xl leading-none">☰</span>
         </button>
       </div>
 

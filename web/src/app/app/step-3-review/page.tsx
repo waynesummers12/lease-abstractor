@@ -29,11 +29,11 @@ export default function Step3ReviewPage() {
 
 function Loading() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 text-center">
+    <main className="mx-auto max-w-3xl px-4 py-12 text-center sm:px-6 sm:py-16" role="status">
       <div className="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
 
-      <h1 className="text-xl font-semibold mb-2">
-        Generating Your Savings Preview
+      <h1 className="mb-2 text-2xl font-semibold">
+        Preparing your lease preview
       </h1>
 
       <p className="text-gray-600 mb-4">

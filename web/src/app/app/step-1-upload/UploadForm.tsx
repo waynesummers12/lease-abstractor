@@ -50,7 +50,8 @@ export default function UploadForm({ onUpload, loading }: Props) {
       <input
         type="file"
         accept="application/pdf"
-        className="hidden"
+        aria-label="Choose a lease PDF"
+        className="peer sr-only"
         disabled={loading}
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -60,8 +61,14 @@ export default function UploadForm({ onUpload, loading }: Props) {
         }}
       />
 
-      <div className="flex items-center justify-center rounded-2xl border-2 border-dashed border-green-500 bg-white shadow-lg p-14 text-gray-900 font-bold text-lg transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:border-green-600">
-        {loading ? "Uploading…" : "Check Your Commercial Lease for Hidden Costs"}
+      <div className="flex min-h-48 flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-emerald-400 bg-emerald-50/50 px-5 py-8 text-center transition hover:border-emerald-600 hover:bg-emerald-50 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-emerald-700 sm:min-h-56">
+        <span aria-hidden="true" className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl text-emerald-800">↑</span>
+        <span className="text-lg font-semibold text-slate-950">
+          {loading ? "Uploading and analyzing your lease..." : "Choose a lease PDF"}
+        </span>
+        <span className="max-w-sm text-sm text-slate-600">
+          {loading ? "Keep this page open. Your preview will load when the analysis is ready." : "Tap here to browse your files. PDF documents only."}
+        </span>
       </div>
     </label>
   );

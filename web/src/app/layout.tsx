@@ -60,14 +60,14 @@ export default function RootLayout({
           <Header />
 
           {/* Global Conversion Strip */}
-          <div className="w-full bg-black text-white text-xs sm:text-sm">
-            <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-              <span>
+          <div className="mt-[76px] w-full bg-black text-white text-xs sm:text-sm">
+            <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-center sm:justify-between">
+              <span className="hidden sm:inline">
                 Find hidden CAM & NNN overcharges in minutes
               </span>
               <a
                 href="/app/step-1-upload"
-                className="underline font-medium hover:opacity-80"
+                className="font-medium underline hover:opacity-80"
               >
                 Run Audit (Free Preview) →
               </a>
@@ -75,12 +75,7 @@ export default function RootLayout({
           </div>
 
           {/* Main content area */}
-          <main className="flex-1">
-            {/* Offset for fixed / sticky header */}
-            <div className="pt-16">
-              {children}
-            </div>
-          </main>
+          <main className="flex-1">{children}</main>
 
           <Footer />
         </AuthProvider>

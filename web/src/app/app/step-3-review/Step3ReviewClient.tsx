@@ -97,7 +97,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
 
   if (!auditId) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="mb-4 text-red-600">We need your audit link to load this preview.</p>
         <Link href="/app/step-1-upload" className="text-sm font-medium underline">Upload a Lease</Link>
       </main>
@@ -106,9 +106,14 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
 
   if (loading) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-xl font-semibold">Generating Your Savings Preview</h1>
-        <p className="mt-3 text-gray-600">We’re checking your lease analysis. This can take up to a minute.</p>
+      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8" role="status">
+          <div className="mb-5 h-10 w-10 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-700" aria-hidden="true" />
+          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 2 of 2</p>
+          <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">Preparing your lease preview</h1>
+          <p className="mt-3 text-slate-600">We’re checking your lease analysis. This can take up to a minute.</p>
+          <p className="mt-4 text-sm text-slate-500">Keep this page open. You’ll see the preview here when it’s ready.</p>
+        </div>
       </main>
     );
   }
@@ -121,10 +126,11 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         : "Your preview is taking longer than expected. You can check again without re-uploading.";
     const supportHref = `mailto:audits@saveonlease.com?subject=${encodeURIComponent("Lease preview help")}&body=${encodeURIComponent(`Please help with audit ID: ${auditId}`)}`;
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16 space-y-5">
-        <h1 className="text-xl font-semibold">Preview Not Ready</h1>
-        <p className="text-gray-700">{message}</p>
-        <div className="flex flex-wrap items-center gap-4 text-sm">
+      <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <h1 className="text-2xl font-semibold">Preview not ready</h1>
+        <p className="mt-3 text-slate-700">{message}</p>
+        <div className="mt-6 flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
             onClick={() => {
@@ -133,14 +139,15 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
               setLoading(true);
               setRetryCount((count) => count + 1);
             }}
-            className="rounded bg-black px-4 py-2 font-medium text-white hover:bg-gray-800"
+            className="min-h-11 rounded-lg bg-black px-5 py-2 font-medium text-white hover:bg-gray-800"
           >
             Try Checking Again
           </button>
-          <Link href="/app/step-1-upload" className="font-medium underline">Upload Again</Link>
-          <a href={supportHref} className="font-medium underline">Contact Support</a>
+          <Link href="/app/step-1-upload" className="inline-flex min-h-11 items-center font-medium underline">Upload again</Link>
+          <a href={supportHref} className="inline-flex min-h-11 items-center font-medium underline">Contact support</a>
         </div>
-        <p className="text-xs text-gray-500">Audit ID: {auditId}</p>
+        <p className="mt-5 break-all text-xs text-slate-500">Audit ID: {auditId}</p>
+        </div>
       </main>
     );
   }
@@ -148,37 +155,38 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const confidence =
     typeof analysis.confidence === "number"
       ? Math.min(Math.max(analysis.confidence, 0), 100)
-      : 80;
+      : null;
 
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Your Savings Preview</h1>
-        <p className="mt-2 text-gray-600">
-          We’ve identified potential savings and risk areas — unlock the full audit to see exactly where.
+    <main className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6 sm:py-16">
+      <div className="max-w-3xl">
+        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 2 of 2 · Free preview</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your lease preview</h1>
+        <p className="mt-3 text-slate-600">
+          Review the estimate and the lease details we extracted. You can decide whether a full audit is worth it.
         </p>
       </div>
 
 
       {/* ---------- GREEN SUMMARY BOX ---------- */}
 {annualExposure != null && (
-  <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-6 space-y-5">
+  <div className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-8">
     {/* Header */}
-    <div className="flex items-center gap-3">
-      <span className="text-2xl">💰</span>
+    <div className="flex items-start gap-3">
+      <span className="text-2xl" aria-hidden="true">💰</span>
       <div>
-        <p className="text-sm text-emerald-700 font-medium">
-          Estimated Avoidable Exposure (Next 12 Months)
+        <p className="text-sm font-medium text-emerald-800">
+          Estimated avoidable exposure · next 12 months
         </p>
 
         {/* PRIMARY NUMBER */}
-        <p className="text-4xl font-extrabold text-emerald-900">
+        <p className="break-words text-4xl font-bold tracking-tight text-emerald-950 sm:text-5xl">
           ${annualExposure.toLocaleString()}
         </p>
         {monthlyLoss != null && (
-          <p className="mt-1 text-sm text-red-700 font-medium">
-            You may be losing ~${monthlyLoss.toLocaleString()}/month until resolved
+          <p className="mt-2 text-sm font-medium text-emerald-900">
+            Approximately ${monthlyLoss.toLocaleString()} per month at this estimate
           </p>
         )}
 
@@ -204,7 +212,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
               </span>
             </p>
             <p className="mt-2 text-xs text-emerald-700">
-              ⚠️ Many leases have time-limited audit windows — delays can reduce recovery.
+              Audit rights and notice windows vary by lease. Check the dates in your agreement.
             </p>
           </>
         )}
@@ -212,11 +220,11 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     </div>
 
     {/* Confidence / badge */}
-    <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-sm w-fit">
-      ✓ Calculated from your CAM, NNN, escalation, and reconciliation lease clauses
+    <div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-900">
+      Estimate based on terms extracted from your uploaded lease
     </div>
 
-    <div>
+    {confidence != null && <div>
       <p className="text-sm text-emerald-800 mb-2">
         Confidence reflects clarity of CAM, escalation, and reconciliation clauses
       </p>
@@ -237,12 +245,12 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             : "Lower confidence — lease language is unclear"}
         </p>
       </div>
-    </div>
+    </div>}
 
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-emerald-800">
-      <div>✔ CAM charges reviewed</div>
-      <div>✔ Admin fees analyzed</div>
-      <div>✔ Escalations evaluated</div>
+      <div>CAM and NNN terms checked</div>
+      <div>Fee language checked</div>
+      <div>Escalation terms checked</div>
     </div>
 
     {/* How calculated */}
@@ -251,9 +259,9 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         How this estimate was calculated
       </p>
       <ul className="list-disc list-inside space-y-1 text-sm text-emerald-900">
-        <li>CAM / NNN charges flagged as <span className="font-semibold">uncapped, ambiguous, or escalating</span></li>
-        <li>Conservative dollar ranges inferred from lease language (not worst-case)</li>
-        <li>Annualized impact based on current rent and reconciliation rules</li>
+        <li>Potential cost risks identified from CAM, NNN, and escalation language</li>
+        <li>Dollar figures are estimates based on extracted lease terms</li>
+        <li>Actual recoveries depend on charges, records, and lease interpretation</li>
       </ul>
 
       <p className="mt-3 text-xs text-emerald-700 italic">
@@ -274,15 +282,12 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
               <span>
                 {flag}
               </span>
-              <span className="ml-2 bg-gradient-to-r from-emerald-900/80 to-transparent text-transparent bg-clip-text select-none">
-                confidential details
-              </span>
             </li>
           ))}
         </ul>
 
         <p className="mt-2 text-xs text-emerald-700">
-          Unlock the full audit to see complete findings, dollar impact, and exact lease clauses.
+          The full audit provides more detail on each finding and the relevant lease terms.
         </p>
       </div>
     )}
@@ -315,14 +320,24 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     </div>
   </div>
 )}
+      {annualExposure == null && (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-8">
+          <h2 className="text-xl font-semibold text-slate-950">No reliable dollar estimate yet</h2>
+          <p className="mt-2 text-sm text-slate-600">We could not calculate an exposure figure from the extracted terms. Review the lease details below and use the full audit for a closer look.</p>
+          <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+            <div><dt className="font-medium text-slate-500">Tenant</dt><dd className="break-words text-slate-900">{analysis.tenant || "Not identified"}</dd></div>
+            <div><dt className="font-medium text-slate-500">Premises</dt><dd className="break-words text-slate-900">{analysis.premises || "Not identified"}</dd></div>
+          </dl>
+        </div>
+      )}
 
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
-      <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
-        <h2 className="text-lg font-semibold">
-          Unlock the Full Audit — $49.99 One-Time
+      <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">
+          Full lease audit · $49.99 one-time
         </h2>
-        <p className="text-sm text-red-600 font-medium">
-          Audit windows are time-sensitive — delays can reduce recoverable savings
+        <p className="text-sm font-medium text-slate-600">
+          Check your lease for any notice or audit deadlines before deciding what to do next.
         </p>
 
         <p className="text-gray-700">
@@ -346,7 +361,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             Issue-by-issue findings tied directly to specific lease provisions
           </li>
           <li>
-            Estimated dollar impact for each CAM / NNN risk identified
+            Estimated dollar impact where the lease supports a calculation
           </li>
           <li>
             Audit-ready explanations you can share with an attorney,
@@ -384,15 +399,12 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             alert("Failed to start checkout");
           }
         }}
-        className="w-full rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800 font-medium text-center"
+        className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
       >
-        Unlock ${annualExposure?.toLocaleString() ?? "Savings"} →
+        Unlock the full audit · $49.99
       </button>
-      <p className="text-xs text-gray-500 mt-2 text-center">
-        Secure checkout • Instant access after payment
-      </p>
-      <p className="text-[11px] text-gray-400 mt-2 text-center">
-        2,100+ leases analyzed • Avg. savings $8,400
+      <p className="mt-2 text-center text-xs text-slate-500">
+        Secure one-time checkout. Your PDF is prepared after payment.
       </p>
     </main>
   );

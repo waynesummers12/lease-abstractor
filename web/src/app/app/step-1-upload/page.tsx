@@ -93,66 +93,37 @@ export default function UploadLeasePage() {
 // Only edit JSX BELOW the return() statement.
 // =======================================================
   return (
-  <main className="mx-auto max-w-4xl px-6 py-24">
-    <div className="mb-12 text-center">
-      <h1 className="text-5xl sm:text-6xl font-light tracking-tight">
-        Analyze Your Lease (Free Preview)
+  <main className="mx-auto max-w-5xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16">
+    <div className="mx-auto max-w-3xl text-center">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">Free lease preview</p>
+      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+        See what your lease may be costing you
       </h1>
-
-      <p className="mt-4 text-lg text-gray-600">
-        Get a quick preview of hidden CAM & NNN overcharges
+      <p className="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
+        Upload your commercial lease PDF to preview potential CAM and NNN cost risks. You can review the preview before deciding whether to buy a full audit.
       </p>
-
-      <p className="mt-6 text-xl text-gray-800 font-medium">
-        See exactly where you&apos;re overpaying — before your next renewal.
-      </p>
-      <p className="mt-3 text-sm text-gray-500">
-        Built for retail, restaurant, franchise, office, and medical tenants.
-      </p>
-
-      <div className="mt-8 flex flex-col items-center gap-2 text-sm text-gray-600 sm:flex-row sm:justify-center sm:gap-8">
-        <span>✔ Detect inflated CAM charges</span>
-        <span>✔ Identify admin fee padding</span>
-        <span>✔ Flag missing caps & audit rights</span>
-      </div>
     </div>
 
-    <div className="rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-12 shadow-xl text-center text-white ring-1 ring-white/10">
-      <h2 className="text-2xl font-semibold tracking-tight mb-6 text-black">
-        Upload Your Lease & Get Instant Savings Insights
-      </h2>
-      <p className="text-white/90 text-sm mb-8">
-        Drag and drop your lease below or click to upload. We’ll analyze it in seconds.
-      </p>
+    <div className="mx-auto mt-9 max-w-3xl rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2</p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Choose your lease PDF</h2>
+        <p className="mt-2 text-sm text-slate-600">We’ll analyze the document and take you to your preview. This step is free.</p>
+      </div>
       <UploadForm
         onUpload={handleUpload}
         loading={uploading}
       />
-
-      <p className="mt-6 text-sm font-semibold text-white/90">
-        No credit card. No commitment.
-      </p>
-
-      <div className="mt-6 rounded-xl bg-white p-6 text-center text-gray-900">
-        <p className="text-base font-semibold text-green-900">
-          💰 Preview your potential savings before committing to a full audit
-        </p>
-        <p className="mt-2 text-sm text-green-800">
-          We’ll estimate your potential savings first — then you can decide if a full audit is worth it.
-        </p>
-      </div>
-
-      <p className="mt-6 text-xs text-white/70">
-        ⏱ Results generated in ~10 seconds
-      </p>
-
-      <p className="mt-2 text-sm text-white/70">
-        🔒 Secure, private, and never shared
-      </p>
-
       {error && (
-        <p className="mt-4 text-sm text-red-600">{error}</p>
+        <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
       )}
+      <p className="mt-5 text-center text-sm text-slate-600">No credit card needed for the preview.</p>
+    </div>
+
+    <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-sm text-slate-700 sm:grid-cols-3">
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">1. Upload</span><br />Choose a PDF copy of your lease.</div>
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">2. Preview</span><br />Review potential cost risks and extracted details.</div>
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Unlock the full audit only if it’s useful to you.</div>
     </div>
   </main>
 );
