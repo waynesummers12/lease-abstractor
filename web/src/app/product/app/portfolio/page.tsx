@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { portfolioFetch } from "@/lib/portfolioFetch";
+import { authenticatedPortfolioFetch, portfolioFetch } from "@/lib/portfolioFetch";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 import { PortfolioAuditList } from "@/components/PortfolioAuditList";
 
@@ -31,8 +31,9 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLease, setSelectedLease] = useState<LeaseWithRisk | null>(null);
-  const [companyName] = useState<string>("SaveOnLease Client");
-  const [confidential] = useState<boolean>(true);
+  const companyName = "SaveOnLease Client";
+  const [exportingPdf, setExportingPdf] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!authLoading && !userId) {
@@ -99,6 +100,30 @@ export default function PortfolioPage() {
 
     return { critical, watch, safe, unknown };
   }, [sortedLeases]);
+
+  async function handleBoardExport() {
+    setExportError(null);
+    setExportingPdf(true);
+    try {
+      const response = await authenticatedPortfolioFetch("/api/portfolio-board-pdf", { method: "POST" });
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || "Unable to export PDF");
+      }
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "portfolio_board_report.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (cause) {
+      setExportError(cause instanceof Error ? cause.message : "Unable to export PDF");
+    } finally {
+      setExportingPdf(false);
+    }
+  }
 
   if (authLoading || loading) {
   return <div className="p-6">Loading portfolio...</div>;
@@ -183,137 +208,11 @@ if (!session) {
           Export CSV
         </button>
         <button
-          onClick={() => {
-            const now = new Date();
-
-            const narrative = `
-    As of ${now.toLocaleDateString()}, the portfolio consists of ${sortedLeases.length} active leases. 
-    ${riskBuckets.critical} saved renewal dates have passed or fall within 90 days.
-    ${riskBuckets.unknown} leases have no saved renewal date.
-    Dates should be confirmed against the lease before action.
-  `;
-
-            const monthlyRenewals = Array(12).fill(0);
-
-            sortedLeases.forEach(l => {
-              if (!l.renewal_date) return;
-              const diffMonths =
-                (new Date(l.renewal_date).getFullYear() - now.getFullYear()) * 12 +
-                (new Date(l.renewal_date).getMonth() - now.getMonth());
-
-              if (diffMonths >= 0 && diffMonths < 12) {
-                monthlyRenewals[diffMonths]++;
-              }
-            });
-
-            const maxRenewals = Math.max(...monthlyRenewals, 1);
-
-            const chartBars = monthlyRenewals
-              .map((value, i) => {
-                const height = (value / maxRenewals) * 100;
-                const x = i * 28;
-                const y = 120 - height;
-                return `<rect x="${x}" y="${y}" width="20" height="${height}" fill="#60a5fa" />`;
-              })
-              .join("");
-
-            const html = `
-    <html>
-      <head>
-        <title>${companyName} Portfolio Summary</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; background:#0f172a; color:#f1f5f9; }
-          h1,h2,h3 { color:#ffffff; }
-          .kpi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:30px 0; }
-          .kpi { background:#1e293b; padding:20px; border-radius:10px; }
-          .kpi-title { font-size:12px; color:#94a3b8; }
-          .kpi-value { font-size:24px; font-weight:bold; margin-top:5px; }
-          table { width:100%; border-collapse:collapse; margin-top:30px; }
-          th,td { border-bottom:1px solid #334155; padding:10px; font-size:12px; }
-          th { background:#1e293b; }
-          .chart { margin:40px 0; }
-          .watermark {
-            position:fixed;
-            top:40%;
-            left:20%;
-            font-size:80px;
-            color:rgba(255,255,255,0.05);
-            transform:rotate(-30deg);
-          }
-        </style>
-      </head>
-      <body>
-        ${confidential ? `<div class="watermark">CONFIDENTIAL</div>` : ""}
-
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:30px;">
-          <img src="https://saveonlease.com/logo.png" height="40" />
-          <div>
-            <h1 style="margin:0;">${companyName}</h1>
-            <div style="color:#94a3b8; font-size:14px;">Institutional Lease Risk Intelligence</div>
-          </div>
-        </div>
-
-        <h2>Executive Portfolio Summary</h2>
-        <p style="color:#cbd5e1; font-size:14px; line-height:1.6;">${narrative}</p>
-
-        <div class="kpi-grid">
-          <div class="kpi">
-            <div class="kpi-title">Total Leases</div>
-            <div class="kpi-value">${sortedLeases.length}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-title">Renewal date passed or within 90 days</div>
-            <div class="kpi-value">${riskBuckets.critical}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-title">Renewal Date Missing</div>
-            <div class="kpi-value">${riskBuckets.unknown}</div>
-          </div>
-        </div>
-
-        <div class="chart">
-          <h3>Saved renewal dates by month</h3>
-          <svg width="350" height="140" viewBox="0 0 350 140">
-            ${chartBars}
-          </svg>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Property</th>
-              <th>Lease Type</th>
-              <th>Renewal</th>
-              <th>Days</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${sortedLeases
-              .map(l => `
-                <tr>
-                  <td>${l.property_name}</td>
-                  <td>${l.lease_type ?? ""}</td>
-                  <td>${l.renewal_date ?? ""}</td>
-                  <td>${l.diffDays ?? ""}</td>
-                </tr>
-              `)
-              .join("")}
-          </tbody>
-        </table>
-      </body>
-    </html>
-  `;
-
-            const win = window.open("", "_blank");
-            if (!win) return;
-            win.document.write(html);
-            win.document.close();
-            win.focus();
-            win.print();
-          }}
-          className="text-sm px-4 py-2 bg-blue-600 text-white rounded ml-3"
+          onClick={handleBoardExport}
+          disabled={exportingPdf || leases.length === 0}
+          className="text-sm px-4 py-2 bg-blue-600 text-white rounded ml-3 disabled:opacity-50"
         >
-          Export Board PDF
+          {exportingPdf ? "Preparing PDF..." : "Export Board PDF"}
         </button>
         <button
           onClick={() => {
@@ -348,6 +247,8 @@ if (!session) {
           Quick Print Preview
         </button>
       </div>
+
+      {exportError && <p role="alert" className="text-sm text-red-700">{exportError}</p>}
 
       {/* 12-Month Renewal Forecast */}
       <div className="border rounded-lg p-4">
