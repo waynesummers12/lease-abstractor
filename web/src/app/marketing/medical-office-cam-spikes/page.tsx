@@ -122,7 +122,7 @@ export default function CAMSpikesMedical() {
           Hidden Multiplier: Admin Fee Stacking
         </h2>
         <p className="text-gray-700">
-          Many medical leases cap CAM admin fees at 8–12%. When base CAM rises,
+          Some leases cap CAM admin fees. When base CAM rises,
           percentage-based admin fees automatically rise as well.
         </p>
         <p className="text-gray-700">

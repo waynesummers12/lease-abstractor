@@ -41,9 +41,8 @@ export default function TripleNetLeaseMeaningPage() {
         </p>
 
         <p className="text-lg text-gray-700 leading-relaxed">
-          What most tenants do not realize is that these additional charges can
-          increase total occupancy costs by 15–35% — and sometimes more if
-          lease language allows broad expense pass-through.
+          Additional pass-through charges can increase total occupancy costs.
+          The amount depends on the property and the language in your lease.
         </p>
 
         <Link

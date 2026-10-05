@@ -80,8 +80,8 @@ export default function TripleNetLeaseVsGrossPage() {
         </h2>
 
         <p>
-          In a triple net lease, operating expenses can increase 15–35% above
-          base rent depending on taxes, insurance rates, and CAM budgets.
+          In a triple net lease, operating expenses are charged in addition
+          to base rent. The amount depends on taxes, insurance, and CAM budgets.
         </p>
 
         <p>

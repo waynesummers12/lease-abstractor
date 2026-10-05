@@ -20,7 +20,7 @@ export default function CommercialLeaseChecklistPage() {
       </p>
 
       <p className="text-green-700 font-medium mb-10">
-        ✓ Many tenants uncover $5K–$50K+ in CAM exposure using this review framework
+        ✓ Review lease clauses and reconciliation charges with this framework
       </p>
 
       {/* WHAT THE CHECKLIST COVERS */}
@@ -80,8 +80,8 @@ export default function CommercialLeaseChecklistPage() {
 
       {/* TRUST SIGNAL */}
       <p className="text-sm text-gray-500 max-w-2xl mx-auto mb-12">
-        Used by retail, restaurant, franchise, and medical tenants reviewing
-        commercial lease costs and CAM reconciliations nationwide.
+        Designed for retail, restaurant, franchise, and medical tenants reviewing
+        commercial lease costs and CAM reconciliations.
       </p>
 
       {/* INDUSTRIES */}

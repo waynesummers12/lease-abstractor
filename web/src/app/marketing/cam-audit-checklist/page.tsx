@@ -121,7 +121,7 @@ export default function CamAuditChecklistPage() {
           Instant PDF download • No signup required • Tenant-side review framework
         </p>
         <p className="text-sm text-gray-500 mt-4">
-          Used by retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations nationwide.
+          Designed for retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations.
         </p>
       </section>
 {/* Broker Referral Section */}
@@ -131,7 +131,7 @@ export default function CamAuditChecklistPage() {
   </h3>
 
   <p className="text-gray-700 mb-4">
-    Many tenant representation brokers use this checklist when reviewing
+    Tenant representation brokers can use this checklist when reviewing
     CAM reconciliations with clients.
   </p>
 

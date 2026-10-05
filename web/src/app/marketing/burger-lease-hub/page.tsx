@@ -136,8 +136,8 @@ export default function BurgerLeaseHubPage() {
                 How often do CAM overcharges occur in burger franchises?
               </h3>
               <p className="mt-2">
-                3–7% discrepancies are commonly identified during structured
-                reconciliation reviews, especially in multi-unit portfolios.
+                Review reconciliation calculations against lease terms, especially
+                for multi-unit portfolios.
               </p>
             </div>
 
@@ -174,7 +174,7 @@ export default function BurgerLeaseHubPage() {
                   name: "How often do CAM overcharges occur in burger franchises?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "3–7% discrepancies are commonly identified during structured reconciliation reviews, especially in multi-unit portfolios."
+                    text: "Review reconciliation calculations against lease terms, especially for multi-unit portfolios."
                   }
                 },
                 {

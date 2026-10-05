@@ -91,7 +91,7 @@ export default function MedicalOvercharges() {
             1. Admin Fee Stacking Above Lease Caps
           </h2>
           <p className="text-gray-700">
-            Many medical leases cap CAM admin fees at 8–12%. Overcharges occur
+            Some leases cap CAM admin fees. Potential overcharges occur
             when management fees are layered separately, when caps are applied
             to expanded expense categories, or when percentage calculations are
             performed incorrectly.

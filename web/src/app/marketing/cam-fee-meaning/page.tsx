@@ -94,7 +94,7 @@ export default function CamFeeMeaningPage() {
         <p className="text-gray-700 mb-4">
           CAM fees can represent a substantial portion of total occupancy
           costs. In triple net (NNN) leases, CAM is typically bundled with
-          property taxes and insurance, often adding 15–35% to base rent.
+          property taxes and insurance. The amount varies by property and lease.
         </p>
         <p className="text-gray-700">
           Over the life of a lease, small CAM miscalculations can add up to

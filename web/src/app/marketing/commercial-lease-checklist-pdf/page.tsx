@@ -14,14 +14,14 @@ export default function CommercialLeaseChecklistPdfPage() {
       </h1>
 
       <p className="text-gray-700 max-w-2xl mx-auto mb-8">
-        Download a free commercial lease review checklist used by tenants
+        Download a free commercial lease review checklist designed to help tenants
         to identify CAM overcharges, NNN expense errors, administrative
         fee increases, and reconciliation discrepancies before audit
         windows expire.
       </p>
 
       <p className="text-green-700 font-medium mb-10">
-        ✓ Many tenants uncover $5K–$50K+ in potential CAM exposure
+        ✓ Review CAM charges and audit deadlines against your lease
       </p>
 
       {/* DOWNLOAD SECTION */}

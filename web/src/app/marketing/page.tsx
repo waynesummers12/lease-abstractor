@@ -128,16 +128,16 @@ export default function MarketingHomePage() {
       <section className="border-y bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 py-10 grid gap-6 md:grid-cols-3 text-center">
           <div>
-            <p className="text-3xl font-semibold">3-7%</p>
-            <p className="mt-1 text-gray-600">CAM discrepancies commonly identified</p>
+            <p className="text-3xl font-semibold">Lease terms</p>
+            <p className="mt-1 text-gray-600">Review what the lease allows</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold">$5k-$25k+</p>
-            <p className="mt-1 text-gray-600">Typical annual exposure</p>
+            <p className="text-3xl font-semibold">Billing records</p>
+            <p className="mt-1 text-gray-600">Check actual charges</p>
           </div>
           <div>
-            <p className="text-3xl font-semibold">30-120 days</p>
-            <p className="mt-1 text-gray-600">Common audit windows</p>
+            <p className="text-3xl font-semibold">Audit rights</p>
+            <p className="mt-1 text-gray-600">Check your lease deadline</p>
           </div>
         </div>
       </section>

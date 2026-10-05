@@ -106,9 +106,9 @@ export default function RetailLeaseHubPage() {
             Retail Occupancy Risk Signals
           </h2>
           <ul className="mt-4 space-y-2 text-indigo-800">
-            <li>• 3–7% CAM discrepancies commonly identified</li>
-            <li>• $5k–$25k+ typical annual exposure</li>
-            <li>• 30–120 day audit windows</li>
+            <li>• CAM allocation and fee terms to review</li>
+            <li>• Actual exposure depends on lease and billing records</li>
+            <li>• Check audit deadlines in your lease</li>
           </ul>
         </div>
 

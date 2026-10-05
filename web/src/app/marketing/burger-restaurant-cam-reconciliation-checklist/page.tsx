@@ -129,11 +129,11 @@ export default function BurgerRestaurantCamChecklistPage() {
 
             <div>
               <p className="font-medium text-gray-900">
-                What percentage errors are commonly found?
+                What allocation errors should I check?
               </p>
               <p className="mt-2 text-gray-600">
-                3–7% discrepancies are frequently identified in retail CAM allocations,
-                particularly where admin fees or capital pass-throughs are involved.
+                Compare billed allocations with your lease, especially admin fees
+                and capital expense pass-throughs.
               </p>
             </div>
           </div>

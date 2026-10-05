@@ -51,8 +51,8 @@ export default function MedicalOfficeCAM() {
           CAM reconciliations in medical office buildings are materially more
           complex than traditional office properties. Imaging infrastructure,
           generator systems, parking structures, elevator modernization, and
-          compliance-driven upgrades create recurring volatility that can add
-          15–35% to total occupancy costs.
+          compliance-driven upgrades can affect occupancy costs and should be checked
+          against lease terms and billing records.
         </p>
         <p className="text-gray-600">
           Without structured review, medical tenants often absorb capital

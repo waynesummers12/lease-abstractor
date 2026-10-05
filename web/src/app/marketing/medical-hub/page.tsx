@@ -18,7 +18,7 @@ export default function MedicalHubPage() {
         "name": "How much do CAM and NNN charges typically add for medical tenants?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Medical tenants often see CAM and NNN charges add 20–35% on top of base rent, and in some markets even more."
+          "text": "CAM and NNN charges vary by property and lease terms. Medical tenants should review the specific pass-throughs in their lease."
         }
       },
       {

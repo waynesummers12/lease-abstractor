@@ -14,10 +14,9 @@ export default function CamVsNnnPage() {
         </h1>
         <p className="text-lg text-gray-600">
           CAM vs NNN charges explained in practical terms: these operating
-          expenses are often lumped together, poorly explained, and quietly
-          inflated. For many commercial tenants, CAM and NNN costs add
-          <strong> 15–35% on top of base rent</strong> — yet few fully
-          understand what they are actually paying for.
+          expenses can include property maintenance, taxes, and insurance.
+          <strong> The amount depends on the property and lease terms.</strong>
+          Review your reconciliation to understand the actual charges.
         </p>
         <p className="mt-4 text-gray-700">
           If you are evaluating a full <a href="/marketing/nnn" className="underline hover:text-black">NNN lease structure</a>, understanding how CAM is embedded inside NNN is critical before reviewing reconciliation statements or annual increases.

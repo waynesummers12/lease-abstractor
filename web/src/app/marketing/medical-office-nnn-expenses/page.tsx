@@ -17,7 +17,7 @@ export default function MedicalNNNExpenses() {
         "name": "What percentage of rent do NNN charges usually add for medical tenants?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "For medical office tenants, NNN commonly adds 20–35% above base rent and can exceed 40% in high-tax or high-insurance markets."
+          "text": "NNN charges for medical office tenants vary by property, lease terms, taxes, and insurance costs."
         }
       },
       {
@@ -47,10 +47,10 @@ export default function MedicalNNNExpenses() {
           Medical Office NNN Expenses: What Healthcare Tenants Actually Pay
         </h1>
         <p className="text-lg text-gray-700">
-          Triple Net (NNN) charges in medical office buildings typically add
-          20–35% on top of base rent — and in high-tax markets, even more.
-          For imaging centers, surgical suites, dialysis clinics, and specialty
-          practices, these pass-through costs can quietly become six-figure exposures.
+          Triple Net (NNN) charges in medical office buildings vary by property,
+          lease terms, taxes, insurance, and maintenance costs. Imaging centers,
+          surgical suites, dialysis clinics, and specialty practices should review
+          these pass-throughs against their own billing records.
         </p>
         <p className="text-gray-600">
           Small allocation errors in property taxes, insurance, or CAM pass-throughs
