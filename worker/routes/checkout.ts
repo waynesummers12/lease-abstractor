@@ -14,6 +14,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
+import { fulfillPaidCheckout } from "../utils/fulfillPaidCheckout.ts";
 
 const router = new Router({ prefix: "/checkout" });
 
@@ -97,7 +98,7 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
           quantity: 1,
         },
       ],
-      success_url: `${PUBLIC_APP_URL}/success?auditId=${auditId}`,
+      success_url: `${PUBLIC_APP_URL}/success?auditId=${encodeURIComponent(auditId)}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${PUBLIC_APP_URL}/cancel?auditId=${encodeURIComponent(auditId)}`,
       metadata: {
         auditId,
@@ -113,6 +114,38 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
     console.error("❌ Stripe error:", err);
     ctx.response.status = 500;
     ctx.response.body = { error: "Checkout session failed" };
+  }
+});
+
+// The return page can recover a paid session when webhook delivery is delayed.
+// Stripe is queried server-side; the browser's session ID is never proof of payment.
+router.post("/recover", async (ctx) => {
+  const body = await ctx.request.body({ type: "json" }).value;
+  const auditId = body?.auditId;
+  const sessionId = body?.sessionId;
+  if (typeof auditId !== "string" || !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(auditId) ||
+      typeof sessionId !== "string" || !/^cs_(test|live)_[A-Za-z0-9]+$/.test(sessionId)) {
+    ctx.response.status = 400;
+    ctx.response.body = { error: "Invalid checkout reference" };
+    return;
+  }
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    if (session.mode !== "payment" || session.metadata?.auditId !== auditId) {
+      ctx.response.status = 404;
+      ctx.response.body = { error: "Checkout not found" };
+      return;
+    }
+    if (session.payment_status !== "paid") {
+      ctx.response.body = { status: "pending" };
+      return;
+    }
+    await fulfillPaidCheckout(session);
+    ctx.response.body = { status: "complete" };
+  } catch (error) {
+    console.error("Checkout recovery failed", { auditId, sessionId, error });
+    ctx.response.status = 503;
+    ctx.response.body = { error: "Recovery pending" };
   }
 });
 

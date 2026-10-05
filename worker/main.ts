@@ -53,7 +53,7 @@ app.use(async (ctx, next) => {
   const protectedRoute = path.startsWith("/auditById/") ||
     path.startsWith("/downloadAuditPdf/") ||
     (path === "/audits" && ctx.request.method === "POST") ||
-    path === "/checkout/create" || path === "/audit/generate-pdf";
+    path === "/checkout/create" || path === "/checkout/recover" || path === "/audit/generate-pdf";
   if (protectedRoute) {
     const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!secret) {

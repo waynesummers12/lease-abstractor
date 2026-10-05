@@ -79,6 +79,7 @@ export default function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const auditId = searchParams.get("auditId");
+  const checkoutSessionId = searchParams.get("session_id");
 
   const [data, setData] = useState<AuditResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -86,6 +87,21 @@ export default function SuccessPage() {
   const [fatalError, setFatalError] = useState<string | null>(null);
   const [waitTimedOut, setWaitTimedOut] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    if (!auditId || !checkoutSessionId || authLoading) return;
+    const controller = new AbortController();
+    fetch("/api/audit-checkout/recover", {
+      method: "POST",
+      headers: { "Content-Type": "application/json",
+        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
+      body: JSON.stringify({ auditId, sessionId: checkoutSessionId }),
+      signal: controller.signal,
+    }).then((response) => {
+      if (response.ok) setRetryCount((count) => count + 1);
+    }).catch(() => { /* The webhook and status poll remain available. */ });
+    return () => controller.abort();
+  }, [auditId, checkoutSessionId, authLoading, session?.access_token]);
 
   /* ---------- POLL AUDIT STATUS ---------- */
   useEffect(() => {
