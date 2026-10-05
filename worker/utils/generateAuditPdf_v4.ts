@@ -68,7 +68,7 @@ function wrap(value: string, font: PDFFont, size: number, width: number): string
   if (line) lines.push(line);
   return lines;
 }
-function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { page: number; text: string } | null {
+function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { page: number; text: string; kind: "clause excerpt" | "term mention" } | null {
   if (!sourcePages) return null;
   const patterns: Record<string, RegExp> = {
     CAPEX_IN_CAM: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
@@ -86,7 +86,9 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
     if (!match || match.index === undefined) continue;
     const start = Math.max(0, match.index - 45);
     const end = Math.min(source.text.length, match.index + match[0].length + 115);
-    return { page: source.page, text: safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`) };
+    const text = safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`);
+    const kind = /\b(?:shall|must|will|may|required|prohibited|subject to)\b/i.test(text) ? "clause excerpt" : "term mention";
+    return { page: source.page, text, kind };
   }
   return null;
 }
@@ -135,7 +137,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   lines("CAM / NNN language review  |  Prepared " + new Date().toISOString().slice(0, 10), MARGIN, 10, BLUE, bold); y -= 18;
   page.drawRectangle({ x: MARGIN, y: y - 83, width: CONTENT, height: 83, color: LIGHT });
   y -= 24;
-  page.drawText(`${items.length} item${items.length === 1 ? "" : "s"} to verify`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
+  page.drawText(`${items.length} review topic${items.length === 1 ? "" : "s"} found`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
   lines("A lease clause is a starting point. Whether a charge was overbilled requires the landlord's statements, calculations, and supporting records.", MARGIN + 18, 10.5, NAVY, font, CONTENT - 36); y -= 20;
 
   heading("Lease snapshot");
@@ -163,13 +165,13 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   }
 
   addPage();
-  heading("Lease language to investigate");
+  heading("Lease topics to investigate");
   if (items.length === 0) {
     lines(sourcePages.length ? "No stored review flags could be linked to extracted lease text. This does not establish that the lease or bills are free of issues." : "Page-referenced lease text was unavailable for this audit. Review the executed lease and billing records directly before drawing a conclusion.", MARGIN, 10.5, NAVY); y -= 20;
   }
   for (const [index, item] of items.entries()) {
     const review = reviewItem(item.flag);
-    const excerpt = item.match ? `PAGE ${item.match.page}  /  TEXT MATCH:  "${item.match.text}"` : "Source page unavailable; verify in the original lease.";
+    const excerpt = item.match ? `PAGE ${item.match.page}  /  ${item.match.kind.toUpperCase()}:  "${item.match.text}"` : "Source page unavailable; verify in the original lease.";
     const excerptLines = wrap(excerpt, font, 9, CONTENT - 30);
     const reasonLines = wrap(review.reason, font, 9.5, CONTENT - 30);
     const checkLines = wrap(review.check, font, 9.5, CONTENT - 30);
@@ -189,7 +191,14 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     y = top - cardHeight - 13;
   }
 
-  ensure(330);
+  heading("Records to collect");
+  for (const text of ["Executed lease, exhibits, and amendments", "Annual CAM / NNN statements and prior-year reconciliations", "General ledger or category detail, invoices, and capital schedules", "Rentable-area and tenant-share allocation schedules", "Delivery dates and notices relevant to review or dispute rights"]) {
+    ensure(25);
+    page.drawText("+", { x: MARGIN, y, size: 12, font: bold, color: TEAL });
+    lines(text, MARGIN + 18, 9.5, NAVY, font, CONTENT - 18, 14); y -= 10;
+  }
+
+  addPage();
   heading("Billing reconciliation worksheet");
   lines("Use one row per charge category and year. A positive difference is only a question to investigate until the lease basis and records are confirmed."); y -= 16;
   const cols = [MARGIN, MARGIN + 128, MARGIN + 258, MARGIN + 375, WIDTH - MARGIN];
@@ -198,20 +207,26 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   headers.forEach((h, i) => page.drawText(h, { x: cols[i] + 6, y: y - 20, size: 7.5, font: bold, color: WHITE }));
   y -= 31;
   for (let i = 0; i < 5; i++) {
-    ensure(39);
     page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: i % 2 ? WHITE : LIGHT });
     cols.slice(1, 4).forEach((x) => page.drawLine({ start: { x, y }, end: { x, y: y - 36 }, thickness: 0.5, color: MUTED }));
+    if (items[i]) {
+      const rowLabel = wrap(reviewItem(items[i].flag).title, font, 8, cols[1] - cols[0] - 12);
+      rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
+    }
     y -= 36;
   }
   y -= 16;
-  heading("Records to collect");
-  for (const text of ["Executed lease, exhibits, and amendments", "Annual CAM / NNN statements and prior-year reconciliations", "General ledger or category detail, invoices, and capital schedules", "Rentable-area and tenant-share allocation schedules", "Delivery dates and notices relevant to review or dispute rights"]) {
-    ensure(25);
-    page.drawText("+", { x: MARGIN, y, size: 12, font: bold, color: TEAL });
-    lines(text, MARGIN + 18, 9.5, NAVY, font, CONTENT - 18, 14); y -= 10;
-  }
+  heading("What remains unverified");
+  const missing = [
+    !analysis.tenant && "Tenant name was not reliably extracted.",
+    !analysis.landlord && "Landlord name was not reliably extracted.",
+    !analysis.premises && "Premises address was not reliably extracted.",
+    "Actual charges, allocation calculations, and recoverable amounts require billing records.",
+  ].filter((value): value is string => Boolean(value));
+  for (const value of missing) { ensure(30); lines(`- ${value}`, MARGIN, 9.5, NAVY); y -= 6; }
+  y -= 4;
   heading("Scope and support");
-  lines("This is an automated lease-text screening, not a completed billing reconciliation or legal opinion. OCR and extraction can omit or misread text. A matched excerpt can have exceptions elsewhere in the lease. Confirm every page reference in the original document.", MARGIN, 9.5); y -= 11;
+  lines("This is an automated lease-text screening, not a completed billing reconciliation or legal opinion. A term mention may be only an expense-list entry, not an operative clause. OCR can omit or misread text. Check the complete original page and any amendments before drawing a conclusion.", MARGIN, 9.5); y -= 11;
   lines(`Questions? Email audits@saveonlease.com with audit reference ${auditId}.`, MARGIN, 9.5, BLUE, bold);
 
   pdf.getPages().forEach((current, index, pages) => {

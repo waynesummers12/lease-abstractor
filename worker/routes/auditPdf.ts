@@ -124,7 +124,7 @@ pdfBytes = await generateAuditPdf({
   // --------------------
   // 4. Upload PDF (CORRECT PATH — NO PREFIX)
   // --------------------
-  const objectPath = `${auditId}-v6.pdf`;
+  const objectPath = `${auditId}-v7.pdf`;
 
   const { error: uploadError } = await supabase.storage
   .from("audit-pdfs")
