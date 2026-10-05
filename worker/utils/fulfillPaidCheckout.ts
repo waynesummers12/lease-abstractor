@@ -5,7 +5,10 @@ import { normalizeAuditForSuccess } from "./normalizeAuditForSuccess.ts";
 import { sendAuditEmail } from "./sendAuditEmail.ts";
 
 /** Safe to call again for the same paid Checkout Session. */
-export async function fulfillPaidCheckout(session: Stripe.Checkout.Session) {
+export async function fulfillPaidCheckout(
+  session: Stripe.Checkout.Session,
+  options: { notifyCustomer?: boolean; recordPaidAt?: boolean } = {},
+) {
   if (session.mode !== "payment" || session.payment_status !== "paid") {
     throw new Error("Checkout session is not paid");
   }
@@ -23,7 +26,7 @@ export async function fulfillPaidCheckout(session: Stripe.Checkout.Session) {
   }
   const paymentFields = {
     stripe_session_id: session.id,
-    paid_at: new Date().toISOString(),
+    ...(options.recordPaidAt === false ? {} : { paid_at: new Date().toISOString() }),
     amount_paid: session.amount_total,
     currency: session.currency,
   };
@@ -31,13 +34,20 @@ export async function fulfillPaidCheckout(session: Stripe.Checkout.Session) {
     ? { column: "stripe_session_id", value: session.id }
     : null;
   if (audit.status === "complete" && audit.audit_pdf_path) {
-    if (audit.stripe_session_id === session.id) return;
-    let query = supabase.from("lease_audits").update(paymentFields).eq("id", auditId);
-    query = matchingSession ? query.eq(matchingSession.column, matchingSession.value)
-      : query.is("stripe_session_id", null);
-    const { data, error } = await query.select("id").maybeSingle();
-    if (error || !data) throw error ?? new Error("Completed audit payment was not recorded");
-    return;
+    const bucket = audit.audit_pdf_path.startsWith("leases/") ? "leases" : "audit-pdfs";
+    const path = audit.audit_pdf_path.replace(/^(leases|audit-pdfs)\//, "");
+    const { data: file, error: fileError } = await supabase.storage.from(bucket).info(path);
+    if (fileError && String(fileError.statusCode) !== "404") throw fileError;
+    if (file) {
+      if (audit.stripe_session_id === session.id) return;
+      let query = supabase.from("lease_audits").update(paymentFields).eq("id", auditId);
+      query = matchingSession ? query.eq(matchingSession.column, matchingSession.value)
+        : query.is("stripe_session_id", null);
+      const { data, error } = await query.select("id").maybeSingle();
+      if (error || !data) throw error ?? new Error("Completed audit payment was not recorded");
+      return;
+    }
+    // A completed row with a missing object is still recoverable from analysis.
   }
   if (!audit.analysis) throw new Error("Paid audit is missing analysis");
 
@@ -97,7 +107,7 @@ export async function fulfillPaidCheckout(session: Stripe.Checkout.Session) {
   }
 
   const recipient = session.customer_details?.email ?? session.customer_email;
-  if (recipient) {
+  if (recipient && options.notifyCustomer !== false) {
     const { data: signed, error } = await supabase.storage.from("audit-pdfs")
       .createSignedUrl(objectPath, 60 * 10);
     if (error || !signed?.signedUrl) {
