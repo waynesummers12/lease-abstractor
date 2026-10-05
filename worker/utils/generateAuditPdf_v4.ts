@@ -31,6 +31,8 @@ function reviewItem(flag: Flag): Review {
     case "CAPEX_IN_CAM":
     case "CAPEX_INCLUDED":
       return { title: "Capital costs in operating expenses", reason: "A lease may allow some capital work, but recovery can depend on exclusions, useful life, or amortization.", check: "Compare each capital charge with the lease's permitted categories and any amortization terms.", request: "Capital project ledger, invoices, amortization schedule, and allocation calculation." };
+    case "CAPEX_EXCEPTION":
+      return { title: "Capital cost exclusion and exception", reason: "The lease excludes capital improvements from CAM except for an amortization exception.", check: "Confirm that any billed capital cost fits the exception and is amortized over the required useful life.", request: "Capital invoices, useful-life support, amortization schedule, and CAM category detail." };
     case "MGMT_FEE_WATCH":
     case "MGMT_FEE_DELTA":
       return { title: "Management and administrative fees", reason: "The fee base and percentage can change the amount billed, especially if a fee is applied to excluded costs.", check: "Compare the agreed rate and calculation base with the rate and base on the annual statement.", request: "Fee calculation, expense base detail, and annual reconciliation." };
@@ -38,6 +40,10 @@ function reviewItem(flag: Flag): Review {
       return { title: "Tenant share and allocation", reason: "A change in rentable area or the denominator used for allocation can alter the tenant's share.", check: "Recalculate the tenant share using the lease definition and the landlord's area schedule.", request: "Rentable-area schedule, tenant-share calculation, and allocation by expense category." };
     case "UNCAPPED_CAM":
       return { title: "CAM caps and exceptions", reason: "A cap may apply only to certain expense categories or exclude taxes, insurance, utilities, or unusual costs.", check: "Identify the capped categories, base year, annual adjustment, and exceptions before comparing billed amounts.", request: "Year-by-year CAM summary, cap calculation, and category-level expense detail." };
+    case "CAM_CAP":
+      return { title: "Annual CAM increase cap", reason: "The stated cap can limit increases in covered CAM categories while leaving listed exceptions outside the cap.", check: "Recalculate the covered category increases year by year and separate excluded categories.", request: "Prior-year and current-year CAM detail, cap worksheet, and exception calculations." };
+    case "CAM_EXCLUSIONS":
+      return { title: "Expenses excluded from CAM", reason: "The lease lists expense categories that should not be included in CAM, subject to stated exceptions.", check: "Compare the landlord's category detail with each exclusion and read any exception in full.", request: "CAM general ledger, category mapping, invoices, and any exception calculations." };
     case "NO_RECONCILIATION":
       return { title: "Reconciliation and review rights", reason: "The timing and procedure for reviewing charges may affect what records are available and when a dispute must be raised.", check: "Read the statement, inspection, notice, and dispute provisions in the executed lease.", request: "Annual reconciliations, delivery dates, notices, and supporting-record access instructions." };
     case "AUDIT_WINDOW":
@@ -78,12 +84,15 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
   const patterns: Record<string, RegExp> = {
     CAPEX_IN_CAM: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
     CAPEX_INCLUDED: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
+    CAPEX_EXCEPTION: /capital improvements|CAM expenses shall not include/i,
     MGMT_FEE_WATCH: /(?:management|admin(?:istration)?) fee/i,
     MGMT_FEE_DELTA: /(?:management|admin(?:istration)?) fee/i,
     PRO_RATA: /pro[-\s]?rata|proportionate share|tenant['\u2019]s share/i,
     UNCAPPED_CAM: /no cap|without limitation|all operating expenses/i,
+    CAM_CAP: /CAM\s+expenses\s+shall\s+be\s+capped|capped\s+at\s+\d+(?:\.\d+)?%\s+annually/i,
+    CAM_EXCLUSIONS: /CAM\s+expenses\s+shall\s+not\s+include/i,
     NO_RECONCILIATION: /reconcil(?:e|iation)|audit rights|examin(?:e|ation) of (?:books|records)/i,
-    AUDIT_WINDOW: /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days/i,
+    AUDIT_WINDOW: /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days|initiate\s+any\s+audit\s+within\s+\d+\s+months/i,
     WAIVER_CLAIMS: /waives? any claims?|waiver of claims/i,
   };
   const pattern = patterns[flag.code ?? ""];
@@ -94,9 +103,10 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
       const start = Math.max(0, match.index - 65);
       const end = Math.min(source.text.length, match.index + match[0].length + 175);
       const text = safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`);
-      const operative = /\b(?:shall|must|may|equal to|calculated|waives?|completed within)\b/i.test(text);
+      const operative = /\b(?:shall|must|may|equal to|calculated|defined as|waives?|completed within)\b/i.test(text);
       const score = (operative ? 2 : 0) + (/\b(?:percent|days|amortiz|ratio)\b/i.test(text) ? 1 : 0)
-        + (flag.code === "WAIVER_CLAIMS" && /related to the calculation|except to the extent/i.test(text) ? 2 : 0);
+        + (flag.code === "WAIVER_CLAIMS" && /related to the calculation|except to the extent/i.test(text) ? 2 : 0)
+        + (flag.code === "PRO_RATA" && /\d+(?:\.\d+)?%/.test(text) ? 2 : 0);
       if (!best || score > best.score) best = { page: source.page, text, kind: operative ? "clause excerpt" : "term mention", score };
     }
   }
@@ -110,10 +120,17 @@ type LeaseFacts = {
   nnnEstimate: { value: number; page: number } | null;
   deposit: { value: number; page: number } | null;
   renewal: { years: number; noticeDays: number; page: number } | null;
+  tenantShare: { value: number; page: number } | null;
+  camCap: { value: number; page: number; exclusions: string[] } | null;
+  reconciliationDays: { value: number; page: number } | null;
+  auditNoticeDays: { value: number; page: number } | null;
+  auditInitiateMonths: { value: number; page: number } | null;
+  auditCostThreshold: { value: number; page: number } | null;
+  baseRent: { rate: number; annual: number; monthly: number; increase: number | null; page: number } | null;
   rentBands: Array<{ years: string; rate: number; basis: "rsf_annual" | "monthly"; page: number }>;
 };
 function leaseFacts(pages: NonNullable<AuditAnalysis["sourcePages"]>): LeaseFacts {
-  const facts: LeaseFacts = { area: null, managementFee: null, reviewDays: null, nnnEstimate: null, deposit: null, renewal: null, rentBands: [] };
+  const facts: LeaseFacts = { area: null, managementFee: null, reviewDays: null, nnnEstimate: null, deposit: null, renewal: null, tenantShare: null, camCap: null, reconciliationDays: null, auditNoticeDays: null, auditInitiateMonths: null, auditCostThreshold: null, baseRent: null, rentBands: [] };
   for (const page of pages) {
     const text = safeText(page.text);
     const area = text.match(/approximately\s+([\d,]+)\s+(rentable\s+)?square feet/i);
@@ -128,6 +145,32 @@ function leaseFacts(pages: NonNullable<AuditAnalysis["sourcePages"]>): LeaseFact
     if (!facts.deposit && deposit) facts.deposit = { value: Number(deposit[1].replace(/,/g, "")), page: page.page };
     const renewal = text.match(/option to renew.{0,80}?additional\s+(?:[a-z]+\s+)?\((\d+)\)\s+year.{0,100}?no later than\s+(\d+)\s+days prior/i);
     if (!facts.renewal && renewal) facts.renewal = { years: Number(renewal[1]), noticeDays: Number(renewal[2]), page: page.page };
+    const share = text.match(/pro rata share is defined as\s+(\d+(?:\.\d+)?)%/i);
+    if (!facts.tenantShare && share) facts.tenantShare = { value: Number(share[1]), page: page.page };
+    const cap = text.match(/CAM expenses shall be capped at\s+(\d+(?:\.\d+)?)% annually/i);
+    if (!facts.camCap && cap) {
+      const nearby = text.slice(cap.index ?? 0, (cap.index ?? 0) + 210);
+      const exclusions = /exclusive of:/i.test(nearby)
+        ? [["property taxes", /property taxes/i], ["insurance", /insurance premiums/i], ["utilities", /utilities/i]]
+          .filter(([, pattern]) => (pattern as RegExp).test(nearby)).map(([label]) => label as string)
+        : [];
+      facts.camCap = { value: Number(cap[1]), page: page.page, exclusions };
+    }
+    const reconciliation = text.match(/annual reconciliation statement within\s+(\d+)\s+days following/i);
+    if (!facts.reconciliationDays && reconciliation) facts.reconciliationDays = { value: Number(reconciliation[1]), page: page.page };
+    const auditNotice = text.match(/upon\s+(\d+)\s+days'?\s+written notice\s*,?\s+to audit/i);
+    if (!facts.auditNoticeDays && auditNotice) facts.auditNoticeDays = { value: Number(auditNotice[1]), page: page.page };
+    const auditInitiate = text.match(/initiate any audit within\s+(\d+)\s+months/i);
+    if (!facts.auditInitiateMonths && auditInitiate) facts.auditInitiateMonths = { value: Number(auditInitiate[1]), page: page.page };
+    const auditCost = text.match(/overcharge of\s+(\d+(?:\.\d+)?)% or more.{0,90}?reimburse Tenant for reasonable audit costs/i);
+    if (!facts.auditCostThreshold && auditCost) facts.auditCostThreshold = { value: Number(auditCost[1]), page: page.page };
+    const rate = text.match(/\$([\d.]+)\s+per rentable square foot per year/i);
+    const annual = text.match(/Annual Base Rent:\s*\$([\d,]+)/i);
+    const monthly = text.match(/Monthly Base Rent:\s*\$([\d,]+)/i);
+    if (!facts.baseRent && rate && annual && monthly) {
+      const increase = text.match(/base rent shall increase by\s+(\d+(?:\.\d+)?)% annually/i);
+      facts.baseRent = { rate: Number(rate[1]), annual: Number(annual[1].replace(/,/g, "")), monthly: Number(monthly[1].replace(/,/g, "")), increase: increase ? Number(increase[1]) : null, page: page.page };
+    }
     for (const match of text.matchAll(/Years?\s+(\d+)\s*-\s*(\d+):?\s*\$([\d.]+)\s+per rentable square foot per year/gi)) {
       facts.rentBands.push({ years: `${match[1]}-${match[2]}`, rate: Number(match[3]), basis: "rsf_annual", page: page.page });
     }
@@ -147,13 +190,16 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   const sourceText = sourcePages.map((p) => p.text).join(" ");
   const refreshed = sourceText ? abstractLease(sourceText) : null;
   const facts = leaseFacts(sourcePages);
-  const isSample = /sample.{0,15}demonstration purposes only/i.test(safeText(sourceText));
+  const isSample = /demonstration purposes only|sample - not a legal document/i.test(safeText(sourceText));
   const stored = Array.isArray(analysis.health?.flags) ? analysis.health.flags.filter((f) => typeof f?.label === "string") : [];
-  const candidates = [...stored];
+  const hasCapexException = refreshed?.health.flags.some((flag) => flag.code === "CAPEX_EXCEPTION") ?? false;
+  const candidates = stored.filter((flag) => !(hasCapexException && ["CAPEX_IN_CAM", "CAPEX_INCLUDED"].includes(flag.code ?? "")));
   for (const flag of refreshed?.health.flags ?? []) if (!candidates.some((item) => item.code === flag.code)) candidates.push(flag);
   for (const [code, label, pattern] of [
-    ["AUDIT_WINDOW", "Audit or review deadline", /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days/i],
+    ["AUDIT_WINDOW", "Audit or review deadline", /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days|initiate\s+any\s+audit\s+within\s+\d+\s+months/i],
     ["WAIVER_CLAIMS", "Waiver of expense claims", /waives? any claims?|waiver of claims/i],
+    ["CAM_CAP", "Annual CAM increase cap", /CAM\s+expenses\s+shall\s+be\s+capped\s+at\s+\d+(?:\.\d+)?%\s+annually/i],
+    ["CAM_EXCLUSIONS", "Excluded CAM expenses", /CAM\s+expenses\s+shall\s+not\s+include/i],
   ] as const) if (pattern.test(sourceText) && !candidates.some((item) => item.code === code)) candidates.push({ code, label });
   const items = candidates.map((flag) => ({ flag, match: textMatch(flag, sourcePages) }))
     .filter((item) => sourcePages.length === 0 || item.match)
@@ -213,14 +259,24 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   heading("What this report can tell you");
   lines("The items below identify lease language for review. Page references point to text extracted from the uploaded PDF; confirm each clause on the original page and read related definitions and amendments."); y -= 15;
   lines("Verified overcharge: not determined. No landlord invoices, reconciliations, or actual allocations were analyzed with this lease.", MARGIN, 10, NAVY, bold); y -= 21;
-  if (facts.area || facts.managementFee || facts.reviewDays || facts.nnnEstimate || facts.deposit || facts.renewal || facts.rentBands.length) {
+  if (facts.area || facts.managementFee || facts.reviewDays || facts.nnnEstimate || facts.deposit || facts.renewal || facts.tenantShare || facts.camCap || facts.reconciliationDays || facts.auditNoticeDays || facts.auditInitiateMonths || facts.auditCostThreshold || facts.baseRent || facts.rentBands.length) {
     addPage();
     heading("Terms extracted from this lease");
     lines("These values come from the uploaded text. Check the cited page and any amendments before relying on them."); y -= 13;
     const factRows: Array<{ label: string; value: string; page: number }> = [];
     if (facts.area) factRows.push({ label: "Premises area", value: `${facts.area.value.toLocaleString()} ${facts.area.unit}`, page: facts.area.page });
+    if (facts.baseRent) {
+      factRows.push({ label: "Stated first-year base rent", value: `$${facts.baseRent.rate.toFixed(2)} / rentable sq. ft. / year; $${facts.baseRent.annual.toLocaleString()} annually; $${facts.baseRent.monthly.toLocaleString()} monthly`, page: facts.baseRent.page });
+      if (facts.baseRent.increase !== null) factRows.push({ label: "Base-rent increase", value: `${facts.baseRent.increase}% annually, as stated in the lease`, page: facts.baseRent.page });
+    }
+    if (facts.tenantShare) factRows.push({ label: "Tenant's stated NNN share", value: `${facts.tenantShare.value}%`, page: facts.tenantShare.page });
+    if (facts.camCap) factRows.push({ label: "CAM increase cap", value: `${facts.camCap.value}% annually for covered expenses${facts.camCap.exclusions.length ? `; excludes ${facts.camCap.exclusions.join(", ")}` : "; check listed exclusions"}`, page: facts.camCap.page });
     if (facts.managementFee) factRows.push({ label: "Management fee", value: `${facts.managementFee.value}% of Operating Expenses`, page: facts.managementFee.page });
     if (facts.reviewDays) factRows.push({ label: "Record-review window", value: `${facts.reviewDays.value} days after reconciliation receipt`, page: facts.reviewDays.page });
+    if (facts.reconciliationDays) factRows.push({ label: "Annual statement timing", value: `Within ${facts.reconciliationDays.value} days after calendar year end`, page: facts.reconciliationDays.page });
+    if (facts.auditNoticeDays) factRows.push({ label: "Audit notice", value: `${facts.auditNoticeDays.value} days' written notice required`, page: facts.auditNoticeDays.page });
+    if (facts.auditInitiateMonths) factRows.push({ label: "Audit initiation window", value: `Within ${facts.auditInitiateMonths.value} months of receiving reconciliation`, page: facts.auditInitiateMonths.page });
+    if (facts.auditCostThreshold) factRows.push({ label: "Audit-cost reimbursement", value: `Landlord reimburses reasonable audit costs if overcharge is ${facts.auditCostThreshold.value}% or more, as stated`, page: facts.auditCostThreshold.page });
     if (facts.nnnEstimate) factRows.push({ label: "First-year NNN estimate", value: `$${facts.nnnEstimate.value.toLocaleString()} per month; subject to reconciliation`, page: facts.nnnEstimate.page });
     if (facts.deposit) factRows.push({ label: "Security deposit", value: `$${facts.deposit.value.toLocaleString()}`, page: facts.deposit.page });
     if (facts.renewal) factRows.push({ label: "Renewal option", value: `${facts.renewal.years} additional years; written notice at least ${facts.renewal.noticeDays} days before expiration`, page: facts.renewal.page });
@@ -284,7 +340,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   }
 
   heading("Records to collect");
-  const needsCapitalSchedule = items.some(({ flag }) => ["CAPEX_IN_CAM", "CAPEX_INCLUDED"].includes(flag.code ?? ""));
+  const needsCapitalSchedule = items.some(({ flag }) => ["CAPEX_IN_CAM", "CAPEX_INCLUDED", "CAPEX_EXCEPTION"].includes(flag.code ?? ""));
   for (const text of ["Executed lease, exhibits, and amendments", "Annual CAM / NNN statements and prior-year reconciliations", needsCapitalSchedule ? "General ledger, invoices, and capital amortization schedules" : "General ledger or category detail and supporting invoices", "Rentable-area and tenant-share allocation schedules", "Delivery dates and notices relevant to review or dispute rights"]) {
     ensure(25);
     page.drawText("+", { x: MARGIN, y, size: 12, font: bold, color: TEAL });

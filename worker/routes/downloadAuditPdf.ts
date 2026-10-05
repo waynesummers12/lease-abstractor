@@ -46,7 +46,7 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
   let pdfPath = data.audit_pdf_path;
   // Paid reports made by the older template contained unsupported dollar claims.
   // Replace one only when its original paid analysis is available.
-  if (!pdfPath.endsWith(`${auditId}-v9.pdf`) && data.stripe_session_id && data.analysis) {
+  if (!pdfPath.endsWith(`${auditId}-v10.pdf`) && data.stripe_session_id && data.analysis) {
     try {
       const secret = Deno.env.get("STRIPE_SECRET_KEY");
       if (!secret) throw new Error("Stripe is not configured");
@@ -56,7 +56,7 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
       }
       const normalized = normalizeAuditForSuccess(data.analysis);
       if (!normalized) throw new Error("Stored analysis could not be normalized");
-      const newPath = `${auditId}-v9.pdf`;
+      const newPath = `${auditId}-v10.pdf`;
       const sourcePages = await readLeasePagesForReport(auditId);
       const pdf = await generateAuditPdfV4({ ...normalized, audit_id: auditId, sourcePages });
       const { error: uploadError } = await supabase.storage.from("audit-pdfs")
@@ -101,7 +101,7 @@ router.get("/downloadAuditPdf/:auditId", async (ctx) => {
       }
       await fulfillPaidCheckout(session, { notifyCustomer: false, recordPaidAt: false });
       bucket = "audit-pdfs";
-      fileName = `${auditId}-v9.pdf`;
+      fileName = `${auditId}-v10.pdf`;
       ({ data: signed, error: signedError } = await supabase.storage
         .from(bucket).createSignedUrl(fileName, 60 * 10));
     } catch (recoveryError) {

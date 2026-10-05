@@ -97,7 +97,7 @@ function cleanPartyName(value: string): string {
 
 function extractPremises(text: string): string | null {
   const definedPremises = extractWithPatterns(text, [
-    /located at\s+(.+?)\s+\((?:the\s+)?"Premises"\)/i,
+    /located at:?\s+(.+?)\s+\((?:the\s+)?"Premises"\)/i,
   ]);
   if (definedPremises) return definedPremises.replace(/,\s*$/, "");
   return extractWithPatterns(text, [
@@ -132,18 +132,19 @@ export type Rent = {
   escalation_interval: "annual" | null;
 };
 
-function extractBaseRent(text: string): number | null {
-  const v = extractWithPatterns(text, [
-    /\$([\d,]+)\s+per\s+month/i,
-    /Base Rent[:\s]+\$([\d,]+)/i,
+function extractBaseRentInfo(text: string): { amount: number | null; frequency: Rent["frequency"] } {
+  const monthly = extractWithPatterns(text, [
+    /Monthly Base Rent:\s*\$([\d,]+)/i,
+    /Year\s*1:\s*\$([\d,]+)\s+per\s+month/i,
+    /base rent[^.]{0,90}?\$([\d,]+)\s+per\s+month/i,
   ]);
-  return v ? Number(v.replace(/,/g, "")) : null;
-}
-
-function extractFrequency(text: string): Rent["frequency"] {
-  if (/per\s+month|monthly/i.test(text)) return "monthly";
-  if (/per\s+year|annual/i.test(text)) return "annual";
-  return null;
+  if (monthly) return { amount: Number(monthly.replace(/,/g, "")), frequency: "monthly" };
+  const annual = extractWithPatterns(text, [
+    /Annual Base Rent:\s*\$([\d,]+)/i,
+    /base rent[^.]{0,90}?\$([\d,]+)\s+per\s+year/i,
+  ]);
+  if (annual) return { amount: Number(annual.replace(/,/g, "")), frequency: "annual" };
+  return { amount: null, frequency: null };
 }
 
 function inferFixedEscalationFromText(text: string): number | null {
@@ -279,6 +280,7 @@ export type CamNnn = {
   reconciliation: boolean;
   pro_rata: boolean;
   includes_capex: boolean;
+  capex_excluded: boolean;
   has_management_fee: boolean;
   cam_cap_percent: number | null;
 
@@ -321,6 +323,7 @@ function extractCamNnn(
     /capital expenses|capital improvements|replacement of roof|structural/i.test(
       text
     );
+  const capex_excluded = /CAM expenses shall not include.{0,140}capital improvements/i.test(text);
 
   const capPct = extractWithPatterns(text, [
     /CAM cap[^%]*(\d+(?:\.\d+)?)%/i,
@@ -355,6 +358,7 @@ function extractCamNnn(
       reconciliation,
       pro_rata,
       includes_capex,
+      capex_excluded,
       has_management_fee: hasManagementFee,
       cam_cap_percent: capPct ? Number(capPct) : null,
     };
@@ -373,6 +377,7 @@ function extractCamNnn(
     reconciliation,
     pro_rata,
     includes_capex,
+    capex_excluded,
     cam_cap_percent: capPct ? Number(capPct) : null,
 
     capital_items_low: null,
@@ -422,7 +427,14 @@ function computeLeaseHealth(input: {
   let score = 100;
   let confidence = 100;
 
-  if (input.cam_nnn.includes_capex) {
+  if (input.cam_nnn.capex_excluded) {
+    flags.push({
+      code: "CAPEX_EXCEPTION",
+      label: "Capital improvement exclusion with an exception",
+      severity: "low",
+      recommendation: "Check whether any billed capital item meets the lease's stated amortization exception.",
+    });
+  } else if (input.cam_nnn.includes_capex) {
     flags.push({
       code: "CAPEX_IN_CAM",
       label: "Capital expense language detected",
@@ -482,10 +494,11 @@ export function abstractLease(rawText: string) {
     : null;
 
   const escalation = extractEscalation(text);
+  const baseRent = extractBaseRentInfo(text);
 
   const rent: Rent = {
-    base_rent: extractBaseRent(text),
-    frequency: extractFrequency(text),
+    base_rent: baseRent.amount,
+    frequency: baseRent.frequency,
     escalation_type: escalation.escalation_type,
     escalation_value: escalation.escalation_value,
     escalation_interval: escalation.escalation_interval,
