@@ -252,6 +252,7 @@ export type CamNnn = {
   reconciliation: boolean;
   pro_rata: boolean;
   includes_capex: boolean;
+  has_management_fee: boolean;
   cam_cap_percent: number | null;
 
   // 🔥 CAM escalation exposure
@@ -299,44 +300,11 @@ function extractCamNnn(
     /capped at (\d+(?:\.\d+)?)%/i,
   ]);
 
-  // Management/admin fee detection
-  const mgmtFeePct = extractWithPatterns(text, [
-    /(management|admin(?:istration)?) fee[^%]*(\d+(?:\.\d+)?)%/i,
-  ]);
-
-  const managementFeePercent =
-    mgmtFeePct ? Number(mgmtFeePct) : 15; // common default
-
-  let monthlyAmount: number | null = null;
-
-  // 1️⃣ Explicit CAM / NNN dollar amount
-  if (monthlyExplicit) {
-    monthlyAmount = Number(monthlyExplicit.replace(/,/g, ""));
-  }
-
-  // 2️⃣ Fallback: estimate CAM from rent if referenced but not priced
-if (!monthlyAmount && referencesCam && annualRent) {
-  const estimatedAnnual = estimateCamFromRent(text, annualRent);
-  if (estimatedAnnual) {
-    monthlyAmount = Math.round(estimatedAnnual / 12);
-  }
-}
-
-// 3️⃣ Structural CAM fallback (no rent available)
-if (!monthlyAmount && referencesCam) {
-  // Conservative baseline monthly CAM by property type
-  let assumedMonthly = 2000; // default floor
-
-  if (/retail|shopping center|plaza/i.test(text)) {
-    assumedMonthly = 3500;
-  } else if (/office/i.test(text)) {
-    assumedMonthly = 2800;
-  } else if (/industrial|warehouse/i.test(text)) {
-    assumedMonthly = 1500;
-  }
-
-  monthlyAmount = assumedMonthly;
-}
+  const hasManagementFee = /(?:management|admin(?:istration)?) fee/i.test(text);
+  // Only a CAM/NNN amount explicitly stated in the lease is recorded.
+  const monthlyAmount = monthlyExplicit
+    ? Number(monthlyExplicit.replace(/,/g, ""))
+    : null;
 
 console.log("[CAM DEBUG]", {
   monthlyAmount,
@@ -370,54 +338,14 @@ console.log("[CAM DEBUG]", {
       reconciliation,
       pro_rata,
       includes_capex,
+      has_management_fee: hasManagementFee,
       cam_cap_percent: capPct ? Number(capPct) : null,
     };
   }
 
   const annualAmount = monthlyAmount * 12;
-  /* ---------- MANAGEMENT FEE CAP DELTA ---------- */
-  let managementFeeLow: number | null = null;
-  let managementFeeHigh: number | null = null;
-
-  if (annualAmount > 0) {
-    const actualPct = managementFeePercent / 100;
-    const capPctNum = capPct ? Number(capPct) / 100 : 0.05; // conservative cap
-
-    const deltaPct = Math.max(0, actualPct - capPctNum);
-
-    if (deltaPct > 0) {
-      managementFeeLow = Math.round(annualAmount * deltaPct * 0.5);
-      managementFeeHigh = Math.round(annualAmount * deltaPct);
-    }
-  }
-  /* ---------- CAPITAL ITEMS AMORTIZATION ---------- */
-/**
- * Conservative assumption:
- * - 10–20% of annual CAM is capital improperly passed through
- * - Amortized over 10 years
- */
-let capitalItemsLow: number | null = null;
-let capitalItemsHigh: number | null = null;
-
-if (includes_capex && annualAmount > 0) {
-  const capitalPortionLow = annualAmount * 0.10;
-  const capitalPortionHigh = annualAmount * 0.20;
-
-  // Annualized exposure (amortized)
-  capitalItemsLow = Math.round(capitalPortionLow / 10);
-  capitalItemsHigh = Math.round(capitalPortionHigh / 10);
-}
   const years = termMonths ? termMonths / 12 : 1;
-  const totalExposure = annualAmount * years;
-
-  // 📈 CAM escalation exposure (next 12 months, conservative)
-let escalation_low: number | null = null;
-let escalation_high: number | null = null;
-
-if (is_uncapped && annualAmount) {
-  escalation_low = Math.round(annualAmount * 0.10); // conservative
-  escalation_high = Math.round(annualAmount * 0.25); // aggressive
-}
+  const totalExposure = annualAmount * years; // Total charge, not an overcharge.
 
   return {
     monthly_amount: monthlyAmount,
@@ -430,14 +358,13 @@ if (is_uncapped && annualAmount) {
     includes_capex,
     cam_cap_percent: capPct ? Number(capPct) : null,
 
-    capital_items_low: capitalItemsLow,
-    capital_items_high: capitalItemsHigh,
-
-    escalation_low,
-    escalation_high,
-
-    management_fee_low: managementFeeLow,
-    management_fee_high: managementFeeHigh,
+    capital_items_low: null,
+    capital_items_high: null,
+    escalation_low: null,
+    escalation_high: null,
+    management_fee_low: null,
+    management_fee_high: null,
+    has_management_fee: hasManagementFee,
   };
 }
 
@@ -478,115 +405,33 @@ function computeLeaseHealth(input: {
   let score = 100;
   let confidence = 100;
 
-  const baseCam = input.cam_nnn.annual_amount ?? 0;
-
-  /* ---------- CAPITAL EXPENDITURES ---------- */
-  if (input.cam_nnn.includes_capex && baseCam > 0) {
-    const capexExposure = baseCam * 0.2;
-
+  if (input.cam_nnn.includes_capex) {
     flags.push({
       code: "CAPEX_IN_CAM",
-      label: "Capital expenditures included in CAM",
-      severity: capexExposure > 15000 ? "high" : "medium",
-      recommendation:
-        "Capital improvements should be excluded from CAM or amortized over useful life per lease standards.",
-      estimated_impact: formatMoney(capexExposure),
+      label: "Capital expense language detected",
+      severity: "medium",
+      recommendation: "Check whether the lease permits the item and how it must be amortized.",
     });
-
-    findings.push({
-      category: "Capital Items",
-      issue: "Capital expenditures may be improperly included in CAM.",
-      lease_snippet: null,
-      estimated_annual_impact: Math.round(capexExposure),
-      estimated_term_impact: Math.round(
-        capexExposure * ((input.term_months ?? 12) / 12)
-      ),
-      confidence: capexExposure > 15000 ? "high" : "medium",
-    });
-
-    score -= capexExposure > 15000 ? 20 : 10;
-    confidence -= capexExposure > 15000 ? 15 : 8;
+    score -= 10;
   }
 
+  if (input.cam_nnn.has_management_fee) {
+    flags.push({
+      code: "MGMT_FEE_WATCH",
+      label: "Management or administrative fee language detected",
+      severity: "low",
+      recommendation: "Compare the lease fee definition and calculation base with the reconciliation.",
+    });
+  }
 
-  /* ---------- MANAGEMENT FEE WATCH FLAG ---------- */
-if (
-  input.cam_nnn.management_fee_low === null &&
-  input.cam_nnn.management_fee_high === null
-) {
-  flags.push({
-    code: "MGMT_FEE_WATCH",
-    label: "Management fee included with no stated percentage cap",
-    severity: "low",
-    recommendation:
-      "Confirm whether a management or administrative fee is embedded in CAM. Industry norms typically cap these at 3–5% of operating expenses.",
-  });
-
-  // Light confidence impact only (educational flag)
-  confidence -= 3;
-}
-
-  /* ---------- MANAGEMENT FEE FINANCIAL FINDING ---------- */
-if (
-  (input.cam_nnn.management_fee_low ?? 0) > 0 ||
-  (input.cam_nnn.management_fee_high ?? 0) > 0
-) {
-  const annualImpact =
-    input.cam_nnn.management_fee_high ?? 0;
-
-  const termImpact = Math.round(
-    annualImpact * ((input.term_months ?? 12) / 12)
-  );
-
-  flags.push({
-    code: "MGMT_FEE_DELTA",
-    label: "Management fee exceeds conservative market cap",
-    severity: annualImpact > 10000 ? "medium" : "low",
-    recommendation:
-      "Negotiate a management/admin fee cap of 3–5% of operating expenses or require landlord documentation of fee calculation methodology.",
-    estimated_impact: formatMoney(annualImpact),
-  });
-
-  findings.push({
-    category: "Management Fees",
-    issue:
-      "Management or administrative fee appears above conservative industry cap assumptions.",
-    lease_snippet: null,
-    estimated_annual_impact: Math.round(annualImpact),
-    estimated_term_impact: termImpact,
-    confidence: annualImpact > 10000 ? "medium" : "low",
-  });
-
-  score -= annualImpact > 10000 ? 8 : 4;
-  confidence -= annualImpact > 10000 ? 6 : 3;
-}
-
-  /* ---------- PRO-RATA ALLOCATION ---------- */
-  if (input.cam_nnn.pro_rata && baseCam > 0) {
-    const proRataExposure = baseCam * 0.08;
-
+  if (input.cam_nnn.pro_rata) {
     flags.push({
       code: "PRO_RATA",
-      label: "Pro-rata CAM allocation risk",
-      severity: proRataExposure > 8000 ? "medium" : "low",
-      recommendation:
-        "Verify rentable-area denominator, confirm vacant space is excluded, and ensure any gross-up or co-tenancy adjustments are applied correctly.",
-      estimated_impact: formatMoney(proRataExposure),
+      label: "Pro-rata allocation language detected",
+      severity: "low",
+      recommendation: "Verify the tenant share and rentable-area denominator against landlord records.",
     });
-
-    findings.push({
-      category: "Pro-Rata",
-      issue: "Potential misallocation of CAM based on pro-rata calculation.",
-      lease_snippet: null,
-      estimated_annual_impact: Math.round(proRataExposure),
-      estimated_term_impact: Math.round(
-        proRataExposure * ((input.term_months ?? 12) / 12)
-      ),
-      confidence: proRataExposure > 8000 ? "medium" : "low",
-    });
-
-    score -= proRataExposure > 8000 ? 10 : 5;
-    confidence -= proRataExposure > 8000 ? 8 : 4;
+    score -= 5;
   }
 
   /* ---------- STRUCTURAL CONFIDENCE ADJUSTMENTS ---------- */
@@ -679,46 +524,14 @@ capital_items_high: cam_nnn.capital_items_high ?? 0,
 management_fee_low: cam_nnn.management_fee_low ?? 0,
 management_fee_high: cam_nnn.management_fee_high ?? 0,
 
-/* -------------------- CORE EXPOSURE (AUTHORITATIVE) -------------------- */
-cam_total_avoidable_exposure: (() => {
-  const base = cam_nnn.total_exposure ?? 0;
-  const escalation = cam_nnn.escalation_high ?? 0;
-  const capital = cam_nnn.capital_items_high ?? 0;
-  const management = cam_nnn.management_fee_high ?? 0;
-
-  return base + escalation + capital + management;
-})(),
-
   /* -------------------- HEALTH (FULL LOGIC) -------------------- */
   health,
 
-  /* -------------------- TEASER SUMMARY (GREEN BOX SAFE) -------------------- */
-  teaser_summary:
-    cam_nnn.total_exposure
-      ? {
-          estimated_avoidable_range: {
-            low: Math.round(
-              (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_high ?? 0) +
-                (cam_nnn.management_fee_high ?? 0)) *
-                0.15) /
-                1000
-            ) * 1000,
-            high: Math.round(
-              (((cam_nnn.total_exposure ?? 0) +
-                (cam_nnn.escalation_high ?? 0) +
-                (cam_nnn.management_fee_high ?? 0)) *
-                0.35) /
-                1000
-            ) * 1000,
-          },
-
-          headline_flags: health.flags.slice(0, 2).map((f) => f.label),
-        }
-      : null,
+  teaser_summary: {
+    headline_flags: health.flags.slice(0, 2).map((f) => f.label),
+  },
 
   /* -------------------- DEBUG / PREVIEW -------------------- */
   raw_preview: text.slice(0, 1500),
   };
 }
-

@@ -80,7 +80,7 @@ export default function PricingPage() {
         </li>
         <li className="flex items-start gap-2">
           <span className="text-green-500">✔</span>
-          <span>Estimated avoidable exposure (when applicable)</span>
+          <span>Lease review items and verification steps</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="text-green-500">✔</span>

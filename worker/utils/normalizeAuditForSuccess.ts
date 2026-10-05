@@ -22,7 +22,7 @@
 
 type NormalizeAuditHealth = {
   score?: number | null;
-  flags?: unknown;
+  flags?: Array<{ code?: string; label?: string; recommendation?: string }> | null;
   findings?: unknown;
 };
 
@@ -38,7 +38,6 @@ type NormalizeAuditAnalysis = {
   exposure_range?: string | null;
   exposure_risk?: string | null;
 
-  cam_total_avoidable_exposure?: number | null;
 
   // 🔥 flattened numeric inputs from abstractLease
   escalation_low?: number | null;
@@ -71,11 +70,6 @@ export function normalizeAuditForSuccess(
         ? "MEDIUM"
         : "HIGH"
       : "HIGH";
-
-  const camTotalAvoidableExposure =
-    typeof analysis.cam_total_avoidable_exposure === "number"
-      ? Math.round(analysis.cam_total_avoidable_exposure)
-      : null;
 
   /* -------------------------------------------------
      ROLLUPS — SINGLE SOURCE OF TRUTH FOR PDF
@@ -128,8 +122,6 @@ export function normalizeAuditForSuccess(
 
     rent: analysis.rent ?? null,
 
-    // ✅ PRIMARY EXPOSURE (GREEN BOX — UNCHANGED)
-    cam_total_avoidable_exposure: camTotalAvoidableExposure,
     exposure_range: analysis.exposure_range ?? null,
     exposure_risk: analysis.exposure_risk ?? null,
     risk_level: riskLevel,

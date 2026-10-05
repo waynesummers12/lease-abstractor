@@ -356,8 +356,8 @@ export default function MarketingHomePage() {
       What Your Audit Reveals
     </h2>
     <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-700 leading-relaxed">
-      Every lease is different. Your report highlights exposure ranges, lease
-      language risks, and specific provisions that may be costing you money.
+      Every lease is different. Your report highlights language to review,
+      text matches from the uploaded lease, and records needed to verify a charge.
     </p>
   </div>
 
@@ -386,20 +386,13 @@ export default function MarketingHomePage() {
     {/* Step 2 */}
     <div className="space-y-6">
       <h3 className="text-2xl font-semibold">
-        2. Instant Exposure Estimate (Free Analysis)
+        2. Free Lease Preview
       </h3>
       <p className="text-gray-700 max-w-3xl">
-        Immediately see an estimated avoidable exposure range based on 
-        common CAM / NNN risk patterns in your lease — before any payment.
+        See extracted lease details and potential CAM / NNN review items before payment.
       </p>
-      <div className="rounded-2xl border shadow-sm overflow-hidden">
-        <Image
-          src="/demo/free-preview.png"
-          alt="Free CAM NNN exposure preview example"
-          width={1200}
-          height={800}
-          className="w-full h-auto"
-        />
+      <div className="rounded-2xl border bg-emerald-50 p-6 text-sm text-emerald-950">
+        The preview identifies terms to check. It does not claim a recoverable amount from the lease alone.
       </div>
     </div>
 
@@ -409,24 +402,19 @@ export default function MarketingHomePage() {
         3. Full CAM / NNN Audit Summary
       </h3>
       <p className="text-gray-700 max-w-3xl">
-        Unlock a professional CAM / NNN Audit Summary detailing flagged risks,
-        lease references, and exposure calculations specific to your lease.
+        Unlock a CAM / NNN lease review with prioritized items, page-numbered
+        text matches when extraction permits, and practical verification steps.
       </p>
       <p className="text-gray-700 font-medium">
-        Delivered as a professional PDF (typically 8–15 pages).
+        Delivered as a downloadable PDF. Length depends on the findings.
       </p>
       <p className="text-gray-700">
-        Reports can also be shared by brokers or tenant advisors as a white‑label
-        CAM / NNN audit summary during lease negotiations or reconciliation reviews.
+        Verify each text match in the original lease and compare it with
+        reconciliations and invoices before asserting an overcharge.
       </p>
-      <div className="rounded-2xl border shadow-sm overflow-hidden">
-        <Image
-          src="/demo/final-report.png"
-          alt="Full CAM NNN audit PDF example"
-          width={1200}
-          height={800}
-          className="w-full h-auto"
-        />
+      <div className="rounded-2xl border bg-slate-50 p-6 text-sm text-slate-700">
+        The report includes an audit reference, review items,
+        source text matches when available, and next steps.
       </div>
     </div>
 

@@ -50,8 +50,8 @@ export async function GET(
 
   if (!res.ok) {
     return NextResponse.json(
-      { error: "PDF not ready" },
-      { status: 404 }
+      { error: res.status === 503 ? "Report temporarily unavailable" : "PDF not ready" },
+      { status: res.status === 503 ? 503 : 404 }
     );
   }
 

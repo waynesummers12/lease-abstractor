@@ -77,7 +77,8 @@ router.get("/auditById/:auditId", async (ctx) => {
     -------------------------------------------------- */
   const hasPdf =
     typeof audit.audit_pdf_path === "string" &&
-    audit.audit_pdf_path.startsWith("audit-pdfs/");
+    (audit.audit_pdf_path.startsWith("audit-pdfs/") ||
+      (!audit.audit_pdf_path.includes("/") && audit.audit_pdf_path.endsWith(".pdf")));
 
   if (hasPdf) {
     console.log("📄 Creating signed URL for PDF:", audit.audit_pdf_path);

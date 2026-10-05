@@ -2,6 +2,7 @@ import { supabase } from "../lib/supabase.ts";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { generateAuditPdfV4 as generateAuditPdf } from "./generateAuditPdf_v4.ts";
 import { normalizeAuditForSuccess } from "./normalizeAuditForSuccess.ts";
+import { readLeasePagesForReport } from "./readLeasePagesForReport.ts";
 
 
 export async function markAuditPaid(
@@ -43,9 +44,12 @@ export async function markAuditPaid(
       normalized.rollup.managementFees.high,
   };
 
+  const sourcePages = await readLeasePagesForReport(auditId);
   const pdfBytes = await generateAuditPdf({
     ...normalized,
     exposureRange,
+    audit_id: auditId,
+    sourcePages,
   });
 
   // 3️⃣ Upload PDF

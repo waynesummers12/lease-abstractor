@@ -35,11 +35,8 @@ type AuditResponse = {
   status: string;
   analysis: {
     tenant?: string | null;
-    risk_level?: string | null;
-    health?: {
-      score?: number | null;
-    };
-    cam_total_avoidable_exposure?: number | null;
+    premises?: string | null;
+    health?: { flags?: Array<{ code?: string; label?: string }> | null };
   } | null;
 };
 
@@ -48,29 +45,6 @@ const POLL_INTERVAL_MS = 4_000;
 const REQUEST_TIMEOUT_MS = 10_000;
 
 /* ================= HELPERS ================= */
-
-function deriveRiskLevel(score?: number | null) {
-  if (typeof score !== "number") return "UNKNOWN";
-  if (score >= 75) return "LOW RISK";
-  if (score >= 50) return "MODERATE RISK";
-  return "HIGH RISK";
-}
-
-function explainScore(score?: number | null) {
-  if (typeof score !== "number") {
-    return "We were unable to calculate a complete lease health score.";
-  }
-
-  if (score >= 75) {
-    return "Your lease language is generally clear, with fewer CAM / NNN risk indicators. Review your billing records to confirm actual charges.";
-  }
-
-  if (score >= 50) {
-    return "Your lease contains some ambiguous or unfavorable clauses. Compare the audit findings with actual billing records before claiming an overcharge.";
-  }
-
-  return "Your lease shows significant risk indicators, unclear cost allocations, or missing protections. Compare these findings with your billing records before claiming an overcharge.";
-}
 
 /* ================= PAGE ================= */
 
@@ -231,7 +205,9 @@ useEffect(() => {
     });
 
     if (!res.ok) {
-      alert("Your PDF is still being prepared. Please try again shortly.");
+      alert(res.status === 503
+        ? "We couldn't update your report right now. Please try again shortly or contact audits@saveonlease.com."
+        : "Your PDF is still being prepared. Please try again shortly.");
       return;
     }
 
@@ -344,70 +320,42 @@ useEffect(() => {
     );
   }
 
-  const score = data.analysis?.health?.score ?? null;
-  const riskLabel = deriveRiskLevel(score);
+  const reviewItems = Array.isArray(data.analysis?.health?.flags)
+    ? data.analysis.health.flags
+    : [];
 
   /* ---------- COMPLETE ---------- */
 return (
-  <main className="mx-auto max-w-xl px-6 py-24 space-y-8 text-center">
-    <div className="text-3xl">✅</div>
-
-    <h1 className="text-2xl font-semibold">Payment successful</h1>
-
-    {/* ---------- LEASE SUMMARY ---------- */}
-<div className="rounded-xl border bg-gray-50 p-6 text-left space-y-4">
-  <div className="flex items-center justify-between">
-    <p className="text-sm font-medium text-gray-600">
-      Lease Health Score
-    </p>
-    <span className="text-sm font-semibold">
-      {riskLabel}
-    </span>
-  </div>
-
-  <p className="text-4xl font-bold text-black">
-    {typeof score === "number" ? score : "—"}
-  </p>
-
-  <p className="text-sm text-gray-700">
-    {explainScore(score)}
-  </p>
-
-  {typeof data.analysis?.cam_total_avoidable_exposure === "number" && (
-    <p className="text-sm text-gray-600">
-      Estimated avoidable exposure over 12 months:{" "}
-      <span className="font-semibold">
-        ${data.analysis.cam_total_avoidable_exposure.toLocaleString()}
-      </span>
-    </p>
-  )}
-
-  {/* ---------- NEXT STEPS ---------- */}
-  <p className="pt-2 text-sm text-gray-600">
-    Even low-risk leases often contain recoverable CAM or NNN charges.
-    A full audit highlights where landlords commonly over-allocate costs.
-  </p>
-</div>
-
-
-    {/* ---------- ACTIONS ---------- */}
+  <main className="mx-auto max-w-2xl px-6 py-12 sm:py-20 space-y-8">
     <div className="space-y-3">
+      <p className="text-sm font-semibold text-green-700">Payment complete · Report ready</p>
+      <h1 className="text-3xl font-semibold tracking-tight">Your lease review is ready</h1>
+      <p className="text-gray-600">Download the report to review the flagged lease terms and the records needed to verify them.</p>
+    </div>
+
+    <section className="rounded-2xl border border-gray-200 bg-gray-50 p-6 space-y-5" aria-label="Audit summary">
+      <div>
+        <p className="text-xs uppercase tracking-wide text-gray-500">Lease</p>
+        <p className="mt-1 font-medium">{data.analysis?.premises || data.analysis?.tenant || "Uploaded lease"}</p>
+      </div>
+      <div className="rounded-xl border bg-white p-4">
+        <p className="text-sm font-medium">Lease-language review completed</p>
+        <p className="mt-1 text-sm text-gray-600">The initial scan flagged {reviewItems.length} potential review item{reviewItems.length === 1 ? "" : "s"}. The PDF includes items that can be matched to text in your original upload.</p>
+      </div>
+      <p className="text-sm text-gray-700">This is a lease-language screening result. It does not establish an overcharge or a recoverable savings amount. Compare the findings with your invoices and CAM/NNN reconciliations.</p>
+      {auditId && <p className="text-xs text-gray-500 break-all">Audit reference: {auditId}</p>}
+    </section>
+
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
       <button
         onClick={handleDownload}
         disabled={downloading}
-        className="inline-block rounded-md bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        className="rounded-lg bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
       >
-        {downloading ? "Preparing PDF…" : "Download PDF Audit"}
+        {downloading ? "Preparing PDF…" : "Open full PDF report"}
       </button>
-
-      <div>
-        <button
-          onClick={() => router.push("/app/step-1-upload")}
-          className="text-sm underline text-gray-600 hover:text-black"
-        >
-          Run another audit
-        </button>
-      </div>
+      {session && <button onClick={() => router.push("/product/app/portfolio")} className="rounded-lg border px-5 py-3 text-sm font-medium hover:bg-gray-50">Go to portfolio</button>}
+      <button onClick={() => router.push("/app/step-1-upload")} className="px-2 py-3 text-sm text-gray-600 underline">Review another lease</button>
     </div>
   </main>
 );

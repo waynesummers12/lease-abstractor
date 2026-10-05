@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdfV4 } from "./generateAuditPdf_v4.ts";
 import { normalizeAuditForSuccess } from "./normalizeAuditForSuccess.ts";
 import { sendAuditEmail } from "./sendAuditEmail.ts";
+import { readLeasePagesForReport } from "./readLeasePagesForReport.ts";
 
 /** Safe to call again for the same paid Checkout Session. */
 export async function fulfillPaidCheckout(
@@ -75,10 +76,11 @@ export async function fulfillPaidCheckout(
     low: normalized.rollup.camEscalation.low + normalized.rollup.capitalItems.low + normalized.rollup.managementFees.low,
     high: normalized.rollup.camEscalation.high + normalized.rollup.capitalItems.high + normalized.rollup.managementFees.high,
   };
-  const pdf = await generateAuditPdfV4({ ...normalized, exposureRange });
+  const sourcePages = await readLeasePagesForReport(auditId);
+  const pdf = await generateAuditPdfV4({ ...normalized, exposureRange, audit_id: auditId, sourcePages });
   if (!pdf?.length) throw new Error("Paid audit PDF is empty");
 
-  const objectPath = `${auditId}.pdf`;
+  const objectPath = `${auditId}-v5.pdf`;
   const { error: uploadError } = await supabase.storage.from("audit-pdfs")
     .upload(objectPath, pdf, { contentType: "application/pdf", upsert: true });
   if (uploadError) throw uploadError;

@@ -23,6 +23,7 @@ import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
 import { generateAuditPdfV4 as generateAuditPdf } from "../utils/generateAuditPdf_v4.ts";
 import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
+import { readLeasePagesForReport } from "../utils/readLeasePagesForReport.ts";
 
 const router = new Router({
   prefix: "/audit",
@@ -76,7 +77,6 @@ console.log("🧪 NORMALIZED FOR PDF", {
   camEscalationHigh: normalized.rollup.camEscalation.high,
   capitalItemsHigh: normalized.rollup.capitalItems.high,
   managementFeesHigh: normalized.rollup.managementFees.high,
-  camTotalAvoidableExposure: normalized.cam_total_avoidable_exposure,
 });
 
 if (!normalized) {
@@ -96,9 +96,12 @@ const exposureRange = {
     normalized.rollup.managementFees.high,
 };
 
+const sourcePages = await readLeasePagesForReport(auditId);
 pdfBytes = await generateAuditPdf({
   ...normalized,
   exposureRange,
+  audit_id: auditId,
+  sourcePages,
 });
   } catch (err) {
     console.error("❌ PDF generation failed for audit", auditId, err);
@@ -121,7 +124,7 @@ pdfBytes = await generateAuditPdf({
   // --------------------
   // 4. Upload PDF (CORRECT PATH — NO PREFIX)
   // --------------------
-  const objectPath = `audit-pdfs/${auditId}.pdf`;
+  const objectPath = `${auditId}-v5.pdf`;
 
   const { error: uploadError } = await supabase.storage
   .from("audit-pdfs")
@@ -163,4 +166,3 @@ pdfBytes = await generateAuditPdf({
 });
 
 export default router;
-

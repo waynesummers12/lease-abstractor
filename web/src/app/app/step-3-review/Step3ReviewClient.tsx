@@ -14,23 +14,18 @@ type Analysis = {
   lease_end: string | null;
   term_months: number | null;
 
-  cam_total_avoidable_exposure?: number | null;
-
   teaser_summary?: {
-    estimated_avoidable_range?: {
-      low: number;
-      high: number;
-    };
     headline_flags?: string[];
   } | null;
 
-  confidence?: number | null; // UI-only
 };
 
-function midpoint(range?: { low: number; high: number } | null) {
-  if (!range) return null;
-  return Math.round((range.low + range.high) / 2);
-  }
+function reviewLabel(label: string) {
+  if (/management|admin/i.test(label)) return "Management or administrative fee language to verify";
+  if (/capital/i.test(label)) return "Capital expense language to verify";
+  if (/pro.rata|allocation/i.test(label)) return "Pro-rata allocation language to verify";
+  return "Lease term to verify in the original document";
+}
 
 export default function Step3ReviewClient() {
   const searchParams = useSearchParams();
@@ -62,40 +57,21 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     return () => controller.abort();
   }, [auditId, retryCount, authLoading, session?.access_token]);
 
-    const range = analysis?.teaser_summary?.estimated_avoidable_range;
-
-  // Total exposure across remaining lease term
-  const totalLeaseExposure =
-    range
-      ? midpoint(range)
-      : analysis?.cam_total_avoidable_exposure ?? null;
-
-  // Annualized exposure (Next 12 Months)
-  const leaseMonths = analysis?.term_months ?? 12;
-
-  const annualExposure =
-    totalLeaseExposure != null
-      ? Math.round((totalLeaseExposure / leaseMonths) * 12)
-      : null;
-
-  const monthlyLoss = annualExposure != null ? Math.round(annualExposure / 12) : null;
-
-  // GA4: fire once when value is shown
+  // GA4: fire once when the preview is shown.
   useEffect(() => {
     const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
 
     if (typeof window !== "undefined" && gtag) {
-      if (annualExposure != null && !hasFiredLeaseUploaded.current) {
+      if (analysis && !hasFiredLeaseUploaded.current) {
         hasFiredLeaseUploaded.current = true;
 
         gtag("event", "lease_uploaded", {
           event_category: "funnel",
-          event_label: "estimated_savings_shown",
-          value: annualExposure,
+          event_label: "lease_preview_shown",
         });
       }
     }
-  }, [annualExposure]);
+  }, [analysis]);
 
   if (!auditId) {
     return (
@@ -154,184 +130,38 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     );
   }
 
-  const confidence =
-    typeof analysis.confidence === "number"
-      ? Math.min(Math.max(analysis.confidence, 0), 100)
-      : null;
-
-
   return (
     <main className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6 sm:py-16">
       <div className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 2 of 2 · Free preview</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your lease preview</h1>
         <p className="mt-3 text-slate-600">
-          Review the estimate and the lease details we extracted. You can decide whether a full audit is worth it.
+          Review the lease details we extracted. You can decide whether a full report is worth it.
         </p>
       </div>
 
 
-      {/* ---------- GREEN SUMMARY BOX ---------- */}
-{annualExposure != null && (
-  <div className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-8">
-    {/* Header */}
-    <div className="flex items-start gap-3">
-      <span className="text-2xl" aria-hidden="true">💰</span>
-      <div>
-        <p className="text-sm font-medium text-emerald-800">
-          Estimated avoidable exposure · next 12 months
-        </p>
-
-        {/* PRIMARY NUMBER */}
-        <p className="break-words text-4xl font-bold tracking-tight text-emerald-950 sm:text-5xl">
-          ${annualExposure.toLocaleString()}
-        </p>
-        {monthlyLoss != null && (
-          <p className="mt-2 text-sm font-medium text-emerald-900">
-            Approximately ${monthlyLoss.toLocaleString()} per month at this estimate
-          </p>
-        )}
-
-        {/* SECONDARY CONTEXT */}
-        {totalLeaseExposure != null && (
-          <p className="mt-1 text-sm text-emerald-800">
-            Estimated total exposure over remaining lease term:{" "}
-            <span className="font-semibold">
-              ${totalLeaseExposure.toLocaleString()}
-            </span>
-          </p>
-        )}
-
-        {/* RANGE (IF AVAILABLE) */}
-        {analysis.teaser_summary?.estimated_avoidable_range && (
-          <>
-            <p className="mt-1 text-sm text-emerald-700">
-              Conservative estimate range:{" "}
-              <span className="font-semibold">
-                ${analysis.teaser_summary.estimated_avoidable_range.low.toLocaleString()}
-                {" – "}
-                ${analysis.teaser_summary.estimated_avoidable_range.high.toLocaleString()}
-              </span>
-            </p>
-            <p className="mt-2 text-xs text-emerald-700">
-              Audit rights and notice windows vary by lease. Check the dates in your agreement.
-            </p>
-          </>
-        )}
-      </div>
-    </div>
-
-    {/* Confidence / badge */}
-    <div className="inline-flex w-fit items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-900">
-      Estimate based on terms extracted from your uploaded lease
-    </div>
-
-    {confidence != null && <div>
-      <p className="text-sm text-emerald-800 mb-2">
-        Confidence reflects clarity of CAM, escalation, and reconciliation clauses
-      </p>
-
-      <div className="space-y-1">
-        <div className="h-2 w-full rounded-full bg-emerald-200 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-emerald-600 transition-all"
-            style={{ width: `${confidence}%` }}
-          />
+      <section className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-8">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Free preview</p>
+          <h2 className="mt-2 text-xl font-semibold text-emerald-950">Lease terms ready for review</h2>
+          <p className="mt-2 text-sm text-emerald-900">We found lease language to check against your CAM/NNN billing records. An uploaded lease alone cannot establish an overcharge or a recoverable dollar amount.</p>
         </div>
-
-        <p className="text-xs text-emerald-700">
-          {confidence >= 75
-            ? "High confidence — terms are clearly defined"
-            : confidence >= 40
-            ? "Moderate confidence — some ambiguity detected"
-            : "Lower confidence — lease language is unclear"}
-        </p>
-      </div>
-    </div>}
-
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-emerald-800">
-      <div>CAM and NNN terms checked</div>
-      <div>Fee language checked</div>
-      <div>Escalation terms checked</div>
-    </div>
-
-    {/* How calculated */}
-    <div className="rounded-lg bg-white/60 p-4 border border-emerald-200">
-      <p className="text-sm font-semibold text-emerald-900 mb-2">
-        How this estimate was calculated
-      </p>
-      <ul className="list-disc list-inside space-y-1 text-sm text-emerald-900">
-        <li>Potential cost risks identified from CAM, NNN, and escalation language</li>
-        <li>Dollar figures are estimates based on extracted lease terms</li>
-        <li>Actual recoveries depend on charges, records, and lease interpretation</li>
-      </ul>
-
-      <p className="mt-3 text-xs text-emerald-700 italic">
-        Final recovery depends on lease interpretation, audit rights, and timing.
-      </p>
-    </div>
-
-    {/* ---------- TOP 3 ISSUES (TEASER) ---------- */}
-    {analysis.teaser_summary?.headline_flags && analysis.teaser_summary.headline_flags.length > 0 && (
-      <div className="rounded-lg bg-white/60 p-4 border border-emerald-200">
-        <p className="text-sm font-semibold text-emerald-900 mb-2">
-          Top issues found (preview)
-        </p>
-
-        <ul className="list-disc list-inside space-y-1 text-sm text-emerald-900">
-          {analysis.teaser_summary.headline_flags.slice(0, 3).map((flag, i) => (
-            <li key={i} className="relative">
-              <span>
-                {flag}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-        <p className="mt-2 text-xs text-emerald-700">
-          The full audit provides more detail on each finding and the relevant lease terms.
-        </p>
-      </div>
-    )}
-
-    {/* Lease metadata */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-emerald-200 text-sm">
-      <div>
-        <p className="font-semibold">Tenant</p>
-        <p>{analysis.tenant ?? "—"}</p>
-      </div>
-
-      <div>
-        <p className="font-semibold">Landlord</p>
-        <p>{analysis.landlord ?? "—"}</p>
-      </div>
-
-      <div>
-        <p className="font-semibold">Premises</p>
-        <p>{analysis.premises ?? "—"}</p>
-      </div>
-
-      <div>
-        <p className="font-semibold">Lease Term</p>
-        <p>
-          {analysis.lease_start && analysis.lease_end
-            ? `${analysis.lease_start} → ${analysis.lease_end} (${analysis.term_months} months)`
-            : "—"}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
-      {annualExposure == null && (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-8">
-          <h2 className="text-xl font-semibold text-slate-950">No reliable dollar estimate yet</h2>
-          <p className="mt-2 text-sm text-slate-600">We could not calculate an exposure figure from the extracted terms. Review the lease details below and use the full audit for a closer look.</p>
-          <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
-            <div><dt className="font-medium text-slate-500">Tenant</dt><dd className="break-words text-slate-900">{analysis.tenant || "Not identified"}</dd></div>
-            <div><dt className="font-medium text-slate-500">Premises</dt><dd className="break-words text-slate-900">{analysis.premises || "Not identified"}</dd></div>
-          </dl>
-        </div>
-      )}
+        {analysis.teaser_summary?.headline_flags && analysis.teaser_summary.headline_flags.length > 0 && (
+          <div className="rounded-lg border border-emerald-200 bg-white p-4">
+            <p className="text-sm font-semibold text-emerald-950">Potential review items</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-emerald-900">
+              {analysis.teaser_summary.headline_flags.slice(0, 3).map((flag, index) => <li key={index}>{reviewLabel(flag)}</li>)}
+            </ul>
+          </div>
+        )}
+        <dl className="grid gap-4 border-t border-emerald-200 pt-4 text-sm sm:grid-cols-2">
+          <div><dt className="font-medium text-emerald-800">Tenant</dt><dd>{analysis.tenant || "Not identified"}</dd></div>
+          <div><dt className="font-medium text-emerald-800">Landlord</dt><dd>{analysis.landlord || "Not identified"}</dd></div>
+          <div><dt className="font-medium text-emerald-800">Premises</dt><dd>{analysis.premises || "Not identified"}</dd></div>
+          <div><dt className="font-medium text-emerald-800">Lease dates</dt><dd>{analysis.lease_start && analysis.lease_end ? `${analysis.lease_start} to ${analysis.lease_end}` : "Not identified"}</dd></div>
+        </dl>
+      </section>
 
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
@@ -343,9 +173,8 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         </p>
 
         <p className="text-gray-700">
-          This complete audit highlights potential CAM / NNN exposure based on
-          your lease language. Unlocking this full audit provides a complete,
-          downloadable PDF with the detail you need to take action.
+          The paid report summarizes the language review, flags terms to verify,
+          and lists the records needed before you can establish an overcharge.
         </p>
 
         <p className="text-sm text-gray-600">
@@ -360,13 +189,13 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             Audit windows are often time-limited
           </li>
           <li>
-            Issue-by-issue findings tied directly to specific lease provisions
+            Issue-by-issue screening findings and practical verification steps
           </li>
           <li>
-            Estimated dollar impact where the lease supports a calculation
+            No dollar recovery claim without billing records
           </li>
           <li>
-            Audit-ready explanations you can share with an attorney,
+            A report you can share with an attorney,
             accountant, or landlord
           </li>
           <li>

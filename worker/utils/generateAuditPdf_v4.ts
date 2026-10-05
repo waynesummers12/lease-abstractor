@@ -1,495 +1,195 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
+import type { PDFPage, PDFFont } from "npm:pdf-lib@1.17.1";
 
-import { drawHero } from "./pdf/components/Hero.ts";
-import { drawSummaryTable as _drawSummaryTable } from "./pdf/components/SummaryTable.ts";
-import { drawCallout as _drawCallout } from "./pdf/components/Callout.ts";
-import { drawExplanationBox } from "./pdf/components/ExplanationBox.ts";
-import { drawBottomLine } from "./pdf/components/BottomLine.ts";
-
-import { PAGE, CONTENT, SPACING } from "./pdf/layout.ts";
-import {
-  FONT_SIZES,
-  COLORS,
-  drawHeading,
-  drawParagraph,
-} from "./pdf/typography.ts";
-
-/* -------------------------------------------------
-   Types
--------------------------------------------------- */
-
-type ExposureRange = {
-  low: number;
-  high: number;
-};
-
-type Rollup = {
-  camEscalation: { low: number; high: number };
-  capitalItems: { low: number; high: number };
-  managementFees: { low: number; high: number };
-};
-
+type Flag = { code?: string; label?: string };
 type AuditAnalysis = {
-  tenant: string | null;
-  landlord: string | null;
+  exposureRange?: { low: number; high: number };
+  sourcePages?: Array<{ page: number; text: string }> | null;
   audit_id?: string | null;
-  exposureRange: ExposureRange;
-  rollup: Rollup;
+  tenant?: string | null;
+  landlord?: string | null;
+  premises?: string | null;
+  lease_start?: string | null;
+  lease_end?: string | null;
+  health?: { flags?: Flag[] | null } | null;
 };
 
-/* -------------------------------------------------
-   Helpers
--------------------------------------------------- */
+const INK = rgb(0.08, 0.13, 0.19);
+const MUTED = rgb(0.37, 0.43, 0.49);
+const BLUE = rgb(0.08, 0.32, 0.55);
+const PALE = rgb(0.93, 0.96, 0.98);
+const MARGIN = 48;
 
-function currency(n: number) {
-  return `$${Math.round(n).toLocaleString()}`;
+function safeText(value: unknown): string {
+  return String(value ?? "")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014\u2011]/g, "-")
+    .replace(/[^\x20-\x7E]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-function _estimateLines(text: string, charsPerLine = 90) {
-  return Math.ceil(text.length / charsPerLine);
+function wrap(text: string, font: PDFFont, size: number, width: number): string[] {
+  const result: string[] = [];
+  let line = "";
+  for (const word of safeText(text).split(" ")) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (line && font.widthOfTextAtSize(candidate, size) > width) {
+      result.push(line);
+      line = word;
+    } else line = candidate;
+  }
+  if (line) result.push(line);
+  return result;
 }
 
-function computeLeaseHealthScore(analysis: AuditAnalysis) {
-  const { rollup } = analysis;
+function reviewItem(flag: Flag): { title: string; check: string } {
+  switch (flag.code) {
+    case "CAPEX_IN_CAM":
+    case "CAPEX_INCLUDED":
+      return { title: "Capital expense language", check: "Check which capital items the lease permits, any amortization requirement, and the actual amounts billed." };
+    case "MGMT_FEE_WATCH":
+    case "MGMT_FEE_DELTA":
+      return { title: "Management or administrative fees", check: "Find the lease's fee definition, percentage and calculation base, then compare them with the reconciliation." };
+    case "PRO_RATA":
+      return { title: "Pro-rata allocation", check: "Compare the stated tenant share and rentable-area denominator with the landlord's allocation schedule." };
+    case "UNCAPPED_CAM":
+      return { title: "CAM cap language", check: "Confirm which expense categories have a cap and whether any exceptions apply." };
+    case "NO_RECONCILIATION":
+      return { title: "Reconciliation procedure", check: "Locate the annual statement, supporting-record, and dispute provisions in the lease." };
+    default:
+      return { title: safeText(flag.label) || "Lease provision to review", check: "Locate the relevant clause and compare it with the landlord's supporting records." };
+  }
+}
 
-  const total =
-    rollup.camEscalation.high +
-    rollup.capitalItems.high +
-    rollup.managementFees.high;
+function textMatch(flag: Flag, sourcePages?: Array<{ page: number; text: string }> | null): { page: number; text: string } | null {
+  if (!sourcePages) return null;
+  const patterns: Record<string, RegExp> = {
+    CAPEX_IN_CAM: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
+    CAPEX_INCLUDED: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
+    MGMT_FEE_WATCH: /(?:management|admin(?:istration)?) fee/i,
+    MGMT_FEE_DELTA: /(?:management|admin(?:istration)?) fee/i,
+    PRO_RATA: /pro[-\s]?rata|tenant['\u2019]s share/i,
+    UNCAPPED_CAM: /no cap|without limitation|all operating expenses/i,
+  };
+  const pattern = patterns[flag.code ?? ""];
+  if (!pattern) return null;
+  for (const source of sourcePages) {
+    const match = pattern.exec(source.text);
+    if (!match || match.index === undefined) continue;
+    const start = Math.max(0, match.index - 55);
+    const end = Math.min(source.text.length, match.index + match[0].length + 110);
+    return { page: source.page, text: safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`) };
+  }
+  return null;
+}
 
-  if (total === 0) {
-    return {
-      score: 85,
-      breakdown: {
-        capProtection: 80,
-        allocationClarity: 85,
-        feeDiscipline: 90,
-        costPredictability: 85,
-      },
-    };
+export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8Array> {
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  const storedFlags = Array.isArray(analysis.health?.flags)
+    ? analysis.health.flags.filter((flag) => typeof flag?.label === "string")
+    : [];
+  const flags = analysis.sourcePages
+    ? storedFlags.filter((flag) => textMatch(flag, analysis.sourcePages))
+    : storedFlags;
+  const auditId = safeText(analysis.audit_id) || "Reference unavailable";
+  let page!: PDFPage;
+  let y = 0;
+
+  function addPage() {
+    page = pdf.addPage([595.28, 841.89]);
+    const { width, height } = page.getSize();
+    page.drawRectangle({ x: 0, y: height - 12, width, height: 12, color: BLUE });
+    page.drawText("SAVEONLEASE  /  LEASE REVIEW", {
+      x: MARGIN, y: height - 46, size: 9, font: bold, color: BLUE,
+    });
+    y = height - 86;
   }
 
-  const capProtection = Math.max(
-    40,
-    100 - Math.min(rollup.camEscalation.high / 1000, 60)
-  );
+  function ensure(height: number) {
+    if (y - height < 68) addPage();
+  }
 
-  const allocationClarity = Math.max(
-    35,
-    100 - Math.min(rollup.capitalItems.high / 1000, 65)
-  );
+  function heading(text: string) {
+    ensure(45);
+    page.drawText(safeText(text), { x: MARGIN, y, size: 15, font: bold, color: INK });
+    y -= 26;
+  }
 
-  const feeDiscipline = Math.max(
-    50,
-    100 - Math.min(rollup.managementFees.high / 1000, 50)
-  );
-
-  const costPredictability = Math.round(
-    (capProtection + allocationClarity + feeDiscipline) / 3
-  );
-
-  const overall = Math.round(
-    (capProtection +
-      allocationClarity +
-      feeDiscipline +
-      costPredictability) /
-      4
-  );
-
-  return {
-    score: overall,
-    breakdown: {
-      capProtection: Math.round(capProtection),
-      allocationClarity: Math.round(allocationClarity),
-      feeDiscipline: Math.round(feeDiscipline),
-      costPredictability,
-    },
-  };
-}
-
-function createPage(pdfDoc: PDFDocument) {
-  const page = pdfDoc.addPage();
-  const { height } = page.getSize();
-  return { page, y: height - PAGE.margin - 40 };
-}
-
-function drawHeader(
-  page: import("npm:pdf-lib@1.17.1").PDFPage,
-  analysis: AuditAnalysis,
-  font: import("npm:pdf-lib@1.17.1").PDFFont
-) {
-  const { width, height } = page.getSize();
-
-  const headerText = `Tenant: ${analysis.tenant ?? "N/A"}   |   Landlord: ${
-    analysis.landlord ?? "N/A"
-  }`;
-
-  page.drawText(headerText, {
-    x: PAGE.margin,
-    y: height - 28,
-    size: 9,
-    font,
-    color: COLORS.subtle,
-    maxWidth: width - PAGE.margin * 2,
-  });
-
-  page.drawLine({
-    start: { x: PAGE.margin, y: height - 34 },
-    end: { x: width - PAGE.margin, y: height - 34 },
-    thickness: 0.5,
-    color: rgb(0.85, 0.85, 0.85),
-  });
-}
-
-function drawFooter(
-  page: import("npm:pdf-lib@1.17.1").PDFPage,
-  auditId: string,
-  font: import("npm:pdf-lib@1.17.1").PDFFont
-) {
-  const { width } = page.getSize();
-
-  page.drawText(
-    `Prepared by SaveOnLease • ${new Date().toLocaleDateString()} • Audit ID: ${auditId}`,
-    {
-      x: PAGE.margin,
-      y: 20,
-      size: 8,
-      font,
-      color: COLORS.subtle,
-      maxWidth: width - PAGE.margin * 2,
+  function paragraph(text: string, options: { indent?: number; color?: typeof INK; bold?: boolean; gap?: number } = {}) {
+    const x = MARGIN + (options.indent ?? 0);
+    const face = options.bold ? bold : font;
+    const wrapped = wrap(text, face, 10.5, page.getWidth() - x - MARGIN);
+    ensure(wrapped.length * 15 + (options.gap ?? 9));
+    for (const line of wrapped) {
+      page.drawText(line, { x, y, size: 10.5, font: face, color: options.color ?? MUTED });
+      y -= 15;
     }
-  );
-}
+    y -= options.gap ?? 9;
+  }
 
-/* -------------------------------------------------
-   Main
--------------------------------------------------- */
-
-export async function generateAuditPdfV4(
-  analysis: AuditAnalysis
-): Promise<Uint8Array> {
-  const pdfDoc = await PDFDocument.create();
-
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-  const rollup = analysis.rollup ?? {
-    camEscalation: { low: 0, high: 0 },
-    capitalItems: { low: 0, high: 0 },
-    managementFees: { low: 0, high: 0 },
-  };
-
-  const totalLow =
-    rollup.camEscalation.low +
-    rollup.capitalItems.low +
-    rollup.managementFees.low;
-
-  const totalHigh =
-    rollup.camEscalation.high +
-    rollup.capitalItems.high +
-    rollup.managementFees.high;
-
-  /* ============================
-     PAGE 1 — HERO + EXEC SUMMARY
-  ============================ */
-
-  let { page, y } = createPage(pdfDoc);
-  drawHeader(page, analysis, font);
-
-  y = drawHero(page, y - SPACING.lg, {
-    font,
-    boldFont,
-    low: analysis.exposureRange.low,
-    high: analysis.exposureRange.high,
+  addPage();
+  page.drawText("Your commercial lease review", {
+    x: MARGIN, y, size: 25, font: bold, color: INK,
   });
+  y -= 30;
+  paragraph("CAM / NNN language screening report", { color: BLUE, gap: 16 });
 
-  y -= SPACING.md;
+  page.drawRectangle({ x: MARGIN, y: y - 81, width: page.getWidth() - MARGIN * 2, height: 81, color: PALE });
+  y -= 20;
+  paragraph(`Audit reference: ${auditId}`, { indent: 14, color: INK, gap: 1 });
+  paragraph(`Prepared: ${new Date().toISOString().slice(0, 10)}`, { indent: 14, gap: 1 });
+  paragraph(`Premises: ${analysis.premises || "Not reliably extracted"}`, { indent: 14, gap: 0 });
+  y -= 27;
 
-  y = drawHeading(
-    page,
-    "Executive Summary",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h2,
-    SPACING.lg
-  );
+  heading("At a glance");
+  paragraph(`${flags.length} review item${flags.length === 1 ? "" : "s"} ${analysis.sourcePages ? "matched to lease text" : "from the stored analysis"} for manual verification. A finding indicates language to check; it does not establish that the landlord overcharged you.`, { color: INK });
+  paragraph("Verified overcharge: Not determined. The lease alone does not provide invoices, reconciliation statements, or actual CAM allocations.", { bold: true, color: INK, gap: 16 });
 
-  const executiveParagraphs = [
-    `Our review indicates an estimated ${currency(
-      totalLow
-    )} - ${currency(
-      totalHigh
-    )} in avoidable operating expense exposure over the next 12 months.`,
-    "Primary exposure drivers include uncapped CAM escalation, capital allocations, and management fees without defined limits.",
-    "Absent proactive review, these provisions typically compound year-over-year and weaken tenant leverage prior to reconciliation or renewal.",
-  ];
+  heading("Lease details available to the audit");
+  paragraph(`Tenant: ${analysis.tenant || "Not reliably extracted"}`);
+  paragraph(`Landlord: ${analysis.landlord || "Not reliably extracted"}`);
+  paragraph(`Lease dates: ${analysis.lease_start || "Unknown"} to ${analysis.lease_end || "Unknown"}`, { gap: 17 });
 
-  for (const p of executiveParagraphs) {
-    y = drawParagraph(
-      page,
-      p,
-      PAGE.margin,
-      y,
-      font,
-      CONTENT.maxWidth
-    );
-    y -= SPACING.sm;
+  heading("Priority review items");
+  if (flags.length === 0) {
+    paragraph("No specific review flags were preserved in this analysis. Check the lease and billing records directly before concluding there is no risk.");
+  } else {
+    for (const [index, flag] of flags.slice(0, 5).entries()) {
+      ensure(150);
+      const item = reviewItem(flag);
+      paragraph(`${index + 1}. ${item.title}`, { bold: true, color: INK, gap: 2 });
+      paragraph(item.check, { indent: 15, gap: 8 });
+      const excerpt = textMatch(flag, analysis.sourcePages);
+      if (excerpt) paragraph(`Lease text match, page ${excerpt.page}: "${excerpt.text}"`, { indent: 15, gap: 12 });
+    }
   }
 
-  drawFooter(page, analysis.audit_id ?? "N/A", font);
+  heading("What to do next");
+  paragraph("1. Find the lease clauses for each flagged item and note any exclusions, caps, and audit deadlines.");
+  paragraph("2. Compare those clauses with your CAM/NNN statements, invoices, and allocation schedules.");
+  paragraph("3. Ask the landlord for supporting calculations before asserting a recoverable amount.");
+  heading("How to read this report");
+  paragraph("This report screens extracted lease text for CAM and NNN language. It is a starting point for review, not a completed reconciliation audit or legal opinion.", { color: INK });
+  paragraph("Automated dollar scenarios may be built from assumed CAM charges and percentage sensitivities. Those inputs are not verified against invoices, so this report does not label them as savings or overcharges.");
+  paragraph("Page-numbered text matches come from PDF extraction; they are prompts for checking the original page, not proof that a charge violates the lease. A clause may have exceptions elsewhere.");
+  heading("Documents needed to verify a claim");
+  paragraph("- The executed lease and amendments");
+  paragraph("- Annual CAM/NNN reconciliations and landlord backup");
+  paragraph("- Invoices, allocation schedules, and rentable-area calculations");
+  paragraph("- Notices and the dates that start any audit or dispute period");
+  heading("Questions about this audit?");
+  paragraph(`Email audits@saveonlease.com and include audit reference ${auditId}.`);
 
-  /* ============================
-     PAGE 2 — ROLLUP TABLE
-  ============================ */
-
-  ({ page, y } = createPage(pdfDoc));
-  drawHeader(page, analysis, font);
-
-  y = drawHeading(
-    page,
-    "Estimated Avoidable Exposure - 12 Month Roll-Up",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h2,
-    SPACING.lg
-  );
-
-  const rollupRows: [string, string, string][] = [
-    [
-      "CAM Escalation Exposure",
-      currency(rollup.camEscalation.low),
-      currency(rollup.camEscalation.high),
-    ],
-    [
-      "Capital Expenditure Allocation",
-      currency(rollup.capitalItems.low),
-      currency(rollup.capitalItems.high),
-    ],
-    [
-      "Management Fee Overages",
-      currency(rollup.managementFees.low),
-      currency(rollup.managementFees.high),
-    ],
-    [
-      "Total Estimated Avoidable Exposure",
-      currency(totalLow),
-      currency(totalHigh),
-    ],
-  ];
-
-  const tableResult = _drawSummaryTable(
-    page,
-    y,
-    { rows: rollupRows },
-    { font, boldFont }
-  );
-
-  y = tableResult.cursorY;
-
-  y = _drawCallout(
-    page,
-    y,
-    "Why This Matters",
-    "warning",
-    [
-      "Operating expenses across retail and office properties are increasing due to insurance repricing, tax reassessments, and capital items being allocated through CAM.",
-      "Most commercial leases restrict audit rights to a 12–24 month window. Once closed, recovery of overcharges is typically unavailable.",
-      "Addressing structural exposure before reconciliation or renewal materially improves negotiating position and reduces long-term cost creep."
-    ],
-    font,
-    boldFont
-  );
-
-  y -= SPACING.lg;
-
-  const bottomResult = drawBottomLine(
-    pdfDoc,
-    page,
-    y,
-    {
-      rangeLow: currency(totalLow),
-      rangeHigh: currency(totalHigh),
-    },
-    { font, boldFont }
-  );
-
-  page = bottomResult.page;
-  y = bottomResult.cursorY;
-
-  drawFooter(page, analysis.audit_id ?? "N/A", font);
-
-  /* ============================
-     PAGE 3 — METHODOLOGY
-  ============================ */
-
-  ({ page, y } = createPage(pdfDoc));
-  drawHeader(page, analysis, font);
-
-  const explanationResult = drawExplanationBox(
-    pdfDoc,
-    page,
-    y - SPACING.sm,
-    {
-      title: "How Exposure Is Derived",
-      paragraphs: [
-        "Exposure modeling is based on specific lease provisions identified within your agreement.",
-        "Applied market-observed CAM inflation sensitivity ranges (10–25%) to uncapped categories.",
-        "Modeled capital expenditure allocation using standard amortization and recoverability benchmarks.",
-        "Benchmarked management fee structures against prevailing 3–5% industry norms for comparable asset classes.",
-        "Modeled exposure conservatively — not worst-case assumptions."
-      ],
-    },
-    { font, boldFont }
-  );
-
-  page = explanationResult.page;
-  y = explanationResult.cursorY;
-
-  const timingResult = drawExplanationBox(
-    pdfDoc,
-    page,
-    y - SPACING.lg,
-    {
-      title: "Audit Windows & Timing Risk",
-      paragraphs: [
-        "Most commercial leases provide tenants a limited window — often 30 to 120 days — to dispute CAM and NNN charges after reconciliation statements are delivered.",
-        "Once that window closes, even clearly incorrect charges may become difficult or impossible to recover.",
-        "Proactive review before reconciliation, renewal, or amendment negotiations materially strengthens tenant leverage and protects long-term economics."
-      ],
-    },
-    { font, boldFont }
-  );
-
-  page = timingResult.page;
-  y = timingResult.cursorY;
-
-  drawFooter(page, analysis.audit_id ?? "N/A", font);
-
-  /* ============================
-     PAGE 4 — ACTION PLAN
-  ============================ */
-
-  ({ page, y } = createPage(pdfDoc));
-  drawHeader(page, analysis, font);
-
-  y = drawHeading(
-    page,
-    "Recommended Next Steps",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h2,
-    SPACING.lg
-  );
-
-  const actions = [
-    "Confirm audit window deadlines and upcoming reconciliation timelines.",
-    "Formally request detailed CAM backup, capital allocation schedules, and supporting invoices.",
-    "Evaluate management fee structure against market benchmarks and lease-defined limits.",
-    "Initiate structured tenant inquiry prior to reconciliation, renewal, or amendment negotiations.",
-  ];
-
-  for (const step of actions) {
-    const text = `• ${step}`;
-    y = drawParagraph(
-      page,
-      text,
-      PAGE.margin + 8,
-      y,
-      font,
-      CONTENT.maxWidth - 8
-    );
-    y -= SPACING.md;
-  }
-
-  drawFooter(page, analysis.audit_id ?? "N/A", font);
-
-  /* ============================
-     PAGE 5 — LEASE HEALTH SCORE
-  ============================ */
-
-  ({ page, y } = createPage(pdfDoc));
-  drawHeader(page, analysis, font);
-
-  const health = computeLeaseHealthScore(analysis);
-
-  y = drawHeading(
-    page,
-    "Lease Health Score",
-    PAGE.margin,
-    y,
-    boldFont,
-    FONT_SIZES.h2,
-    SPACING.lg
-  );
-
-  y = drawParagraph(
-    page,
-    "Overall Structural Risk Index",
-    PAGE.margin,
-    y,
-    font,
-    CONTENT.maxWidth,
-    FONT_SIZES.small,
-    SPACING.lg
-  );
-
-  y -= SPACING.md;
-
-  const { width } = page.getSize();
-  const scoreText = `${health.score} / 100`;
-  const textWidth = boldFont.widthOfTextAtSize(scoreText, 48);
-
-  page.drawText(scoreText, {
-    x: width / 2 - textWidth / 2,
-    y,
-    size: 48,
-    font: boldFont,
-    color: COLORS.text,
+  const pages = pdf.getPages();
+  pages.forEach((current, index) => {
+    current.drawLine({ start: { x: MARGIN, y: 50 }, end: { x: current.getWidth() - MARGIN, y: 50 }, thickness: 0.5, color: MUTED });
+    current.drawText(`SaveOnLease  |  ${auditId}  |  Page ${index + 1} of ${pages.length}`, {
+      x: MARGIN, y: 33, size: 8, font, color: MUTED,
+    });
   });
-
-  y -= 80;
-
-  const interpretation =
-    health.score >= 80
-      ? "This lease structure demonstrates comparatively strong cost controls, though continued monitoring is advisable to prevent erosion of protections."
-      : health.score >= 60
-      ? "This lease presents moderate structural exposure driven by pass-through provisions that warrant disciplined review and oversight."
-      : "This lease presents elevated financial exposure requiring proactive audit positioning and strategic negotiation before costs compound.";
-
-  y = drawParagraph(
-    page,
-    interpretation,
-    PAGE.margin,
-    y,
-    font,
-    CONTENT.maxWidth
-  );
-
-  y -= SPACING.lg;
-
-  const breakdownLines = [
-    `Cap Protection: ${health.breakdown.capProtection}`,
-    `Allocation Clarity: ${health.breakdown.allocationClarity}`,
-    `Fee Discipline: ${health.breakdown.feeDiscipline}`,
-    `Cost Predictability: ${health.breakdown.costPredictability}`,
-  ];
-
-  for (const line of breakdownLines) {
-    y = drawParagraph(
-      page,
-      line,
-      PAGE.margin,
-      y,
-      font,
-      CONTENT.maxWidth
-    );
-    y -= SPACING.sm;
-  }
-
-  drawFooter(page, analysis.audit_id ?? "N/A", font);
-
-  return await pdfDoc.save();
+  return pdf.save();
 }
