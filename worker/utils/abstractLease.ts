@@ -24,6 +24,9 @@
 
 function normalizeText(raw: string): string {
   return raw
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
     .replace(/\r\n/g, "\n")
     .replace(/\n{2,}/g, "\n")
     .replace(/-\n/g, "")
@@ -71,6 +74,8 @@ function formatMoney(n: number): string {
 /* -------------------- CORE FIELDS -------------------- */
 
 function extractTenant(text: string): string | null {
+  const parties = text.match(/\bby and between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
+  if (parties) return cleanPartyName(parties[2]);
   return extractWithPatterns(text, [
     /Tenant:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
     /Lessee:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
@@ -78,13 +83,23 @@ function extractTenant(text: string): string | null {
 }
 
 function extractLandlord(text: string): string | null {
+  const parties = text.match(/\bby and between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
+  if (parties) return cleanPartyName(parties[1]);
   return extractWithPatterns(text, [
     /Landlord:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
     /Lessor:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
   ]);
 }
 
+function cleanPartyName(value: string): string {
+  return value.replace(/,\s+an?\s+[A-Za-z ]+\s+(?:limited liability company|corporation|partnership|company)\s*$/i, "").trim();
+}
+
 function extractPremises(text: string): string | null {
+  const definedPremises = extractWithPatterns(text, [
+    /located at\s+(.+?)\s+\(the\s+"Premises"\)/i,
+  ]);
+  if (definedPremises) return definedPremises.replace(/,\s*$/, "");
   return extractWithPatterns(text, [
     /Premises:\s*([^.;]+)/i,
     /located at\s+([^.;]+)/i,
@@ -288,7 +303,7 @@ function extractCamNnn(
     /annual reconciliation|subject to reconciliation/i.test(text);
 
   const pro_rata =
-    /pro\s*rata\s*share|tenant['’]s share/i.test(text);
+    /pro\s*rata\s*share|tenant's (?:proportionate )?share|proportionate share/i.test(text);
 
   const includes_capex =
     /capital expenses|capital improvements|replacement of roof|structural/i.test(
@@ -305,16 +320,6 @@ function extractCamNnn(
   const monthlyAmount = monthlyExplicit
     ? Number(monthlyExplicit.replace(/,/g, ""))
     : null;
-
-console.log("[CAM DEBUG]", {
-  monthlyAmount,
-  referencesCam,
-  annualRent,
-  is_uncapped,
-  reconciliation,
-  pro_rata,
-  includes_capex,
-});
 
   if (!monthlyAmount) {
     return {
@@ -503,7 +508,7 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   return {
   tenant: extractTenant(text) || null,
   landlord: extractLandlord(text) || null,
-  premises: extractPremises,
+  premises: extractPremises(text),
 
   lease_start,
   lease_end,

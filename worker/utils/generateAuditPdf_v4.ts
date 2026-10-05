@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 import type { PDFPage, PDFFont } from "npm:pdf-lib@1.17.1";
+import { abstractLease } from "./abstractLease.ts";
 
 type Flag = { code?: string; label?: string };
 type AuditAnalysis = {
@@ -39,6 +40,10 @@ function reviewItem(flag: Flag): Review {
       return { title: "CAM caps and exceptions", reason: "A cap may apply only to certain expense categories or exclude taxes, insurance, utilities, or unusual costs.", check: "Identify the capped categories, base year, annual adjustment, and exceptions before comparing billed amounts.", request: "Year-by-year CAM summary, cap calculation, and category-level expense detail." };
     case "NO_RECONCILIATION":
       return { title: "Reconciliation and review rights", reason: "The timing and procedure for reviewing charges may affect what records are available and when a dispute must be raised.", check: "Read the statement, inspection, notice, and dispute provisions in the executed lease.", request: "Annual reconciliations, delivery dates, notices, and supporting-record access instructions." };
+    case "AUDIT_WINDOW":
+      return { title: "Deadline to review charges", reason: "The lease may set a short period to inspect records or assert a billing claim.", check: "Confirm when the period begins, what notice is required, and whether an amendment changes it. Seek legal advice on enforceability.", request: "Reconciliation delivery dates, notices, review correspondence, and landlord records-access procedure." };
+    case "WAIVER_CLAIMS":
+      return { title: "Waiver of expense claims", reason: "The lease contains waiver language that may affect a challenge to expense calculations.", check: "Read the complete waiver with the audit-rights clause and amendments; ask counsel to assess its effect.", request: "Executed amendments, reconciliation statements, and any prior objections or reservations of rights." };
     default:
       return { title: safeText(flag.label) || "Lease provision for review", reason: "This item needs a human reading of the full clause and related definitions.", check: "Compare the complete clause and any amendments with the charge as billed.", request: "Annual statement and the underlying invoices or calculations for this item." };
   }
@@ -75,22 +80,50 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
     CAPEX_INCLUDED: /capital (?:expenses|improvements|expenditures)|replacement of roof|structural/i,
     MGMT_FEE_WATCH: /(?:management|admin(?:istration)?) fee/i,
     MGMT_FEE_DELTA: /(?:management|admin(?:istration)?) fee/i,
-    PRO_RATA: /pro[-\s]?rata|tenant['\u2019]s share/i,
+    PRO_RATA: /pro[-\s]?rata|proportionate share|tenant['\u2019]s share/i,
     UNCAPPED_CAM: /no cap|without limitation|all operating expenses/i,
     NO_RECONCILIATION: /reconcil(?:e|iation)|audit rights|examin(?:e|ation) of (?:books|records)/i,
+    AUDIT_WINDOW: /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days/i,
+    WAIVER_CLAIMS: /waives? any claims?|waiver of claims/i,
   };
   const pattern = patterns[flag.code ?? ""];
   if (!pattern) return null;
+  let best: { page: number; text: string; kind: "clause excerpt" | "term mention"; score: number } | null = null;
   for (const source of sourcePages) {
-    const match = pattern.exec(source.text);
-    if (!match || match.index === undefined) continue;
-    const start = Math.max(0, match.index - 45);
-    const end = Math.min(source.text.length, match.index + match[0].length + 115);
-    const text = safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`);
-    const kind = /\b(?:shall|must|will|may|required|prohibited|subject to)\b/i.test(text) ? "clause excerpt" : "term mention";
-    return { page: source.page, text, kind };
+    for (const match of source.text.matchAll(new RegExp(pattern.source, "gi"))) {
+      const start = Math.max(0, match.index - 65);
+      const end = Math.min(source.text.length, match.index + match[0].length + 175);
+      const text = safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`);
+      const operative = /\b(?:shall|must|may|equal to|calculated|waives?|completed within)\b/i.test(text);
+      const score = (operative ? 2 : 0) + (/\b(?:percent|days|amortiz|ratio)\b/i.test(text) ? 1 : 0)
+        + (flag.code === "WAIVER_CLAIMS" && /related to the calculation|except to the extent/i.test(text) ? 2 : 0);
+      if (!best || score > best.score) best = { page: source.page, text, kind: operative ? "clause excerpt" : "term mention", score };
+    }
   }
-  return null;
+  return best && { page: best.page, text: best.text, kind: best.kind };
+}
+
+type LeaseFacts = {
+  area: { value: number; page: number } | null;
+  managementFee: { value: number; page: number } | null;
+  reviewDays: { value: number; page: number } | null;
+  rentBands: Array<{ years: string; rate: number; page: number }>;
+};
+function leaseFacts(pages: NonNullable<AuditAnalysis["sourcePages"]>): LeaseFacts {
+  const facts: LeaseFacts = { area: null, managementFee: null, reviewDays: null, rentBands: [] };
+  for (const page of pages) {
+    const text = safeText(page.text);
+    const area = text.match(/approximately\s+([\d,]+)\s+rentable square feet/i);
+    if (!facts.area && area) facts.area = { value: Number(area[1].replace(/,/g, "")), page: page.page };
+    const fee = text.match(/management fee equal to.{0,45}?\((\d+(?:\.\d+)?)%\)/i);
+    if (!facts.managementFee && fee) facts.managementFee = { value: Number(fee[1]), page: page.page };
+    const window = text.match(/completed within.{0,24}?\((\d+)\)\s+days of receipt of (?:the )?reconciliation/i);
+    if (!facts.reviewDays && window) facts.reviewDays = { value: Number(window[1]), page: page.page };
+    for (const match of text.matchAll(/Years?\s+(\d+)\s*-\s*(\d+):?\s*\$([\d.]+)\s+per rentable square foot per year/gi)) {
+      facts.rentBands.push({ years: `${match[1]}-${match[2]}`, rate: Number(match[3]), page: page.page });
+    }
+  }
+  return facts;
 }
 
 export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8Array> {
@@ -99,10 +132,25 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const auditId = safeText(analysis.audit_id) || "Reference unavailable";
   const sourcePages = analysis.sourcePages?.filter((p) => Number.isInteger(p.page) && p.page > 0 && !!p.text) ?? [];
+  const sourceText = sourcePages.map((p) => p.text).join(" ");
+  const refreshed = sourceText ? abstractLease(sourceText) : null;
+  const facts = leaseFacts(sourcePages);
+  const isSample = /sample.{0,15}demonstration purposes only/i.test(safeText(sourceText));
   const stored = Array.isArray(analysis.health?.flags) ? analysis.health.flags.filter((f) => typeof f?.label === "string") : [];
-  const items = stored.map((flag) => ({ flag, match: textMatch(flag, sourcePages) }))
+  const candidates = [...stored];
+  for (const flag of refreshed?.health.flags ?? []) if (!candidates.some((item) => item.code === flag.code)) candidates.push(flag);
+  for (const [code, label, pattern] of [
+    ["AUDIT_WINDOW", "Audit or review deadline", /(?:completed|asserted)\s+within\s+(?:[a-z]+\s+)?\(?\d+\)?\s+days/i],
+    ["WAIVER_CLAIMS", "Waiver of expense claims", /waives? any claims?|waiver of claims/i],
+  ] as const) if (pattern.test(sourceText) && !candidates.some((item) => item.code === code)) candidates.push({ code, label });
+  const items = candidates.map((flag) => ({ flag, match: textMatch(flag, sourcePages) }))
     .filter((item) => sourcePages.length === 0 || item.match)
     .slice(0, 8);
+  const tenant = safeText(refreshed?.tenant || analysis.tenant) || "Not reliably extracted";
+  const landlord = safeText(refreshed?.landlord || analysis.landlord) || "Not reliably extracted";
+  const premises = safeText(refreshed?.premises || analysis.premises) || "Not reliably extracted";
+  const leaseStart = safeText(refreshed?.lease_start || analysis.lease_start) || "Unknown";
+  const leaseEnd = safeText(refreshed?.lease_end || analysis.lease_end) || "Unknown";
   let page!: PDFPage;
   let y = 0;
   const addPage = () => {
@@ -139,29 +187,51 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   y -= 24;
   page.drawText(`${items.length} review topic${items.length === 1 ? "" : "s"} found`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
   lines("A lease clause is a starting point. Whether a charge was overbilled requires the landlord's statements, calculations, and supporting records.", MARGIN + 18, 10.5, NAVY, font, CONTENT - 36); y -= 20;
+  if (isSample) { lines("This upload is marked as a sample demonstration lease.", MARGIN, 9.5, BLUE, bold); y -= 4; }
 
   heading("Lease snapshot");
   const half = (CONTENT - 22) / 2;
-  labelValue("Tenant", safeText(analysis.tenant) || "Not reliably extracted", MARGIN, half);
-  labelValue("Landlord", safeText(analysis.landlord) || "Not reliably extracted", MARGIN + half + 22, half);
+  labelValue("Tenant", tenant, MARGIN, half);
+  labelValue("Landlord", landlord, MARGIN + half + 22, half);
   y -= 53;
-  labelValue("Premises", safeText(analysis.premises) || "Not reliably extracted", MARGIN, half);
-  labelValue("Lease dates", `${safeText(analysis.lease_start) || "Unknown"} to ${safeText(analysis.lease_end) || "Unknown"}`, MARGIN + half + 22, half);
+  labelValue("Premises", premises, MARGIN, half);
+  labelValue("Lease dates", `${leaseStart} to ${leaseEnd}`, MARGIN + half + 22, half);
   y -= 58;
   rule();
   heading("What this report can tell you");
   lines("The items below identify lease language for review. Page references point to text extracted from the uploaded PDF; confirm each clause on the original page and read related definitions and amendments."); y -= 15;
   lines("Verified overcharge: not determined. No landlord invoices, reconciliations, or actual allocations were analyzed with this lease.", MARGIN, 10, NAVY, bold); y -= 21;
-  heading("Your review path");
-  for (const [number, title, detail] of [
-    ["01", "Confirm the clause", "Read the full provision, definitions, exclusions, amendments, and any review deadlines."],
-    ["02", "Get the billing backup", "Request the annual reconciliation, category detail, invoices, and allocation math."],
-    ["03", "Calculate a variance", "Compare the charge billed with the amount permitted by the lease and supporting records."],
-  ]) {
-    ensure(59);
-    page.drawText(number, { x: MARGIN, y, size: 13, font: bold, color: TEAL });
-    page.drawText(title, { x: MARGIN + 36, y, size: 11, font: bold, color: NAVY }); y -= 17;
-    lines(detail, MARGIN + 36, 9.5, MUTED, font, CONTENT - 36, 14); y -= 5;
+  if (facts.area || facts.managementFee || facts.reviewDays || facts.rentBands.length) {
+    addPage();
+    heading("Terms extracted from this lease");
+    lines("These values come from the uploaded text. Check the cited page and any amendments before relying on them."); y -= 13;
+    for (const [label, fact, suffix] of [
+      ["Rentable area", facts.area, " rentable square feet"],
+      ["Management fee", facts.managementFee, "% of Operating Expenses"],
+      ["Record-review window", facts.reviewDays, " days after reconciliation receipt"],
+    ] as const) {
+      if (!fact) continue;
+      ensure(48);
+      page.drawText(label.toUpperCase(), { x: MARGIN, y, size: 8, font: bold, color: MUTED }); y -= 17;
+      lines(`${fact.value.toLocaleString()}${suffix}  |  Lease page ${fact.page}`, MARGIN, 11, NAVY, bold); y -= 13;
+    }
+    if (facts.rentBands.length) {
+      heading("Stated base-rent schedule");
+      lines("Rates below are quoted from the lease. Calculated amounts use the extracted rentable area and exclude CAM, taxes, insurance, concessions, and amendments.", MARGIN, 9.5); y -= 11;
+      const rentCols = [MARGIN + 8, MARGIN + 104, MARGIN + 237, MARGIN + 376];
+      page.drawRectangle({ x: MARGIN, y: y - 30, width: CONTENT, height: 30, color: NAVY });
+      ["YEARS", "RATE / RSF / YEAR", "ANNUAL BASE", "MONTHLY BASE"].forEach((label, i) =>
+        page.drawText(label, { x: rentCols[i], y: y - 19, size: 7.5, font: bold, color: WHITE }));
+      y -= 30;
+      for (const [index, band] of facts.rentBands.slice(0, 8).entries()) {
+        ensure(38);
+        page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: index % 2 ? WHITE : LIGHT });
+        const annual = facts.area ? band.rate * facts.area.value : null;
+        [band.years, `$${band.rate.toFixed(2)} (p. ${band.page})`, annual === null ? "Area needed" : `$${annual.toLocaleString("en-US", { maximumFractionDigits: 0 })}`, annual === null ? "Area needed" : `$${(annual / 12).toLocaleString("en-US", { maximumFractionDigits: 2 })}`]
+          .forEach((value, i) => page.drawText(value, { x: rentCols[i], y: y - 23, size: 9, font, color: NAVY }));
+        y -= 36;
+      }
+    }
   }
 
   addPage();
@@ -203,14 +273,15 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   lines("Use one row per charge category and year. A positive difference is only a question to investigate until the lease basis and records are confirmed."); y -= 16;
   const cols = [MARGIN, MARGIN + 128, MARGIN + 258, MARGIN + 375, WIDTH - MARGIN];
   const headers = ["CATEGORY / YEAR", "AMOUNT BILLED", "LEASE BASIS", "DIFFERENCE"];
+  const accountingItems = items.filter(({ flag }) => !["AUDIT_WINDOW", "WAIVER_CLAIMS", "NO_RECONCILIATION"].includes(flag.code ?? ""));
   page.drawRectangle({ x: MARGIN, y: y - 31, width: CONTENT, height: 31, color: NAVY });
   headers.forEach((h, i) => page.drawText(h, { x: cols[i] + 6, y: y - 20, size: 7.5, font: bold, color: WHITE }));
   y -= 31;
   for (let i = 0; i < 5; i++) {
     page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: i % 2 ? WHITE : LIGHT });
     cols.slice(1, 4).forEach((x) => page.drawLine({ start: { x, y }, end: { x, y: y - 36 }, thickness: 0.5, color: MUTED }));
-    if (items[i]) {
-      const rowLabel = wrap(reviewItem(items[i].flag).title, font, 8, cols[1] - cols[0] - 12);
+    if (accountingItems[i]) {
+      const rowLabel = wrap(reviewItem(accountingItems[i].flag).title, font, 8, cols[1] - cols[0] - 12);
       rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
     }
     y -= 36;
@@ -218,9 +289,9 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   y -= 16;
   heading("What remains unverified");
   const missing = [
-    !analysis.tenant && "Tenant name was not reliably extracted.",
-    !analysis.landlord && "Landlord name was not reliably extracted.",
-    !analysis.premises && "Premises address was not reliably extracted.",
+    tenant === "Not reliably extracted" && "Tenant name was not reliably extracted.",
+    landlord === "Not reliably extracted" && "Landlord name was not reliably extracted.",
+    premises === "Not reliably extracted" && "Premises address was not reliably extracted.",
     "Actual charges, allocation calculations, and recoverable amounts require billing records.",
   ].filter((value): value is string => Boolean(value));
   for (const value of missing) { ensure(30); lines(`- ${value}`, MARGIN, 9.5, NAVY); y -= 6; }
