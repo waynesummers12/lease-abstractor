@@ -38,14 +38,6 @@ type Lease = {
 
 /* ================== HELPERS ================== */
 
-function getHealthScore(): "A" | "B" | "C" | "D" {
-  const v = 0;
-  if (v <= 1000) return "A";
-  if (v <= 5000) return "B";
-  if (v <= 15000) return "C";
-  return "D";
-}
-
 function getRenewalRiskScore(lease: Lease | null): number | null {
   if (!lease || !lease.renewal_date) return null;
 
@@ -62,21 +54,6 @@ function getRenewalRiskScore(lease: Lease | null): number | null {
   return 10;                                 // low risk
 }
 
-function HealthBadge({ score }: { score: "A" | "B" | "C" | "D" }) {
-  const styles = {
-    A: "bg-green-100 text-green-800",
-    B: "bg-blue-100 text-blue-800",
-    C: "bg-yellow-100 text-yellow-800",
-    D: "bg-red-100 text-red-800",
-  };
-
-  return (
-    <span className={`rounded px-2 py-1 text-xs font-semibold ${styles[score]}`}>
-      Health: {score}
-    </span>
-  );
-}
-
 function StatusChips() {
   return (
     <div className="flex gap-2">
@@ -85,18 +62,6 @@ function StatusChips() {
       </span>
     </div>
   );
-}
-
-function estimateLeaseSavings(lease: Lease) {
-  const risk = getRenewalRiskScore(lease) ?? 0;
-  const base = lease.square_feet ?? 2000;
-
-  return Math.max(1500, Math.round((risk / 100) * base * 1.5));
-}
-
-function estimateMonthlyLoss(lease: Lease) {
-  const savings = estimateLeaseSavings(lease);
-  return Math.round(savings / 12);
 }
 
 /* ================== PAGE ================== */
@@ -166,11 +131,6 @@ export default function DashboardPage() {
 
   // Pricing trigger logic
   const showPremiumCTA = averageRiskScore >= 60 || urgentRenewals > 0;
-  const estimatedSavings = Math.max(5000, Math.round(averageRiskScore * 150));
-  const selectedSavings = selected ? estimateLeaseSavings(selected) : estimatedSavings;
-  const selectedMonthlyLoss = selected
-  ? estimateMonthlyLoss(selected)
-  : Math.round(estimatedSavings / 12);
   const selectedRisk = selected ? getRenewalRiskScore(selected) : null;
 
   // Build 12-month renewal timeline
@@ -368,10 +328,6 @@ const sortedLeases = [...filteredLeases].sort((a, b) => {
   return 0;
 });
 
-const topSavings = sortedLeases.length
-  ? Math.max(...sortedLeases.map((l) => estimateLeaseSavings(l)))
-  : 0;
-
 return (
   <div className="min-h-screen bg-white">
     <div className="p-5 lg:p-6 space-y-6 pb-20">
@@ -380,7 +336,7 @@ return (
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Portfolio Dashboard</h1>
         <p className="text-[13px] text-gray-600 mt-1">
-          Monitor renewal risk, prioritize action, and run audits to uncover savings.
+          Monitor renewal dates, prioritize action, and run lease audits.
         </p>
       </div>
       <button
@@ -390,22 +346,12 @@ return (
         {showPremiumCTA ? "Unlock Full Audit →" : "Run Lease Audit →"}
       </button>
     </div>
-{/* PORTFOLIO SAVINGS HERO */}
+{/* PORTFOLIO RENEWAL HERO */}
 <div className="rounded-xl border border-green-200 bg-green-50 p-5 flex items-center justify-between shadow-sm">
   <div>
-    <div className="text-[12px] text-green-700 uppercase tracking-wide">
-      Estimated Portfolio Savings
-    </div>
-    <div className="text-2xl font-semibold text-green-900">
-      $
-      {sortedLeases
-        .reduce((sum, l) => sum + estimateLeaseSavings(l), 0)
-        .toLocaleString()}
-      +
-    </div>
-    <div className="text-[12px] text-green-700 mt-1">
-      Based on renewal risk + lease exposure
-    </div>
+    <div className="text-[12px] text-green-700 uppercase tracking-wide">Upcoming Renewals</div>
+    <div className="text-2xl font-semibold text-green-900">{upcomingRenewals}</div>
+    <div className="text-[12px] text-green-700 mt-1">Based on lease renewal dates</div>
   </div>
 
   <button
@@ -416,7 +362,7 @@ return (
     }
     className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700"
   >
-    Unlock Savings →
+    Review Lease →
   </button>
 </div>
 
@@ -584,7 +530,7 @@ return (
           })}
         </div>
 
-        
+
 
         {/* PLATFORM NAVIGATION */}
         <div className="flex flex-wrap gap-3">
@@ -744,7 +690,7 @@ return (
                 onClick={() => {
                   setSelected(audit);
 
-                  const isTop = estimateLeaseSavings(audit) === topSavings;
+                  const isTop = getRenewalRiskScore(audit) !== null && getRenewalRiskScore(audit)! >= 90;
 
                   if (isTop && showPremiumCTA) {
                     setTimeout(() => setShowPaywall(true), 300);
@@ -765,7 +711,7 @@ return (
                     ? "bg-gray-200 scale-[1.01] shadow-sm"
                     : "hover:bg-gray-100 hover:scale-[1.01] hover:shadow-sm"
                 } ${
-                  estimateLeaseSavings(audit) === topSavings
+                  getRenewalRiskScore(audit) !== null && getRenewalRiskScore(audit)! >= 90
                     ? "ring-1 ring-green-400"
                     : ""
                 }`}
@@ -780,11 +726,9 @@ return (
                   )}
                   {audit.property_name ?? "Unnamed Lease"}
                 </div>
-                <div className="mt-0.5 text-[11px] text-gray-500">
-                  Health {getHealthScore()}
-                </div>
+
                 <div className="text-[11px] text-green-700 font-medium">
-                  ${estimateLeaseSavings(audit).toLocaleString()} potential
+                  Renewal date: {audit.renewal_date ? new Date(audit.renewal_date).toLocaleDateString() : "Not recorded"}
                 </div>
                 <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
               </li>
@@ -794,16 +738,16 @@ return (
 
         <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3 text-[11px] space-y-1">
           <div className="font-medium text-gray-800">
-            Typical Results
+            Audit Review
           </div>
           <div className="text-gray-600">
-            • $5K–$20K savings per lease
+            • Lease-specific findings
           </div>
           <div className="text-gray-600">
-            • 2,100+ leases analyzed
+            • Review findings against your lease and billing records
           </div>
           <div className="text-gray-600">
-            • Avg. savings: $8,400
+            • Verify against billing records
           </div>
         </div>
       </aside>
@@ -824,7 +768,6 @@ return (
               >
                 Open Lease Details →
               </Link>
-              <HealthBadge score={getHealthScore()} />
               {(() => {
                 const risk = getRenewalRiskScore(selected);
                 if (risk === null) return null;
@@ -1040,28 +983,28 @@ return (
                   </div>
 
                   <div className="text-[12px] text-gray-600 mb-3">
-                    Estimated savings: ${selectedSavings.toLocaleString()}+ on this lease
+                    Audit findings depend on lease terms and billing records
                   </div>
                   <div className="text-[11px] text-red-700 font-medium mb-3">
-  You may be losing ~${selectedMonthlyLoss.toLocaleString()}/month until resolved
+  A renewal date alone does not establish an overcharge
 </div>
 
                   <div className="text-[11px] text-gray-500 mb-2">
-  Most tenants uncover $5K–$20K in hidden costs
+  Estimates depend on this lease and require verification
 </div>
 
 <div className="text-[11px] text-gray-700 mb-3">
-  • 2,100+ leases analyzed
+  • Review findings against your lease and billing records
 </div>
 
 <div className="text-[11px] text-gray-700 mb-2">
-  • Avg. savings: $8,400 per lease
+  • Verify against billing records per lease
 </div>
 
 <div className="text-[11px] text-red-600 font-medium mb-3">
   {urgentRenewals > 0
     ? `⚠️ ${urgentRenewals} leases approaching renewal — pricing advantage decreases after renewal`
-    : "Limited-time insight advantage before renewal window closes"}
+    : "Review your lease before its renewal window closes"}
 </div>
 
 <div className="text-[11px] text-gray-500 border-t pt-3 mb-4">
@@ -1079,7 +1022,7 @@ return (
                       onClick={() => window.location.href = "/app/step-1-upload"}
                       className="bg-black text-white px-4 py-2 rounded text-sm"
                     >
-                      Unlock ${selectedSavings.toLocaleString()} →
+                      Run Lease Audit →
                     </button>
                   </div>
                 </div>

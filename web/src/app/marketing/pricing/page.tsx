@@ -45,11 +45,12 @@ export default function PricingPage() {
 
       <p className="mt-4 text-gray-600">
         Includes a full CAM / NNN lease audit with a downloadable PDF
-        summary and email delivery.
+        summary. We also email a download link when a checkout email is available.
       </p>
 
       <p className="mt-3 text-sm text-red-500 font-medium">
-        Most tenants uncover $5,000–$20,000+ in avoidable costs — often within minutes
+        Your lease terms determine which CAM and NNN charges may need a closer review.
+        <a className="ml-1 underline" href="https://archibus.tn.gov/archibus_help/user/Subsystems/webc/Content/gloss/rplm/cam_costs_def.htm">Source: Tennessee CAM cost guide</a>
       </p>
 
       <ul className="mt-6 space-y-2 text-gray-600 list-none">
@@ -83,7 +84,7 @@ export default function PricingPage() {
         </li>
         <li className="flex items-start gap-2">
           <span className="text-green-500">✔</span>
-          <span>Secure PDF + email delivery</span>
+          <span>Secure PDF download; email link when available</span>
         </li>
       </ul>
 
@@ -128,18 +129,18 @@ export default function PricingPage() {
 
     {/* ROI */}
     <section className="rounded-2xl bg-gray-50 p-6">
-      <h2 className="text-2xl font-semibold">Typical ROI for Tenants</h2>
+      <h2 className="text-2xl font-semibold">What the Audit Reviews</h2>
       <p className="mt-3 text-gray-600">
-        CAM and NNN charges often represent 15–35% of total rent. Even
-        small errors can add up over time.
+        CAM and NNN charges depend on the property and your lease terms.
+        The audit flags clauses that may need review against your billing records.
       </p>
       <ul className="mt-4 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600">
-        <li>Common findings range from $5,000 to $20,000+</li>
-        <li>Administrative fees frequently exceed lease limits</li>
-        <li>Insurance and tax pass-throughs are often misapplied</li>
+        <li>CAM and NNN charges defined in your lease</li>
+        <li>Administrative fee terms and limits</li>
+        <li>Insurance and tax pass-through terms</li>
       </ul>
       <p className="mt-3 text-gray-600">
-        Many tenants recover the cost of the audit many times over.
+        Actual savings, if any, require verification against invoices and the lease.
       </p>
     </section>
 
@@ -195,7 +196,7 @@ export default function PricingPage() {
         Analyze My Lease →
       </Link>
       <p className="mt-3 text-xs text-gray-500 text-center">
-        2,100+ leases analyzed • Avg. savings $8,400
+        Results vary by lease and available records
       </p>
     </section>
 
@@ -215,7 +216,7 @@ export default function PricingPage() {
         {
           question: "Do CAM and NNN audits usually save money?",
           answer:
-            "Many tenants identify thousands of dollars in potential overcharges, though results vary by lease and expense structure.",
+            "The audit identifies potential risks. Actual overcharges require checking the lease against billing records.",
         },
       ]}
     />

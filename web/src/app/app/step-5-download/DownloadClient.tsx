@@ -62,14 +62,14 @@ function explainScore(score?: number | null) {
   }
 
   if (score >= 75) {
-    return "Your lease language is generally clear, with fewer CAM / NNN risk indicators. Most tenants in this range still find savings through targeted audits.";
+    return "Your lease language is generally clear, with fewer CAM / NNN risk indicators. Review your billing records to confirm actual charges.";
   }
 
   if (score >= 50) {
-    return "Your lease contains some ambiguous or unfavorable clauses that often result in CAM or NNN overcharges. Audits frequently uncover recoverable costs in this range.";
+    return "Your lease contains some ambiguous or unfavorable clauses. Compare the audit findings with actual billing records before claiming an overcharge.";
   }
 
-  return "Your lease shows significant risk indicators, unclear cost allocations, or missing protections. Tenants in this range commonly recover meaningful overcharges after audit.";
+  return "Your lease shows significant risk indicators, unclear cost allocations, or missing protections. Compare these findings with your billing records before claiming an overcharge.";
 }
 
 /* ================= PAGE ================= */

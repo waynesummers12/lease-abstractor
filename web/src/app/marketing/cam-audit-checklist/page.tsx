@@ -102,13 +102,12 @@ export default function CamAuditChecklistPage() {
         </p>
 
         <p className="text-gray-700 max-w-2xl mx-auto mb-10">
-          Designed for retail and office tenants. Frequently identifies
-          administrative overcharges, capital misclassification, allocation
-          drift, and structural exposure ranging from{" "}
-          <strong>$5,000–$50,000+ annually</strong>.
+          Designed for retail and office tenants. Helps review administrative fees, capital expense classifications,
+          allocation methods, and lease-specific risk. Actual overcharges
+          require billing records and verification.
         </p>
         <p className="text-green-700 font-medium mb-8">
-          ✓ Identify $5K–$50K+ CAM overcharges before audit windows close
+          ✓ Review CAM charges against your lease before audit windows close
         </p>
         <a
           href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"

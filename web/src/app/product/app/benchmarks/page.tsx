@@ -30,7 +30,7 @@ export default function BenchmarksPage() {
             Identify Overcharges in Minutes
           </div>
           <div className="text-sm text-gray-600 max-w-md">
-            Most tenants overpay 5–20% on CAM, admin fees, or escalations. Upload your lease to see how it compares.
+            CAM, admin fees, and escalation terms vary by lease. Upload yours to review potential risk areas.
           </div>
         </div>
 

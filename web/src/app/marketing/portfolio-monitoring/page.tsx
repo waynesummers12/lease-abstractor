@@ -121,7 +121,7 @@ export default function PortfolioMonitoringPage() {
         </div>
 
         <p className="text-sm text-gray-600 mt-4 max-w-xl">
-          Most tenants uncover $5,000–$50,000+ in avoidable lease costs. Start with a free upload, then decide if a full audit is worth it.
+          Start with a free lease preview, then decide if a full audit is worth it. Findings depend on your lease terms and available billing records.
         </p>
       </div>
       <style jsx>{`

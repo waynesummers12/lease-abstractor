@@ -70,7 +70,7 @@ export default function TermsPage() {
       </section>
 
       <p className="pt-4 text-sm text-gray-500">
-        Last updated: {new Date().toLocaleDateString()}
+        Last updated: October 5, 2026
       </p>
     </div>
   );

@@ -1,26 +1,3 @@
-// worker/utils/sendAuditEmail.ts
-/**
- * SHARED UTILITY — SAVEONLEASE V1 (LOCKED)
- *
- * Intended use:
- * - utils/*.ts files
- * - Normalization helpers
- * - Pure calculations
- *
- * Rules:
- * - Pure functions only
- * - No side effects
- * - No network calls
- * - No environment variables
- *
- * Safe to use in:
- * - Worker (Deno + Oak)
- * - Next.js API routes
- *
- * NOT safe for client components unless explicitly reviewed.
- */
-
-
 import { Resend } from "npm:resend";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
@@ -39,8 +16,7 @@ export async function sendAuditEmail({
     return;
   }
 
-  try {
-    await resend.emails.send({
+  const { error } = await resend.emails.send({
       from: "SaveOnLease <audits@saveonlease.com>",
       to: toEmail,
       subject: "Your CAM / NNN Lease Audit is Ready",
@@ -68,15 +44,10 @@ export async function sendAuditEmail({
 
           <p style="margin-top:24px;color:#666;font-size:13px;">
             This secure link expires in 10 minutes.  
-            You can always re-download your audit from your dashboard.
+            If it expires, return to your audit page or email audits@saveonlease.com for help.
           </p>
         </div>
       `,
-    });
-
-    console.log("📧 Audit email sent to", toEmail);
-  } catch (err) {
-    console.error("❌ Failed to send audit email", err);
-  }
+  });
+  if (error) throw new Error(`Audit email was rejected: ${error.message}`);
 }
-

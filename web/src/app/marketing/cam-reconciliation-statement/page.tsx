@@ -23,7 +23,7 @@ export default function CamReconciliationStatementPage() {
       </p>
 
       <p className="text-green-700 font-medium mb-12">
-        ✓ Many tenants discover $5K–$50K+ in potential CAM overcharges
+        ✓ Compare reconciliation charges with the terms in your lease
       </p>
 
       {/* EXAMPLE TABLE */}

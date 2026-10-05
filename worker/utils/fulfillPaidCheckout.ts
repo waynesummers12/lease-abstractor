@@ -18,7 +18,7 @@ export async function fulfillPaidCheckout(
   }
 
   const { data: audit, error: readError } = await supabase.from("lease_audits")
-    .select("id,status,analysis,stripe_session_id,audit_pdf_path")
+    .select("id,status,analysis,stripe_session_id,audit_pdf_path,email_sent")
     .eq("id", auditId).single();
   if (readError || !audit) throw readError ?? new Error("Audit not found");
   if (audit.stripe_session_id && audit.stripe_session_id !== session.id) {
@@ -39,12 +39,16 @@ export async function fulfillPaidCheckout(
     const { data: file, error: fileError } = await supabase.storage.from(bucket).info(path);
     if (fileError && String(fileError.statusCode) !== "404") throw fileError;
     if (file) {
-      if (audit.stripe_session_id === session.id) return;
+      if (audit.stripe_session_id === session.id) {
+        await deliverReportEmail(session, auditId, audit.audit_pdf_path, audit.email_sent, options);
+        return;
+      }
       let query = supabase.from("lease_audits").update(paymentFields).eq("id", auditId);
       query = matchingSession ? query.eq(matchingSession.column, matchingSession.value)
         : query.is("stripe_session_id", null);
       const { data, error } = await query.select("id").maybeSingle();
       if (error || !data) throw error ?? new Error("Completed audit payment was not recorded");
+      await deliverReportEmail(session, auditId, audit.audit_pdf_path, audit.email_sent, options);
       return;
     }
     // A completed row with a missing object is still recoverable from analysis.
@@ -87,12 +91,13 @@ export async function fulfillPaidCheckout(
   if (completeError) throw completeError;
   if (!completed) {
     const { data: current, error } = await supabase.from("lease_audits")
-      .select("status,audit_pdf_path,stripe_session_id").eq("id", auditId).single();
+      .select("status,audit_pdf_path,stripe_session_id,email_sent").eq("id", auditId).single();
     if (error || current?.status !== "complete" || !current.audit_pdf_path ||
         current.stripe_session_id !== session.id) {
       throw error ?? new Error("Report completion was not recorded");
     }
-    return; // Another delivery finished while this attempt generated the PDF.
+    await deliverReportEmail(session, auditId, current.audit_pdf_path, current.email_sent, options);
+    return;
   }
 
   // Delivery and referral tracking are secondary to granting report access.
@@ -106,18 +111,28 @@ export async function fulfillPaidCheckout(
     if (error) console.error("Referral recording failed", { auditId, error });
   }
 
+  await deliverReportEmail(session, auditId, objectPath, false, options);
+}
+
+async function deliverReportEmail(
+  session: Stripe.Checkout.Session,
+  auditId: string,
+  objectPath: string,
+  emailSent: boolean,
+  options: { notifyCustomer?: boolean },
+) {
+  if (emailSent || options.notifyCustomer === false) return;
   const recipient = session.customer_details?.email ?? session.customer_email;
-  if (recipient && options.notifyCustomer !== false) {
-    const { data: signed, error } = await supabase.storage.from("audit-pdfs")
-      .createSignedUrl(objectPath, 60 * 10);
-    if (error || !signed?.signedUrl) {
-      console.error("Audit email link creation failed", { auditId, error });
-    } else {
-      try {
-        await sendAuditEmail({ leaseName: "Your Lease Audit", signedUrl: signed.signedUrl, toEmail: recipient });
-      } catch (error) {
-        console.error("Audit email failed", { auditId, error });
-      }
-    }
-  }
+  if (!recipient) return;
+  const bucket = objectPath.startsWith("leases/") ? "leases" : "audit-pdfs";
+  const path = objectPath.replace(/^(leases|audit-pdfs)\//, "");
+  const { data: signed, error } = await supabase.storage.from(bucket)
+    .createSignedUrl(path, 60 * 10);
+  if (error || !signed?.signedUrl) throw error ?? new Error("Audit email link was not created");
+  await sendAuditEmail({ leaseName: "Your Lease Audit", signedUrl: signed.signedUrl, toEmail: recipient });
+  const { data: updated, error: updateError } = await supabase.from("lease_audits")
+    .update({ email_sent: true, email_sent_at: new Date().toISOString() })
+    .eq("id", auditId).eq("stripe_session_id", session.id)
+    .select("id").maybeSingle();
+  if (updateError || !updated) throw updateError ?? new Error("Audit email status was not recorded");
 }

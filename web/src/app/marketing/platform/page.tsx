@@ -62,7 +62,7 @@ export default function PlatformPage() {
         </Link>
       </div>
       <p className="text-xs text-gray-500 mt-3">
-        Typical tenants uncover $7,500–$14,000 in avoidable lease costs.
+        Findings vary by lease and should be checked against billing records.
       </p>
 
     </main>

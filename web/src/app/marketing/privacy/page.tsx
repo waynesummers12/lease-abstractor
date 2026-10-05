@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         <ul className="mt-2 list-disc pl-6 text-gray-700 space-y-2">
           <li>Lease documents you upload for analysis</li>
           <li>Basic contact information such as email address</li>
-          <li>Payment confirmation details (processed by Stripe)</li>
+          <li>Payment status, amount, currency, and Checkout reference; Stripe handles card entry</li>
           <li>Technical information such as browser type and IP address</li>
         </ul>
       </section>
@@ -45,9 +45,11 @@ export default function PrivacyPage() {
           information or lease documents.
         </p>
         <p className="mt-2 text-gray-700">
-          We may share limited information with trusted service providers
-          (such as payment or email delivery services) solely to operate
-          the service.
+          We use Supabase for accounts and document storage, Stripe for
+          checkout, Resend for report emails, and hosting providers to run
+          the site and audit service. Google Analytics collects site usage
+          information. These providers receive information needed for their
+          respective services.
         </p>
       </section>
 
@@ -63,22 +65,26 @@ export default function PrivacyPage() {
       <section>
         <h2 className="text-lg sm:text-xl font-light tracking-tight">Data Retention</h2>
         <p className="mt-2 text-gray-700">
-          Lease documents and audit results are retained only as long as
-          necessary to provide the service and comply with legal or
-          operational requirements.
+          We keep uploaded leases and audit results so you can return to
+          your reports. Payment and support records may be kept for
+          accounting, dispute resolution, and legal obligations. We do
+          not currently apply a fixed automatic deletion period. You may
+          request deletion of your lease documents and audit results by
+          emailing us; we will verify the request and explain any records
+          we must retain.
         </p>
       </section>
 
       <section>
         <h2 className="text-lg sm:text-xl font-light tracking-tight">Contact</h2>
         <p className="mt-2 text-gray-700">
-          If you have questions about this Privacy Policy, please contact
-          us through the SaveOnLease website.
+          For privacy questions or requests to access or delete your data,
+          email <a className="underline" href="mailto:audits@saveonlease.com">audits@saveonlease.com</a>.
         </p>
       </section>
 
       <p className="pt-4 text-sm text-gray-500">
-        Last updated: {new Date().toLocaleDateString()}
+        Last updated: October 5, 2026
       </p>
     </div>
   );

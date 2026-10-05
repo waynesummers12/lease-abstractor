@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "SaveOnLease Pricing | CAM & NNN Lease Audit for Commercial Tenants",
   description:
-    "Run a fast, AI-powered lease audit to uncover CAM and NNN overcharges. Most tenants identify $5,000–$20,000+ in avoidable costs.",
+    "Review your lease for potential CAM and NNN cost risks. Get a free preview, then choose whether to unlock the full audit.",
   openGraph: {
     title: "SaveOnLease Pricing",
     description:
-      "Identify hidden CAM and NNN costs in minutes. Upload your lease and uncover potential savings instantly.",
+      "Upload your lease for a CAM and NNN risk preview and choose whether to unlock a full audit.",
     url: "https://saveonlease.com/marketing/pricing",
     siteName: "SaveOnLease",
     type: "website",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SaveOnLease Pricing",
     description:
-      "Uncover hidden CAM & NNN costs in minutes. Most tenants find $5,000–$20,000+ in savings.",
+      "Review your lease for CAM and NNN cost risks with a free preview and optional full audit.",
     images: ["https://saveonlease.com/demo/OG%20Imagev1.png"],
   },
 };
