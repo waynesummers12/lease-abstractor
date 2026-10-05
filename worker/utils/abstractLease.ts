@@ -97,7 +97,7 @@ function cleanPartyName(value: string): string {
 
 function extractPremises(text: string): string | null {
   const definedPremises = extractWithPatterns(text, [
-    /located at\s+(.+?)\s+\(the\s+"Premises"\)/i,
+    /located at\s+(.+?)\s+\((?:the\s+)?"Premises"\)/i,
   ]);
   if (definedPremises) return definedPremises.replace(/,\s*$/, "");
   return extractWithPatterns(text, [
@@ -159,6 +159,7 @@ function inferFixedEscalationFromText(text: string): number | null {
 function extractEscalation(text: string): Rent {
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
+    /increase(?:s)?\s+(?:annually|yearly|each year)\s+by\s+(\d+(?:\.\d+)?)%/i,
   ]);
 
   if (pct) {
@@ -222,6 +223,17 @@ export type RentScheduleRow = {
   annual_rent: number;
   monthly_rent: number;
 };
+
+function extractExplicitMonthlyRentSchedule(text: string): RentScheduleRow[] {
+  const rows: RentScheduleRow[] = [];
+  for (const match of text.matchAll(/Year\s+(\d+):\s*\$([\d,]+)\s+per\s+month/gi)) {
+    const monthly = Number(match[2].replace(/,/g, ""));
+    if (monthly > 0 && !rows.some((row) => row.year === Number(match[1]))) {
+      rows.push({ year: Number(match[1]), annual_rent: monthly * 12, monthly_rent: monthly });
+    }
+  }
+  return rows.sort((a, b) => a.year - b.year);
+}
 
 function buildRentSchedule(
   baseRent: number | null,
@@ -464,14 +476,10 @@ export function abstractLease(rawText: string) {
   const lease_start = extractDate("start", text);
   const lease_end = extractDate("end", text);
 
-  const term_months =
-    lease_start && lease_end
-      ? Math.round(
-          (new Date(lease_end).getTime() -
-            new Date(lease_start).getTime()) /
-            (1000 * 60 * 60 * 24 * 30)
-        )
-      : null;
+  const term_months = lease_start && lease_end
+    ? Math.round((new Date(lease_end).getTime() - new Date(lease_start).getTime()) /
+      (1000 * 60 * 60 * 24 * (365.2425 / 12)))
+    : null;
 
   const escalation = extractEscalation(text);
 
@@ -483,7 +491,8 @@ export function abstractLease(rawText: string) {
     escalation_interval: escalation.escalation_interval,
   };
 
-  const rent_schedule = buildRentSchedule(
+  const explicitRentSchedule = extractExplicitMonthlyRentSchedule(text);
+  const rent_schedule = explicitRentSchedule.length ? explicitRentSchedule : buildRentSchedule(
     rent.base_rent,
     rent.frequency,
     rent.escalation_type,
@@ -506,8 +515,8 @@ const cam_nnn = extractCamNnn(text, term_months, annualRent);
   });
 
   return {
-  tenant: extractTenant(text) || null,
-  landlord: extractLandlord(text) || null,
+  tenant: extractTenant(rawText) || extractTenant(text) || null,
+  landlord: extractLandlord(rawText) || extractLandlord(text) || null,
   premises: extractPremises(text),
 
   lease_start,

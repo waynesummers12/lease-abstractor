@@ -16,7 +16,9 @@ export async function readLeasePagesForReport(auditId: string): Promise<LeaseTex
           getTextContent: () => Promise<{ items: Array<{ str: string }> }>;
         }) => {
           const content = await page.getTextContent();
-          const text = content.items.map((item) => item.str).join(" ");
+          // pdf-parse emits standalone spaces at line breaks for many leases.
+          // Preserve those breaks so party labels do not consume following sections.
+          const text = content.items.map((item) => item.str === " " ? "\n" : item.str).join(" ");
           pages.push({ page: page.pageNumber, text });
           return text;
         },

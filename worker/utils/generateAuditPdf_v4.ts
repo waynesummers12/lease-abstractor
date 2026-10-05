@@ -104,23 +104,35 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
 }
 
 type LeaseFacts = {
-  area: { value: number; page: number } | null;
+  area: { value: number; unit: string; page: number } | null;
   managementFee: { value: number; page: number } | null;
   reviewDays: { value: number; page: number } | null;
-  rentBands: Array<{ years: string; rate: number; page: number }>;
+  nnnEstimate: { value: number; page: number } | null;
+  deposit: { value: number; page: number } | null;
+  renewal: { years: number; noticeDays: number; page: number } | null;
+  rentBands: Array<{ years: string; rate: number; basis: "rsf_annual" | "monthly"; page: number }>;
 };
 function leaseFacts(pages: NonNullable<AuditAnalysis["sourcePages"]>): LeaseFacts {
-  const facts: LeaseFacts = { area: null, managementFee: null, reviewDays: null, rentBands: [] };
+  const facts: LeaseFacts = { area: null, managementFee: null, reviewDays: null, nnnEstimate: null, deposit: null, renewal: null, rentBands: [] };
   for (const page of pages) {
     const text = safeText(page.text);
-    const area = text.match(/approximately\s+([\d,]+)\s+rentable square feet/i);
-    if (!facts.area && area) facts.area = { value: Number(area[1].replace(/,/g, "")), page: page.page };
+    const area = text.match(/approximately\s+([\d,]+)\s+(rentable\s+)?square feet/i);
+    if (!facts.area && area) facts.area = { value: Number(area[1].replace(/,/g, "")), unit: area[2] ? "rentable square feet" : "square feet", page: page.page };
     const fee = text.match(/management fee equal to.{0,45}?\((\d+(?:\.\d+)?)%\)/i);
     if (!facts.managementFee && fee) facts.managementFee = { value: Number(fee[1]), page: page.page };
     const window = text.match(/completed within.{0,24}?\((\d+)\)\s+days of receipt of (?:the )?reconciliation/i);
     if (!facts.reviewDays && window) facts.reviewDays = { value: Number(window[1]), page: page.page };
+    const nnn = text.match(/estimated NNN charges for the first year are\s*\$([\d,]+)\s+per month/i);
+    if (!facts.nnnEstimate && nnn) facts.nnnEstimate = { value: Number(nnn[1].replace(/,/g, "")), page: page.page };
+    const deposit = text.match(/security deposit.{0,100}?\$([\d,]+)/i);
+    if (!facts.deposit && deposit) facts.deposit = { value: Number(deposit[1].replace(/,/g, "")), page: page.page };
+    const renewal = text.match(/option to renew.{0,80}?additional\s+(?:[a-z]+\s+)?\((\d+)\)\s+year.{0,100}?no later than\s+(\d+)\s+days prior/i);
+    if (!facts.renewal && renewal) facts.renewal = { years: Number(renewal[1]), noticeDays: Number(renewal[2]), page: page.page };
     for (const match of text.matchAll(/Years?\s+(\d+)\s*-\s*(\d+):?\s*\$([\d.]+)\s+per rentable square foot per year/gi)) {
-      facts.rentBands.push({ years: `${match[1]}-${match[2]}`, rate: Number(match[3]), page: page.page });
+      facts.rentBands.push({ years: `${match[1]}-${match[2]}`, rate: Number(match[3]), basis: "rsf_annual", page: page.page });
+    }
+    for (const match of text.matchAll(/Year\s+(\d+):\s*\$([\d,]+)\s+per month/gi)) {
+      facts.rentBands.push({ years: match[1], rate: Number(match[2].replace(/,/g, "")), basis: "monthly", page: page.page });
     }
   }
   return facts;
@@ -201,33 +213,43 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   heading("What this report can tell you");
   lines("The items below identify lease language for review. Page references point to text extracted from the uploaded PDF; confirm each clause on the original page and read related definitions and amendments."); y -= 15;
   lines("Verified overcharge: not determined. No landlord invoices, reconciliations, or actual allocations were analyzed with this lease.", MARGIN, 10, NAVY, bold); y -= 21;
-  if (facts.area || facts.managementFee || facts.reviewDays || facts.rentBands.length) {
+  if (facts.area || facts.managementFee || facts.reviewDays || facts.nnnEstimate || facts.deposit || facts.renewal || facts.rentBands.length) {
     addPage();
     heading("Terms extracted from this lease");
     lines("These values come from the uploaded text. Check the cited page and any amendments before relying on them."); y -= 13;
-    for (const [label, fact, suffix] of [
-      ["Rentable area", facts.area, " rentable square feet"],
-      ["Management fee", facts.managementFee, "% of Operating Expenses"],
-      ["Record-review window", facts.reviewDays, " days after reconciliation receipt"],
-    ] as const) {
-      if (!fact) continue;
-      ensure(48);
-      page.drawText(label.toUpperCase(), { x: MARGIN, y, size: 8, font: bold, color: MUTED }); y -= 17;
-      lines(`${fact.value.toLocaleString()}${suffix}  |  Lease page ${fact.page}`, MARGIN, 11, NAVY, bold); y -= 13;
+    const factRows: Array<{ label: string; value: string; page: number }> = [];
+    if (facts.area) factRows.push({ label: "Premises area", value: `${facts.area.value.toLocaleString()} ${facts.area.unit}`, page: facts.area.page });
+    if (facts.managementFee) factRows.push({ label: "Management fee", value: `${facts.managementFee.value}% of Operating Expenses`, page: facts.managementFee.page });
+    if (facts.reviewDays) factRows.push({ label: "Record-review window", value: `${facts.reviewDays.value} days after reconciliation receipt`, page: facts.reviewDays.page });
+    if (facts.nnnEstimate) factRows.push({ label: "First-year NNN estimate", value: `$${facts.nnnEstimate.value.toLocaleString()} per month; subject to reconciliation`, page: facts.nnnEstimate.page });
+    if (facts.deposit) factRows.push({ label: "Security deposit", value: `$${facts.deposit.value.toLocaleString()}`, page: facts.deposit.page });
+    if (facts.renewal) factRows.push({ label: "Renewal option", value: `${facts.renewal.years} additional years; written notice at least ${facts.renewal.noticeDays} days before expiration`, page: facts.renewal.page });
+    for (const fact of factRows) {
+      const value = `${fact.value}  |  Lease page ${fact.page}`;
+      ensure(34 + wrap(value, bold, 11, CONTENT).length * 15);
+      page.drawText(fact.label.toUpperCase(), { x: MARGIN, y, size: 8, font: bold, color: MUTED }); y -= 17;
+      lines(value, MARGIN, 11, NAVY, bold); y -= 13;
     }
     if (facts.rentBands.length) {
       heading("Stated base-rent schedule");
-      lines("Rates below are quoted from the lease. Calculated amounts use the extracted rentable area and exclude CAM, taxes, insurance, concessions, and amendments.", MARGIN, 9.5); y -= 11;
+      const monthlySchedule = facts.rentBands.every((band) => band.basis === "monthly");
+      lines(monthlySchedule
+        ? "Monthly amounts are quoted from the lease; annual amounts equal twelve monthly payments. NNN and other charges are excluded."
+        : "Rates below are quoted from the lease. Calculated amounts use the stated rentable area and exclude CAM, taxes, insurance, concessions, and amendments.", MARGIN, 9.5); y -= 11;
       const rentCols = [MARGIN + 8, MARGIN + 104, MARGIN + 237, MARGIN + 376];
+      ensure(30 + Math.min(facts.rentBands.length, 8) * 36 + 8);
       page.drawRectangle({ x: MARGIN, y: y - 30, width: CONTENT, height: 30, color: NAVY });
-      ["YEARS", "RATE / RSF / YEAR", "ANNUAL BASE", "MONTHLY BASE"].forEach((label, i) =>
+      ["YEARS", monthlySchedule ? "MONTHLY STATED" : "RATE / RSF / YEAR", monthlySchedule ? "ANNUAL EQUIV." : "ANNUAL BASE", monthlySchedule ? "CHANGE / MONTH" : "MONTHLY BASE"].forEach((label, i) =>
         page.drawText(label, { x: rentCols[i], y: y - 19, size: 7.5, font: bold, color: WHITE }));
       y -= 30;
       for (const [index, band] of facts.rentBands.slice(0, 8).entries()) {
         ensure(38);
         page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: index % 2 ? WHITE : LIGHT });
-        const annual = facts.area ? band.rate * facts.area.value : null;
-        [band.years, `$${band.rate.toFixed(2)} (p. ${band.page})`, annual === null ? "Area needed" : `$${annual.toLocaleString("en-US", { maximumFractionDigits: 0 })}`, annual === null ? "Area needed" : `$${(annual / 12).toLocaleString("en-US", { maximumFractionDigits: 2 })}`]
+        const annual = band.basis === "monthly" ? band.rate * 12 : facts.area?.unit === "rentable square feet" ? band.rate * facts.area.value : null;
+        const monthly = band.basis === "monthly" ? band.rate : annual === null ? null : annual / 12;
+        const prior = index > 0 ? facts.rentBands[index - 1] : null;
+        const change = monthlySchedule ? prior ? `+$${(band.rate - prior.rate).toLocaleString("en-US", { maximumFractionDigits: 2 })}` : "-" : monthly === null ? "Area needed" : `$${monthly.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
+        [band.years, `$${band.rate.toLocaleString("en-US", { minimumFractionDigits: band.basis === "monthly" ? 0 : 2, maximumFractionDigits: 2 })} (p. ${band.page})`, annual === null ? "Area needed" : `$${annual.toLocaleString("en-US", { maximumFractionDigits: 0 })}`, change]
           .forEach((value, i) => page.drawText(value, { x: rentCols[i], y: y - 23, size: 9, font, color: NAVY }));
         y -= 36;
       }
@@ -262,7 +284,8 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   }
 
   heading("Records to collect");
-  for (const text of ["Executed lease, exhibits, and amendments", "Annual CAM / NNN statements and prior-year reconciliations", "General ledger or category detail, invoices, and capital schedules", "Rentable-area and tenant-share allocation schedules", "Delivery dates and notices relevant to review or dispute rights"]) {
+  const needsCapitalSchedule = items.some(({ flag }) => ["CAPEX_IN_CAM", "CAPEX_INCLUDED"].includes(flag.code ?? ""));
+  for (const text of ["Executed lease, exhibits, and amendments", "Annual CAM / NNN statements and prior-year reconciliations", needsCapitalSchedule ? "General ledger, invoices, and capital amortization schedules" : "General ledger or category detail and supporting invoices", "Rentable-area and tenant-share allocation schedules", "Delivery dates and notices relevant to review or dispute rights"]) {
     ensure(25);
     page.drawText("+", { x: MARGIN, y, size: 12, font: bold, color: TEAL });
     lines(text, MARGIN + 18, 9.5, NAVY, font, CONTENT - 18, 14); y -= 10;
