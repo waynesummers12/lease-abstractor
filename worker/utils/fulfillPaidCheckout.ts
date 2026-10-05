@@ -80,7 +80,7 @@ export async function fulfillPaidCheckout(
   const pdf = await generateAuditPdfV4({ ...normalized, exposureRange, audit_id: auditId, sourcePages });
   if (!pdf?.length) throw new Error("Paid audit PDF is empty");
 
-  const objectPath = `${auditId}-v10.pdf`;
+  const objectPath = `${auditId}-v11.pdf`;
   const { error: uploadError } = await supabase.storage.from("audit-pdfs")
     .upload(objectPath, pdf, { contentType: "application/pdf", upsert: true });
   if (uploadError) throw uploadError;

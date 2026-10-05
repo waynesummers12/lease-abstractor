@@ -161,6 +161,7 @@ function extractEscalation(text: string): Rent {
   const pct = extractWithPatterns(text, [
     /increase(?:s)? by (\d+(?:\.\d+)?)%/i,
     /increase(?:s)?\s+(?:annually|yearly|each year)\s+by\s+(\d+(?:\.\d+)?)%/i,
+    /Annual Escalation:\s*(\d+(?:\.\d+)?)%\s+fixed annual increase/i,
   ]);
 
   if (pct) {
@@ -311,7 +312,7 @@ function extractCamNnn(
   /(CAM|NNN|operating expenses|common area|pro\s*rata)/i.test(text);
 
   const is_uncapped =
-    /no cap|without limitation|all operating expenses/i.test(text);
+    /no (?:express )?cap|uncapped/i.test(text);
 
   const reconciliation =
     /annual reconciliation|subject to reconciliation/i.test(text);
@@ -453,6 +454,15 @@ function computeLeaseHealth(input: {
     });
   }
 
+  if (input.cam_nnn.is_uncapped) {
+    flags.push({
+      code: "UNCAPPED_CAM",
+      label: "No express CAM / NNN increase cap detected",
+      severity: "medium",
+      recommendation: "Confirm the absence of a cap in the complete lease and amendments, then review actual increases.",
+    });
+  }
+
   if (input.cam_nnn.pro_rata) {
     flags.push({
       code: "PRO_RATA",
@@ -505,7 +515,7 @@ export function abstractLease(rawText: string) {
   };
 
   const explicitRentSchedule = extractExplicitMonthlyRentSchedule(text);
-  const rent_schedule = explicitRentSchedule.length ? explicitRentSchedule : buildRentSchedule(
+  const rent_schedule = explicitRentSchedule.length > 1 ? explicitRentSchedule : buildRentSchedule(
     rent.base_rent,
     rent.frequency,
     rent.escalation_type,
