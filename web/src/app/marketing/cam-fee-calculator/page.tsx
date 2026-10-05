@@ -27,8 +27,8 @@ export default function CamFeeCalculatorPage() {
         </p>
 
         <p className="mb-8 text-gray-700">
-          While landlords provide annual reconciliation statements, most tenants
-          never see how CAM allocations are calculated or whether expense
+          Annual reconciliation statements may not show how CAM allocations
+          are calculated or whether expense
           categories, administrative fees, and capital costs match the actual
           lease language.
         </p>

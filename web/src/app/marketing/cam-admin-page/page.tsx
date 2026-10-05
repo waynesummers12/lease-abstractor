@@ -157,8 +157,8 @@ export default function CamAdminFeesPage() {
   </div>
 
   <p style={{ marginTop: 8, fontSize: 14, color: "#6b7280" }}>
-    Most tenants never see this number clearly — it’s buried inside CAM
-    reconciliations and labeled as “standard.”
+    This number may be buried inside CAM reconciliations and labeled
+    as “standard.”
   </p>
 </section>
       {/* ---------- WHEN NOT ALLOWED ---------- */}
@@ -187,11 +187,10 @@ export default function CamAdminFeesPage() {
 
       {/* ---------- WHY MISSED ---------- */}
       <section style={sectionStyle}>
-        <h2 style={subHeadingStyle}>Why most tenants miss this</h2>
+        <h2 style={subHeadingStyle}>Why admin fees get missed</h2>
         <p style={textStyle}>
-          CAM admin fees are buried deep in lease language and rarely itemized in
-          reconciliation statements. Most tenants assume percentages are
-          standard — and never verify them.
+          CAM admin fees may be buried in lease language or not itemized in
+          reconciliation statements. Check the percentage and calculation base.
         </p>
       </section>
 
@@ -317,7 +316,7 @@ export default function CamAdminFeesPage() {
             double-counting, capital expenses, or vague “management” language.
           </p>
           <p>
-            Most tenants never challenge them because the math is buried.{" "}
+            Check the underlying calculation before disputing a charge.{" "}
             <a
               href="/app/step-1-upload"
               style={{ color: "#0f172a", fontWeight: 600 }}
@@ -350,12 +349,11 @@ export default function CamAdminFeesPage() {
 
         <details>
           <summary style={{ fontWeight: 700, cursor: "pointer" }}>
-            Why do most tenants overpay CAM admin fees?
+            How can CAM admin fees be checked?
           </summary>
           <p style={{ marginTop: 8 }}>
-            Because admin fees are rarely itemized and often assumed to be
-            “standard.” In reality, many tenants are paying thousands they don’t
-            owe.
+            Compare the fee percentage and calculation base with your lease
+            and reconciliation statement.
           </p>
           <p>
             That’s why we built an audit designed specifically for tenants.{" "}
@@ -415,11 +413,11 @@ export default function CamAdminFeesPage() {
               },
               {
                 "@type": "Question",
-                "name": "Why do most tenants overpay CAM admin fees?",
+                "name": "How can CAM admin fees be checked?",
                 "acceptedAnswer": {
                   "@type": "Answer",
                   "text":
-                    "Most tenants overpay because admin fees are buried in lease language and rarely itemized in reconciliation statements. Many tenants assume percentages are standard and never review the calculation."
+                    "Compare the admin fee percentage and calculation base with the lease and reconciliation statement."
                 }
               }
             ]

@@ -127,8 +127,8 @@ export default function MedicalNNNExpenses() {
           <div className="space-y-2">
             <h3 className="font-light tracking-tight">CAM Administrative Fees</h3>
             <p>
-              Frequently 10–15% of total CAM spend — sometimes layered on top
-              of capital expenditures and reserves.
+              Check the percentage and calculation base against your lease,
+              including any capital expenditures or reserves.
             </p>
           </div>
         </div>

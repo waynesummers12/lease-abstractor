@@ -79,8 +79,8 @@ export default function NNNCalculationExamplesPage() {
         </div>
 
         <p className="mt-4 text-gray-700">
-          This is the clean version most tenants expect — but it’s rarely what
-          actually happens.
+          This is a simplified example. Check actual charges against your lease
+          and reconciliation statement.
         </p>
       </section>
 

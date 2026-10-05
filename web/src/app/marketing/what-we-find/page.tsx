@@ -48,7 +48,7 @@ export default function WhatWeFindPage() {
             reasonable actually means.
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>10–20% admin fees layered onto CAM</li>
+            <li>Admin fees layered onto CAM</li>
             <li>Fees applied to insurance or taxes</li>
             <li>Charges exceeding lease caps</li>
           </ul>
