@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { waitForAnalysis } from "../step-2-analysis/analysis.wait";
 import { useAuth } from "@/app/providers/AuthProvider";
 
@@ -184,6 +185,28 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
           If no meaningful issues are found, you’ll still receive a complete audit report for your records.
         </p>
 
+        <section className="overflow-hidden rounded-2xl border-2 border-emerald-700 bg-emerald-50 shadow-sm" aria-labelledby="sample-report-heading">
+          <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_220px]">
+            <div className="p-5 sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-800">See the report format</p>
+              <h3 id="sample-report-heading" className="mt-2 text-xl font-semibold text-slate-950">Preview the report before paying</h3>
+              <p className="mt-3 text-sm leading-relaxed text-slate-700">This is the first page of a real report generated from a demonstration lease. It shows prioritized lease questions, a deadline to verify, and records to request. Your report will reflect your own lease.</p>
+              <a
+                href="/sample/lease-review-sample.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-emerald-900 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
+              >
+                Open the full sample report (PDF) ↗
+              </a>
+              <p className="mt-3 text-xs text-slate-600">Demonstration only · Lease language review, not a verified billing audit</p>
+            </div>
+            <a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full sample lease report PDF" className="block border-t border-emerald-200 bg-white p-4 md:border-l md:border-t-0">
+              <Image src="/sample/lease-review-page-one.png" alt="First page of the sample report, showing review topics and first actions" width={637} height={900} className="mx-auto h-64 w-auto rounded border border-slate-200 shadow-md md:h-72" />
+            </a>
+          </div>
+        </section>
+
         <ul className="list-disc list-inside space-y-2 text-gray-700">
           <li>
             Audit windows are often time-limited
@@ -202,20 +225,6 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             A secure, downloadable PDF for your records
           </li>
         </ul>
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-          <p className="text-sm font-semibold text-slate-950">See a report before you pay</p>
-          <p className="mt-1 text-sm text-slate-600">
-            This report from a demonstration lease shows the action plan, clause excerpts, records checklist, and billing worksheet. Your findings will depend on your lease.
-          </p>
-          <a
-            href="/sample/lease-review-sample.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950"
-          >
-            View the sample report (PDF) ↗
-          </a>
-        </div>
       </div>
 
       {/* ---------- CHECKOUT BUTTON ---------- */}
