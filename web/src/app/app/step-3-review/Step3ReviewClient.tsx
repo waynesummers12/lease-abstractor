@@ -202,6 +202,20 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             A secure, downloadable PDF for your records
           </li>
         </ul>
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+          <p className="text-sm font-semibold text-slate-950">See a report before you pay</p>
+          <p className="mt-1 text-sm text-slate-600">
+            This deidentified three-page report shows clause excerpts, a records checklist, a billing worksheet, and how uncertain fields are labeled. Your findings will depend on your lease.
+          </p>
+          <a
+            href="/sample/lease-review-sample.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950"
+          >
+            View the sample report (PDF) ↗
+          </a>
+        </div>
       </div>
 
       {/* ---------- CHECKOUT BUTTON ---------- */}

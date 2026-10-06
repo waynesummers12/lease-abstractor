@@ -88,6 +88,21 @@ export default function PricingPage() {
         </li>
       </ul>
 
+      <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+        <h2 className="text-lg font-semibold text-emerald-950">See what the report looks like</h2>
+        <p className="mt-2 text-sm text-emerald-900">
+          Open a deidentified three-page report. It includes page-linked lease topics, a records checklist, a billing worksheet, and clearly labeled missing fields. Results vary by lease, and a lease alone cannot verify an overcharge.
+        </p>
+        <a
+          href="/sample/lease-review-sample.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-900 underline underline-offset-4 hover:text-emerald-950"
+        >
+          View the sample report (PDF) ↗
+        </a>
+      </div>
+
       <Link
         href="/app/step-1-upload"
         onClick={() => console.log("pricing_cta_click_top")}
