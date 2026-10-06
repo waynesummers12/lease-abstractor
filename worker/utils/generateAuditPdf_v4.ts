@@ -221,6 +221,49 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   const premises = safeText(refreshed?.premises || analysis.premises) || "Not reliably extracted";
   const leaseStart = safeText(refreshed?.lease_start || analysis.lease_start) || "Unknown";
   const leaseEnd = safeText(refreshed?.lease_end || analysis.lease_end) || "Unknown";
+  const expensePriority: Record<string, number> = {
+    CAM_CAP: 1, CAM_EXCLUSIONS: 2, CAPEX_EXCEPTION: 3, CAPEX_IN_CAM: 3,
+    CAPEX_INCLUDED: 3, MGMT_FEE_DELTA: 4, MGMT_FEE_WATCH: 4,
+    PRO_RATA: 5, UNCAPPED_CAM: 6,
+  };
+  const firstPageChecks: Record<string, string> = {
+    CAM_CAP: "Compare covered CAM increases with the cap and its exceptions.",
+    CAM_EXCLUSIONS: "Look for excluded categories in the landlord's CAM detail.",
+    CAPEX_EXCEPTION: "Check whether billed capital work fits the exception and amortization terms.",
+    CAPEX_IN_CAM: "Check the lease basis and amortization for each billed capital charge.",
+    CAPEX_INCLUDED: "Check the lease basis and amortization for each billed capital charge.",
+    MGMT_FEE_DELTA: "Recalculate the management fee rate and expense base.",
+    MGMT_FEE_WATCH: "Recalculate the management fee rate and expense base.",
+    PRO_RATA: "Recalculate your share using the lease's area definition.",
+    UNCAPPED_CAM: "Compare annual increases and confirm whether another clause limits them.",
+  };
+  const firstPageRequests: Record<string, string> = {
+    CAM_CAP: "Prior-year and current CAM detail plus the cap worksheet",
+    CAM_EXCLUSIONS: "CAM category ledger and invoices for excluded categories",
+    CAPEX_EXCEPTION: "Capital invoices and useful-life amortization schedule",
+    CAPEX_IN_CAM: "Capital invoices and amortization schedule",
+    CAPEX_INCLUDED: "Capital invoices and amortization schedule",
+    MGMT_FEE_DELTA: "Management fee calculation and expense base",
+    MGMT_FEE_WATCH: "Management fee calculation and expense base",
+    PRO_RATA: "Rentable-area schedule and tenant-share calculation",
+    UNCAPPED_CAM: "Executed amendments and prior-year CAM / NNN statements",
+  };
+  const priorityItems = items
+    .filter(({ flag }) => flag.code && flag.code in expensePriority)
+    .sort((a, b) =>
+      Number(b.match?.kind === "clause excerpt") - Number(a.match?.kind === "clause excerpt")
+      || expensePriority[a.flag.code!] - expensePriority[b.flag.code!])
+    .slice(0, 3);
+  const deadline = facts.reviewDays
+    ? { text: `${facts.reviewDays.value} days after receiving the reconciliation to review records`, page: facts.reviewDays.page }
+    : facts.auditInitiateMonths
+      ? { text: `${facts.auditInitiateMonths.value} months after receiving the reconciliation to initiate an audit`, page: facts.auditInitiateMonths.page }
+      : null;
+  const deadlineMention = items.find(({ flag }) => flag.code === "AUDIT_WINDOW")?.match;
+  const recordRequests = [
+    "Annual CAM / NNN reconciliation and category detail",
+    ...priorityItems.map(({ flag }) => firstPageRequests[flag.code!]),
+  ].filter((value, index, all) => all.indexOf(value) === index).slice(0, 4);
   let page!: PDFPage;
   let y = 0;
   const addPage = () => {
@@ -259,6 +302,38 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   lines("A lease clause is a starting point. Whether a charge was overbilled requires the landlord's statements, calculations, and supporting records.", MARGIN + 18, 10.5, NAVY, font, CONTENT - 36); y -= 20;
   if (isSample) { lines("This upload is marked as a sample demonstration lease.", MARGIN, 9.5, BLUE, bold); y -= 4; }
 
+  heading("Your first actions");
+  page.drawText("DEADLINE TO VERIFY", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 18;
+  lines(deadline
+    ? `${deadline.text} (lease p. ${deadline.page}). Confirm the trigger, notice rules, and amendments.`
+    : deadlineMention
+      ? `A possible review deadline appears on lease p. ${deadlineMention.page}, but its timing was not reliably extracted. Read the full clause.`
+      : "No review deadline was reliably extracted. Check the signed lease and amendments before relying on any timing.",
+  MARGIN, 10, NAVY, bold); y -= 11;
+  if (deadline || deadlineMention) {
+    lines("The actual calendar deadline cannot be calculated without the statement delivery date.", MARGIN, 9, MUTED); y -= 11;
+  }
+
+  page.drawText("LEASE TERMS TO CHECK FIRST", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 19;
+  if (priorityItems.length === 0) {
+    lines("No page-supported expense rule was identified for this summary. Review the complete lease and billing records directly.", MARGIN, 10, NAVY); y -= 12;
+  } else {
+    for (const [index, item] of priorityItems.entries()) {
+      const review = reviewItem(item.flag);
+      const evidence = item.match?.kind === "clause excerpt" ? "Clause excerpt" : "Term mention only";
+      lines(`${index + 1}. ${review.title} - ${evidence}, lease p. ${item.match?.page ?? "unavailable"}`, MARGIN, 10, NAVY, bold); y -= 4;
+      lines(firstPageChecks[item.flag.code!], MARGIN + 15, 9, MUTED, font, CONTENT - 15, 13); y -= 8;
+    }
+  }
+
+  page.drawText("REQUEST THESE RECORDS", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 19;
+  for (const request of recordRequests) {
+    lines(`- ${request}`, MARGIN, 9.5, NAVY, font, CONTENT, 13); y -= 6;
+  }
+  y -= 5;
+  lines("These are lease-text screening steps. No billed charge or recoverable amount has been verified.", MARGIN, 9, MUTED);
+
+  addPage();
   heading("Lease snapshot");
   const half = (CONTENT - 22) / 2;
   labelValue("Tenant", tenant, MARGIN, half);
@@ -268,11 +343,8 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   labelValue("Lease dates", `${leaseStart} to ${leaseEnd}`, MARGIN + half + 22, half);
   y -= 58;
   rule();
-  heading("What this report can tell you");
-  lines("The items below identify lease language for review. Page references point to text extracted from the uploaded PDF; confirm each clause on the original page and read related definitions and amendments."); y -= 15;
-  lines("Verified overcharge: not determined. No landlord invoices, reconciliations, or actual allocations were analyzed with this lease.", MARGIN, 10, NAVY, bold); y -= 21;
+  lines("Lease terms are extracted from the uploaded PDF. Confirm each cited page in the signed lease and amendments. Billing records are needed to verify any overcharge.", MARGIN, 10, NAVY); y -= 20;
   if (facts.area || facts.managementFee || facts.reviewDays || facts.nnnEstimate || facts.deposit || facts.renewal || facts.tenantShare || facts.camCap || facts.reconciliationDays || facts.auditNoticeDays || facts.auditInitiateMonths || facts.auditCostThreshold || facts.baseRent || facts.firstYearMonthly || facts.annualEscalation || facts.noExpressCap || facts.rentBands.length) {
-    addPage();
     heading("Terms extracted from this lease");
     lines("These values come from the uploaded text. Check the cited page and any amendments before relying on them."); y -= 13;
     const factRows: Array<{ label: string; value: string; page: number }> = [];
@@ -297,9 +369,9 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     if (facts.renewal) factRows.push({ label: "Renewal option", value: `${facts.renewal.years} additional years; written notice at least ${facts.renewal.noticeDays} days before expiration`, page: facts.renewal.page });
     for (const fact of factRows) {
       const value = `${fact.value}  |  Lease page ${fact.page}`;
-      ensure(34 + wrap(value, bold, 11, CONTENT).length * 15);
-      page.drawText(fact.label.toUpperCase(), { x: MARGIN, y, size: 8, font: bold, color: MUTED }); y -= 17;
-      lines(value, MARGIN, 11, NAVY, bold); y -= 13;
+      ensure(23 + wrap(value, bold, 11, CONTENT).length * 15);
+      page.drawText(fact.label.toUpperCase(), { x: MARGIN, y, size: 8, font: bold, color: MUTED }); y -= 12;
+      lines(value, MARGIN, 11, NAVY, bold); y -= 7;
     }
     if (facts.rentBands.length && !(facts.rentBands.length === 1 && facts.firstYearMonthly)) {
       heading("Stated base-rent schedule");

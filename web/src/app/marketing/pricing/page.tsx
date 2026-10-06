@@ -91,7 +91,7 @@ export default function PricingPage() {
       <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
         <h2 className="text-lg font-semibold text-emerald-950">See what the report looks like</h2>
         <p className="mt-2 text-sm text-emerald-900">
-          Open a deidentified three-page report. It includes page-linked lease topics, a records checklist, a billing worksheet, and clearly labeled missing fields. Results vary by lease, and a lease alone cannot verify an overcharge.
+          Open a report from a demonstration lease. It includes a first-page action plan, page-linked lease topics, a records checklist, and a billing worksheet. Results vary by lease, and a lease alone cannot verify an overcharge.
         </p>
         <a
           href="/sample/lease-review-sample.pdf"

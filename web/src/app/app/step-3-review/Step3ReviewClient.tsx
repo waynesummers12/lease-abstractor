@@ -205,7 +205,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
           <p className="text-sm font-semibold text-slate-950">See a report before you pay</p>
           <p className="mt-1 text-sm text-slate-600">
-            This deidentified three-page report shows clause excerpts, a records checklist, a billing worksheet, and how uncertain fields are labeled. Your findings will depend on your lease.
+            This report from a demonstration lease shows the action plan, clause excerpts, records checklist, and billing worksheet. Your findings will depend on your lease.
           </p>
           <a
             href="/sample/lease-review-sample.pdf"
