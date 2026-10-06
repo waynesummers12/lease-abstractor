@@ -100,10 +100,10 @@ export default function UploadLeasePage() {
     <div className="mx-auto max-w-3xl text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">Free lease preview</p>
       <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-        See what your lease may be costing you
+        Understand your lease expense terms
       </h1>
       <p className="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
-        Upload your commercial lease PDF to preview potential CAM and NNN cost risks. You can review the preview before deciding whether to buy a full audit.
+        Upload one commercial lease PDF for a free preview of its CAM and NNN terms. You can decide whether to buy the full lease report afterward.
       </p>
     </div>
 
@@ -125,9 +125,10 @@ export default function UploadLeasePage() {
 
     <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-sm text-slate-700 sm:grid-cols-3">
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">1. Upload</span><br />Choose a PDF copy of your lease.</div>
-      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">2. Preview</span><br />Review potential cost risks and extracted details.</div>
-      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Unlock the full audit only if it’s useful to you.</div>
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">2. Preview</span><br />Review the extracted lease terms and topics to verify.</div>
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Unlock the lease report only if it’s useful to you.</div>
     </div>
+    <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-slate-600">Have an annual CAM statement too? <a href="/marketing/reconciliation-pilot" className="font-semibold text-emerald-800 underline">Request our separate founder-reviewed pilot</a>. This upload accepts a lease only.</p>
   </main>
 );
 }

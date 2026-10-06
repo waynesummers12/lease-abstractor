@@ -110,6 +110,7 @@ export default function MobileMenu({
             ["What We Find", "/marketing/what-we-find"],
             ["How It Works", "/marketing/how-it-works"],
             ["Pricing", "/pricing"],
+            ["Statement Pilot", "/marketing/reconciliation-pilot"],
             ["CAM Reconciliation", "/marketing/cam-reconciliation"],
             ["NNN Audit Rights", "/marketing/nnn-audit-rights"],
             ["Audit Deadlines", "/marketing/audit-window-deadlines"],

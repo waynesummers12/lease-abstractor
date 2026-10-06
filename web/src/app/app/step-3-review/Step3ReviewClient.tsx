@@ -166,7 +166,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <h2 className="text-xl font-semibold text-slate-950">
-          Full lease audit · $49.99 one-time
+          Lease Expense Review · $49.99 one-time
         </h2>
         <p className="text-sm font-medium text-slate-600">
           Check your lease for any notice or audit deadlines before deciding what to do next.
@@ -245,7 +245,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         }}
         className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
       >
-        Unlock the full audit · $49.99
+        Unlock the lease report · $49.99
       </button>
       <p className="mt-2 text-center text-xs text-slate-500">
         Secure one-time checkout. Your PDF is prepared after payment.
