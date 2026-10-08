@@ -56,6 +56,7 @@ export default function UploadForm({ onUpload, loading }: Props) {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
+            e.target.value = "";
             onUpload(file); // ✅ THIS WAS MISSING / NOT FIRING
           }
         }}

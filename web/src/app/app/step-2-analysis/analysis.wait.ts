@@ -1,6 +1,6 @@
 export type AnalysisWaitResult<T> =
   | { status: "ready"; analysis: T }
-  | { status: "timeout" | "not-found" | "unavailable" };
+  | { status: "timeout" | "not-found" | "unavailable" | "invalid-document" };
 
 function pause(ms: number, signal: AbortSignal): Promise<void> {
   return new Promise((resolve) => {
@@ -42,6 +42,9 @@ export async function waitForAnalysis<T>(
         const result = await response.json();
         if (result?.status === "failed" || result?.status === "error") {
           return { status: "unavailable" };
+        }
+        if (result?.status === "invalid_document") {
+          return { status: "invalid-document" };
         }
         if (result?.analysis && typeof result.analysis === "object") {
           return { status: "ready", analysis: result.analysis as T };

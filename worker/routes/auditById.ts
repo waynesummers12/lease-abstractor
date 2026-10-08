@@ -22,6 +22,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { supabase } from "../lib/supabase.ts";
 import { normalizeAuditForSuccess } from "../utils/normalizeAuditForSuccess.ts";
+import { isGeneratedAuditReport } from "../utils/documentType.ts";
 
 const router = new Router();
 
@@ -59,6 +60,13 @@ router.get("/auditById/:auditId", async (ctx) => {
     console.warn("⚠️ Audit not found:", auditId);
     ctx.response.status = 404;
     ctx.response.body = { error: "Audit not found" };
+    return;
+  }
+
+  if (audit.status === "analyzed" && typeof audit.analysis?.raw_preview === "string" &&
+      isGeneratedAuditReport(audit.analysis.raw_preview)) {
+    ctx.response.status = 200;
+    ctx.response.body = { id: audit.id, status: "invalid_document", analysis: null };
     return;
   }
 

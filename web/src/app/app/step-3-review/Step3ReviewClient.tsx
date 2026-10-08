@@ -38,7 +38,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const { session, loading: authLoading } = useAuth();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [loading, setLoading] = useState(true);
-  const [failure, setFailure] = useState<"timeout" | "not-found" | "unavailable" | null>(null);
+  const [failure, setFailure] = useState<"timeout" | "not-found" | "unavailable" | "invalid-document" | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
   const hasFiredLeaseUploaded = useRef(false);
@@ -98,7 +98,9 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   }
 
   if (failure || !analysis) {
-    const message = failure === "not-found"
+    const message = failure === "invalid-document"
+      ? "This upload appears to be a SaveOnLease report rather than the original lease agreement. We can't produce a reliable lease review from it. Please upload the original commercial lease PDF."
+      : failure === "not-found"
       ? "We couldn't find this audit. Check the link or upload the lease again."
       : failure === "unavailable"
         ? "We couldn't access this audit right now. Please try again."
@@ -107,10 +109,10 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
-        <h1 className="text-2xl font-semibold">Preview not ready</h1>
+        <h1 className="text-2xl font-semibold">{failure === "invalid-document" ? "Please upload the lease agreement" : "Preview not ready"}</h1>
         <p className="mt-3 text-slate-700">{message}</p>
         <div className="mt-6 flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center">
-          <button
+          {failure !== "invalid-document" && <button
             type="button"
             onClick={() => {
               setAnalysis(null);
@@ -121,7 +123,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             className="min-h-11 rounded-lg bg-black px-5 py-2 font-medium text-white hover:bg-gray-800"
           >
             Try Checking Again
-          </button>
+          </button>}
           <Link href="/app/step-1-upload" className="inline-flex min-h-11 items-center font-medium underline">Upload again</Link>
           <a href={supportHref} className="inline-flex min-h-11 items-center font-medium underline">Contact support</a>
         </div>

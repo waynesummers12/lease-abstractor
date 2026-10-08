@@ -23,6 +23,7 @@
 import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import pdfParse from "npm:pdf-parse@1.1.1";
 import { abstractLease } from "../utils/abstractLease.ts";
+import { isGeneratedAuditReport } from "../utils/documentType.ts";
 import { supabase } from "../lib/supabase.ts";
 
 const router = new Router({
@@ -70,6 +71,22 @@ router.post("/pdf", async (ctx) => {
       ? new Uint8Array(file.content)
       : await Deno.readFile(file.filename!);
 
+    // Inspect the PDF before storing or analyzing it. A prior audit report is
+    // not the executed lease, even when it repeats a few lease details.
+    const parsed = await pdfParse(fileBuffer);
+    const leaseText = parsed.text;
+
+    if (!leaseText?.trim()) {
+      ctx.response.status = 422;
+      ctx.response.body = { error: "We couldn't read text from this PDF. Please upload a text-readable copy of the commercial lease." };
+      return;
+    }
+    if (isGeneratedAuditReport(leaseText)) {
+      ctx.response.status = 422;
+      ctx.response.body = { error: "This looks like a SaveOnLease report, not the lease agreement. Please upload the original commercial lease PDF." };
+      return;
+    }
+
     // 1️⃣ Upload ORIGINAL lease PDF (input artifact)
     const { error: uploadError } = await supabase.storage
       .from("leases")
@@ -83,13 +100,6 @@ router.post("/pdf", async (ctx) => {
     }
 
     // 2️⃣ Extract text
-    const parsed = await pdfParse(fileBuffer);
-    const leaseText = parsed.text;
-
-    if (!leaseText?.trim()) {
-      throw new Error("No text extracted from lease PDF");
-    }
-
     console.info("[ingest] extracted lease text", {
       length: leaseText.length,
     });

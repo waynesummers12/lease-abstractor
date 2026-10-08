@@ -76,8 +76,8 @@ export default function UploadLeasePage() {
       );
 
       if (!ingestRes.ok) {
-        const text = await ingestRes.text();
-        throw new Error(text || "Failed to upload lease");
+        const result = await ingestRes.json().catch(() => null);
+        throw new Error(typeof result?.error === "string" ? result.error : "We couldn't analyze this PDF. Please try another copy of the lease.");
       }
 
       // 3️⃣ Redirect (working path)
@@ -111,7 +111,7 @@ export default function UploadLeasePage() {
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Choose your lease PDF</h2>
-        <p className="mt-2 text-sm text-slate-600">We’ll analyze the document and take you to your preview. This step is free.</p>
+        <p className="mt-2 text-sm text-slate-600">Choose the original lease agreement, not a prior SaveOnLease report. We’ll analyze it and take you to your free preview.</p>
       </div>
       <UploadForm
         onUpload={handleUpload}

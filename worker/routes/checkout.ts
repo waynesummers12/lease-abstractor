@@ -15,6 +15,7 @@ import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 import { fulfillPaidCheckout } from "../utils/fulfillPaidCheckout.ts";
+import { isGeneratedAuditReport } from "../utils/documentType.ts";
 
 const router = new Router({ prefix: "/checkout" });
 
@@ -85,6 +86,12 @@ const { auditId, ref } = body as { auditId?: string; ref?: string };
   if (!existingAudit || !existingAudit.analysis || existingAudit.status !== "analyzed") {
     ctx.response.status = 409;
     ctx.response.body = { error: "Audit is not ready for checkout" };
+    return;
+  }
+  if (typeof existingAudit.analysis.raw_preview === "string" &&
+      isGeneratedAuditReport(existingAudit.analysis.raw_preview)) {
+    ctx.response.status = 422;
+    ctx.response.body = { error: "This upload is a SaveOnLease report. Please upload the original lease before purchasing." };
     return;
   }
 

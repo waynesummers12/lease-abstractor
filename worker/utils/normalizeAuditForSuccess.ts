@@ -50,6 +50,7 @@ type NormalizeAuditAnalysis = {
   management_fee_high?: number | null;
 
   health?: NormalizeAuditHealth | null;
+  teaser_summary?: { headline_flags?: string[] } | null;
 };
 
 export function normalizeAuditForSuccess(
@@ -119,6 +120,7 @@ export function normalizeAuditForSuccess(
     lease_start: analysis.lease_start ?? null,
     lease_end: analysis.lease_end ?? null,
     term_months: analysis.term_months ?? null,
+    teaser_summary: analysis.teaser_summary ?? null,
 
     rent: analysis.rent ?? null,
 
