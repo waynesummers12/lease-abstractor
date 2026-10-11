@@ -66,7 +66,7 @@ export default function MarketingHomePage() {
 
       <section className="bg-slate-950 px-5 py-16 text-white sm:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div><h2 className="text-2xl font-semibold">See the report before deciding</h2><p className="mt-2 max-w-2xl text-sm text-slate-300">Open a real generated lease report from a demonstration document. The separate statement-review example is a manually prepared concept.</p></div>
+          <div><h2 className="text-2xl font-semibold text-white">See the report before deciding</h2><p className="mt-2 max-w-2xl text-sm text-slate-300">Open a real generated lease report from a demonstration document. The separate statement-review example is a manually prepared concept.</p></div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/40 px-5 py-2 text-sm font-semibold hover:bg-white/10">Lease report PDF ↗</a>
             <Link href="/marketing/reconciliation-pilot" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-5 py-2 text-sm font-semibold text-slate-950 hover:bg-slate-100">Explore the pilot</Link>
