@@ -1,33 +1,21 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "How SaveOnLease Works | Lease Review and CAM Statement Pilot",
-  description: "Start with an automated commercial lease review, or request a founder-reviewed comparison with an annual CAM statement.",
+  title: "How SaveOnLease Works | Lease and Statement Review",
+  description: "Upload a lease for a free preview, optionally add an annual CAM statement and supporting records, then purchase one report.",
 };
 
 export default function HowItWorksPage() {
-  return (
-    <main className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">How it works</p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-6xl">From lease terms to better questions.</h1>
-      <p className="mt-6 max-w-3xl text-lg text-slate-600">The current product reviews lease language. Our separate founder-reviewed pilot pairs that lease with an annual CAM or NNN statement.</p>
-      <section className="mt-14 rounded-3xl border border-slate-200 bg-white p-7 sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Available now · $49.99 after preview</p>
-        <h2 className="mt-3 text-2xl font-semibold text-slate-950">Automated Lease Expense Review</h2>
-        <div className="mt-7 grid gap-6 md:grid-cols-3">
-          <div><p className="text-sm font-semibold text-emerald-800">01 · Upload</p><p className="mt-2 text-sm text-slate-600">Submit one commercial lease PDF, including its relevant exhibits if they are in that file.</p></div>
-          <div><p className="text-sm font-semibold text-emerald-800">02 · Preview</p><p className="mt-2 text-sm text-slate-600">See the free preview before deciding whether to purchase the report.</p></div>
-          <div><p className="text-sm font-semibold text-emerald-800">03 · Review</p><p className="mt-2 text-sm text-slate-600">Download a report with page-linked expense terms, records to request, and a worksheet for checking bills.</p></div>
-        </div>
-        <p className="mt-7 text-sm text-slate-600">This process analyzes lease language. It does not verify charges against an annual statement or supporting invoices.</p>
-        <div className="mt-6 flex flex-wrap gap-4"><Link href="/app/step-1-upload" className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-5 py-2 text-sm font-semibold text-white">Start free preview →</Link><a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">View sample report ↗</a></div>
-      </section>
-      <section className="mt-8 rounded-3xl border border-emerald-200 bg-emerald-50 p-7 sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Founder-reviewed pilot</p>
-        <h2 className="mt-3 text-2xl font-semibold text-slate-950">Lease + Annual Statement Review</h2>
-        <p className="mt-4 max-w-3xl text-slate-700">If you have both documents, request an invitation. We&apos;ll confirm scope, timing, and price before asking for files. A founder-reviewed comparison can examine billed categories, allocation math, and gaps in supporting records. Findings remain questions until verified.</p>
-        <Link href="/marketing/reconciliation-pilot" className="mt-6 inline-flex min-h-11 items-center rounded-lg bg-emerald-900 px-5 py-2 text-sm font-semibold text-white">Request pilot access →</Link>
-      </section>
-    </main>
-  );
+  return <main className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
+    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">How it works</p>
+    <h1 className="mt-4 text-4xl font-semibold text-slate-950 sm:text-6xl">From lease terms to better questions.</h1>
+    <p className="mt-6 max-w-3xl text-lg text-slate-600">One automated workflow. Start with the signed lease, add available billing documents, and review the evidence before deciding what to investigate.</p>
+    <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <section className="rounded-2xl border border-slate-200 p-6"><p className="text-sm font-semibold text-emerald-800">01 · Lease</p><h2 className="mt-2 text-xl font-semibold text-slate-950">Upload and preview</h2><p className="mt-3 text-sm text-slate-600">Upload a text-readable commercial lease PDF. See the extracted details in a free preview.</p></section>
+      <section className="rounded-2xl border border-slate-200 p-6"><p className="text-sm font-semibold text-emerald-800">02 · Annual statement</p><h2 className="mt-2 text-xl font-semibold text-slate-950">Compare the bill</h2><p className="mt-3 text-sm text-slate-600">On the preview, add a CAM or NNN statement. We check readable tenant-share values and visible arithmetic against the lease.</p></section>
+      <section className="rounded-2xl border border-slate-200 p-6"><p className="text-sm font-semibold text-emerald-800">03 · Supporting records</p><h2 className="mt-2 text-xl font-semibold text-slate-950">See what is missing</h2><p className="mt-3 text-sm text-slate-600">Add up to four supporting PDFs. The report inventories the files and labels claims that still need invoice, area, or fee verification.</p></section>
+    </div>
+    <p className="mt-8 max-w-3xl text-sm text-slate-700">The $49.99 one-time report includes whichever documents you add before checkout. An automated question is not a verified overcharge or legal conclusion.</p>
+    <div className="mt-8 flex flex-wrap gap-4"><Link href="/app/step-1-upload" className="inline-flex min-h-11 items-center rounded-lg bg-slate-950 px-5 py-2 text-sm font-semibold text-white">Start free preview →</Link><a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline">View sample lease report ↗</a></div>
+  </main>;
 }

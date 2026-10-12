@@ -1,9 +1,11 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 import type { PDFPage, PDFFont } from "npm:pdf-lib@1.17.1";
 import { abstractLease } from "./abstractLease.ts";
+import type { Reconciliation } from "./reconcileDocuments.ts";
 
 type Flag = { code?: string; label?: string };
 type AuditAnalysis = {
+  reconciliation?: Reconciliation | null;
   sourcePages?: Array<{ page: number; text: string }> | null;
   audit_id?: string | null;
   tenant?: string | null;
@@ -331,7 +333,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     lines(`- ${request}`, MARGIN, 9.5, NAVY, font, CONTENT, 13); y -= 6;
   }
   y -= 5;
-  lines("These are lease-text screening steps. No billed charge or recoverable amount has been verified.", MARGIN, 9, MUTED);
+  lines(analysis.reconciliation ? "Statement checks are included later in this report. No recoverable amount has been verified." : "These are lease-text screening steps. No billed charge or recoverable amount has been verified.", MARGIN, 9, MUTED);
 
   addPage();
   heading("Lease snapshot");
@@ -459,13 +461,29 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     tenant === "Not reliably extracted" && "Tenant name was not reliably extracted.",
     landlord === "Not reliably extracted" && "Landlord name was not reliably extracted.",
     premises === "Not reliably extracted" && "Premises address was not reliably extracted.",
-    "Actual charges, allocation calculations, and recoverable amounts require billing records.",
+    analysis.reconciliation ? "Statement values were screened; original invoices, allocations, and recoverable amounts remain unverified." : "Actual charges, allocation calculations, and recoverable amounts require billing records.",
   ].filter((value): value is string => Boolean(value));
   for (const value of missing) { ensure(30); lines(`- ${value}`, MARGIN, 9.5, NAVY); y -= 6; }
   y -= 4;
   heading("Scope and support");
-  lines("This is an automated lease-text screening, not a completed billing reconciliation or legal opinion. A term mention may be only an expense-list entry, not an operative clause. OCR can omit or misread text. Check the complete original page and any amendments before drawing a conclusion.", MARGIN, 9.5); y -= 11;
+  lines(analysis.reconciliation ? "This automated review screens extracted lease and statement text and checks limited arithmetic. It does not authenticate invoices or establish an overcharge or legal opinion. Confirm original pages, amendments, and supporting calculations." : "This is an automated lease-text screening, not a completed billing reconciliation or legal opinion. A term mention may be only an expense-list entry, not an operative clause. OCR can omit or misread text. Check the complete original page and any amendments before drawing a conclusion.", MARGIN, 9.5); y -= 11;
   lines(`Questions? Email audits@saveonlease.com with audit reference ${auditId}.`, MARGIN, 9.5, BLUE, bold);
+
+  if (analysis.reconciliation) {
+    const review = analysis.reconciliation;
+    addPage();
+    heading("Annual statement review");
+    lines(`Source: ${review.statementName}. This section compares extracted values with lease text and checks visible arithmetic. Confirm each cited page in the originals.`, MARGIN, 10, NAVY); y -= 12;
+    for (const check of review.checks) {
+      ensure(100);
+      page.drawText(safeText(`${check.status.toUpperCase()}  /  ${check.label}`), { x: MARGIN, y, size: 10, font: bold, color: check.status === "question" ? BLUE : TEAL }); y -= 19;
+      lines(check.result, MARGIN + 12, 9.5, NAVY, font, CONTENT - 12, 14); y -= 13;
+    }
+    heading("Documents and limits");
+    lines(`Statement: ${review.statementName}. Supporting PDFs: ${review.supportNames.length ? review.supportNames.join(", ") : "none supplied"}.`, MARGIN, 9.5, NAVY); y -= 10;
+    for (const item of review.support) { ensure(45); lines(`${item.name}: text mentions ${item.signals.length ? item.signals.join(", ") : "no recognized record type"}. Presence does not verify the billed cost.`, MARGIN, 9.5, NAVY); y -= 8; }
+    lines("A percentage difference or arithmetic question is a lead for investigation, not a refund estimate. Check category-specific rules, rentable-area schedules, original invoices, credit history, and delivery dates before making a claim.", MARGIN, 9.5, MUTED);
+  }
 
   pdf.getPages().forEach((current, index, pages) => {
     current.drawLine({ start: { x: MARGIN, y: 50 }, end: { x: WIDTH - MARGIN, y: 50 }, thickness: 0.5, color: MUTED });

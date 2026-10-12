@@ -128,7 +128,7 @@ export default function UploadLeasePage() {
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">2. Preview</span><br />Review the extracted lease terms and topics to verify.</div>
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Unlock the lease report only if it’s useful to you.</div>
     </div>
-    <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-slate-600">Have an annual CAM statement too? <a href="/marketing/reconciliation-pilot" className="font-semibold text-emerald-800 underline">Request our separate founder-reviewed pilot</a>. This upload accepts a lease only.</p>
+    <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-slate-600">Have an annual CAM statement too? Start with the lease here, then add the statement and supporting PDFs on the free preview before checkout.</p>
   </main>
 );
 }

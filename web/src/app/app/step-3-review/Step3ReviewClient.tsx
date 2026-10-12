@@ -8,6 +8,7 @@ import { waitForAnalysis } from "../step-2-analysis/analysis.wait";
 import { useAuth } from "@/app/providers/AuthProvider";
 
 type Analysis = {
+  reconciliation?: { statementName: string; supportNames: string[]; checks: Array<{ label: string; result: string; status: string }> } | null;
   tenant: string | null;
   landlord: string | null;
   premises: string | null;
@@ -40,6 +41,11 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const [loading, setLoading] = useState(true);
   const [failure, setFailure] = useState<"timeout" | "not-found" | "unavailable" | "invalid-document" | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [statement, setStatement] = useState<File | null>(null);
+  const [supportFiles, setSupportFiles] = useState<File[]>([]);
+  const [documentBusy, setDocumentBusy] = useState(false);
+  const [documentError, setDocumentError] = useState<string | null>(null);
+  const [pendingDocuments, setPendingDocuments] = useState(false);
 
   const hasFiredLeaseUploaded = useRef(false);
 
@@ -166,18 +172,57 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         </dl>
       </section>
 
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Steps 2 and 3 · Optional before payment</p>
+        <h2 className="mt-2 text-xl font-semibold text-slate-950">Add your annual statement and supporting records</h2>
+        <p className="mt-2 text-sm text-slate-600">We can compare a text-readable CAM or NNN statement with the lease and check visible arithmetic. Add up to four supporting PDFs. The report will label what remains unverified.</p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <label className="text-sm font-medium text-slate-800">Annual statement PDF
+            <input type="file" accept="application/pdf,.pdf" onChange={(event) => { setStatement(event.target.files?.[0] ?? null); setPendingDocuments(Boolean(event.target.files?.length)); }} className="mt-2 block w-full text-sm" />
+          </label>
+          <label className="text-sm font-medium text-slate-800">Supporting PDFs (up to four)
+            <input type="file" accept="application/pdf,.pdf" multiple onChange={(event) => { setSupportFiles(Array.from(event.target.files ?? [])); setPendingDocuments(true); }} className="mt-2 block w-full text-sm" />
+          </label>
+        </div>
+        <button type="button" disabled={!statement || documentBusy} onClick={async () => {
+          if (!statement || !auditId) return;
+          setDocumentError(null); setDocumentBusy(true);
+          try {
+            if (supportFiles.length > 4) throw new Error("Choose up to four supporting PDFs.");
+            if ([statement, ...supportFiles].some((file) => file.size > 10 * 1024 * 1024) || [statement, ...supportFiles].reduce((sum, file) => sum + file.size, 0) > 29 * 1024 * 1024) throw new Error("Each PDF must be under 10 MB and all PDFs together under 29 MB.");
+            const form = new FormData(); form.append("files", statement);
+            for (const file of supportFiles) form.append("files", file);
+            const tokenResponse = await fetch(`/api/audits/${auditId}/reconcile`, { headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}, cache: "no-store" });
+            const token = await tokenResponse.json();
+            if (!tokenResponse.ok || typeof token.capability !== "string") throw new Error(token.error || "Document access unavailable");
+            const response = await fetch(`${process.env.NEXT_PUBLIC_WORKER_URL}/audit/${auditId}/reconcile`, { method: "POST", headers: { "X-Audit-Capability": token.capability }, body: form });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Document analysis failed");
+            setAnalysis((current) => current ? { ...current, reconciliation: result.reconciliation } : current);
+            setPendingDocuments(false);
+          } catch (error) { setDocumentError(error instanceof Error ? error.message : "Document analysis failed"); }
+          finally { setDocumentBusy(false); }
+        }} className="mt-5 min-h-11 rounded-lg bg-emerald-900 px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">{documentBusy ? "Reviewing documents…" : "Analyze documents"}</button>
+        {documentError && <p role="alert" className="mt-3 text-sm text-red-700">{documentError}</p>}
+        {analysis.reconciliation && <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
+          <p className="font-semibold">Statement analyzed: {analysis.reconciliation.statementName}</p>
+          <p className="mt-1">{analysis.reconciliation.supportNames.length} supporting PDFs added. The report will include the checks below.</p>
+          <ul className="mt-3 list-disc space-y-2 pl-5">{analysis.reconciliation.checks.map((check, index) => <li key={index}><strong>{check.label}:</strong> {check.result}</li>)}</ul>
+        </div>}
+        <p className="mt-4 text-xs text-slate-500">You may continue with only the lease. Add all documents before checkout; the paid PDF reflects the files saved at purchase.</p>
+      </section>
+
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <h2 className="text-xl font-semibold text-slate-950">
-          Lease Expense Review · $49.99 one-time
+          Lease Expense Review{analysis.reconciliation ? " + Statement" : ""} · $49.99 one-time
         </h2>
         <p className="text-sm font-medium text-slate-600">
           Check your lease for any notice or audit deadlines before deciding what to do next.
         </p>
 
         <p className="text-gray-700">
-          The paid report summarizes the language review, flags terms to verify,
-          and lists the records needed before you can establish an overcharge.
+          The paid report summarizes lease language and, when added above, checks statement arithmetic and documents to verify before asserting an overcharge.
         </p>
 
         <p className="text-sm text-gray-600">
@@ -231,6 +276,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
 
       {/* ---------- CHECKOUT BUTTON ---------- */}
       <button
+        disabled={documentBusy || pendingDocuments}
         onClick={async () => {
           if (!auditId) return;
 
@@ -256,7 +302,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         }}
         className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
       >
-        Unlock the lease report · $49.99
+        {pendingDocuments ? "Analyze selected documents before checkout" : "Unlock your report · $49.99"}
       </button>
       <p className="mt-2 text-center text-xs text-slate-500">
         Secure one-time checkout. Your PDF is prepared after payment.

@@ -12,6 +12,7 @@ import auditPdfRoutes from "./routes/auditPdf.ts";
 import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 import portfolioLeasesRoutes from "./routes/portfolioleases.ts";
 import portfolioBoardPdfRoutes from "./routes/portfolioBoardPdf.ts";
+import reconcileRoutes from "./routes/reconcile.ts";
 
 const app = new Application();
 
@@ -102,6 +103,9 @@ app.use(checkoutRoutes.allowedMethods());
 
 app.use(auditPdfRoutes.routes());
 app.use(auditPdfRoutes.allowedMethods());
+
+app.use(reconcileRoutes.routes());
+app.use(reconcileRoutes.allowedMethods());
 
 app.use(portfolioLeasesRoutes.routes());
 app.use(portfolioLeasesRoutes.allowedMethods());

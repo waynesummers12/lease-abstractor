@@ -27,6 +27,7 @@ type NormalizeAuditHealth = {
 };
 
 type NormalizeAuditAnalysis = {
+  reconciliation?: import("./reconcileDocuments.ts").Reconciliation | null;
   tenant?: string | null;
   landlord?: string | null;
   premises?: string | null;
@@ -113,6 +114,7 @@ export function normalizeAuditForSuccess(
   };
 
   return {
+    reconciliation: analysis.reconciliation ?? null,
     // 🔒 FLAT, UI-READY FIELDS
     tenant: analysis.tenant ?? null,
     landlord: analysis.landlord ?? null,
