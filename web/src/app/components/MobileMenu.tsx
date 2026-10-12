@@ -107,6 +107,7 @@ export default function MobileMenu({
         <nav aria-label="Explore SaveOnLease" className="mt-7 border-b border-white/15 pb-5">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-400">Explore</p>
           {[
+            ["Learn", "/marketing/learn"],
             ["What We Find", "/marketing/what-we-find"],
             ["How It Works", "/marketing/how-it-works"],
             ["Pricing", "/pricing"],

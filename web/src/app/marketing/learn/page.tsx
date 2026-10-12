@@ -242,6 +242,12 @@ const sections: Section[] = [
     label: "Industries",
     articles: [
       {
+        title: "Restaurant NNN Overcharges",
+        description:
+          "Review how restaurant tenants can compare NNN charges with lease terms, annual statements, and payment credits.",
+        href: "/marketing/restaurant-nnn-overcharges",
+      },
+      {
         title: "Retail Lease Audit Hub",
         description:
           "Central resource for retail tenants reviewing CAM reconciliation, NNN charges, audit rights, and occupancy risk exposure.",
