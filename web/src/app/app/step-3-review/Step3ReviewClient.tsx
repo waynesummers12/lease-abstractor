@@ -72,13 +72,10 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       if (analysis && !hasFiredLeaseUploaded.current) {
         hasFiredLeaseUploaded.current = true;
 
-        gtag("event", "lease_uploaded", {
-          event_category: "funnel",
-          event_label: "lease_preview_shown",
-        });
+        gtag("event", "lease_preview_viewed", { audit_id: auditId });
       }
     }
-  }, [analysis]);
+  }, [analysis, auditId]);
 
   if (!auditId) {
     return (
@@ -295,6 +292,11 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
           const data = await res.json();
 
           if (data?.url) {
+            window.gtag?.("event", "begin_checkout", {
+              currency: "USD",
+              value: 49.99,
+              audit_id: auditId,
+            });
             window.location.href = data.url;
           } else {
             alert("Failed to start checkout");

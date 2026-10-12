@@ -71,8 +71,24 @@ export default function SuccessPage() {
         ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
       body: JSON.stringify({ auditId, sessionId: checkoutSessionId }),
       signal: controller.signal,
-    }).then((response) => {
-      if (response.ok) setRetryCount((count) => count + 1);
+    }).then(async (response) => {
+      if (!response.ok || controller.signal.aborted) return;
+      const result = await response.json().catch(() => null);
+      if (result?.status === "complete" && checkoutSessionId) {
+        const key = `saveonlease:purchase:${checkoutSessionId}`;
+        try {
+          if (!localStorage.getItem(key) && window.gtag) {
+            window.gtag("event", "purchase", {
+              transaction_id: checkoutSessionId,
+              currency: "USD",
+              value: 49.99,
+              audit_id: auditId,
+            });
+            localStorage.setItem(key, "1");
+          }
+        } catch { /* Analytics storage may be unavailable; report access still works. */ }
+      }
+      setRetryCount((count) => count + 1);
     }).catch(() => { /* The webhook and status poll remain available. */ });
     return () => controller.abort();
   }, [auditId, checkoutSessionId, authLoading, session?.access_token]);
@@ -177,21 +193,6 @@ export default function SuccessPage() {
     };
   }, [auditId, authLoading, session?.access_token, retryCount]);
 
-        /* ---------- GA4: REPORT PURCHASED ---------- */
-useEffect(() => {
-  if (
-  data?.status === "complete" &&
-  typeof window !== "undefined" &&
-  window.gtag
-) {
-  window.gtag("event", "report_purchased", {
-    event_category: "funnel",
-    event_label: "audit_pdf_unlocked",
-    value: 49.99,
-  } as Record<string, unknown>);
-}
-}, [data?.status]);
-
   /* ---------- DOWNLOAD PDF ---------- */
   async function handleDownload() {
   if (!auditId) return;
@@ -222,6 +223,7 @@ useEffect(() => {
 
     // ✅ OPEN IN NEW TAB — DO NOT use window.location.href
     window.open(url, "_blank", "noopener,noreferrer");
+    window.gtag?.("event", "report_downloaded", { audit_id: auditId });
   } catch (err) {
     console.error("PDF download failed", err);
     alert("Failed to download PDF.");

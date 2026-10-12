@@ -81,6 +81,7 @@ export default function UploadLeasePage() {
       }
 
       // 3️⃣ Redirect (working path)
+      window.gtag?.("event", "lease_uploaded", { audit_id: auditId });
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: unknown) {
       console.error("Upload failed:", err);
