@@ -1,197 +1,114 @@
-
-
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Commercial Lease Audit for Tenants | Identify CAM & NNN Overcharges",
+export const metadata: Metadata = {
+  title: "Commercial Lease Audit for Tenants | CAM & NNN Review",
   description:
-    "Commercial lease audit for tenants. Identify CAM, NNN, and reconciliation overcharges before audit windows close. See how much exposure may be avoidable.",
+    "Learn what a commercial lease audit can check, how an annual CAM statement changes the review, and which records are needed to verify a billing discrepancy.",
   alternates: {
     canonical: "https://www.saveonlease.com/marketing/commercial-lease-audit",
   },
 };
 
+const reviewAreas = [
+  {
+    title: "Expense definitions and exclusions",
+    detail: "Which operating costs does the lease include, exclude, or allow only under stated conditions?",
+  },
+  {
+    title: "Caps and fee calculations",
+    detail: "Does the lease limit increases or management fees, and what amount is the limit applied to?",
+  },
+  {
+    title: "Allocation method",
+    detail: "What tenant area, building area, and sharing formula does the lease specify?",
+  },
+  {
+    title: "Statement arithmetic",
+    detail: "When an annual statement is provided, do visible totals, credits, and tenant shares reconcile?",
+  },
+  {
+    title: "Review and notice terms",
+    detail: "What records may be requested, and when does the lease require notice or action?",
+  },
+];
+
 export default function CommercialLeaseAuditPage() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16">
-      {/* ---------------- HERO ---------------- */}
-      <section className="mb-12">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-6">
-          Commercial Lease Audit for Tenants
+    <main className="mx-auto max-w-4xl px-6 py-16 text-slate-800 sm:py-20">
+      <header className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">Commercial tenant guide</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          What does a commercial lease audit actually check?
         </h1>
-
-        <p className="text-lg text-gray-700 mb-4">
-          A <strong>commercial lease audit for tenants</strong> reviews your
-          lease language and annual CAM / NNN charges to determine whether
-          costs were billed correctly — and whether avoidable overcharges exist.
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          A useful review starts with the lease rules, then compares them with the annual CAM or NNN statement and supporting records. A lease alone can identify terms to check; it cannot establish that a particular charge was billed incorrectly.
         </p>
+        <Link href="/app/step-1-upload" className="mt-7 inline-flex rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-slate-800">
+          Start with a free lease preview
+        </Link>
+      </header>
 
-        <p className="text-lg text-gray-700">
-          For many small and mid-sized commercial tenants, lease audit reviews
-          uncover $5,000–$50,000+ in annual exposure tied to administrative
-          fees, allocation errors, and improperly passed-through expenses.
-        </p>
-      </section>
-
-      {/* ---------------- WHAT IS A LEASE AUDIT ---------------- */}
-      <section className="mb-12">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          What Is a Commercial Lease Audit?
-        </h2>
-
-        <p className="text-gray-700 mb-4">
-          A commercial lease audit compares:
-        </p>
-
-        <ul className="list-disc pl-6 text-gray-700 space-y-2">
-          <li>The lease’s defined CAM / NNN language</li>
-          <li>Expense caps and exclusions</li>
-          <li>Pro-rata allocation methodology</li>
-          <li>Annual CAM reconciliation statements</li>
-          <li>Administrative and management fees</li>
-        </ul>
-
-        <p className="text-gray-700 mt-4">
-          The goal is simple: confirm whether the charges match what the lease
-          actually allows.
-        </p>
-      </section>
-
-      {/* ---------------- WHY TENANTS NEED ONE ---------------- */}
-      <section className="mb-12">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Why Commercial Tenants Often Need a Lease Audit
-        </h2>
-
-        <p className="text-gray-700 mb-4">
-          Commercial leases are complex. CAM (Common Area Maintenance) and NNN
-          (triple net) structures frequently include:
-        </p>
-
-        <ul className="list-disc pl-6 text-gray-700 space-y-2">
-          <li>Broad expense definitions</li>
-          <li>Vague capital expenditure language</li>
-          <li>Management fee markups</li>
-          <li>Allocation changes over time</li>
-          <li>Limited audit windows (30–90 days)</li>
-        </ul>
-
-        <p className="text-gray-700 mt-4">
-          Without reviewing the lease language against the reconciliation
-          statement, overcharges can compound year after year.
-        </p>
-      </section>
-
-      {/* ---------------- COMMON FINDINGS ---------------- */}
-      <section className="mb-12">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Common Findings in Commercial Lease Audits
-        </h2>
-
-        <div className="space-y-4 text-gray-700">
-          <p>
-            <strong>Administrative Fees Above Lease Caps</strong> – Many leases
-            cap admin fees at 10–15%, yet higher percentages are sometimes
-            applied.
-          </p>
-
-          <p>
-            <strong>Improper Capital Improvements</strong> – Structural or
-            long-term upgrades passed through as operating expenses.
-          </p>
-
-          <p>
-            <strong>Allocation Errors</strong> – Incorrect square footage or
-            pro-rata share calculations.
-          </p>
-
-          <p>
-            <strong>Duplicate Charges</strong> – Expenses appearing in both CAM
-            and NNN categories.
-          </p>
+      <section className="mt-14 grid gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <p className="text-sm font-semibold text-emerald-800">1 · Read the lease</p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-950">Find the rules</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">Identify expense definitions, exclusions, caps, allocation terms, and review rights.</p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <p className="text-sm font-semibold text-emerald-800">2 · Compare the statement</p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-950">Check what was billed</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">Match visible categories, arithmetic, credits, and tenant share to the lease.</p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 p-5">
+          <p className="text-sm font-semibold text-emerald-800">3 · Verify the records</p>
+          <h2 className="mt-2 text-lg font-semibold text-slate-950">Confirm the details</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">Use invoices, ledgers, area schedules, and fee worksheets before asserting an overcharge.</p>
         </div>
       </section>
 
-      {/* ---------------- FINANCIAL CONSEQUENCE ---------------- */}
-      <section className="mb-12">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Why Timing Matters
-        </h2>
-
-        <p className="text-gray-700 mb-4">
-          Most leases include a limited{" "}
-          <Link
-            href="/marketing/audit-window-deadlines"
-            className="underline hover:text-black"
-          >
-            audit window
-          </Link>{" "}
-          — often 30 to 90 days after receiving the reconciliation statement.
-        </p>
-
-        <p className="text-gray-700">
-          If that window closes, leverage decreases. Reviewing your lease
-          before the deadline preserves your ability to dispute improper
-          charges.
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">Five areas to examine</h2>
+        <div className="mt-6 space-y-3">
+          {reviewAreas.map((area) => (
+            <div key={area.title} className="rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-950">{area.title}</h3>
+              <p className="mt-1 text-slate-600">{area.detail}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 text-slate-600">
+          Learn more about <Link href="/marketing/non-allowable-cam-nnn-expenses" className="font-medium text-emerald-800 underline">expense categories to check</Link> and <Link href="/marketing/cam-reconciliation" className="font-medium text-emerald-800 underline">CAM reconciliation</Link>.
         </p>
       </section>
 
-      {/* ---------------- INTERNAL LINKS ---------------- */}
-      <section className="mb-12">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Related Guides
-        </h2>
-
-        <ul className="list-disc pl-6 text-gray-700 space-y-2">
-          <li>
-            <Link
-              href="/marketing/cam-reconciliation"
-              className="underline hover:text-black"
-            >
-              CAM Reconciliation Explained
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/cam-reconciliation-errors"
-              className="underline hover:text-black"
-            >
-              Common CAM Reconciliation Errors
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/lease-overcharge"
-              className="underline hover:text-black"
-            >
-              How Lease Overcharges Happen
-            </Link>
-          </li>
+      <section className="mt-16 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">What can be concluded from each document?</h2>
+        <ul className="mt-4 list-disc space-y-3 pl-5 leading-relaxed">
+          <li><strong>Lease only:</strong> Identify contract language and questions for the landlord. No billed amount has been verified.</li>
+          <li><strong>Lease plus annual statement:</strong> Compare visible amounts and flag potential differences. A statement category may still need invoice detail.</li>
+          <li><strong>Lease, statement, and backup:</strong> Test the underlying expense and allocation more directly. Any conclusion remains subject to the complete documents and applicable terms.</li>
         </ul>
       </section>
 
-      {/* ---------------- CTA ---------------- */}
-      <section className="bg-gray-50 border rounded-xl p-8 text-center">
-        <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-4">
-          Not Sure If Your Lease Was Billed Correctly?
-        </h2>
-
-        <p className="text-gray-700 mb-6">
-          Upload your commercial lease for a tenant-focused review of CAM /
-          NNN language, caps, exclusions, and reconciliation exposure through a
-          formal commercial lease audit process.
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">Before you start</h2>
+        <p className="mt-4 leading-relaxed text-slate-600">
+          Gather the signed lease and amendments. Add the annual CAM or NNN reconciliation statement if you have it, plus any invoices or schedules already provided. Check the exact notice and records-request provisions in your lease; deadlines vary and can affect your next step.
         </p>
+        <p className="mt-4 text-slate-600">
+          See the <Link href="/marketing/audit-window-deadlines" className="font-medium text-emerald-800 underline">audit-window guide</Link> for a checklist of timing questions.
+        </p>
+      </section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="inline-block bg-black text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
-        >
-          Upload Your Lease
+      <section className="mt-16 rounded-2xl bg-slate-950 p-6 text-white sm:p-8">
+        <h2 className="text-2xl font-semibold">See your lease terms before paying</h2>
+        <p className="mt-3 leading-relaxed text-slate-200">
+          SaveOnLease starts with a free lease preview. You can add an annual statement and up to four supporting PDFs before checkout. The $49.99 report summarizes the lease language, visible billing questions, records to request, and any limits on what can be verified.
+        </p>
+        <Link href="/app/step-1-upload" className="mt-6 inline-flex rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 hover:bg-slate-100">
+          Upload a lease for a free preview
         </Link>
-
-        <p className="mt-4 text-sm text-gray-600">
-          Takes 2 minutes. No subscription. Secure & confidential.
-        </p>
       </section>
     </main>
   );
