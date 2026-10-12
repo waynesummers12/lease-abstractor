@@ -117,6 +117,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/marketing/non-allowable-cam-nnn-expenses`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/marketing/audit-window-deadlines`,
       lastModified: now,
       changeFrequency: "monthly",
