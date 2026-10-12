@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saveonlease.com"),
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "CAM in Real Estate Explained | Common Area Maintenance Charges for Tenants",
   description:
     "Understand CAM in real estate, how common area maintenance charges are calculated, and how commercial tenants can identify overcharges before audit windows close.",
@@ -149,19 +149,19 @@ export default function CamRealEstatePage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Learn",
-                item: "https://saveonlease.com/marketing/learn",
+                item: "https://www.saveonlease.com/marketing/learn",
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: "CAM in Real Estate",
-                item: "https://saveonlease.com/marketing/cam-real-estate",
+                item: "https://www.saveonlease.com/marketing/cam-real-estate",
               },
             ],
           }),

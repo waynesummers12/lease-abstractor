@@ -6,7 +6,7 @@ export const metadata = {
   description:
     "Learn what CAM and NNN overcharges are, how they happen, and how commercial tenants can identify billing errors before audit deadlines expire.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/cam-nnn-overcharges",
+    canonical: "https://www.saveonlease.com/marketing/cam-nnn-overcharges",
   },
 };
 
@@ -154,19 +154,19 @@ export default function CamNnnOverchargesPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Learn",
-                item: "https://saveonlease.com/marketing/learn",
+                item: "https://www.saveonlease.com/marketing/learn",
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 name: "CAM & NNN Overcharges",
-                item: "https://saveonlease.com/marketing/cam-nnn-overcharges",
+                item: "https://www.saveonlease.com/marketing/cam-nnn-overcharges",
               },
             ],
           }),

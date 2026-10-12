@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Think your landlord overcharged you? Learn how CAM and NNN lease overcharges happen, what tenants can challenge, and how to review your lease before audit windows close.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/lease-overcharge",
+    canonical: "https://www.saveonlease.com/marketing/lease-overcharge",
   },
 };
 

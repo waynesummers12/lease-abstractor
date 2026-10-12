@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saveonlease.com"),
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "Lease CAM Explained | Common Area Maintenance in Commercial Leases",
   description:
     "Understand Lease CAM (Common Area Maintenance), how CAM charges work in commercial leases, common overcharges, reconciliation errors, and how tenants can protect themselves before audit deadlines close.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/lease-cam",
+    canonical: "https://www.saveonlease.com/marketing/lease-cam",
   },
 };
 
@@ -182,13 +182,13 @@ export default function LeaseCamPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Lease CAM",
-                item: "https://saveonlease.com/marketing/lease-cam",
+                item: "https://www.saveonlease.com/marketing/lease-cam",
               },
             ],
           }),

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Estimate potential CAM fee exposure in your commercial lease. Learn how CAM fees are calculated, common allocation errors, and how tenants can identify overcharges.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/cam-fee-calculator",
+    canonical: "https://www.saveonlease.com/marketing/cam-fee-calculator",
   },
 };
 

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Understand CAM in commercial real estate, how Common Area Maintenance charges work, and how tenants can identify overcharges before audit windows expire.",
   alternates: {
     canonical:
-      "https://saveonlease.com/marketing/cam-commercial-real-estate",
+      "https://www.saveonlease.com/marketing/cam-commercial-real-estate",
   },
 };
 

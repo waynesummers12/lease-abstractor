@@ -8,12 +8,12 @@ export const metadata: Metadata = {
     title: "SaveOnLease Pricing",
     description:
       "Upload your lease for a CAM and NNN risk preview and choose whether to unlock a full audit.",
-    url: "https://saveonlease.com/marketing/pricing",
+    url: "https://www.saveonlease.com/marketing/pricing",
     siteName: "SaveOnLease",
     type: "website",
     images: [
       {
-        url: "https://saveonlease.com/demo/OG%20Imagev1.png",
+        url: "https://www.saveonlease.com/demo/OG%20Imagev1.png",
         width: 1200,
         height: 630,
         alt: "SaveOnLease CAM & NNN Audit Report Preview",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "SaveOnLease Pricing",
     description:
       "Review your lease for CAM and NNN cost risks with a free preview and optional full audit.",
-    images: ["https://saveonlease.com/demo/OG%20Imagev1.png"],
+    images: ["https://www.saveonlease.com/demo/OG%20Imagev1.png"],
   },
 };
 

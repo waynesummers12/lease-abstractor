@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saveonlease.com"),
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "NNN Explained | What NNN Means in Commercial Real Estate",
   description:
     "NNN stands for triple net lease. Learn what NNN means in commercial real estate, how CAM, tax, and insurance charges work, and how tenants can prevent overcharges.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/nnn",
+    canonical: "https://www.saveonlease.com/marketing/nnn",
   },
 };
 
@@ -187,13 +187,13 @@ export default function nnnPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "NNN",
-                item: "https://saveonlease.com/marketing/nnn",
+                item: "https://www.saveonlease.com/marketing/nnn",
               },
             ],
           }),

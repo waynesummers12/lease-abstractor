@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saveonlease.com"),
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: "CAM Charges Explained | What Commercial Tenants Actually Pay",
   description:
     "Understand CAM charges in commercial leases, what is included, how they are calculated, common overcharges, and how tenants can protect themselves before audit deadlines close.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/cam-charges",
+    canonical: "https://www.saveonlease.com/marketing/cam-charges",
   },
 };
 
@@ -215,13 +215,13 @@ export default function CamChargesPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Home",
-                item: "https://saveonlease.com/",
+                item: "https://www.saveonlease.com/",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "CAM Charges",
-                item: "https://saveonlease.com/marketing/cam-charges",
+                item: "https://www.saveonlease.com/marketing/cam-charges",
               },
             ],
           }),

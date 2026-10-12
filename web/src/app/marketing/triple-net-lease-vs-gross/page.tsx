@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Triple net lease vs gross lease explained. Learn how NNN and gross leases differ, who pays operating expenses, and where commercial tenants face overcharge risk.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/triple-net-lease-vs-gross",
+    canonical: "https://www.saveonlease.com/marketing/triple-net-lease-vs-gross",
   },
 };
 

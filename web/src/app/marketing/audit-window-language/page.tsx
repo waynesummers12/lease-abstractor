@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Learn what audit window rights mean in commercial leases, how CAM and NNN dispute deadlines work, and what happens if tenants miss the window to challenge overcharges.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/audit-window-language",
+    canonical: "https://www.saveonlease.com/marketing/audit-window-language",
   },
 };
 

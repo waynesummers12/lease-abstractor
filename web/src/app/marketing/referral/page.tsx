@@ -39,8 +39,8 @@ export default function ReferralPage() {
   ];
 
   const referralLink = name
-    ? `https://saveonlease.com/?ref=${encodeURIComponent(name)}`
-    : "https://saveonlease.com/?ref=YOURNAME";
+    ? `https://www.saveonlease.com/?ref=${encodeURIComponent(name)}`
+    : "https://www.saveonlease.com/?ref=YOURNAME";
 
   const copyLink = async () => {
     try {

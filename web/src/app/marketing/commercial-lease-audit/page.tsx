@@ -7,7 +7,7 @@ export const metadata = {
   description:
     "Commercial lease audit for tenants. Identify CAM, NNN, and reconciliation overcharges before audit windows close. See how much exposure may be avoidable.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/commercial-lease-audit",
+    canonical: "https://www.saveonlease.com/marketing/commercial-lease-audit",
   },
 };
 

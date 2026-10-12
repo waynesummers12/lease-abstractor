@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 import { AuthProvider } from "./providers/AuthProvider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://saveonlease.com"),
+  metadataBase: new URL("https://www.saveonlease.com"),
   title: {
     default: "SaveOnLease — CAM & NNN Lease Audit for Commercial Tenants",
     template: "%s | SaveOnLease",

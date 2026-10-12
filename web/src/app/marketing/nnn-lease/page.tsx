@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Understand what an NNN lease is, how triple net leases work, and how CAM, tax, and insurance charges impact commercial tenants.",
   alternates: {
-    canonical: "https://saveonlease.com/marketing/nnn-lease",
+    canonical: "https://www.saveonlease.com/marketing/nnn-lease",
   },
 };
 
