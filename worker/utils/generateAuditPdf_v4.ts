@@ -202,7 +202,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   const sourceText = sourcePages.map((p) => p.text).join(" ");
   const refreshed = sourceText ? abstractLease(sourceText) : null;
   const facts = leaseFacts(sourcePages);
-  const isSample = /demonstration purposes only|sample - not a legal document/i.test(safeText(sourceText));
+  const isSample = /demonstration purposes only|sample - not a legal document|sample document - fictional/i.test(safeText(sourceText));
   const stored = Array.isArray(analysis.health?.flags) ? analysis.health.flags.filter((f) => typeof f?.label === "string") : [];
   const hasCapexException = refreshed?.health.flags.some((flag) => flag.code === "CAPEX_EXCEPTION") ?? false;
   const candidates = stored.filter((flag) =>
@@ -262,6 +262,12 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
       ? { text: `${facts.auditInitiateMonths.value} months after receiving the reconciliation to initiate an audit`, page: facts.auditInitiateMonths.page }
       : null;
   const deadlineMention = items.find(({ flag }) => flag.code === "AUDIT_WINDOW")?.match;
+  const statementQuestions = analysis.reconciliation?.checks.filter((check) => check.status === "question") ?? [];
+  const statementPriority = ["Tenant share", "Monthly payment ledger", "Administrative fee"];
+  const firstStatementQuestions = [...statementQuestions].sort((a, b) =>
+    (statementPriority.indexOf(a.label) < 0 ? 99 : statementPriority.indexOf(a.label))
+    - (statementPriority.indexOf(b.label) < 0 ? 99 : statementPriority.indexOf(b.label)));
+  const statementDeadline = analysis.reconciliation?.checks.find((check) => check.label === "Review notice window");
   const recordRequests = [
     "Annual CAM / NNN reconciliation and category detail",
     ...priorityItems.map(({ flag }) => firstPageRequests[flag.code!]),
@@ -300,24 +306,31 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   lines("CAM / NNN language review  |  Prepared " + new Date().toISOString().slice(0, 10), MARGIN, 10, BLUE, bold); y -= 18;
   page.drawRectangle({ x: MARGIN, y: y - 83, width: CONTENT, height: 83, color: LIGHT });
   y -= 24;
-  page.drawText(`${items.length} review topic${items.length === 1 ? "" : "s"} found`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
-  lines("A lease clause is a starting point. Whether a charge was overbilled requires the landlord's statements, calculations, and supporting records.", MARGIN + 18, 10.5, NAVY, font, CONTENT - 36); y -= 20;
+  page.drawText(analysis.reconciliation ? `${statementQuestions.length} statement question${statementQuestions.length === 1 ? "" : "s"} to verify` : `${items.length} review topic${items.length === 1 ? "" : "s"} found`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
+  lines(analysis.reconciliation ? "The lease and statement raise questions about billing. Supporting records are needed before any recoverable amount can be confirmed." : "A lease clause is a starting point. Whether a charge was overbilled requires the landlord's statements, calculations, and supporting records.", MARGIN + 18, 10.5, NAVY, font, CONTENT - 36); y -= 20;
   if (isSample) { lines("This upload is marked as a sample demonstration lease.", MARGIN, 9.5, BLUE, bold); y -= 4; }
 
   heading("Your first actions");
   page.drawText("DEADLINE TO VERIFY", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 18;
-  lines(deadline
+  lines(statementDeadline
+    ? statementDeadline.result
+    : deadline
     ? `${deadline.text} (lease p. ${deadline.page}). Confirm the trigger, notice rules, and amendments.`
     : deadlineMention
       ? `A possible review deadline appears on lease p. ${deadlineMention.page}, but its timing was not reliably extracted. Read the full clause.`
       : "No review deadline was reliably extracted. Check the signed lease and amendments before relying on any timing.",
   MARGIN, 10, NAVY, bold); y -= 11;
-  if (deadline || deadlineMention) {
+  if (!statementDeadline && (deadline || deadlineMention)) {
     lines("The actual calendar deadline cannot be calculated without the statement delivery date.", MARGIN, 9, MUTED); y -= 11;
   }
 
-  page.drawText("LEASE TERMS TO CHECK FIRST", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 19;
-  if (priorityItems.length === 0) {
+  page.drawText(analysis.reconciliation ? "STATEMENT QUESTIONS TO VERIFY" : "LEASE TERMS TO CHECK FIRST", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 19;
+  if (analysis.reconciliation && statementQuestions.length) {
+    for (const [index, finding] of firstStatementQuestions.slice(0, 3).entries()) {
+      lines(`${index + 1}. ${finding.label}`, MARGIN, 10, NAVY, bold); y -= 8;
+    }
+    lines("See the annual statement review for page references and the remaining questions.", MARGIN, 9, MUTED); y -= 8;
+  } else if (priorityItems.length === 0) {
     lines("No page-supported expense rule was identified for this summary. Review the complete lease and billing records directly.", MARGIN, 10, NAVY); y -= 12;
   } else {
     for (const [index, item] of priorityItems.entries()) {

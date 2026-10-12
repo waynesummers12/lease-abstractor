@@ -74,7 +74,7 @@ function formatMoney(n: number): string {
 /* -------------------- CORE FIELDS -------------------- */
 
 function extractTenant(text: string): string | null {
-  const parties = text.match(/\bby and between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
+  const parties = text.match(/\b(?:by and )?between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
   if (parties) return cleanPartyName(parties[2]);
   return extractWithPatterns(text, [
     /Tenant:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
@@ -83,7 +83,7 @@ function extractTenant(text: string): string | null {
 }
 
 function extractLandlord(text: string): string | null {
-  const parties = text.match(/\bby and between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
+  const parties = text.match(/\b(?:by and )?between\s+(.+?)\s*\("Landlord"\)\s*,?\s+and\s+(.+?)\s*\("Tenant"\)/i);
   if (parties) return cleanPartyName(parties[1]);
   return extractWithPatterns(text, [
     /Landlord:\s*([A-Z][A-Za-z0-9 &.,'-]{3,})/,
@@ -92,10 +92,12 @@ function extractLandlord(text: string): string | null {
 }
 
 function cleanPartyName(value: string): string {
-  return value.replace(/,\s+an?\s+[A-Za-z ]+\s+(?:limited liability company|corporation|partnership|company)\s*$/i, "").trim();
+  return value.replace(/,\s+an?\s+[A-Za-z ]+\s+(?:limited liability company|corporation|partnership|company)\s*$/i, "").replace(/\s+/g, " ").trim();
 }
 
 function extractPremises(text: string): string | null {
+  const basicProvision = text.match(/\b1\.2\s+Premises\s*(Suite\s+\d+\s*,\s*Building\s+[A-Z])\b/i);
+  if (basicProvision) return basicProvision[1];
   const definedPremises = extractWithPatterns(text, [
     /located at:?\s+(.+?)\s+\((?:the\s+)?"Premises"\)/i,
   ]);
@@ -113,11 +115,13 @@ function extractDate(type: "start" | "end", text: string): string | null {
     return extractWithPatterns(text, [
       /commence(?:s|ment)? on ([A-Za-z]+ \d{1,2}, \d{4})/i,
       /commencing on ([A-Za-z]+ \d{1,2}, \d{4})/i,
+      /commencing ([A-Za-z]+ \d{1,2}, \d{4})/i,
     ]);
   }
 
   return extractWithPatterns(text, [
     /expir(?:e|ing) on ([A-Za-z]+ \d{1,2}, \d{4})/i,
+    /expiring ([A-Za-z]+ \d{1,2}, \d{4})/i,
     /expiration date[:\s]+([A-Za-z]+ \d{1,2}, \d{4})/i,
   ]);
 }

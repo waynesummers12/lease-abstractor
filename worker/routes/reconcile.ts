@@ -2,7 +2,7 @@ import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { PDFParse } from "npm:pdf-parse@2.4.5";
 import { supabase } from "../lib/supabase.ts";
 import { readLeasePagesForReport } from "../utils/readLeasePagesForReport.ts";
-import { reconcileDocuments } from "../utils/reconcileDocuments.ts";
+import { reconcileDocumentsV2 } from "../utils/reconcileDocumentsV2.ts";
 import { isGeneratedAuditReport } from "../utils/documentType.ts";
 
 const router = new Router();
@@ -65,7 +65,7 @@ router.post("/audit/:auditId/reconcile", async (ctx) => {
     const supports = await Promise.all(files.slice(1).map(load));
     const leasePages = await readLeasePagesForReport(auditId);
     if (!leasePages?.length) throw new Error("Lease text is unavailable; upload the lease again.");
-    const reconciliation = reconcileDocuments(statement.name, statement.pages, leasePages, supports);
+    const reconciliation = reconcileDocumentsV2(statement.name, statement.pages, leasePages, supports);
     const uploads = [{ path: `reconciliation/${auditId}/statement.pdf`, bytes: statement.bytes }, ...supports.map((item, index) => ({ path: `reconciliation/${auditId}/support-${index + 1}.pdf`, bytes: item.bytes }))];
     for (const upload of uploads) {
       const { error: uploadError } = await supabase.storage.from("leases").upload(upload.path, upload.bytes, { contentType: "application/pdf", upsert: true });
