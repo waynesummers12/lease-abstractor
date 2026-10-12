@@ -138,7 +138,7 @@ export default function FranchiseCamAuditPage() {
                 What common errors are found in franchise NNN leases?
               </h3>
               <p className="mt-2">
-                Common issues include uncapped administrative fees, capital improvement pass-throughs, incorrect pro-rata allocations, insurance markups, and expense stacking across shared centers. See detailed industry examples in our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-emerald-600 underline">Burger Restaurant Rent Benchmark guide</Link>.
+                Common review topics include administrative fees, capital work, pro-rata allocations, and insurance charges. See how to calculate full occupancy cost in our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-emerald-600 underline">Burger Restaurant Rent guide</Link>.
               </p>
             </div>
 

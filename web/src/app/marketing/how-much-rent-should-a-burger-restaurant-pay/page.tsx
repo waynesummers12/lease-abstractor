@@ -1,146 +1,76 @@
-
-
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "How Much Rent Should a Burger Restaurant Pay? | 2026 Lease Guide",
+export const metadata: Metadata = {
+  title: "How Much Rent Should a Burger Restaurant Pay?",
   description:
-    "Understand typical rent-to-revenue ratios for burger restaurants and franchise operators. Learn how CAM and NNN charges impact total occupancy cost.",
+    "Calculate a burger restaurant's full occupancy cost, including base rent, CAM, taxes, and insurance. See what the result can and cannot tell you about your lease.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/how-much-rent-should-a-burger-restaurant-pay",
+  },
 };
 
 export default function HowMuchRentBurgerRestaurantPage() {
   return (
-    <main className="bg-white">
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
-          How Much Rent Should a Burger Restaurant Pay?
+    <main className="mx-auto max-w-4xl px-6 py-16 text-slate-800 sm:py-20">
+      <header className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">Restaurant occupancy costs</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          How much rent should a burger restaurant pay?
         </h1>
-
-        <p className="mt-4 text-lg text-gray-600">
-          A practical benchmark guide for franchisees and multi-unit QSR operators evaluating lease performance.
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          There is no single rent percentage that fits every burger restaurant. Sales, location, store format, lease terms, and operating margins all matter. Start by calculating the full annual occupancy cost, then compare locations and test the charges against each lease.
         </p>
+      </header>
 
-        <div className="mt-10 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            Typical Rent-to-Revenue Ratio for Burger Restaurants
-          </h2>
+      <section className="mt-14 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Calculate the whole occupancy cost</h2>
+        <p className="mt-3 leading-relaxed"><strong>Annual occupancy cost</strong> = base rent + percentage rent, if any + CAM + property tax + insurance + other occupancy charges the lease requires.</p>
+        <p className="mt-3 leading-relaxed"><strong>Occupancy-cost ratio</strong> = annual occupancy cost ÷ annual gross sales × 100.</p>
+        <p className="mt-3 text-sm text-slate-700">Use the same reporting period for costs and sales. Keep sales tax, discounts, delivery fees, and franchise reporting definitions consistent with your own financial statements.</p>
+      </section>
 
-          <p>
-            Most quick-service burger restaurants aim for total occupancy costs
-            (base rent + CAM + taxes + insurance) to fall between
-            <strong> 6%–10% of gross revenue</strong>.
-          </p>
-
-          <p>
-            If total occupancy exceeds 10–12%, profitability becomes increasingly
-            sensitive to labor, food, and insurance cost fluctuations.
-          </p>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">A worked example</h2>
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+          <table className="w-full min-w-[440px] text-left">
+            <caption className="sr-only">Illustrative annual burger restaurant occupancy cost</caption>
+            <thead className="bg-slate-50 text-slate-950"><tr><th scope="col" className="px-5 py-3">Annual item</th><th scope="col" className="px-5 py-3 text-right">Example amount</th></tr></thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr><td className="px-5 py-3">Base rent</td><td className="px-5 py-3 text-right">$72,000</td></tr>
+              <tr><td className="px-5 py-3">CAM</td><td className="px-5 py-3 text-right">$18,000</td></tr>
+              <tr><td className="px-5 py-3">Property tax</td><td className="px-5 py-3 text-right">$12,000</td></tr>
+              <tr><td className="px-5 py-3">Insurance</td><td className="px-5 py-3 text-right">$3,000</td></tr>
+              <tr className="font-semibold text-slate-950"><td className="px-5 py-3">Total occupancy cost</td><td className="px-5 py-3 text-right">$105,000</td></tr>
+            </tbody>
+          </table>
         </div>
+        <p className="mt-5 leading-relaxed">If annual gross sales are $1,500,000, the example ratio is <strong>7%</strong> ($105,000 ÷ $1,500,000). This illustrates the calculation; it is not a market benchmark or a conclusion that the charges are correct.</p>
+      </section>
 
-        <div className="mt-12 grid md:grid-cols-3 gap-6 text-sm">
-          <div className="p-6 border rounded-lg bg-gray-50">
-            <p className="font-semibold text-gray-900">Strong Location</p>
-            <p className="mt-2 text-gray-600">6%–8% of gross revenue</p>
-          </div>
-          <div className="p-6 border rounded-lg bg-gray-50">
-            <p className="font-semibold text-gray-900">Average Range</p>
-            <p className="mt-2 text-gray-600">8%–10% of gross revenue</p>
-          </div>
-          <div className="p-6 border rounded-lg bg-gray-50">
-            <p className="font-semibold text-gray-900">High Risk Zone</p>
-            <p className="mt-2 text-gray-600">10%–12%+ of gross revenue</p>
-          </div>
-        </div>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">What to compare across locations</h2>
+        <ul className="mt-5 list-disc space-y-3 pl-5 leading-relaxed">
+          <li><strong>Total cost per square foot:</strong> Divide annual occupancy cost by the premises area stated in that location's lease.</li>
+          <li><strong>CAM and NNN components:</strong> Keep rent, maintenance, taxes, and insurance separate so a change in one category is visible.</li>
+          <li><strong>Estimated versus actual payments:</strong> A reconciliation should credit payments already made during the year.</li>
+          <li><strong>Year-over-year changes:</strong> Record the stated reason for a jump and request backup before treating it as an error.</li>
+          <li><strong>Lease differences:</strong> One store may have a cap, exclusion, or allocation method that another does not.</li>
+        </ul>
+      </section>
 
-        <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            The Hidden Variable: CAM & NNN Charges
-          </h2>
+      <section className="mt-16 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">High cost is a business question; an overcharge is a document question</h2>
+        <p className="mt-3 leading-relaxed">A high occupancy-cost ratio may reflect an expensive location, weaker sales, or a charge worth investigating. It does not prove the landlord billed contrary to the lease. To test a CAM or NNN line, compare the lease, annual statement, and supporting invoices or allocation records.</p>
+        <p className="mt-3 text-slate-700">Use our <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="font-medium text-emerald-800 underline">burger restaurant CAM checklist</Link> for that review.</p>
+      </section>
 
-          <p>
-            Many operators focus on base rent per square foot but overlook
-            the impact of CAM, insurance, and tax pass-throughs in{" "}
-            <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">triple-net lease structures</Link>.
-          </p>
-
-          <p>
-            A location that appears to be 7% of revenue can quickly move into
-            the 10–12% range when reconciliation discrepancies are present.
-          </p>
-          <p>
-            If discrepancies are suspected, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link> to understand common risk patterns.
-          </p>
-
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Uncapped administrative fees</li>
-            <li>Capital improvements billed as CAM</li>
-            <li>Improper pro rata allocations</li>
-            <li>Insurance markups</li>
-          </ul>
-        </div>
-
-        <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
-            Multi-Unit Operators: Portfolio-Level Math
-          </h2>
-          <p className="mt-3 text-indigo-800">
-            A 2% overage in occupancy cost across 10 stores generating $1.5M each
-            equals $300,000 in annual margin erosion.
-          </p>
-        </div>
-
-        <div className="mt-16">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            When to Review Your Lease
-          </h2>
-          <p className="mt-4 text-gray-700 leading-relaxed">
-            If occupancy costs exceed 9–10% of gross revenue, or if year-over-year
-            CAM increases outpace revenue growth, a structured lease review is warranted.
-          </p>
-          <p className="mt-4 text-gray-700 leading-relaxed">
-            You may also want to follow our structured <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-indigo-600 font-medium hover:underline">CAM Reconciliation Checklist</Link> and understand your <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-indigo-600 font-medium hover:underline">Lease Audit Rights</Link> before your audit window closes.
-          </p>
-        </div>
-
-        <div className="mt-16 text-center">
-          <Link
-            href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition"
-          >
-            Upload Your Lease — Results in ~10 Seconds
-          </Link>
-          <p className="mt-3 text-sm text-gray-500">
-            Secure. No subscription required.
-          </p>
-        </div>
-
-        <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
-            FAQ
-          </h3>
-
-          <div className="mt-6 space-y-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                What is a typical CAM cost per square foot for burger restaurants?
-              </p>
-              <p className="mt-2 text-gray-600">
-                CAM varies by market and center type, but operators often see
-                $3–$10+ per square foot annually in retail environments.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-medium text-gray-900">
-                Can high occupancy costs be renegotiated?
-              </p>
-              <p className="mt-2 text-gray-600">
-                Depending on lease terms and audit findings, operators may have
-                leverage during renewal periods or through formal audit processes.
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="mt-16 rounded-2xl bg-slate-950 p-6 text-white sm:p-8">
+        <h2 className="text-2xl font-semibold">Check the lease behind the number</h2>
+        <p className="mt-3 leading-relaxed text-slate-200">Upload your lease for a free preview of its CAM and NNN terms. Add an annual statement and supporting PDFs before checkout if you have them. The $49.99 report flags visible billing questions and states what still needs verification.</p>
+        <Link href="/app/step-1-upload" className="mt-6 inline-flex rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 hover:bg-slate-100">
+          Upload a lease for a free preview
+        </Link>
       </section>
     </main>
   );

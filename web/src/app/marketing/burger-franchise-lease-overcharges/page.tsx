@@ -68,7 +68,7 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
             location-level profitability.
           </p>
           <p>
-            You can also benchmark total occupancy cost using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link> to see if your location is outside the healthy 6–10% range.
+            You can calculate total occupancy cost using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link>, then compare the result with your store's financial plan.
           </p>
           <p>
             If you want a broader overview of risk exposure across your lease, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
