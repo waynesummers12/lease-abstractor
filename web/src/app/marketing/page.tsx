@@ -1,9 +1,10 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Commercial Lease Expense Review | SaveOnLease",
   description: "Review CAM and NNN terms in your lease, then add an annual statement and supporting records for an automated review.",
-  alternates: { canonical: "/marketing" },
+  alternates: { canonical: "https://www.saveonlease.com/marketing" },
 };
 
 export default function MarketingHomePage() {
