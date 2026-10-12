@@ -1,134 +1,94 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Burger Restaurant Lease Audit | CAM & NNN Review for Franchise Operators",
+export const metadata: Metadata = {
+  title: "Burger Restaurant Lease Audit | CAM & NNN Review",
   description:
-    "Lease audit services built for burger franchisees and multi-unit QSR operators. Identify hidden CAM and NNN overcharges before audit deadlines expire.",
+    "Review CAM and NNN terms in a burger restaurant lease, compare an annual statement, and organize the records needed to verify a billing question.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/burger-restaurant-lease-audit",
+  },
 };
+
+const reviewAreas = [
+  {
+    title: "The expense rules",
+    detail: "Identify the lease's CAM and NNN definitions, exclusions, caps, fee bases, and amendments.",
+  },
+  {
+    title: "The store's share",
+    detail: "Check the premises area, center area, allocation formula, and any separate pools for anchors or shared services.",
+  },
+  {
+    title: "Restaurant-specific services",
+    detail: "Ask how parking, drive-through areas, trash, grease service, utilities, and exclusive-use facilities were allocated when they appear on the statement.",
+  },
+  {
+    title: "The annual true-up",
+    detail: "Compare billed categories and visible arithmetic with estimated payments and credits already recorded.",
+  },
+  {
+    title: "The next action",
+    detail: "Locate the records-request procedure and notice language before deciding whether to ask a billing question or challenge a charge.",
+  },
+];
 
 export default function BurgerRestaurantLeaseAuditPage() {
   return (
-    <main className="bg-white">
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
-          Burger Restaurant Lease Audit
+    <main className="mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20">
+      <header className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">For burger franchise and multi-unit tenants</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Burger restaurant lease audit: where to start
         </h1>
-
-        <p className="mt-4 text-lg text-gray-600">
-          CAM & NNN risk review built specifically for franchisees and multi-unit
-          burger operators in strip centers and inline retail.
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          A lease review identifies the rules for CAM and NNN expenses. An annual statement shows what was billed. Supporting records help establish whether a questioned charge was calculated and allocated as the lease requires.
         </p>
+        <Link href="/app/step-1-upload" className="mt-7 inline-flex rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-slate-800">
+          See a free lease preview
+        </Link>
+      </header>
 
-        <div className="mt-10 grid md:grid-cols-3 gap-6 text-sm">
-          <div className="p-4 bg-gray-50 border rounded-lg">
-            <p className="font-semibold text-gray-900">Thin margins (4–6%)</p>
-            <p className="mt-1 text-gray-600">
-              A small allocation error can eliminate store-level profit.
-            </p>
-          </div>
-          <div className="p-4 bg-gray-50 border rounded-lg">
-            <p className="font-semibold text-gray-900">Triple Net leases common</p>
-            <p className="mt-1 text-gray-600">
-              Taxes, insurance, maintenance and admin fees often pass through unchecked.
-            </p>
-          </div>
-          <div className="p-4 bg-gray-50 border rounded-lg">
-            <p className="font-semibold text-gray-900">Audit windows limited</p>
-            <p className="mt-1 text-gray-600">
-              Most leases allow only 30–120 days to challenge discrepancies.
-            </p>
-          </div>
+      <section className="mt-14 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Start with one location</h2>
+        <p className="mt-3 leading-relaxed">Gather the signed lease and amendments, the latest CAM or NNN reconciliation, and any invoices or allocation schedules already available. Review each store against its own documents before comparing locations. A term that applies at one restaurant may not appear in another lease.</p>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">What the review examines</h2>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {reviewAreas.map((area) => (
+            <article key={area.title} className="rounded-2xl border border-slate-200 p-5 sm:p-6">
+              <h3 className="text-lg font-semibold text-slate-950">{area.title}</h3>
+              <p className="mt-2 leading-relaxed text-slate-600">{area.detail}</p>
+            </article>
+          ))}
         </div>
+        <p className="mt-5 text-slate-600">Work through the <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="font-medium text-emerald-800 underline">restaurant CAM checklist</Link> for document-by-document questions.</p>
+      </section>
 
-        <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            Why Burger Restaurants Face Elevated Lease Risk
-          </h2>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">How multi-unit operators can compare stores</h2>
+        <ol className="mt-5 list-decimal space-y-4 pl-5 leading-relaxed">
+          <li>Use one row per location with the statement year, premises area, billed share, CAM, taxes, insurance, estimated payments, and true-up.</li>
+          <li>Record the lease clause behind each cap, exclusion, or allocation rule. Do not assume a clause from another store applies.</li>
+          <li>Flag unusual differences for review, then request the underlying schedules or invoices. A difference between stores is a prompt to investigate, not a verified overcharge.</li>
+          <li>Track each lease's notice and records-review terms separately.</li>
+        </ol>
+        <p className="mt-5 text-slate-600">If you are comparing total occupancy cost with sales, use our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="font-medium text-emerald-800 underline">restaurant rent calculation guide</Link>. That business metric does not establish whether CAM was billed correctly.</p>
+      </section>
 
-          <p>
-            Burger restaurants frequently operate in high-traffic retail centers
-            where common area maintenance (CAM) and NNN expenses fluctuate
-            year over year. Inflation, insurance increases, and capital upgrades
-            can significantly impact reconciliation statements.
-          </p>
+      <section className="mt-16 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">What a finding means</h2>
+        <p className="mt-3 leading-relaxed">A lease-only finding identifies language to check. A lease and statement may reveal a visible calculation difference. Confirming the reason and any tenant-level dollar effect may require invoices, area schedules, payment records, or other backup. The report should label those limits rather than present a question as a recovered amount.</p>
+      </section>
 
-          <p>
-            Without structured review, franchisees may unknowingly absorb:
-          </p>
-
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Improper CAM allocation percentages</li>
-            <li>Uncapped administrative fees</li>
-            <li>Capital expense pass-throughs</li>
-            <li>Insurance markups</li>
-            <li>Charges outside lease-defined categories</li>
-          </ul>
-        </div>
-
-        <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
-            Portfolio-Level Impact for Multi-Unit Operators
-          </h2>
-          <p className="mt-3 text-indigo-800">
-            A $6,000 annual discrepancy at one location becomes $60,000 across
-            ten stores. Lease exposure scales with footprint.
-          </p>
-        </div>
-
-        <div className="mt-16">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            What a Burger Lease Audit Includes
-          </h2>
-
-          <ul className="mt-6 space-y-3 text-gray-700">
-            <li>✔ Review of CAM reconciliation statements</li>
-            <li>✔ Lease cap verification</li>
-            <li>✔ Capital expenditure compliance analysis</li>
-            <li>✔ Administrative fee review</li>
-            <li>✔ Audit window deadline identification</li>
-          </ul>
-        </div>
-
-        <div className="mt-16 text-center">
-          <Link
-            href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            Upload Your Lease — Results in ~10 Seconds
-          </Link>
-          <p className="mt-3 text-sm text-gray-500">
-            Secure. No subscription required.
-          </p>
-        </div>
-
-        <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
-            FAQ
-          </h3>
-
-          <div className="mt-6 space-y-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                How much exposure can a burger restaurant lease contain?
-              </p>
-              <p className="mt-2 text-gray-600">
-                Exposure varies by square footage and center type, but
-                discrepancies of $5,000–$20,000 per location annually are not uncommon.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-medium text-gray-900">
-                Do franchisees have audit rights?
-              </p>
-              <p className="mt-2 text-gray-600">
-                Most commercial leases provide defined audit rights with
-                specific time limits. Reviewing reconciliation statements promptly
-                is critical to preserve these rights.
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="mt-16 rounded-2xl bg-slate-950 p-6 text-white sm:p-8">
+        <h2 className="text-2xl font-semibold">Review your own lease and statement</h2>
+        <p className="mt-3 leading-relaxed text-slate-200">Start with a free lease preview. Add an annual statement and up to four supporting PDFs before checkout if available. The $49.99 report summarizes relevant terms, visible billing questions, records to request, and what remains unverified.</p>
+        <Link href="/app/step-1-upload" className="mt-6 inline-flex rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 hover:bg-slate-100">
+          Upload a lease for a free preview
+        </Link>
       </section>
     </main>
   );
