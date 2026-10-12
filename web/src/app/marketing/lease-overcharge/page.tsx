@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Commercial Lease Overcharge | What Tenants Can Do About CAM & NNN Billing Errors",
+  title: "How to Check a Commercial Lease Overcharge | SaveOnLease",
   description:
-    "Think your landlord overcharged you? Learn how CAM and NNN lease overcharges happen, what tenants can challenge, and how to review your lease before audit windows close.",
+    "Compare your lease, annual CAM or NNN statement, and payment records to investigate a possible commercial lease overcharge.",
   alternates: {
     canonical: "https://www.saveonlease.com/marketing/lease-overcharge",
   },
@@ -12,169 +12,138 @@ export const metadata: Metadata = {
 
 export default function LeaseOverchargePage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
-      {/* HERO */}
-      <section className="space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-          Commercial Lease Overcharge: What Tenants Can Do
+    <main className="mx-auto max-w-4xl space-y-12 px-6 py-16 text-slate-900">
+      <section className="space-y-5">
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          How to check a possible commercial lease overcharge
         </h1>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          A <strong>commercial lease overcharge</strong> often happens during
-          CAM or NNN reconciliation — when landlords finalize annual operating
-          expenses and bill tenants for the difference.
+        <p className="text-lg text-slate-700">
+          A higher CAM or NNN bill is a reason to investigate, but the amount
+          alone does not prove an overcharge. Compare the lease and amendments,
+          the annual statement, and the payments already credited. That
+          comparison shows which figures can be checked now and which need
+          supporting records.
         </p>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          Many tenants assume these charges are correct. In reality, billing
-          errors, cap violations, and improper expense allocations are more
-          common than most realize.
-        </p>
-
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
+          className="inline-block rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white hover:bg-emerald-800"
         >
-          Upload Your Lease (Free Preview)
+          Upload your lease for a free preview
         </Link>
       </section>
 
-      {/* HOW OVERCHARGES HAPPEN */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          How Lease Overcharges Happen
-        </h2>
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Start with three documents</h2>
+        <ol className="list-decimal space-y-3 pl-6 text-slate-700">
+          <li>
+            <strong>Lease and amendments:</strong> Find the expense definitions,
+            exclusions, caps, allocation formula, review procedure, and any
+            notice deadline.
+          </li>
+          <li>
+            <strong>Annual statement:</strong> Record each expense category,
+            your stated share, adjustments, and the balance requested.
+          </li>
+          <li>
+            <strong>Payment records:</strong> Add the monthly estimates and
+            other credits you actually paid, then compare them with the
+            statement.
+          </li>
+        </ol>
+      </section>
 
-        <ul className="list-disc pl-6 space-y-3 marker:text-green-600">
-          <li>Incorrect pro-rata share calculations</li>
-          <li>Administrative fees exceeding lease-defined caps</li>
-          <li>Capital improvements billed as operating expenses</li>
-          <li>Vacant unit costs allocated to active tenants</li>
-          <li>Duplicate CAM and NNN charges</li>
-          <li>Charges outside lease-defined allowable categories</li>
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Where a mismatch may appear</h2>
+        <ul className="list-disc space-y-2 pl-6 text-slate-700">
+          <li>The statement uses a different tenant share or area than the lease specifies.</li>
+          <li>A billed category may conflict with an exclusion or cap.</li>
+          <li>An administrative fee may use the wrong base or rate.</li>
+          <li>A capital project may be treated differently than the lease requires.</li>
+          <li>Monthly estimates or other payments may be missing from the credits.</li>
+          <li>A category may appear twice under different labels.</li>
         </ul>
+        <p className="text-slate-700">
+          Each item is a question to verify, not a conclusion. For example,
+          if your records show $61,200 in estimates paid but the statement
+          credits $56,100, the $5,100 difference deserves a records check.
+          It may reflect a missing credit, a different billing period, or
+          another adjustment.
+        </p>
+      </section>
 
-        <p>
-          These issues are typically uncovered during{" "}
-          <Link
-            href="/marketing/cam-reconciliation"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Calculate only what the records support</h2>
+        <p className="text-slate-700">
+          Recheck visible arithmetic first: expense total, your share, any
+          caps or exclusions that can be applied from the lease, and credits
+          for payments made. Keep uncertain charges separate from confirmed
+          calculation differences. Invoices, ledgers, area schedules, or
+          amortization details may be needed before assigning a dollar impact.
+        </p>
+        <p className="text-slate-700">
+          Our{" "}
+          <Link href="/marketing/cam-reconciliation" className="text-emerald-800 underline">
+            CAM reconciliation guide
           </Link>{" "}
-          review or a formal{" "}
-          <Link
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            commercial lease audit
-          </Link>
-          .
-        </p>
-      </section>
-
-      {/* WHAT TENANTS CAN CHALLENGE */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          What Tenants Can Challenge
-        </h2>
-
-        <p>
-          Most commercial leases include audit rights that allow tenants to
-          dispute questionable charges — but only within a limited timeframe.
-        </p>
-
-        <p>
-          Review your lease language carefully to understand:
-        </p>
-
-        <ul className="list-disc pl-6 space-y-3 marker:text-green-600">
-          <li>Expense caps</li>
-          <li>Exclusions</li>
-          <li>Allocation methods</li>
-          <li>Audit window deadlines</li>
-        </ul>
-
-        <p>
-          Learn more about{" "}
-          <Link
-            href="/marketing/audit-window-deadlines"
-            className="underline hover:text-black"
-          >
-            audit window deadlines
+          explains the annual statement, and the{" "}
+          <Link href="/marketing/cam-audit-checklist" className="text-emerald-800 underline">
+            review checklist
           </Link>{" "}
-          before taking action.
+          helps organize the figures and records.
         </p>
       </section>
 
-      {/* FINANCIAL CONSEQUENCES */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Why Lease Overcharges Matter Financially
-        </h2>
-
-        <p>
-          Even small percentage errors can cost $5,000–$50,000+ annually,
-          depending on square footage and expense levels.
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Check the lease&apos;s next-step procedure</h2>
+        <p className="text-slate-700">
+          If you need backup or want to raise a billing question, follow the
+          lease&apos;s instructions for the recipient, delivery method, and
+          timing. The right to inspect records and the deadline for an
+          objection vary by agreement. If the deadline is close or the
+          potential amount is material, consider a qualified attorney or
+          accountant. Reading a report does not send a notice or preserve
+          rights for you.
         </p>
-
-        <p>
-          Because CAM and NNN charges recur each year, unnoticed overcharges
-          compound over time — especially in multi-year leases.
-        </p>
+        <Link href="/marketing/audit-window-deadlines" className="text-emerald-800 underline">
+          Learn how to locate review and notice deadlines
+        </Link>
       </section>
 
-      {/* INTERNAL LINKS */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Related Guides
-        </h2>
-
-        <ul className="space-y-3">
-          <li>
-            <Link
-              href="/marketing/cam-reconciliation-errors"
-              className="underline hover:text-black"
-            >
-              CAM Reconciliation Errors Explained
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/non-allowable-cam-nnn-expenses"
-              className="underline hover:text-black"
-            >
-              Non-Allowable CAM & NNN Expenses
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/triple-net-lease"
-              className="underline hover:text-black"
-            >
-              What Is a Triple Net Lease?
-            </Link>
-          </li>
-        </ul>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="border-t pt-10 space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Think You’ve Been Overcharged?
-        </h2>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          Upload your lease and reconciliation statement to identify potential
-          CAM and NNN billing issues before your leverage disappears.
+      <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
+        <h2 className="text-2xl font-semibold">Review your own documents</h2>
+        <p className="mt-3 text-slate-700">
+          SaveOnLease offers a free lease preview. You can add an annual CAM
+          statement and supporting PDFs before checkout. The $49.99 report
+          compares visible billing information with extracted lease terms
+          and labels what still needs verification.
         </p>
-
         <Link
           href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
+          className="mt-5 inline-block rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white hover:bg-emerald-800"
         >
-          Review My Lease
+          Start with a free lease preview
         </Link>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Related guides</h2>
+        <ul className="list-disc space-y-2 pl-6 text-emerald-800">
+          <li>
+            <Link href="/marketing/cam-reconciliation-errors">
+              CAM reconciliation questions to check
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/non-allowable-cam-nnn-expenses">
+              Compare billed expenses with lease exclusions
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/triple-net-lease">
+              Understand a triple net lease
+            </Link>
+          </li>
+        </ul>
       </section>
     </main>
   );
