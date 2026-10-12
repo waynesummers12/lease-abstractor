@@ -2,252 +2,128 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How Medical Practices Can Dispute CAM Charges (Audit Rights & Recovery Guide)",
+  title: "How Medical Practices Can Question CAM Charges | SaveOnLease",
   description:
-    "Step-by-step guidance for medical tenants disputing CAM charges, admin fee violations, and improper capital expense pass-through in outpatient buildings.",
+    "A document-based guide to reviewing a medical office CAM statement, checking lease terms, requesting records, and raising a specific billing question.",
+  alternates: {
+    canonical:
+      "https://www.saveonlease.com/marketing/how-medical-practices-can-dispute-cam-charges",
+  },
 };
 
 export default function DisputeMedicalCAMChargesPage() {
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Can medical tenants legally dispute CAM charges?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Most medical office leases include audit rights allowing tenants to review and challenge CAM reconciliations within defined timeframes."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What CAM charges are most commonly disputed?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Admin fee cap violations, capital improvements improperly passed through, reserve fund allocations, and incorrect pro-rata share calculations."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How long do medical practices have to dispute charges?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Many leases provide a 12-month audit window after reconciliation delivery, though timelines vary by agreement."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Do medical office leases typically include CAM caps?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Some medical office leases include caps on controllable CAM expenses or administrative fees, but many exclude taxes and insurance from caps. Lease language must be reviewed carefully."
-        }
-      }
-    ]
-  };
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
-
-      {/* HERO */}
-      <section className="space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-          How Medical Practices Can Dispute CAM Charges
+    <main className="mx-auto max-w-4xl space-y-12 px-6 py-16 text-slate-900">
+      <section className="space-y-5">
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          How a medical practice can question CAM charges
         </h1>
-        <p className="text-lg text-gray-700">
-          Medical office tenants often overpay thousands in CAM and NNN charges
-          due to improper admin fees, capital expense misclassification, and
-          incorrect cost allocation. Most leases grant audit rights — but only
-          within strict time windows.
+        <p className="text-lg text-slate-700">
+          A CAM statement tells you what the landlord billed. Your lease and
+          amendments tell you which costs may be passed through and how your
+          share should be calculated. Compare the two before calling a line
+          item an overcharge.
         </p>
-      </section>
-
-      <section className="space-y-6">
-        <p className="text-gray-700">
-          In medical office buildings, CAM disputes often involve high-voltage
-          electrical loads, generator redundancy systems, infection-control
-          HVAC infrastructure, and healthcare compliance costs. These technical
-          components make operating expense audits more complex than traditional
-          retail or general office leases.
-        </p>
-      </section>
-
-      {/* FINANCIAL CONTEXT */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          What a CAM Dispute Can Actually Recover
-        </h2>
-        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
-          <p>8,000 SF practice × $3 PSF improper allocation = $24,000/year</p>
-          <p>10,000 SF imaging center × $4 PSF misclassification = $40,000/year</p>
-          <p className="font-semibold">
-            Over a 5-year term, unresolved CAM errors can exceed $150,000.
-          </p>
-        </div>
-      </section>
-
-      {/* STEP 1 */}
-      <section>
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Step 1: Review the Lease Language Carefully
-        </h2>
-        <p className="text-gray-700">
-          Confirm CAM definitions, admin fee caps, capital expenditure
-          exclusions, amortization rules, audit rights, notice requirements,
-          and reconciliation timelines. Medical leases often contain narrow
-          dispute windows (commonly 12 months).
-          For deeper context, review our <Link href="/marketing/medical-office-cam-reconciliation" className="text-emerald-600 hover:underline">Medical Office CAM Reconciliation Guide</Link> and <Link href="/marketing/medical-office-nnn-expenses" className="text-emerald-600 hover:underline">Medical Office NNN Expense Breakdown</Link>.
-        </p>
-      </section>
-
-      {/* STEP 2 */}
-      <section>
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Step 2: Request Supporting Documentation
-        </h2>
-        <p className="text-gray-700">
-          Request invoices, vendor contracts, allocation schedules, and
-          supporting reconciliation detail. Tenants are generally entitled to
-          review backup documentation supporting CAM charges.
-        </p>
-      </section>
-
-      {/* STEP 3 */}
-      <section>
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-4">
-          Step 3: Identify Healthcare-Specific Overcharges
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Generator replacements passed through as operating expense</li>
-          <li>Parking structure repairs classified as CAM</li>
-          <li>HVAC upgrades tied to imaging load treated as tenant expense</li>
-          <li>Admin fees exceeding stated percentage caps</li>
-          <li>Capital improvements amortized improperly</li>
-        </ul>
-      </section>
-
-      {/* DISPUTE STRUCTURE */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          How to Structure a CAM Dispute Letter
-        </h2>
-        <p className="text-gray-700">
-          Medical tenants typically structure disputes by:
-        </p>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Referencing the specific lease section governing CAM</li>
-          <li>Identifying the disputed category or calculation</li>
-          <li>Requesting detailed backup documentation</li>
-          <li>Preserving audit rights in writing</li>
-          <li>Reserving all contractual rights pending review</li>
-        </ul>
-      </section>
-
-      {/* URGENCY */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Why Timing Matters
-        </h2>
-        <p className="text-gray-700">
-          Most medical office leases require formal notice within a defined
-          audit window. Failure to dispute within that period may waive
-          recovery rights for that reconciliation year.
-        </p>
-      </section>
-
-      {/* INTERNAL CLUSTER LINKS */}
-      <section className="space-y-4">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Related Medical Lease Resources</h2>
-        <ul className="list-disc pl-6 space-y-2 text-emerald-700">
-          <li>
-            <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit (CAM & NNN Review)
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/medical-office-cam-reconciliation">
-              Medical Office CAM Reconciliation Process
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/multi-location-medical-lease-risk">
-              Multi-Location Medical Lease Risk & Portfolio Audit
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/medical-practice-lease-overcharges">
-              Identifying Medical Lease Overcharges & Admin Fee Violations
-            </Link>
-          </li>
-        </ul>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Frequently Asked Questions</h2>
-
-        <div className="space-y-4 text-gray-700">
-          <div>
-            <h3 className="font-light tracking-tight">Can medical tenants legally dispute CAM charges?</h3>
-            <p>
-              Yes. Most medical office leases include audit rights allowing
-              tenants to review and challenge CAM reconciliations within
-              defined timeframes.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-light tracking-tight">What CAM charges are most commonly disputed?</h3>
-            <p>
-              Admin fee cap violations, capital improvements improperly passed
-              through, reserve fund allocations, and incorrect pro-rata share
-              calculations.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-light tracking-tight">How long do medical practices have to dispute charges?</h3>
-            <p>
-              Many leases provide a 12-month audit window after reconciliation
-              delivery, though timelines vary by agreement.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-light tracking-tight">Do medical office leases typically include CAM caps?</h3>
-            <p>
-              Some medical office leases include caps on controllable CAM
-              expenses or administrative fees, but many exclude taxes and
-              insurance from caps. Lease language must be reviewed carefully.
-            </p>
-          </div>
-        </div>
       </section>
 
       <section className="space-y-4">
-        <p className="text-gray-700">
-          Need help reviewing your reconciliation before the audit window closes?
-          Our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">medical lease audit</Link>
-          identifies improper allocations, admin fee violations, and capital expense
-          misclassification while preserving your dispute rights.
+        <h2 className="text-2xl font-semibold">1. Find the rules in your lease</h2>
+        <p className="text-slate-700">
+          Read the operating expense definition, exclusions, allocation method,
+          administrative fee language, capital cost provisions, and any caps.
+          Check amendments too. Locate the exact procedure and deadline, if
+          any, for requesting records or sending a billing objection. The
+          applicable terms depend on your agreement.
         </p>
       </section>
 
-      {/* CTA */}
-      <section className="text-center pt-8">
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">2. Match each question to a statement line</h2>
+        <p className="text-slate-700">
+          Note the reconciliation year, category, billed amount, credits, and
+          your stated share. Recalculate visible arithmetic. Then identify the
+          lease clause that makes a category or allocation worth checking.
+          Keep a separate list for figures that cannot be verified from the
+          statement alone.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">
+          3. Check costs specific to the building and your practice
+        </h2>
+        <p className="text-slate-700">
+          Medical buildings may have shared and tenant-specific systems. Ask
+          whether the billed cost pool includes expenses for equipment or
+          services used by only some tenants, such as dedicated HVAC, backup
+          power, specialized utilities, medical waste, or reserved parking.
+          Also check how capital projects and administrative fees were treated.
+          None of these costs is automatically improper; the lease and
+          supporting records determine the answer.
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">4. Request the records you need</h2>
+        <p className="text-slate-700">
+          Follow the lease procedure for requesting backup. For each questioned
+          line, identify the year and amount and ask for the relevant invoice,
+          ledger detail, area or allocation schedule, fee calculation, or
+          amortization schedule. A useful question is specific: “The statement
+          allocates this generator expense to our suite. Please provide the
+          invoice, allocation method, and the lease provision used for this
+          charge.”
+        </p>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">5. Track the response and any deadline</h2>
+        <p className="text-slate-700">
+          Save the statement, lease excerpts, your calculation, the request,
+          and the landlord&apos;s response together. Use the notice recipient,
+          method, and timing specified in your lease. If a deadline is close
+          or the amount is material, consult a qualified attorney or accountant
+          about your next step. A report or records request does not itself
+          preserve contractual rights.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
+        <h2 className="text-2xl font-semibold">Start with your documents</h2>
+        <p className="mt-3 text-slate-700">
+          SaveOnLease offers a free lease preview. You can add an annual CAM
+          statement and supporting PDFs before checkout. The $49.99 report
+          compares visible billing information with extracted lease terms and
+          labels items that still need verification.
+        </p>
         <Link
           href="/app/step-1-upload"
-          className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
+          className="mt-5 inline-block rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white hover:bg-emerald-800"
         >
-          Analyze My CAM Reconciliation Before the Audit Window Closes
+          Upload your lease for a free preview
         </Link>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
+      <section className="space-y-3">
+        <h2 className="text-2xl font-semibold">Related guides</h2>
+        <ul className="list-disc space-y-2 pl-6 text-emerald-800">
+          <li>
+            <Link href="/marketing/medical-office-cam-reconciliation">
+              Review a medical office CAM reconciliation
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-nnn-expenses">
+              Understand medical office NNN expenses
+            </Link>
+          </li>
+          <li>
+            <Link href="/marketing/medical-office-lease-audit">
+              Check medical office lease terms
+            </Link>
+          </li>
+        </ul>
+      </section>
     </main>
   );
 }
