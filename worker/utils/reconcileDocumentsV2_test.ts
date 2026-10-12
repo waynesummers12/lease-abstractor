@@ -9,7 +9,10 @@ Tenant's share % 12.0000% 13.8889%
 Tenant's share of Total Operating Expenses $62,242.80 $112,053.13
 Parking lot sweeping - 2025 service 9,200.00 9,600.00
 Parking lot sweeping - annual contract - 9,600.00
-Administrative fee - 2024: 10% of CAM; 2025: 15% of Total A+B+C 22,190.00 105,232.50` },
+Administrative fee - 2024: 10% of CAM; 2025: 15% of Total A+B+C 22,190.00 105,232.50
+Regional asset management - allocated salary - 14,500.00
+Legal fees - lease enforcement - 7,250.00
+Roof membrane replacement - 86,400.00` },
     { page: 2, text: `January 2025 $5,100.00 July 2025 $5,100.00
 February 2025 $5,100.00 August 2025 $5,100.00
 March 2025 $5,100.00 September 2025 $5,100.00
@@ -21,6 +24,7 @@ BALANCE DUE FROM TENANT $55,953.13` },
   ];
   const lease = [
     { page: 1, text: "1.3 Center GLA 62,500 RSF 1.4 Pro Rata Share 12.00%" },
+    { page: 2, text: "CAM Expenses exclude personnel above the level of on-site property manager, fees incurred in negotiating, enforcing or litigating any lease, and replacement of the roof, roof membrane." },
     { page: 6, text: `2. Administrative Fee. Section 4.5 is amended by deleting "twelve percent (12%)" and substituting
 "ten percent (10%)" for all calendar years beginning with 2024.
 3. Limitation on Controllable CAM Expenses. Section 4.6 is amended by deleting "one hundred
@@ -37,4 +41,7 @@ six percent (106%)" and substituting "one hundred five percent (105%)" for 2024 
   if (!byLabel("Administrative fee")?.result.includes("10%")) throw new Error("Amended fee was missed");
   if (!byLabel("Controllable CAM cap")?.result.includes("105%")) throw new Error("Amended cap was missed");
   if (byLabel("Possible duplicate CAM line")?.status !== "question") throw new Error("Potential duplicate was missed");
+  if (result.scenarios?.shareOnly.difference !== 15239.23) throw new Error("Share-only scenario is wrong");
+  if (result.scenarios?.selectedExclusions?.difference !== 28217.23) throw new Error("Selected-exclusion scenario is wrong");
+  if (result.worksheetRows?.find((item) => item.category === "Roof membrane replacement")?.amountBilled !== 86400) throw new Error("Worksheet did not retain the billed roof charge");
 });

@@ -7,6 +7,12 @@ export type Reconciliation = {
   leaseShare: Evidence | null;
   checks: Array<{ label: string; result: string; status: "matches" | "question" | "unverified" }>;
   support: Array<{ name: string; signals: string[] }>;
+  worksheetRows?: Array<{ category: string; amountBilled: number; leaseBasis: string; difference: string; statementPage: number; leasePage?: number }>;
+  scenarios?: {
+    shareOnly: { charge: number; difference: number };
+    selectedExclusions?: { categories: string[]; centerAmount: number; charge: number; difference: number };
+    paymentCredit?: { listed: number; stated: number; difference: number };
+  };
 };
 
 type Page = { page: number; text: string };

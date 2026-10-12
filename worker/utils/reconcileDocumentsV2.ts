@@ -37,6 +37,8 @@ export function reconcileDocumentsV2(statementName: string, statementPages: Page
   const ratio = ratios.at(-1);
   const numerator = ratio ? Number(ratio[1].replaceAll(",", "")) : null;
   const denominator = ratio ? Number(ratio[2].replaceAll(",", "")) : null;
+  const worksheetRows: NonNullable<Reconciliation["worksheetRows"]> = [];
+  let scenarios: Reconciliation["scenarios"];
 
   if (share && leaseShare) {
     const same = Math.abs(share.value - leaseShare.value) < .005;
@@ -55,8 +57,10 @@ export function reconcileDocumentsV2(statementName: string, statementPages: Page
   } else check("Statement multiplication", "Property total, billed share, or tenant charge was not reliably extracted; calculation remains unverified.", "unverified");
   if (leaseShare && propertyTotal && tenantCharge && Math.abs((share?.value ?? leaseShare.value) - leaseShare.value) > .005) {
     const leaseBasisCharge = Math.round(propertyTotal.value * leaseShare.value) / 100;
-    const difference = tenantCharge.value - leaseBasisCharge;
+    const difference = Math.round((tenantCharge.value - leaseBasisCharge) * 100) / 100;
     check("Share-only comparison", `Applying the lease's ${leaseShare.value}% share to the statement's unverified ${money(propertyTotal.value)} total gives ${money(leaseBasisCharge)}, versus ${money(tenantCharge.value)} billed: ${money(difference)} difference. This isolates the share change only; it is not an established refund or a corrected expense total.`, "question");
+    scenarios = { shareOnly: { charge: leaseBasisCharge, difference } };
+    worksheetRows.push({ category: "Tenant share", amountBilled: tenantCharge.value, leaseBasis: `${leaseShare.value}% of stated total`, difference: money(difference), statementPage: tenantCharge.page, leasePage: leaseShare.page });
   }
   if (tenantCharge && credits && balance) {
     const expected = Math.round((tenantCharge.value - credits.value) * 100) / 100, diff = Math.abs(expected - balance.value);
@@ -66,7 +70,11 @@ export function reconcileDocumentsV2(statementName: string, statementPages: Page
   if (credits && paymentRows.length) {
     const total = Math.round(paymentRows.reduce((sum, item) => sum + item.value, 0) * 100) / 100;
     const diff = total - credits.value;
-    check("Monthly payment ledger", `${paymentRows.length} listed payments total ${money(total)} (statement p. ${paymentRows[0].page}); stated credits are ${money(credits.value)} (p. ${credits.page}). ${Math.abs(diff) > .02 ? `Difference ${money(Math.abs(diff))}; using the listed payments alone would make the balance ${tenantCharge ? money(tenantCharge.value - total) : "unknown"}. Request the payment ledger.` : "Totals match."}`, Math.abs(diff) > .02 ? "question" : "matches");
+    check("Monthly payment ledger", `${paymentRows.length} listed payments total ${money(total)} (statement p. ${paymentRows[0].page}); stated credits are ${money(credits.value)} (p. ${credits.page}). ${diff > .02 ? `The statement may be short-crediting ${money(diff)} if every listed payment was received; using those payments would make the balance ${tenantCharge ? money(tenantCharge.value - total) : "unknown"}. Request the payment ledger.` : diff < -.02 ? `Stated credits exceed the listed payments by ${money(-diff)}; request the payment ledger.` : "Totals match."}`, Math.abs(diff) > .02 ? "question" : "matches");
+    if (Math.abs(diff) > .02) {
+      worksheetRows.push({ category: "Payment credits", amountBilled: credits.value, leaseBasis: "Listed monthly payments", difference: money(Math.abs(diff)), statementPage: credits.page });
+      if (scenarios && diff > .02) scenarios.paymentCredit = { listed: total, stated: credits.value, difference: diff };
+    }
   }
   const duplicateRows = s.filter(({ text }) => /parking lot sweeping/i.test(text) && /(?:service|contract)/i.test(text));
   if (duplicateRows.length > 1) {
@@ -87,9 +95,19 @@ export function reconcileDocumentsV2(statementName: string, statementPages: Page
     ["Ownership-related assessment", /supplemental assessment.*(?:ownership|financing)/i, /supplemental assessment.{0,100}(?:sale|transfer|refinancing|change in ownership)/i],
     ["Portfolio umbrella premium", /umbrella.*(?:portfolio|premium)/i, /umbrella or excess liability/i],
   ];
+  const selected: Array<{ label: string; amount: number }> = [];
   for (const [label, statementPattern, leasePattern] of exclusions) {
     const billed = row(s, statementPattern), clause = leasePage(leasePattern), charge = lastAmount(billed);
-    if (charge && clause) check(label, `Statement lists ${money(charge.value)} (p. ${billed!.page}); lease appears to exclude this category (p. ${clause.page}). Confirm invoices and allocation before asserting an overcharge.`, "question");
+    if (charge && clause) {
+      check(label, `Statement lists ${money(charge.value)} (p. ${billed!.page}); lease appears to exclude this category (p. ${clause.page}). Confirm invoices and allocation before asserting an overcharge.`, "question");
+      worksheetRows.push({ category: label, amountBilled: charge.value, leaseBasis: "Excluded; verify", difference: leaseShare ? money(Math.round(charge.value * leaseShare.value) / 100) : "Pending", statementPage: charge.page, leasePage: clause.page });
+      if (["Regional management salary", "Lease enforcement legal fees", "Roof membrane replacement"].includes(label)) selected.push({ label, amount: charge.value });
+    }
+  }
+  if (scenarios && selected.length === 3 && propertyTotal && tenantCharge && leaseShare) {
+    const centerAmount = selected.reduce((sum, item) => sum + item.amount, 0);
+    const charge = Math.round((propertyTotal.value - centerAmount) * leaseShare.value) / 100;
+    scenarios.selectedExclusions = { categories: selected.map((item) => item.label), centerAmount, charge, difference: Math.round((tenantCharge.value - charge) * 100) / 100 };
   }
   const capital = row(s, /(?:led|lighting).*retrofit.*total project cost/i);
   const capitalClause = row(l, /capital expenditures may be included.*only if/i);
@@ -113,5 +131,5 @@ export function reconcileDocumentsV2(statementName: string, statementPages: Page
     return { name, signals: signals.flatMap(([label, pattern]) => { const page = pages.find((item) => pattern.test(item.text)); return page ? [`${label} (p. ${page.page})`] : []; }) };
   });
   check("Underlying records", support.length ? `${support.length} supporting PDFs received. Text signals do not verify authenticity, eligibility, areas, or amortization.` : "No supporting records supplied. Request invoices, category ledger, area schedule, fee calculations, and amortization where applicable.", "unverified");
-  return { version: 1, statementName, supportNames: supports.map((item) => item.name), statement: { share, propertyTotal, tenantCharge, credits, balance }, leaseShare, checks, support };
+  return { version: 1, statementName, supportNames: supports.map((item) => item.name), statement: { share, propertyTotal, tenantCharge, credits, balance }, leaseShare, checks, support, worksheetRows, scenarios };
 }

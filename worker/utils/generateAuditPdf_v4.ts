@@ -26,6 +26,7 @@ const MARGIN = 48;
 const WIDTH = 595.28;
 const HEIGHT = 841.89;
 const CONTENT = WIDTH - MARGIN * 2;
+const money = (value: number) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 type Review = { title: string; reason: string; check: string; request: string };
 function reviewItem(flag: Flag): Review {
@@ -330,6 +331,10 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
       lines(`${index + 1}. ${finding.label}`, MARGIN, 10, NAVY, bold); y -= 8;
     }
     lines("See the annual statement review for page references and the remaining questions.", MARGIN, 9, MUTED); y -= 8;
+    if (analysis.reconciliation.scenarios) {
+      const scenarios = analysis.reconciliation.scenarios;
+      lines(`Illustrative charge questions: ${money(scenarios.shareOnly.difference)} from the share change alone${scenarios.selectedExclusions ? `; ${money(scenarios.selectedExclusions.difference)} with three selected categories removed` : ""}. These are not verified savings.`, MARGIN, 9, BLUE, bold); y -= 8;
+    }
   } else if (priorityItems.length === 0) {
     lines("No page-supported expense rule was identified for this summary. Review the complete lease and billing records directly.", MARGIN, 10, NAVY); y -= 12;
   } else {
@@ -452,17 +457,31 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
 
   ensure(420);
   heading("Billing reconciliation worksheet");
-  lines("Use one row per charge category and year. A positive difference is only a question to investigate until the lease basis and records are confirmed."); y -= 16;
+  lines(analysis.reconciliation?.worksheetRows?.length
+    ? "Selected rows are prefilled. Expense amounts are center-wide; share and credit rows are tenant amounts. Expense check amounts apply the extracted lease share. All checks are conditional and must not be added together."
+    : "Use one row per charge category and year. A positive difference is only a question to investigate until the lease basis and records are confirmed."); y -= 16;
   const cols = [MARGIN, MARGIN + 128, MARGIN + 258, MARGIN + 375, WIDTH - MARGIN];
-  const headers = ["CATEGORY / YEAR", "AMOUNT BILLED", "LEASE BASIS", "DIFFERENCE"];
+  const headers = ["CATEGORY / YEAR", "AMOUNT BILLED", "LEASE BASIS", "CHECK AMOUNT"];
   const accountingItems = items.filter(({ flag }) => !["AUDIT_WINDOW", "WAIVER_CLAIMS", "NO_RECONCILIATION"].includes(flag.code ?? ""));
+  const worksheetPriority = ["Tenant share", "Payment credits", "Roof membrane replacement", "Lease enforcement legal fees", "Regional management salary"];
+  const selectedRows = [...(analysis.reconciliation?.worksheetRows ?? [])].sort((a, b) =>
+    (worksheetPriority.indexOf(a.category) < 0 ? 99 : worksheetPriority.indexOf(a.category))
+    - (worksheetPriority.indexOf(b.category) < 0 ? 99 : worksheetPriority.indexOf(b.category))).slice(0, 5);
   page.drawRectangle({ x: MARGIN, y: y - 31, width: CONTENT, height: 31, color: NAVY });
   headers.forEach((h, i) => page.drawText(h, { x: cols[i] + 6, y: y - 20, size: 7.5, font: bold, color: WHITE }));
   y -= 31;
   for (let i = 0; i < 5; i++) {
     page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: i % 2 ? WHITE : LIGHT });
     cols.slice(1, 4).forEach((x) => page.drawLine({ start: { x, y }, end: { x, y: y - 36 }, thickness: 0.5, color: MUTED }));
-    if (accountingItems[i]) {
+    if (selectedRows[i]) {
+      const entry = selectedRows[i];
+      const rowLabel = wrap(entry.category, font, 8, cols[1] - cols[0] - 12);
+      rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
+      page.drawText(money(entry.amountBilled), { x: cols[1] + 6, y: y - 20, size: 8, font, color: NAVY });
+      wrap(entry.leaseBasis, font, 8, cols[3] - cols[2] - 12).slice(0, 2).forEach((line, j) =>
+        page.drawText(line, { x: cols[2] + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
+      page.drawText(entry.difference, { x: cols[3] + 6, y: y - 20, size: 8, font, color: NAVY });
+    } else if (accountingItems[i] && !analysis.reconciliation) {
       const rowLabel = wrap(reviewItem(accountingItems[i].flag).title, font, 8, cols[1] - cols[0] - 12);
       rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
     }
@@ -487,6 +506,20 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     addPage();
     heading("Annual statement review");
     lines(`Source: ${review.statementName}. This section compares extracted values with lease text and checks visible arithmetic. Confirm each cited page in the originals.`, MARGIN, 10, NAVY); y -= 12;
+    if (review.scenarios && review.statement.tenantCharge && review.statement.propertyTotal && review.leaseShare) {
+      heading("Illustrative bill scenarios");
+      lines(`Billed tenant charge: ${money(review.statement.tenantCharge.value)}. The center expense total of ${money(review.statement.propertyTotal.value)} is taken from the landlord statement and has not been verified.`, MARGIN, 9.5, NAVY); y -= 8;
+      lines(`Share only: applying the lease's ${review.leaseShare.value}% to that stated total produces ${money(review.scenarios.shareOnly.charge)}, a ${money(review.scenarios.shareOnly.difference)} difference from the billed charge.`, MARGIN, 9.5, NAVY); y -= 8;
+      if (review.scenarios.selectedExclusions) {
+        const scenario = review.scenarios.selectedExclusions;
+        lines(`Share plus selected exclusions: removing ${money(scenario.centerAmount)} of listed center charges for roof, lease-enforcement legal fees, and regional salary, then applying ${review.leaseShare.value}%, produces ${money(scenario.charge)}. The difference from the billed charge is ${money(scenario.difference)}.`, MARGIN, 9.5, NAVY); y -= 8;
+      }
+      if (review.scenarios.paymentCredit) {
+        const credit = review.scenarios.paymentCredit;
+        lines(`Separately, listed monthly payments exceed stated credits by ${money(credit.difference)}. Confirm these were actually paid; this amount is not added to either charge scenario.`, MARGIN, 9.5, NAVY); y -= 8;
+      }
+      lines("These are conditional comparisons, not a savings range or refund estimate. They assume the listed categories were fully included and do not recalculate the administrative fee, CAM cap, other exclusions, or payment history.", MARGIN, 9, MUTED); y -= 10;
+    }
     for (const check of review.checks) {
       ensure(100);
       page.drawText(safeText(`${check.status.toUpperCase()}  /  ${check.label}`), { x: MARGIN, y, size: 10, font: bold, color: check.status === "question" ? BLUE : TEAL }); y -= 19;
@@ -496,6 +529,34 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     lines(`Statement: ${review.statementName}. Supporting PDFs: ${review.supportNames.length ? review.supportNames.join(", ") : "none supplied"}.`, MARGIN, 9.5, NAVY); y -= 10;
     for (const item of review.support) { ensure(45); lines(`${item.name}: text mentions ${item.signals.length ? item.signals.join(", ") : "no recognized record type"}. Presence does not verify the billed cost.`, MARGIN, 9.5, NAVY); y -= 8; }
     lines("A percentage difference or arithmetic question is a lead for investigation, not a refund estimate. Check category-specific rules, rentable-area schedules, original invoices, credit history, and delivery dates before making a claim.", MARGIN, 9.5, MUTED);
+
+    addPage();
+    heading("Draft records request for review");
+    lines("Customize this letter before sending. Confirm the actual statement receipt date, the signed lease and amendments, the notice address, and the required delivery method. Email alone may not satisfy the lease's formal notice clause.", MARGIN, 10, BLUE, bold); y -= 20;
+    lines("Date: [insert date]", MARGIN, 10, NAVY); y -= 5;
+    lines(`To: ${landlord === "Not reliably extracted" ? "[landlord/property manager]" : landlord} - [confirm formal notice address]`, MARGIN, 10, NAVY); y -= 5;
+    lines(`From: ${tenant === "Not reliably extracted" ? "[tenant name]" : tenant} - [your name and contact details]`, MARGIN, 10, NAVY); y -= 5;
+    lines(`Re: ${review.statementName.match(/20\d{2}/)?.[0] ?? "[year]"} annual operating expense reconciliation - ${premises === "Not reliably extracted" ? "[premises]" : premises}`, MARGIN, 10, NAVY); y -= 20;
+    lines("Dear Property Manager:", MARGIN, 10, NAVY); y -= 12;
+    lines(statementQuestions.length
+      ? "I am reviewing the annual operating expense reconciliation identified above. I object to the items below pending inspection of the supporting records and request access to the books and records supporting the statement under the review procedure in our lease. Please confirm receipt of this notice and provide available dates for inspection."
+      : "I am reviewing the annual operating expense reconciliation identified above and request access to the records supporting it. Please confirm receipt and provide available dates for inspection.", MARGIN, 10, NAVY); y -= 15;
+    for (const finding of firstStatementQuestions.slice(0, 3)) {
+      ensure(80);
+      lines(`- ${finding.label}: ${finding.result}`, MARGIN + 12, 9.5, NAVY, font, CONTENT - 12); y -= 9;
+    }
+    y -= 5;
+    for (const request of [
+      "The full category ledger and invoices for CAM, taxes, insurance, and any reimbursements or credits.",
+      "The rentable-area schedule and calculation of our share, including the treatment of vacant space.",
+      "The monthly payment ledger and proof of the estimated payments credited to our account.",
+      "The administrative-fee base and rate calculation, plus the prior- and current-year controllable CAM cap worksheet.",
+      "Invoices, allocation details, and any useful-life amortization schedule for capital work or other questioned categories appearing on the statement.",
+    ]) { ensure(55); lines(`- ${request}`, MARGIN + 12, 9.5, NAVY, font, CONTENT - 12); y -= 9; }
+    ensure(95);
+    lines("Please explain any differences and issue a corrected reconciliation if warranted. I have not concluded that a particular refund is due.", MARGIN, 10, NAVY); y -= 16;
+    lines("Sincerely,", MARGIN, 10, NAVY); y -= 11;
+    lines("[Your name, title, and signature]", MARGIN, 10, NAVY);
   }
 
   pdf.getPages().forEach((current, index, pages) => {
