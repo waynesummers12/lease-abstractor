@@ -1,147 +1,99 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Burger Franchise Lease Overcharges | CAM & NNN Audit for QSR Operators",
+export const metadata: Metadata = {
+  title: "Burger Franchise Lease Overcharges: What to Verify",
   description:
-    "Franchisees and multi-unit burger operators: uncover hidden CAM and NNN lease overcharges before your audit window closes.",
+    "Review common CAM and NNN billing questions for burger franchise locations, the lease terms that matter, and the records needed before claiming an overcharge.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/burger-franchise-lease-overcharges",
+  },
 };
+
+const patterns = [
+  {
+    title: "A share that does not match the lease",
+    signal: "The annual statement uses a percentage or square-footage denominator you do not recognize.",
+    proof: "Compare the lease and amendments with the dated center area schedule and allocation worksheet.",
+  },
+  {
+    title: "A cost category that may be excluded",
+    signal: "Roof, paving, leasing, or other major charges appear under a broad CAM heading.",
+    proof: "Read the lease definition and exceptions, then obtain the underlying invoice and any amortization schedule.",
+  },
+  {
+    title: "A fee calculated on the wrong base",
+    signal: "A management or administrative percentage appears larger than the clause seems to allow.",
+    proof: "Request the fee worksheet and identify which expenses were included in its base.",
+  },
+  {
+    title: "Estimated payments that may not be fully credited",
+    signal: "The statement credit differs from the installments shown in your own payment ledger.",
+    proof: "Reconcile both ledgers by month, including reversals, late payments, and credits.",
+  },
+  {
+    title: "A shared service billed to the wrong group",
+    signal: "Drive-through, parking, trash, grease, or utility costs appear to be spread across spaces that may not benefit equally.",
+    proof: "Check the lease allocation rule and request service invoices, meter records, or cost-pool schedules.",
+  },
+];
 
 export default function BurgerFranchiseLeaseOverchargesPage() {
   return (
-    <main className="bg-white">
-      <section className="max-w-5xl mx-auto px-6 py-16">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
-          Burger Franchise Lease Overcharges
+    <main className="mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20">
+      <header className="max-w-3xl">
+        <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">Burger franchise billing review</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Burger franchise lease overcharges: what can you verify?
         </h1>
-
-        <p className="mt-4 text-lg text-gray-600">
-          Built for franchisees & multi-unit operators managing thin margins in competitive QSR markets.
+        <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          An unexpected CAM or NNN charge is a reason to investigate, not yet an established overcharge. Compare the lease, annual statement, and backup for that location before assigning a tenant-level dollar amount.
         </p>
+        <Link href="/app/step-1-upload" className="mt-7 inline-flex rounded-xl bg-black px-6 py-3 font-semibold text-white hover:bg-slate-800">
+          Start with a free lease preview
+        </Link>
+      </header>
 
-        <div className="mt-8 grid md:grid-cols-3 gap-6 text-sm">
-          <div className="p-4 bg-gray-50 rounded-lg border">
-            <p className="font-semibold text-gray-900">4–6% margin industry</p>
-            <p className="text-gray-600 mt-1">
-              Even small CAM discrepancies can erase annual profit.
-            </p>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg border">
-            <p className="font-semibold text-gray-900">Triple Net exposure</p>
-            <p className="text-gray-600 mt-1">
-              Taxes, insurance, and maintenance often passed through without scrutiny. Learn how these structures work in our <Link href="/marketing/nnn-for-burger-restaurants" className="text-indigo-600 font-medium hover:underline">Triple Net (NNN) guide for burger restaurants</Link>.
-            </p>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg border">
-            <p className="font-semibold text-gray-900">30–120 day audit windows</p>
-            <p className="text-gray-600 mt-1">
-              Miss the deadline and overcharges may become permanent.
-            </p>
-          </div>
+      <section className="mt-14 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">Use three labels for every finding</h2>
+        <ul className="mt-4 list-disc space-y-2 pl-5 leading-relaxed">
+          <li><strong>Question:</strong> The statement or lease suggests something to check.</li>
+          <li><strong>Documented difference:</strong> The available figures or clauses do not match; the reason may still be unknown.</li>
+          <li><strong>Verified amount:</strong> The applicable lease terms, source records, allocation, and payment credits support a tenant-level calculation.</li>
+        </ul>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">Five billing patterns to investigate</h2>
+        <div className="mt-6 space-y-4">
+          {patterns.map((pattern, index) => (
+            <article key={pattern.title} className="rounded-2xl border border-slate-200 p-5 sm:p-6">
+              <h3 className="text-lg font-semibold text-slate-950">{index + 1}. {pattern.title}</h3>
+              <p className="mt-2"><strong>What you may see:</strong> {pattern.signal}</p>
+              <p className="mt-2"><strong>What to verify:</strong> {pattern.proof}</p>
+            </article>
+          ))}
         </div>
+      </section>
 
-        <div className="mt-12 space-y-6 text-gray-700 leading-relaxed">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            Why Burger Franchisees Are Vulnerable
-          </h2>
+      <section className="mt-16 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
+        <h2 className="text-xl font-semibold text-slate-950">A credit example</h2>
+        <p className="mt-3 leading-relaxed">Suppose a store's own ledger shows twelve $500 estimated CAM payments ($6,000), while the annual statement credits $5,500. The visible difference is $500. Check both ledgers and any adjustments before treating it as an amount owed back to the tenant.</p>
+        <p className="mt-3 text-sm text-slate-700">Illustrative arithmetic only; it does not describe a real SaveOnLease customer or a typical recovery.</p>
+      </section>
 
-          <p>
-            Many franchisees assume corporate oversight protects them from lease risk.
-            In reality, most CAM reconciliations and NNN pass-throughs are the
-            responsibility of the individual operator.
-            For a full breakdown of structured review steps, see our <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="text-indigo-600 font-medium hover:underline">Burger Restaurant CAM Reconciliation Checklist</Link>.
-          </p>
+      <section className="mt-16">
+        <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">Across multiple stores</h2>
+        <p className="mt-4 leading-relaxed text-slate-600">Keep separate rows for each lease, landlord, statement year, billed share, and finding status. Similar-looking charges can have different contract treatment. Add amounts across locations only after each location's calculation is supported.</p>
+        <p className="mt-4 text-slate-600">For a broader process, use the <Link href="/marketing/burger-restaurant-lease-audit" className="font-medium text-emerald-800 underline">burger restaurant lease audit guide</Link> and the <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="font-medium text-emerald-800 underline">CAM reconciliation checklist</Link>.</p>
+      </section>
 
-          <p>
-            In strip centers and inline retail locations, common hidden exposures include:
-          </p>
-
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Uncapped administrative fees</li>
-            <li>Capital expense pass-throughs</li>
-            <li>Improper allocation percentages</li>
-            <li>Insurance markups</li>
-            <li>Landlord overhead embedded in CAM</li>
-          </ul>
-
-          <p>
-            When operating margins are tight, a 3–7% discrepancy in CAM can wipe out
-            location-level profitability.
-          </p>
-          <p>
-            You can calculate total occupancy cost using our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Rent guide</Link>, then compare the result with your store's financial plan.
-          </p>
-          <p>
-            If you want a broader overview of risk exposure across your lease, review our <Link href="/marketing/burger-restaurant-lease-audit" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit guide</Link>.
-          </p>
-        </div>
-
-        <div className="mt-12 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
-            Multi-Unit Operators: Portfolio Risk Multiplies
-          </h2>
-          <p className="mt-3 text-indigo-800">
-            If you operate 5, 10, or 25 locations, small discrepancies compound across
-            every lease. A $8,000 annual overcharge per store becomes $80,000 across
-            ten stores.
-          </p>
-        </div>
-
-        <div className="mt-16">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-gray-900">
-            How SaveOnLease Helps Burger Franchisees
-          </h2>
-
-          <ul className="mt-6 space-y-3 text-gray-700">
-            <li>✔ Identify uncapped CAM and NNN exposure</li>
-            <li>✔ Flag capital expense pass-through violations</li>
-            <li>✔ Highlight reconciliation irregularities</li>
-            <li>✔ Surface audit window deadlines</li>
-          </ul>
-          <p className="mt-6 text-gray-700">
-            Multi-brand franchise groups can also review our broader <Link href="/marketing/franchise-cam-audit" className="text-indigo-600 font-medium hover:underline">Franchise CAM Audit overview</Link> for portfolio-wide exposure strategies.
-          </p>
-        </div>
-
-        <div className="mt-16 text-center">
-          <Link
-            href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            Upload Your Lease — Results in ~10 Seconds
-          </Link>
-          <p className="mt-3 text-sm text-gray-500">
-            Secure. No subscription required.
-          </p>
-        </div>
-
-        <div className="mt-20 border-t pt-12">
-          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-gray-900">
-            Frequently Asked Questions
-          </h3>
-
-          <div className="mt-6 space-y-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                How much can a burger franchise lose to CAM overcharges?
-              </p>
-              <p className="mt-2 text-gray-600">
-                Depending on square footage and lease structure, exposure can range
-                from $5,000 to $25,000+ per location annually — especially in
-                high-traffic retail centers.
-              </p>
-            </div>
-
-            <div>
-              <p className="font-medium text-gray-900">
-                Can franchisees challenge CAM charges?
-              </p>
-              <p className="mt-2 text-gray-600">
-                Most commercial leases include audit rights with defined deadlines.
-                Identifying discrepancies before the window closes is critical. Learn more in our <Link href="/marketing/burger-restaurant-lease-audit-rights" className="text-indigo-600 font-medium hover:underline">Burger Restaurant Lease Audit Rights guide</Link>.
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="mt-16 rounded-2xl bg-slate-950 p-6 text-white sm:p-8">
+        <h2 className="text-2xl font-semibold">Check your own lease and statement</h2>
+        <p className="mt-3 leading-relaxed text-slate-200">Start with a free lease preview. Add the annual statement and up to four supporting PDFs before checkout if available. The $49.99 report identifies visible questions and labels what remains unverified.</p>
+        <Link href="/app/step-1-upload" className="mt-6 inline-flex rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 hover:bg-slate-100">
+          Upload a lease for a free preview
+        </Link>
       </section>
     </main>
   );
