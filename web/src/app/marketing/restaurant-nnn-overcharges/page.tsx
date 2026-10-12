@@ -1,228 +1,156 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Restaurant NNN Charges: What to Check on Your CAM Statement",
+  description:
+    "A practical checklist for restaurant tenants reviewing NNN charges, CAM allocations, shared services, fee calculations, and payment credits.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/restaurant-nnn-overcharges",
+  },
+};
 
 export default function RestaurantNNNOverchargesPage() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* HERO */}
-      <section className="bg-slate-900 text-white">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
-            Restaurant NNN Lease Overcharges: Hidden CAM Costs That Hurt Margins
+    <main className="bg-white text-slate-900">
+      <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
+        <div className="mx-auto max-w-5xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-emerald-300">
+            Restaurant lease guide
+          </p>
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">
+            Restaurant NNN charges: what to check on your CAM statement
           </h1>
-          <p className="mt-6 text-lg text-slate-300 max-w-3xl">
-            Restaurant operators are uniquely exposed to inflated CAM charges,
-            admin fee stacking, and capital expense pass-throughs. Even small
-            discrepancies can erode already tight operating margins.
-          </p>
-          <p className="mt-4 text-lg text-slate-300 max-w-3xl">
-            If you are unfamiliar with how NNN structures allocate taxes, insurance, and CAM, review our foundational guide to the <Link href="/marketing/triple-net-lease" className="underline hover:text-white">triple net (NNN) lease structure</Link> before analyzing reconciliation discrepancies.
-          </p>
-
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/app"
-              className="rounded-lg bg-emerald-500 px-6 py-3 text-center font-medium text-white hover:bg-emerald-600"
-            >
-              Upload Your Lease
-            </Link>
-            <Link
-              href="/marketing/franchise-cam-audit"
-              className="rounded-lg border border-slate-400 px-6 py-3 text-center font-medium text-white hover:bg-slate-800"
-            >
-              Franchise CAM Audit Guide
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* PROBLEM */}
-      <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
-          Why Restaurants Are Vulnerable to NNN Overcharges
-        </h2>
-
-        <div className="mt-8 grid md:grid-cols-3 gap-8 text-slate-700">
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">High CAM Allocation</h3>
-            <p className="mt-3">
-              Restaurants typically occupy prime retail frontage, increasing
-              exposure to shared maintenance, landscaping, security, and
-              marketing fees.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">Thin Profit Margins</h3>
-            <p className="mt-3">
-              A modest annual reconciliation spike can materially impact cash
-              flow in food service operations.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">Frequent Build-Out Costs</h3>
-            <p className="mt-3">
-              Landlords may attempt to pass through capital improvements under
-              CAM language that exceeds lease allowances.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* COMMON ERRORS */}
-      <section className="bg-slate-50">
-        <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
-            Common NNN Lease Errors Found in Restaurants
-          </h2>
-          <p className="mt-6 text-slate-700 max-w-3xl">
-            Many of these issues stem from how expenses are defined within the broader <Link href="/marketing/triple-net-lease" className="underline hover:text-black">triple net lease framework</Link>, particularly in retail centers where allocations are shared across tenants.
-          </p>
-          <ul className="mt-8 space-y-4 text-slate-700 list-disc list-inside">
-            <li>Administrative fee percentages exceeding lease caps</li>
-            <li>Capital improvement expenses improperly allocated</li>
-            <li>Incorrect pro-rata share calculations</li>
-            <li>Insurance premium markups</li>
-            <li>Marketing fund duplication or stacking</li>
-          </ul>
-
-          <p className="mt-8 text-slate-700 max-w-3xl">
-            Multi-unit restaurant operators should treat lease review as a
-            structured <Link href="/marketing/franchise-cam-audit" className="text-emerald-600 underline">portfolio CAM audit strategy</Link>,
-            comparing expense structures across locations to detect systemic
-            leakage.
-          </p>
-        </div>
-      </section>
-
-      {/* ROI EXAMPLE */}
-      <section className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
-          Margin Impact Example
-        </h2>
-
-        <div className="mt-8 rounded-xl border border-slate-200 p-8">
-          <p className="text-lg font-medium text-slate-900">
-            Example Scenario:
-          </p>
-          <p className="mt-4 text-slate-700">
-            6 locations × $7,500 average CAM discrepancy = <span className="font-medium text-emerald-600">$45,000 annual margin erosion</span>
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-5xl px-6 py-16">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-slate-900">
-            Restaurant NNN Lease FAQ
-          </h2>
-
-          <div className="mt-8 space-y-8 text-slate-700">
-            <div>
-              <h3 className="text-lg sm:text-xl font-light tracking-tight">
-                What are NNN charges in restaurant leases?
-              </h3>
-              <p className="mt-2">
-                NNN (triple net) charges typically include property taxes,
-                insurance, and Common Area Maintenance expenses passed through
-                by the landlord.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg sm:text-xl font-light tracking-tight">
-                Can restaurants dispute CAM reconciliation charges?
-              </h3>
-              <p className="mt-2">
-                Yes — most leases provide a defined audit window during which
-                tenants can review and dispute improper expense allocations.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg sm:text-xl font-light tracking-tight">
-                How much can NNN overcharges impact a restaurant?
-              </h3>
-              <p className="mt-2">
-                Even a few thousand dollars per year can materially impact
-                profitability due to tight operating margins in food service.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg sm:text-xl font-light tracking-tight">
-                How much does a restaurant NNN audit cost — and is it worth it?
-              </h3>
-              <p className="mt-2">
-                Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling. <Link href="/app" className="text-emerald-600 underline">Upload your lease to see your risk in minutes.</Link>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "What are NNN charges in restaurant leases?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "NNN (triple net) charges typically include property taxes, insurance, and Common Area Maintenance expenses passed through by the landlord."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Can restaurants dispute CAM reconciliation charges?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes — most leases provide a defined audit window during which tenants can review and dispute improper expense allocations."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How much can NNN overcharges impact a restaurant?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Even a few thousand dollars per year can materially impact profitability due to tight operating margins in food service."
-                  }
-                }
-                ,
-                {
-                  "@type": "Question",
-                  "name": "How much does a restaurant NNN audit cost — and is it worth it?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most restaurant lease reviews are modest compared to the potential recovery. Even one identified CAM discrepancy can offset the review cost. For multi-location operators, small errors multiplied across sites often make a structured audit financially compelling."
-                  }
-                }
-              ]
-            })
-          }}
-        />
-      </section>
-
-      {/* CTA */}
-      <section className="bg-slate-900 text-white">
-        <div className="mx-auto max-w-5xl px-6 py-20 text-center">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-            Protect Your Restaurant Margins
-          </h2>
-          <p className="mt-6 text-slate-300">
-            Upload one lease to identify hidden NNN and CAM risks before your
-            next reconciliation cycle.
+          <p className="mt-6 max-w-3xl text-lg text-slate-200">
+            A restaurant&apos;s annual NNN bill may include property taxes,
+            insurance, and shared operating costs. A higher bill is not
+            automatically an overcharge. Compare the statement with your
+            lease and payment records to find figures that need an explanation.
           </p>
           <Link
             href="/app/step-1-upload"
-            className="mt-8 inline-block rounded-lg bg-emerald-500 px-8 py-4 font-medium text-white hover:bg-emerald-600"
+            className="mt-8 inline-block rounded-lg bg-emerald-400 px-6 py-3 font-semibold text-slate-950 hover:bg-emerald-300"
           >
-            Run Lease Review
+            Upload your lease for a free preview
           </Link>
         </div>
       </section>
+
+      <div className="mx-auto max-w-5xl space-y-14 px-6 py-16">
+        <section className="space-y-4">
+          <h2 className="text-3xl font-semibold">First, identify the three inputs</h2>
+          <ol className="list-decimal space-y-3 pl-6 text-slate-700">
+            <li>
+              <strong>Lease and amendments:</strong> Find the allowed expense
+              categories, exclusions, tenant share, caps, and review procedure.
+            </li>
+            <li>
+              <strong>Annual reconciliation:</strong> Note the year, cost pool,
+              your share, each category, and any balance or credit.
+            </li>
+            <li>
+              <strong>Payment ledger:</strong> Add the monthly estimates and
+              other credits paid during the same period.
+            </li>
+          </ol>
+          <p className="text-slate-700">
+            If NNN terms are new to you, start with our{" "}
+            <Link href="/marketing/triple-net-lease" className="text-emerald-800 underline">
+              triple net lease explanation
+            </Link>
+            .
+          </p>
+        </section>
+
+        <section className="space-y-5">
+          <h2 className="text-3xl font-semibold">Five restaurant billing questions</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {[
+              {
+                title: "Is the tenant share correct?",
+                text: "Compare your rentable area, the property's denominator, and any separate cost pools with the lease and area schedule.",
+              },
+              {
+                title: "Are shared services allocated consistently?",
+                text: "Check whether trash, grease service, delivery areas, parking, or utilities are charged to all tenants or only the spaces that use them, as the lease provides.",
+              },
+              {
+                title: "Are fees calculated on the right base?",
+                text: "Compare management and administrative fee rates and bases with any lease limits. Ask for the calculation behind a lump-sum fee.",
+              },
+              {
+                title: "How were capital projects treated?",
+                text: "Check roof, paving, HVAC, or equipment projects against the lease's capital cost and amortization language before classifying a charge as improper.",
+              },
+              {
+                title: "Were all payments credited?",
+                text: "Reconcile twelve monthly estimates, prior-year credits, and any direct reimbursements to the annual statement.",
+              },
+            ].map(({ title, text }) => (
+              <article key={title} className="rounded-xl border border-slate-200 p-5">
+                <h3 className="text-lg font-semibold">{title}</h3>
+                <p className="mt-2 text-slate-700">{text}</p>
+              </article>
+            ))}
+          </div>
+          <p className="text-slate-700">
+            These are checks, not claims that a particular charge is
+            disallowed. An invoice, ledger, or allocation schedule may be
+            needed to resolve the question.
+          </p>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-3xl font-semibold">A simple reconciliation example</h2>
+          <p className="text-slate-700">
+            Suppose a statement shows $300,000 of allocated expenses and a
+            5% tenant share. That produces $15,000 before adjustments. If
+            $12,000 in estimated payments were credited, the visible balance
+            is $3,000. Next, verify whether the $300,000 cost pool, 5% share,
+            and $12,000 credit match the lease and records. The $3,000 is a
+            balance in this example, not a proven overcharge.
+          </p>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-3xl font-semibold">What to do when a line does not match</h2>
+          <p className="text-slate-700">
+            Record the statement year, line item, amount, and lease clause.
+            Request the particular invoice, area schedule, fee calculation,
+            or payment ledger needed to check it. Follow the lease&apos;s
+            instructions for who receives a request or objection and when.
+            A report does not send a notice or preserve rights for you.
+          </p>
+          <p className="text-slate-700">
+            Use the{" "}
+            <Link href="/marketing/cam-audit-checklist" className="text-emerald-800 underline">
+              CAM review checklist
+            </Link>{" "}
+            to organize your work. Multi-location operators can also compare
+            lease language and statement formats across sites using the{" "}
+            <Link href="/marketing/franchise-cam-audit" className="text-emerald-800 underline">
+              franchise CAM guide
+            </Link>
+            .
+          </p>
+        </section>
+
+        <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
+          <h2 className="text-3xl font-semibold">Review your restaurant lease and statement</h2>
+          <p className="mt-3 text-slate-700">
+            Start with a free lease preview. You can add an annual CAM or NNN
+            statement and up to four supporting PDFs before checkout. The
+            $49.99 report compares readable billing details with extracted
+            lease terms and labels what still needs verification.
+          </p>
+          <Link
+            href="/app/step-1-upload"
+            className="mt-5 inline-block rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white hover:bg-emerald-800"
+          >
+            Start your free preview
+          </Link>
+        </section>
+      </div>
     </main>
   );
 }
