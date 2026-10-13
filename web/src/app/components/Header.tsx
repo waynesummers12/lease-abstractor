@@ -76,6 +76,10 @@ export default function Header() {
           ============================= */}
           {!user ? (
             <>
+              <Link href="/login" className="inline-flex items-center gap-2 font-semibold transition hover:opacity-80">
+                Dashboard
+                <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
+              </Link>
               <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
                 Login
               </Link>
