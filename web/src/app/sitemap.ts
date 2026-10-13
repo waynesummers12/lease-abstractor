@@ -1,346 +1,87 @@
 import type { MetadataRoute } from "next";
 
+// Keep this list to public, indexable pages. Update it when adding a marketing route.
+const marketingPaths = [
+  "/marketing",
+  "/marketing/audit-rights",
+  "/marketing/audit-window-deadlines",
+  "/marketing/audit-window-language",
+  "/marketing/burger-franchise-lease-overcharges",
+  "/marketing/burger-lease-hub",
+  "/marketing/burger-restaurant-cam-reconciliation-checklist",
+  "/marketing/burger-restaurant-lease-audit",
+  "/marketing/burger-restaurant-lease-audit-rights",
+  "/marketing/cam-admin-page",
+  "/marketing/cam-audit-checklist",
+  "/marketing/cam-charges",
+  "/marketing/cam-commercial-real-estate",
+  "/marketing/cam-expense-caps",
+  "/marketing/cam-fee-calculator",
+  "/marketing/cam-fee-meaning",
+  "/marketing/cam-nnn-overcharges",
+  "/marketing/cam-real-estate",
+  "/marketing/cam-reconciliation",
+  "/marketing/cam-reconciliation-checklist",
+  "/marketing/cam-reconciliation-errors",
+  "/marketing/cam-reconciliation-statement",
+  "/marketing/cam-vs-nnn",
+  "/marketing/commercial-lease-audit",
+  "/marketing/commercial-lease-checklist",
+  "/marketing/commercial-lease-checklist-pdf",
+  "/marketing/common-area-maintenance",
+  "/marketing/common-area-maintenance-cam",
+  "/marketing/common-area-maintenance-charges",
+  "/marketing/common-cam-fees",
+  "/marketing/contact",
+  "/marketing/franchise-cam-audit",
+  "/marketing/how-it-works",
+  "/marketing/how-medical-practices-can-dispute-cam-charges",
+  "/marketing/how-much-rent-should-a-burger-restaurant-pay",
+  "/marketing/learn",
+  "/marketing/lease-cam",
+  "/marketing/lease-intelligence",
+  "/marketing/lease-overcharge",
+  "/marketing/lease-portfolio-software",
+  "/marketing/lease-score-explained",
+  "/marketing/medical-hub",
+  "/marketing/medical-office-cam-reconciliation",
+  "/marketing/medical-office-cam-spikes",
+  "/marketing/medical-office-lease-audit",
+  "/marketing/medical-office-lease-audit-checklist",
+  "/marketing/medical-office-nnn-expenses",
+  "/marketing/medical-practice-lease-overcharges",
+  "/marketing/multi-location-medical-lease-risk",
+  "/marketing/nnn",
+  "/marketing/nnn-audit-rights",
+  "/marketing/nnn-calculation-examples",
+  "/marketing/nnn-expenses-explained",
+  "/marketing/nnn-for-burger-restaurants",
+  "/marketing/nnn-insurance-charges-explained",
+  "/marketing/nnn-lease",
+  "/marketing/nnn-property-tax-charges-explained",
+  "/marketing/nnn-reconciliation",
+  "/marketing/non-allowable-cam-nnn-expenses",
+  "/marketing/platform",
+  "/marketing/portfolio-monitoring",
+  "/marketing/pricing",
+  "/marketing/privacy",
+  "/marketing/pro-rata-share-explained",
+  "/marketing/real-cam-nnn-overcharge-examples",
+  "/marketing/reconciliation-pilot",
+  "/marketing/referral",
+  "/marketing/restaurant-nnn-overcharges",
+  "/marketing/retail-lease-hub",
+  "/marketing/retail-lease-reconciliation-help",
+  "/marketing/security",
+  "/marketing/terms",
+  "/marketing/triple-net-lease",
+  "/marketing/triple-net-lease-meaning",
+  "/marketing/triple-net-lease-vs-gross",
+  "/marketing/what-we-find",
+] as const;
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.saveonlease.com";
-  const now = new Date();
-
-  return [
-    // Core Pages
-    {
-      url: `${baseUrl}/marketing`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-
-    // Product Flow
-    {
-      url: `${baseUrl}/app/step-1-upload`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-
-    // Education Hub
-    {
-      url: `${baseUrl}/marketing/learn`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-
-    // Medical Vertical Hub
-    {
-      url: `${baseUrl}/marketing/medical-hub`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-office-lease-audit`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-office-cam-reconciliation`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-office-cam-spikes`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-office-nnn-expenses`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-practice-lease-overcharges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/medical-office-lease-audit-checklist`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/multi-location-medical-lease-risk`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/how-medical-practices-can-dispute-cam-charges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-
-    // Core Authority Pages
-    {
-      url: `${baseUrl}/marketing/cam-reconciliation`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-reconciliation-errors`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-reconciliation-statement`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-nnn-overcharges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/non-allowable-cam-nnn-expenses`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/audit-window-deadlines`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/audit-rights`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-
-    // CAM Cluster
-    {
-      url: `${baseUrl}/marketing/cam-charges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-fee-meaning`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-fee-calculator`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/marketing/common-area-maintenance`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/common-area-maintenance-cam`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/marketing/common-area-maintenance-charges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-real-estate`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-commercial-real-estate`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/lease-cam`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-
-    // NNN / Lease Cluster
-    {
-      url: `${baseUrl}/marketing/nnn-lease`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/triple-net-lease`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/triple-net-lease-meaning`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/triple-net-lease-vs-gross`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-vs-nnn`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/commercial-lease-audit`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/lease-overcharge`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-reconciliation-checklist`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/cam-audit-checklist`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/commercial-lease-checklist`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/commercial-lease-checklist-pdf`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/nnn`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/nnn-expenses-explained`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-
-    // Industry Vertical Pages
-    {
-      url: `${baseUrl}/marketing/retail-lease-reconciliation-help`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/restaurant-nnn-overcharges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/franchise-cam-audit`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-
-    // Burger Vertical Hub
-    {
-      url: `${baseUrl}/marketing/burger-lease-hub`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/burger-restaurant-lease-audit`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/burger-franchise-lease-overcharges`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/marketing/burger-restaurant-cam-reconciliation-checklist`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/burger-restaurant-lease-audit-rights`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/how-much-rent-should-a-burger-restaurant-pay`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/marketing/nnn-for-burger-restaurants`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-
-    // Retail Hub
-    {
-      url: `${baseUrl}/marketing/retail-lease-hub`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
+  return marketingPaths.map((path) => ({
+    url: `https://www.saveonlease.com${path}`,
+  }));
 }
