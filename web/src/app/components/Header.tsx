@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 import EducationDropdown from "./EducationDropdown";
@@ -12,10 +11,6 @@ import MobileMenu from "./MobileMenu";
 
 
 export default function Header() {
-  const pathname = usePathname();
-  const isAppPage =
-    pathname.startsWith("/app") || pathname.startsWith("/product/app");
-
   const { session } = useAuth();
   const user = session?.user ?? null;
 
@@ -31,18 +26,12 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  const navTextColor = isAppPage ? "text-gray-900" : "text-white";
-  const bgClass = isAppPage
-    ? "bg-white border-b border-gray-200"
-    : "bg-black shadow-md";
-  const navLinkClass = isAppPage
-    ? "text-gray-600 hover:text-gray-950 focus-visible:text-gray-950"
-    : "text-white/70 hover:text-white focus-visible:text-white";
+  const navLinkClass = "text-white/70 hover:text-white focus-visible:text-white";
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[1000] ${bgClass}`}>
+    <header className="fixed top-0 left-0 right-0 z-[1000] bg-black shadow-md">
       <div
-        className={`mx-auto flex w-full max-w-full items-center justify-between px-4 sm:px-6 py-4 ${navTextColor}`}
+        className="mx-auto flex w-full max-w-full items-center justify-between px-4 py-4 text-white sm:px-6"
       >
         {/* Logo */}
         <Link href="/marketing" className="flex items-center gap-2 shrink-0">
@@ -67,7 +56,7 @@ export default function Header() {
           <Link href="/marketing/contact" className={`${navLinkClass} transition-colors`}>
             Contact
           </Link>
-          <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
+          <div className="mx-3 h-5 w-px bg-white/20" />
 
           {/* =============================
               NOT LOGGED IN
@@ -100,7 +89,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/app/step-1-upload"
-                className={`ml-2 rounded-full px-5 py-2 font-semibold shadow-md transition-all hover:shadow-lg ${isAppPage ? "bg-[#102c25] text-white hover:bg-[#1b4a3c]" : "bg-white text-black hover:bg-gray-200"}`}
+                className="ml-2 rounded-full bg-white px-5 py-2 font-semibold text-black shadow-md transition-all hover:bg-gray-200 hover:shadow-lg"
               >
                 Start Free Preview
               </Link>
