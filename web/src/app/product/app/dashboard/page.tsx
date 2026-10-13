@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 
@@ -46,8 +45,56 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return <span aria-hidden="true">{diagonal ? "↗" : "→"}</span>;
 }
 
+function GuestDashboardOverview() {
+  const features = [
+    { number: "01", title: "Keep every lease in one place", description: "Save each property, landlord, lease type, square footage, and renewal date. Search your leases when you need a specific record." },
+    { number: "02", title: "See what needs attention", description: "View lease counts, upcoming saved renewal dates, missing dates, and a twelve-month renewal outlook in one workspace." },
+    { number: "03", title: "Take your list with you", description: "Export your saved lease list as a CSV when you need to review or share your portfolio outside SaveOnLease." },
+    { number: "04", title: "Return to completed reports", description: "Find the reviews you created while signed in and reopen their questions and available PDF reports." },
+  ];
+
+  return (
+    <main className="min-h-screen bg-[#f5f7f3] text-[#122c25]">
+      <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-20">
+        <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] px-6 py-12 text-white shadow-[0_22px_70px_rgba(16,44,37,0.16)] sm:px-12 sm:py-16">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-52 h-[520px] w-[520px] rounded-full border border-white/10" />
+          <div className="relative max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Dashboard Leases · Free</p>
+            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">Your lease command center, <span className="text-[#a9e9be]">all in one place.</span></h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d9e9df]">Manage the lease details and dates you save across your properties. See what is coming up, find a lease quickly, and return to your completed reviews.</p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link href="/login" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 py-3 text-sm font-semibold text-[#102c25] hover:bg-[#c7f4d5]">Sign in or get started <Arrow diagonal /></Link>
+              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Start a free lease preview <Arrow diagonal /></Link>
+            </div>
+            <p className="mt-5 text-sm text-[#d9e9df]">The dashboard is free. A full lease review report is optional and costs $49.99 per lease.</p>
+          </div>
+        </section>
+
+        <section className="py-16 sm:py-20" aria-labelledby="dashboard-benefits-title">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d7459]">Inside your workspace</p>
+          <h2 id="dashboard-benefits-title" className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">A clearer view of all your leases.</h2>
+          <div className="mt-9 grid gap-4 md:grid-cols-2">
+            {features.map((feature) => (
+              <article key={feature.number} className="rounded-3xl border border-[#dce5dc] bg-white p-7 shadow-sm">
+                <span className="text-sm font-bold text-[#0d7459]">{feature.number}</span>
+                <h3 className="mt-5 text-xl font-semibold">{feature.title}</h3>
+                <p className="mt-3 leading-7 text-[#60736a]">{feature.description}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-7 max-w-3xl text-sm leading-7 text-[#60736a]">Renewal dates are based on what you save and serve as reminders. Check your signed lease for separate notice and audit deadlines. Sample records stay out of your real lease counts.</p>
+        </section>
+
+        <section className="mb-10 flex flex-col gap-6 rounded-3xl bg-[#e4f2e8] p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
+          <div><h2 className="text-2xl font-semibold">Ready to organize your leases?</h2><p className="mt-2 max-w-2xl leading-7 text-[#526b5d]">Sign in to open your free dashboard and begin adding leases. You can start a free lease preview whenever you are ready to review the document itself.</p></div>
+          <Link href="/login" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#102c25] px-6 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Open your free dashboard <Arrow diagonal /></Link>
+        </section>
+      </div>
+    </main>
+  );
+}
+
 export default function DashboardPage() {
-  const router = useRouter();
   const { session, loading: authLoading } = useAuth();
   const userId = session?.user.id;
   const accessToken = session?.access_token;
@@ -59,10 +106,6 @@ export default function DashboardPage() {
   const [showSamples, setShowSamples] = useState(false);
   const [showAllReports, setShowAllReports] = useState(false);
   const [leaseQuery, setLeaseQuery] = useState("");
-
-  useEffect(() => {
-    if (!authLoading && !session) router.replace("/login");
-  }, [authLoading, session, router]);
 
   useEffect(() => {
     if (authLoading || !userId || !accessToken) return;
@@ -151,7 +194,13 @@ export default function DashboardPage() {
     });
   }, [realLeases]);
 
-  if (authLoading || (!session && !authLoading) || loading) {
+  if (authLoading) {
+    return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
+  }
+
+  if (!session) return <GuestDashboardOverview />;
+
+  if (loading) {
     return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
   }
 

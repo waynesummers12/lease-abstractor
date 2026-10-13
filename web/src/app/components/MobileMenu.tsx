@@ -88,7 +88,7 @@ export default function MobileMenu({
         </Link>
 
         {!user && (
-          <Link href="/login" onClick={() => setOpen(false)} className="mt-5 flex min-h-12 items-center gap-2 rounded-lg px-2 text-base font-semibold hover:bg-white/10">
+          <Link href="/product/app/dashboard" onClick={() => setOpen(false)} className="mt-5 flex min-h-12 items-center gap-2 rounded-lg px-2 text-base font-semibold hover:bg-white/10">
             Dashboard Leases
             <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
           </Link>
