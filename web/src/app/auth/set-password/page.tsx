@@ -45,7 +45,7 @@ export default function SetPasswordPage() {
         {authLoading ? (
           <p className="mt-5 text-slate-600">Checking your sign-in…</p>
         ) : !session ? (
-          <p className="mt-5 leading-7 text-slate-600">Your password link is no longer active. <Link href="/login" className="font-semibold text-emerald-800 underline underline-offset-4">Return to sign in</Link> and request a new one.</p>
+          <p className="mt-5 leading-7 text-slate-600">Sign in or request a password setup link to continue. <Link href="/login" className="font-semibold text-emerald-800 underline underline-offset-4">Return to sign in</Link>.</p>
         ) : (
           <>
             <p className="mt-4 leading-7 text-slate-600">Create a password for {session.user.email}. You can then sign in to your dashboard without a new email link.</p>
