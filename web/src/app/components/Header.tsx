@@ -35,6 +35,9 @@ export default function Header() {
   const bgClass = isAppPage
     ? "bg-white border-b border-gray-200"
     : "bg-black shadow-md";
+  const navLinkClass = isAppPage
+    ? "text-gray-600 hover:text-gray-950 focus-visible:text-gray-950"
+    : "text-white/70 hover:text-white focus-visible:text-white";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-[1000] ${bgClass}`}>
@@ -48,23 +51,23 @@ export default function Header() {
         </Link>
 
         <nav className="relative ml-4 hidden items-center gap-6 whitespace-nowrap text-sm xl:flex">
-          <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
+          <Link href="/marketing/what-we-find" className={`${navLinkClass} transition-colors`}>
             What We Find
           </Link>
-          <a href="/marketing/how-it-works" className="opacity-70 hover:opacity-100 transition">
+          <a href="/marketing/how-it-works" className={`${navLinkClass} transition-colors`}>
             How It Works
           </a>
-          <Link href="/marketing#statement-review" className="opacity-90 hover:opacity-100 font-medium transition">
+          <Link href="/marketing#statement-review" className={`${navLinkClass} transition-colors`}>
             Statement Review
           </Link>
-          <Link href="/marketing/pricing" className="opacity-70 hover:opacity-100 transition">
+          <Link href="/marketing/pricing" className={`${navLinkClass} transition-colors`}>
             Pricing
           </Link>
-          <EducationDropdown />
-          <Link href="/marketing/referral" className="opacity-90 hover:opacity-100 font-medium transition">
+          <EducationDropdown triggerClassName={navLinkClass} />
+          <Link href="/marketing/referral" className={`${navLinkClass} transition-colors`}>
             Refer & Earn 20%
           </Link>
-          <Link href="/marketing/contact" className="opacity-70 hover:opacity-100 transition">
+          <Link href="/marketing/contact" className={`${navLinkClass} transition-colors`}>
             Contact
           </Link>
           <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
@@ -74,11 +77,11 @@ export default function Header() {
           ============================= */}
           {!user ? (
             <>
-              <Link href="/login" className="inline-flex items-center gap-2 font-semibold transition hover:opacity-80">
+              <Link href="/login" className={`inline-flex items-center gap-2 ${navLinkClass} transition-colors`}>
                 Dashboard
                 <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
               </Link>
-              <Link href="/login" className="opacity-80 hover:opacity-100 transition font-medium">
+              <Link href="/login" className={`${navLinkClass} transition-colors`}>
                 Login
               </Link>
               <Link
@@ -94,11 +97,11 @@ export default function Header() {
                   LOGGED IN
               ============================= */}
 
-              <Link href="/product/app/dashboard" className={`inline-flex items-center gap-2 font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}>
+              <Link href="/product/app/dashboard" className={`inline-flex items-center gap-2 ${navLinkClass} transition-colors`}>
                 Dashboard
                 <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
               </Link>
-              <Link href="/product/app/dashboard#leases" className="text-sm opacity-80 transition hover:opacity-100">
+              <Link href="/product/app/dashboard#leases" className={`${navLinkClass} transition-colors`}>
                 Your Leases
               </Link>
               <Link
@@ -110,7 +113,7 @@ export default function Header() {
 
               {/* Avatar */}
               {session && (
-                <AvatarDropdown session={session} />
+                <AvatarDropdown session={session} triggerClassName={navLinkClass} />
               )}
             </>
           )}

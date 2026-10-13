@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-export default function EducationDropdown() {
+export default function EducationDropdown({ triggerClassName = "" }: { triggerClassName?: string }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -23,7 +23,7 @@ export default function EducationDropdown() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="opacity-80 hover:opacity-100 transition"
+        className={`${triggerClassName} transition-colors`}
         aria-expanded={open}
         aria-haspopup="menu"
       >

@@ -7,10 +7,12 @@ import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {
   session: Session;
+  triggerClassName?: string;
 }
 
 export default function AvatarDropdown({
   session,
+  triggerClassName = "",
 }: AvatarDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -35,12 +37,12 @@ export default function AvatarDropdown({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2"
+        className={`group flex items-center gap-2 ${triggerClassName} transition-colors`}
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 font-bold text-white">{initial}</span>
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 font-bold text-white transition-colors group-hover:bg-gray-400 group-focus-visible:bg-gray-400">{initial}</span>
         <span className="text-sm font-medium">Account</span>
       </button>
 
