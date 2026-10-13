@@ -113,14 +113,15 @@ export default function MobileMenu({
         <nav aria-label="Explore SaveOnLease" className="mt-7 border-b border-white/15 pb-5">
           <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-400">Explore</p>
           {[
-            ["Learn", "/marketing/learn"],
             ["What We Find", "/marketing/what-we-find"],
             ["How It Works", "/marketing/how-it-works"],
-            ["Pricing", "/pricing"],
             ["Statement Review", "/marketing#statement-review"],
+            ["Learn", "/marketing/learn"],
             ["CAM Reconciliation", "/marketing/cam-reconciliation"],
             ["NNN Audit Rights", "/marketing/nnn-audit-rights"],
             ["Audit Deadlines", "/marketing/audit-window-deadlines"],
+            ["Pricing", "/marketing/pricing"],
+            ["Refer & Earn 20%", "/marketing/referral"],
             ["Contact", "/marketing/contact"],
           ].map(([label, href]) => (
             <Link key={href} href={href} onClick={() => setOpen(false)} className="flex min-h-12 items-center rounded-lg px-2 text-base hover:bg-white/10">

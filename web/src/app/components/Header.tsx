@@ -48,8 +48,6 @@ export default function Header() {
         </Link>
 
         <nav className="relative ml-4 hidden items-center gap-6 whitespace-nowrap text-sm xl:flex">
-          <EducationDropdown />
-
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
             What We Find
           </Link>
@@ -59,16 +57,16 @@ export default function Header() {
           <Link href="/marketing#statement-review" className="opacity-90 hover:opacity-100 font-medium transition">
             Statement Review
           </Link>
+          <EducationDropdown />
+          <Link href="/marketing/pricing" className="opacity-70 hover:opacity-100 transition">
+            Pricing
+          </Link>
           <Link href="/marketing/referral" className="opacity-90 hover:opacity-100 font-medium transition">
             Refer & Earn 20%
           </Link>
           <Link href="/marketing/contact" className="opacity-70 hover:opacity-100 transition">
             Contact
           </Link>
-          <Link href="/pricing" className="opacity-70 hover:opacity-100 transition">
-            Pricing
-          </Link>
-
           <div className={`h-5 w-px mx-3 ${isAppPage ? "bg-gray-200" : "bg-white/20"}`} />
 
           {/* =============================

@@ -27,7 +27,7 @@ export default function EducationDropdown() {
         aria-expanded={open}
         aria-haspopup="menu"
       >
-        Education ▾
+        Learn ▾
       </button>
 
       {open && (
@@ -35,6 +35,7 @@ export default function EducationDropdown() {
           role="menu"
           className="absolute left-0 top-full mt-2 w-[520px] rounded-lg bg-black text-white border border-white/10 shadow-xl p-6"
         >
+          <Link href="/marketing/learn" className="mb-5 block border-b border-white/10 pb-4 text-sm font-semibold hover:underline" onClick={() => setOpen(false)}>Explore the learning center →</Link>
           <div className="grid grid-cols-2 gap-6 text-sm">
             {/* Core CAM */}
             <div>
