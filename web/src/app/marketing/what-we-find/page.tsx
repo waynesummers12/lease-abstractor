@@ -1,237 +1,48 @@
 import FaqSchema from "@/app/components/FaqSchema";
+import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "What We Find in CAM & NNN Statements | SaveOnLease",
+  description: "See the lease terms, billing calculations, and missing records SaveOnLease can flag in a commercial lease expense review. Explore a fictional full report.",
+  alternates: { canonical: "https://www.saveonlease.com/marketing/what-we-find" },
+};
+
+const findings = [
+  { n: "01", label: "The share", title: "The percentage behind the bill", body: "Compare the billed tenant share with the signed lease, amendments, premises area, and available center-area records.", evidence: "Lease + amendment + statement + area schedule", color: "bg-[#e5f6ed]" },
+  { n: "02", label: "The expense", title: "Costs the lease may exclude", body: "Surface items such as capital work, legal fees, regional salaries, or ownership-related costs for a closer look at the lease language.", evidence: "Expense line + exclusion clause", color: "bg-[#eef1fb]" },
+  { n: "03", label: "The fee", title: "Administration and management charges", body: "Check the stated rate and the base it was applied to, including whether an amendment changed the original terms.", evidence: "Fee calculation + amended lease", color: "bg-[#fff2df]" },
+  { n: "04", label: "The limit", title: "Caps and year-over-year increases", body: "Screen a controllable CAM cap when the prior-year baseline and covered categories are readable. Show assumptions when records are incomplete.", evidence: "Prior year + current year + cap clause", color: "bg-[#e5f6ed]" },
+  { n: "05", label: "The math", title: "Duplicates, credits, and balances", body: "Recheck visible line-item math, repeated charges, and the difference between billed payments and the available payment ledger.", evidence: "Statement + payment detail", color: "bg-[#eef1fb]" },
+  { n: "06", label: "The clock", title: "Review and payment dates", body: "Pull out statement delivery, objection, records-review, and payment timing to verify against the signed lease.", evidence: "Date received + review clause", color: "bg-[#fff2df]" },
+];
+
+const examples = [
+  { title: "Share", first: "13.89%", firstNote: "Billed on the statement", second: "12.00%", secondNote: "In the signed amendment" },
+  { title: "Capital cost", first: "$86,400", firstNote: "Center-wide roof item listed", second: "§4.4", secondNote: "Lease language to review" },
+  { title: "Payment credits", first: "$61,200", firstNote: "Shown in a payment ledger", second: "$56,100", secondNote: "Credited on the statement" },
+];
 
 export default function WhatWeFindPage() {
-  return (
-    <div className="mx-auto max-w-6xl px-6 py-12 space-y-16">
-      
-      {/* HERO */}
-      <section className="max-w-3xl">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-          What We Find in CAM & NNN Audits
-        </h1>
-        <p className="mt-4 text-lg text-gray-700">
-          Most commercial tenants overpay on CAM and NNN charges — not because
-          landlords are malicious, but because the billing is complex,
-          inconsistent, and rarely challenged.
-        </p>
-        <p className="mt-2 text-gray-700">
-          Our lease audits focus on the most common (and expensive) areas where
-          charges drift outside what your lease actually allows.
-        </p>
-      </section>
+  return <main className="bg-[#f7f8f5] text-[#172820]">
+    <section className="relative overflow-hidden bg-[#102b25] text-white">
+      <div aria-hidden className="pointer-events-none absolute -right-32 -top-52 h-[600px] w-[600px] rounded-full border border-white/10" />
+      <div aria-hidden className="pointer-events-none absolute -right-16 -top-36 h-[470px] w-[470px] rounded-full border border-white/10" />
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.03fr_.97fr] lg:items-center">
+        <div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a8edbf]">What we find</p><h1 className="mt-5 max-w-2xl text-5xl font-semibold leading-[1.06] tracking-tight text-white sm:text-6xl">Every charge has a <span className="text-[#a8edbf]">story.</span> Your lease tells us where to look.</h1><p className="mt-7 max-w-xl text-lg leading-8 text-slate-200">A CAM or NNN statement can look precise while hiding the question that matters: does this charge follow your signed lease? SaveOnLease brings the language, the billing, and the gaps in evidence into one review.</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a8edbf] px-6 py-3 text-sm font-bold text-[#102b25] hover:bg-white">Start a free lease preview <span aria-hidden className="ml-3">↗</span></Link><a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">See a full sample report ↗</a></div><p className="mt-5 text-xs leading-5 text-slate-300">The examples below use fictional documents. Findings in your report depend on the files you provide.</p></div>
+        <div className="relative mx-auto w-full max-w-[480px] rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/30 sm:p-6"><div className="rounded-[1.4rem] bg-[#f9fbf8] p-6 text-[#172820] sm:p-8"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-[0.17em] text-emerald-800">Illustrative finding</span><span className="rounded-full bg-[#e5f6ed] px-3 py-1 text-xs font-semibold text-emerald-900">Share comparison</span></div><p className="mt-7 text-sm font-semibold text-slate-600">2025 annual statement</p><p className="mt-1 text-5xl font-semibold tracking-tight text-slate-950">13.89%</p><div className="my-6 flex items-center gap-4"><div className="h-px flex-1 bg-slate-200" /><span className="text-xs font-bold uppercase tracking-widest text-slate-400">compared with</span><div className="h-px flex-1 bg-slate-200" /></div><p className="text-sm font-semibold text-slate-600">Signed lease amendment</p><p className="mt-1 text-5xl font-semibold tracking-tight text-emerald-800">12.00%</p><div className="mt-7 rounded-xl border border-emerald-200 bg-[#e5f6ed] p-4"><p className="text-sm font-semibold text-emerald-950">Question worth resolving</p><p className="mt-1 text-sm leading-6 text-emerald-950">Which area schedule and lease provision support the larger billed share?</p></div></div><p className="mt-4 text-center text-xs text-slate-300">A review lead, not a verified overcharge</p></div>
+      </div>
+    </section>
 
-      {/* FINDINGS GRID */}
-      <section className="grid gap-8 md:grid-cols-2">
-        
-        {/* CARD */}
-        <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-lg sm:text-xl font-light tracking-tight">CAM Reconciliation Errors</h2>
-          <p className="mt-3 text-gray-700">
-            CAM charges are usually estimated throughout the year, then “trued up”
-            in a reconciliation statement — one of the most error-prone parts of a lease.
-          </p>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>Expenses charged outside CAM definitions</li>
-            <li>Duplicate line items year over year</li>
-            <li>Costs shifted between properties</li>
-            <li>Late reconciliations after audit windows close</li>
-          </ul>
-        </div>
+    <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Six places to look</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">The findings start where the bill meets the contract.</h2><p className="mt-4 text-lg leading-8 text-slate-600">We look for questions that can be tied to readable numbers, clauses, and supporting pages. Each category depends on what your documents actually show.</p></div><div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{findings.map((finding) => <article key={finding.n} className="flex h-full flex-col rounded-3xl border border-[#dce5dc] bg-white p-7 shadow-sm"><div className="flex items-start justify-between gap-4"><span className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-950 ${finding.color}`}>{finding.label}</span><span className="text-sm font-semibold text-emerald-800">{finding.n}</span></div><h3 className="mt-8 text-xl font-semibold leading-7 text-slate-950">{finding.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-slate-600">{finding.body}</p><div className="mt-7 border-t border-slate-100 pt-4"><p className="text-xs font-bold uppercase tracking-widest text-slate-400">Evidence to compare</p><p className="mt-2 text-sm font-medium text-slate-700">{finding.evidence}</p></div></article>)}</div></section>
 
-        <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-lg sm:text-xl font-light tracking-tight">
-            Administrative & Management Fee Abuse
-          </h2>
-          <p className="mt-3 text-gray-700">
-            Many leases allow “reasonable” admin fees — without defining what
-            reasonable actually means.
-          </p>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>Admin fees layered onto CAM</li>
-            <li>Fees applied to insurance or taxes</li>
-            <li>Charges exceeding lease caps</li>
-          </ul>
-        </div>
+    <section className="border-y border-[#dce5dc] bg-white"><div className="mx-auto max-w-6xl px-6 py-20 sm:py-24"><div className="grid gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">See the reasoning</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Three signals from one fictional statement.</h2></div><p className="max-w-xl text-lg leading-8 text-slate-600">A useful report shows the source of each question. These numbers come from fictional demonstration documents and are presented as items to verify, not money owed to a tenant.</p></div><div className="mt-10 grid gap-4 md:grid-cols-3">{examples.map((item) => <article key={item.title} className="rounded-3xl border border-slate-200 bg-[#f9fbf8] p-6"><p className="text-xs font-bold uppercase tracking-[0.17em] text-emerald-800">{item.title}</p><p className="mt-7 text-3xl font-semibold tracking-tight text-slate-950">{item.first}</p><p className="mt-1 text-sm text-slate-500">{item.firstNote}</p><div className="mt-6 border-t border-slate-200 pt-5"><p className="text-2xl font-semibold tracking-tight text-emerald-800">{item.second}</p><p className="mt-1 text-sm text-slate-500">{item.secondNote}</p></div></article>)}</div><div className="mt-7 rounded-2xl border border-amber-200 bg-[#fff8e8] p-5 text-sm leading-7 text-amber-950"><strong>What these numbers do not prove:</strong> The roof figure is a center-wide statement line, not a tenant refund. The payment difference needs the actual ledger and proof of cleared payments. A changed tenant share needs the applicable area records and signed amendment.</div></div></section>
 
-        <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-lg sm:text-xl font-light tracking-tight">
-            Improper Capital Expenditures
-          </h2>
-          <p className="mt-3 text-gray-700">
-            CAM is intended for operating expenses — not long-term improvements.
-          </p>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>Roof replacements passed through as CAM</li>
-            <li>HVAC upgrades billed in a single year</li>
-            <li>Structural work improperly allocated</li>
-          </ul>
-        </div>
+    <section className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-24 lg:grid-cols-[1fr_.9fr] lg:items-center"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">From signal to next step</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">The report keeps the evidence attached.</h2><p className="mt-5 max-w-xl leading-8 text-slate-600">The paid PDF brings together prioritized questions, lease excerpts with page references, statement checks, conditional calculations when inputs support them, and the records needed to verify the open items.</p><div className="mt-7 grid gap-3 sm:grid-cols-2"><div className="rounded-xl border border-[#dce5dc] bg-white p-4 text-sm font-medium text-slate-800">01 / See what deserves attention first</div><div className="rounded-xl border border-[#dce5dc] bg-white p-4 text-sm font-medium text-slate-800">02 / Trace the clause and statement line</div><div className="rounded-xl border border-[#dce5dc] bg-white p-4 text-sm font-medium text-slate-800">03 / Review the assumptions and math</div><div className="rounded-xl border border-[#dce5dc] bg-white p-4 text-sm font-medium text-slate-800">04 / Request the missing records</div></div><div className="mt-8 flex flex-wrap gap-5"><a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-emerald-800 underline underline-offset-4">Open the 11-page fictional sample ↗</a><Link href="/marketing/how-it-works" className="text-sm font-semibold text-emerald-800 underline underline-offset-4">See how the review works ↗</Link></div></div><div className="mx-auto w-full max-w-[420px] rounded-[2rem] border border-[#dce5dc] bg-white p-5 shadow-xl shadow-slate-900/10"><div className="overflow-hidden rounded-xl border border-slate-100"><Image src="/sample/lease-and-statement-review-preview.png" alt="Cover page of the fictional SaveOnLease lease and statement review" width={992} height={1403} className="h-auto w-full" /></div><p className="mt-4 text-center text-xs text-slate-500">Actual report format · fictional sample</p></div></section>
 
-        <div className="rounded-xl border p-6 shadow-sm">
-          <h2 className="text-lg sm:text-xl font-light tracking-tight">
-            Insurance & Tax Pass-Through Issues
-          </h2>
-          <p className="mt-3 text-gray-700">
-            Insurance and taxes are often the fastest-growing NNN components.
-          </p>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>Premium increases not limited by lease language</li>
-            <li>Tenant charged for landlord-level coverage</li>
-            <li>Taxes reassessed after purchase or refinance</li>
-          </ul>
-        </div>
-
-        <div className="rounded-xl border p-6 shadow-sm md:col-span-2">
-          <h2 className="text-lg sm:text-xl font-light tracking-tight">
-            Pro-Rata Share & Allocation Errors
-          </h2>
-          <p className="mt-3 text-gray-700">
-            Your CAM and NNN share must follow a specific formula defined in your lease.
-          </p>
-          <ul className="mt-4 list-disc space-y-2 pl-5 text-gray-700">
-            <li>Incorrect rentable square footage</li>
-            <li>Vacant space allocated to tenants</li>
-            <li>Common areas misclassified</li>
-          </ul>
-        </div>
-
-      </section>
-
-      {/* CTA STRIP */}
-      <section className="rounded-xl bg-black p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <div>
-          <h3 className="text-xl sm:text-2xl font-light tracking-tight text-white">
-  These issues add up quietly —
-  <span className="block text-gray-300">
-    until they’re expensive
-  </span>
-</h3>
-          <p className="mt-2 text-gray-300 max-w-xl">
-            A few thousand dollars here, a few percent there — year after year.
-            Our audit shows what your lease actually allows.
-          </p>
-        </div>
-        <Link
-          href="/app/step-1-upload"
-          className="inline-block rounded bg-white px-6 py-3 text-black font-medium hover:bg-gray-100 transition"
-        >
-          Upload Lease (Free Preview)
-        </Link>
-      </section>
-
-{/* DOLLAR IMPACT */}
-<div className="mt-20 border-t pt-16">
-  <h2 className="text-4xl font-light tracking-tight">
-    What CAM Errors Can Actually Cost
-  </h2>
-
-  <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
-    Even small miscalculations in CAM reconciliations can compound quickly.
-    For example, a 7,500 sq ft retail tenant paying $6.50 per sq ft in CAM
-    charges could see $3,000–$12,000 in avoidable exposure annually if
-    administrative fees, capital expenses, or pro-rata allocations are
-    applied incorrectly.
-  </p>
-
-  <p className="mt-4 text-gray-700 leading-relaxed max-w-4xl">
-    Larger tenants may face significantly higher exposure — especially
-    when audit windows close and overcharges continue year after year.
-  </p>
-</div>
-
-{/* CASE EXAMPLE */}
-<div className="mt-20 border-t pt-16">
-  <h2 className="text-4xl font-light tracking-tight">
-    Example: Retail Tenant CAM Overcharge Review
-  </h2>
-
-  <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
-    An 8,200 sq ft retail tenant in a multi-tenant shopping center was
-    paying approximately $7.10 per sq ft in CAM charges. After reviewing
-    the lease language and reconciliation statements, we identified:
-  </p>
-
-  <ul className="mt-6 list-disc pl-6 space-y-2 text-gray-700 marker:text-green-600 max-w-4xl">
-    <li>15% administrative fees applied to insurance and tax categories not permitted by the lease</li>
-    <li>Capital roof repairs billed in a single year instead of amortized</li>
-    <li>Incorrect pro-rata allocation including vacant space</li>
-  </ul>
-
-  <p className="mt-6 text-gray-900 font-medium max-w-4xl">
-    Estimated avoidable exposure: $11,400 in a single reconciliation year.
-  </p>
-
-  <p className="mt-4 text-gray-700 leading-relaxed max-w-4xl">
-    The tenant was still within the 90-day audit window and was able to
-    raise the discrepancies before the charges rolled into future years.
-  </p>
-</div>
-
-{/* INTERNAL SEO LINKS */}
-<div className="mt-20 border-t pt-16">
-  <h2 className="text-4xl font-light tracking-tight">
-    Learn More About CAM & NNN Lease Issues
-  </h2>
-
-  <p className="mt-6 text-lg text-gray-700 leading-relaxed max-w-4xl">
-    Dive deeper into specific topics affecting commercial tenants:
-  </p>
-
-  <ul className="mt-6 space-y-3 text-gray-700 max-w-4xl">
-    <li>
-      <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
-        CAM reconciliation errors and true-up statements
-      </Link>
-    </li>
-    <li>
-      <Link href="/marketing/nnn" className="underline hover:text-black">
-        Understanding triple net (NNN) lease structures
-      </Link>
-    </li>
-    <li>
-      <Link href="/marketing/audit-window-deadlines" className="underline hover:text-black">
-        Commercial lease audit window deadlines and dispute rights
-      </Link>
-    </li>
-  </ul>
-</div>
-
-      {/* WHAT THIS MEANS */}
-      <section className="rounded-xl bg-gray-50 p-8 max-w-3xl">
-        <h3 className="text-lg sm:text-xl font-light tracking-tight">
-          What This Means for You
-        </h3>
-        <p className="mt-3 text-gray-700">
-          These issues rarely appear as a single large mistake. Instead, they
-          accumulate quietly — until tenants are overpaying year after year.
-        </p>
-        <p className="mt-2 text-gray-700">
-          Our audit helps you decide whether it’s worth pursuing corrections
-          before audit windows close.
-        </p>
-      </section>
-
-      {/* FAQ SCHEMA */}
-      <FaqSchema
-        faqs={[
-          {
-            question: "What are common CAM overcharges?",
-            answer:
-              "Common CAM overcharges include excessive administrative fees, capital expenses passed through improperly, insurance markups, and reconciliation errors.",
-          },
-          {
-            question: "Can landlords overcharge NNN expenses?",
-            answer:
-              "Yes. NNN overcharges often occur due to misapplied taxes, insurance premiums, management fees, or incorrect pro-rata calculations.",
-          },
-          {
-            question: "How often do CAM reconciliation errors occur?",
-            answer:
-              "CAM reconciliation errors are common because expenses are estimated throughout the year and later adjusted, often without tenant review.",
-          },
-        ]}
-      />
-    </div>
-  );
+    <section className="bg-[#102b25] px-6 py-20 text-white"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">Begin with your lease</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Find the question before the window closes.</h2><p className="mt-5 leading-8 text-slate-200">The free preview starts with a text-readable lease. Add an annual statement and up to four supporting PDFs before buying the $49.99 one-time report. The report screens what is visible; invoices, payment history, and legal conclusions still require verification.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a8edbf] px-7 py-3 text-sm font-bold text-[#102b25] hover:bg-white">Start free preview <span aria-hidden className="ml-3">↗</span></Link></div></section>
+    <section className="mx-auto max-w-6xl px-6 py-16"><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Explore the details</p><div className="mt-5 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-emerald-900"><Link href="/marketing/cam-reconciliation" className="underline underline-offset-4 hover:text-emerald-700">CAM reconciliation</Link><Link href="/marketing/nnn" className="underline underline-offset-4 hover:text-emerald-700">NNN charges</Link><Link href="/marketing/audit-window-deadlines" className="underline underline-offset-4 hover:text-emerald-700">Audit deadlines</Link><Link href="/marketing/cam-fee-calculator" className="underline underline-offset-4 hover:text-emerald-700">CAM fee calculator</Link></div></section>
+    <FaqSchema faqs={[{ question: "What can a CAM and NNN review find?", answer: "A document review can flag tenant-share differences, fee calculations, possible duplicate lines, capital-cost questions, payment-credit differences, and deadlines when the lease and statement contain readable evidence." }, { question: "Does a flagged charge mean I am owed a refund?", answer: "No. A flag is a review question. The lease, amendments, source invoices, allocation records, and payment history may be needed to determine whether a charge was improper." }, { question: "Do I need an annual statement to start?", answer: "No. Start with a free lease preview. An annual CAM or NNN statement and up to four supporting PDFs are optional and can be added before purchasing the one-time report." }]} />
+  </main>;
 }
