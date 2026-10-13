@@ -27,14 +27,8 @@ export default function AuthCallback() {
 
       try {
         const supabase = createClient();
-        const code = params.get("code");
-        if (code) {
-          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-          if (exchangeError) throw exchangeError;
-        }
-
-        // Also handles links using the implicit flow, which the browser client
-        // processes from the URL fragment during initialization.
+        // The browser client processes the PKCE code during initialization.
+        // Exchanging it here again would consume the one-time code twice.
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if (userError || !user) throw userError || new Error("The sign-in link is invalid or has expired.");
 
