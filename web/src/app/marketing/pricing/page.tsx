@@ -28,6 +28,7 @@ const reportFeatures = [
 const faq = [
   { question: "Do I need an annual CAM or NNN statement?", answer: "No. You can start with a signed lease alone. Add a readable annual statement and up to four supporting PDFs before checkout if you want the report to compare billing details with the lease." },
   { question: "Does adding a statement cost more?", answer: "No. The full report is $49.99 one-time whether you upload only a lease or also add an annual statement and supporting PDFs." },
+  { question: "What does the statement review check?", answer: "When you add a readable annual CAM or NNN statement, the report compares listed expenses, your share, visible arithmetic, and payment credits with relevant lease terms. It highlights questions to verify against invoices and other source records." },
   { question: "When do I pay?", answer: "Start with a free preview. After reviewing it, you can choose whether to purchase the full downloadable PDF report. There is no subscription or automatic renewal." },
   { question: "Will the report tell me exactly how much I am owed?", answer: "The report can show conditional comparisons when readable inputs support them, but a flagged charge is not a verified refund. Source invoices, area records, payment history, and lease interpretation may still need review." },
 ];

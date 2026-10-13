@@ -57,9 +57,6 @@ export default function Header() {
           <a href="/marketing/how-it-works" className={`${navLinkClass} transition-colors`}>
             How It Works
           </a>
-          <Link href="/marketing#statement-review" className={`${navLinkClass} transition-colors`}>
-            Statement Review
-          </Link>
           <Link href="/marketing/pricing" className={`${navLinkClass} transition-colors`}>
             Pricing
           </Link>
