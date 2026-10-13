@@ -1,49 +1,72 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
-import { createBrowserClient } from "@supabase/ssr";
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export const dynamic = "force-dynamic";
 
-function AuthCallbackInner() {
+export default function AuthCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== "undefined" ? window.localStorage : undefined,
-      },
-    }
-  );
+  const started = useRef(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleAuth = async () => {
-      await supabase.auth.exchangeCodeForSession(window.location.href);
-      const next = searchParams.get("next") || "/product/app/dashboard";
-      router.replace(next);
-    };
+    if (started.current) return;
+    started.current = true;
 
-    handleAuth();
-  }, [router, supabase, searchParams]);
+    async function finishSignIn() {
+      const params = new URLSearchParams(window.location.search);
+      const fragment = new URLSearchParams(window.location.hash.slice(1));
+      const authError = params.get("error_description") || fragment.get("error_description");
+      if (authError) {
+        setError(authError);
+        return;
+      }
+
+      try {
+        const supabase = createClient();
+        const code = params.get("code");
+        if (code) {
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (exchangeError) throw exchangeError;
+        }
+
+        // Also handles links using the implicit flow, which the browser client
+        // processes from the URL fragment during initialization.
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) throw userError || new Error("The sign-in link is invalid or has expired.");
+
+        const requested = params.get("next");
+        const next = requested?.startsWith("/") && !requested.startsWith("//")
+          ? requested
+          : "/product/app/dashboard";
+        router.replace(next);
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : "We couldn’t complete sign-in. Please request a new link.");
+      }
+    }
+
+    void finishSignIn();
+  }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p className="text-sm text-gray-600">Logging you in…</p>
-    </div>
-  );
-}
-
-export default function AuthCallback() {
-  return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><p className="text-sm text-gray-600">Logging you in…</p></div>}>
-      <AuthCallbackInner />
-    </Suspense>
+    <main className="flex min-h-[55vh] items-center justify-center bg-[#f5f7f2] px-6 py-16">
+      <div className="w-full max-w-md rounded-2xl border border-[#d7e1d8] bg-white p-8 text-center shadow-sm">
+        {error ? (
+          <>
+            <h1 className="text-2xl font-semibold text-[#102b25]">That sign-in link didn’t work.</h1>
+            <p role="alert" className="mt-4 text-sm leading-6 text-slate-600">{error}</p>
+            <Link href="/login" className="mt-7 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white hover:bg-emerald-900">Request a new sign-in link</Link>
+          </>
+        ) : (
+          <>
+            <h1 className="text-2xl font-semibold text-[#102b25]">Signing you in…</h1>
+            <p className="mt-4 text-sm text-slate-600">You’ll be taken to your dashboard in a moment.</p>
+          </>
+        )}
+      </div>
+    </main>
   );
 }

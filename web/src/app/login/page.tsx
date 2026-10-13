@@ -5,7 +5,7 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 
-const dashboardRedirect = () => `${window.location.origin}/auth/callback?next=/product/app/dashboard`;
+const dashboardRedirect = () => `${window.location.origin}/auth/callback`;
 
 export default function LoginPage() {
   const supabase = createClient();
