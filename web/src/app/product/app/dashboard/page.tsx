@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
@@ -70,7 +71,30 @@ function GuestDashboardOverview() {
           </div>
         </section>
 
-        <section className="py-16 sm:py-20" aria-labelledby="dashboard-benefits-title">
+        <section className="py-16 sm:py-20" aria-labelledby="dashboard-tour-title">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d7459]">See the dashboard</p>
+            <h2 id="dashboard-tour-title" className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">A real look inside your free workspace.</h2>
+            <p className="mt-4 text-lg leading-8 text-[#60736a]">These screens show the lease command center with a saved lease. Your own dashboard fills in as you add properties, dates, and reports.</p>
+          </div>
+
+          <div className="mt-10 grid gap-8 lg:grid-cols-2">
+            <figure className="overflow-hidden rounded-[28px] border border-[#dce5dc] bg-white shadow-[0_18px_50px_rgba(16,44,37,0.1)]">
+              <div className="aspect-[1.55] overflow-hidden bg-[#f5f7f3]">
+                <Image src="/dashboard/lease-command-center.png" alt="Actual SaveOnLease dashboard showing a saved lease, next step, portfolio counts, and lease activity" width={1640} height={1308} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" style={{ marginTop: "-11.6%" }} />
+              </div>
+              <figcaption className="border-t border-[#e7eee7] p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0d7459]">01 / At a glance</p><h3 className="mt-2 text-xl font-semibold">Know your next step.</h3><p className="mt-2 text-sm leading-6 text-[#60736a]">See lease counts, missing dates, and the property that needs attention.</p></figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-[28px] border border-[#dce5dc] bg-white shadow-[0_18px_50px_rgba(16,44,37,0.1)]">
+              <div className="aspect-[1.55] overflow-hidden bg-[#f5f7f3]">
+                <Image src="/dashboard/lease-list-and-renewals.png" alt="Actual SaveOnLease dashboard showing the searchable lease list, twelve-month renewal outlook, and completed reports area" width={1650} height={1321} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" style={{ marginTop: "-11.6%" }} />
+              </div>
+              <figcaption className="border-t border-[#e7eee7] p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0d7459]">02 / Your portfolio</p><h3 className="mt-2 text-xl font-semibold">Find leases and see what is ahead.</h3><p className="mt-2 text-sm leading-6 text-[#60736a]">Search saved leases, review the renewal outlook, and return to completed reports in the same workspace.</p></figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="pb-16 sm:pb-20" aria-labelledby="dashboard-benefits-title">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d7459]">Inside your workspace</p>
           <h2 id="dashboard-benefits-title" className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">A clearer view of all your leases.</h2>
           <div className="mt-9 grid gap-4 md:grid-cols-2">
