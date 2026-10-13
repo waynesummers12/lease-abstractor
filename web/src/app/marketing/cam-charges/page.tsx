@@ -75,7 +75,7 @@ export default function CamChargesPage() {
           </Link>.
         </p>
         <p>
-          If you're unsure how CAM differs from broader NNN expense structures,
+          If you&apos;re unsure how CAM differs from broader NNN expense structures,
           review our{" "}
           <Link
             href="/marketing/cam-vs-nnn"

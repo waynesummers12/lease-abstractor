@@ -89,10 +89,10 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json(data);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("❌ /api/ingest/lease/pdf error:", err);
     return NextResponse.json(
-      { error: err?.message || "Unexpected server error" },
+      { error: err instanceof Error ? err.message : "Unexpected server error" },
       { status: 500 }
     );
   }

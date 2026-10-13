@@ -78,13 +78,13 @@ export default function BurgerFranchiseLeaseOverchargesPage() {
 
       <section className="mt-16 rounded-2xl border border-amber-200 bg-amber-50 p-6 sm:p-8">
         <h2 className="text-xl font-semibold text-slate-950">A credit example</h2>
-        <p className="mt-3 leading-relaxed">Suppose a store's own ledger shows twelve $500 estimated CAM payments ($6,000), while the annual statement credits $5,500. The visible difference is $500. Check both ledgers and any adjustments before treating it as an amount owed back to the tenant.</p>
+        <p className="mt-3 leading-relaxed">Suppose a store&apos;s own ledger shows twelve $500 estimated CAM payments ($6,000), while the annual statement credits $5,500. The visible difference is $500. Check both ledgers and any adjustments before treating it as an amount owed back to the tenant.</p>
         <p className="mt-3 text-sm text-slate-700">Illustrative arithmetic only; it does not describe a real SaveOnLease customer or a typical recovery.</p>
       </section>
 
       <section className="mt-16">
         <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">Across multiple stores</h2>
-        <p className="mt-4 leading-relaxed text-slate-600">Keep separate rows for each lease, landlord, statement year, billed share, and finding status. Similar-looking charges can have different contract treatment. Add amounts across locations only after each location's calculation is supported.</p>
+        <p className="mt-4 leading-relaxed text-slate-600">Keep separate rows for each lease, landlord, statement year, billed share, and finding status. Similar-looking charges can have different contract treatment. Add amounts across locations only after each location&apos;s calculation is supported.</p>
         <p className="mt-4 text-slate-600">For a broader process, use the <Link href="/marketing/burger-restaurant-lease-audit" className="font-medium text-emerald-800 underline">burger restaurant lease audit guide</Link> and the <Link href="/marketing/burger-restaurant-cam-reconciliation-checklist" className="font-medium text-emerald-800 underline">CAM reconciliation checklist</Link>.</p>
       </section>
 

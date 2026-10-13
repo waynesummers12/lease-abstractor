@@ -4,7 +4,7 @@ export type AuditPipelineResult =
   | {
       success: true;
       status: "analysis_ready";
-      analysis: any; // your Analysis type
+      analysis: unknown;
       auditId: string;
     }
   | {

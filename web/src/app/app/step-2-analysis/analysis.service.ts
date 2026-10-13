@@ -28,6 +28,8 @@
 
 export function useAuditUpload() {
   async function uploadAndIngest(_file: File, _auditId: string) {
+    void _file;
+    void _auditId;
     throw new Error(
       "useAuditUpload disabled: ingestion handled via worker"
     );
