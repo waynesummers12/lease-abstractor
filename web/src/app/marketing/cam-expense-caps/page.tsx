@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "../CamGuide.module.css";
+import CamGuideNav from "../CamGuideNav";
 
 export const metadata = {
   title: "CAM Expense Caps Explained — How Tenants Limit Annual Increases",
@@ -8,7 +10,8 @@ export const metadata = {
 
 export default function CamExpenseCapsPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-20">
+    <main className={styles.guide}>
+      <CamGuideNav current="/marketing/cam-expense-caps" />
       {/* ---------- HERO ---------- */}
       <header className="mb-12">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">

@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import styles from "../CamGuide.module.css";
+import CamGuideNav from "../CamGuideNav";
 
 const sectionStyle: React.CSSProperties = {
   border: "1px solid #e2e8f0",
@@ -43,13 +45,8 @@ const ctaStyle: React.CSSProperties = {
 
 export default function CamAdminFeesPage() {
   return (
-    <main
-      style={{
-        maxWidth: 900,
-        margin: "0 auto",
-        padding: "48px 24px",
-      }}
-    >
+    <main className={styles.guide}>
+      <CamGuideNav current="/marketing/cam-admin-page" />
       {/* ---------- HERO ---------- */}
       <section style={{ marginBottom: 40 }}>
         <h1 style={headingStyle}>

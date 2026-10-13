@@ -1,6 +1,8 @@
 // src/app/marketing/cam-reconciliation/page.tsx
 
 import Link from "next/link";
+import styles from "../CamGuide.module.css";
+import CamGuideNav from "../CamGuideNav";
 
 export const metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
@@ -38,7 +40,8 @@ export const metadata = {
 
 export default function CamReconciliationPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-20">
+    <main className={styles.guide}>
+      <CamGuideNav current="/marketing/cam-reconciliation" />
       {/* ---------------- HERO ---------------- */}
       <section className="mb-16">
         <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">

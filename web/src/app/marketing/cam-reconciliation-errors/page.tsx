@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "../CamGuide.module.css";
+import CamGuideNav from "../CamGuideNav";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
@@ -24,7 +26,8 @@ export const metadata: Metadata = {
 
 export default function CamReconciliationErrorsPage() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+    <main className={`${styles.guide} space-y-16`}>
+      <CamGuideNav current="/marketing/cam-reconciliation-errors" />
       {/* HERO */}
       <section className="space-y-6">
         <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
