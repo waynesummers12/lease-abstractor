@@ -33,12 +33,15 @@ export default function AvatarDropdown({
   return (
     <div ref={ref} className="relative flex items-center gap-4">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center font-bold text-white"
+        className="flex items-center gap-2"
+        aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        {initial}
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 font-bold text-white">{initial}</span>
+        <span className="text-sm font-medium">Account</span>
       </button>
 
       {open && (

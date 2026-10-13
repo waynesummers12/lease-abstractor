@@ -92,8 +92,9 @@ export default function Header() {
                   LOGGED IN
               ============================= */}
 
-              <Link href="/product/app/dashboard" className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}>
+              <Link href="/product/app/dashboard" className={`inline-flex items-center gap-2 font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}>
                 Dashboard
+                <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
               </Link>
               <Link href="/product/app/leases" className="text-sm opacity-80 transition hover:opacity-100">
                 Your Leases
