@@ -1,8 +1,11 @@
 import Link from "next/link";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export default function FranchiseCamAuditPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className={`${styles.guide} min-h-screen bg-white`}>
+      <RetailGuideNav current="/marketing/franchise-cam-audit" />
       {/* HERO */}
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-5xl px-6 py-20">

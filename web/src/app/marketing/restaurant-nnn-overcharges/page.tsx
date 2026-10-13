@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata: Metadata = {
   title: "Restaurant NNN Charges: What to Check on Your CAM Statement",
@@ -12,7 +14,8 @@ export const metadata: Metadata = {
 
 export default function RestaurantNNNOverchargesPage() {
   return (
-    <main className="bg-white text-slate-900">
+    <main className={`${styles.guide} bg-white text-slate-900`}>
+      <RetailGuideNav current="/marketing/restaurant-nnn-overcharges" />
       <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-5xl">
           <p className="text-sm font-semibold uppercase tracking-widest text-emerald-300">

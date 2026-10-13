@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata: Metadata = {
   title: "How Much Rent Should a Burger Restaurant Pay?",
@@ -12,7 +14,8 @@ export const metadata: Metadata = {
 
 export default function HowMuchRentBurgerRestaurantPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16 text-slate-800 sm:py-20">
+    <main className={`${styles.guide} mx-auto max-w-4xl px-6 py-16 text-slate-800 sm:py-20`}>
+      <RetailGuideNav current="/marketing/how-much-rent-should-a-burger-restaurant-pay" embedded />
       <header className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">Restaurant occupancy costs</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -51,7 +54,7 @@ export default function HowMuchRentBurgerRestaurantPage() {
       <section className="mt-16">
         <h2 className="text-2xl font-semibold text-slate-950 sm:text-3xl">What to compare across locations</h2>
         <ul className="mt-5 list-disc space-y-3 pl-5 leading-relaxed">
-          <li><strong>Total cost per square foot:</strong> Divide annual occupancy cost by the premises area stated in that location's lease.</li>
+          <li><strong>Total cost per square foot:</strong> Divide annual occupancy cost by the premises area stated in that location&apos;s lease.</li>
           <li><strong>CAM and NNN components:</strong> Keep rent, maintenance, taxes, and insurance separate so a change in one category is visible.</li>
           <li><strong>Estimated versus actual payments:</strong> A reconciliation should credit payments already made during the year.</li>
           <li><strong>Year-over-year changes:</strong> Record the stated reason for a jump and request backup before treating it as an error.</li>

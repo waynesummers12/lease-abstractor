@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata: Metadata = {
   title: "Restaurant CAM Reconciliation Checklist for Burger Operators",
@@ -51,7 +53,8 @@ const checks = [
 
 export default function BurgerRestaurantCamChecklistPage() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20">
+    <main className={`${styles.guide} mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20`}>
+      <RetailGuideNav current="/marketing/burger-restaurant-cam-reconciliation-checklist" embedded />
       <header className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">Restaurant tenant checklist</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -98,7 +101,7 @@ export default function BurgerRestaurantCamChecklistPage() {
           <li>Write down the exact statement line, the clause you compared, and the calculation.</li>
           <li>Mark whether the finding is confirmed by records or still a question.</li>
           <li>Request the missing backup using the procedure in your lease.</li>
-          <li>Check the contract's notice deadline before sending a challenge or records request.</li>
+          <li>Check the contract&apos;s notice deadline before sending a challenge or records request.</li>
         </ol>
         <p className="mt-5 text-slate-600">For background, see the <Link href="/marketing/burger-restaurant-lease-audit" className="font-medium text-emerald-800 underline">burger restaurant lease review guide</Link> and <Link href="/marketing/audit-window-deadlines" className="font-medium text-emerald-800 underline">audit-window checklist</Link>.</p>
       </section>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata: Metadata = {
   title: "Burger Restaurant Lease Audit | CAM & NNN Review",
@@ -35,7 +37,8 @@ const reviewAreas = [
 
 export default function BurgerRestaurantLeaseAuditPage() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20">
+    <main className={`${styles.guide} mx-auto max-w-5xl px-6 py-16 text-slate-800 sm:py-20`}>
+      <RetailGuideNav current="/marketing/burger-restaurant-lease-audit" embedded />
       <header className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">For burger franchise and multi-unit tenants</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -73,7 +76,7 @@ export default function BurgerRestaurantLeaseAuditPage() {
           <li>Use one row per location with the statement year, premises area, billed share, CAM, taxes, insurance, estimated payments, and true-up.</li>
           <li>Record the lease clause behind each cap, exclusion, or allocation rule. Do not assume a clause from another store applies.</li>
           <li>Flag unusual differences for review, then request the underlying schedules or invoices. A difference between stores is a prompt to investigate, not a verified overcharge.</li>
-          <li>Track each lease's notice and records-review terms separately.</li>
+          <li>Track each lease&apos;s notice and records-review terms separately.</li>
         </ol>
         <p className="mt-5 text-slate-600">If you are comparing total occupancy cost with sales, use our <Link href="/marketing/how-much-rent-should-a-burger-restaurant-pay" className="font-medium text-emerald-800 underline">restaurant rent calculation guide</Link>. That business metric does not establish whether CAM was billed correctly.</p>
       </section>

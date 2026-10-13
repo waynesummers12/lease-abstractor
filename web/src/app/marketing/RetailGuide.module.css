@@ -1,0 +1,87 @@
+.guide {
+  color: #392c25;
+}
+
+.guide :global(h1) {
+  color: #663b20 !important;
+  font-size: clamp(2.5rem, 4.5vw, 3.75rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.08;
+  letter-spacing: -0.045em !important;
+}
+
+.guide :global(h2) {
+  color: #774625 !important;
+  font-size: clamp(1.55rem, 2.5vw, 2rem) !important;
+  font-weight: 620 !important;
+  line-height: 1.2;
+  letter-spacing: -0.025em !important;
+}
+
+.guide :global(h3) {
+  color: #8b532d !important;
+  font-weight: 600 !important;
+}
+
+.guide :global(p),
+.guide :global(li) {
+  line-height: 1.75;
+}
+
+.guide :global(a[class*="text-indigo"]),
+.guide :global(a[class*="text-emerald"]),
+.guide :global(p[class*="text-emerald"]) {
+  color: #9a4f25 !important;
+  text-underline-offset: 3px;
+}
+
+.guide :global(a[class*="text-indigo"]:hover),
+.guide :global(a[class*="text-emerald"]:hover) {
+  color: #663b20 !important;
+}
+
+.guide :global(a[class*="bg-emerald"]),
+.guide :global(a[class*="bg-black"]) {
+  background: #9a4f25 !important;
+  color: white !important;
+  border-radius: 10px !important;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.guide :global(a[class*="bg-emerald"]:hover),
+.guide :global(a[class*="bg-black"]:hover) {
+  background: #713916 !important;
+  transform: translateY(-2px);
+}
+
+.guide :global(section[class*="bg-emerald"]),
+.guide :global(div[class*="bg-gray-50"]),
+.guide :global(div[class*="bg-slate-50"]) {
+  background: #fbf5ee !important;
+  border-color: #ead8c5 !important;
+}
+
+.guide :global(article[class*="border"]),
+.guide :global(div[class*="border"]) {
+  border-color: #ead8c5;
+}
+
+.guide > :global(section:first-of-type[class*="bg-slate-9"]) {
+  background: #fffaf5 !important;
+  color: #392c25 !important;
+  border-bottom: 1px solid #ead8c5;
+}
+
+.guide > :global(section:first-of-type[class*="bg-slate-9"] p[class*="text-slate"]) {
+  color: #5c5148 !important;
+}
+
+.guide > :global(section:first-of-type[class*="bg-slate-9"] a[class*="border-slate"]) {
+  color: #713916 !important;
+  border-color: #ba8b68 !important;
+}
+
+.guide :global(section[class*="bg-slate-950"]:not(:first-of-type) h2),
+.guide :global(section[class*="bg-slate-950"]:not(:first-of-type) h3) {
+  color: white !important;
+}

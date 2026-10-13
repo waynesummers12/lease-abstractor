@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "../RetailGuide.module.css";
+import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata = {
   title: "Burger Restaurant Lease Audit Rights | CAM & NNN Dispute Guide",
@@ -8,7 +10,8 @@ export const metadata = {
 
 export default function BurgerRestaurantLeaseAuditRightsPage() {
   return (
-    <main className="bg-white">
+    <main className={`${styles.guide} bg-white`}>
+      <RetailGuideNav current="/marketing/burger-restaurant-lease-audit-rights" />
       <section className="max-w-5xl mx-auto px-6 py-16">
         <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-gray-900">
           Burger Restaurant Lease Audit Rights
