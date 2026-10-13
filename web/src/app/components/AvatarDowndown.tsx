@@ -59,14 +59,7 @@ export default function AvatarDropdown({
             href="/product/app/dashboard"
             className="block px-4 py-2.5 hover:bg-gray-100"
           >
-            Dashboard
-          </Link>
-
-          <Link
-            href="/product/app/dashboard#leases"
-            className="block px-4 py-2.5 hover:bg-gray-100"
-          >
-            Your Leases
+            Dashboard Leases
           </Link>
 
           <Link

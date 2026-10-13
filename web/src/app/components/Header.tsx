@@ -78,7 +78,7 @@ export default function Header() {
           {!user ? (
             <>
               <Link href="/login" className={`inline-flex items-center gap-2 ${navLinkClass} transition-colors`}>
-                Dashboard
+                Dashboard Leases
                 <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
               </Link>
               <Link href="/login" className={`${navLinkClass} transition-colors`}>
@@ -98,11 +98,8 @@ export default function Header() {
               ============================= */}
 
               <Link href="/product/app/dashboard" className={`inline-flex items-center gap-2 ${navLinkClass} transition-colors`}>
-                Dashboard
+                Dashboard Leases
                 <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
-              </Link>
-              <Link href="/product/app/dashboard#leases" className={`${navLinkClass} transition-colors`}>
-                Your Leases
               </Link>
               <Link
                 href="/app/step-1-upload"
