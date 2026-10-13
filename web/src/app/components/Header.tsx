@@ -56,9 +56,9 @@ export default function Header() {
           <Link href="/marketing/what-we-find" className="opacity-90 hover:opacity-100 font-medium transition">
             What We Find
           </Link>
-          <Link href="/marketing/how-it-works" className="opacity-70 hover:opacity-100 transition">
+          <a href="/marketing/how-it-works" className="opacity-70 hover:opacity-100 transition">
             How It Works
-          </Link>
+          </a>
           <Link href="/marketing#statement-review" className="opacity-90 hover:opacity-100 font-medium transition">
             Statement Review
           </Link>
