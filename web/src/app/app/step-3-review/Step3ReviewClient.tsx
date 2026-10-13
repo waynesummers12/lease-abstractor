@@ -209,6 +209,46 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         <p className="mt-4 text-xs text-slate-500">You may continue with only the lease. Add all documents before checkout; the paid PDF reflects the files saved at purchase.</p>
       </section>
 
+      <div>
+        <button
+          disabled={documentBusy || pendingDocuments}
+          onClick={async () => {
+            if (!auditId) return;
+
+            const res = await fetch(
+              "/api/audit-checkout",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+                },
+                body: JSON.stringify({ auditId }),
+              }
+            );
+
+            const data = await res.json();
+
+            if (data?.url) {
+              window.gtag?.("event", "begin_checkout", {
+                currency: "USD",
+                value: 49.99,
+                audit_id: auditId,
+              });
+              window.location.href = data.url;
+            } else {
+              alert("Failed to start checkout");
+            }
+          }}
+          className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+        >
+          {pendingDocuments ? "Analyze selected documents before checkout" : "Unlock your report · $49.99"}
+        </button>
+        <p className="mt-2 text-center text-xs text-slate-500">
+          Secure one-time checkout. Your PDF is prepared after payment.
+        </p>
+      </div>
+
       {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
       <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <h2 className="text-xl font-semibold text-slate-950">
@@ -271,44 +311,6 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         </ul>
       </div>
 
-      {/* ---------- CHECKOUT BUTTON ---------- */}
-      <button
-        disabled={documentBusy || pendingDocuments}
-        onClick={async () => {
-          if (!auditId) return;
-
-          const res = await fetch(
-            "/api/audit-checkout",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
-              },
-              body: JSON.stringify({ auditId }),
-            }
-          );
-
-          const data = await res.json();
-
-          if (data?.url) {
-            window.gtag?.("event", "begin_checkout", {
-              currency: "USD",
-              value: 49.99,
-              audit_id: auditId,
-            });
-            window.location.href = data.url;
-          } else {
-            alert("Failed to start checkout");
-          }
-        }}
-        className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-      >
-        {pendingDocuments ? "Analyze selected documents before checkout" : "Unlock your report · $49.99"}
-      </button>
-      <p className="mt-2 text-center text-xs text-slate-500">
-        Secure one-time checkout. Your PDF is prepared after payment.
-      </p>
     </main>
   );
 }
