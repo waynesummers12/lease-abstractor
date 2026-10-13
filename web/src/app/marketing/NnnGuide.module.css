@@ -1,0 +1,102 @@
+.guide {
+  width: min(100%, 960px);
+  margin-inline: auto;
+  padding: 64px 24px 96px;
+  color: #20253a;
+}
+
+.guide::before {
+  content: "NNN LEARNING CENTER";
+  display: block;
+  margin-bottom: 20px;
+  color: #5a4bb0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.guide > :global(nav + header),
+.guide > :global(nav + section) {
+  border-bottom: 1px solid #e2def2;
+  padding-bottom: 40px;
+  margin-top: 0 !important;
+  margin-bottom: 52px !important;
+}
+
+.guide :global(h1) {
+  color: #28215b;
+  font-size: clamp(2.5rem, 4.5vw, 3.75rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.08;
+  letter-spacing: -0.045em !important;
+}
+
+.guide :global(h2) {
+  color: #3b3176;
+  font-size: clamp(1.55rem, 2.5vw, 2rem) !important;
+  font-weight: 620 !important;
+  line-height: 1.2;
+  letter-spacing: -0.025em !important;
+}
+
+.guide :global(h3) {
+  color: #4e438d;
+  font-weight: 600 !important;
+}
+
+.guide :global(p),
+.guide :global(li) {
+  line-height: 1.75;
+}
+
+.guide :global(a:not([class*="bg-"])) {
+  text-underline-offset: 3px;
+}
+
+.guide :global(a[class*="text-emerald"]),
+.guide :global(p[class*="text-emerald"]) {
+  color: #5142a2 !important;
+}
+
+.guide :global(a:not([class*="bg-"]):hover) {
+  color: #5142a2;
+}
+
+.guide :global(a[class*="bg-black"]) {
+  background: #443581 !important;
+  border-radius: 10px !important;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.guide :global(a[class*="bg-black"]:hover) {
+  background: #30245e !important;
+  transform: translateY(-2px);
+}
+
+.guide :global(section[class*="bg-emerald"]),
+.guide :global(section[class*="bg-gray-50"]),
+.guide :global(div[class*="bg-gray-50"]) {
+  background: #f5f3fc !important;
+  border-color: #e2def2 !important;
+}
+
+.guide :global(ul[class*="marker:text-green"] li::marker) {
+  color: #6655b5 !important;
+}
+
+.guide :global(article[class*="border"]) {
+  border-color: #e2def2;
+  border-radius: 14px;
+}
+
+@media (max-width: 640px) {
+  .guide {
+    padding: 44px 20px 72px;
+  }
+
+  .guide > :global(nav + header),
+  .guide > :global(nav + section) {
+    padding-bottom: 30px;
+    margin-bottom: 40px !important;
+  }
+}

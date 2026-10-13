@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "../NnnGuide.module.css";
+import NnnGuideNav from "../NnnGuideNav";
 
 export const metadata = {
   title: "NNN Expenses Explained | Triple Net Lease Costs for Tenants | SaveOnLease",
@@ -42,7 +44,8 @@ const faqSchema = {
 
 export default function NnnExpensesExplainedPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
+    <main className={`${styles.guide} space-y-12`}>
+      <NnnGuideNav current="/marketing/nnn-expenses-explained" />
       {/* HERO */}
       <section>
         <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">

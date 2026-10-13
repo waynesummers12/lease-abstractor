@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "../NnnGuide.module.css";
+import NnnGuideNav from "../NnnGuideNav";
 
 export const metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
@@ -38,7 +40,8 @@ export const metadata = {
 
 export default function NnnAuditRightsPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-20">
+    <main className={styles.guide}>
+      <NnnGuideNav current="/marketing/nnn-audit-rights" />
       {/* ---------- HERO ---------- */}
       <header className="mb-12">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">

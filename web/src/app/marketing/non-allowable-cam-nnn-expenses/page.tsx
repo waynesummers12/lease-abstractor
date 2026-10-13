@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import styles from "../NnnGuide.module.css";
+import NnnGuideNav from "../NnnGuideNav";
 
 export const metadata: Metadata = {
   title: "CAM & NNN Expenses to Check Against Your Lease",
@@ -40,7 +42,8 @@ const categories = [
 
 export default function NonAllowableExpensesPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16 text-slate-800 sm:py-20">
+    <main className={styles.guide}>
+      <NnnGuideNav current="/marketing/non-allowable-cam-nnn-expenses" />
       <header className="max-w-3xl">
         <p className="text-sm font-semibold uppercase tracking-widest text-emerald-800">CAM and NNN billing guide</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">

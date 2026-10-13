@@ -1,6 +1,8 @@
 // web/src/app/marketing/nnn-reconciliation/page.tsx
 
 import Link from "next/link";
+import styles from "../NnnGuide.module.css";
+import NnnGuideNav from "../NnnGuideNav";
 
 export const metadata = {
   title: "NNN Reconciliation Explained — How Tenants Spot Errors & Overcharges",
@@ -10,7 +12,8 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-24">
+    <main className={styles.guide}>
+      <NnnGuideNav current="/marketing/nnn-reconciliation" />
       {/* HERO */}
       <header className="mb-14 text-center">
         <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
