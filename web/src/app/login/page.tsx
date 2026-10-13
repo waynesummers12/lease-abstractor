@@ -83,22 +83,23 @@ export default function LoginPage() {
 
         <section className="flex items-center px-6 py-16 sm:px-12 lg:px-16" aria-labelledby="sign-in-title">
           <div className="mx-auto w-full max-w-md">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Welcome back</p>
-            <h2 id="sign-in-title" className="mt-3 text-4xl font-semibold tracking-tight text-[#102b25]">Sign in to continue.</h2>
-            <p className="mt-4 text-base leading-7 text-slate-600">Choose Google or get a secure, one-time link by email. No password to remember.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Returning users</p>
+            <h2 id="sign-in-title" className="mt-3 text-4xl font-semibold tracking-tight text-[#102b25]">Sign in to your account.</h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">Use the same Google account or email address you used before. We&apos;ll take you back to your dashboard—no password needed.</p>
             <button type="button" onClick={handleGoogleLogin} disabled={loading !== null} className="mt-9 flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border border-[#cbd9cd] bg-white px-5 font-semibold text-[#172820] shadow-sm transition hover:border-emerald-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">
               <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.73 1.22 9.24 3.6l6.9-6.9C35.68 2.68 30.2 0 24 0 14.82 0 6.94 5.24 2.98 12.86l8.06 6.26C12.9 13.1 17.96 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.7-.15-3.33-.43-4.9H24v9.27h12.7c-.55 2.96-2.23 5.47-4.76 7.16l7.32 5.7C43.93 37.9 46.5 31.7 46.5 24.5z"/><path fill="#FBBC05" d="M11.04 28.62a14.5 14.5 0 010-9.24l-8.06-6.26A23.94 23.94 0 000 24c0 3.9.93 7.59 2.98 10.88l8.06-6.26z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2.04 15.2-5.55l-7.32-5.7c-2.03 1.36-4.64 2.17-7.88 2.17-6.04 0-11.1-3.6-12.96-8.62l-8.06 6.26C6.94 42.76 14.82 48 24 48z"/></svg>
-              {loading === "google" ? "Connecting to Google…" : "Continue with Google"}
+              {loading === "google" ? "Connecting to Google…" : "Sign in with Google"}
             </button>
             <div className="my-7 flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"><span className="h-px flex-1 bg-[#d7e1d8]" />Or use your email<span className="h-px flex-1 bg-[#d7e1d8]" /></div>
             <form onSubmit={handleLogin}>
               <label htmlFor="login-email" className="block text-sm font-semibold text-[#172820]">Email address</label>
               <input id="login-email" type="email" required autoComplete="email" placeholder="you@company.com" value={email} onChange={(event) => setEmail(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
               <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "email" ? "Sending your link…" : "Email me a sign-in link ↗"}</button>
-              <p className="mt-4 text-center text-sm leading-6 text-slate-500">The link is one-time use and expires. Open it from the email we send you.</p>
+              <p className="mt-4 text-center text-sm leading-6 text-slate-500">Returning users: enter the email linked to your existing reviews. The sign-in link is one-time use and expires.</p>
             </form>
             {notice && <p role="status" aria-live="polite" className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${notice.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-800"}`}>{notice.text}</p>}
-            <div className="mt-10 border-t border-[#d7e1d8] pt-6 text-sm leading-7 text-slate-600">Need a hand getting in? <Link href="/marketing/contact" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Contact SaveOnLease ↗</Link></div>
+            <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>
+            <div className="mt-8 border-t border-[#d7e1d8] pt-6 text-sm leading-7 text-slate-600">Need a hand getting in? <Link href="/marketing/contact" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Contact SaveOnLease ↗</Link></div>
           </div>
         </section>
       </div>
