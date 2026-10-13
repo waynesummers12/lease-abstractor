@@ -16,8 +16,8 @@ export default function SetPasswordPage() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (password.length < 12) {
-      setError("Use at least 12 characters for your password.");
+    if (password.length < 9) {
+      setError("Use at least 9 characters for your password.");
       return;
     }
     if (password !== confirmation) {
@@ -52,12 +52,12 @@ export default function SetPasswordPage() {
             <form onSubmit={handleSubmit} className="mt-7 space-y-5">
               <div>
                 <label htmlFor="new-password" className="block text-sm font-semibold">New password</label>
-                <input id="new-password" type="password" autoComplete="new-password" minLength={12} required value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#cbd9cd] px-4 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
-                <p className="mt-2 text-xs text-slate-500">At least 12 characters.</p>
+                <input id="new-password" type="password" autoComplete="new-password" minLength={9} required value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#cbd9cd] px-4 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+                <p className="mt-2 text-xs text-slate-500">At least 9 characters.</p>
               </div>
               <div>
                 <label htmlFor="confirm-password" className="block text-sm font-semibold">Confirm password</label>
-                <input id="confirm-password" type="password" autoComplete="new-password" minLength={12} required value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#cbd9cd] px-4 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+                <input id="confirm-password" type="password" autoComplete="new-password" minLength={9} required value={confirmation} onChange={(event) => setConfirmation(event.target.value)} className="mt-2 min-h-12 w-full rounded-xl border border-[#cbd9cd] px-4 outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
               </div>
               {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
               <button type="submit" disabled={saving} className="min-h-12 w-full rounded-xl bg-[#102b25] px-5 font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{saving ? "Saving…" : "Save password and open dashboard"}</button>
