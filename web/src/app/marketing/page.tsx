@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -73,6 +74,24 @@ export default function MarketingHomePage() {
             <Link href="/app/step-1-upload" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-white px-5 py-2 text-sm font-semibold text-slate-950 hover:bg-slate-100">Start your review</Link>
           </div>
         </div>
+      </section>
+
+      <section className="px-5 py-12 text-center sm:px-8" aria-label="SaveOnLease on Product Hunt">
+        <p className="mb-4 text-sm font-medium text-slate-600">Find us on Product Hunt</p>
+        <a
+          href="https://www.producthunt.com/products/saveonlease?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-saveonlease"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-950"
+        >
+          <Image
+            alt="SaveOnLease on Product Hunt"
+            width={250}
+            height={54}
+            unoptimized
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1278200&theme=light&t=1791926149291"
+          />
+        </a>
       </section>
     </main>
   );
