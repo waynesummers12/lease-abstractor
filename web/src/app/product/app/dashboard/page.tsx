@@ -67,11 +67,11 @@ function GuestDashboardOverview() {
           <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-52 h-[520px] w-[520px] rounded-full border border-white/10" />
           <div className="relative max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Dashboard Leases · Free</p>
-            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">Your lease command center, <span className="text-[#a9e9be]">all in one place.</span></h1>
+            <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight text-white sm:text-6xl">Your lease command center, <span className="text-[#a9e9be]">all in one place.</span></h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d9e9df]">Manage the lease details and dates you save across your properties. See what is coming up, find a lease quickly, and return to your completed reviews.</p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/login" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 py-3 text-sm font-semibold text-[#102c25] hover:bg-[#c7f4d5]">Sign in or get started <Arrow diagonal /></Link>
-              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Start a free lease preview <Arrow diagonal /></Link>
+              <Link href="/login" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#a9e9be] px-6 py-3 text-sm font-semibold text-[#102c25] hover:bg-[#c7f4d5]">Sign in or get started <Arrow diagonal /></Link>
+              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Start a free lease preview <Arrow diagonal /></Link>
             </div>
             <p className="mt-5 text-sm text-[#d9e9df]">The dashboard is free. A full lease review report is optional and costs $49.99 per lease.</p>
           </div>
@@ -113,7 +113,7 @@ function GuestDashboardOverview() {
 
         <section className="mb-10 flex flex-col gap-6 rounded-3xl bg-[#e4f2e8] p-7 sm:flex-row sm:items-center sm:justify-between sm:p-9">
           <div><h2 className="text-2xl font-semibold">Ready to organize your leases?</h2><p className="mt-2 max-w-2xl leading-7 text-[#526b5d]">Sign in to open your free dashboard and begin adding leases. You can start a free lease preview whenever you are ready to review the document itself.</p></div>
-          <Link href="/login" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#102c25] px-6 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Open your free dashboard <Arrow diagonal /></Link>
+          <Link href="/login" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#102c25] px-6 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Open your free dashboard <Arrow diagonal /></Link>
         </section>
       </div>
     </main>
