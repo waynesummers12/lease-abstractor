@@ -37,6 +37,7 @@ type AuditResponse = {
     tenant?: string | null;
     premises?: string | null;
     health?: { flags?: Array<{ code?: string; label?: string }> | null };
+    reconciliation?: { statementName?: string; checks?: Array<{ label: string; result: string; status: string }> } | null;
   } | null;
 };
 
@@ -325,39 +326,73 @@ export default function SuccessPage() {
   const reviewItems = Array.isArray(data.analysis?.health?.flags)
     ? data.analysis.health.flags
     : [];
+  const statementChecks = Array.isArray(data.analysis?.reconciliation?.checks)
+    ? data.analysis.reconciliation.checks
+    : [];
+  const hasStatement = Boolean(data.analysis?.reconciliation);
+  const leaseName = data.analysis?.premises || data.analysis?.tenant || "Your uploaded lease";
 
   /* ---------- COMPLETE ---------- */
 return (
-  <main className="mx-auto max-w-2xl px-6 py-12 sm:py-20 space-y-8">
-    <div className="space-y-3">
-      <p className="text-sm font-semibold text-green-700">Payment complete · Report ready</p>
-      <h1 className="text-3xl font-semibold tracking-tight">Your lease review is ready</h1>
-      <p className="text-gray-600">Download the report to review the flagged lease terms and the records needed to verify them.</p>
-    </div>
+  <main className="bg-[#f5f8f5] text-[#102820]">
+    <div className="mx-auto max-w-6xl px-4 pb-20 pt-8 sm:px-6 sm:pt-12">
+      <section className="relative overflow-hidden rounded-[2rem] bg-[#102c25] px-6 py-9 text-white shadow-[0_24px_70px_rgba(16,44,37,0.18)] sm:px-10 sm:py-12 lg:px-14 lg:py-14" aria-labelledby="report-ready-title">
+        <div className="pointer-events-none absolute -right-28 -top-44 h-[420px] w-[420px] rounded-full border border-white/10" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-12 -top-28 h-[330px] w-[330px] rounded-full border border-white/10" aria-hidden="true" />
+        <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-[#a8edbf]/40 bg-[#a8edbf]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#a8edbf]"><span className="text-base leading-none" aria-hidden="true">✓</span> Payment complete · Report ready</p>
+            <h1 id="report-ready-title" className="mt-7 max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl">Your lease review is ready. <span className="text-[#a8edbf]">Here’s what to check next.</span></h1>
+            <p className="mt-5 max-w-xl text-base leading-7 text-[#d8e9df] sm:text-lg">Your full report brings the lease terms, {hasStatement ? "statement questions, " : ""}page references, and records to request into one place.</p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button onClick={handleDownload} disabled={downloading} className="inline-flex min-h-14 items-center justify-center rounded-xl bg-[#a8edbf] px-7 py-3 text-sm font-bold text-[#102c25] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60">{downloading ? "Preparing PDF…" : "Open your full PDF report ↗"}</button>
+              {session && <button onClick={() => router.push("/product/app/dashboard#reports")} className="inline-flex min-h-14 items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">View saved reports</button>}
+            </div>
+            <p className="mt-4 text-xs text-[#b6d4c3]">Your report opens in a new tab so you can keep this page for reference.</p>
+          </div>
+          <div className="relative mx-auto w-full max-w-[320px] rotate-[2deg] rounded-2xl border border-[#dbe9df] bg-white p-5 text-[#102820] shadow-[0_25px_55px_rgba(0,0,0,0.24)] sm:p-6" aria-label="Report at a glance">
+            <div className="h-1.5 rounded-full bg-[#0b776e]" />
+            <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#0b776e]">SaveOnLease / Commercial lease review</p>
+            <p className="mt-4 text-2xl font-semibold leading-tight tracking-tight">Your lease,<br />clearer next steps.</p>
+            <div className="mt-5 rounded-xl bg-[#edf5f4] p-4">
+              <p className="text-3xl font-semibold tracking-tight">{hasStatement ? statementChecks.length : reviewItems.length}</p>
+              <p className="mt-1 text-xs font-medium text-[#335851]">{hasStatement ? "statement questions to verify" : "lease review items to verify"}</p>
+            </div>
+            <div className="mt-5 space-y-2 text-xs text-[#526a62]"><p>01 / Review the questions</p><p>02 / Check the source pages</p><p>03 / Request supporting records</p></div>
+            <p className="mt-5 border-t border-[#dce8e1] pt-3 text-[10px] text-[#6b8077]">Prepared for {leaseName}</p>
+          </div>
+        </div>
+      </section>
 
-    <section className="rounded-2xl border border-gray-200 bg-gray-50 p-6 space-y-5" aria-label="Audit summary">
-      <div>
-        <p className="text-xs uppercase tracking-wide text-gray-500">Lease</p>
-        <p className="mt-1 font-medium">{data.analysis?.premises || data.analysis?.tenant || "Uploaded lease"}</p>
-      </div>
-      <div className="rounded-xl border bg-white p-4">
-        <p className="text-sm font-medium">Lease-language review completed</p>
-        <p className="mt-1 text-sm text-gray-600">The initial scan flagged {reviewItems.length} potential review item{reviewItems.length === 1 ? "" : "s"}. The PDF includes items that can be matched to text in your original upload.</p>
-      </div>
-      <p className="text-sm text-gray-700">This is a lease-language screening result. It does not establish an overcharge or a recoverable savings amount. Compare the findings with your invoices and CAM/NNN reconciliations.</p>
-      {auditId && <p className="text-xs text-gray-500 break-all">Audit reference: {auditId}</p>}
-    </section>
+      <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,.75fr)]">
+        <section className="rounded-[1.5rem] border border-[#dce8de] bg-white p-6 shadow-sm sm:p-8" aria-labelledby="inside-report-title">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0b776e]">Your report at a glance</p>
+          <h2 id="inside-report-title" className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">A clear path from findings to questions.</h2>
+          <p className="mt-3 text-sm leading-7 text-[#53675d]">For <strong className="text-[#102820]">{leaseName}</strong>, the PDF organizes what the documents show and what still needs confirmation.</p>
+          <div className="mt-7 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-[#f2f7f3] p-4"><p className="text-2xl font-semibold">{reviewItems.length}</p><p className="mt-1 text-xs leading-5 text-[#53675d]">initial lease terms flagged</p></div>
+            <div className="rounded-xl bg-[#f2f7f3] p-4"><p className="text-2xl font-semibold">{hasStatement ? statementChecks.length : "—"}</p><p className="mt-1 text-xs leading-5 text-[#53675d]">{hasStatement ? "statement questions to verify" : "statement not provided"}</p></div>
+            <div className="rounded-xl bg-[#f2f7f3] p-4"><p className="text-2xl font-semibold">PDF</p><p className="mt-1 text-xs leading-5 text-[#53675d]">page references and next steps</p></div>
+          </div>
+          {hasStatement && <p className="mt-5 text-xs text-[#65796e]">Statement reviewed: {data.analysis?.reconciliation?.statementName || "Annual statement"}</p>}
+        </section>
 
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <button
-        onClick={handleDownload}
-        disabled={downloading}
-        className="rounded-lg bg-black px-5 py-3 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
-      >
-        {downloading ? "Preparing PDF…" : "Open full PDF report"}
-      </button>
-      {session && <button onClick={() => router.push("/product/app/dashboard#reports")} className="rounded-lg border px-5 py-3 text-sm font-medium hover:bg-gray-50">Go to dashboard</button>}
-      <button onClick={() => router.push("/app/step-1-upload")} className="px-2 py-3 text-sm text-gray-600 underline">Review another lease</button>
+        <section className="rounded-[1.5rem] border border-[#dce8de] bg-[#e3f1e8] p-6 sm:p-8" aria-labelledby="next-steps-title">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0b776e]">What to do now</p>
+          <h2 id="next-steps-title" className="mt-3 text-2xl font-semibold tracking-tight">Turn the report into a plan.</h2>
+          <ol className="mt-6 space-y-5 text-sm">
+            <li className="flex gap-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-bold text-[#0b776e]">01</span><span><strong className="block">Open the PDF</strong><span className="mt-1 block leading-6 text-[#53675d]">Start with the first actions and flagged questions.</span></span></li>
+            <li className="flex gap-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-bold text-[#0b776e]">02</span><span><strong className="block">Check the source pages</strong><span className="mt-1 block leading-6 text-[#53675d]">Compare each question with your signed lease and billing records.</span></span></li>
+            <li className="flex gap-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-xs font-bold text-[#0b776e]">03</span><span><strong className="block">Request what is missing</strong><span className="mt-1 block leading-6 text-[#53675d]">Use the records checklist and request draft in your report.</span></span></li>
+          </ol>
+        </section>
+      </div>
+
+      <div className="mt-8 flex flex-col gap-4 rounded-[1.5rem] border border-[#dce8de] bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div><h2 className="text-lg font-semibold">Keep your review close.</h2><p className="mt-1 max-w-xl text-sm leading-6 text-[#53675d]">{session ? "Return to your dashboard to find this report alongside your saved leases." : "Keep this page or your downloaded PDF for future reference."} Review another lease whenever you’re ready.</p></div>
+        <div className="flex shrink-0 flex-wrap gap-3">{session && <button onClick={() => router.push("/product/app/dashboard#reports")} className="rounded-xl border border-[#cbded0] px-5 py-3 text-sm font-semibold hover:bg-[#f2f7f3]">Go to dashboard</button>}<button onClick={() => router.push("/app/step-1-upload")} className="rounded-xl border border-[#cbded0] px-5 py-3 text-sm font-semibold hover:bg-[#f2f7f3]">Review another lease →</button></div>
+      </div>
+      <p className="mx-auto mt-6 max-w-3xl text-center text-xs leading-6 text-[#65796e]">Review questions are prompts to verify, not confirmed overcharges or recoverable savings. Check notice and audit deadlines in your signed lease. {auditId && <>Audit reference: <span className="break-all">{auditId}</span></>}</p>
     </div>
   </main>
 );

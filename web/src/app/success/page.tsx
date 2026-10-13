@@ -22,9 +22,7 @@ export default function SuccessPage() {
         </main>
       }
     >
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <DownloadClient />
-      </div>
+      <DownloadClient />
     </Suspense>
   );
 }
