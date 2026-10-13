@@ -132,7 +132,7 @@ export default function DashboardPage() {
           <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] lg:items-end">
             <div>
               <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[#a9e9be]">Your lease command center</p>
-              <h1 className="max-w-[800px] text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-5xl lg:text-6xl">
+              <h1 className="max-w-[800px] text-4xl font-semibold leading-[1.06] tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
                 Know what&apos;s next for <span className="text-[#a9e9be]">every lease.</span>
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-[#d9e9df]">
@@ -149,7 +149,7 @@ export default function DashboardPage() {
             </div>
             <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm sm:p-6">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#a9e9be]">Your next useful step</p>
-              <h2 className="mt-4 text-xl font-semibold leading-snug">
+              <h2 className="mt-4 text-xl font-semibold leading-snug text-white">
                 {nextLease ? nextLease.lease.property_name || "Review your saved lease" : audits.length > 0 ? "Return to your latest report" : "Add your first real lease"}
               </h2>
               <p className="mt-3 text-sm leading-6 text-[#d9e9df]">
@@ -178,7 +178,7 @@ export default function DashboardPage() {
           {[
             { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
             { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Based on saved renewal dates", accent: "#b46c2a" },
-            { label: "Completed reports", value: auditError ? "—" : String(audits.length), detail: "Available in your workspace", accent: "#5264a5" },
+            { label: "Completed reports", value: auditError ? "—" : String(audits.length), detail: "Created while signed in", accent: "#5264a5" },
           ].map((item) => (
             <div key={item.label} className="rounded-2xl border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-6">
               <div className="mb-7 h-1 w-10 rounded-full" style={{ background: item.accent }} />
@@ -265,7 +265,7 @@ export default function DashboardPage() {
             ) : (
               <div className="mt-6 rounded-2xl bg-[#f7faf6] p-6">
                 <p className="text-sm font-semibold">Your reports will appear here.</p>
-                <p className="mt-2 text-sm leading-6 text-[#64776c]">Start with a free lease preview. Add an annual CAM or NNN statement and supporting PDFs if you have them.</p>
+                <p className="mt-2 text-sm leading-6 text-[#64776c]">Reports created while signed in appear here. Start with a free lease preview, then add an annual statement and supporting PDFs if you have them.</p>
                 <Link href="/app/step-1-upload" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Start a preview <Arrow /></Link>
               </div>
             )}
