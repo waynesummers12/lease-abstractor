@@ -5,7 +5,7 @@ import NnnGuideNav from "../NnnGuideNav";
 export const metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
   title:
-    "NNN Audit Rights Explained — Don’t Miss Your Chance to Challenge Charges | SaveOnLease",
+    "NNN Audit Rights Explained — Don’t Miss Your Chance to Challenge Charges",
   description:
     "Understand NNN audit rights in commercial leases, how CAM reconciliation deadlines work, what charges tenants can dispute, and how to protect financial recovery.",
   alternates: {

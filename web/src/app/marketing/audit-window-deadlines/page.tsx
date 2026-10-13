@@ -3,7 +3,7 @@ import Link from "next/link";
 import FaqSchema from "@/app/components/FaqSchema";
 
 export const metadata = {
-  title: "Commercial Lease Audit Rights Explained | CAM & NNN | SaveOnLease",
+  title: "Commercial Lease Audit Rights Explained | CAM & NNN",
   description:
     "Learn how commercial lease audit rights work, common CAM & NNN audit deadlines, and how tenants can preserve their right to dispute overcharges.",
   alternates: {

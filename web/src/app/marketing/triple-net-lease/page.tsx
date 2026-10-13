@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 const url = "https://www.saveonlease.com/marketing/triple-net-lease";
 
 export const metadata: Metadata = {
-  title: "What Is a Triple Net (NNN) Lease? | SaveOnLease",
+  title: "What Is a Triple Net (NNN) Lease?",
   description:
     "Learn what taxes, insurance, and CAM mean in a triple net lease, how estimates are reconciled, and which lease terms to check against a statement.",
   alternates: { canonical: url },

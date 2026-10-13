@@ -3,7 +3,7 @@ import styles from "../RetailGuide.module.css";
 import RetailGuideNav from "../RetailGuideNav";
 
 export const metadata = {
-  title: "Retail Lease Audit Hub | SaveOnLease",
+  title: "Retail Lease Audit Hub",
   description:
     "Central resource for retail tenants reviewing CAM reconciliation, NNN charges, audit rights, admin fees, and occupancy exposure.",
 };

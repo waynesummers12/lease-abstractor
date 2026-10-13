@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "CAM Fee Meaning (Common Area Maintenance Fee Explained) | SaveOnLease",
+  title: "CAM Fee Meaning (Common Area Maintenance Fee Explained)",
   description:
     "What does a CAM fee mean in a commercial lease? Learn how Common Area Maintenance (CAM) fees work, what’s included, what’s often overcharged, and how tenants can protect themselves.",
 };

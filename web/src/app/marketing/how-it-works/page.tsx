@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How SaveOnLease Works | From Lease to Statement Review",
+  title: "How It Works | From Lease to Statement Review",
   description: "See how a free lease preview becomes a page-referenced CAM and NNN report with statement checks, conditional comparisons, a billing worksheet, and next steps.",
   alternates: { canonical: "https://www.saveonlease.com/marketing/how-it-works" },
 };

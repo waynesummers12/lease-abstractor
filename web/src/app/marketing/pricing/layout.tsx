@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SaveOnLease Pricing | Lease and Statement Review",
+  title: "Pricing | Lease and Statement Review",
   description:
     "Start with a free lease preview, then choose a $49.99 one-time report. Annual CAM or NNN statement review is included at the same price.",
   openGraph: {

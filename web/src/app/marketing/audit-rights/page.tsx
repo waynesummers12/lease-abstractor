@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Commercial Lease Audit Rights Explained | CAM & NNN | SaveOnLease",
+  title: "Commercial Lease Audit Rights Explained | CAM & NNN",
   description:
     "Learn what audit rights commercial tenants have, common CAM & NNN audit deadlines, and how to preserve your right to dispute overcharges.",
 };

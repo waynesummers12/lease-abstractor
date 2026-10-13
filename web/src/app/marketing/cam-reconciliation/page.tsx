@@ -6,7 +6,7 @@ import CamGuideNav from "../CamGuideNav";
 
 export const metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
-  title: "CAM Reconciliation Explained | Spot Overcharges & Protect Audit Rights | SaveOnLease",
+  title: "CAM Reconciliation Explained | Spot Overcharges & Protect Audit Rights",
   description:
     "Learn how CAM reconciliation works, common overcharge mistakes, and how commercial tenants can identify avoidable CAM costs before audit deadlines close.",
   alternates: {

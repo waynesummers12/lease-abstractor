@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Privacy Policy | SaveOnLease",
+  title: "Privacy Policy",
   description:
     "How SaveOnLease collects, uses, and protects lease documents and personal information.",
 };

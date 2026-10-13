@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
-  title: "Tenant-First CAM Audit Checklist (Free Download) | SaveOnLease",
+  title: "Tenant-First CAM Audit Checklist (Free Download)",
   description:
     "Download the Tenant-First CAM Audit Checklist for retail and office leases. Identify administrative overcharges, capital misclassification, pro rata errors, and audit window risks before exposure compounds.",
   alternates: {

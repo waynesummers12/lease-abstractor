@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Common CAM Fees Explained | Commercial Lease CAM Charges | SaveOnLease",
+  title: "Common CAM Fees Explained | Commercial Lease CAM Charges",
   description:
     "Learn the most common CAM fees charged to commercial tenants, which costs are typically allowed, and where landlords often overcharge.",
 };

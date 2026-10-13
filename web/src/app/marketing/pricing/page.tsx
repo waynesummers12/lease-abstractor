@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing | SaveOnLease",
+  title: "Pricing",
   description: "One $49.99 report after a free lease preview. Add an annual CAM or NNN statement and supporting PDFs for the same price.",
   alternates: { canonical: "https://www.saveonlease.com/marketing/pricing" },
 };

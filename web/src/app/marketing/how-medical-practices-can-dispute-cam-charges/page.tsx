@@ -4,7 +4,7 @@ import styles from "../MedicalGuide.module.css";
 import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
-  title: "How Medical Practices Can Question CAM Charges | SaveOnLease",
+  title: "How Medical Practices Can Question CAM Charges",
   description:
     "A document-based guide to reviewing a medical office CAM statement, checking lease terms, requesting records, and raising a specific billing question.",
   alternates: {

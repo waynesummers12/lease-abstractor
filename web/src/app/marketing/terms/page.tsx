@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Terms of Service | SaveOnLease",
+  title: "Terms of Service",
   description:
     "Terms and conditions governing the use of SaveOnLease and its lease audit services.",
 };

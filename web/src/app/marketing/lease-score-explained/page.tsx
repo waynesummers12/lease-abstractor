@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Lease Score Explained | SaveOnLease",
+  title: "Lease Score Explained",
   description:
     "Understand how Lease Score evaluates CAM / NNN risk, escalation limits, and audit rights to show how tenant-favorable a commercial lease really is.",
 };

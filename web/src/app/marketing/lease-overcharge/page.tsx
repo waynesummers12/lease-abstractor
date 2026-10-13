@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How to Check a Commercial Lease Overcharge | SaveOnLease",
+  title: "How to Check a Commercial Lease Overcharge",
   description:
     "Compare your lease, annual CAM or NNN statement, and payment records to investigate a possible commercial lease overcharge.",
   alternates: {

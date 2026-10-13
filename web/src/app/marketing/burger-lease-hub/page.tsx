@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Burger Restaurant Lease Audit Hub | SaveOnLease",
+  title: "Burger Restaurant Lease Audit Hub",
   description:
     "Central resource for burger franchisees and multi-unit operators reviewing CAM, NNN, and lease overcharges.",
 };

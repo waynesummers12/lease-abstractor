@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "What We Find in CAM & NNN Statements | SaveOnLease",
+  title: "What We Find in CAM & NNN Statements",
   description: "See the lease terms, billing calculations, and missing records SaveOnLease can flag in a commercial lease expense review. Explore a fictional full report.",
   alternates: { canonical: "https://www.saveonlease.com/marketing/what-we-find" },
 };

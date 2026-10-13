@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "CAM & NNN Overcharges Explained | SaveOnLease",
+  title: "CAM & NNN Overcharges Explained",
   description:
     "Learn what CAM and NNN overcharges are, how they happen, and how commercial tenants can identify billing errors before audit deadlines expire.",
   alternates: {

@@ -3,7 +3,7 @@ import styles from "../NnnGuide.module.css";
 import NnnGuideNav from "../NnnGuideNav";
 
 export const metadata = {
-  title: "NNN Expenses Explained | Triple Net Lease Costs for Tenants | SaveOnLease",
+  title: "NNN Expenses Explained | Triple Net Lease Costs for Tenants",
   description:
     "Understand common NNN expenses in commercial leases, how Triple Net charges work, and when tenants can dispute improper or overstated costs.",
 };

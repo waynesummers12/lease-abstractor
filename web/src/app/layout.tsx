@@ -7,6 +7,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.saveonlease.com"),
+  // Page titles omit the brand; this template adds it once.
   title: {
     default: "SaveOnLease — CAM & NNN Lease Audit for Commercial Tenants",
     template: "%s | SaveOnLease",
