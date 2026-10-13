@@ -68,7 +68,7 @@ export default function LoginPage() {
           <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-[27rem] w-[27rem] rounded-full border border-white/10" />
           <div className="relative z-10">
             <p className="inline-flex items-center gap-2 rounded-full border border-[#a8edbf]/35 bg-[#a8edbf]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#b8f0ca]"><span className="h-2 w-2 rounded-full bg-[#a8edbf]" /> Your workspace</p>
-            <h1 id="login-intro-title" className="mt-8 max-w-xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">Your lease questions, <span className="text-[#a8edbf]">all in one place.</span></h1>
+            <h1 id="login-intro-title" className="mt-8 max-w-xl text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">Your lease questions, <span className="text-[#a8edbf]">all in one place.</span></h1>
             <p className="mt-6 max-w-lg text-base leading-8 text-slate-200 sm:text-lg">Sign in to pick up where you left off, revisit your review, and keep your source documents and next steps together.</p>
           </div>
           <div className="relative z-10 mt-12 max-w-lg rounded-[1.75rem] border border-white/15 bg-white/10 p-5 shadow-2xl shadow-black/10 backdrop-blur-sm sm:p-7">
