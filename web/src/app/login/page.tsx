@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 const dashboardRedirect = () => `${window.location.origin}/auth/callback?next=/product/app/dashboard`;
 
 export default function LoginPage() {
   const supabase = createClient();
+  const { session, loading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState<"email" | "google" | null>(null);
   const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
@@ -98,7 +100,7 @@ export default function LoginPage() {
               <p className="mt-4 text-center text-sm leading-6 text-slate-500">Returning users: enter the email linked to your existing reviews. The sign-in link is one-time use and expires.</p>
             </form>
             {notice && <p role="status" aria-live="polite" className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${notice.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-800"}`}>{notice.text}</p>}
-            <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>
+            {!authLoading && session && <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>}
             <div className="mt-8 border-t border-[#d7e1d8] pt-6 text-sm leading-7 text-slate-600">Need a hand getting in? <Link href="/marketing/contact" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Contact SaveOnLease ↗</Link></div>
           </div>
         </section>
