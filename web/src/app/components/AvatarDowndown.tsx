@@ -49,40 +49,40 @@ export default function AvatarDropdown({
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-12 w-52 bg-white text-black rounded-md shadow-lg py-2 z-50"
+          className="absolute right-0 top-full z-50 mt-3 w-60 rounded-xl border border-gray-200 bg-white py-2 text-gray-900 shadow-xl"
         >
-          <div className="px-4 py-2 text-xs text-gray-500 border-b">
+          <div className="break-all border-b border-gray-100 px-4 py-3 text-xs text-gray-500">
             {session.user.email}
           </div>
 
           <Link
             href="/product/app/dashboard"
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-2.5 hover:bg-gray-100"
           >
             Dashboard
           </Link>
 
           <Link
             href="/product/app/dashboard#leases"
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-2.5 hover:bg-gray-100"
           >
             Your Leases
           </Link>
 
           <Link
             href="/product/app/settings"
-            className="block px-4 py-2 hover:bg-gray-100"
+            className="block px-4 py-2.5 hover:bg-gray-100"
           >
             Settings
           </Link>
 
-          <Link href="/auth/set-password" className="block px-4 py-2 hover:bg-gray-100">
+          <Link href="/auth/set-password" className="block px-4 py-2.5 hover:bg-gray-100">
             Set or change password
           </Link>
 
           <button
             onClick={() => supabase.auth.signOut()}
-            className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+            className="w-full px-4 py-2.5 text-left text-red-600 hover:bg-gray-100"
           >
             Logout
           </button>
