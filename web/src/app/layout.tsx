@@ -46,9 +46,9 @@ export default function RootLayout({
             (function() {
               const params = new URLSearchParams(window.location.search);
               const ref = params.get('ref');
-              if (ref) {
+              if (ref && /^[a-z0-9_-]{1,48}$/i.test(ref)) {
                 const maxAge = 60 * 60 * 24 * 30; // 30 days
-                document.cookie = "ref=" + ref + "; path=/; max-age=" + maxAge;
+                document.cookie = "ref=" + encodeURIComponent(ref) + "; path=/; max-age=" + maxAge + "; SameSite=Lax; Secure";
               }
             })();
           `}
