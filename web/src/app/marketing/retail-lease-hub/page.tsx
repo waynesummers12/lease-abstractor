@@ -80,7 +80,7 @@ export default function RetailLeaseHubPage() {
               Identify administrative markups that exceed negotiated caps.
             </p>
             <Link
-              href="/marketing/cam-admin-fees"
+              href="/marketing/cam-admin-page"
               className="inline-block mt-3 text-indigo-600 hover:underline"
             >
               View Admin Fee Guide →
@@ -104,24 +104,24 @@ export default function RetailLeaseHubPage() {
         </div>
 
         {/* Exposure Section */}
-        <div className="mt-16 p-8 bg-indigo-50 border border-indigo-200 rounded-xl">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-indigo-900">
+        <div className="mt-16 rounded-xl border border-[#ead8c5] bg-[#fbf5ee] p-8">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight text-[#774625]">
             Retail Occupancy Risk Signals
           </h2>
-          <ul className="mt-4 space-y-2 text-indigo-800">
-            <li>• CAM allocation and fee terms to review</li>
-            <li>• Actual exposure depends on lease and billing records</li>
-            <li>• Check audit deadlines in your lease</li>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-[#5c5148]">
+            <li>CAM allocation and fee terms to review</li>
+            <li>Actual exposure depends on lease and billing records</li>
+            <li>Check audit deadlines in your lease</li>
           </ul>
         </div>
 
         {/* CTA */}
-        <div className="mt-20 text-center">
+        <div className="mt-16 text-center">
           <Link
             href="/app/step-1-upload"
-            className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 transition"
+            className="inline-block rounded-lg bg-[#9a4f25] px-8 py-4 text-lg font-medium text-white transition-colors hover:bg-[#713916]"
           >
-            Upload Your Lease — Results in ~10 Seconds
+            Upload your lease for a free preview
           </Link>
           <p className="mt-3 text-sm text-gray-500">
             Secure. No subscription required.
