@@ -14,6 +14,7 @@ export default function LoginPage() {
   const { session, loading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<"email" | "password" | "reset" | "google" | null>(null);
   const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
 
@@ -136,7 +137,16 @@ export default function LoginPage() {
               <label htmlFor="login-email" className="block text-sm font-semibold text-[#172820]">Email address</label>
               <input id="login-email" type="email" required autoComplete="email" placeholder="you@company.com" value={email} onChange={(event) => setEmail(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
               <label htmlFor="login-password" className="mt-5 block text-sm font-semibold text-[#172820]">Password</label>
-              <input id="login-password" type="password" required autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+              <div className="mt-2 flex min-h-14 overflow-hidden rounded-xl border border-[#cbd9cd] bg-white transition focus-within:border-emerald-700 focus-within:ring-2 focus-within:ring-emerald-200">
+                <input id="login-password" type={showPassword ? "text" : "password"} required autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} className="min-w-0 flex-1 bg-transparent px-4 text-base text-[#172820] outline-none" />
+                <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Hide password" : "Show password"} aria-pressed={showPassword} aria-controls="login-password" className="flex w-14 shrink-0 items-center justify-center text-[#526b5d] transition hover:bg-[#f2f7f3] hover:text-[#102b25] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-emerald-700">
+                  {showPassword ? (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 10.7a2 2 0 0 0 2.7 2.7"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5 0 8.7 3.3 10 7a11.9 11.9 0 0 1-3.1 4.7"/><path d="M6.6 6.6A11.8 11.8 0 0 0 2 12c1.3 3.7 5 7 10 7 1.3 0 2.5-.2 3.6-.7"/></svg>
+                  ) : (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  )}
+                </button>
+              </div>
               <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "password" ? "Signing in…" : "Sign in to dashboard"}</button>
             </form>
             <div className="mt-5 flex flex-wrap justify-between gap-x-5 gap-y-3 text-sm">
