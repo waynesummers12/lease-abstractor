@@ -140,9 +140,9 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     <main className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6 sm:py-16">
       <div className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 2 of 2 · Free preview</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your lease preview</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your lease{analysis.reconciliation ? " + statement" : ""} preview</h1>
         <p className="mt-3 text-slate-600">
-          Review the lease details we extracted. You can decide whether a full report is worth it.
+          Review the terms and {analysis.reconciliation ? "statement checks" : "topics"} we found. You can decide whether a full report is worth it.
         </p>
       </div>
 
@@ -150,8 +150,8 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       <section className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-8">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Free preview</p>
-          <h2 className="mt-2 text-xl font-semibold text-emerald-950">Lease terms ready for review</h2>
-          <p className="mt-2 text-sm text-emerald-900">We found lease language to check against your CAM/NNN billing records. An uploaded lease alone cannot establish an overcharge or a recoverable dollar amount.</p>
+          <h2 className="mt-2 text-xl font-semibold text-emerald-950">Lease terms{analysis.reconciliation ? " and statement checks" : ""} ready for review</h2>
+          <p className="mt-2 text-sm text-emerald-900">{analysis.reconciliation ? "We compared readable statement details with the lease. Review the checks below and verify any flagged items with supporting records." : "We found lease language to check against your CAM/NNN billing records. An uploaded lease alone cannot establish an overcharge or a recoverable dollar amount."}</p>
         </div>
         {analysis.teaser_summary?.headline_flags && analysis.teaser_summary.headline_flags.length > 0 && (
           <div className="rounded-lg border border-emerald-200 bg-white p-4">
@@ -234,19 +234,19 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
             <div className="p-5 sm:p-6">
               <p className="text-xs font-bold uppercase tracking-widest text-emerald-800">See the report format</p>
               <h3 id="sample-report-heading" className="mt-2 text-xl font-semibold text-slate-950">Preview the report before paying</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-700">This is the first page of a real report generated from a demonstration lease. It shows prioritized lease questions, a deadline to verify, and records to request. Your report will reflect your own lease.</p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-700">Explore an 11-page report generated from fictional lease and statement documents. It shows prioritized questions, conditional calculations, a worksheet, and records to request. Your report will reflect your own files.</p>
               <a
-                href="/sample/lease-review-sample.pdf"
+                href="/sample/lease-and-statement-review-sample.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-emerald-900 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
               >
                 Open the full sample report (PDF) ↗
               </a>
-              <p className="mt-3 text-xs text-slate-600">Demonstration only · Lease language review, not a verified billing audit</p>
+              <p className="mt-3 text-xs text-slate-600">Fictional demonstration · Review leads are not verified overcharges</p>
             </div>
-            <a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full sample lease report PDF" className="block border-t border-emerald-200 bg-white p-4 md:border-l md:border-t-0">
-              <Image src="/sample/lease-review-page-one.png" alt="First page of the sample report, showing review topics and first actions" width={637} height={900} className="mx-auto h-64 w-auto rounded border border-slate-200 shadow-md md:h-72" />
+            <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full sample lease and statement report PDF" className="block border-t border-emerald-200 bg-white p-4 md:border-l md:border-t-0">
+              <Image src="/sample/lease-and-statement-review-preview.png" alt="First page of the fictional lease and statement report" width={992} height={1403} className="mx-auto h-64 w-auto rounded border border-slate-200 shadow-md md:h-72" />
             </a>
           </div>
         </section>
