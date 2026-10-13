@@ -57,10 +57,10 @@ export default function Header() {
           <Link href="/marketing#statement-review" className="opacity-90 hover:opacity-100 font-medium transition">
             Statement Review
           </Link>
-          <EducationDropdown />
           <Link href="/marketing/pricing" className="opacity-70 hover:opacity-100 transition">
             Pricing
           </Link>
+          <EducationDropdown />
           <Link href="/marketing/referral" className="opacity-90 hover:opacity-100 font-medium transition">
             Refer & Earn 20%
           </Link>
