@@ -150,7 +150,7 @@ export default function CommercialLeaseChecklistPage() {
         </p>
 
         <Link
-          href="/refer"
+          href="/marketing/referral"
           className="inline-block border border-gray-300 px-6 py-3 text-sm font-medium rounded-md hover:bg-gray-100 transition"
         >
           Create Your Broker Referral Link →
@@ -214,12 +214,12 @@ export default function CommercialLeaseChecklistPage() {
             </Link>
           </li>
           <li>
-            <Link href="/marketing/cam-admin-fees" className="underline">
+            <Link href="/marketing/cam-admin-page" className="underline">
               CAM Administrative Fees Explained
             </Link>
           </li>
           <li>
-            <Link href="/marketing/nnn-expenses" className="underline">
+            <Link href="/marketing/nnn-expenses-explained" className="underline">
               What NNN Expenses Include in Commercial Leases
             </Link>
           </li>

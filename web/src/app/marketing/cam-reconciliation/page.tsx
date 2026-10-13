@@ -139,7 +139,7 @@ export default function CamReconciliationPage() {
           <ul className="list-disc ml-6 space-y-2">
             <li><Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline hover:text-black">Non-allowable CAM expenses</Link></li>
             <li><Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">Common reconciliation errors</Link></li>
-            <li><Link href="/marketing/nnn-overcharges" className="underline hover:text-black">NNN overcharges explained</Link></li>
+            <li><Link href="/marketing/cam-nnn-overcharges" className="underline hover:text-black">NNN overcharges explained</Link></li>
             <li><Link href="/marketing/commercial-lease-audit" className="underline hover:text-black">Commercial lease audit process</Link></li>
           </ul>
         </div>

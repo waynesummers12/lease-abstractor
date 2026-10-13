@@ -115,7 +115,7 @@ export default function TripleNetLeaseMeaningPage() {
           capital pass‑through language. See our
           {" "}
           <Link
-            href="/marketing/cam-admin-fees"
+            href="/marketing/cam-admin-page"
             className="underline hover:text-black"
           >
             CAM administrative fee analysis
@@ -195,7 +195,7 @@ export default function TripleNetLeaseMeaningPage() {
             </Link>
           </li>
           <li>
-            <Link href="/marketing/cam-admin-fees" className="underline hover:text-black">
+            <Link href="/marketing/cam-admin-page" className="underline hover:text-black">
               Administrative Fee Overcharges Explained
             </Link>
           </li>
