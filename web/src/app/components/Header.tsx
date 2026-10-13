@@ -45,7 +45,7 @@ export default function Header() {
         className={`mx-auto flex w-full max-w-full items-center justify-between px-4 sm:px-6 py-4 ${navTextColor}`}
       >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href="/marketing" className="flex items-center gap-2 shrink-0">
           <Image src="/logo.png" alt="SaveOnLease" width={24} height={44} />
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>

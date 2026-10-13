@@ -65,7 +65,7 @@ export default function MobileMenu({
     >
       <div className="mx-auto flex min-h-full max-w-xl flex-col px-5 pb-8 pt-5 sm:px-8">
         <div className="flex items-center justify-between border-b border-white/15 pb-5">
-          <Link href="/" onClick={() => setOpen(false)} className="text-lg font-semibold tracking-tight">
+          <Link href="/marketing" onClick={() => setOpen(false)} className="text-lg font-semibold tracking-tight">
             SaveOnLease
           </Link>
           <button
