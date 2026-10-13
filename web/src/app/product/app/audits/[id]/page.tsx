@@ -30,7 +30,7 @@ export default function PortfolioAuditPage() {
   }, [id]);
 
   return <main className="mx-auto max-w-4xl space-y-6 px-6 py-16">
-    <Link href="/product/app/portfolio" className="text-sm underline">Back to portfolio</Link>
+    <Link href="/product/app/dashboard#reports" className="text-sm underline">Back to dashboard</Link>
     <h1 className="text-3xl font-semibold">Completed lease audit</h1>
     {error ? <p role="alert" className="text-red-700">{error}</p> : !audit ? <p>Loading report...</p> : <>
       <p className="text-sm text-gray-600">Completed {audit.completed_at ? new Date(audit.completed_at).toLocaleDateString() : "recently"}</p>

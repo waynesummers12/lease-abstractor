@@ -7,8 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 const navItems = [
   { label: "Dashboard", href: "/product/app/dashboard", roles: ["admin", "analyst", "viewer"] },
-  { label: "Leases", href: "/product/app/leases", roles: ["admin", "analyst"] },
-  { label: "Portfolio", href: "/product/app/portfolio", roles: ["admin", "analyst"], planRequired: "pro" },
+  { label: "Leases", href: "/product/app/dashboard#leases", roles: ["admin", "analyst"] },
   { label: "Benchmarks", href: "/product/app/benchmarks", roles: ["admin"], planRequired: "enterprise" },
   { label: "Alerts", href: "/product/app/alerts", roles: ["admin", "analyst"] },
 ];
@@ -52,7 +51,7 @@ export default function SidebarNav() {
   const filteredNav = useMemo(() => {
   if (role === "viewer") {
     return navItems.filter((item) =>
-      ["Dashboard", "Leases", "Portfolio", "Alerts", "Benchmarks"].includes(item.label)
+      ["Dashboard", "Leases", "Alerts", "Benchmarks"].includes(item.label)
     );
   }
   return navItems;

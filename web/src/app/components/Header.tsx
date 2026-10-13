@@ -100,7 +100,7 @@ export default function Header() {
                 Dashboard
                 <span className="rounded bg-amber-400 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-black">Free</span>
               </Link>
-              <Link href="/product/app/leases" className="text-sm opacity-80 transition hover:opacity-100">
+              <Link href="/product/app/dashboard#leases" className="text-sm opacity-80 transition hover:opacity-100">
                 Your Leases
               </Link>
               <Link

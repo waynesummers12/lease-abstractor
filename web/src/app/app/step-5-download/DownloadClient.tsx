@@ -356,7 +356,7 @@ return (
       >
         {downloading ? "Preparing PDF…" : "Open full PDF report"}
       </button>
-      {session && <button onClick={() => router.push("/product/app/portfolio")} className="rounded-lg border px-5 py-3 text-sm font-medium hover:bg-gray-50">Go to portfolio</button>}
+      {session && <button onClick={() => router.push("/product/app/dashboard#reports")} className="rounded-lg border px-5 py-3 text-sm font-medium hover:bg-gray-50">Go to dashboard</button>}
       <button onClick={() => router.push("/app/step-1-upload")} className="px-2 py-3 text-sm text-gray-600 underline">Review another lease</button>
     </div>
   </main>

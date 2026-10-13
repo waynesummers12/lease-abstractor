@@ -99,8 +99,7 @@ export default function MobileMenu({
             <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-slate-400">Your workspace</p>
             {[
               ["Dashboard", "/product/app/dashboard"],
-              ["Leases", "/product/app/leases"],
-              ["Portfolio", "/product/app/portfolio"],
+              ["Your Leases", "/product/app/dashboard#leases"],
               ["Alerts", "/product/app/alerts"],
               ["Settings", "/product/app/settings"],
             ].map(([label, href]) => (

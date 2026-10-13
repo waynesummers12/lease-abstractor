@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 
@@ -46,6 +47,7 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { session, loading: authLoading } = useAuth();
   const userId = session?.user.id;
   const accessToken = session?.access_token;
@@ -55,6 +57,12 @@ export default function DashboardPage() {
   const [leaseError, setLeaseError] = useState(false);
   const [auditError, setAuditError] = useState(false);
   const [showSamples, setShowSamples] = useState(false);
+  const [showAllReports, setShowAllReports] = useState(false);
+  const [leaseQuery, setLeaseQuery] = useState("");
+
+  useEffect(() => {
+    if (!authLoading && !session) router.replace("/login");
+  }, [authLoading, session, router]);
 
   useEffect(() => {
     if (authLoading || !userId || !accessToken) return;
@@ -94,15 +102,44 @@ export default function DashboardPage() {
     days: daysUntilSavedDate(lease.renewal_date),
   })).sort((a, b) => (a.days ?? Infinity) - (b.days ?? Infinity)), [realLeases]);
   const upcoming = datedLeases.filter(({ days }) => days !== null && days >= 0 && days <= 180);
+  const urgent = datedLeases.filter(({ days }) => days !== null && days >= 0 && days <= 90).length;
   const needsDates = datedLeases.filter(({ days }) => days === null).length;
-  const recentAudits = useMemo(() => [...audits].sort((a, b) =>
+  const sortedAudits = useMemo(() => [...audits].sort((a, b) =>
     (b.completed_at ?? "").localeCompare(a.completed_at ?? "")
-  ).slice(0, 3), [audits]);
+  ), [audits]);
+  const visibleAudits = showAllReports ? sortedAudits : sortedAudits.slice(0, 5);
+  const visibleLeases = useMemo(() => datedLeases.filter(({ lease }) =>
+    `${lease.property_name ?? ""} ${lease.landlord ?? ""} ${lease.lease_type ?? ""}`.toLowerCase().includes(leaseQuery.trim().toLowerCase())
+  ), [datedLeases, leaseQuery]);
+  const leaseTypes = useMemo(() => realLeases.reduce<Record<string, number>>((counts, lease) => {
+    const type = lease.lease_type?.trim() || "Unspecified";
+    counts[type] = (counts[type] ?? 0) + 1;
+    return counts;
+  }, {}), [realLeases]);
   const nextLease = upcoming[0] ?? datedLeases.find(({ days }) => days === null) ?? datedLeases[0];
+
+  function downloadLeasesCsv() {
+    const safeCell = (value: string | number | null) => {
+      const text = String(value ?? "");
+      const guarded = /^[\s]*[=+@\-]/.test(text) ? `'${text}` : text;
+      return `"${guarded.replaceAll('"', '""')}"`;
+    };
+    const rows = [
+      ["Property", "Landlord", "Lease type", "Square feet", "Renewal date"],
+      ...realLeases.map((lease) => [lease.property_name, lease.landlord, lease.lease_type, lease.square_feet, lease.renewal_date]),
+    ];
+    const blob = new Blob(["\uFEFF", rows.map((row) => row.map(safeCell).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "saveonlease-leases.csv";
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  }
 
   const months = useMemo(() => {
     const now = new Date();
-    return Array.from({ length: 6 }, (_, index) => {
+    return Array.from({ length: 12 }, (_, index) => {
       const date = new Date(now.getFullYear(), now.getMonth() + index, 1);
       const count = realLeases.filter((lease) => {
         if (!lease.renewal_date) return false;
@@ -114,7 +151,7 @@ export default function DashboardPage() {
     });
   }, [realLeases]);
 
-  if (authLoading || loading) {
+  if (authLoading || (!session && !authLoading) || loading) {
     return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
   }
 
@@ -161,7 +198,7 @@ export default function DashboardPage() {
                     ? "Your completed review is ready whenever you need to revisit its questions and source pages."
                     : "Save the property and its renewal date to create a useful workspace."}
               </p>
-              <Link href={nextLease ? `/product/app/leases/${encodeURIComponent(nextLease.lease.id)}` : audits.length > 0 ? `/product/app/audits/${encodeURIComponent(recentAudits[0]?.id ?? audits[0].id)}` : "/product/app/add-lease"} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#a9e9be] hover:underline">
+              <Link href={nextLease ? `/product/app/leases/${encodeURIComponent(nextLease.lease.id)}` : audits.length > 0 ? `/product/app/audits/${encodeURIComponent(sortedAudits[0]?.id ?? audits[0].id)}` : "/product/app/add-lease"} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#a9e9be] hover:underline">
                 {nextLease ? "Open lease details" : audits.length > 0 ? "View latest report" : "Add a lease"} <Arrow diagonal />
               </Link>
             </div>
@@ -174,10 +211,11 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <section aria-label="Workspace overview" className="mt-7 grid gap-4 sm:grid-cols-3">
+        <section aria-label="Workspace overview" className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
             { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Based on saved renewal dates", accent: "#b46c2a" },
+            { label: "Missing renewal dates", value: leaseError ? "—" : String(needsDates), detail: "Add dates to complete your outlook", accent: "#a65d48" },
             { label: "Completed reports", value: auditError ? "—" : String(audits.length), detail: "Created while signed in", accent: "#5264a5" },
           ].map((item) => (
             <div key={item.label} className="rounded-2xl border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-6">
@@ -190,14 +228,17 @@ export default function DashboardPage() {
         </section>
 
         <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
-          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+          <section id="leases" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your leases</h2>
                 <p className="mt-2 text-sm text-[#60736a]">Renewal dates are reminders. Check each lease for separate notice and audit deadlines.</p>
               </div>
-              <Link href="/product/app/leases" className="inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">View all leases <Arrow /></Link>
+              <div className="flex flex-wrap gap-2">
+                <Link href="/product/app/add-lease" className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652] hover:bg-[#f5faf5]">Add lease</Link>
+                <button type="button" onClick={downloadLeasesCsv} disabled={realLeases.length === 0} className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652] hover:bg-[#f5faf5] disabled:cursor-not-allowed disabled:opacity-50">Export CSV</button>
+              </div>
             </div>
             {realLeases.length === 0 ? (
               <div className="mt-7 rounded-2xl border border-dashed border-[#cbded0] bg-[#f8fbf7] px-6 py-10">
@@ -207,8 +248,12 @@ export default function DashboardPage() {
                 <Link href="/product/app/add-lease" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#102c25] px-4 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Add your first lease <Arrow /></Link>
               </div>
             ) : (
-              <div className="mt-7 divide-y divide-[#e9eee9]">
-                {datedLeases.slice(0, 5).map(({ lease, days }) => (
+              <div className="mt-7">
+                <label htmlFor="lease-search" className="block text-xs font-semibold text-[#526b5d]">Find a lease</label>
+                <input id="lease-search" type="search" value={leaseQuery} onChange={(event) => setLeaseQuery(event.target.value)} placeholder="Search property, landlord, or lease type" className="mt-2 w-full rounded-xl border border-[#d8e5d9] px-4 py-3 text-sm outline-none focus:border-[#0c6652] focus:ring-2 focus:ring-[#c4e7d0]" />
+                <p className="mt-3 text-xs text-[#6e8076]">{visibleLeases.length} of {realLeases.length} real {realLeases.length === 1 ? "lease" : "leases"} shown · {urgent} within 90 days</p>
+                <div className="mt-4 divide-y divide-[#e9eee9]">
+                {visibleLeases.map(({ lease, days }) => (
                   <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 hover:text-[#0c6652]">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold">{lease.property_name || "Unnamed lease"}</p>
@@ -217,13 +262,15 @@ export default function DashboardPage() {
                     <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
                   </Link>
                 ))}
+                {visibleLeases.length === 0 && <p className="py-5 text-sm text-[#6e8076]">No leases match that search.</p>}
+                </div>
               </div>
             )}
             {needsDates > 0 && <p className="mt-4 rounded-xl bg-[#fff8ec] px-4 py-3 text-xs text-[#806043]">{needsDates} {needsDates === 1 ? "lease needs" : "leases need"} a saved renewal date to appear on the timeline.</p>}
           </section>
 
           <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Next six months</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Next twelve months</p>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Renewal outlook</h2>
             <p className="mt-2 text-sm leading-6 text-[#60736a]">A simple view of the renewal dates you saved.</p>
             <div className="mt-7 grid grid-cols-6 gap-2">
@@ -238,21 +285,22 @@ export default function DashboardPage() {
               ))}
             </div>
             <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">This chart uses saved renewal dates only; it does not calculate notice deadlines or potential savings.</p>
+            {realLeases.length > 0 && <div className="mt-5 border-t border-[#e8eee8] pt-5"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#61766a]">By lease type</p><div className="mt-3 flex flex-wrap gap-2">{Object.entries(leaseTypes).sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => <span key={type} className="rounded-full bg-[#f0f6f0] px-3 py-1.5 text-xs text-[#245746]">{type}: {count}</span>)}</div></div>}
           </section>
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
-          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+          <section id="reports" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Your work</p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Recent reports</h2>
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Completed reports</h2>
               </div>
-              <Link href="/product/app/portfolio" className="inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Open portfolio <Arrow /></Link>
+              {sortedAudits.length > 5 && <button type="button" onClick={() => setShowAllReports((value) => !value)} className="text-sm font-semibold text-[#0c6652] hover:underline">{showAllReports ? "Show recent" : `Show all ${sortedAudits.length}`}</button>}
             </div>
-            {recentAudits.length ? (
+            {visibleAudits.length ? (
               <div className="mt-6 divide-y divide-[#e9eee9]">
-                {recentAudits.map((audit) => (
+                {visibleAudits.map((audit) => (
                   <Link key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
                     <div>
                       <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
@@ -304,12 +352,11 @@ export default function DashboardPage() {
             </div>
             {showSamples && (
               <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                {sampleLeases.slice(0, 6).map((lease) => (
+                {sampleLeases.map((lease) => (
                   <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="flex items-center justify-between rounded-xl bg-white px-4 py-3 text-xs font-medium hover:text-[#0c6652]">
                     <span className="truncate">{lease.property_name || "Sample lease"}</span><Arrow />
                   </Link>
                 ))}
-                {sampleLeases.length > 6 && <Link href="/product/app/leases" className="px-4 py-3 text-xs font-semibold text-[#0c6652] hover:underline">View all {sampleLeases.length} records <Arrow /></Link>}
               </div>
             )}
           </section>

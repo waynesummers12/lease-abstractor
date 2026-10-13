@@ -100,7 +100,7 @@ export default function LeaseDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16">
         <p className="text-red-700 mb-4">{error}</p>
-        <Link href="/product/app/leases" className="text-blue-600 underline">
+        <Link href="/product/app/dashboard#leases" className="text-blue-600 underline">
           Back to Leases
         </Link>
       </div>
@@ -112,7 +112,7 @@ export default function LeaseDetailPage() {
       <div className="max-w-4xl mx-auto px-6 py-16">
         <p className="text-gray-600 mb-4">Lease not found.</p>
         <button
-          onClick={() => router.push("/product/app/leases")}
+          onClick={() => router.push("/product/app/dashboard#leases")}
           className="text-blue-600 underline"
         >
           Back to Leases
@@ -167,7 +167,7 @@ export default function LeaseDetailPage() {
         throw new Error("Failed to delete lease");
       }
 
-      router.push("/product/app/leases");
+      router.push("/product/app/dashboard#leases");
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -198,10 +198,10 @@ export default function LeaseDetailPage() {
         </div>
 
         <Link
-          href="/product/app/portfolio"
+          href="/product/app/dashboard#leases"
           className="text-sm text-gray-600 hover:underline"
         >
-          Back to Portfolio
+          Back to Dashboard
         </Link>
       </div>
 

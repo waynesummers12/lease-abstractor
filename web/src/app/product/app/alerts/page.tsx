@@ -108,7 +108,7 @@ export default function AlertsPage() {
           )}
 
           <div className="mt-10 flex gap-4">
-            <Link href="/product/app/leases" className="text-sm font-medium underline">View All Leases</Link>
+            <Link href="/product/app/dashboard#leases" className="text-sm font-medium underline">View All Leases</Link>
             <Link href="/product/app/add-lease" className="text-sm font-medium underline">Add Lease</Link>
           </div>
         </>
