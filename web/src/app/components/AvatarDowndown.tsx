@@ -7,12 +7,10 @@ import { Session } from "@supabase/supabase-js";
 
 interface AvatarDropdownProps {
   session: Session;
-  isProUser?: boolean;
 }
 
 export default function AvatarDropdown({
   session,
-  isProUser = false,
 }: AvatarDropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -34,15 +32,6 @@ export default function AvatarDropdown({
 
   return (
     <div ref={ref} className="relative flex items-center gap-4">
-      {!isProUser && (
-        <Link
-          href="/marketing/pricing"
-          className="text-xs bg-yellow-500 text-black px-2 py-1 rounded-full font-semibold"
-        >
-          Upgrade
-        </Link>
-      )}
-
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center font-bold text-white"
@@ -69,10 +58,10 @@ export default function AvatarDropdown({
           </Link>
 
           <Link
-            href="/product/app/portfolio"
+            href="/product/app/leases"
             className="block px-4 py-2 hover:bg-gray-100"
           >
-            Portfolio
+            Your Leases
           </Link>
 
           <Link

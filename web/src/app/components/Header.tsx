@@ -16,7 +16,7 @@ export default function Header() {
   const isAppPage =
     pathname.startsWith("/app") || pathname.startsWith("/product/app");
 
-  const { session, plan } = useAuth();
+  const { session } = useAuth();
   const user = session?.user ?? null;
 
 
@@ -30,9 +30,6 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
-
-  const isProUser = plan === "pro" || plan === "enterprise";
-  const isEnterprise = plan === "enterprise";
 
   const navTextColor = isAppPage ? "text-gray-900" : "text-white";
   const bgClass = isAppPage
@@ -95,69 +92,22 @@ export default function Header() {
                   LOGGED IN
               ============================= */}
 
-              {/* Dashboard */}
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/product/app/dashboard"
-                  className={`font-semibold transition ${
-                    isAppPage ? "text-black" : "text-white"
-                  }`}
-                >
-                  Dashboard
-                </Link>
-
-                {/* PLAN BADGE */}
-                <span className="text-[10px] px-2 py-0.5 rounded bg-yellow-400 text-black font-semibold">
-                  {plan.toUpperCase()}
-                </span>
-              </div>
-
-              {/* Portfolio */}
-              <Link
-                href={plan === "free" ? "/pricing" : "/product/app/portfolio"}
-                className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
-              >
-                Portfolio {plan === "free" && "🔒"}
+              <Link href="/product/app/dashboard" className={`font-semibold transition ${isAppPage ? "text-black" : "text-white"}`}>
+                Dashboard
               </Link>
-
-              {/* Benchmarks */}
-              <Link
-                href={plan !== "enterprise" ? "/pricing" : "/product/app/benchmarks"}
-                className="text-sm opacity-80 hover:opacity-100 flex items-center gap-1"
-              >
-                Benchmarks {plan !== "enterprise" && "🔒"}
+              <Link href="/product/app/leases" className="text-sm opacity-80 transition hover:opacity-100">
+                Your Leases
               </Link>
-
-              {/* Upgrade CTA */}
-              {plan === "free" && !isAppPage && (
-                <Link
-                  href="/pricing"
-                  className="rounded-full border border-white/30 px-4 py-1.5 text-xs font-semibold hover:bg-white hover:text-black transition"
-                >
-                  Upgrade
-                </Link>
-              )}
-
-              {/* Run Audit */}
-              {!isAppPage && (
-                <Link
-                  href="/app/step-1-upload"
-                  className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
-                >
-                  Run Audit
-                </Link>
-              )}
+              <Link
+                href="/app/step-1-upload"
+                className={`ml-2 rounded-full px-5 py-2 font-semibold shadow-md transition-all hover:shadow-lg ${isAppPage ? "bg-[#102c25] text-white hover:bg-[#1b4a3c]" : "bg-white text-black hover:bg-gray-200"}`}
+              >
+                Start Free Preview
+              </Link>
 
               {/* Avatar */}
               {session && (
-                <AvatarDropdown session={session} isProUser={isProUser} />
-              )}
-
-              {/* Enterprise Label */}
-              {isEnterprise && (
-                <span className="text-[10px] text-gray-500 ml-2">
-                  Enterprise
-                </span>
+                <AvatarDropdown session={session} />
               )}
             </>
           )}

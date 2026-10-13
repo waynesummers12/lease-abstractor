@@ -56,8 +56,6 @@ export default function Navbar() {
     await supabase.auth.signOut();
   };
 
-  const isProUser = false; // TODO: replace with real plan logic
-
   return (
     <nav className="w-full bg-black text-white px-4 sm:px-6 py-4">
       <div className="flex w-full max-w-full items-center justify-between">
@@ -118,15 +116,6 @@ export default function Navbar() {
             </>
           ) : (
             <div ref={avatarRef} className="flex items-center gap-4 relative">
-              {!isProUser && (
-                <Link
-                  href="/upgrade"
-                  className="text-xs bg-yellow-500 text-black px-2 py-1 rounded-full font-semibold"
-                >
-                  Upgrade
-                </Link>
-              )}
-
               <button
                 onClick={() => setAvatarOpen(!avatarOpen)}
                 className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold"
