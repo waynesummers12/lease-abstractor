@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SaveOnLease Pricing | CAM & NNN Lease Audit for Commercial Tenants",
+  title: "SaveOnLease Pricing | Lease and Statement Review",
   description:
-    "Review your lease for potential CAM and NNN cost risks. Get a free preview, then choose whether to unlock the full audit.",
+    "Start with a free lease preview, then choose a $49.99 one-time report. Annual CAM or NNN statement review is included at the same price.",
   openGraph: {
-    title: "SaveOnLease Pricing",
+    title: "SaveOnLease Pricing | One Report, $49.99",
     description:
-      "Upload your lease for a CAM and NNN risk preview and choose whether to unlock a full audit.",
+      "Preview your lease for free. Add an annual statement and supporting PDFs for a fuller $49.99 report.",
     url: "https://www.saveonlease.com/marketing/pricing",
     siteName: "SaveOnLease",
     type: "website",
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SaveOnLease Pricing",
+    title: "SaveOnLease Pricing | One Report, $49.99",
     description:
-      "Review your lease for CAM and NNN cost risks with a free preview and optional full audit.",
+      "Preview your lease for free. Add an annual statement and supporting PDFs for a fuller $49.99 report.",
     images: ["https://www.saveonlease.com/demo/OG%20Imagev1.png"],
   },
 };

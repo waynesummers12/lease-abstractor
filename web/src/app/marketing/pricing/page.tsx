@@ -1,26 +1,58 @@
+import FaqSchema from "@/app/components/FaqSchema";
+import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Pricing | SaveOnLease",
-  description: "One $49.99 report: lease review with optional annual CAM or NNN statement and supporting record checks.",
+  description: "One $49.99 report after a free lease preview. Add an annual CAM or NNN statement and supporting PDFs for the same price.",
+  alternates: { canonical: "https://www.saveonlease.com/marketing/pricing" },
 };
 
+const previewFeatures = [
+  "Extracted lease details and topics to check",
+  "Basic statement checks when you add a readable annual bill",
+  "A chance to review before paying",
+  "No credit card required",
+];
+
+const reportFeatures = [
+  "Prioritized questions and first actions",
+  "Page-referenced lease terms, amendments, and deadlines",
+  "Annual statement review when one is supplied",
+  "Conditional dollar comparisons when inputs support them",
+  "Billing worksheet, records checklist, and request draft",
+  "Downloadable PDF for your records",
+];
+
+const faq = [
+  { question: "Do I need an annual CAM or NNN statement?", answer: "No. You can start with a signed lease alone. Add a readable annual statement and up to four supporting PDFs before checkout if you want the report to compare billing details with the lease." },
+  { question: "Does adding a statement cost more?", answer: "No. The full report is $49.99 one-time whether you upload only a lease or also add an annual statement and supporting PDFs." },
+  { question: "When do I pay?", answer: "Start with a free preview. After reviewing it, you can choose whether to purchase the full downloadable PDF report. There is no subscription or automatic renewal." },
+  { question: "Will the report tell me exactly how much I am owed?", answer: "The report can show conditional comparisons when readable inputs support them, but a flagged charge is not a verified refund. Source invoices, area records, payment history, and lease interpretation may still need review." },
+];
+
 export default function PricingPage() {
-  return <main className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24">
-    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">One clear price</p>
-    <h1 className="mt-4 text-4xl font-semibold text-slate-950 sm:text-6xl">Lease and statement clarity for $49.99</h1>
-    <p className="mt-6 max-w-3xl text-lg text-slate-600">Start with a free lease preview. Before payment, add a text-readable annual statement and up to four supporting PDFs if you have them.</p>
-    <section className="mt-10 rounded-3xl border border-emerald-200 bg-emerald-50 p-7 sm:p-10">
-      <p className="text-4xl font-bold text-slate-950">$49.99 <span className="text-base font-normal text-slate-600">one-time</span></p>
-      <ul className="mt-6 list-disc space-y-2 pl-5 text-slate-700">
-        <li>Page-linked lease expense terms and deadlines to verify</li>
-        <li>Optional statement share and arithmetic checks where values can be extracted</li>
-        <li>Supporting PDF inventory and remaining verification questions</li>
-        <li>Downloadable PDF report after payment</li>
-      </ul>
-      <p className="mt-6 text-sm text-slate-700">Automated document screening does not verify invoice authenticity or prove an overcharge. Missing or unreadable values are labeled as unverified.</p>
-      <Link href="/app/step-1-upload" className="mt-7 inline-flex min-h-12 items-center rounded-xl bg-emerald-900 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-800">Start free lease preview →</Link>
-      <p><a href="/sample/lease-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-900 underline">View sample lease report (PDF) ↗</a></p>
+  return <main className="bg-[#f7f8f5] text-[#172820]">
+    <section className="relative overflow-hidden bg-[#102b25] text-white">
+      <div aria-hidden className="pointer-events-none absolute -right-24 -top-48 h-[560px] w-[560px] rounded-full border border-white/10" />
+      <div aria-hidden className="pointer-events-none absolute -right-6 -top-32 h-[430px] w-[430px] rounded-full border border-white/10" />
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1fr_.88fr] lg:items-center">
+        <div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">Simple pricing</p><h1 className="mt-5 max-w-2xl text-5xl font-semibold leading-[1.07] tracking-tight text-white sm:text-6xl">Know what to question. <span className="text-[#a8edbf]">Know what to request.</span></h1><p className="mt-7 max-w-xl text-lg leading-8 text-slate-200">Begin with a free lease preview. Add an annual CAM or NNN statement and supporting PDFs if you have them. Decide whether the full report is worth $49.99 after you see the preview.</p><div className="mt-9 flex flex-wrap gap-3"><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a8edbf] px-6 py-3 text-sm font-bold text-[#102b25] hover:bg-white">Start free preview <span aria-hidden className="ml-3">↗</span></Link><a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10">Inspect sample PDF ↗</a></div><p className="mt-5 text-sm text-slate-300">One-time purchase · No subscription · Statement review included at the same price</p></div>
+        <div className="relative mx-auto w-full max-w-[460px] rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/30 sm:p-6"><div className="rounded-[1.4rem] bg-white p-7 text-[#172820] sm:p-9"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-[0.17em] text-emerald-800">Full report</span><span className="rounded-full bg-[#e5f6ed] px-3 py-1 text-xs font-semibold text-emerald-950">One clear price</span></div><p className="mt-7 text-6xl font-semibold tracking-tight text-slate-950">$49.99</p><p className="mt-2 text-sm text-slate-600">One-time, after the free preview</p><div className="mt-7 h-px bg-slate-200" /><p className="mt-6 text-lg font-semibold text-slate-950">Lease review + optional statement analysis</p><p className="mt-3 text-sm leading-7 text-slate-600">The same price includes your lease, an annual statement when provided, and up to four supporting PDFs. The final PDF reflects the readable files saved before checkout.</p><Link href="/app/step-1-upload" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-bold text-white hover:bg-emerald-900">Preview your lease first ↗</Link></div></div>
+      </div>
     </section>
+
+    <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">What you get</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">See enough to decide. Pay only for the full PDF.</h2><p className="mt-4 text-lg leading-8 text-slate-600">There is one report, with more detail when you provide more documents. You can add the annual statement during the first upload or on the preview page.</p></div><div className="mt-10 grid gap-5 lg:grid-cols-2">
+      <article className="rounded-3xl border border-[#dce5dc] bg-white p-7 shadow-sm sm:p-9"><div className="flex items-center justify-between gap-4"><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">First · Free preview</p><span className="rounded-full bg-[#e5f6ed] px-3 py-1 text-sm font-bold text-emerald-950">$0</span></div><h3 className="mt-7 text-2xl font-semibold tracking-tight text-slate-950">Understand the starting point.</h3><p className="mt-3 text-sm leading-7 text-slate-600">Upload a text-readable signed lease. Add a statement if available. See the extracted terms and initial checks before you decide.</p><ul className="mt-7 list-none space-y-4 pl-0">{previewFeatures.map((feature) => <li key={feature} className="flex gap-3 text-sm leading-6 text-slate-700"><span aria-hidden className="font-bold text-emerald-700">✓</span>{feature}</li>)}</ul></article>
+      <article className="rounded-3xl border border-emerald-300 bg-[#e9f7ed] p-7 shadow-sm sm:p-9"><div className="flex items-center justify-between gap-4"><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">Then · Full report</p><span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-emerald-950">$49.99 once</span></div><h3 className="mt-7 text-2xl font-semibold tracking-tight text-slate-950">Leave with a plan to verify.</h3><p className="mt-3 text-sm leading-7 text-slate-700">The page-referenced PDF organizes the lease terms, billing questions, calculations, and records needed for your next conversation.</p><ul className="mt-7 list-none space-y-4 pl-0">{reportFeatures.map((feature) => <li key={feature} className="flex gap-3 text-sm leading-6 text-slate-800"><span aria-hidden className="font-bold text-emerald-700">✓</span>{feature}</li>)}</ul></article>
+    </div></section>
+
+    <section className="border-y border-[#dce5dc] bg-white"><div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-24 lg:grid-cols-[1fr_.9fr] lg:items-center"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Look inside first</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">See the report format before you buy.</h2><p className="mt-5 max-w-xl leading-8 text-slate-600">Explore an 11-page report generated from fictional lease, statement, and occupancy documents. It shows prioritized questions, conditional calculations, a worksheet, and a records request draft.</p><p className="mt-4 max-w-xl text-sm leading-7 text-slate-500">The sample is an illustration, not a promise of a particular finding or refund. Your report depends on your readable documents.</p><div className="mt-8 flex flex-wrap gap-5"><a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Open the full sample PDF ↗</a><Link href="/marketing/how-it-works" className="inline-flex min-h-12 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">See how the review works ↗</Link></div></div><div className="mx-auto w-full max-w-[420px] rounded-[2rem] border border-[#dce5dc] bg-[#f7f8f5] p-5 shadow-xl shadow-slate-900/10"><div className="overflow-hidden rounded-xl bg-white"><Image src="/sample/lease-and-statement-review-preview.png" alt="First page of a fictional SaveOnLease lease and statement report" width={992} height={1403} className="h-auto w-full" /></div><p className="mt-4 text-center text-xs text-slate-500">Actual report format · fictional sample</p></div></div></section>
+
+    <section className="mx-auto max-w-6xl px-6 py-20 sm:py-24"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Common questions</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">No surprises at checkout.</h2></div><div className="mt-8 grid gap-4 md:grid-cols-2">{faq.map((item) => <article key={item.question} className="rounded-2xl border border-[#dce5dc] bg-white p-6"><h3 className="text-lg font-semibold text-slate-950">{item.question}</h3><p className="mt-3 text-sm leading-7 text-slate-600">{item.answer}</p></article>)}</div></section>
+
+    <section className="bg-[#102b25] px-6 py-20 text-white"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">Start at no cost</p><h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Bring the lease. We&apos;ll show you where to look.</h2><p className="mt-5 leading-8 text-slate-200">A free preview starts with your lease. Statement checks and supporting records can make the paid report more specific. Flagged items still need verification against source records and the signed documents.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a8edbf] px-7 py-3 text-sm font-bold text-[#102b25] hover:bg-white">Start free preview <span aria-hidden className="ml-3">↗</span></Link></div></section>
+    <FaqSchema faqs={faq} />
   </main>;
 }
