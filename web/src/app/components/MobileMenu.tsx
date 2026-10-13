@@ -111,7 +111,7 @@ export default function MobileMenu({
             ["What We Find", "/marketing/what-we-find"],
             ["How It Works", "/marketing/how-it-works"],
             ["Pricing", "/pricing"],
-            ["Statement Review", "/marketing/how-it-works"],
+            ["Statement Review", "/marketing#statement-review"],
             ["CAM Reconciliation", "/marketing/cam-reconciliation"],
             ["NNN Audit Rights", "/marketing/nnn-audit-rights"],
             ["Audit Deadlines", "/marketing/audit-window-deadlines"],

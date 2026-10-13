@@ -5,6 +5,7 @@ export type Reconciliation = {
   supportNames: string[];
   statement: { share: Evidence | null; propertyTotal: Evidence | null; tenantCharge: Evidence | null; credits: Evidence | null; balance: Evidence | null };
   leaseShare: Evidence | null;
+  leaseTerms?: { adminFeeRate?: Evidence; camCapMultiplier?: Evidence };
   checks: Array<{ label: string; result: string; status: "matches" | "question" | "unverified" }>;
   support: Array<{ name: string; signals: string[] }>;
   worksheetRows?: Array<{ category: string; amountBilled: number; leaseBasis: string; difference: string; statementPage: number; leasePage?: number }>;
@@ -12,6 +13,7 @@ export type Reconciliation = {
     shareOnly: { charge: number; difference: number };
     selectedExclusions?: { categories: string[]; centerAmount: number; charge: number; difference: number };
     paymentCredit?: { listed: number; stated: number; difference: number };
+    correctedScreen?: { centerTotal: number; tenantCharge: number; listedPayments: number; alternateBalance: number; billedBalance: number; difference: number; capBase: number; capLimit: number; amortizedCapital: number };
   };
 };
 

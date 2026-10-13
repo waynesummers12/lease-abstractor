@@ -103,8 +103,10 @@ function textMatch(flag: Flag, sourcePages?: AuditAnalysis["sourcePages"]): { pa
   let best: { page: number; text: string; kind: "clause excerpt" | "term mention"; score: number } | null = null;
   for (const source of sourcePages) {
     for (const match of source.text.matchAll(new RegExp(pattern.source, "gi"))) {
-      const start = Math.max(0, match.index - 65);
-      const end = Math.min(source.text.length, match.index + match[0].length + 175);
+      let start = Math.max(0, match.index - 65);
+      let end = Math.min(source.text.length, match.index + match[0].length + 175);
+      if (start > 0) while (start < match.index && /[^\s]/.test(source.text[start - 1])) start++;
+      if (end < source.text.length) while (end > match.index + match[0].length && /[^\s]/.test(source.text[end])) end--;
       const text = safeText(`${start ? "..." : ""}${source.text.slice(start, end)}${end < source.text.length ? "..." : ""}`);
       const operative = /\b(?:shall|must|may|equal to|calculated|defined as|waives?|completed within)\b/i.test(text)
         || (flag.code === "UNCAPPED_CAM" && /no express cap/i.test(text));
@@ -145,8 +147,8 @@ function leaseFacts(pages: NonNullable<AuditAnalysis["sourcePages"]>): LeaseFact
     if (!facts.area && area) facts.area = { value: Number(area[1].replace(/,/g, "")), unit: area[2] ? "rentable square feet" : "square feet", page: page.page };
     const fee = text.match(/management fee equal to.{0,45}?\((\d+(?:\.\d+)?)%\)/i);
     if (!facts.managementFee && fee) facts.managementFee = { value: Number(fee[1]), page: page.page };
-    const window = text.match(/completed within.{0,24}?\((\d+)\)\s+days of receipt of (?:the )?reconciliation|have\s+[a-z]+\s+\((\d+)\)\s+days after receipt of the reconciliation statement to dispute/i);
-    if (!facts.reviewDays && window) facts.reviewDays = { value: Number(window[1] ?? window[2]), page: page.page };
+    const window = text.match(/completed within.{0,24}?\((\d+)\)\s+days of receipt of (?:the )?reconciliation|have\s+[a-z]+\s+\((\d+)\)\s+days after receipt of the reconciliation statement to dispute|within\s+ninety\s*\((90)\)\s*days after receipt of a reconciliation statement/i);
+    if (!facts.reviewDays && window) facts.reviewDays = { value: Number(window[1] ?? window[2] ?? window[3]), page: page.page };
     const nnn = text.match(/estimated NNN charges for the first year are\s*\$([\d,]+)\s+per month|CAM\s*\/\s*NNN charges at approximately:\s*\$([\d,]+)\s+per month/i);
     if (!facts.nnnEstimate && nnn) facts.nnnEstimate = { value: Number((nnn[1] ?? nnn[2]).replace(/,/g, "")), page: page.page };
     const deposit = text.match(/security deposit.{0,100}?\$([\d,]+)/i);
@@ -264,7 +266,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
       : null;
   const deadlineMention = items.find(({ flag }) => flag.code === "AUDIT_WINDOW")?.match;
   const statementQuestions = analysis.reconciliation?.checks.filter((check) => check.status === "question") ?? [];
-  const statementPriority = ["Tenant share", "Monthly payment ledger", "Administrative fee"];
+  const statementPriority = ["Roof membrane replacement", "Tenant share", "Monthly payment ledger", "Administrative fee"];
   const firstStatementQuestions = [...statementQuestions].sort((a, b) =>
     (statementPriority.indexOf(a.label) < 0 ? 99 : statementPriority.indexOf(a.label))
     - (statementPriority.indexOf(b.label) < 0 ? 99 : statementPriority.indexOf(b.label)));
@@ -304,7 +306,7 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   addPage();
   page.drawText("YOUR LEASE,", { x: MARGIN, y, size: 27, font: bold, color: NAVY }); y -= 34;
   page.drawText("CLEARER NEXT STEPS.", { x: MARGIN, y, size: 27, font: bold, color: NAVY }); y -= 29;
-  lines("CAM / NNN language review  |  Prepared " + new Date().toISOString().slice(0, 10), MARGIN, 10, BLUE, bold); y -= 18;
+  lines("CAM / NNN language review  |  Prepared " + new Intl.DateTimeFormat("en-CA", { timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()), MARGIN, 10, BLUE, bold); y -= 18;
   page.drawRectangle({ x: MARGIN, y: y - 83, width: CONTENT, height: 83, color: LIGHT });
   y -= 24;
   page.drawText(analysis.reconciliation ? `${statementQuestions.length} statement question${statementQuestions.length === 1 ? "" : "s"} to verify` : `${items.length} review topic${items.length === 1 ? "" : "s"} found`, { x: MARGIN + 18, y, size: 20, font: bold, color: NAVY }); y -= 26;
@@ -335,6 +337,16 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
       const scenarios = analysis.reconciliation.scenarios;
       lines(`Illustrative charge questions: ${money(scenarios.shareOnly.difference)} from the share change alone${scenarios.selectedExclusions ? `; ${money(scenarios.selectedExclusions.difference)} with three selected categories removed` : ""}. These are not verified savings.`, MARGIN, 9, BLUE, bold); y -= 8;
     }
+    const largestExpenses = [...(analysis.reconciliation.worksheetRows ?? [])]
+      .filter((entry) => !["Tenant share", "Payment credits", "Controllable CAM cap"].includes(entry.category))
+      .sort((a, b) => b.amountBilled - a.amountBilled).slice(0, 3);
+    if (largestExpenses.length) {
+      page.drawText("LARGEST FLAGGED STATEMENT AMOUNTS", { x: MARGIN, y, size: 8, font: bold, color: TEAL }); y -= 17;
+      for (const entry of largestExpenses) {
+        lines(`${entry.category}: ${money(entry.amountBilled)} center-wide (statement p. ${entry.statementPage})`, MARGIN, 9, NAVY, font, CONTENT, 12); y -= 3;
+      }
+      lines("These amounts may overlap with share, fee, and cap questions; do not add them together.", MARGIN, 8.5, MUTED); y -= 8;
+    }
   } else if (priorityItems.length === 0) {
     lines("No page-supported expense rule was identified for this summary. Review the complete lease and billing records directly.", MARGIN, 10, NAVY); y -= 12;
   } else {
@@ -351,7 +363,44 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     lines(`- ${request}`, MARGIN, 9.5, NAVY, font, CONTENT, 13); y -= 6;
   }
   y -= 5;
-  lines(analysis.reconciliation ? "Statement checks are included later in this report. No recoverable amount has been verified." : "These are lease-text screening steps. No billed charge or recoverable amount has been verified.", MARGIN, 9, MUTED);
+  lines(analysis.reconciliation ? "Statement checks begin on the next page. No recoverable amount has been verified." : "These are lease-text screening steps. No billed charge or recoverable amount has been verified.", MARGIN, 9, MUTED);
+
+  if (analysis.reconciliation) {
+    const review = analysis.reconciliation;
+    addPage();
+    heading("Annual statement review");
+    lines(`Source: ${review.statementName}. This section compares extracted values with lease text and checks visible arithmetic. Confirm each cited page in the originals.`, MARGIN, 10, NAVY); y -= 12;
+    if (review.scenarios && review.statement.tenantCharge && review.statement.propertyTotal && review.leaseShare) {
+      heading("Illustrative bill scenarios");
+      lines(`Billed tenant charge: ${money(review.statement.tenantCharge.value)}. The center expense total of ${money(review.statement.propertyTotal.value)} is taken from the landlord statement and has not been verified.`, MARGIN, 9.5, NAVY); y -= 8;
+      lines(`Share only: applying the lease's ${review.leaseShare.value}% to that stated total produces ${money(review.scenarios.shareOnly.charge)}, a ${money(review.scenarios.shareOnly.difference)} difference from the billed charge.`, MARGIN, 9.5, NAVY); y -= 8;
+      if (review.scenarios.selectedExclusions) {
+        const scenario = review.scenarios.selectedExclusions;
+        lines(`Share plus selected exclusions: removing ${money(scenario.centerAmount)} of listed center charges for roof, lease-enforcement legal fees, and regional salary, then applying ${review.leaseShare.value}%, produces ${money(scenario.charge)}. The difference from the billed charge is ${money(scenario.difference)}.`, MARGIN, 9.5, NAVY); y -= 8;
+      }
+      if (review.scenarios.paymentCredit) {
+        const credit = review.scenarios.paymentCredit;
+        lines(`Separately, listed monthly payments exceed stated credits by ${money(credit.difference)}. Confirm these were actually paid; this amount is not added to either charge scenario.`, MARGIN, 9.5, NAVY); y -= 8;
+      }
+      if (review.scenarios.correctedScreen) {
+        const screen = review.scenarios.correctedScreen;
+        lines(`Combined conditional screen: after a ${money(screen.capLimit)} cap on covered CAM, selected exclusions, and an illustrative ${money(screen.amortizedCapital)} annual LED amortization, the center pool is ${money(screen.centerTotal)} and the tenant charge is ${money(screen.tenantCharge)}. With ${money(screen.listedPayments)} in listed payments, the alternate balance is ${money(screen.alternateBalance)}, ${money(screen.difference)} below the billed balance.`, MARGIN, 9.5, NAVY); y -= 8;
+        lines("The combined screen assumes all listed payments cleared, the full cap applies, and the LED project qualifies for a ten-year schedule. Confirm invoices, expense categories, the project schedule, and ledger. Differences across scenarios overlap and must not be added together. No refund is verified.", MARGIN, 9, MUTED); y -= 10;
+      } else {
+        lines("These are conditional comparisons, not a savings range or refund estimate. They assume the listed categories were fully included and do not recalculate the administrative fee, CAM cap, other exclusions, or payment history.", MARGIN, 9, MUTED); y -= 10;
+      }
+    }
+    for (const check of review.checks) {
+      ensure(100);
+      page.drawText(safeText(`${check.status.toUpperCase()}  /  ${check.label}`), { x: MARGIN, y, size: 10, font: bold, color: check.status === "question" ? BLUE : TEAL }); y -= 19;
+      lines(check.result, MARGIN + 12, 9.5, NAVY, font, CONTENT - 12, 14); y -= 13;
+    }
+    heading("Documents and limits");
+    lines(`Statement: ${review.statementName}. Supporting PDFs: ${review.supportNames.length ? review.supportNames.join(", ") : "none supplied"}.`, MARGIN, 9.5, NAVY); y -= 10;
+    for (const item of review.support) { ensure(45); lines(`${item.name}: text mentions ${item.signals.length ? item.signals.join(", ") : "no recognized record type"}. Presence does not verify the billed cost.`, MARGIN, 9.5, NAVY); y -= 8; }
+    lines("A percentage difference or arithmetic question is a lead for investigation, not a refund estimate. Check category-specific rules, rentable-area schedules, original invoices, credit history, and delivery dates before making a claim.", MARGIN, 9.5, MUTED);
+
+  }
 
   addPage();
   heading("Lease snapshot");
@@ -376,9 +425,12 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     if (!facts.baseRent && facts.firstYearMonthly) factRows.push({ label: "Stated first-year base rent", value: `$${facts.firstYearMonthly.value.toLocaleString()} per month`, page: facts.firstYearMonthly.page });
     if (facts.annualEscalation) factRows.push({ label: "Base-rent escalation", value: `${facts.annualEscalation.value}% fixed annual increase${facts.annualEscalation.compounded ? ", compounded annually" : ""}`, page: facts.annualEscalation.page });
     if (facts.tenantShare) factRows.push({ label: "Tenant's stated NNN share", value: `${facts.tenantShare.value}%`, page: facts.tenantShare.page });
+    if (analysis.reconciliation?.leaseShare && (!facts.tenantShare || facts.tenantShare.value !== analysis.reconciliation.leaseShare.value || facts.tenantShare.page !== analysis.reconciliation.leaseShare.page)) factRows.push({ label: "Tenant's current share", value: `${analysis.reconciliation.leaseShare.value}% per amendment or lease`, page: analysis.reconciliation.leaseShare.page });
     if (facts.noExpressCap) factRows.push({ label: "CAM / NNN increase cap", value: "No express cap stated in the extracted clause; confirm full lease and amendments", page: facts.noExpressCap.page });
     if (facts.camCap) factRows.push({ label: "CAM increase cap", value: `${facts.camCap.value}% annually for covered expenses${facts.camCap.exclusions.length ? `; excludes ${facts.camCap.exclusions.join(", ")}` : "; check listed exclusions"}`, page: facts.camCap.page });
+    if (!facts.camCap && analysis.reconciliation?.leaseTerms?.camCapMultiplier) factRows.push({ label: "Controllable CAM limit", value: `${analysis.reconciliation.leaseTerms.camCapMultiplier.value}% of prior-year covered CAM; confirm exclusions and base`, page: analysis.reconciliation.leaseTerms.camCapMultiplier.page });
     if (facts.managementFee) factRows.push({ label: "Management fee", value: `${facts.managementFee.value}% of Operating Expenses`, page: facts.managementFee.page });
+    if (analysis.reconciliation?.leaseTerms?.adminFeeRate) factRows.push({ label: "Amended administrative fee", value: `${analysis.reconciliation.leaseTerms.adminFeeRate.value}% of eligible CAM; confirm fee base`, page: analysis.reconciliation.leaseTerms.adminFeeRate.page });
     if (facts.reviewDays) factRows.push({ label: "Record-review window", value: `${facts.reviewDays.value} days after reconciliation receipt`, page: facts.reviewDays.page });
     if (facts.reconciliationDays) factRows.push({ label: "Annual statement timing", value: `Within ${facts.reconciliationDays.value} days after calendar year end`, page: facts.reconciliationDays.page });
     if (facts.auditNoticeDays) factRows.push({ label: "Audit notice", value: `${facts.auditNoticeDays.value} days' written notice required`, page: facts.auditNoticeDays.page });
@@ -445,6 +497,17 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
     lines(`REQUEST  ${review.request}`, x, 9.5, NAVY, font, CONTENT - 30, 14);
     y = top - cardHeight - 13;
   }
+  if (analysis.reconciliation) {
+    const leaseLinkedLabels = ["Administrative fee", "Controllable CAM cap", "Ownership-related assessment", "Portfolio umbrella premium", "Review notice window", "Audit cost shifting"];
+    const linked = analysis.reconciliation.checks.filter((check) => leaseLinkedLabels.includes(check.label));
+    if (linked.length) {
+      heading("Other lease terms tied to the statement");
+      for (const check of linked) {
+        ensure(75);
+        lines(`${check.label}: ${check.result}`, MARGIN, 9.5, NAVY); y -= 10;
+      }
+    }
+  }
 
   ensure(580);
   heading("Records to collect");
@@ -458,19 +521,20 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   ensure(420);
   heading("Billing reconciliation worksheet");
   lines(analysis.reconciliation?.worksheetRows?.length
-    ? "Selected rows are prefilled. Expense amounts are center-wide; share and credit rows are tenant amounts. Expense check amounts apply the extracted lease share. All checks are conditional and must not be added together."
+    ? "Selected rows are prefilled. Expense and cap amounts are center-wide; share and credit rows are tenant amounts. Exclusion check amounts apply the extracted lease share, while any cap variance is center-wide. All checks are conditional and must not be added together."
     : "Use one row per charge category and year. A positive difference is only a question to investigate until the lease basis and records are confirmed."); y -= 16;
   const cols = [MARGIN, MARGIN + 128, MARGIN + 258, MARGIN + 375, WIDTH - MARGIN];
   const headers = ["CATEGORY / YEAR", "AMOUNT BILLED", "LEASE BASIS", "CHECK AMOUNT"];
   const accountingItems = items.filter(({ flag }) => !["AUDIT_WINDOW", "WAIVER_CLAIMS", "NO_RECONCILIATION"].includes(flag.code ?? ""));
-  const worksheetPriority = ["Tenant share", "Payment credits", "Roof membrane replacement", "Lease enforcement legal fees", "Regional management salary"];
+  const worksheetPriority = ["Roof membrane replacement", "Tenant share", "Payment credits", "Administrative fee", "Controllable CAM cap", "Lease enforcement legal fees", "Regional management salary"];
   const selectedRows = [...(analysis.reconciliation?.worksheetRows ?? [])].sort((a, b) =>
     (worksheetPriority.indexOf(a.category) < 0 ? 99 : worksheetPriority.indexOf(a.category))
-    - (worksheetPriority.indexOf(b.category) < 0 ? 99 : worksheetPriority.indexOf(b.category))).slice(0, 5);
+    - (worksheetPriority.indexOf(b.category) < 0 ? 99 : worksheetPriority.indexOf(b.category)));
   page.drawRectangle({ x: MARGIN, y: y - 31, width: CONTENT, height: 31, color: NAVY });
   headers.forEach((h, i) => page.drawText(h, { x: cols[i] + 6, y: y - 20, size: 7.5, font: bold, color: WHITE }));
   y -= 31;
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < (analysis.reconciliation ? selectedRows.length : 5); i++) {
+    ensure(42);
     page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: i % 2 ? WHITE : LIGHT });
     cols.slice(1, 4).forEach((x) => page.drawLine({ start: { x, y }, end: { x, y: y - 36 }, thickness: 0.5, color: MUTED }));
     if (selectedRows[i]) {
@@ -503,33 +567,6 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
 
   if (analysis.reconciliation) {
     const review = analysis.reconciliation;
-    addPage();
-    heading("Annual statement review");
-    lines(`Source: ${review.statementName}. This section compares extracted values with lease text and checks visible arithmetic. Confirm each cited page in the originals.`, MARGIN, 10, NAVY); y -= 12;
-    if (review.scenarios && review.statement.tenantCharge && review.statement.propertyTotal && review.leaseShare) {
-      heading("Illustrative bill scenarios");
-      lines(`Billed tenant charge: ${money(review.statement.tenantCharge.value)}. The center expense total of ${money(review.statement.propertyTotal.value)} is taken from the landlord statement and has not been verified.`, MARGIN, 9.5, NAVY); y -= 8;
-      lines(`Share only: applying the lease's ${review.leaseShare.value}% to that stated total produces ${money(review.scenarios.shareOnly.charge)}, a ${money(review.scenarios.shareOnly.difference)} difference from the billed charge.`, MARGIN, 9.5, NAVY); y -= 8;
-      if (review.scenarios.selectedExclusions) {
-        const scenario = review.scenarios.selectedExclusions;
-        lines(`Share plus selected exclusions: removing ${money(scenario.centerAmount)} of listed center charges for roof, lease-enforcement legal fees, and regional salary, then applying ${review.leaseShare.value}%, produces ${money(scenario.charge)}. The difference from the billed charge is ${money(scenario.difference)}.`, MARGIN, 9.5, NAVY); y -= 8;
-      }
-      if (review.scenarios.paymentCredit) {
-        const credit = review.scenarios.paymentCredit;
-        lines(`Separately, listed monthly payments exceed stated credits by ${money(credit.difference)}. Confirm these were actually paid; this amount is not added to either charge scenario.`, MARGIN, 9.5, NAVY); y -= 8;
-      }
-      lines("These are conditional comparisons, not a savings range or refund estimate. They assume the listed categories were fully included and do not recalculate the administrative fee, CAM cap, other exclusions, or payment history.", MARGIN, 9, MUTED); y -= 10;
-    }
-    for (const check of review.checks) {
-      ensure(100);
-      page.drawText(safeText(`${check.status.toUpperCase()}  /  ${check.label}`), { x: MARGIN, y, size: 10, font: bold, color: check.status === "question" ? BLUE : TEAL }); y -= 19;
-      lines(check.result, MARGIN + 12, 9.5, NAVY, font, CONTENT - 12, 14); y -= 13;
-    }
-    heading("Documents and limits");
-    lines(`Statement: ${review.statementName}. Supporting PDFs: ${review.supportNames.length ? review.supportNames.join(", ") : "none supplied"}.`, MARGIN, 9.5, NAVY); y -= 10;
-    for (const item of review.support) { ensure(45); lines(`${item.name}: text mentions ${item.signals.length ? item.signals.join(", ") : "no recognized record type"}. Presence does not verify the billed cost.`, MARGIN, 9.5, NAVY); y -= 8; }
-    lines("A percentage difference or arithmetic question is a lead for investigation, not a refund estimate. Check category-specific rules, rentable-area schedules, original invoices, credit history, and delivery dates before making a claim.", MARGIN, 9.5, MUTED);
-
     addPage();
     heading("Draft records request for review");
     lines("Customize this letter before sending. Confirm the actual statement receipt date, the signed lease and amendments, the notice address, and the required delivery method. Email alone may not satisfy the lease's formal notice clause.", MARGIN, 10, BLUE, bold); y -= 20;

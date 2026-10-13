@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s | SaveOnLease",
   },
   description:
-    "Identify CAM and NNN overcharges in commercial leases with a clear, tenant-first audit and estimated exposure.",
+    "Review CAM and NNN charges against your commercial lease, with document-backed questions and conditional bill comparisons where records allow.",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",

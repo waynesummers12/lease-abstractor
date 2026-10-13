@@ -89,7 +89,7 @@ export default function LeaseScorePage() {
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-gray-300">
           Upload your commercial lease and receive a tenant-first CAM & NNN audit
-          with clear findings, risk indicators, and estimated exposure.
+          with clear questions, risk indicators, and conditional bill comparisons when the documents support them.
         </p>
 
         <Link

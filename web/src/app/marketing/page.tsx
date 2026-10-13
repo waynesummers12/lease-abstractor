@@ -44,7 +44,7 @@ export default function MarketingHomePage() {
             </ul>
             <Link href="/marketing/pricing" className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">See the current offer →</Link>
           </article>
-          <article className="rounded-3xl border border-emerald-200 bg-emerald-50 p-7 sm:p-9">
+          <article id="statement-review" className="scroll-mt-24 rounded-3xl border border-emerald-200 bg-emerald-50 p-7 sm:p-9">
             <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Included at the same price</p>
             <h2 className="mt-3 text-2xl font-semibold text-slate-950">Lease + Annual Statement Review</h2>
             <p className="mt-2 text-sm font-semibold text-slate-700">$49.99 one-time · Optional statement and records</p>

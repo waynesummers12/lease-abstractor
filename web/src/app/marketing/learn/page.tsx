@@ -550,7 +550,7 @@ export default function LearnPage() {
         </h3>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-700">
           Upload your commercial lease and receive a tenant-first CAM & NNN audit
-          with clear findings and estimated exposure.
+          with clear questions and conditional bill comparisons when the documents support them.
         </p>
         <Link
           href="/app/step-1-upload"

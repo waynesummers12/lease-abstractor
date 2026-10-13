@@ -132,7 +132,7 @@ export default function CamNnnOverchargesPage() {
         </h3>
         <p className="mx-auto mt-4 max-w-xl text-gray-700">
           Upload your lease and receive a tenant-first CAM & NNN audit with clear
-          findings and estimated exposure before audit deadlines close.
+          questions and conditional bill comparisons before audit deadlines close.
         </p>
         <Link
           href="/app/step-1-upload"
