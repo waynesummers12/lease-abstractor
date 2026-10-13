@@ -1,34 +1,13 @@
 "use client";
 
-/**
- * CLIENT COMPONENT — SAVEONLEASE V1 (LOCKED)
- *
- * Rules:
- * - Client-side only
- * - No Supabase imports
- * - No Stripe imports
- * - No server-only logic
- * - No process.env (except NEXT_PUBLIC_*)
- *
- * Allowed:
- * - fetch("/api/...")
- * - useState / useEffect / useRouter
- * - window.location
- *
- * Violation = production regression
- */
-
-
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { portfolioFetch } from "@/lib/portfolioFetch";
-
-/* ================== TYPES ================== */
+import { authenticatedPortfolioFetch } from "@/lib/portfolioFetch";
+import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 
 type Lease = {
   id: string;
-  created_at: string;
   property_name: string | null;
   landlord: string | null;
   square_feet: number | null;
@@ -36,998 +15,302 @@ type Lease = {
   renewal_date: string | null;
 };
 
-/* ================== HELPERS ================== */
+type Audit = {
+  id: string;
+  completed_at: string | null;
+  analysis: { tenant?: string | null; property_name?: string | null } | null;
+};
 
-function getRenewalRiskScore(lease: Lease | null): number | null {
-  if (!lease || !lease.renewal_date) return null;
+const sampleName = /^(?:1sample-commercial-lease|📄\s*sample complex commercial lease)$/i;
 
-  const renewal = new Date(lease.renewal_date);
-  const today = new Date();
-  const diffMs = renewal.getTime() - today.getTime();
-  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-  if (daysRemaining <= 0) return 100;        // expired
-  if (daysRemaining <= 30) return 90;
-  if (daysRemaining <= 60) return 75;
-  if (daysRemaining <= 90) return 60;
-  if (daysRemaining <= 180) return 40;
-  return 10;                                 // low risk
+function isSampleLease(lease: Lease) {
+  return sampleName.test((lease.property_name ?? "").trim());
 }
 
-function StatusChips() {
-  return (
-    <div className="flex gap-2">
-      <span className="rounded bg-gray-100 px-2 py-1 text-xs">
-        Paid
-      </span>
-    </div>
-  );
+function dateLabel(value: string | null) {
+  if (!value) return "Date not saved";
+  const date = new Date(`${value.slice(0, 10)}T12:00:00`);
+  return Number.isNaN(date.getTime())
+    ? "Date not saved"
+    : date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 }
 
-/* ================== PAGE ================== */
+function timingLabel(days: number | null) {
+  if (days === null) return "Add a renewal date";
+  if (days < 0) return "Saved date passed";
+  if (days === 0) return "Saved date is today";
+  return `${days} days away`;
+}
+
+function Arrow({ diagonal = false }: { diagonal?: boolean }) {
+  return <span aria-hidden="true">{diagonal ? "↗" : "→"}</span>;
+}
 
 export default function DashboardPage() {
-  const { loading: authLoading } = useAuth();
-  const [audits, setAudits] = useState<Lease[]>([]);
-  const [selected, setSelected] = useState<Lease | null>(null);
+  const { session, loading: authLoading } = useAuth();
+  const userId = session?.user.id;
+  const [leases, setLeases] = useState<Lease[]>([]);
+  const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortMode, setSortMode] = useState<"risk" | "renewal" | "name">("risk");
-  const [activeMonth, setActiveMonth] = useState<string | null>(null);
-  const [showPaywall, setShowPaywall] = useState(false);
-
-  const upcomingRenewals = audits.filter((lease) => {
-    if (!lease.renewal_date) return false;
-
-    const renewal = new Date(lease.renewal_date);
-    const today = new Date();
-    const diffMs = renewal.getTime() - today.getTime();
-    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    return daysRemaining > 0 && daysRemaining <= 180;
-  }).length;
-
-  const expiredLeases = audits.filter((lease) => {
-    if (!lease.renewal_date) return false;
-
-    const renewal = new Date(lease.renewal_date);
-    const today = new Date();
-    const diffMs = renewal.getTime() - today.getTime();
-    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    return daysRemaining <= 0;
-  }).length;
-
-  const urgentRenewals = audits.filter((lease) => {
-    if (!lease.renewal_date) return false;
-
-    const renewal = new Date(lease.renewal_date);
-    const today = new Date();
-    const diffMs = renewal.getTime() - today.getTime();
-    const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    return daysRemaining > 0 && daysRemaining <= 90;
-  }).length;
-
-  const riskScores = audits
-    .map((lease) => getRenewalRiskScore(lease))
-    .filter((score): score is number => score !== null);
-
-  const averageRiskScore =
-    riskScores.length > 0
-      ? Math.round(
-          riskScores.reduce((sum, score) => sum + score, 0) /
-            riskScores.length
-        )
-      : 0;
-
-  const totalAtRiskSquareFootage = audits
-    .filter((lease) => {
-      const risk = getRenewalRiskScore(lease);
-      return risk !== null && risk >= 60; // warning + urgent
-    })
-    .reduce((sum, lease) => {
-      return sum + (lease.square_feet ?? 0);
-    }, 0);
-
-  // Pricing trigger logic
-  const showPremiumCTA = averageRiskScore >= 60 || urgentRenewals > 0;
-  const selectedRisk = selected ? getRenewalRiskScore(selected) : null;
-
-  // Build 12-month renewal timeline
-  const today = new Date();
-  const timelineMonths = Array.from({ length: 12 }).map((_, i) => {
-    // ensures newest/highest activity month auto-focus later
-    const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
-    const label = d.toLocaleString("default", { month: "short", year: "numeric" });
-
-    const count = audits.filter((lease) => {
-      if (!lease.renewal_date) return false;
-      const r = new Date(lease.renewal_date);
-      return r.getFullYear() === d.getFullYear() && r.getMonth() === d.getMonth();
-    }).length;
-
-    return { label, count };
-  });
+  const [leaseError, setLeaseError] = useState(false);
+  const [auditError, setAuditError] = useState(false);
+  const [showSamples, setShowSamples] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
+    if (authLoading || !userId) return;
+    let active = true;
 
-    async function loadLeases() {
-      try {
-        const res = await portfolioFetch({
-          cache: "no-store",
-        });
+    Promise.allSettled([
+      authenticatedPortfolioFetch("/api/portfolio-leases"),
+      authenticatedPortfolioFetch("/api/portfolio-audits"),
+    ]).then(async ([leaseResult, auditResult]) => {
+      if (!active) return;
+      if (leaseResult.status === "fulfilled" && leaseResult.value.ok) {
+        const data = await leaseResult.value.json().catch(() => null);
+        if (active && Array.isArray(data?.leases)) setLeases(data.leases);
+        else if (active) setLeaseError(true);
+      } else setLeaseError(true);
 
-        if (!res.ok) return;
-
-        const json = await res.json();
-
-        if (!cancelled && json?.leases) {
-          setAudits(json.leases);
-
-          // Auto-select highest urgency lease (highest risk first, then nearest renewal)
-          const sortedByUrgency = [...json.leases].sort((a, b) => {
-            const riskA = getRenewalRiskScore(a) ?? -1;
-            const riskB = getRenewalRiskScore(b) ?? -1;
-
-            if (riskA !== riskB) return riskB - riskA;
-
-            if (a.renewal_date && b.renewal_date) {
-              return (
-                new Date(a.renewal_date).getTime() -
-                new Date(b.renewal_date).getTime()
-              );
-            }
-
-            return 0;
-          });
-
-          setSelected(sortedByUrgency[0] ?? null);
-        }
-      } catch (err) {
-        console.error("Dashboard load failed:", err);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    loadLeases();
-    // Auto-scroll to first active month with leases (improved horizontal focus)
-    setTimeout(() => {
-      const container = document.querySelector(".timeline-scroll");
-      const el = document.querySelector("[data-has-renewals='true']");
-
-      if (container && el) {
-        const containerEl = container as HTMLElement;
-        const targetEl = el as HTMLElement;
-
-        const offset =
-          targetEl.offsetLeft -
-          containerEl.offsetWidth / 2 +
-          targetEl.offsetWidth / 2;
-
-        containerEl.scrollTo({
-          left: offset,
-          behavior: "smooth",
-        });
-      }
-    }, 250);
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  /* Auto-effect for month filtering */
-  useEffect(() => {
-    if (!activeMonth) return;
-
-    // Auto-select first lease in filtered set
-    const first = audits.find((lease) => {
-      if (!lease.renewal_date) return false;
-
-      const r = new Date(lease.renewal_date);
-      const label = r.toLocaleString("default", {
-        month: "short",
-        year: "numeric",
-      });
-
-      return label === activeMonth;
+      if (auditResult.status === "fulfilled" && auditResult.value.ok) {
+        const data = await auditResult.value.json().catch(() => null);
+        if (active && Array.isArray(data?.audits)) setAudits(data.audits);
+        else if (active) setAuditError(true);
+      } else setAuditError(true);
+    }).finally(() => {
+      if (active) setLoading(false);
     });
 
-    if (first) setSelected(first);
+    return () => { active = false; };
+  }, [authLoading, userId]);
 
-    // Scroll list into view
-    setTimeout(() => {
-      const el = document.getElementById("lease-list");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
-  }, [activeMonth, audits]);
+  const realLeases = useMemo(() => leases.filter((lease) => !isSampleLease(lease)), [leases]);
+  const sampleLeases = useMemo(() => leases.filter(isSampleLease), [leases]);
+  const datedLeases = useMemo(() => realLeases.map((lease) => ({
+    lease,
+    days: daysUntilSavedDate(lease.renewal_date),
+  })).sort((a, b) => (a.days ?? Infinity) - (b.days ?? Infinity)), [realLeases]);
+  const upcoming = datedLeases.filter(({ days }) => days !== null && days >= 0 && days <= 180);
+  const needsDates = datedLeases.filter(({ days }) => days === null).length;
+  const recentAudits = useMemo(() => [...audits].sort((a, b) =>
+    (b.completed_at ?? "").localeCompare(a.completed_at ?? "")
+  ).slice(0, 3), [audits]);
+  const nextLease = upcoming[0] ?? datedLeases.find(({ days }) => days === null) ?? datedLeases[0];
 
-  /* ---------------- LOADING ---------------- */
+  const months = useMemo(() => {
+    const now = new Date();
+    return Array.from({ length: 6 }, (_, index) => {
+      const date = new Date(now.getFullYear(), now.getMonth() + index, 1);
+      const count = realLeases.filter((lease) => {
+        if (!lease.renewal_date) return false;
+        const saved = lease.renewal_date.slice(0, 7);
+        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+        return saved === month;
+      }).length;
+      return { label: date.toLocaleDateString(undefined, { month: "short" }), count };
+    });
+  }, [realLeases]);
 
   if (authLoading || loading) {
-    return <div className="p-6">Loading your dashboard…</div>;
+    return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
   }
 
-  /* ---------------- EMPTY STATE ---------------- */
-
-  if (!audits.length) {
-    return (
-      <div className="p-6">
-        <h1 className="mb-2 text-2xl font-semibold">
-          No audits yet
-        </h1>
-        <p className="mb-4 text-gray-600">
-          Upload a lease to manage it, or run a full audit to uncover hidden costs.
-        </p>
-        <div className="flex gap-3">
-          <Link
-            href="/product/app/add-lease"
-            className="inline-block rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
-          >
-            Add Lease
-          </Link>
-          <Link
-            href="/app/step-1-upload"
-            className="inline-block rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-          >
-            Run Audit (Free Preview)
-          </Link>
+  return (
+    <main className="min-h-screen bg-[#f5f7f3] text-[#122c25]">
+      <div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
+        <div className="mb-7 flex flex-wrap items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#557466]">
+          <span>SaveOnLease / Your workspace</span>
+          <span className="rounded-full border border-[#d4e5d9] bg-white px-3 py-1.5 text-[10px] tracking-[0.12em]">Your documents, your next steps</span>
         </div>
-      </div>
-    );
-  }
 
-/* ---------------- MAIN UI ---------------- */
-
-const filteredLeases = activeMonth
-  ? audits.filter((lease) => {
-      if (!lease.renewal_date) return false;
-      const r = new Date(lease.renewal_date);
-      const label = r.toLocaleString("default", {
-        month: "short",
-        year: "numeric",
-      });
-      return label === activeMonth;
-    })
-  : audits;
-
-const sortedLeases = [...filteredLeases].sort((a, b) => {
-  if (sortMode === "risk") {
-    const riskA = getRenewalRiskScore(a) ?? -1;
-    const riskB = getRenewalRiskScore(b) ?? -1;
-
-    if (riskA !== riskB) return riskB - riskA;
-
-    if (a.renewal_date && b.renewal_date) {
-      return (
-        new Date(a.renewal_date).getTime() -
-        new Date(b.renewal_date).getTime()
-      );
-    }
-
-    return 0;
-  }
-
-  if (sortMode === "renewal") {
-    if (a.renewal_date && b.renewal_date) {
-      return (
-        new Date(a.renewal_date).getTime() -
-        new Date(b.renewal_date).getTime()
-      );
-    }
-    return 0;
-  }
-
-  if (sortMode === "name") {
-    const nameA = a.property_name ?? "";
-    const nameB = b.property_name ?? "";
-    return nameA.localeCompare(nameB);
-  }
-
-  return 0;
-});
-
-return (
-  <div className="min-h-screen bg-white">
-    <div className="p-5 lg:p-6 space-y-6 pb-20">
-      {/* HEADER — DETAIL */}
-      <div className="flex items-center justify-between">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Portfolio Dashboard</h1>
-        <p className="text-[13px] text-gray-600 mt-1">
-          Monitor renewal dates, prioritize action, and run lease audits.
-        </p>
-      </div>
-      <button
-        onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
-        className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-      >
-        {showPremiumCTA ? "Unlock Full Audit →" : "Run Lease Audit →"}
-      </button>
-    </div>
-{/* PORTFOLIO RENEWAL HERO */}
-<div className="rounded-xl border border-green-200 bg-green-50 p-5 flex items-center justify-between shadow-sm">
-  <div>
-    <div className="text-[12px] text-green-700 uppercase tracking-wide">Upcoming Renewals</div>
-    <div className="text-2xl font-semibold text-green-900">{upcomingRenewals}</div>
-    <div className="text-[12px] text-green-700 mt-1">Based on lease renewal dates</div>
-  </div>
-
-  <button
-    onClick={() =>
-      showPremiumCTA
-        ? setShowPaywall(true)
-        : (window.location.href = "/app/step-1-upload")
-    }
-    className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700"
-  >
-    Review Lease →
-  </button>
-</div>
-
-{/* CALENDAR TIMELINE — HERO */}
-<div className="rounded-xl border border-gray-200 bg-white p-6 lg:p-8 shadow-sm w-full mb-2">
-  <div className="flex items-center justify-between mb-5">
-    <div>
-      <div className="text-[11px] text-gray-500 uppercase tracking-wide">
-        Renewal Timeline
-      </div>
-      <div className="text-lg font-semibold">
-        Next 12 Months
-      </div>
-    </div>
-
-    {activeMonth && (
-      <button
-        onClick={() => setActiveMonth(null)}
-        className="text-xs text-gray-500 hover:text-black"
-      >
-        Clear filter
-      </button>
-    )}
-  </div>
-
-  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full pt-2">
-    {timelineMonths.map((m) => {
-      const intensity =
-        m.count >= 5
-          ? "bg-red-100 text-red-900"
-          : m.count >= 3
-          ? "bg-yellow-100 text-yellow-900"
-          : "bg-gray-100 text-gray-800";
-
-      return (
-        <div
-          key={m.label}
-          onClick={() =>
-            setActiveMonth(activeMonth === m.label ? null : m.label)
-          }
-          data-has-renewals={m.count > 0 ? "true" : "false"}
-          className={`rounded-xl h-[140px] flex flex-col justify-center p-5 text-center cursor-pointer border transition-all duration-200 shadow-sm hover:shadow-md ${
-            activeMonth === m.label
-              ? "border-black ring-2 ring-black"
-              : "border-gray-200"
-          } ${intensity}`}
-        >
-          <div className="text-sm font-medium tracking-tight">
-            {m.label}
-          </div>
-
-          <div className="mt-2 text-2xl font-semibold">
-            {m.count}
-          </div>
-
-          <div className="text-xs mt-1 opacity-80">
-            renewals
-          </div>
-
-          {/* INLINE SAVINGS PREVIEW */}
-          {m.count > 0 && (
-            <div className="mt-3 text-[11px] font-medium text-green-700">
-              ${Math.round(m.count * 3500).toLocaleString()}+
-            </div>
-          )}
-
-          {m.count > 0 && (
-            <div className="text-[10px] text-gray-500">
-              potential savings
-            </div>
-          )}
-        </div>
-      );
-    })}
-  </div>
-
-  {/* CONVERSION BANNER */}
-  <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-5 py-4 flex items-center justify-between">
-    <div>
-      <div className="text-sm font-semibold text-red-900">
-        {urgentRenewals > 0
-          ? `${urgentRenewals} leases need immediate attention`
-          : "Stay ahead of renewal risk"}
-      </div>
-      <div className="text-xs text-red-700">
-        Audit now to uncover hidden costs and strengthen negotiation leverage.
-      </div>
-    </div>
-
-    <button
-      onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
-      className="rounded bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-700"
-    >
-      {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit Now"}
-    </button>
-  </div>
-</div>
-    {/* DASHBOARD SUMMARY — BAR STYLE */}
-    <div className="space-y-3 mb-6">
-          {[
-            {
-              label: "Expired Leases",
-              value: expiredLeases,
-              color: "bg-red-500",
-            },
-            {
-              label: "Urgent Renewals (≤ 90 days)",
-              value: urgentRenewals,
-              color: "bg-orange-500",
-            },
-            {
-              label: "Upcoming Renewals (≤ 180 days)",
-              value: upcomingRenewals,
-              color: "bg-yellow-500",
-            },
-            {
-              label: "Average Risk Score",
-              value: averageRiskScore,
-              suffix: "/100",
-              color: "bg-purple-500",
-              max: 100,
-            },
-            {
-              label: "At-Risk Square Footage",
-              value: totalAtRiskSquareFootage,
-              color: "bg-blue-500",
-            },
-            {
-              label: "Total Leases",
-              value: audits.length,
-              color: "bg-gray-800",
-            },
-          ].map((item) => {
-            const max =
-              item.max ??
-              Math.max(
-                expiredLeases,
-                urgentRenewals,
-                upcomingRenewals,
-                audits.length,
-                1
-              );
-
-            const percent =
-              max > 0 ? Math.min((item.value / max) * 100, 100) : 0;
-
-            return (
-              <div key={item.label}>
-                <div className="flex justify-between text-[13px] mb-1">
-                  <span className="text-gray-600">{item.label}</span>
-                  <span className="font-semibold">
-                    {item.value.toLocaleString()}
-                    {item.suffix ?? ""}
-                  </span>
-                </div>
-
-                <div className="h-2.5 w-full bg-gray-100 rounded-full">
-                  <div
-                    className={`h-2.5 rounded-full ${item.color} transition-all duration-500`}
-                    style={{ width: `${percent}%` }}
-                  />
-                </div>
+        <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] px-6 py-8 text-white shadow-[0_22px_70px_rgba(16,44,37,0.16)] sm:px-10 sm:py-11 lg:px-14">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-52 h-[520px] w-[520px] rounded-full border border-white/10" />
+          <div aria-hidden="true" className="pointer-events-none absolute right-10 -top-32 h-[440px] w-[440px] rounded-full border border-white/10" />
+          <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] lg:items-end">
+            <div>
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[#a9e9be]">Your lease command center</p>
+              <h1 className="max-w-[800px] text-4xl font-semibold leading-[1.06] tracking-[-0.045em] sm:text-5xl lg:text-6xl">
+                Know what&apos;s next for <span className="text-[#a9e9be]">every lease.</span>
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#d9e9df]">
+                Keep your lease dates, reports, and follow-up questions together. Start with a free lease preview, then add a statement when you&apos;re ready to compare the bill.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/app/step-1-upload" className="inline-flex items-center gap-3 rounded-xl bg-[#a9e9be] px-5 py-3.5 text-sm font-semibold text-[#102c25] transition hover:-translate-y-0.5 hover:bg-[#c7f4d5]">
+                  Start a free lease preview <Arrow />
+                </Link>
+                <Link href="/product/app/add-lease" className="inline-flex items-center gap-3 rounded-xl border border-white/30 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                  Add a lease to track <Arrow />
+                </Link>
               </div>
-            );
-          })}
-        </div>
-
-
-
-        {/* PLATFORM NAVIGATION */}
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/product/app/leases"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            View All Leases
-          </Link>
-          <Link
-            href="/product/app/portfolio"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            Portfolio Overview
-          </Link>
-          <Link
-            href="/product/app/add-lease"
-            className="rounded border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
-          >
-            Add Lease (No Audit)
-          </Link>
-          <button
-            onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
-            className="rounded bg-black px-3 py-2 text-sm text-white"
-          >
-            Run Audit (Free Preview)
-          </button>
-        </div>
-</div>
-
-
-      {/* NEXT BEST ACTION — REVENUE DRIVER */}
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 flex items-center justify-between shadow-sm">
-        <div>
-          <div className="text-sm font-semibold">
-            {selected?.property_name
-              ? `Run an audit for ${selected.property_name}`
-              : "Run your first lease audit"}
-          </div>
-          <div className="text-xs text-gray-600">
-            Identify CAM overcharges, admin fee padding, and negotiation leverage in minutes.
-          </div>
-        </div>
-
-        <div className="flex gap-2">
-          <Link
-            href="/product/app/add-lease"
-            className="rounded border border-gray-300 px-3 py-2 text-xs hover:bg-gray-100"
-          >
-            Add Lease
-          </Link>
-          <button
-            onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
-            className="rounded bg-black px-3 py-2 text-xs text-white hover:bg-gray-800"
-          >
-            {showPremiumCTA ? "Unlock Full Audit →" : "Run Audit →"}
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LEFT — HISTORY */}
-<aside id="lease-list" className="border-r border-gray-200 pr-5">
-  <h2 className="mb-1 text-base font-semibold">
-    {activeMonth ? `${activeMonth} Renewals` : "Your Leases"}
-  </h2>
-
-  {activeMonth && (
-    <div className="text-[11px] text-gray-500 mb-2">
-      Showing leases expiring this month
-    </div>
-  )}
-  <div className="mb-3 flex gap-1.5 text-[11.5px]">
-          <button
-            onClick={() => setSortMode("risk")}
-            className={`rounded px-2 py-[2px] border ${
-              sortMode === "risk"
-                ? "bg-black text-white"
-                : "bg-white hover:bg-gray-100"
-            }`}
-          >
-            Risk
-          </button>
-
-          <button
-            onClick={() => setSortMode("renewal")}
-            className={`rounded px-2 py-[2px] border ${
-              sortMode === "renewal"
-                ? "bg-black text-white"
-                : "bg-white hover:bg-gray-100"
-            }`}
-          >
-            Renewal Date
-          </button>
-
-          <button
-            onClick={() => setSortMode("name")}
-            className={`rounded px-2 py-[2px] border ${
-              sortMode === "name"
-                ? "bg-black text-white"
-                : "bg-white hover:bg-gray-100"
-            }`}
-          >
-            Name
-          </button>
-        </div>
-
-        <div className="mb-3 text-[11px] text-gray-600 flex items-center justify-between">
-          <span>Click any lease to preview savings</span>
-          <button
-            onClick={() =>
-              showPremiumCTA
-                ? setShowPaywall(true)
-                : (window.location.href = "/app/step-1-upload")
-            }
-            className="text-blue-600 hover:underline"
-          >
-            Run audit →
-          </button>
-        </div>
-
-        <ul className="space-y-1.5">
-          {sortedLeases.map((audit) => {
-            let tooltip = "";
-
-            if (audit.renewal_date) {
-              const renewal = new Date(audit.renewal_date);
-              const today = new Date();
-              const diffMs = renewal.getTime() - today.getTime();
-              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-              if (daysRemaining <= 0) {
-                tooltip = "Lease expired";
-              } else if (daysRemaining <= 30) {
-                tooltip = "Critical Renewal Window";
-              } else {
-                tooltip = `Renewal in ${daysRemaining} days`;
-              }
-            }
-
-            const renewalInfo = (() => {
-              if (!audit.renewal_date) return { show: false, pulse: false };
-
-              const renewal = new Date(audit.renewal_date);
-              const today = new Date();
-              const diffMs = renewal.getTime() - today.getTime();
-              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-              return {
-                show: daysRemaining <= 90,
-                pulse: daysRemaining <= 30,
-              };
-            })();
-
-            return (
-              <li
-                key={audit.id}
-                onClick={() => {
-                  setSelected(audit);
-
-                  const isTop = getRenewalRiskScore(audit) !== null && getRenewalRiskScore(audit)! >= 90;
-
-                  if (isTop && showPremiumCTA) {
-                    setTimeout(() => setShowPaywall(true), 300);
-                  }
-                }}
-                title={tooltip}
-                className={`cursor-pointer rounded-md px-3 py-2 text-[12.5px] transition-all duration-150 ease-in-out transform border-l-4 ${
-                  (() => {
-                    const risk = getRenewalRiskScore(audit);
-                    if (risk === null) return "border-gray-200";
-                    if (risk >= 90) return "border-red-600";
-                    if (risk >= 75) return "border-orange-500";
-                    if (risk >= 60) return "border-yellow-400";
-                    return "border-green-400";
-                  })()
-                } ${
-                  selected?.id === audit.id
-                    ? "bg-gray-200 scale-[1.01] shadow-sm"
-                    : "hover:bg-gray-100 hover:scale-[1.01] hover:shadow-sm"
-                } ${
-                  getRenewalRiskScore(audit) !== null && getRenewalRiskScore(audit)! >= 90
-                    ? "ring-1 ring-green-400"
-                    : ""
-                }`}
-              >
-                <div className="flex items-center gap-1.5 font-medium leading-tight">
-                  {renewalInfo.show && (
-                    <span
-                      className={`inline-block h-2 w-2 rounded-full bg-red-600 ${
-                        renewalInfo.pulse ? "animate-pulse opacity-80" : ""
-                      }`}
-                    />
-                  )}
-                  {audit.property_name ?? "Unnamed Lease"}
-                </div>
-
-                <div className="text-[11px] text-green-700 font-medium">
-                  Renewal date: {audit.renewal_date ? new Date(audit.renewal_date).toLocaleDateString() : "Not recorded"}
-                </div>
-                <div className="text-[10px] text-blue-600 mt-1">Run audit →</div>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3 text-[11px] space-y-1">
-          <div className="font-medium text-gray-800">
-            Audit Review
-          </div>
-          <div className="text-gray-600">
-            • Lease-specific findings
-          </div>
-          <div className="text-gray-600">
-            • Review findings against your lease and billing records
-          </div>
-          <div className="text-gray-600">
-            • Verify against billing records
-          </div>
-        </div>
-      </aside>
-
-      {/* RIGHT — DETAIL */}
-      <div className="lg:col-span-2 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold">
-              Lease Overview
-            </h1>
-          </div>
-          {selected && (
-            <div className="flex items-center gap-2">
-              <Link
-                href={`/product/app/leases/${encodeURIComponent(selected.id)}`}
-                className="text-sm font-medium text-black hover:underline"
-              >
-                Open Lease Details →
+            </div>
+            <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm sm:p-6">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#a9e9be]">Your next useful step</p>
+              <h2 className="mt-4 text-xl font-semibold leading-snug">
+                {nextLease ? nextLease.lease.property_name || "Review your saved lease" : audits.length > 0 ? "Return to your latest report" : "Add your first real lease"}
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-[#d9e9df]">
+                {nextLease
+                  ? nextLease.days === null
+                    ? "Add a renewal date so this lease can appear in your timeline."
+                    : `Saved renewal date: ${dateLabel(nextLease.lease.renewal_date)}. Confirm any notice deadlines in the lease.`
+                  : audits.length > 0
+                    ? "Your completed review is ready whenever you need to revisit its questions and source pages."
+                    : "Save the property and its renewal date to create a useful workspace."}
+              </p>
+              <Link href={nextLease ? `/product/app/leases/${encodeURIComponent(nextLease.lease.id)}` : audits.length > 0 ? `/product/app/audits/${encodeURIComponent(recentAudits[0]?.id ?? audits[0].id)}` : "/product/app/add-lease"} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#a9e9be] hover:underline">
+                {nextLease ? "Open lease details" : audits.length > 0 ? "View latest report" : "Add a lease"} <Arrow diagonal />
               </Link>
-              {(() => {
-                const risk = getRenewalRiskScore(selected);
-                if (risk === null) return null;
-
-                const riskColor =
-                  risk >= 80
-                    ? "bg-red-100 text-red-800"
-                    : risk >= 60
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-green-100 text-green-800";
-
-                return (
-                  <span className={`rounded px-2 py-1 text-xs font-semibold ${riskColor}`}>
-                    Renewal Risk: {risk}/100
-                  </span>
-                );
-              })()}
             </div>
-          )}
-        </div>
-
-        {selected && <StatusChips />}
-
-        <div className="rounded-lg border border-gray-200 p-5 bg-white shadow-sm">
-          <div className="text-xs text-gray-500 mb-3">
-            Lease Details
           </div>
+        </section>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-[13px]">
-            <div>
-              <div className="text-gray-500 text-[11px]">Property</div>
-              <div className="font-medium">{selected?.property_name ?? "—"}</div>
-            </div>
-
-            <div>
-              <div className="text-gray-500 text-[11px]">Lease Type</div>
-              <div className="font-medium">{selected?.lease_type ?? "NNN"}</div>
-            </div>
-
-            <div>
-              <div className="text-gray-500 text-[11px]">Square Footage</div>
-              <div className="font-medium">{selected?.square_feet ? selected.square_feet.toLocaleString() : "—"}</div>
-            </div>
-
-            {selected && (() => {
-              if (!selected.renewal_date) {
-                return (
-                  <div>
-                    <div className="text-gray-500 text-[11px]">Renewal Date</div>
-                    <div className="font-medium">—</div>
-                  </div>
-                );
-              }
-
-              const renewal = new Date(selected.renewal_date);
-              const today = new Date();
-              const diffMs = renewal.getTime() - today.getTime();
-              const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-              let status: "safe" | "warning" | "urgent" = "safe";
-              if (daysRemaining <= 90) status = "urgent";
-              else if (daysRemaining <= 180) status = "warning";
-
-              const badgeStyles = {
-                safe: "bg-green-100 text-green-800",
-                warning: "bg-yellow-100 text-yellow-800",
-                urgent: "bg-red-100 text-red-800",
-              };
-
-              return (
-                <div>
-                  <div className="text-gray-500 text-[11px]">Renewal Date</div>
-                  <div className="font-medium">
-                    {renewal.toLocaleDateString()}
-                  </div>
-                  <div className={`mt-1 inline-block rounded px-2 py-1 text-xs font-semibold ${badgeStyles[status]}`}>
-                    {daysRemaining > 0
-                      ? `${daysRemaining} days remaining`
-                      : "Expired"}
-                  </div>
-                </div>
-              );
-            })()}
+        {(leaseError || auditError) && (
+          <div role="alert" className="mt-6 rounded-2xl border border-[#e4c9aa] bg-[#fff8ec] px-5 py-4 text-sm text-[#684d2f]">
+            Some workspace information could not be loaded. Refresh the page to try again.
           </div>
+        )}
 
-          {selected && (() => {
-            const renewal = selected.renewal_date ? new Date(selected.renewal_date) : null;
-            const today = new Date();
-            const diffMs = renewal ? renewal.getTime() - today.getTime() : 0;
-            const daysRemaining = renewal ? Math.ceil(diffMs / (1000 * 60 * 60 * 24)) : 0;
-
-            let status: "safe" | "warning" | "urgent" = "safe";
-            if (daysRemaining <= 90) status = "urgent";
-            else if (daysRemaining <= 180) status = "warning";
-
-            const buttonStyles = {
-              safe: "border border-gray-300 hover:bg-gray-100",
-              warning: "border border-yellow-400 bg-yellow-50 text-yellow-800 hover:bg-yellow-100",
-              urgent: "bg-red-600 text-white hover:bg-red-700",
-            };
-
-            return (
-              <div className="mt-4">
-                <button
-                  onClick={() => showPremiumCTA ? setShowPaywall(true) : window.location.href = "/app/step-1-upload"}
-                  className={`inline-block rounded px-4 py-2 text-sm font-medium transition ${buttonStyles[status]}`}
-                >
-                  {showPremiumCTA ? "Unlock Full Audit →" : "Run Full Audit →"}
-                </button>
-                {showPremiumCTA && (
-                  <div className="text-[11px] text-gray-500 mt-1">
-                    Includes savings breakdown + negotiation insights
-                  </div>
-                )}
-
-                {status === "urgent" && (
-                  <div className="mt-2 text-xs text-red-600 font-medium">
-                    Renewal approaching — audit recommended before negotiation.
-                  </div>
-                )}
-
-                {status === "warning" && (
-                  <div className="mt-2 text-xs text-yellow-700 font-medium">
-                    Renewal within 6 months — consider reviewing exposure.
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-
-        {selected && (() => {
-          const risk = getRenewalRiskScore(selected);
-          if (risk === null) return null;
-
-          let message = "";
-          let style = "border-gray-200 bg-gray-50 text-gray-800";
-
-          if (risk >= 90) {
-            message =
-              "This lease is expired or critically close to renewal. You have maximum negotiation leverage right now. Use audit findings to push for concessions, caps, or tenant improvements.";
-            style = "border-red-400 bg-red-50 text-red-900";
-          } else if (risk >= 75) {
-            message =
-              "Renewal is imminent. Begin negotiation strategy now. Consider requesting CAM caps, administrative fee limits, and removal of capital pass-through language.";
-            style = "border-yellow-400 bg-yellow-50 text-yellow-900";
-          } else if (risk >= 60) {
-            message =
-              "You are within strategic review window. Audit exposure and prepare data-backed negotiation points before landlord outreach.";
-            style = "border-yellow-300 bg-yellow-50 text-yellow-800";
-          } else {
-            message =
-              "Low immediate renewal risk. Monitor lease health and begin pre-renewal modeling 12–18 months prior to expiration.";
-          }
-
-          return (
-            <div className={`mt-4 rounded-md border p-3 text-[13px] ${style}`}>
-              <div className="font-semibold mb-1">Negotiation Leverage Insight</div>
-              <div>{message}</div>
+        <section aria-label="Workspace overview" className="mt-7 grid gap-4 sm:grid-cols-3">
+          {[
+            { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
+            { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Based on saved renewal dates", accent: "#b46c2a" },
+            { label: "Completed reports", value: auditError ? "—" : String(audits.length), detail: "Available in your workspace", accent: "#5264a5" },
+          ].map((item) => (
+            <div key={item.label} className="rounded-2xl border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-6">
+              <div className="mb-7 h-1 w-10 rounded-full" style={{ background: item.accent }} />
+              <p className="text-[11px] font-bold uppercase tracking-[0.17em] text-[#64776c]">{item.label}</p>
+              <p className="mt-2 text-4xl font-semibold tracking-[-0.05em]">{item.value}</p>
+              <p className="mt-2 text-xs text-[#65776e]">{item.detail}</p>
             </div>
-          );
-        })()}
-        </div>
+          ))}
+        </section>
 
-                {/* EXECUTIVE SUMMARY */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-                  <div className="border rounded-lg p-3">
-                    <div className="text-[11px] text-gray-500">Total Leases</div>
-                    <div className="text-lg font-semibold">{audits.length}</div>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <div className="text-[11px] text-gray-500">Urgent (≤ 90 days)</div>
-                    <div className="text-lg font-semibold text-red-600">{urgentRenewals}</div>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <div className="text-[11px] text-gray-500">Upcoming (≤ 180 days)</div>
-                    <div className="text-lg font-semibold text-yellow-600">{upcomingRenewals}</div>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <div className="text-[11px] text-gray-500">Avg Risk</div>
-                    <div className="text-lg font-semibold">{averageRiskScore}/100</div>
-                  </div>
-                </div>
+        <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
+          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your leases</h2>
+                <p className="mt-2 text-sm text-[#60736a]">Renewal dates are reminders. Check each lease for separate notice and audit deadlines.</p>
               </div>
+              <Link href="/product/app/leases" className="inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">View all leases <Arrow /></Link>
             </div>
-
-            {/* PAYWALL MODAL */}
-            {showPaywall && (
-              <div
-                className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-                onClick={() => setShowPaywall(false)}
-              >
-                <div
-                  className="bg-white rounded-lg p-6 w-[400px] shadow-xl"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <h3 className="text-lg font-semibold mb-2">
-                    {selected?.property_name
-                      ? `Unlock Savings for ${selected.property_name}`
-                      : "Unlock Full Audit"}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Get a full savings breakdown, CAM overcharge detection, and negotiation insights.
-                  </p>
-
-                  <div className="text-2xl font-semibold mb-1">$249 / lease</div>
-
-                  <div className="text-[11px] text-red-600 mb-2">
-                    {selectedRisk && selectedRisk >= 75
-                      ? "Critical: renewal risk is high — act now"
-                      : selectedRisk && selectedRisk >= 60
-                      ? "Warning: renewal approaching — review costs"
-                      : "Unlock full financial insights"}
-                  </div>
-
-                  <div className="text-[12px] text-gray-600 mb-3">
-                    Audit findings depend on lease terms and billing records
-                  </div>
-                  <div className="text-[11px] text-red-700 font-medium mb-3">
-  A renewal date alone does not establish an overcharge
-</div>
-
-                  <div className="text-[11px] text-gray-500 mb-2">
-  Estimates depend on this lease and require verification
-</div>
-
-<div className="text-[11px] text-gray-700 mb-3">
-  • Review findings against your lease and billing records
-</div>
-
-<div className="text-[11px] text-gray-700 mb-2">
-  • Verify against billing records per lease
-</div>
-
-<div className="text-[11px] text-red-600 font-medium mb-3">
-  {urgentRenewals > 0
-    ? `⚠️ ${urgentRenewals} leases approaching renewal — pricing advantage decreases after renewal`
-    : "Review your lease before its renewal window closes"}
-</div>
-
-<div className="text-[11px] text-gray-500 border-t pt-3 mb-4">
-  Secure checkout • No long-term contracts • Cancel anytime
-</div>
-
-                  <div className="flex justify-end gap-3">
-                    <button
-                      onClick={() => setShowPaywall(false)}
-                      className="text-sm text-gray-500"
-                    >
-                      Not now
-                    </button>
-                    <button
-                      onClick={() => window.location.href = "/app/step-1-upload"}
-                      className="bg-black text-white px-4 py-2 rounded text-sm"
-                    >
-                      Run Lease Audit →
-                    </button>
-                  </div>
-                </div>
+            {realLeases.length === 0 ? (
+              <div className="mt-7 rounded-2xl border border-dashed border-[#cbded0] bg-[#f8fbf7] px-6 py-10">
+                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#e0f4e6] text-xl text-[#0d7459]" aria-hidden="true">⌁</div>
+                <h3 className="text-xl font-semibold">A clean start for your real leases.</h3>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-[#61766a]">Add a property and its saved renewal date. Your timeline and reminders will fill in as you build your portfolio.</p>
+                <Link href="/product/app/add-lease" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#102c25] px-4 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Add your first lease <Arrow /></Link>
+              </div>
+            ) : (
+              <div className="mt-7 divide-y divide-[#e9eee9]">
+                {datedLeases.slice(0, 5).map(({ lease, days }) => (
+                  <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 hover:text-[#0c6652]">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold">{lease.property_name || "Unnamed lease"}</p>
+                      <p className="mt-1 text-xs text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
+                    </div>
+                    <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
+                  </Link>
+                ))}
               </div>
             )}
-          </div>
-        );
-      }
+            {needsDates > 0 && <p className="mt-4 rounded-xl bg-[#fff8ec] px-4 py-3 text-xs text-[#806043]">{needsDates} {needsDates === 1 ? "lease needs" : "leases need"} a saved renewal date to appear on the timeline.</p>}
+          </section>
+
+          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Next six months</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Renewal outlook</h2>
+            <p className="mt-2 text-sm leading-6 text-[#60736a]">A simple view of the renewal dates you saved.</p>
+            <div className="mt-7 grid grid-cols-6 gap-2">
+              {months.map((month) => (
+                <div key={month.label} className="text-center">
+                  <div className="flex h-28 flex-col items-center justify-end rounded-xl bg-[#f0f4ef] p-2">
+                    <span className="mb-2 text-sm font-semibold">{month.count || "·"}</span>
+                    <div className={`w-full rounded-md ${month.count ? "bg-[#1a8a68]" : "bg-[#d8e5d9]"}`} style={{ height: `${month.count ? Math.min(18 + month.count * 12, 68) : 4}px` }} />
+                  </div>
+                  <span className="mt-2 block text-[10px] font-semibold uppercase text-[#6a7d72]">{month.label}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">This chart uses saved renewal dates only; it does not calculate notice deadlines or potential savings.</p>
+          </section>
+        </div>
+
+        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
+          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Your work</p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Recent reports</h2>
+              </div>
+              <Link href="/product/app/portfolio" className="inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Open portfolio <Arrow /></Link>
+            </div>
+            {recentAudits.length ? (
+              <div className="mt-6 divide-y divide-[#e9eee9]">
+                {recentAudits.map((audit) => (
+                  <Link key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
+                    <div>
+                      <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
+                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}</p>
+                    </div>
+                    <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">View report <Arrow /></span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-2xl bg-[#f7faf6] p-6">
+                <p className="text-sm font-semibold">Your reports will appear here.</p>
+                <p className="mt-2 text-sm leading-6 text-[#64776c]">Start with a free lease preview. Add an annual CAM or NNN statement and supporting PDFs if you have them.</p>
+                <Link href="/app/step-1-upload" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Start a preview <Arrow /></Link>
+              </div>
+            )}
+          </section>
+
+          <section className="rounded-[24px] bg-[#e4f2e8] p-5 sm:p-7">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Make the most of your review</p>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em]">From lease terms to better questions.</h2>
+            <ol className="mt-7 space-y-5">
+              {[
+                ["01", "Start with the lease", "See extracted terms in a free preview."],
+                ["02", "Add the annual statement", "Compare visible charges and calculations."],
+                ["03", "Keep the evidence together", "Return to reports and source pages here."],
+              ].map(([number, title, description]) => (
+                <li key={number} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/75 text-xs font-bold text-[#0d7459]">{number}</span>
+                  <div><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-[#526b5d]">{description}</p></div>
+                </li>
+              ))}
+            </ol>
+            <Link href="/marketing/how-it-works" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">See how it works <Arrow /></Link>
+          </section>
+        </div>
+
+        {sampleLeases.length > 0 && (
+          <section className="mt-6 rounded-[24px] border border-[#dce5df] bg-[#edf2ed] p-5 sm:p-7">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#6b7d72]">Sample data</p>
+                <h2 className="mt-2 text-lg font-semibold">{sampleLeases.length} example lease records</h2>
+                <p className="mt-1 text-sm text-[#5c6e62]">These are kept out of your lease counts and renewal outlook.</p>
+              </div>
+              <button type="button" onClick={() => setShowSamples((value) => !value)} className="rounded-lg border border-[#cbd9ce] bg-white px-4 py-2 text-sm font-semibold hover:bg-[#f9fcf9]" aria-expanded={showSamples}>
+                {showSamples ? "Hide examples" : "Show examples"} <span aria-hidden="true">{showSamples ? "↑" : "↓"}</span>
+              </button>
+            </div>
+            {showSamples && (
+              <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                {sampleLeases.slice(0, 6).map((lease) => (
+                  <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="flex items-center justify-between rounded-xl bg-white px-4 py-3 text-xs font-medium hover:text-[#0c6652]">
+                    <span className="truncate">{lease.property_name || "Sample lease"}</span><Arrow />
+                  </Link>
+                ))}
+                {sampleLeases.length > 6 && <Link href="/product/app/leases" className="px-4 py-3 text-xs font-semibold text-[#0c6652] hover:underline">View all {sampleLeases.length} records <Arrow /></Link>}
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+    </main>
+  );
+}
