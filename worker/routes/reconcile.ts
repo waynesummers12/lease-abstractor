@@ -44,7 +44,9 @@ router.post("/audit/:auditId/reconcile", async (ctx) => {
     const bytes = file.content ? new Uint8Array(file.content) : await Deno.readFile(file.filename!);
     if (bytes.length > MAX_FILE || bytes.length < 5 || new TextDecoder().decode(bytes.slice(0, 5)) !== "%PDF-") throw new Error("Each document must be a PDF under 10 MB.");
     const pages: Array<{ page: number; text: string }> = [];
-    const parser = new PDFParse({ data: bytes });
+    // PDF.js may transfer its input buffer to a worker. Keep the uploaded bytes
+    // separate so they remain available when we save the original PDF below.
+    const parser = new PDFParse({ data: Uint8Array.from(bytes) });
     try {
       const info = await parser.getInfo();
       if (info.total > 100) throw new Error("Each PDF must have 100 pages or fewer.");
