@@ -38,11 +38,11 @@ export default function HowItWorksPage() {
             </div>
             <p className="mt-5 text-sm text-slate-300">One-time purchase. The statement and supporting files are optional.</p>
           </div>
-          <div className="relative mx-auto w-full max-w-[470px] rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/25 sm:p-6">
+          <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full sample report PDF" className="relative z-10 mx-auto block w-full max-w-[470px] rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/25 transition-transform duration-300 ease-out hover:scale-[1.06] focus-visible:scale-[1.06] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-[#a8edbf] motion-reduce:transition-none motion-reduce:hover:scale-100 sm:p-6">
             <div className="absolute -right-3 top-10 z-10 rounded-xl border border-emerald-200 bg-[#e3f6e8] px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] text-emerald-950 shadow-lg sm:-right-6">Real report format</div>
             <div className="overflow-hidden rounded-xl bg-white shadow-xl"><Image src="/sample/lease-and-statement-review-preview.png" alt="First page of an illustrative SaveOnLease lease and statement review report" width={992} height={1403} priority className="h-auto w-full" /></div>
             <p className="mt-4 text-center text-xs text-slate-300">Fictional demonstration documents · outcomes vary by lease and statement</p>
-          </div>
+          </a>
         </div>
       </section>
 
