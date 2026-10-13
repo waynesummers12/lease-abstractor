@@ -47,6 +47,12 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 }
 
 function GuestDashboardOverview() {
+  const [activeView, setActiveView] = useState<"overview" | "portfolio">("overview");
+  const screenshots = {
+    overview: { src: "/dashboard/lease-command-center.png", width: 1640, height: 1308, alt: "Actual SaveOnLease dashboard showing a saved lease, next step, portfolio counts, and lease activity", title: "Know your next step.", description: "See lease counts, missing dates, and the property that needs attention." },
+    portfolio: { src: "/dashboard/lease-list-and-renewals.png", width: 1650, height: 1321, alt: "Actual SaveOnLease dashboard showing the searchable lease list, twelve-month renewal outlook, and completed reports area", title: "Find leases and see what is ahead.", description: "Search saved leases, review the renewal outlook, and return to completed reports in the same workspace." },
+  };
+  const activeScreenshot = screenshots[activeView];
   const features = [
     { number: "01", title: "Keep every lease in one place", description: "Save each property, landlord, lease type, square footage, and renewal date. Search your leases when you need a specific record." },
     { number: "02", title: "See what needs attention", description: "View lease counts, upcoming saved renewal dates, missing dates, and a twelve-month renewal outlook in one workspace." },
@@ -78,20 +84,16 @@ function GuestDashboardOverview() {
             <p className="mt-4 text-lg leading-8 text-[#60736a]">These screens show the lease command center with a saved lease. Your own dashboard fills in as you add properties, dates, and reports.</p>
           </div>
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-2">
-            <figure className="overflow-hidden rounded-[28px] border border-[#dce5dc] bg-white shadow-[0_18px_50px_rgba(16,44,37,0.1)]">
-              <div className="aspect-[1.55] overflow-hidden bg-[#f5f7f3]">
-                <Image src="/dashboard/lease-command-center.png" alt="Actual SaveOnLease dashboard showing a saved lease, next step, portfolio counts, and lease activity" width={1640} height={1308} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" style={{ marginTop: "-11.6%" }} />
-              </div>
-              <figcaption className="border-t border-[#e7eee7] p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0d7459]">01 / At a glance</p><h3 className="mt-2 text-xl font-semibold">Know your next step.</h3><p className="mt-2 text-sm leading-6 text-[#60736a]">See lease counts, missing dates, and the property that needs attention.</p></figcaption>
-            </figure>
-            <figure className="overflow-hidden rounded-[28px] border border-[#dce5dc] bg-white shadow-[0_18px_50px_rgba(16,44,37,0.1)]">
-              <div className="aspect-[1.55] overflow-hidden bg-[#f5f7f3]">
-                <Image src="/dashboard/lease-list-and-renewals.png" alt="Actual SaveOnLease dashboard showing the searchable lease list, twelve-month renewal outlook, and completed reports area" width={1650} height={1321} sizes="(max-width: 1024px) 100vw, 50vw" className="h-auto w-full" style={{ marginTop: "-11.6%" }} />
-              </div>
-              <figcaption className="border-t border-[#e7eee7] p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#0d7459]">02 / Your portfolio</p><h3 className="mt-2 text-xl font-semibold">Find leases and see what is ahead.</h3><p className="mt-2 text-sm leading-6 text-[#60736a]">Search saved leases, review the renewal outlook, and return to completed reports in the same workspace.</p></figcaption>
-            </figure>
+          <div className="mt-9 flex flex-wrap gap-3" role="tablist" aria-label="Dashboard screenshots">
+            <button id="dashboard-overview-tab" type="button" role="tab" aria-selected={activeView === "overview"} aria-controls="dashboard-screenshot-panel" onClick={() => setActiveView("overview")} className={`rounded-full px-5 py-3 text-sm font-semibold transition-colors ${activeView === "overview" ? "bg-[#102c25] text-white" : "border border-[#cbded0] bg-white text-[#245746] hover:bg-[#e4f2e8]"}`}>01 · Command center</button>
+            <button id="dashboard-portfolio-tab" type="button" role="tab" aria-selected={activeView === "portfolio"} aria-controls="dashboard-screenshot-panel" onClick={() => setActiveView("portfolio")} className={`rounded-full px-5 py-3 text-sm font-semibold transition-colors ${activeView === "portfolio" ? "bg-[#102c25] text-white" : "border border-[#cbded0] bg-white text-[#245746] hover:bg-[#e4f2e8]"}`}>02 · Leases &amp; renewals</button>
           </div>
+          <figure id="dashboard-screenshot-panel" role="tabpanel" aria-labelledby={activeView === "overview" ? "dashboard-overview-tab" : "dashboard-portfolio-tab"} className="mt-5 overflow-hidden rounded-[28px] border border-[#dce5dc] bg-white shadow-[0_22px_60px_rgba(16,44,37,0.12)]">
+            <div className="aspect-[1.75] overflow-hidden bg-[#f5f7f3]">
+              <Image key={activeScreenshot.src} src={activeScreenshot.src} alt={activeScreenshot.alt} width={activeScreenshot.width} height={activeScreenshot.height} sizes="(max-width: 1200px) 100vw, 1152px" className="h-auto w-full" style={{ marginTop: "-11.6%" }} />
+            </div>
+            <figcaption className="border-t border-[#e7eee7] px-6 py-5 sm:px-8"><h3 className="text-xl font-semibold">{activeScreenshot.title}</h3><p className="mt-2 text-sm leading-6 text-[#60736a]">{activeScreenshot.description}</p></figcaption>
+          </figure>
         </section>
 
         <section className="pb-16 sm:pb-20" aria-labelledby="dashboard-benefits-title">
