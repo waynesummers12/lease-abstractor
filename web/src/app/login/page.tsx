@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
@@ -8,14 +9,15 @@ import { useAuth } from "@/app/providers/AuthProvider";
 const dashboardRedirect = () => `${window.location.origin}/auth/callback`;
 
 export default function LoginPage() {
+  const router = useRouter();
   const supabase = createClient();
   const { session, loading: authLoading } = useAuth();
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState<"email" | "google" | null>(null);
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState<"email" | "password" | "reset" | "google" | null>(null);
   const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleEmailLink() {
     setLoading("email");
     setNotice(null);
     try {
@@ -36,6 +38,43 @@ export default function LoginPage() {
       }
     } catch {
       setNotice({ kind: "error", text: "We couldn’t send the link right now. Please try again." });
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function handlePasswordLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading("password");
+    setNotice(null);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) {
+        setNotice({ kind: "error", text: "That email and password didn’t match. You can reset your password or use an email link." });
+      } else {
+        router.replace("/product/app/dashboard");
+      }
+    } catch {
+      setNotice({ kind: "error", text: "We couldn’t sign you in right now. Please try again." });
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function handlePasswordReset() {
+    if (!email.trim()) {
+      setNotice({ kind: "error", text: "Enter your email address first, then choose Set or reset password." });
+      return;
+    }
+    setLoading("reset");
+    setNotice(null);
+    try {
+      const redirectTo = `${dashboardRedirect()}?next=${encodeURIComponent("/auth/set-password")}`;
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
+      if (error) throw error;
+      setNotice({ kind: "success", text: "If this email has an account, we’ll send a link to set its password. After that, you can sign in directly." });
+    } catch {
+      setNotice({ kind: "error", text: "We couldn’t send a password link right now. Please try again shortly." });
     } finally {
       setLoading(null);
     }
@@ -87,18 +126,23 @@ export default function LoginPage() {
           <div className="mx-auto w-full max-w-md">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Returning users</p>
             <h2 id="sign-in-title" className="mt-3 text-4xl font-semibold tracking-tight text-[#102b25]">Sign in to your account.</h2>
-            <p className="mt-4 text-base leading-7 text-slate-600">Use the same Google account or email address you used before. We&apos;ll take you back to your dashboard—no password needed.</p>
+            <p className="mt-4 text-base leading-7 text-slate-600">Use Google or sign in with your email and password. If you previously used an email link, set a password once to return without requesting a link each time.</p>
             <button type="button" onClick={handleGoogleLogin} disabled={loading !== null} className="mt-9 flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border border-[#cbd9cd] bg-white px-5 font-semibold text-[#172820] shadow-sm transition hover:border-emerald-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">
               <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.73 1.22 9.24 3.6l6.9-6.9C35.68 2.68 30.2 0 24 0 14.82 0 6.94 5.24 2.98 12.86l8.06 6.26C12.9 13.1 17.96 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.7-.15-3.33-.43-4.9H24v9.27h12.7c-.55 2.96-2.23 5.47-4.76 7.16l7.32 5.7C43.93 37.9 46.5 31.7 46.5 24.5z"/><path fill="#FBBC05" d="M11.04 28.62a14.5 14.5 0 010-9.24l-8.06-6.26A23.94 23.94 0 000 24c0 3.9.93 7.59 2.98 10.88l8.06-6.26z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2.04 15.2-5.55l-7.32-5.7c-2.03 1.36-4.64 2.17-7.88 2.17-6.04 0-11.1-3.6-12.96-8.62l-8.06 6.26C6.94 42.76 14.82 48 24 48z"/></svg>
               {loading === "google" ? "Connecting to Google…" : "Sign in with Google"}
             </button>
             <div className="my-7 flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"><span className="h-px flex-1 bg-[#d7e1d8]" />Or use your email<span className="h-px flex-1 bg-[#d7e1d8]" /></div>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handlePasswordLogin}>
               <label htmlFor="login-email" className="block text-sm font-semibold text-[#172820]">Email address</label>
               <input id="login-email" type="email" required autoComplete="email" placeholder="you@company.com" value={email} onChange={(event) => setEmail(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
-              <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "email" ? "Sending your link…" : "Email me a sign-in link ↗"}</button>
-              <p className="mt-4 text-center text-sm leading-6 text-slate-500">Returning users: enter the email linked to your existing reviews. The sign-in link is one-time use and expires.</p>
+              <label htmlFor="login-password" className="mt-5 block text-sm font-semibold text-[#172820]">Password</label>
+              <input id="login-password" type="password" required autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+              <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "password" ? "Signing in…" : "Sign in to dashboard"}</button>
             </form>
+            <div className="mt-5 flex flex-wrap justify-between gap-x-5 gap-y-3 text-sm">
+              <button type="button" onClick={handlePasswordReset} disabled={loading !== null} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "reset" ? "Sending…" : "Set or reset password"}</button>
+              <button type="button" onClick={handleEmailLink} disabled={loading !== null || !email.trim()} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "email" ? "Sending…" : "Email me a sign-in link"}</button>
+            </div>
             {notice && <p role="status" aria-live="polite" className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${notice.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-800"}`}>{notice.text}</p>}
             {!authLoading && session && <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>}
             <div className="mt-8 border-t border-[#d7e1d8] pt-6 text-sm leading-7 text-slate-600">Need a hand getting in? <Link href="/marketing/contact" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Contact SaveOnLease ↗</Link></div>

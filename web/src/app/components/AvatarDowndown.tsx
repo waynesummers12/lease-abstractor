@@ -74,6 +74,10 @@ export default function AvatarDropdown({
             Settings
           </Link>
 
+          <Link href="/auth/set-password" className="block px-4 py-2 hover:bg-gray-100">
+            Set or change password
+          </Link>
+
           <button
             onClick={() => supabase.auth.signOut()}
             className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
