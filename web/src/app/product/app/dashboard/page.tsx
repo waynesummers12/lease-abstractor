@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { authenticatedPortfolioFetch } from "@/lib/portfolioFetch";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
 
 type Lease = {
@@ -49,6 +48,7 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 export default function DashboardPage() {
   const { session, loading: authLoading } = useAuth();
   const userId = session?.user.id;
+  const accessToken = session?.access_token;
   const [leases, setLeases] = useState<Lease[]>([]);
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,23 +57,27 @@ export default function DashboardPage() {
   const [showSamples, setShowSamples] = useState(false);
 
   useEffect(() => {
-    if (authLoading || !userId) return;
+    if (authLoading || !userId || !accessToken) return;
     let active = true;
+    const request = (url: string) => fetch(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: "no-store",
+    });
 
     Promise.allSettled([
-      authenticatedPortfolioFetch("/api/portfolio-leases"),
-      authenticatedPortfolioFetch("/api/portfolio-audits"),
+      request("/api/portfolio-leases"),
+      request("/api/portfolio-audits"),
     ]).then(async ([leaseResult, auditResult]) => {
       if (!active) return;
       if (leaseResult.status === "fulfilled" && leaseResult.value.ok) {
         const data = await leaseResult.value.json().catch(() => null);
-        if (active && Array.isArray(data?.leases)) setLeases(data.leases);
+        if (active && Array.isArray(data?.leases)) { setLeases(data.leases); setLeaseError(false); }
         else if (active) setLeaseError(true);
       } else setLeaseError(true);
 
       if (auditResult.status === "fulfilled" && auditResult.value.ok) {
         const data = await auditResult.value.json().catch(() => null);
-        if (active && Array.isArray(data?.audits)) setAudits(data.audits);
+        if (active && Array.isArray(data?.audits)) { setAudits(data.audits); setAuditError(false); }
         else if (active) setAuditError(true);
       } else setAuditError(true);
     }).finally(() => {
@@ -81,7 +85,7 @@ export default function DashboardPage() {
     });
 
     return () => { active = false; };
-  }, [authLoading, userId]);
+  }, [authLoading, userId, accessToken]);
 
   const realLeases = useMemo(() => leases.filter((lease) => !isSampleLease(lease)), [leases]);
   const sampleLeases = useMemo(() => leases.filter(isSampleLease), [leases]);
