@@ -1,0 +1,103 @@
+.guide {
+  width: min(100%, 960px);
+  margin-inline: auto;
+  padding: 64px 24px 96px;
+  color: #1d2b40;
+}
+
+.guide::before {
+  content: "MEDICAL LEASE LEARNING CENTER";
+  display: block;
+  margin-bottom: 20px;
+  color: #2563a6;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.guide > :global(section:first-of-type) {
+  border-bottom: 1px solid #d8e6f6;
+  padding-bottom: 40px;
+  margin-bottom: 52px !important;
+}
+
+.guide > :global(nav + section) {
+  margin-top: 0 !important;
+}
+
+.guide :global(h1) {
+  color: #123f70;
+  font-size: clamp(2.5rem, 4.5vw, 3.75rem) !important;
+  font-weight: 650 !important;
+  line-height: 1.08;
+  letter-spacing: -0.045em !important;
+}
+
+.guide :global(h2) {
+  color: #184d82;
+  font-size: clamp(1.55rem, 2.5vw, 2rem) !important;
+  font-weight: 620 !important;
+  line-height: 1.2;
+  letter-spacing: -0.025em !important;
+}
+
+.guide :global(h3) {
+  color: #23598d;
+  font-weight: 600 !important;
+}
+
+.guide :global(p),
+.guide :global(li) {
+  line-height: 1.75;
+}
+
+.guide :global(a[class*="text-emerald"]),
+.guide :global(ul[class*="text-emerald"]) {
+  color: #1f5f9e !important;
+  text-underline-offset: 3px;
+}
+
+.guide :global(a[class*="text-emerald"]:hover) {
+  color: #123f70 !important;
+}
+
+.guide :global(a[class*="bg-emerald"]) {
+  background: #1b5a97 !important;
+  border-radius: 10px !important;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.guide :global(a[class*="bg-emerald"]:hover) {
+  background: #123f70 !important;
+  transform: translateY(-2px);
+}
+
+.guide :global(section[class*="bg-emerald"]),
+.guide :global(div[class*="bg-gray-50"]),
+.guide :global(div[class*="bg-emerald"]) {
+  background: #f2f7fc !important;
+  border-color: #d8e6f6 !important;
+}
+
+.guide :global(a[class*="border"][class*="p-6"]) {
+  border-color: #d8e6f6;
+  border-radius: 14px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.guide :global(a[class*="border"][class*="p-6"]:hover) {
+  border-color: #88b5e1;
+  box-shadow: 0 12px 28px rgba(22, 77, 130, 0.1);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .guide {
+    padding: 44px 20px 72px;
+  }
+
+  .guide > :global(section:first-of-type) {
+    padding-bottom: 30px;
+    margin-bottom: 40px !important;
+  }
+}

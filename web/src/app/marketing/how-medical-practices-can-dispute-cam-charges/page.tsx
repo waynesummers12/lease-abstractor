@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
   title: "How Medical Practices Can Question CAM Charges | SaveOnLease",
@@ -13,7 +15,8 @@ export const metadata: Metadata = {
 
 export default function DisputeMedicalCAMChargesPage() {
   return (
-    <main className="mx-auto max-w-4xl space-y-12 px-6 py-16 text-slate-900">
+    <main className={`${styles.guide} space-y-12`}>
+      <MedicalGuideNav current="/marketing/how-medical-practices-can-dispute-cam-charges" />
       <section className="space-y-5">
         <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           How a medical practice can question CAM charges

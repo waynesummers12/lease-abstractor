@@ -1,4 +1,6 @@
 import Link from "next/link";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export default function MedicalHubPage() {
   const faqJsonLd = {
@@ -32,7 +34,8 @@ export default function MedicalHubPage() {
     ]
   };
   return (
-    <main className="max-w-5xl mx-auto px-6 py-16 space-y-24">
+    <main className={`${styles.guide} space-y-24`}>
+      <MedicalGuideNav current="/marketing/medical-hub" />
 
       {/* HERO */}
       <section className="space-y-6 text-center">

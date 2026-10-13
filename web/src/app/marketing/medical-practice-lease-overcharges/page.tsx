@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
   title: "Medical Practice Lease Overcharges (CAM & NNN Admin Fee Violations Guide)",
@@ -39,7 +41,8 @@ export default function MedicalOvercharges() {
     ]
   };
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-20">
+    <main className={`${styles.guide} space-y-20`}>
+      <MedicalGuideNav current="/marketing/medical-practice-lease-overcharges" />
 
       {/* HERO */}
       <section className="space-y-6">

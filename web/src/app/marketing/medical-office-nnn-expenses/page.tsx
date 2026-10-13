@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
   title: "Medical Office NNN Expenses (Triple Net Cost Breakdown for Healthcare Tenants)",
@@ -39,7 +41,8 @@ export default function MedicalNNNExpenses() {
     ]
   };
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
+    <main className={`${styles.guide} space-y-24`}>
+      <MedicalGuideNav current="/marketing/medical-office-nnn-expenses" />
 
       {/* HERO */}
       <section className="space-y-6">

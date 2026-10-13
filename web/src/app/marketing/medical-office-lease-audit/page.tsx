@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
   title: "Medical Office Lease Audit (CAM & NNN Review for Healthcare Tenants)",
@@ -39,7 +41,8 @@ export default function MedicalOfficeLeaseAudit() {
     ]
   };
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
+    <main className={`${styles.guide} space-y-24`}>
+      <MedicalGuideNav current="/marketing/medical-office-lease-audit" />
 
       {/* HERO */}
       <section className="space-y-6">

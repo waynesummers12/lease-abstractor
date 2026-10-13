@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import styles from "../MedicalGuide.module.css";
+import MedicalGuideNav from "../MedicalGuideNav";
 
 export const metadata: Metadata = {
   title:
@@ -40,7 +42,8 @@ export default function MedicalOfficeCAM() {
     ]
   };
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16 space-y-24">
+    <main className={`${styles.guide} space-y-24`}>
+      <MedicalGuideNav current="/marketing/medical-office-cam-reconciliation" />
 
       {/* HERO */}
       <section className="space-y-6">
