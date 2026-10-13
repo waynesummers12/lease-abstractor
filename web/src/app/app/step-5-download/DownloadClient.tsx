@@ -342,7 +342,7 @@ return (
         <div className="relative grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full border border-[#a8edbf]/40 bg-[#a8edbf]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#a8edbf]"><span className="text-base leading-none" aria-hidden="true">✓</span> Payment complete · Report ready</p>
-            <h1 id="report-ready-title" className="mt-7 max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl">Your lease review is ready. <span className="text-[#a8edbf]">Here’s what to check next.</span></h1>
+            <h1 id="report-ready-title" className="mt-7 max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl">Your lease review is ready. <span className="text-[#a8edbf]">Here’s what to check next.</span></h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-[#d8e9df] sm:text-lg">Your full report brings the lease terms, {hasStatement ? "statement questions, " : ""}page references, and records to request into one place.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <button onClick={handleDownload} disabled={downloading} className="inline-flex min-h-14 items-center justify-center rounded-xl bg-[#a8edbf] px-7 py-3 text-sm font-bold text-[#102c25] transition-colors hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-60">{downloading ? "Preparing PDF…" : "Open your full PDF report ↗"}</button>
