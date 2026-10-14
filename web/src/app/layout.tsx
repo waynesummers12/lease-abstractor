@@ -61,7 +61,7 @@ export default function RootLayout({
           <Header />
 
           {/* Global Conversion Strip */}
-          <div className="mt-[76px] w-full bg-black text-white text-xs sm:text-sm">
+          <div className="mt-[76px] w-full bg-[#17382f] text-white text-xs sm:text-sm">
             <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-center sm:justify-between">
               <span className="hidden sm:inline">
                 Review CAM & NNN terms in your lease
