@@ -122,6 +122,34 @@ export default function ExpensesToCheckPage() {
         </div>
       </section>
 
+      <section className="bg-[#e8eee8] px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">See the question take shape</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">A line item is the start of the review.</h2>
+            <p className="mt-5 text-base leading-8 text-[#516073]">Imagine an annual statement lists a roof replacement under CAM. The label gives you a useful question, but the lease and project records determine how the cost should be treated.</p>
+            <p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Illustrative example only. It does not establish that this charge is improper or that any amount is recoverable.</p>
+          </div>
+          <div className="overflow-hidden rounded-[28px] border border-[#cedcd0] bg-white shadow-xl shadow-[#102c25]/10">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-[#102c25] px-6 py-5 text-white sm:px-8">
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be]">Illustrative statement excerpt</span>
+              <span className="rounded-full border border-white/25 px-3 py-1 text-xs">CAM · Repairs</span>
+            </div>
+            <div className="p-6 sm:p-8">
+              <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#dbe6dc] pb-6">
+                <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#687d70]">Listed expense</p><p className="mt-2 text-xl font-semibold text-[#102c25]">Roof membrane replacement</p></div>
+                <span className="rounded-lg bg-[#fff3de] px-3 py-2 text-xs font-bold text-[#79551f]">Needs context</span>
+              </div>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl bg-[#f1f7f2] p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Ask the lease</p><p className="mt-3 text-sm leading-7 text-[#334b40]">Is this type of work excluded, permitted under an exception, or subject to amortization?</p></div>
+                <div className="rounded-xl bg-[#f1f7f2] p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Request the records</p><p className="mt-3 text-sm leading-7 text-[#334b40]">Get the invoice, scope, timing, amortization schedule, and allocation calculation.</p></div>
+              </div>
+              <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#dbe6dc] p-5"><span aria-hidden="true" className="text-lg text-[#006d57]">→</span><p className="text-sm leading-7 text-[#516073]"><strong className="text-[#102c25]">Then compare.</strong> Separate the property-wide project cost from your billed share before making a claim.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white px-6 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="max-w-3xl">
