@@ -1,255 +1,66 @@
-// src/app/marketing/audit-window-deadlines/page.tsx
 import Link from "next/link";
-import FaqSchema from "@/app/components/FaqSchema";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Commercial Lease Audit Rights Explained | CAM & NNN",
-  description:
-    "Learn how commercial lease audit rights work, common CAM & NNN audit deadlines, and how tenants can preserve their right to dispute overcharges.",
-  alternates: {
-    canonical: "https://www.saveonlease.com/marketing/audit-window-deadlines",
-  },
+const pageUrl = "https://www.saveonlease.com/marketing/audit-window-deadlines";
+
+export const metadata: Metadata = {
+  title: "Lease Audit Windows and Deadlines",
+  description: "Understand how lease-specific objection and records-access periods may work after a CAM or NNN reconciliation, and what details to track before sending a question.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "Lease Audit Windows and Deadlines | SaveOnLease", description: "A practical guide to reading your lease's notice, records-access, and review provisions.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
-export default function AuditRightsPage() {
+const guideNav = [
+  { href: "/marketing/nnn-audit-rights", label: "Audit rights" },
+  { href: pageUrl, label: "Deadlines" },
+  { href: "/marketing/cam-reconciliation", label: "CAM reconciliation" },
+  { href: "/marketing/cam-audit-checklist", label: "Review checklist" },
+];
+
+const clauseDetails = [
+  { number: "01", title: "The trigger", detail: "Does the clock begin at receipt, delivery, year-end, or another defined event?" },
+  { number: "02", title: "The period", detail: "How long does the agreement allow for a request, objection, or audit? These may be separate periods." },
+  { number: "03", title: "The action", detail: "Does the lease call for a written objection, records request, audit election, or a particular level of detail?" },
+  { number: "04", title: "The recipient and method", detail: "Who must receive the notice, at which address, and by what delivery method?" },
+];
+
+const steps = [
+  { number: "01", title: "Save the statement", detail: "Keep the annual reconciliation, its cover message, and evidence of when it arrived." },
+  { number: "02", title: "Read every notice term", detail: "Check the signed lease and amendments for objection, records-access, audit, and delivery provisions." },
+  { number: "03", title: "List the questions", detail: "Record the statement year, line items, amounts, lease clauses, and records needed to evaluate them." },
+  { number: "04", title: "Follow the lease procedure", detail: "If action is needed, use the required recipient and method, and retain copies of what you sent and received." },
+];
+
+const faqs = [
+  { question: "Is there a standard CAM audit deadline?", answer: "No. The deadline and triggering event come from the signed lease and any amendments. Different actions may have different periods." },
+  { question: "Does receiving a statement automatically start the clock?", answer: "It may, but not every lease uses receipt as the trigger. Read the exact clause and keep evidence of the event it names." },
+  { question: "Will a lease preview send an objection for me?", answer: "No. A preview may surface terms to check. It does not send a notice, request records, or preserve a contractual right." },
+  { question: "What if a period may have passed?", answer: "Check the full agreement and relevant correspondence before assuming what options remain. A qualified adviser can help interpret the clause and circumstances." },
+];
+
+export default function AuditWindowDeadlinesPage() {
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+  const breadcrumbJsonLd = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://www.saveonlease.com/marketing" }, { "@type": "ListItem", position: 2, name: "Learn", item: "https://www.saveonlease.com/marketing/learn" }, { "@type": "ListItem", position: 3, name: "Lease Audit Deadlines", item: pageUrl }] };
+
   return (
-    <main className="mx-auto max-w-4xl px-6 py-20 space-y-12">
-      {/* HERO */}
-      <section>
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
-          Commercial Lease Audit Rights Explained
-        </h1>
-        <p className="mt-6 text-xl text-gray-700 leading-relaxed">
-          Commercial lease audit rights explained in practical terms: most
-          commercial leases give tenants the right to audit CAM and NNN
-          charges — but only if strict notice and timing requirements are met.
-          Missing these deadlines can permanently waive recovery rights.
-        </p>
-      </section>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="Lease review guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{guideNav.map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
 
-      {/* CONTENT */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <p>
-          Audit rights allow tenants to review and dispute operating expenses
-          billed by a landlord. These rights are governed entirely by lease
-          language and typically apply to {" "}
-          <Link href="/marketing/common-area-maintenance-charges" className="underline hover:text-black">
-            common area maintenance (CAM) charges
-          </Link>,{" "}
-          <Link href="/marketing/cam-reconciliation-errors" className="underline hover:text-black">
-            CAM reconciliation errors
-          </Link>, tax, and insurance charges.
-        </p>
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24"><div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" /><div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Lease audit windows</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Know what starts the clock. <span className="text-[#a9e9be]">Know what to send.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">Your lease may set a period for questioning an annual CAM or NNN statement, requesting records, or beginning an audit. Find the exact trigger, action, recipient, and delivery method before relying on a date alone.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#clause" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Read the four details ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div><div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">An illustrative review path</p><div className="mt-6 space-y-3">{[["01", "Statement arrives", "Save the document and evidence of delivery."], ["02", "Find the lease clause", "Identify each period and what starts it."], ["03", "Act as required", "Use the specified notice or records process."]].map(([number, title, detail]) => <div key={number} className="flex gap-4 rounded-xl border border-white/20 bg-white/10 p-4"><span className="text-sm font-bold text-[#a9e9be]">{number}</span><div><p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p></div></div>)}</div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">The lease, amendments, and facts of delivery determine the actual timeline.</p></div></div></section>
 
-        <p>
-          Landlords often provide annual reconciliation statements without
-          highlighting tenant audit deadlines, leaving many tenants unaware of
-          their limited window to object.
-        </p>
+      <section id="clause" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Read the full clause</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Four details define the task.</h2><p className="mt-5 text-base leading-8 text-[#516073]">A number of days is only one part of a review provision. Read the full agreement, including amendments and the general notices section.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2">{clauseDetails.map((item) => <article key={item.number} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7"><span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{item.detail}</p></article>)}</div></section>
 
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          What Audit Rights Typically Cover
-        </h2>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">See how a clause works</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">The deadline is more than “60 days.”</h2><p className="mt-5 text-base leading-8 text-[#516073]">Imagine an agreement requires a written objection within 60 days after receipt of the annual statement. You still need to establish receipt, identify the proper recipient, and follow the required delivery method.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Illustrative clause only. It is not a deadline calculation for your lease or a statement of what happens if a period passes.</p></div><div className="overflow-hidden rounded-[28px] border border-[#dbe6dc] bg-[#f9fbf8] shadow-xl shadow-[#102c25]/10"><div className="bg-[#102c25] px-6 py-5 text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be] sm:px-8">Illustrative notice tracker</div><div className="space-y-3 p-6 sm:p-8">{[["Trigger", "Receipt of annual statement"], ["Period", "60 days in this example"], ["Action", "Written objection"], ["Recipient", "Person and address named in lease"], ["Method", "Delivery method in notices clause"]].map(([label, detail]) => <div key={label} className="flex flex-wrap justify-between gap-2 rounded-xl border border-[#dbe6dc] bg-white px-5 py-4 text-sm"><span className="font-semibold text-[#102c25]">{label}</span><span className="text-[#516073]">{detail}</span></div>)}<p className="pt-2 text-xs leading-6 text-[#516073]">A records request and a formal objection may have different requirements. Check both provisions.</p></div></div></div></section>
 
-        <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-          <li>Review of CAM and NNN expense documentation</li>
-          <li>Verification of lease-defined caps and exclusions</li>
-          <li>Confirmation of pro-rata share calculations</li>
-          <li>Identification of misclassified or duplicate charges</li>
-          <li>Potential reimbursement or credit for overcharges</li>
-        </ul>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">A practical sequence</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Move from receipt to a documented question.</h2><p className="mt-5 text-base leading-8 text-[#516073]">Keep the statement, lease language, questions, and correspondence together so the next step is grounded in the actual agreement.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{steps.map((item) => <article key={item.number} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><span className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Step {item.number}</span><h3 className="mt-4 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{item.detail}</p></article>)}</div></section>
 
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          Common Audit Deadlines
-        </h2>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">If timing is uncertain</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Do not assume the window is open or closed.</h2><p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Review the lease, amendments, delivery evidence, and prior correspondence. If the deadline or effect of a missed step is unclear, a qualified adviser can help interpret your agreement and circumstances.</p></div><Link href="/marketing/nnn-audit-rights" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Explore audit rights ↗</Link></div></section>
 
-        <p>
-          Most leases require tenants to object to charges within a defined
-          audit window after receiving a reconciliation statement.
-        </p>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before you act on a date.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></section>
 
-        <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-          <li>30 days after reconciliation delivery</li>
-          <li>60 days after year-end statement</li>
-          <li>90–120 days in more tenant-favorable leases</li>
-        </ul>
-
-        <p>
-          If objections are not made in writing within this window, the charges
-          are typically deemed final — even if incorrect or inconsistent with
-          <Link href="/marketing/lease-cam" className="underline hover:text-black">
-            lease CAM provisions
-          </Link>.
-        </p>
-        <p>
-          Missing a 60-day audit window can lock in five-figure CAM or NNN
-          overcharges for the life of a lease. Because operating expenses recur
-          annually, even a modest $5,000 error can compound into tens of
-          thousands of dollars over a multi-year term.
-        </p>
-
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          Example Lease Audit Deadline Clause
-        </h2>
-
-        <p>
-          Many commercial leases include language similar to the following:
-        </p>
-
-        <div className="rounded-lg border bg-gray-100 p-6 text-base text-gray-800">
-          <p className="italic">
-            “Tenant shall notify Landlord in writing of any objection to the
-            annual reconciliation statement within sixty (60) days after
-            receipt. Failure to object within such period shall constitute
-            Tenant’s acceptance of the statement as final and binding.”
-          </p>
-        </div>
-
-        <p>
-          While the exact wording varies, the structure is consistent: a defined
-          objection period, a written notice requirement, and automatic
-          acceptance if no action is taken. Understanding this language is
-          critical before audit windows expire.
-        </p>
-
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          Why Tenants Lose Audit Rights
-        </h2>
-
-        <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-          <li>Deadlines buried deep in lease language</li>
-          <li>Reconciliation statements arrive during busy periods</li>
-          <li>Assumption that charges are non-negotiable</li>
-          <li>Lack of time or expertise to review documentation</li>
-        </ul>
-
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          How to Preserve Your Audit Rights
-        </h2>
-
-        <p>
-          The best way to protect audit rights is to review lease language and
-          reconciliation statements as soon as they are received — especially
-          those involving{" "}
-          <Link href="/marketing/cam-commercial-real-estate" className="underline hover:text-black">
-            CAM in commercial real estate
-          </Link>{" "}
-          environments. A structured audit — particularly of{" "}
-          <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
-            annual CAM reconciliation statements
-          </Link>{" "}
-          — can surface issues early and help tenants act before deadlines
-          expire.
-        </p>
-
-        <p>
-          Tenants who need a step-by-step framework can use the{" "}
-          <Link href="/marketing/cam-audit-checklist" className="underline hover:text-black">
-            Tenant-First CAM Audit Checklist
-          </Link>{" "}
-          to systematically review expense categories, allocation math, and
-          audit notice requirements before the objection period closes.
-        </p>
-
-        <h2 className="pt-6 text-2xl sm:text-3xl font-light tracking-tight">
-          What If the Audit Window Has Already Closed?
-        </h2>
-
-        <p>
-          Even if the formal audit window has expired, all leverage is not necessarily lost.
-          Some leases allow limited follow-up review, and many landlords remain open to
-          discussion when presented with clear documentation of errors.
-        </p>
-
-        <p>
-          Identifying reconciliation mistakes can still strengthen negotiations,
-          protect future years, and prevent recurring overcharges. Understanding what
-          happened — even after a deadline — is often financially valuable.
-        </p>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-2xl bg-gray-50 p-8 text-center">
-        <h3 className="text-xl sm:text-2xl font-light tracking-tight">
-          Not sure if your audit window is still open?
-        </h3>
-        <p className="mx-auto mt-4 max-w-xl text-gray-700">
-          Upload your lease and receive a tenant-first CAM & NNN audit that
-          highlights deadlines, risks, and potential overcharges.
-        </p>
-        <Link
-          href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white transition hover:bg-gray-800"
-        >
-          Run Lease Audit (Free Preview)
-        </Link>
-      </section>
-
-      {/* FAQ Schema (SEO) */}
-      {/* ---------------- BREADCRUMB SCHEMA ---------------- */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: "https://www.saveonlease.com/",
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Learn",
-                item: "https://www.saveonlease.com/marketing/learn",
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                name: "Audit Window Deadlines",
-                item: "https://www.saveonlease.com/marketing/audit-window-deadlines",
-              },
-            ],
-          }),
-        }}
-      />
-      <FaqSchema
-        faqs={[
-          {
-            question: "What are audit rights in a commercial lease?",
-            answer:
-              "Audit rights give tenants the contractual ability to review and challenge CAM, NNN, tax, and insurance charges billed by a landlord.",
-          },
-          {
-            question: "Are CAM and NNN audit rights time-limited?",
-            answer:
-              "Yes. Most leases impose strict deadlines—often 30 to 90 days after reconciliation delivery—after which audit rights are waived.",
-          },
-          {
-            question: "What happens if a tenant misses the audit deadline?",
-            answer:
-              "If the audit window closes, charges are usually deemed final, even if they include errors or non-lease-compliant expenses.",
-          },
-          {
-            question: "Can tenants audit prior years of CAM or NNN charges?",
-            answer:
-              "In most cases, audit rights apply only to the defined window for each reconciliation year. However, identifying past errors can still inform negotiations or prevent similar issues in future years.",
-          },
-          {
-            question: "Do tenants need an accountant or attorney to audit CAM charges?",
-            answer:
-              "Not necessarily. While professionals can assist in complex situations, many audit rights issues relate directly to lease language, expense caps, and allocation math that can be reviewed systematically.",
-          },
-          {
-            question: "How can tenants protect their audit rights?",
-            answer:
-              "Tenants should review leases carefully, track reconciliation receipt dates, and conduct structured audits as soon as statements are received.",
-          },
-        ]}
-      />
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Find the dates in your own lease.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">A free lease preview can surface notice and review terms to verify. Add an annual statement and available records to develop more specific questions. The preview does not send notices or determine legal deadlines.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
     </main>
   );
 }
