@@ -19,6 +19,7 @@ type Audit = {
   id: string;
   completed_at: string | null;
   analysis: { tenant?: string | null; property_name?: string | null } | null;
+  followup_dates?: Record<string, string>;
 };
 
 const sampleName = /^(?:1sample-commercial-lease|📄\s*sample complex commercial lease)$/i;
@@ -177,6 +178,9 @@ export default function DashboardPage() {
     (b.completed_at ?? "").localeCompare(a.completed_at ?? "")
   ), [audits]);
   const visibleAudits = showAllReports ? sortedAudits : sortedAudits.slice(0, 5);
+  const savedReportDates = audits.flatMap((audit) => ["first:deadline", "next:statement"].flatMap((key) =>
+    audit.followup_dates?.[key] ? [{ auditId: audit.id, date: audit.followup_dates[key], label: key === "first:deadline" ? "Review deadline to verify" : "Next statement review" }] : []
+  )).sort((a, b) => a.date.localeCompare(b.date));
   const visibleLeases = useMemo(() => datedLeases.filter(({ lease }) =>
     `${lease.property_name ?? ""} ${lease.landlord ?? ""} ${lease.lease_type ?? ""}`.toLowerCase().includes(leaseQuery.trim().toLowerCase())
   ), [datedLeases, leaseQuery]);
@@ -286,6 +290,13 @@ export default function DashboardPage() {
           </div>
         )}
 
+        {savedReportDates.length > 0 && <section className="mt-7 rounded-[24px] border border-[#cbded0] bg-[#e4f2e8] p-5 sm:p-7" aria-labelledby="report-dates-title">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Dates you saved</p>
+          <h2 id="report-dates-title" className="mt-2 text-2xl font-semibold">Keep this year&apos;s review moving.</h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">{savedReportDates.slice(0, 4).map((item) => <Link key={`${item.auditId}-${item.label}`} href={`/product/app/audits/${encodeURIComponent(item.auditId)}`} className="rounded-xl bg-white p-4 text-sm hover:text-[#087055]"><span className="block font-semibold">{item.label}</span><span className="mt-1 block text-[#60736a]">{dateLabel(item.date)} · Open follow-up →</span></Link>)}</div>
+          <p className="mt-4 text-xs text-[#526b5d]">Dates are saved by you for reference. Check the signed lease, statement receipt, and notice requirements; no automatic alerts are sent.</p>
+        </section>}
+
         <section aria-label="Workspace overview" className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
@@ -379,7 +390,7 @@ export default function DashboardPage() {
                   <Link key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
                     <div>
                       <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
-                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}</p>
+                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}{audit.followup_dates?.["first:deadline"] ? ` · Saved review date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
                     </div>
                     <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Report &amp; follow-up <Arrow /></span>
                   </Link>

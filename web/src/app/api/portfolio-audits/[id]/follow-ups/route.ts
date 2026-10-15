@@ -23,7 +23,7 @@ export async function GET(req: Request, context: Context) {
     if (!owned) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     if (!owned.audit) return NextResponse.json({ error: "Report not found" }, { status: 404 });
     const { data, error } = await owned.access.db.from("report_followups")
-      .select("item_key,status,note,updated_at")
+      .select("item_key,status,note,due_date,updated_at")
       .eq("audit_id", owned.audit.id).eq("user_id", owned.access.userId);
     if (error) throw error;
     return NextResponse.json({ tasks: reportFollowUpTasks(owned.audit.analysis), progress: data ?? [] }, { headers: privateHeaders });
@@ -41,13 +41,16 @@ export async function PATCH(req: Request, context: Context) {
     const key = body?.key;
     const status = body?.status;
     const note = body?.note;
+    const dueDate = body?.dueDate;
     if (typeof key !== "string" || !reportFollowUpTasks(owned.audit.analysis).some((task) => task.key === key) ||
-        !["open", "waiting", "reviewed"].includes(status) || typeof note !== "string" || note.length > 2000) {
+        !["open", "waiting", "reviewed"].includes(status) || typeof note !== "string" || note.length > 2000 ||
+        (dueDate !== null && dueDate !== undefined && (typeof dueDate !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dueDate) || Number.isNaN(Date.parse(`${dueDate}T12:00:00Z`)) ||
+          !["first:deadline", "next:statement"].includes(key)))) {
       return NextResponse.json({ error: "Invalid follow-up update" }, { status: 400 });
     }
     const { data, error } = await owned.access.db.from("report_followups")
-      .upsert({ audit_id: owned.audit.id, user_id: owned.access.userId, item_key: key, status, note: note.trim(), updated_at: new Date().toISOString() }, { onConflict: "audit_id,item_key" })
-      .select("item_key,status,note,updated_at").single();
+      .upsert({ audit_id: owned.audit.id, user_id: owned.access.userId, item_key: key, status, note: note.trim(), due_date: dueDate || null, updated_at: new Date().toISOString() }, { onConflict: "audit_id,item_key" })
+      .select("item_key,status,note,due_date,updated_at").single();
     if (error) throw error;
     return NextResponse.json({ progress: data }, { headers: privateHeaders });
   } catch {

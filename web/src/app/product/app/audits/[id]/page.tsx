@@ -14,20 +14,22 @@ type Audit = {
   analysis: { tenant?: string; premises?: string; property_name?: string } | null;
 };
 type Status = "open" | "waiting" | "reviewed";
-type Progress = { item_key: string; status: Status; note: string; updated_at?: string };
-type Draft = { status: Status; note: string };
+type Progress = { item_key: string; status: Status; note: string; due_date: string | null; updated_at?: string };
+type Draft = { status: Status; note: string; dueDate: string };
+type SourceDocument = { label: string; url: string };
 
 const statusLabels: Record<Status, string> = {
   open: "To check",
   waiting: "Waiting on records",
   reviewed: "Reviewed",
 };
-const groups: FollowUpTask["group"][] = ["First actions", "Statement questions", "Lease terms"];
+const groups: FollowUpTask["group"][] = ["First actions", "Records to request", "Statement questions", "Lease terms", "Next year"];
 
 export default function PortfolioAuditPage() {
   const { id } = useParams<{ id: string }>();
   const [audit, setAudit] = useState<Audit | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [sourceDocuments, setSourceDocuments] = useState<SourceDocument[]>([]);
   const [tasks, setTasks] = useState<FollowUpTask[]>([]);
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
   const [savedStatuses, setSavedStatuses] = useState<Record<string, Status>>({});
@@ -49,8 +51,9 @@ export default function PortfolioAuditPage() {
       if (!active) return;
       setAudit(report.audit);
       setDownloadUrl(report.downloadUrl);
+      setSourceDocuments(report.sourceDocuments ?? []);
       setTasks(followUp.tasks ?? []);
-      setDrafts(Object.fromEntries((followUp.progress as Progress[] ?? []).map((item) => [item.item_key, { status: item.status, note: item.note }])));
+      setDrafts(Object.fromEntries((followUp.progress as Progress[] ?? []).map((item) => [item.item_key, { status: item.status, note: item.note, dueDate: item.due_date ?? "" }])));
       setSavedStatuses(Object.fromEntries((followUp.progress as Progress[] ?? []).map((item) => [item.item_key, item.status])));
       setLoadState("ready");
     }).catch((cause) => { if (active) { setError(cause instanceof Error ? cause.message : "Unable to load report"); setLoadState("error"); } });
@@ -62,7 +65,7 @@ export default function PortfolioAuditPage() {
   const reportName = audit?.analysis?.premises || audit?.analysis?.property_name || audit?.analysis?.tenant || "Your lease review";
 
   async function save(task: FollowUpTask) {
-    const draft = drafts[task.key] ?? { status: "open" as Status, note: "" };
+    const draft = drafts[task.key] ?? { status: "open" as Status, note: "", dueDate: "" };
     setSavingKey(task.key);
     setSavedKey(null);
     setError(null);
@@ -70,11 +73,11 @@ export default function PortfolioAuditPage() {
       const response = await authenticatedPortfolioFetch(`/api/portfolio-audits/${encodeURIComponent(id)}/follow-ups`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: task.key, status: draft.status, note: draft.note }),
+        body: JSON.stringify({ key: task.key, status: draft.status, note: draft.note, dueDate: draft.dueDate || null }),
       });
       if (!response.ok) throw new Error("Could not save this follow-up. Please try again.");
       const result = await response.json();
-      setDrafts((current) => ({ ...current, [task.key]: { status: result.progress.status, note: result.progress.note } }));
+      setDrafts((current) => ({ ...current, [task.key]: { status: result.progress.status, note: result.progress.note, dueDate: result.progress.due_date ?? "" } }));
       setSavedStatuses((current) => ({ ...current, [task.key]: result.progress.status }));
       setSavedKey(task.key);
     } catch (cause) {
@@ -105,6 +108,13 @@ export default function PortfolioAuditPage() {
             </div>
           </section>
 
+          <section className="mt-8 rounded-[24px] border border-[#dce7dd] bg-white p-6 sm:p-8" aria-labelledby="source-documents-title">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#087055]">Your source files</p>
+            <h2 id="source-documents-title" className="mt-2 text-2xl font-semibold">Return to the documents behind this review.</h2>
+            <p className="mt-2 text-sm leading-6 text-[#60736a]">These private links expire after ten minutes. Refresh this page to get a new link. Keep your own copies for your records.</p>
+            {sourceDocuments.length ? <div className="mt-5 flex flex-wrap gap-3">{sourceDocuments.map((document) => <a key={document.label} href={document.url} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-[#cbded0] px-4 py-3 text-sm font-semibold text-[#0d624c] hover:bg-[#edf6ef]">{document.label} ↗</a>)}</div> : <p className="mt-4 text-sm text-[#60736a]">Original uploads are unavailable for this report. Your completed PDF is available above.</p>}
+          </section>
+
           <section className="mt-8 grid gap-4 sm:grid-cols-3" aria-label="Follow-up progress">
             {[{ label: "Questions and actions", value: tasks.length }, { label: "Reviewed", value: reviewed }, { label: "Waiting on records", value: waiting }].map((stat) => <div key={stat.label} className="rounded-2xl border border-[#dce7dd] bg-white p-6"><p className="text-3xl font-semibold">{stat.value}</p><p className="mt-2 text-sm text-[#60736a]">{stat.label}</p></div>)}
           </section>
@@ -117,8 +127,8 @@ export default function PortfolioAuditPage() {
               const groupTasks = tasks.filter((task) => task.group === group);
               if (!groupTasks.length) return null;
               return <div key={group} className="mt-10"><h3 className="mb-4 text-xl font-semibold">{group} <span className="ml-2 text-sm font-normal text-[#60736a]">{groupTasks.length}</span></h3><div className="space-y-4">{groupTasks.map((task, index) => {
-                const draft = drafts[task.key] ?? { status: "open" as Status, note: "" };
-                return <article key={task.key} className="rounded-[24px] border border-[#dce7dd] bg-white p-6 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7"><div className="flex flex-col gap-5 md:flex-row md:justify-between"><div className="max-w-2xl"><span className="text-xs font-bold uppercase tracking-[0.16em] text-[#087055]">{group === "First actions" ? "Action" : "Question"} {String(index + 1).padStart(2, "0")}</span><h4 className="mt-2 text-xl font-semibold">{task.title}</h4><p className="mt-3 text-sm leading-7 text-[#53675d]">{task.detail}</p></div><div className="min-w-48"><label htmlFor={`status-${task.key}`} className="block text-xs font-semibold text-[#53675d]">Status</label><select id={`status-${task.key}`} value={draft.status} onChange={(event) => { setSavedKey(null); setDrafts((current) => ({ ...current, [task.key]: { ...draft, status: event.target.value as Status } })); }} className="mt-2 w-full rounded-xl border border-[#cbded0] bg-[#f5f7f3] px-3 py-3 text-sm font-medium">{(Object.keys(statusLabels) as Status[]).map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</select></div></div><div className="mt-6 border-t border-[#e6ede6] pt-5"><label htmlFor={`note-${task.key}`} className="text-sm font-semibold">Your note</label><textarea id={`note-${task.key}`} rows={2} maxLength={2000} placeholder="Record what you checked, requested, or learned." value={draft.note} onChange={(event) => { setSavedKey(null); setDrafts((current) => ({ ...current, [task.key]: { ...draft, note: event.target.value } })); }} className="mt-2 w-full resize-y rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm outline-none focus:border-[#087055]" /><div className="mt-3 flex items-center gap-4"><button type="button" disabled={savingKey === task.key} onClick={() => save(task)} className="rounded-xl bg-[#102c25] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{savingKey === task.key ? "Saving…" : "Save progress"}</button>{savedKey === task.key && <span role="status" className="text-sm text-[#087055]">Saved</span>}</div></div></article>;
+                const draft = drafts[task.key] ?? { status: "open" as Status, note: "", dueDate: "" };
+                return <article key={task.key} className="rounded-[24px] border border-[#dce7dd] bg-white p-6 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7"><div className="flex flex-col gap-5 md:flex-row md:justify-between"><div className="max-w-2xl"><span className="text-xs font-bold uppercase tracking-[0.16em] text-[#087055]">{group === "Statement questions" || group === "Lease terms" ? "Question" : "Action"} {String(index + 1).padStart(2, "0")}</span><h4 className="mt-2 text-xl font-semibold">{task.title}</h4><p className="mt-3 text-sm leading-7 text-[#53675d]">{task.detail}</p>{task.key === "next:statement" && <Link href={`/app/step-1-upload${audit.portfolio_lease_id ? `?portfolioLeaseId=${encodeURIComponent(audit.portfolio_lease_id)}` : ""}`} className="mt-4 inline-block text-sm font-semibold text-[#087055] underline underline-offset-4">Start a new lease and statement review ↗</Link>}</div><div className="min-w-48"><label htmlFor={`status-${task.key}`} className="block text-xs font-semibold text-[#53675d]">Status</label><select id={`status-${task.key}`} value={draft.status} onChange={(event) => { setSavedKey(null); setDrafts((current) => ({ ...current, [task.key]: { ...draft, status: event.target.value as Status } })); }} className="mt-2 w-full rounded-xl border border-[#cbded0] bg-[#f5f7f3] px-3 py-3 text-sm font-medium">{(Object.keys(statusLabels) as Status[]).map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</select></div></div>{(task.key === "first:deadline" || task.key === "next:statement") && <div className="mt-5"><label htmlFor={`due-${task.key}`} className="block text-sm font-semibold">{task.key === "first:deadline" ? "Date you confirmed from your documents" : "Date to revisit next year's statement"}</label><input id={`due-${task.key}`} type="date" value={draft.dueDate} onChange={(event) => { setSavedKey(null); setDrafts((current) => ({ ...current, [task.key]: { ...draft, dueDate: event.target.value } })); }} className="mt-2 rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm" /><p className="mt-2 text-xs text-[#60736a]">This is a date you save for reference. Confirm actual receipt, lease terms, and notice rules; SaveOnLease does not send deadline alerts.</p></div>}<div className="mt-6 border-t border-[#e6ede6] pt-5"><label htmlFor={`note-${task.key}`} className="text-sm font-semibold">Your note</label><textarea id={`note-${task.key}`} rows={2} maxLength={2000} placeholder="Record what you checked, requested, or learned." value={draft.note} onChange={(event) => { setSavedKey(null); setDrafts((current) => ({ ...current, [task.key]: { ...draft, note: event.target.value } })); }} className="mt-2 w-full resize-y rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm outline-none focus:border-[#087055]" /><div className="mt-3 flex items-center gap-4"><button type="button" disabled={savingKey === task.key} onClick={() => save(task)} className="rounded-xl bg-[#102c25] px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{savingKey === task.key ? "Saving…" : "Save progress"}</button>{savedKey === task.key && <span role="status" className="text-sm text-[#087055]">Saved</span>}</div></div></article>;
               })}</div></div>;
             })}
           </section>

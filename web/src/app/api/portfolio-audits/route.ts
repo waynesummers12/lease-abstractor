@@ -12,7 +12,17 @@ export async function GET(req: Request) {
     .eq("user_id", access.userId).eq("status", "complete")
     .order("completed_at", { ascending: false });
   if (error) return NextResponse.json({ error: "Failed to load audits" }, { status: 500 });
-  return NextResponse.json({ audits: data }, { headers: privateHeaders });
+  const { data: dates, error: datesError } = await access.db.from("report_followups")
+    .select("audit_id,item_key,due_date")
+    .eq("user_id", access.userId)
+    .in("item_key", ["first:deadline", "next:statement"])
+    .not("due_date", "is", null);
+  if (datesError) return NextResponse.json({ error: "Failed to load report dates" }, { status: 500 });
+  const byAudit = new Map<string, Record<string, string>>();
+  for (const date of dates ?? []) {
+    byAudit.set(date.audit_id, { ...byAudit.get(date.audit_id), [date.item_key]: date.due_date });
+  }
+  return NextResponse.json({ audits: (data ?? []).map((audit) => ({ ...audit, followup_dates: byAudit.get(audit.id) ?? {} })) }, { headers: privateHeaders });
 }
 
 export async function PATCH(req: Request) {

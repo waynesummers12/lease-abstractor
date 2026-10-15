@@ -1,6 +1,6 @@
 export type FollowUpTask = {
   key: string;
-  group: "First actions" | "Statement questions" | "Lease terms";
+  group: "First actions" | "Records to request" | "Statement questions" | "Lease terms" | "Next year";
   title: string;
   detail: string;
 };
@@ -29,6 +29,14 @@ export function reportFollowUpTasks(value: unknown): FollowUpTask[] {
       detail: "Use the records request list in your PDF. Keep the landlord's response, invoices, allocation schedules, and payment ledger with this report.",
     },
   ];
+
+  if (analysis.reconciliation) tasks.push(
+    { key: "records:reconciliation", group: "Records to request", title: "Annual reconciliation and category detail", detail: "Request the complete annual CAM or NNN reconciliation, including category totals and the calculation of your share." },
+    { key: "records:ledger", group: "Records to request", title: "Category ledger and invoices", detail: "Request the ledger and invoices for questioned charges, including capital items, management fees, and excluded categories where relevant." },
+    { key: "records:area", group: "Records to request", title: "Area and tenant-share schedule", detail: "Request the rentable-area schedule and calculation used for your pro-rata share, especially if the share changed." },
+    { key: "records:payments", group: "Records to request", title: "Payment history", detail: "Request your payment ledger and compare billed estimates, credits, and the final true-up." },
+    { key: "next:statement", group: "Next year", title: "Review next year's statement", detail: "When the next annual statement arrives, start a new review with the current lease and new statement. Keep this year's report for comparison." },
+  );
 
   if (Array.isArray(analysis.reconciliation?.checks)) {
     analysis.reconciliation.checks.slice(0, 100).forEach((check, index) => {
