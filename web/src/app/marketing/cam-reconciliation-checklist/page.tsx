@@ -93,7 +93,7 @@ export default function CamReconciliationChecklistPage() {
           </div>
           <div className="rounded-[26px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-9">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Records worth requesting</p>
-            <ul className="mt-6 grid gap-3 text-sm text-[#425b50]">
+            <ul className="mt-6 grid list-none gap-3 text-sm text-[#425b50]">
               {[
                 "Category ledger and supporting invoices",
                 "Rentable-area and tenant-share schedules",
