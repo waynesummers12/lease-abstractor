@@ -1,215 +1,213 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import styles from "../MedicalGuide.module.css";
-import MedicalGuideNav from "../MedicalGuideNav";
+
+const pageUrl = "https://www.saveonlease.com/marketing/medical-office-cam-reconciliation";
 
 export const metadata: Metadata = {
-  title:
-    "Medical Office CAM Reconciliation (Audit Guide for Healthcare Tenants)",
+  title: "Medical Office CAM Reconciliation Guide",
   description:
-    "Deep-dive guide to CAM reconciliations in medical office buildings. Learn how imaging centers and outpatient practices identify overcharges, capital expense violations, admin fee stacking, and NNN allocation errors.",
+    "Understand how a medical office CAM reconciliation works, which shared costs to question, and what lease terms and records to verify.",
+  alternates: { canonical: pageUrl },
+  openGraph: {
+    title: "Medical Office CAM Reconciliation | SaveOnLease",
+    description: "A practical guide to annual CAM statements for healthcare tenants.",
+    url: pageUrl,
+    siteName: "SaveOnLease",
+    type: "article",
+  },
 };
 
-export default function MedicalOfficeCAM() {
+const medicalNav = [
+  { href: "/marketing/medical-hub", label: "Overview" },
+  { href: "/marketing/medical-office-lease-audit", label: "Lease review" },
+  { href: pageUrl, label: "Medical CAM" },
+  { href: "/marketing/medical-office-nnn-expenses", label: "Medical NNN" },
+];
+
+const reviewAreas = [
+  { number: "01", title: "The expense pool", detail: "Compare billed categories with the lease's CAM definition and exclusions. Ask which property or building each cost serves." },
+  { number: "02", title: "Your share", detail: "Check the premises area, denominator, allocation method, and any changes from prior years." },
+  { number: "03", title: "Shared systems", detail: "Review how costs for HVAC, elevators, parking, generators, or security are assigned when they benefit different users." },
+  { number: "04", title: "Fees and limits", detail: "Look at management or administrative fees, caps, gross-up rules, and any special treatment of capital work." },
+];
+
+const medicalCosts = [
+  { title: "HVAC and after-hours service", detail: "Was the service shared, specific to one tenant, or allocated under a special lease provision?" },
+  { title: "Parking and elevators", detail: "Do structural work, modernization, and routine maintenance receive different treatment?" },
+  { title: "Generators and electrical systems", detail: "Who uses the system, and how does the lease allocate testing, fuel, or replacement costs?" },
+];
+
+const faqs = [
+  { question: "What is a medical office CAM reconciliation?", answer: "It is an annual comparison of estimated CAM payments with the tenant's calculated share of actual shared operating costs. The lease defines what can be included and how the share is determined." },
+  { question: "Can a specialized building cost be passed through?", answer: "It depends on the signed lease and the facts behind the charge. Check whether the cost is shared, tenant-specific, excluded, capped, or subject to capital-cost rules." },
+  { question: "How long do tenants have to review the statement?", answer: "The notice and audit periods vary by lease. Read the exact timing and procedure in your agreement soon after receiving the reconciliation." },
+];
+
+const related = [
+  { title: "Medical lease review", text: "Start with the lease terms, shared systems, records, and deadlines.", href: "/marketing/medical-office-lease-audit" },
+  { title: "Medical NNN expenses", text: "Understand taxes, insurance, CAM, and their allocation.", href: "/marketing/medical-office-nnn-expenses" },
+  { title: "CAM reconciliation checklist", text: "Use a structured sequence to compare the statement with your lease.", href: "/marketing/cam-reconciliation-checklist" },
+];
+
+export default function MedicalOfficeCAMPage() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is a CAM reconciliation in a medical office building?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A CAM reconciliation is the annual true-up of operating expenses where medical tenants are billed for their pro-rata share of building costs such as maintenance, insurance, taxes, and shared services."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can imaging centers be overcharged in CAM allocations?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Imaging centers often face higher electrical load allocations, generator expenses, HVAC adjustments, and admin fee stacking that may exceed lease-defined caps."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How long do medical tenants have to dispute CAM charges?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Most medical leases provide a 6 to 12 month audit window after reconciliation delivery to dispute improper allocations."
-        }
-      }
-    ]
+    mainEntity: faqs.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
   };
+
   return (
-    <main className={`${styles.guide} space-y-24`}>
-      <MedicalGuideNav current="/marketing/medical-office-cam-reconciliation" />
-
-      {/* HERO */}
-      <section className="space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight">
-          Medical Office CAM Reconciliation — What Healthcare Tenants Must Review
-        </h1>
-        <p className="text-lg text-gray-700">
-          CAM reconciliations in medical office buildings are materially more
-          complex than traditional office properties. Imaging infrastructure,
-          generator systems, parking structures, elevator modernization, and
-          compliance-driven upgrades can affect occupancy costs and should be checked
-          against lease terms and billing records.
-        </p>
-        <p className="text-gray-600">
-          Without structured review, medical tenants often absorb capital
-          improvements, inflated admin allocations, and miscalculated
-          pro-rata shares that exceed lease limits. For a full framework, see our <Link href="/marketing/medical-office-lease-audit" className="text-emerald-600 hover:underline">Medical Office Lease Audit (CAM & NNN Review)</Link>.
-        </p>
-      </section>
-
-      {/* FINANCIAL CONTEXT */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Example: 12,000 SF Imaging Center Exposure
-        </h2>
-        <div className="bg-gray-50 p-6 rounded-lg space-y-1 text-gray-700">
-          <p>$32 Base Rent = $384,000 Annual Base Rent</p>
-          <p>$10 CAM/NNN = $120,000 Annual NNN</p>
-          <p className="font-medium mt-2">Total Annual Occupancy Cost: $504,000</p>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="Medical lease guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4">
+        <div className="mx-auto flex max-w-6xl flex-wrap gap-2">
+          {medicalNav.map((item) => (
+            <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>
+          ))}
         </div>
-        <p className="text-gray-700">
-          A $2 PSF misallocation increases annual exposure by $24,000.
-          Over a 7-year term, that equals $168,000 in cumulative impact.
-        </p>
-      </section>
+      </nav>
 
-      {/* ADMIN FEE MATH */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-semibold">
-          Admin Fee Cap Violations — The Hidden Multiplier
-        </h2>
-        <div className="bg-gray-50 p-6 rounded-lg space-y-2 text-gray-700">
-          <p>$300,000 Annual CAM × 15% Admin Fee = $45,000</p>
-          <p>Lease Cap = 10%</p>
-          <p className="font-medium">Annual Overcharge = $15,000</p>
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Medical lease learning center</p>
+            <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Make your annual CAM statement <span className="text-[#a9e9be]">make sense.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">
+              A medical office reconciliation compares estimated CAM payments with your share of actual costs. Use the lease and billing detail to understand the calculation before deciding which charges need a closer look.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#how-it-works" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">See how it works ↓</a>
+              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link>
+            </div>
+          </div>
+          <div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The annual comparison</p>
+            <div className="mt-6 space-y-3">
+              {[["Estimated payments", "What you paid during the year"], ["Actual allocated CAM", "What the statement calculates for your share"], ["Balance or credit", "The difference, subject to lease terms"]].map(([title, detail]) => (
+                <div key={title} className="rounded-xl border border-white/20 bg-white/10 p-4">
+                  <p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-xs leading-6 text-[#d9e9df]">The balance alone does not show whether each underlying charge is allowed.</p>
+          </div>
         </div>
-        <p className="text-gray-700">
-          When CAM increases due to capital-heavy infrastructure, percentage-based
-          admin fees magnify exposure.
-        </p>
       </section>
 
-      {/* CAPITAL VS OPERATING TEST */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          How to Evaluate Capital vs Operating Classification
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Does the project extend useful life of the system?</li>
-          <li>Is it a full replacement rather than routine repair?</li>
-          <li>Is amortization permitted under the lease?</li>
-          <li>Is the expense legally mandated or elective?</li>
-          <li>Does the lease explicitly exclude structural improvements?</li>
-        </ul>
-        <p className="text-gray-700">
-          Many medical tenants unknowingly pay for capital improvements
-          improperly categorized as operating expenses.
-        </p>
+      <section id="how-it-works" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Read the statement</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">A reconciliation is a true-up, not a verdict.</h2>
+          <p className="mt-5 text-base leading-8 text-[#516073]">The statement should show what was estimated, what was actually spent, how costs were allocated, and what you already paid. The lease determines which expenses belong in CAM and how the final amount is treated.</p>
+        </div>
+        <div className="mt-9 grid gap-4 md:grid-cols-3">
+          {[["01", "Find the cost pool", "Identify the property and categories included in the reconciliation."], ["02", "Trace your share", "Match the percentage or other formula to the lease and area schedule."], ["03", "Check the true-up", "Compare actual allocated costs with estimates, payments, and credits."]].map(([number, title, detail]) => (
+            <div key={number} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{number}</span>
+              <h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#516073]">{detail}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* MEDICAL-SPECIFIC ALLOCATION RISK */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Allocation Risks Unique to Medical Buildings
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>High electrical load imaging suites increasing shared costs</li>
-          <li>Parking structure reinforcement allocated equally instead of proportionally</li>
-          <li>Generator testing costs distributed without usage modeling</li>
-          <li>After-hours HVAC usage assumptions misapplied</li>
-          <li>Pro-rata share miscalculations tied to rentable vs usable square footage</li>
-        </ul>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Four areas to test</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Where to focus your review.</h2>
+            <p className="mt-5 text-base leading-8 text-[#516073]">Medical buildings may have specialized systems and shared services. Their presence is not itself an error; the question is whether the bill follows the lease.</p>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {reviewAreas.map((area) => (
+              <article key={area.number} className="rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6 sm:p-7">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{area.number}</span>
+                <h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{area.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#516073]">{area.detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* HIGH RISK ITEMS */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          High-Risk CAM Line Items in Medical Buildings
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-gray-700">
-          <li>Lobby concierge and shared clinical staffing allocations</li>
-          <li>Parking structure structural repairs and resurfacing</li>
-          <li>Elevator modernization programs</li>
-          <li>HVAC upgrades tied to imaging load increases</li>
-          <li>Generator replacement and fuel reserve allocations</li>
-          <li>Security system upgrades and compliance monitoring</li>
-          <li>Capital projects classified as “operating expenses”</li>
-        </ul>
+      <section className="mx-auto grid max-w-6xl gap-8 px-6 py-16 sm:py-20 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-14">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Medical-building questions</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Ask how specialized costs were assigned.</h2>
+          <p className="mt-5 text-base leading-8 text-[#516073]">An invoice or capital schedule may be needed to distinguish routine operations from a replacement project, and a usage or area schedule may be needed to understand allocation. The signed lease sets the rules.</p>
+          <Link href="/marketing/medical-office-lease-audit" className="mt-6 inline-flex text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Explore the medical lease review guide ↗</Link>
+        </div>
+        <div className="rounded-[26px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-9">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Examples to investigate</p>
+          <div className="mt-6 grid gap-3">
+            {medicalCosts.map((item) => (
+              <div key={item.title} className="rounded-xl border border-[#cfe1d3] bg-white p-5">
+                <h3 className="font-semibold text-[#102c25]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#516073]">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="space-y-6">
-        <p className="text-gray-700">
-          In outpatient medical office buildings, CAM reconciliations often
-          intersect with triple net (NNN) lease structures, insurance volatility,
-          and property tax reassessments. Understanding how operating expense
-          allocations interact with lease-defined caps and exclusions is critical
-          for preserving audit rights and minimizing cumulative exposure.
-        </p>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Keep the timeline in view</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Check your lease&apos;s review window.</h2>
+            <p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Notice periods and records-access rules vary by agreement. Read the applicable terms soon after the statement arrives, and keep a copy of any questions or requests.</p>
+          </div>
+          <Link href="/marketing/audit-window-deadlines" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Understand review deadlines ↗</Link>
+        </div>
       </section>
 
-      {/* URGENCY */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Why Timing Is Critical in Medical CAM Reviews
-        </h2>
-        <p className="text-gray-700">
-          Most medical office leases provide only 6–12 months after reconciliation
-          delivery to dispute charges. Missing this window may permanently waive
-          recovery rights for that year.
-        </p>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Continue the review</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Related guides.</h2>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {related.map((item) => (
+            <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p>
+              <Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* INTERNAL CLUSTER LINKS */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Related Medical Lease Resources
-        </h2>
-        <ul className="list-disc pl-6 space-y-2 text-emerald-700">
-          <li>
-            <Link href="/marketing/medical-office-lease-audit">
-              Medical Office Lease Audit (CAM & NNN Review)
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/medical-office-nnn-expenses">
-              Medical Office NNN Expense Breakdown
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/medical-practice-lease-overcharges">
-              Medical Lease Overcharges & Admin Fee Violations
-            </Link>
-          </li>
-          <li>
-            <Link href="/marketing/how-medical-practices-can-dispute-cam-charges">
-              How Medical Practices Can Dispute CAM Charges
-            </Link>
-          </li>
-        </ul>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before drawing a conclusion.</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {faqs.map((faq) => (
+              <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6">
+                <h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* CTA */}
-      <section className="text-center pt-10">
-        <Link
-          href="/app/step-1-upload"
-          className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-lg text-lg font-medium"
-        >
-          Review My Medical CAM Reconciliation Before the Audit Window Closes
-        </Link>
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Review your own lease and statement.</h2>
+            <p className="mt-4 text-base leading-8 text-[#d9e9df]">Start with a free lease preview. Add your annual statement if you have one, then review the initial questions before deciding whether a full report is useful.</p>
+          </div>
+          <Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link>
+        </div>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </main>
   );
 }
