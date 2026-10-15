@@ -135,7 +135,38 @@ export default function UploadLeasePage() {
       </p>
     </div>
 
-    <div className="mx-auto mt-9 max-w-3xl rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
+    <section aria-labelledby="document-checklist-title" className="mx-auto mt-10 max-w-5xl rounded-[28px] border border-[#d9e7dc] bg-[#f3f8f3] p-5 sm:p-8">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Before you upload</p>
+          <h2 id="document-checklist-title" className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Bring the lease. Add the bill if you have it.</h2>
+        </div>
+        <p className="text-sm font-semibold text-emerald-900">Only the lease is required</p>
+      </div>
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <article className="rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm">
+          <span className="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">01 · Required</span>
+          <h3 className="mt-4 text-lg font-semibold text-slate-950">Signed lease PDF</h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Include amendments in the same text-readable PDF when possible. The free preview pulls out lease terms and questions to check.</p>
+          <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-600"><strong className="text-slate-800">Limit:</strong> A lease alone cannot establish what you were actually billed or whether money is owed.</p>
+        </article>
+        <article className="rounded-2xl border border-[#dce5dc] bg-white p-5 shadow-sm">
+          <span className="inline-flex rounded-full bg-[#eaf3ec] px-3 py-1 text-xs font-bold text-[#286149]">02 · Optional</span>
+          <h3 className="mt-4 text-lg font-semibold text-slate-950">Annual CAM or NNN statement</h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">Add the landlord&apos;s reconciliation to compare readable expense lines, tenant share, arithmetic, and credits with the lease.</p>
+          <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-600"><strong className="text-slate-800">Good to know:</strong> You can add it on the preview page before checkout, for the same report price.</p>
+        </article>
+        <article className="rounded-2xl border border-[#dce5dc] bg-white p-5 shadow-sm">
+          <span className="inline-flex rounded-full bg-[#eaf3ec] px-3 py-1 text-xs font-bold text-[#286149]">03 · Optional</span>
+          <h3 className="mt-4 text-lg font-semibold text-slate-950">Supporting records</h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">With a statement, add up to four PDFs such as an area schedule, expense ledger, invoices, or payment history if you already have them.</p>
+          <p className="mt-4 border-t border-slate-100 pt-4 text-xs leading-5 text-slate-600"><strong className="text-slate-800">Missing records?</strong> Start anyway. The full report lists what to request and what remains unverified.</p>
+        </article>
+      </div>
+      <p className="mt-5 text-sm leading-6 text-[#456654]">A flagged item is a question to verify against the signed documents and source records. <Link href="/marketing/pricing" className="font-semibold text-emerald-800 underline underline-offset-4">See the free preview and full report side by side →</Link></p>
+    </section>
+
+    <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2 · Add your documents</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Start with the lease. Add the bill if you have it.</h2>
