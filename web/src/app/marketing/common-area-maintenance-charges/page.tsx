@@ -1,192 +1,68 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+const pageUrl = "https://www.saveonlease.com/marketing/common-area-maintenance-charges";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.saveonlease.com"),
-  title: "Common Area Maintenance Charges Explained | CAM in Commercial Leases",
-  description:
-    "Understand common area maintenance charges (CAM charges) in commercial leases, how they are calculated, common overcharges, reconciliation errors, and how tenants can protect themselves before audit deadlines close.",
-  alternates: {
-    canonical:
-      "https://www.saveonlease.com/marketing/common-area-maintenance-charges",
-  },
+  title: "Common Area Maintenance Charges Explained",
+  description: "Understand what CAM charges may include, how a tenant share and annual reconciliation can work, and which lease terms and records help verify a bill.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "Common Area Maintenance Charges | SaveOnLease", description: "A practical guide to shared costs, tenant share, annual true-ups, and records to request.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
+const guideNav = [
+  { href: pageUrl, label: "CAM basics" },
+  { href: "/marketing/cam-reconciliation", label: "Reconciliation" },
+  { href: "/marketing/pro-rata-share-explained", label: "Tenant share" },
+  { href: "/marketing/cam-expense-caps", label: "Expense caps" },
+];
+
+const categories = [
+  { number: "01", title: "Outdoor areas", detail: "Parking, walkways, landscaping, lighting, or snow removal may be in a shared cost pool." },
+  { number: "02", title: "Building services", detail: "Security, cleaning, utilities, or other shared operations may appear, depending on the property." },
+  { number: "03", title: "Management and fees", detail: "Administrative and management charges may have definitions, limits, or calculation rules." },
+  { number: "04", title: "Projects and repairs", detail: "The lease may treat routine maintenance differently from capital work or major replacements." },
+];
+
+const questions = [
+  { number: "01", title: "Is the cost allowed?", detail: "Compare the expense category and underlying work with the lease's definitions, exclusions, and exceptions.", records: "Lease clause · category ledger · invoice" },
+  { number: "02", title: "Is the share right?", detail: "Check the area, cost pool, and allocation method used to calculate your portion.", records: "Area schedule · allocation worksheet" },
+  { number: "03", title: "Do limits apply?", detail: "Find any cap, fee limit, base-year term, or amortization requirement before comparing totals.", records: "Cap worksheet · fee calculation · project schedule" },
+  { number: "04", title: "Were credits applied?", detail: "Match estimated payments and other credits to the annual reconciliation.", records: "Payment ledger · prior and current statements" },
+];
+
+const faqs = [
+  { question: "Are all shared-property costs CAM charges?", answer: "No. The signed lease defines which costs may be included, excluded, separately billed, or subject to a limit. The category name alone does not settle the question." },
+  { question: "Is CAM always based on square footage?", answer: "A square-footage share is common, but a lease may use a different area, cost pool, or allocation rule for certain expenses. Check the exact agreement and area schedule." },
+  { question: "Does an annual balance mean I was overcharged?", answer: "No. A balance shows charges after estimated payments and credits. To assess a possible correction, verify the expense pool, tenant share, lease limits, and supporting records." },
+  { question: "When should I question a CAM statement?", answer: "Read the lease's notice and records-access terms soon after receiving the statement. The trigger, period, recipient, and delivery method vary by agreement." },
+];
+
 export default function CommonAreaMaintenanceChargesPage() {
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+  const breadcrumbJsonLd = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://www.saveonlease.com/marketing" }, { "@type": "ListItem", position: 2, name: "Learn", item: "https://www.saveonlease.com/marketing/learn" }, { "@type": "ListItem", position: 3, name: "CAM Charges", item: pageUrl }] };
+
   return (
-    <main className="mx-auto max-w-4xl px-6 py-20">
-      {/* HERO */}
-      <section className="mb-16">
-        <h1 className="mb-6 text-4xl sm:text-5xl font-light tracking-tight">
-          Common Area Maintenance Charges (CAM Charges) Explained
-        </h1>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="CAM guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{guideNav.map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
 
-        <p className="mb-4 text-lg text-gray-700 leading-relaxed">
-          Common area maintenance charges — often referred to as CAM charges —
-          are recurring expenses passed through to tenants in many commercial
-          leases. These charges cover the cost of operating and maintaining
-          shared areas of a property.
-        </p>
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24"><div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" /><div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Common area maintenance, explained</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Know what sits behind <span className="text-[#a9e9be]">your CAM charge.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">CAM can cover operating and maintaining shared parts of a property. Your lease defines which costs belong, how your share is calculated, and what records can help explain the annual bill.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#anatomy" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">See how CAM works ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div><div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The bill has four moving parts</p><div className="mt-6 space-y-3">{[["01", "Cost pool", "Which shared expenses are included?"], ["02", "Tenant share", "How is your portion allocated?"], ["03", "Lease limits", "Do caps, exclusions, or fee rules apply?"], ["04", "Payments", "Which estimates and credits were applied?"]].map(([number, title, detail]) => <div key={number} className="flex gap-4 rounded-xl border border-white/20 bg-white/10 p-4"><span className="text-sm font-bold text-[#a9e9be]">{number}</span><div><p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p></div></div>)}</div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">A total on the statement is a starting point for review, not proof of an overcharge.</p></div></div></section>
 
-        <p className="text-gray-700 leading-relaxed">
-          While CAM charges are standard in retail, office, and industrial
-          leases, how they are defined and calculated can significantly impact
-          a tenant’s total occupancy cost.
-        </p>
+      <section id="anatomy" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">What CAM may include</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Shared space. Lease-specific rules.</h2><p className="mt-5 text-base leading-8 text-[#516073]">A property may group many services under CAM. Whether a particular cost is chargeable to you depends on the agreement and what the records show.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{categories.map((item) => <article key={item.number} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{item.detail}</p></article>)}</div></section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="mt-8 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
-        >
-          Upload Lease (Free Preview)
-        </Link>
-        <p className="mt-3 text-sm text-gray-600">
-          Takes 2 minutes. No subscription. Secure & confidential.
-        </p>
-      </section>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Follow the annual true-up</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">From property costs to your balance.</h2><p className="mt-5 text-base leading-8 text-[#516073]">A simplified annual statement can start with a defined cost pool, apply a tenant share, then subtract estimated payments. The real answer may also depend on exclusions, caps, separate pools, or other adjustments in your lease.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Illustrative arithmetic only. This is not a real bill, a permitted charge calculation, or a recoverable amount.</p></div><div className="overflow-hidden rounded-[28px] border border-[#dbe6dc] bg-[#f9fbf8] shadow-xl shadow-[#102c25]/10"><div className="bg-[#102c25] px-6 py-5 text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be] sm:px-8">Illustrative CAM statement</div><div className="space-y-4 p-6 sm:p-8">{[["Defined property cost pool", "$120,000"], ["Illustrative tenant share", "× 10%"], ["Calculated share", "$12,000"], ["Estimated payments credited", "− $10,000"]].map(([label, value]) => <div key={label} className="flex items-center justify-between gap-4 border-b border-[#dbe6dc] pb-4 text-sm"><span>{label}</span><strong className="text-[#102c25]">{value}</strong></div>)}<div className="flex items-center justify-between gap-4 rounded-xl bg-[#e5f5eb] px-5 py-4"><span className="font-semibold text-[#102c25]">Statement balance</span><strong className="text-2xl text-[#006d57]">$2,000</strong></div><p className="text-xs leading-6 text-[#516073]">The balance is not a proven overcharge. Verify each input and the lease terms first.</p></div></div></div></section>
 
-      {/* WHAT ARE CAM CHARGES */}
-      <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
-          What Are Common Area Maintenance Charges?
-        </h2>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Four useful checks</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Make the charge traceable.</h2><p className="mt-5 text-base leading-8 text-[#516073]">Pair each question with the lease language and supporting record that could answer it.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2">{questions.map((item) => <article key={item.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7"><span className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Check {item.number}</span><h3 className="mt-4 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.detail}</p><p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">{item.records}</p></article>)}</div></section>
 
-        <p>
-          Common area maintenance charges include expenses related to shared
-          spaces such as parking lots, landscaping, snow removal, lighting,
-          security, utilities, and property management.
-        </p>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Watch the review window</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">The statement and lease belong together.</h2><p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">When an annual reconciliation arrives, save it and check the lease&apos;s records-access and notice terms. The trigger, period, recipient, and delivery method are specific to the agreement.</p></div><Link href="/marketing/audit-window-deadlines" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Understand deadlines ↗</Link></div></section>
 
-        <p>
-          These expenses are typically billed as{" "}
-          <Link
-            href="/marketing/cam-charges"
-            className="underline hover:text-black"
-          >
-            CAM charges
-          </Link>{" "}
-          and reconciled annually through{" "}
-          <Link
-            href="/marketing/cam-reconciliation"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation
-          </Link>
-          .
-        </p>
-      </section>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Keep learning</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Go deeper on the calculation.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[{ title: "CAM reconciliation", text: "See how actual costs and estimated payments become a true-up.", href: "/marketing/cam-reconciliation" }, { title: "Pro-rata share", text: "Understand the area and denominator behind your percentage.", href: "/marketing/pro-rata-share-explained" }, { title: "CAM expense caps", text: "Check which costs, years, and formulas a cap may cover.", href: "/marketing/cam-expense-caps" }].map((item) => <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p><Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link></div>)}</div></section>
 
-      {/* HOW CAM CHARGES ARE CALCULATED */}
-      <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
-          How CAM Charges Are Calculated
-        </h2>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before you draw a conclusion.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></div></section>
 
-        <p>
-          CAM charges are generally allocated based on a tenant’s pro-rata
-          share of the building or center. If a tenant occupies 10% of the total
-          rentable square footage, they may be responsible for 10% of common
-          area maintenance costs.
-        </p>
-
-        <p>
-          Errors can occur when square footage is miscalculated, vacant units
-          are improperly included in allocations, or administrative fees exceed
-          lease-defined caps.
-        </p>
-      </section>
-
-      {/* COMMON OVERCHARGES */}
-      <section className="mb-14 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
-          Common CAM Overcharges & Errors
-        </h2>
-
-        <ul className="list-disc pl-6 space-y-2">
-          <li>Administrative or management fees exceeding lease caps</li>
-          <li>Capital improvements billed as operating expenses</li>
-          <li>Improper allocation of vacant space</li>
-          <li>Duplicate or misclassified expenses</li>
-        </ul>
-
-        <p>
-          These issues are frequently uncovered when reviewing{" "}
-          <Link
-            href="/marketing/cam-reconciliation-errors"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation errors
-          </Link>
-          .
-        </p>
-      </section>
-
-      {/* FINANCIAL IMPACT */}
-      <section className="mb-16 space-y-4 text-gray-700 leading-relaxed">
-        <h2 className="text-3xl font-light tracking-tight">
-          Why Common Area Maintenance Charges Matter
-        </h2>
-
-        <p>
-          Even small common area maintenance charge errors can cost tenants
-          $5,000–$50,000+ annually. Because CAM charges recur every year,
-          unnoticed errors compound over time.
-        </p>
-
-        <p>
-          Most leases include strict{" "}
-          <Link
-            href="/marketing/audit-window-deadlines"
-            className="underline hover:text-black"
-          >
-            audit window deadlines
-          </Link>
-          , limiting how long tenants have to dispute incorrect charges.
-        </p>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="rounded-2xl border bg-gray-50 p-8 text-center">
-        <h2 className="text-xl sm:text-2xl font-light tracking-tight">
-          Review Your CAM Charges Before Deadlines Close
-        </h2>
-        <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
-          Upload your commercial lease to receive a tenant-first CAM & NNN
-          audit summary identifying potential exposure and overcharges.
-        </p>
-        <Link
-          href="/app/step-1-upload"
-          className="mt-6 inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
-        >
-          Upload Lease (Free Preview)
-        </Link>
-      </section>
-
-      {/* BREADCRUMB SCHEMA */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: "https://www.saveonlease.com/",
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: "Common Area Maintenance Charges",
-                item:
-                  "https://www.saveonlease.com/marketing/common-area-maintenance-charges",
-              },
-            ],
-          }),
-        }}
-      />
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Start with the terms in your lease.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">Begin with a free lease preview. Add an annual statement and supporting PDFs if you have them, then review the initial questions before deciding whether a full report is useful.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
     </main>
   );
 }
