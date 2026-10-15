@@ -381,7 +381,7 @@ export default function DashboardPage() {
                       <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
                       <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}</p>
                     </div>
-                    <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">View report <Arrow /></span>
+                    <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Report &amp; follow-up <Arrow /></span>
                   </Link>
                 ))}
               </div>
