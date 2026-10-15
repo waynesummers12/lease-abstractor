@@ -134,15 +134,15 @@ export default function CamAuditChecklistPage() {
             What you can check in the guide
           </h2>
 
-          <ul className="grid gap-3 sm:grid-cols-2 text-[#425b50]">
-            <li>• Administrative & management fee review</li>
-            <li>• Capital expenditure classification</li>
-            <li>• Pro rata allocation verification</li>
-            <li>• Gross-up & vacancy distortion analysis</li>
-            <li>• Controllable vs. uncontrollable expense testing</li>
-            <li>• Year-over-year variance review methodology</li>
-            <li>• Audit window leverage protection</li>
-            <li>• A worksheet and records request draft</li>
+          <ul className="grid list-none gap-3 text-[#425b50] sm:grid-cols-2 [&>li]:rounded-xl [&>li]:border [&>li]:border-[#dbe6dc] [&>li]:bg-[#f9fbf8] [&>li]:px-4 [&>li]:py-3">
+            <li>✓ Administrative & management fee review</li>
+            <li>✓ Capital expenditure classification</li>
+            <li>✓ Pro rata allocation verification</li>
+            <li>✓ Gross-up & vacancy distortion analysis</li>
+            <li>✓ Controllable vs. uncontrollable expense testing</li>
+            <li>✓ Year-over-year variance review methodology</li>
+            <li>✓ Audit window review</li>
+            <li>✓ A worksheet and records request draft</li>
           </ul>
           <p className="mt-8 text-[#516073] leading-7">
             If you&apos;re new to CAM structures, you may also want to review our{" "}
