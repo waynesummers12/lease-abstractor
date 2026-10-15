@@ -1,168 +1,53 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title:
-    "Pro-Rata Share Explained — How CAM & NNN Charges Are Calculated (and Overcharged)",
-  description:
-    "Pro-rata share errors are one of the most common CAM and NNN overcharges. Learn how pro-rata share works, how landlords miscalculate it, and what tenants can challenge.",
+const pageUrl = "https://www.saveonlease.com/marketing/pro-rata-share-explained";
+
+export const metadata: Metadata = {
+  title: "Pro-Rata Share Explained",
+  description: "See how a tenant's share may be calculated, why the denominator matters, and which lease terms and area records can help verify CAM and NNN allocations.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "Pro-Rata Share Explained | SaveOnLease", description: "A lease-specific guide to tenant share, cost pools, and area schedules.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
-export default function Page() {
+const checks = [
+  { number: "01", title: "Your space", question: "What area does the signed lease assign to your premises?", records: "Lease premises clause · amendments · floor plan" },
+  { number: "02", title: "The denominator", question: "Which property area or cost-pool area does the lease say to use?", records: "Property area schedule · cost-pool description" },
+  { number: "03", title: "Vacancy and exclusions", question: "Does the lease change the denominator or allocation when space is vacant or separately served?", records: "Lease allocation clause · occupancy schedule" },
+  { number: "04", title: "Different expense pools", question: "Are CAM, taxes, insurance, or particular services allocated using different methods?", records: "Annual statement · category ledger · allocation worksheet" },
+  { number: "05", title: "Year-to-year changes", question: "Did your percentage change, and what lease event or area change explains it?", records: "Prior and current statements · updated area schedule" },
+];
+
+const faqs = [
+  { question: "Is pro-rata share always square footage divided by total leasable area?", answer: "No. That is a common illustration, but the signed lease may define a different area, cost pool, or allocation method. Use the agreement's actual formula." },
+  { question: "Does a different denominator prove an overcharge?", answer: "No. It raises a question. Compare the number used with the lease definition and the supporting area schedule before drawing a conclusion." },
+  { question: "Can a lease preview verify the billed share?", answer: "A preview may surface the lease's allocation terms. Verifying a billed percentage also requires the annual statement and, often, the area or allocation records." },
+  { question: "When should I ask for the area schedule?", answer: "If the statement does not show enough detail to explain the percentage, check the lease's records-access procedure and request the relevant schedule within any applicable deadline." },
+];
+
+export default function ProRataSharePage() {
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+
   return (
-    <main className="mx-auto max-w-3xl px-6 py-24">
-      {/* HERO */}
-      <header className="mb-14 text-center">
-        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
-          Pro-Rata Share Explained — How CAM & NNN Charges Are Really Calculated
-        </h1>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="CAM and NNN guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{[{ href: "/marketing/cam-reconciliation", label: "CAM reconciliation" }, { href: pageUrl, label: "Pro-rata share" }, { href: "/marketing/cam-expense-caps", label: "Expense caps" }, { href: "/marketing/nnn-audit-rights", label: "Audit rights" }].map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
 
-        <p className="mb-6 text-gray-600">
-          Pro-rata share errors quietly cost tenants thousands every year. Even
-          small miscalculations can inflate CAM and NNN charges far beyond what
-          your lease allows.
-        </p>
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24"><div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" /><div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">CAM and NNN allocation guide</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Your share starts with <span className="text-[#a9e9be]">the right denominator.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">Pro-rata share is the percentage used to assign some property costs to a tenant. The simple math matters, but the signed lease decides which spaces, expenses, and allocation method belong in it.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#example" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">See the share example ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div><div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The illustrative formula</p><div className="mt-6 rounded-2xl bg-white p-6 text-[#102c25]"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Tenant area</p><p className="mt-2 border-b-2 border-[#cfe1d3] pb-4 text-3xl font-semibold">2,500 sq ft</p><p className="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Defined property area</p><p className="mt-2 text-3xl font-semibold">25,000 sq ft</p><div className="mt-6 flex items-center justify-between rounded-xl bg-[#e5f5eb] px-5 py-4"><span className="text-sm font-semibold">Illustrative share</span><strong className="text-3xl text-[#006d57]">10%</strong></div></div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">This common formula is an example. Your lease may define the denominator or cost pool differently.</p></div></div></section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
-        >
-          Upload your lease to check pro-rata errors (Free Preview)
-        </Link>
+      <section id="example" className="scroll-mt-28 bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">See the difference</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Same space. Different area. Different share.</h2><p className="mt-5 text-base leading-8 text-[#516073]">If the denominator changes from 25,000 to 20,000 square feet, the arithmetic changes even though your 2,500-square-foot space does not. The question is which area the lease requires for that expense pool.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Illustrative comparison only. Neither percentage is automatically correct or an overcharge.</p></div><div className="overflow-hidden rounded-[28px] border border-[#dbe6dc] bg-[#f9fbf8] shadow-xl shadow-[#102c25]/10"><div className="bg-[#102c25] px-6 py-5 text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be] sm:px-8">Two possible denominators</div><div className="grid gap-4 p-6 sm:grid-cols-2 sm:p-8"><div className="rounded-2xl border border-[#dbe6dc] bg-white p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Scenario A</p><p className="mt-4 text-sm text-[#516073]">2,500 ÷ 25,000</p><p className="mt-2 text-4xl font-semibold text-[#102c25]">10%</p></div><div className="rounded-2xl border border-[#dbe6dc] bg-white p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">Scenario B</p><p className="mt-4 text-sm text-[#516073]">2,500 ÷ 20,000</p><p className="mt-2 text-4xl font-semibold text-[#102c25]">12.5%</p></div><div className="rounded-xl bg-[#e5f5eb] p-5 sm:col-span-2"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">What to verify</p><p className="mt-2 text-sm leading-7 text-[#334b40]">The lease-defined area, any separate cost pool, and the property area schedule used on the annual statement.</p></div></div></div></div></section>
 
-        <p className="mt-3 text-xs text-gray-500">
-          Secure & private · No obligation · Takes 2–3 minutes
-        </p>
-      </header>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Five allocation checks</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Make the percentage traceable.</h2><p className="mt-5 text-base leading-8 text-[#516073]">A percentage on the statement is easier to evaluate when you can connect it to a lease clause and the area or cost records behind it.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{checks.map((item) => <article key={item.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7"><span className="inline-flex h-9 w-9 items-center justify-center self-start rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-4 flex-1 text-sm leading-7 text-[#516073]">{item.question}</p><p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">{item.records}</p></article>)}<div className="flex flex-col justify-center rounded-2xl border border-[#a5c9ae] bg-[#e9f4ec] p-6 sm:p-7"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Keep the distinction clear</p><h3 className="mt-4 text-xl font-semibold tracking-tight text-[#102c25]">A mismatch is a question.</h3><p className="mt-3 text-sm leading-7 text-[#425b50]">It becomes a supported conclusion only after comparing the signed terms, billed calculation, and underlying records.</p></div></div></section>
 
-      {/* WHAT IS PRO RATA */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          What Is Pro-Rata Share?
-        </h2>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Use the right sequence</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">From percentage to a useful question.</h2></div><div className="mt-8 grid gap-4 md:grid-cols-3">{[{ number: "01", title: "Read the clause", text: "Identify the lease's exact area definition, expense pool, and any adjustment rules." }, { number: "02", title: "Check the statement", text: "Write down the percentage used for each billed category and year." }, { number: "03", title: "Request the schedule", text: "Compare area and allocation records, then note any difference that needs an explanation." }].map((step) => <div key={step.number} className="rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><span className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Step {step.number}</span><h3 className="mt-4 text-xl font-semibold text-[#102c25]">{step.title}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{step.text}</p></div>)}</div></div></section>
 
-        <p className="text-gray-600">
-          Pro-rata share is the percentage of a building’s operating expenses
-          that a tenant is responsible for paying. It is typically based on the
-          tenant’s square footage divided by the total leasable area.
-        </p>
+      <section className="px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Watch the review procedure</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Your lease controls how to ask for records.</h2><p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">If the statement does not explain the percentage, check the lease&apos;s notice and records-access terms before requesting the property area schedule or allocation worksheet. A report does not send a notice for you.</p></div><Link href="/marketing/nnn-audit-rights" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Understand audit rights ↗</Link></div></section>
 
-        <div className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
-          <span className="font-medium">Example:</span>  
-          If your space is 2,500 sq ft in a 25,000 sq ft building, your pro-rata
-          share is <span className="font-medium">10%</span>.
-        </div>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Continue learning</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Related guides.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[{ title: "CAM reconciliation", text: "Trace costs, tenant share, estimates, and credits through an annual true-up.", href: "/marketing/cam-reconciliation" }, { title: "CAM expense caps", text: "Check how a cap may affect the amount allocated to your space.", href: "/marketing/cam-expense-caps" }, { title: "Expenses to check", text: "Investigate cost categories using the lease and supporting records.", href: "/marketing/non-allowable-cam-nnn-expenses" }].map((item) => <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p><Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link></div>)}</div></div></section>
 
-        <p className="mt-4 text-gray-600">
-          That percentage is then applied to CAM, taxes, insurance, or other NNN
-          expenses — year after year.
-        </p>
-      </section>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before you draw a conclusion.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></section>
 
-      {/* HOW IT SHOULD BE CALCULATED */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          How Pro-Rata Share Should Be Calculated
-        </h2>
-
-        <ol className="list-decimal space-y-2 pl-5 text-gray-600">
-          <li>Determine your leased square footage</li>
-          <li>Determine the building’s total leasable area</li>
-          <li>Divide tenant space by total leasable space</li>
-          <li>Apply that percentage consistently to allowed expenses only</li>
-        </ol>
-
-        <p className="mt-4 text-gray-600">
-          Sounds simple — but this is where many overcharges begin.
-        </p>
-      </section>
-
-      {/* COMMON PRO RATA ERRORS */}
-      <section className="mb-12">
-        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
-          Common Pro-Rata Share Errors
-        </h2>
-
-        <ul className="list-disc space-y-2 pl-5 text-gray-600">
-          <li>Inflated total building square footage</li>
-          <li>Including vacant or non-leasable space</li>
-          <li>Using gross building size instead of leasable area</li>
-          <li>Changing the denominator year-to-year</li>
-          <li>Applying pro-rata share to non-allowable expenses</li>
-        </ul>
-
-        <p className="mt-4 text-gray-600">
-          Even a 1–2% error can compound into thousands of dollars annually.
-        </p>
-      </section>
-
-      {/* WHY TENANTS MISS IT */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          Why Tenants Rarely Catch Pro-Rata Errors
-        </h2>
-
-        <ul className="list-disc space-y-2 pl-5 text-gray-600">
-          <li>Square footage assumptions go unchecked</li>
-          <li>Reconciliation statements don’t show calculations</li>
-          <li>Tenants trust landlord-provided numbers</li>
-          <li>Audit windows close quickly</li>
-        </ul>
-      </section>
-
-      {/* CAN IT BE CHALLENGED */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          Can Pro-Rata Share Be Challenged?
-        </h2>
-
-        <p className="text-gray-600">
-          Yes. Most leases allow tenants to dispute incorrect calculations —
-          including square footage errors and improper allocations — but only
-          within a defined audit window.
-        </p>
-
-        <p className="mt-3 text-gray-600">
-          Once that window closes, incorrect pro-rata percentages may become
-          locked in permanently.
-        </p>
-
-        <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
-          <Link href="/marketing/cam-expense-caps" className="underline">
-            CAM expense caps →
-          </Link>
-
-          <Link href="/marketing/nnn-audit-rights" className="underline">
-            NNN audit rights →
-          </Link>
-
-          <Link href="/marketing/non-allowable-cam-nnn-expenses" className="underline">
-            Non-allowable expenses →
-          </Link>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="rounded-2xl border border-gray-200 bg-gray-50 p-8 text-center shadow-sm">
-        <h3 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
-          Verify Your Pro-Rata Share Automatically
-        </h3>
-
-        <p className="mb-6 text-gray-600">
-          Our lease audit checks square footage assumptions, allocation methods,
-          and CAM / NNN calculations for hidden pro-rata errors.
-        </p>
-
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex items-center justify-center rounded-lg bg-black px-7 py-3 text-sm font-medium text-white transition hover:bg-gray-800 hover:-translate-y-[1px] hover:shadow-md active:translate-y-0"
-        >
-          Upload your lease to check pro-rata share (Free Preview)
-        </Link>
-
-        <p className="mt-3 text-xs text-gray-500">
-          Secure · Private · No obligation
-        </p>
-      </section>
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Start with your lease&apos;s share clause.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">A free lease preview can surface allocation terms and initial questions. Add the annual statement and supporting PDFs if you have them to compare the billed details before deciding whether a full report is useful.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </main>
   );
 }
