@@ -83,7 +83,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     }
     setDocumentError(null);
     setDocumentBusy(true);
-    trackFunnel("statement_analysis_started", { support_count: supportFiles.length });
+    trackFunnel("statement_analysis_started", { support_count: supportFiles.length, entry_point: "preview_page" });
     try {
       if (supportFiles.length > 4) throw new Error("Choose up to four supporting PDFs.");
       if ([statement, ...supportFiles].some((file) => file.size > 10 * 1024 * 1024) || [statement, ...supportFiles].reduce((sum, file) => sum + file.size, 0) > 29 * 1024 * 1024) throw new Error("Each PDF must be under 10 MB and all PDFs together under 29 MB.");
@@ -98,10 +98,10 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       if (!response.ok) throw new Error(result.error || "Document analysis failed");
       setAnalysis((current) => current ? { ...current, reconciliation: result.reconciliation } : current);
       setPendingDocuments(false);
-      trackFunnel("statement_analysis_completed", { support_count: supportFiles.length });
+      trackFunnel("statement_analysis_completed", { support_count: supportFiles.length, entry_point: "preview_page" });
     } catch (error) {
       setDocumentError(error instanceof Error ? error.message : "Document analysis failed");
-      trackFunnel("statement_analysis_failed");
+      trackFunnel("statement_analysis_failed", { entry_point: "preview_page" });
     } finally {
       setDocumentBusy(false);
     }

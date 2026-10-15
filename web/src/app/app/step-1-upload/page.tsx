@@ -98,6 +98,7 @@ export default function UploadLeasePage() {
       // then saves the optional statement and records on this same audit.
       if (statement) {
         stage = "statement_analysis";
+        trackFunnel("statement_analysis_started", { support_count: supporting.length, entry_point: "initial_upload" });
         const documents = new FormData();
         documents.append("files", statement);
         for (const support of supporting) documents.append("files", support);
@@ -110,6 +111,7 @@ export default function UploadLeasePage() {
           const result = await reconcileRes.json().catch(() => null);
           throw new Error(typeof result?.error === "string" ? result.error : "We couldn't analyze the annual statement. You can add it on the preview page instead.");
         }
+        trackFunnel("statement_analysis_completed", { support_count: supporting.length, entry_point: "initial_upload" });
       }
 
       // 3️⃣ Redirect (working path)
@@ -119,6 +121,7 @@ export default function UploadLeasePage() {
       const errorMessage = err instanceof Error ? err.message : "Upload failed. Please try again.";
       setError(errorMessage);
       trackFunnel("lease_upload_failed", { stage });
+      if (stage === "statement_analysis") trackFunnel("statement_analysis_failed", { entry_point: "initial_upload" });
       if (leaseReady) setRecoverAuditId(auditId);
     } finally {
       // 🔥 ALWAYS reset state
