@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import AnnualStatementEntry from "@/components/AnnualStatementEntry";
 
 const pageUrl = "https://www.saveonlease.com/marketing/nnn-reconciliation";
 
@@ -93,6 +94,8 @@ export default function NnnReconciliationPage() {
           </div>
         </div>
       </section>
+
+      <AnnualStatementEntry />
 
       <section id="how-it-works" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="max-w-3xl">

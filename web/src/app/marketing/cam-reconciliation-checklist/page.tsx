@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import AnnualStatementEntry from "@/components/AnnualStatementEntry";
 
 const pageUrl = "https://www.saveonlease.com/marketing/cam-reconciliation-checklist";
 
@@ -65,6 +66,8 @@ export default function CamReconciliationChecklistPage() {
           </div>
         </div>
       </section>
+
+      <AnnualStatementEntry />
 
       <section id="checklist" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <div className="max-w-3xl">

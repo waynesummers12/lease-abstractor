@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import AnnualStatementEntry from "@/components/AnnualStatementEntry";
 
 type Article = {
   title: string;
@@ -366,6 +367,8 @@ export default function LearnPage() {
           deadlines expire.
         </p>
       </section>
+
+      <AnnualStatementEntry />
 
       {/* Featured Resource */}
       <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] text-white shadow-[0_24px_70px_rgba(16,44,37,0.16)]">

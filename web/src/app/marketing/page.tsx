@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import AnnualStatementEntry from "@/components/AnnualStatementEntry";
 
 export const metadata: Metadata = {
   title: "Commercial Lease Expense Review",
@@ -29,6 +30,8 @@ export default function MarketingHomePage() {
         </div>
         <p className="mt-5 text-sm text-slate-500">$49.99 one-time for the paid report, with or without a statement. A potential discrepancy still needs supporting records and verification.</p>
       </section>
+
+      <AnnualStatementEntry />
 
       <section aria-label="From preview to report" className="border-y border-[#dce5dc] bg-[#f4f8f3] px-5 py-8 sm:px-8">
         <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
