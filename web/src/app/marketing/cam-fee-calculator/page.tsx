@@ -1,173 +1,46 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import CamFeeCalculator from "./CamFeeCalculator";
 
+const pageUrl = "https://www.saveonlease.com/marketing/cam-fee-calculator";
 export const metadata: Metadata = {
-  title: "CAM Fee Calculator (How to Estimate Common Area Maintenance Costs)",
-  description:
-    "Estimate potential CAM fee exposure in your commercial lease. Learn how CAM fees are calculated, common allocation errors, and how tenants can identify overcharges.",
-  alternates: {
-    canonical: "https://www.saveonlease.com/marketing/cam-fee-calculator",
-  },
+  title: "CAM Fee Calculator",
+  description: "Use an illustrative CAM fee calculator to explore tenant share, monthly estimates, and an annual true-up. Learn which lease terms and records to check.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "CAM Fee Calculator | SaveOnLease", description: "Explore the CAM math, then verify the lease terms and records behind the charge.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
+const checks = [
+  { number: "01", title: "Cost pool", text: "Which expenses belong in CAM under your lease, and are any separately billed or excluded?", records: "Lease definitions · category ledger · invoices" },
+  { number: "02", title: "Tenant share", text: "Which area and allocation method apply to this particular expense pool?", records: "Lease allocation clause · area schedule" },
+  { number: "03", title: "Limits and fees", text: "Do caps, base-year terms, administration fees, or amortization rules change the calculation?", records: "Cap worksheet · fee calculation · project records" },
+  { number: "04", title: "Payments and credits", text: "Were all estimated payments and other credits applied to the annual statement?", records: "Payment ledger · annual reconciliation" },
+];
+const faqs = [
+  { question: "Is this calculator my actual CAM bill?", answer: "No. It shows arithmetic using the numbers you enter. The signed lease and supporting records determine the permitted cost pool, allocation, limits, and credits." },
+  { question: "Does a positive true-up mean I was overcharged?", answer: "No. It means the entered annual share is greater than the entered estimated payments. You still need to verify the underlying costs and lease terms." },
+  { question: "Can my share differ between CAM, taxes, and insurance?", answer: "Yes. A lease may define separate cost pools or allocation methods. Use the figures that apply to the charge you are examining." },
+  { question: "What should I do if the statement lacks detail?", answer: "Check your lease's notice and records-access procedure, including any deadline, then request the relevant ledger, invoices, area schedule, and payment history." },
+];
+
 export default function CamFeeCalculatorPage() {
-  return (
-    <main className="mx-auto max-w-4xl px-6 py-20">
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+  return <main className="bg-[#f5f7f3] text-[#17243a]">
+    <nav aria-label="CAM guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{[{ href: "/marketing/common-area-maintenance-charges", label: "CAM basics" }, { href: pageUrl, label: "Fee calculator" }, { href: "/marketing/pro-rata-share-explained", label: "Tenant share" }, { href: "/marketing/cam-reconciliation", label: "Reconciliation" }].map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
 
-      {/* HERO */}
-      <section className="mb-16">
-        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
-          CAM Fee Calculator — How to Estimate Your Common Area Maintenance Costs
-        </h1>
+    <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24"><div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" /><div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">CAM fee calculator</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">See the CAM math. <span className="text-[#a9e9be]">Know what to verify.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">Explore how an expense pool, tenant share, and estimated payments can produce a monthly CAM amount and an annual true-up. Then check the lease and records behind each number.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#calculator" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Try the calculator ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div><div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The calculation at a glance</p><div className="mt-6 space-y-3">{[{ n: "01", label: "Defined CAM expenses", detail: "Start with the cost pool that applies." }, { n: "02", label: "Your allocated share", detail: "Apply the lease-defined method." }, { n: "03", label: "Estimated payments", detail: "Credit what you already paid." }].map((step) => <div key={step.n} className="rounded-xl border border-white/20 bg-white/10 p-4"><div className="flex gap-4"><span className="font-bold text-[#a9e9be]">{step.n}</span><div><p className="font-semibold text-white">{step.label}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{step.detail}</p></div></div></div>)}</div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">A calculated balance is a question to check, not proof of an overcharge.</p></div></div></section>
 
-        <p className="mb-6 text-lg text-gray-700">
-          A CAM fee calculator helps commercial tenants estimate how much
-          they may be paying in Common Area Maintenance (CAM) charges each year —
-          and whether those charges align with the lease.
-        </p>
+    <section id="calculator" className="scroll-mt-28 bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-start lg:gap-16"><div className="lg:sticky lg:top-28"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Try the numbers</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">From annual costs to your monthly estimate.</h2><p className="mt-5 text-base leading-8 text-[#516073]">Enter an annual CAM pool, your share, and what you paid in monthly estimates. The calculator shows the simple arithmetic for a monthly charge and a year-end balance.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Use lease and statement figures when you have them. This illustration does not account for every cap, exclusion, separate pool, fee, or credit.</p></div><CamFeeCalculator /></div></section>
 
-        <p className="mb-8 text-gray-700">
-          Annual reconciliation statements may not show how CAM allocations
-          are calculated or whether expense
-          categories, administrative fees, and capital costs match the actual
-          lease language.
-        </p>
+    <section className="px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Make each input traceable</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Four checks before trusting the total.</h2><p className="mt-5 text-base leading-8 text-[#516073]">The arithmetic is easy to repeat. The useful work is finding the document that supports each input.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{checks.map((item) => <article key={item.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><span className="inline-flex h-9 w-9 items-center justify-center self-start rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-4 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p><p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">{item.records}</p></article>)}</div></div></section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Upload Your Lease for a CAM Fee Review (Free Preview)
-        </Link>
+    <section className="bg-[#e8eee8] px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Read the result correctly</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">A true-up is not an overcharge finding.</h2><p className="mt-5 text-base leading-8 text-[#516073]">A positive balance means the annual share entered is higher than the estimates entered. A credit means the reverse. Neither result tells you whether the charge is permitted or whether all payments were counted.</p><Link href="/marketing/cam-reconciliation" className="mt-6 inline-flex text-sm font-semibold text-[#006d57] underline underline-offset-4">See how annual reconciliation works ↗</Link></div><div className="rounded-[28px] border border-[#cfe1d3] bg-white p-7 shadow-xl shadow-[#102c25]/10 sm:p-9"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">A useful review sequence</p><div className="mt-6 space-y-5">{[{ n: "1", title: "Match the lease", text: "Find the cost definitions, share clause, limits, and notice process." }, { n: "2", title: "Match the statement", text: "Locate the billed categories, allocated percentage, and estimate credits." }, { n: "3", title: "Ask for the records", text: "Use the lease's records procedure to request missing support in time." }].map((step) => <div key={step.n} className="flex gap-4 border-b border-[#e0e9e1] pb-5 last:border-0 last:pb-0"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#e5f5eb] font-bold text-[#006d57]">{step.n}</span><div><h3 className="font-semibold text-[#102c25]">{step.title}</h3><p className="mt-1 text-sm leading-6 text-[#516073]">{step.text}</p></div></div>)}</div></div></div></section>
 
-        <p className="mt-3 text-xs text-gray-600">
-          🔒 Secure & confidential • No subscription • Takes 2 minutes
-        </p>
-      </section>
+    <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Go deeper</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Explore the terms behind the formula.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[{ title: "CAM charges", text: "Understand which shared costs may appear in the property pool.", href: "/marketing/common-area-maintenance-charges" }, { title: "Pro-rata share", text: "See why the property area and allocation method matter.", href: "/marketing/pro-rata-share-explained" }, { title: "CAM expense caps", text: "Learn how a cap may affect certain costs or years.", href: "/marketing/cam-expense-caps" }].map((item) => <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p><Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link></div>)}</div></div></section>
 
-      {/* HOW CAM FEES ARE CALCULATED */}
-      <section className="mb-14">
-        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
-          How CAM Fees Are Typically Calculated
-        </h2>
+    <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">What the estimate can and cannot say.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></section>
 
-        <ol className="ml-6 list-decimal space-y-3 text-gray-700 leading-relaxed">
-          <li>Total projected CAM expenses are estimated by the landlord</li>
-          <li>Each tenant’s pro-rata share is determined by square footage</li>
-          <li>Monthly estimated CAM payments are collected</li>
-          <li>At year-end, actual expenses are reconciled</li>
-          <li>Tenants pay the difference (or receive a credit)</li>
-        </ol>
-
-        <p className="mt-4 text-gray-700 leading-relaxed">
-          Even small allocation errors — such as incorrect square footage or
-          misclassified expenses — can materially increase total occupancy costs.
-        </p>
-      </section>
-
-      {/* ESTIMATE FORMULA */}
-      <section className="mb-14">
-        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
-          Simple CAM Fee Estimation Formula
-        </h2>
-
-        <p className="text-gray-700 leading-relaxed mb-4">
-          A simplified CAM fee estimate often follows this structure:
-        </p>
-
-        <div className="rounded-lg border bg-gray-50 p-6 text-gray-800">
-          <p className="font-mono text-sm">
-            (Total CAM Expenses × Your Pro‑Rata Share) ÷ 12 = Monthly CAM Fee
-          </p>
-        </div>
-
-        <p className="mt-4 text-gray-700 leading-relaxed">
-          However, the real impact depends on how expenses are defined,
-          capped, excluded, or allocated in your lease.
-        </p>
-      </section>
-
-      {/* COMMON ERRORS */}
-      <section className="mb-14">
-        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
-          Why CAM Fee Calculations Are Often Incorrect
-        </h2>
-
-        <ul className="list-disc pl-6 space-y-2 text-gray-700 leading-relaxed">
-          <li>Incorrect pro-rata share percentages</li>
-          <li>Improper inclusion of capital improvements</li>
-          <li>Administrative markups above lease caps</li>
-          <li>Charges allocated to vacant or non-tenant spaces</li>
-          <li>Double counting across CAM and NNN categories</li>
-        </ul>
-
-        <p className="mt-4 text-gray-700 leading-relaxed">
-          These issues are typically uncovered during a{" "}
-          <Link
-            href="/marketing/cam-reconciliation"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation review
-          </Link>{" "}
-          or broader{" "}
-          <Link
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            commercial lease audit
-          </Link>
-          .
-        </p>
-      </section>
-
-      {/* FINANCIAL IMPACT */}
-      <section className="mb-16">
-        <h2 className="mb-4 text-2xl sm:text-3xl font-light tracking-tight">
-          What Small CAM Errors Can Cost
-        </h2>
-
-        <p className="text-gray-700 leading-relaxed mb-4">
-          Even a $0.50–$2.00 per square foot allocation error can translate
-          into $5,000–$50,000+ in annual exposure depending on property size.
-        </p>
-
-        <p className="text-gray-700 leading-relaxed mb-4">
-          Because CAM fees recur every year under most commercial leases,
-          unnoticed errors compound over time and reduce leverage during
-          reconciliation disputes.
-        </p>
-
-        <p className="text-gray-700 leading-relaxed">
-          These issues are often identified during a{" "}
-          <Link
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            commercial lease audit
-          </Link>
-          , where the lease language is reviewed against actual CAM allocations.
-        </p>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="rounded-xl border bg-gray-50 p-8 text-center">
-        <h2 className="mb-3 text-xl sm:text-2xl font-light tracking-tight">
-          Want a Lease-Based CAM Fee Review Instead of a Rough Estimate?
-        </h2>
-
-        <p className="mb-6 text-gray-700">
-          Our review analyzes your actual lease language to identify CAM
-          allocation risks, admin fee caps, exclusions, and audit deadlines.
-        </p>
-
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex items-center rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Upload Your Lease
-        </Link>
-      </section>
-
-    </main>
-  );
+    <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Bring the lease into the calculation.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">A free lease preview can surface CAM allocation terms and initial questions. Add an annual statement and supporting PDFs if you have them to compare the billed details before deciding whether a full report is useful.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+  </main>;
 }
