@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
@@ -57,11 +58,11 @@ export default function CamAuditChecklistPage() {
       },
       {
         "@type": "Question",
-        name: "How much money can a CAM audit identify or recover?",
+        name: "Does the checklist calculate an overcharge?",
         acceptedAnswer: {
           "@type": "Answer",
           text:
-            "Depending on lease structure and square footage, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.",
+            "No. It organizes questions and records to request. Any overcharge or recoverable amount depends on the lease and verified billing documents.",
         },
       },
       {
@@ -85,82 +86,55 @@ export default function CamAuditChecklistPage() {
     ],
   };
   return (
-    <main className="bg-white text-gray-900">
+    <main className="bg-[#f5f7f3] text-[#17243a]">
       {/* Hero Section */}
-      <section className="max-w-4xl mx-auto px-6 py-20 text-center">
-        <p className="text-sm uppercase tracking-wider text-gray-500 mb-4">
-          Free Download
-        </p>
-
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight leading-tight mb-6">
-          The Tenant-First CAM Audit Checklist
-        </h1>
-
-        <p className="text-lg text-gray-600 mb-6">
-          A structured, professional framework for reviewing Common Area
-          Maintenance (CAM) reconciliations before audit windows close.
-        </p>
-
-        <p className="text-gray-700 max-w-2xl mx-auto mb-10">
-          Designed for retail and office tenants. Helps review administrative fees, capital expense classifications,
-          allocation methods, and lease-specific risk. Actual overcharges
-          require billing records and verification.
-        </p>
-        <p className="text-green-700 font-medium mb-8">
-          ✓ Review CAM charges against your lease before audit windows close
-        </p>
-        <a
-          href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-black text-white px-8 py-4 text-lg font-semibold rounded-md hover:bg-gray-800 transition"
-        >
-          Download Free CAM Audit Checklist →
-        </a>
-        <p className="text-xs text-gray-500 mt-3">
-          Instant PDF download • No signup required • Tenant-side review framework
-        </p>
-        <p className="text-sm text-gray-500 mt-4">
-          Designed for retail, restaurant, franchise, and medical tenants reviewing CAM reconciliations.
-        </p>
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-36 h-[560px] w-[560px] rounded-full border border-white/10" />
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Free tenant field guide</p>
+            <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              A clearer way to review your <span className="text-[#a9e9be]">CAM charges.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-8 text-[#d9e9df] sm:text-lg">
+              The Tenant-First CAM Audit Checklist helps you compare your lease with an annual reconciliation, organize questions, and request the records that matter.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2 text-xs font-semibold text-[#d9e9df]">
+              {["25 practical checks", "8-page PDF", "Working worksheet", "Records request draft"].map((item) => (
+                <span key={item} className="rounded-full border border-white/20 bg-white/10 px-3 py-2">{item}</span>
+              ))}
+            </div>
+            <a href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf" target="_blank" rel="noopener noreferrer" className="mt-9 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">
+              Open the free checklist ↗
+            </a>
+            <p className="mt-4 text-xs text-[#b9d1c2]">Instant PDF · No signup required · Your lease and records determine what applies</p>
+          </div>
+          <div className="mx-auto w-full max-w-[390px] rounded-[25px] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-black/20 sm:p-5">
+            <div className="overflow-hidden rounded-[15px] bg-white shadow-lg">
+              <Image src="/assets/tenant-first-cam-checklist-cover.png" alt="Cover of the eight-page Tenant-First CAM Audit Checklist" width={1044} height={1350} sizes="(max-width: 1024px) 80vw, 390px" className="h-auto w-full" priority />
+            </div>
+            <p className="mt-3 text-center text-xs text-[#d9e9df]">A preview of the actual guide</p>
+          </div>
+        </div>
       </section>
-{/* Broker Referral Section */}
-<div className="mt-10 border-t pt-8 max-w-2xl mx-auto">
-  <h3 className="text-lg sm:text-xl font-light tracking-tight mb-3">
-    Commercial Broker? Use This With Your Clients
-  </h3>
-
-  <p className="text-gray-700 mb-4">
-    Tenant representation brokers can use this checklist when reviewing
-    CAM reconciliations with clients.
-  </p>
-
-  <p className="text-gray-700 mb-4">
-    It provides a structured framework to identify administrative fee
-    overcharges, capital misclassification, and pro-rata allocation
-    errors before formal audit rights expire.
-  </p>
-
-  <p className="text-gray-700 mb-6">
-    You are welcome to share this checklist with clients reviewing CAM
-    exposure.
-  </p>
-
-  <Link
-    href="/marketing/referral"
-    className="inline-block border border-gray-300 px-6 py-3 text-sm font-semibold rounded-md hover:bg-gray-100 transition"
-  >
-    Create Your Broker Referral Link →
-  </Link>
-</div>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="grid gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">For tenant representatives</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Review it with your clients.</h2>
+            <p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Commercial brokers can share this checklist with clients reviewing CAM reconciliations. It gives you a consistent way to discuss fees, allocations, records, and lease-specific deadlines together.</p>
+          </div>
+          <Link href="/marketing/referral" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Create your broker referral link ↗</Link>
+        </div>
+      </section>
       {/* Authority Section */}
-      <section className="bg-gray-50 py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">
-            What This Guide Covers
+      <section className="bg-white py-16 px-6 sm:py-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#102c25] mb-6">
+            What you can check in the guide
           </h2>
 
-          <ul className="space-y-4 text-gray-700">
+          <ul className="grid gap-3 sm:grid-cols-2 text-[#425b50]">
             <li>• Administrative & management fee review</li>
             <li>• Capital expenditure classification</li>
             <li>• Pro rata allocation verification</li>
@@ -168,15 +142,15 @@ export default function CamAuditChecklistPage() {
             <li>• Controllable vs. uncontrollable expense testing</li>
             <li>• Year-over-year variance review methodology</li>
             <li>• Audit window leverage protection</li>
-            <li>• Financial exposure compounding models</li>
+            <li>• A worksheet and records request draft</li>
           </ul>
-          <p className="mt-8 text-gray-700">
+          <p className="mt-8 text-[#516073] leading-7">
             If you&apos;re new to CAM structures, you may also want to review our{" "}
-            <Link href="/marketing/common-area-maintenance-cam" className="underline">
+            <Link href="/marketing/common-area-maintenance-cam" className="font-medium text-[#006d57] underline underline-offset-4">
               overview of Common Area Maintenance (CAM)
             </Link>{" "}
             and our guide to{" "}
-            <Link href="/marketing/nnn" className="underline">
+            <Link href="/marketing/nnn" className="font-medium text-[#006d57] underline underline-offset-4">
               NNN (Triple Net) leases
             </Link>{" "}
             to understand how operating expenses are structured before applying this checklist.
@@ -185,41 +159,40 @@ export default function CamAuditChecklistPage() {
       </section>
 
       {/* Positioning Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6">
-            Why CAM Reviews Are Increasing
+      <section className="py-16 px-6 sm:py-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#102c25] mb-6">
+            Why a careful review matters
           </h2>
 
-          <p className="text-gray-700 mb-4">
+          <p className="text-[#516073] leading-7 mb-4">
             Rising insurance premiums, post-COVID vacancy shifts, operating
             volatility, and inflation in controllable expense categories have
             materially increased CAM variability.
           </p>
 
-          <p className="text-gray-700 mb-4">
+          <p className="text-[#516073] leading-7 mb-4">
             Structural lease complexity combined with expense volatility
             increases the probability of misapplication — even in good-faith
             reconciliations.
           </p>
 
-          <p className="text-gray-700">
-            Structured tenant-side review is no longer optional due diligence.
-            It is financial risk management.
+          <p className="text-[#516073] leading-7">
+            A structured review helps you ask clearer questions and gather the records needed to verify a charge.
             Tenants reviewing CAM exposure should also understand how charges appear in practice within{" "}
-            <Link href="/marketing/cam-commercial-real-estate" className="underline">
+            <Link href="/marketing/cam-commercial-real-estate" className="font-medium text-[#006d57] underline underline-offset-4">
               commercial real estate CAM structures
             </Link>{" "}
             and how allocation mechanics differ under{" "}
-            <Link href="/marketing/triple-net-lease" className="underline">
+            <Link href="/marketing/triple-net-lease" className="font-medium text-[#006d57] underline underline-offset-4">
               triple net lease agreements
             </Link>.
             For a deeper breakdown of reconciliation mechanics, see our{" "}
-            <Link href="/marketing/cam-reconciliation" className="underline">
+            <Link href="/marketing/cam-reconciliation" className="font-medium text-[#006d57] underline underline-offset-4">
               CAM reconciliation guide
             </Link>{" "}
             and our analysis of{" "}
-            <Link href="/marketing/cam-vs-nnn" className="underline">
+            <Link href="/marketing/cam-vs-nnn" className="font-medium text-[#006d57] underline underline-offset-4">
               CAM vs. NNN lease structures
             </Link>.
           </p>
@@ -227,16 +200,16 @@ export default function CamAuditChecklistPage() {
       </section>
 
       {/* Visible FAQ Section */}
-      <section className="py-20 px-6 bg-white border-t">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-10">
+      <section className="py-16 px-6 sm:py-20 bg-white border-t border-[#dbe6dc]">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#102c25] mb-10">
             Frequently Asked Questions
           </h2>
 
-          <div className="space-y-8 text-gray-700">
+          <div className="grid gap-4 md:grid-cols-2 text-[#516073] [&>div]:rounded-2xl [&>div]:border [&>div]:border-[#dbe6dc] [&>div]:bg-[#f9fbf8] [&>div]:p-6 [&>div>p]:leading-7">
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#102c25] mb-2">
                 What is a CAM audit checklist in a commercial lease?
               </h3>
               <p>
@@ -245,7 +218,7 @@ export default function CamAuditChecklistPage() {
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#102c25] mb-2">
                 What are common CAM reconciliation errors in retail and office leases?
               </h3>
               <p>
@@ -253,23 +226,23 @@ export default function CamAuditChecklistPage() {
                 capital expenses improperly passed through, pro rata share miscalculations,
                 gross-up distortion during vacancy, and controllable expense cap violations.
                 For a detailed explanation of how these errors appear in practice, review our{" "}
-                <Link href="/marketing/cam-reconciliation" className="underline">
+                <Link href="/marketing/cam-reconciliation" className="font-medium text-[#006d57] underline underline-offset-4">
                   CAM reconciliation breakdown
                 </Link>.
               </p>
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
-                How much money can a CAM audit identify or recover?
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#102c25] mb-2">
+                Does the checklist calculate an overcharge?
               </h3>
               <p>
-                Depending on lease structure and square footage, structured CAM reviews frequently identify annual exposure ranging from $5,000 to $50,000 or more in misapplied or misclassified charges.
+                No. It organizes questions and records to request. Any overcharge or recoverable amount depends on the lease and verified billing documents.
               </p>
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#102c25] mb-2">
                 When should a tenant review CAM reconciliation charges?
               </h3>
               <p>
@@ -277,14 +250,14 @@ export default function CamAuditChecklistPage() {
                 especially before contractual audit windows close. Most commercial leases
                 limit dispute rights to a defined period after reconciliation delivery.
                 Learn more about timing risks in our{" "}
-                <Link href="/marketing/audit-window-deadlines" className="underline">
+                <Link href="/marketing/audit-window-deadlines" className="font-medium text-[#006d57] underline underline-offset-4">
                   audit window deadlines guide
                 </Link>.
               </p>
             </div>
 
             <div>
-              <h3 className="text-xl sm:text-2xl font-light tracking-tight mb-2">
+              <h3 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#102c25] mb-2">
                 What should I do if CAM charges increase significantly year over year?
               </h3>
               <p>
@@ -292,7 +265,7 @@ export default function CamAuditChecklistPage() {
                 lease caps, allocation methodology, expense classifications, and audit
                 window deadlines before accepting the reconciliation statement. You may
                 also want to reference our{" "}
-                <Link href="/marketing/cam-reconciliation-checklist" className="underline">
+                <Link href="/marketing/cam-reconciliation-checklist" className="font-medium text-[#006d57] underline underline-offset-4">
                   CAM reconciliation checklist overview
                 </Link>{" "}
                 for a structured review sequence.
@@ -304,45 +277,45 @@ export default function CamAuditChecklistPage() {
       </section>
 
       {/* Related Guides */}
-      <section className="bg-gray-50 py-16 px-6 border-t">
+      <section className="bg-[#f5f7f3] py-16 px-6 sm:py-20 border-t border-[#dbe6dc]">
         <div className="max-w-5xl mx-auto">
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-[#516073] mb-6">
             Continue your CAM & NNN lease research with these structured tenant-side guides.
           </p>
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-8 text-center">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#102c25] mb-8 text-center">
             Related CAM & NNN Guides
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8 text-gray-700">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-light tracking-tight mb-3">CAM Reconciliation Guide</h3>
+          <div className="grid md:grid-cols-3 gap-4 text-[#516073] leading-7">
+            <div className="bg-white p-6 rounded-2xl border border-[#dbe6dc] shadow-sm">
+              <h3 className="text-xl font-semibold tracking-tight text-[#102c25] mb-3">CAM Reconciliation Guide</h3>
               <p className="text-sm mb-4">
                 Step-by-step breakdown of how CAM reconciliations are calculated,
                 where errors occur, and how to review allocations.
               </p>
-              <Link href="/marketing/cam-reconciliation" className="underline">
+              <Link href="/marketing/cam-reconciliation" className="font-medium text-[#006d57] underline underline-offset-4">
                 Read Guide →
               </Link>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-light tracking-tight mb-3">Audit Window Deadlines</h3>
+            <div className="bg-white p-6 rounded-2xl border border-[#dbe6dc] shadow-sm">
+              <h3 className="text-xl font-semibold tracking-tight text-[#102c25] mb-3">Audit Window Deadlines</h3>
               <p className="text-sm mb-4">
                 Understand 30, 60, and 90-day audit notice requirements and how
                 missed deadlines eliminate dispute leverage.
               </p>
-              <Link href="/marketing/audit-window-deadlines" className="underline">
+              <Link href="/marketing/audit-window-deadlines" className="font-medium text-[#006d57] underline underline-offset-4">
                 Review Deadlines →
               </Link>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="font-light tracking-tight mb-3">CAM vs. NNN Explained</h3>
+            <div className="bg-white p-6 rounded-2xl border border-[#dbe6dc] shadow-sm">
+              <h3 className="text-xl font-semibold tracking-tight text-[#102c25] mb-3">CAM vs. NNN Explained</h3>
               <p className="text-sm mb-4">
                 Compare CAM charges and Triple Net lease structures to understand
                 how operating expenses are passed through.
               </p>
-              <Link href="/marketing/cam-vs-nnn" className="underline">
+              <Link href="/marketing/cam-vs-nnn" className="font-medium text-[#006d57] underline underline-offset-4">
                 Compare Structures →
               </Link>
             </div>
@@ -351,23 +324,22 @@ export default function CamAuditChecklistPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-black text-white py-20 px-6 text-center">
+      <section className="bg-[#102c25] text-white py-16 px-6 sm:py-20 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-light tracking-tight mb-6 text-white">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#102c25] mb-6 text-white">
             Before Your Audit Window Closes
           </h2>
 
           <p className="text-lg text-gray-300 mb-8">
-            If you want a structured CAM & NNN lease review with quantified
-            exposure analysis, SaveOnLease provides tenant-side evaluation with
-            clear written findings.
+            Start with a free lease preview. Add an annual statement when you have it,
+            then decide whether the full report will help you verify the questions raised.
           </p>
 
           <Link
             href="/app/step-1-upload"
-            className="inline-block bg-white text-black px-8 py-4 text-lg font-semibold rounded-md hover:bg-gray-200 transition"
+            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white"
           >
-            Run Lease Review
+            Start a free lease preview ↗
           </Link>
         </div>
       </section>
@@ -400,7 +372,7 @@ export default function CamAuditChecklistPage() {
             },
             articleSection: ["Commercial Real Estate", "CAM", "NNN Lease"],
             datePublished: "2026-02-01",
-            dateModified: "2026-02-22",
+            dateModified: "2026-10-14",
           }),
         }}
       />
