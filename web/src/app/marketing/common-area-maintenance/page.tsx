@@ -53,10 +53,10 @@ export default function CommonAreaMaintenancePage() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">CAM at a glance</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-white">Your share of shared costs.</h2>
             <p className="mt-4 text-sm leading-7 text-[#d9e9df]">The lease sets which costs can be charged and how they are divided. The statement shows what the landlord billed. You need both to ask useful questions.</p>
-            <div className="mt-6 grid gap-3 border-t border-white/20 pt-6 text-sm text-[#d9e9df]">
-              <p><span className="font-semibold text-white">Lease:</span> definitions, allocation, caps, exclusions</p>
-              <p><span className="font-semibold text-white">Statement:</span> billed categories and your share</p>
-              <p><span className="font-semibold text-white">Records:</span> detail needed to verify a charge</p>
+            <div className="mt-6 grid gap-3 border-t border-white/20 pt-6 text-sm">
+              <p className="text-[#d9e9df]"><span className="font-semibold text-white">Lease:</span> definitions, allocation, caps, exclusions</p>
+              <p className="text-[#d9e9df]"><span className="font-semibold text-white">Statement:</span> billed categories and your share</p>
+              <p className="text-[#d9e9df]"><span className="font-semibold text-white">Records:</span> detail needed to verify a charge</p>
             </div>
           </div>
         </div>
