@@ -19,6 +19,10 @@ export default function LoginPage() {
   const [notice, setNotice] = useState<{ kind: "success" | "error"; text: string } | null>(null);
 
   async function handleEmailLink() {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setNotice({ kind: "error", text: "Enter a valid email address above, then request your sign-in link." });
+      return;
+    }
     setLoading("email");
     setNotice(null);
     try {
@@ -127,7 +131,7 @@ export default function LoginPage() {
           <div className="mx-auto w-full max-w-md">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Account access</p>
             <h2 id="sign-in-title" className="mt-3 text-4xl font-semibold tracking-tight text-[#102b25]">Sign in to your account.</h2>
-            <p className="mt-4 text-base leading-7 text-slate-600">Use Google or sign in with your email and password. If you previously used an email link, set a password once to return without requesting a link each time.</p>
+            <p className="mt-4 text-base leading-7 text-slate-600">Use Google or sign in with your email and password. You can also request a sign-in link if you don’t remember your password.</p>
             <button type="button" onClick={handleGoogleLogin} disabled={loading !== null} className="mt-9 flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border border-[#cbd9cd] bg-white px-5 font-semibold text-[#172820] shadow-sm transition hover:border-emerald-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">
               <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.73 1.22 9.24 3.6l6.9-6.9C35.68 2.68 30.2 0 24 0 14.82 0 6.94 5.24 2.98 12.86l8.06 6.26C12.9 13.1 17.96 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.7-.15-3.33-.43-4.9H24v9.27h12.7c-.55 2.96-2.23 5.47-4.76 7.16l7.32 5.7C43.93 37.9 46.5 31.7 46.5 24.5z"/><path fill="#FBBC05" d="M11.04 28.62a14.5 14.5 0 010-9.24l-8.06-6.26A23.94 23.94 0 000 24c0 3.9.93 7.59 2.98 10.88l8.06-6.26z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2.04 15.2-5.55l-7.32-5.7c-2.03 1.36-4.64 2.17-7.88 2.17-6.04 0-11.1-3.6-12.96-8.62l-8.06 6.26C6.94 42.76 14.82 48 24 48z"/></svg>
               {loading === "google" ? "Connecting to Google…" : "Sign in with Google"}
@@ -136,6 +140,7 @@ export default function LoginPage() {
             <form onSubmit={handlePasswordLogin}>
               <label htmlFor="login-email" className="block text-sm font-semibold text-[#172820]">Email address</label>
               <input id="login-email" type="email" required autoComplete="email" placeholder="you@company.com" value={email} onChange={(event) => setEmail(event.target.value)} className="mt-2 min-h-14 w-full rounded-xl border border-[#cbd9cd] bg-white px-4 text-base text-[#172820] outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+              <button type="button" onClick={handleEmailLink} disabled={loading !== null} className="mt-3 text-sm font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:opacity-60">{loading === "email" ? "Sending sign-in link…" : "Email me a sign-in link instead"}</button>
               <label htmlFor="login-password" className="mt-5 block text-sm font-semibold text-[#172820]">Password</label>
               <div className="mt-2 flex min-h-14 overflow-hidden rounded-xl border border-[#cbd9cd] bg-white transition focus-within:border-emerald-700 focus-within:ring-2 focus-within:ring-emerald-200">
                 <input id="login-password" type={showPassword ? "text" : "password"} required autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} className="min-w-0 flex-1 bg-transparent px-4 text-base text-[#172820] outline-none" />
@@ -151,7 +156,6 @@ export default function LoginPage() {
             </form>
             <div className="mt-5 flex flex-wrap justify-between gap-x-5 gap-y-3 text-sm">
               <button type="button" onClick={handlePasswordReset} disabled={loading !== null} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "reset" ? "Sending…" : "Set or reset password"}</button>
-              <button type="button" onClick={handleEmailLink} disabled={loading !== null || !email.trim()} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "email" ? "Sending…" : "Email me a sign-in link"}</button>
             </div>
             {notice && <p role="status" aria-live="polite" className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${notice.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-800"}`}>{notice.text}</p>}
             {!authLoading && session && <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>}
