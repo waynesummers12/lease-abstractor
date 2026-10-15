@@ -1,223 +1,39 @@
-export const metadata = {
-  title: "CAM vs NNN Charges Explained | What Commercial Tenants Actually Pay",
-  description:
-    "Understand the difference between CAM and NNN charges, how they affect your rent, and where tenants are often overcharged. Learn what’s negotiable and what to audit.",
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "CAM vs. NNN Charges",
+  description: "Understand how CAM fits within NNN charges, compare the categories on an annual statement, and see which lease terms and records to check.",
+  alternates: { canonical: "/marketing/cam-vs-nnn" },
 };
+
+const eyebrow = "text-xs font-bold uppercase tracking-[0.22em] text-[#087055]";
+const topics = [
+  ["01", "Lease definitions", "Find the clauses defining operating expenses, taxes, insurance, exclusions, and fees."],
+  ["02", "Area and share", "Compare the tenant area and allocation denominator with the lease and area schedule."],
+  ["03", "Statement detail", "Identify each category, its backup, and any cost appearing in more than one place."],
+  ["04", "True-up and timing", "Match monthly estimates, credits, the year-end balance, and any notice or audit deadline."],
+];
 
 export default function CamVsNnnPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-20">
-      {/* ---------- HERO ---------- */}
-      <header className="mb-10">
-        <h1 className="mb-4 text-4xl sm:text-5xl font-light tracking-tight">
-          CAM vs NNN Charges: What’s the Difference — and Why It Matters
-        </h1>
-        <p className="text-lg text-gray-600">
-          CAM vs NNN charges explained in practical terms: these operating
-          expenses can include property maintenance, taxes, and insurance.
-          <strong> The amount depends on the property and lease terms.</strong>
-          Review your reconciliation to understand the actual charges.
-        </p>
-        <p className="mt-4 text-gray-700">
-          If you are evaluating a full <a href="/marketing/nnn" className="underline hover:text-black">NNN lease structure</a>, understanding how CAM is embedded inside NNN is critical before reviewing reconciliation statements or annual increases.
-        </p>
-      </header>
-
-      {/* ---------- SECTION 1 ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          What CAM (Common Area Maintenance) Charges Are
-        </h2>
-        <p className="text-gray-700">
-          CAM charges cover shared property expenses like landscaping, snow
-          removal, lighting, parking lots, and general upkeep of common areas.
-          These fees are typically billed monthly and reconciled annually.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          While CAM sounds straightforward, disputes often arise over{" "}
-          <strong>what gets included</strong>, how increases are calculated, and
-          whether capital improvements or management fees are improperly passed
-          through.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          These issues often surface during annual{" "}
-          <a
-            href="/marketing/cam-reconciliation"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation
-          </a>{" "}
-          reviews, where tenants compare estimated versus actual expenses and
-          identify lease violations.
-        </p>
-      </section>
-
-      {/* ---------- REAL TENANT EXAMPLES (NEW) ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          Real Tenant CAM Examples We See Often
-        </h2>
-        <p className="text-gray-700">
-          Many tenants only realize something is wrong when CAM charges jump
-          unexpectedly. One retail tenant saw CAM increase more than 18% year
-          over year, despite no noticeable change in services or maintenance.
-          Another discovered they were paying an administrative fee equal to
-          nearly 15% of total CAM — something their lease limited but was never
-          enforced.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          These situations are common because CAM reconciliations are often
-          dense, delayed, and difficult to verify. By the time tenants review
-          them, they feel pressured to pay first and question later.
-        </p>
-      </section>
-
-      {/* ---------- SECTION 2 ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          What NNN (Triple Net) Charges Include
-        </h2>
-        <p className="text-gray-700">
-          NNN charges typically include three major expense categories:
-        </p>
-
-        <ul className="mt-4 list-disc pl-6 text-gray-700">
-          <li>Property taxes</li>
-          <li>Property insurance</li>
-          <li>CAM charges</li>
-        </ul>
-
-        <p className="mt-4 text-gray-700">
-          In a{" "}
-          <a
-            href="/marketing/triple-net-lease"
-            className="underline hover:text-black"
-          >
-            true NNN lease
-          </a>
-          , tenants are responsible for their proportionate share of all three. However, many leases labeled “NNN” still contain
-          carve-outs, caps, or exclusions that landlords may ignore.
-        </p>
-      </section>
-
-      {/* ---------- COMMON SURPRISES (NEW) ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          Common NNN Surprises Tenants Report
-        </h2>
-        <p className="text-gray-700">
-          Tenants are often surprised by how broadly NNN expenses are applied.
-          Property tax reassessments can cause sudden spikes, insurance premiums
-          may increase due to unrelated claims, and some landlords pass through
-          costs that primarily benefit ownership rather than tenants.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          The confusion is amplified when CAM is already embedded inside NNN,
-          making it difficult to tell whether an increase is driven by taxes,
-          insurance, or maintenance — or whether costs are being counted twice.
-        </p>
-      </section>
-
-      {/* ---------- SECTION 3 ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl sm:text-3xl font-light tracking-tight">
-          CAM vs NNN: The Key Differences
-        </h2>
-
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b text-left">
-                <th className="py-2 font-semibold">Category</th>
-                <th className="py-2 font-semibold">CAM</th>
-                <th className="py-2 font-semibold">NNN</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700">
-              <tr className="border-b">
-                <td className="py-2">Scope</td>
-                <td className="py-2">Common area expenses only</td>
-                <td className="py-2">CAM + taxes + insurance</td>
-              </tr>
-              <tr className="border-b">
-                <td className="py-2">Audit complexity</td>
-                <td className="py-2">Medium</td>
-                <td className="py-2">High</td>
-              </tr>
-              <tr className="border-b">
-                <td className="py-2">Typical disputes</td>
-                <td className="py-2">Admin fees, capex, reconciliation</td>
-                <td className="py-2">Tax spikes, insurance, double counting</td>
-              </tr>
-              <tr>
-                <td className="py-2">Negotiability</td>
-                <td className="py-2">Often capped</td>
-                <td className="py-2">Often misunderstood</td>
-              </tr>
-            </tbody>
-          </table>
+    <main className="bg-[#f5f7f3] text-[#102c25]">
+      <section className="overflow-hidden bg-[#102c25] px-6 py-20 text-white md:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p className="mb-6 text-xs font-bold uppercase tracking-[0.24em] text-[#a9e9be]">A clearer expense picture</p>
+            <h1 className="text-5xl font-semibold tracking-[-0.055em] md:text-7xl">CAM vs. NNN: <span className="text-[#a9e9be]">what&apos;s the difference?</span></h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-[#d6e5dc]">CAM generally covers common area costs. In a typical triple net arrangement, CAM sits alongside property taxes and insurance within the broader NNN expense total.</p>
+            <div className="mt-9 flex flex-wrap gap-3"><a href="#comparison" className="rounded-xl bg-[#a9e9be] px-6 py-3 font-semibold text-[#102c25]">Compare the charges ↓</a><Link href="/app/step-1-upload" className="rounded-xl border border-white/30 px-6 py-3 font-semibold text-white hover:bg-white/10">Start free lease preview ↗</Link></div>
+          </div>
+          <div className="rounded-[32px] border border-white/20 bg-white/10 p-5"><div className="rounded-[24px] bg-white p-7 text-[#102c25] shadow-2xl"><p className={eyebrow}>Think of NNN as the container</p><div className="mt-6 rounded-2xl border-2 border-[#8acda5] bg-[#e9f6ec] p-5"><p className="text-xl font-semibold">NNN expenses</p><div className="mt-5 grid gap-3 sm:grid-cols-3"><div className="rounded-xl bg-white p-4"><span className="block text-2xl">01</span><strong>Taxes</strong></div><div className="rounded-xl bg-white p-4"><span className="block text-2xl">02</span><strong>Insurance</strong></div><div className="rounded-xl bg-[#102c25] p-4 text-white"><span className="block text-2xl text-[#a9e9be]">03</span><strong>CAM</strong></div></div></div><p className="mt-5 text-sm leading-6 text-[#52685f]">The exact categories and allocation rules depend on the signed lease.</p></div></div>
         </div>
       </section>
-
-      {/* ---------- WHEN THIS CROSSES THE LINE (NEW) ---------- */}
-      <section className="mb-12">
-        <h2 className="mb-3 text-2xl font-bold">
-          When CAM or NNN Charges Cross the Line
-        </h2>
-        <p className="text-gray-700">
-          Not every increase is improper — but problems arise when charges
-          violate the lease terms. This includes passing through capital
-          improvements that should be amortized, exceeding CAM caps, charging
-          for landlord overhead, or allocating expenses unrelated to the
-          property.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          If charges feel unclear, inconsistent, or significantly higher than
-          prior years, that’s often a signal to review the lease language closely
-          and verify whether the expenses are allowed.
-        </p>
-
-        <p className="mt-4 text-gray-700">
-          For a structured framework on how to review these categories step-by-step, use our{" "}
-          <a
-            href="/marketing/cam-audit-checklist"
-            className="underline hover:text-black"
-          >
-            Tenant-First CAM Audit Checklist
-          </a>
-          , which outlines the most common classification, allocation, and reconciliation risks.
-        </p>
-      </section>
-
-      {/* ---------- CTA ---------- */}
-      <section className="rounded-xl border border-gray-200 bg-gray-50 p-6">
-        <h3 className="mb-2 text-xl sm:text-2xl font-light tracking-tight">
-          Not sure whether your charges are CAM or NNN?
-        </h3>
-        <p className="mb-4 text-gray-700">
-          Our automated{" "}
-          <a
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            lease audit
-          </a>{" "}
-          identifies CAM vs NNN obligations, flags
-          overcharges, and estimates what you may be able to recover.
-        </p>
-
-        <a
-          href="/app/step-1-upload"
-          className="inline-block rounded-lg bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-800"
-        >
-          Upload your lease & check now (Free Preview →)
-        </a>
-      </section>
+      <section id="comparison" className="mx-auto max-w-6xl px-6 py-20 md:py-24"><p className={eyebrow}>Side by side</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em] md:text-5xl">Two labels, different scopes.</h2><p className="mt-5 max-w-3xl text-lg leading-8 text-[#53675d]">The useful question is which costs your lease permits and how the landlord allocated them, rather than which label appears at the top of the statement.</p><div className="mt-10 grid gap-5 md:grid-cols-2"><div className="rounded-[28px] border border-[#dbe7df] bg-white p-8 md:p-10"><span className={eyebrow}>Common area maintenance</span><h3 className="mt-4 text-4xl font-semibold">CAM</h3><p className="mt-5 leading-7 text-[#53675d]">Shared property operating and maintenance costs, as defined by the lease. Examples may include landscaping, parking area maintenance, cleaning, and common area utilities.</p><div className="mt-8 border-t border-[#e2ebe4] pt-6 text-sm text-[#40594b]"><strong>Check:</strong> Category ledger, exclusions, caps, management or admin fees, and supporting invoices.</div></div><div className="rounded-[28px] border border-[#9fd5af] bg-[#e8f7ed] p-8 md:p-10"><span className={eyebrow}>Triple net expenses</span><h3 className="mt-4 text-4xl font-semibold">NNN</h3><p className="mt-5 leading-7 text-[#40594b]">A broader expense arrangement that commonly includes the tenant&apos;s share of property taxes, insurance, and CAM. Each category can have its own definitions and allocation rules.</p><div className="mt-8 border-t border-[#c9e5d1] pt-6 text-sm text-[#40594b]"><strong>Check:</strong> Tax bills, insurance detail, CAM backup, area schedules, estimates, and annual true-up.</div></div></div></section>
+      <section className="bg-white px-6 py-20 md:py-24"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.78fr_1.22fr]"><div><p className={eyebrow}>One fictional statement</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">Count CAM once.</h2><p className="mt-5 leading-8 text-[#53675d]">In this simplified example, the CAM line is already part of the $120,000 NNN pool. Adding it again would double-count it.</p><p className="mt-5 text-sm leading-6 text-[#62776b]">The figures illustrate the structure only. The lease and records decide whether each charge and share is correct.</p></div><div className="rounded-[28px] border border-[#dbe7df] bg-[#f5f7f3] p-7 md:p-10"><div className="space-y-4 text-lg"><div className="flex justify-between border-b border-[#dbe7df] pb-4"><span>Property taxes</span><strong>$40,000</strong></div><div className="flex justify-between border-b border-[#dbe7df] pb-4"><span>Property insurance</span><strong>$20,000</strong></div><div className="flex justify-between border-b border-[#dbe7df] pb-4"><span>CAM</span><strong>$60,000</strong></div><div className="flex justify-between rounded-xl bg-[#102c25] p-4 text-white"><span>Total NNN pool</span><strong>$120,000</strong></div><div className="flex justify-between px-4 text-[#087055]"><span>Illustrative tenant share · 10%</span><strong>$12,000</strong></div></div></div></div></section>
+      <section className="mx-auto max-w-6xl px-6 py-20 md:py-24"><p className={eyebrow}>Read beyond the label</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">What to compare in your own documents.</h2><div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{topics.map(([number, title, detail]) => <div key={number} className="rounded-[24px] border border-[#dbe7df] bg-white p-7"><span className="text-sm font-bold text-[#087055]">{number}</span><h3 className="mt-5 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-[#53675d]">{detail}</p></div>)}</div><div className="mt-8 rounded-2xl bg-[#e9f2eb] p-6 text-sm leading-7 text-[#40594b]"><strong>A common source of confusion:</strong> A statement may label the full pass-through “CAM/NNN” while also listing CAM as a component. Request the category detail before treating the labels as separate charges.</div></section>
+      <section className="bg-[#e9f2eb] px-6 py-20"><div className="mx-auto max-w-6xl"><p className={eyebrow}>Go deeper</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">Follow the expense trail.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[["NNN calculation examples", "/marketing/nnn-calculation-examples", "See the share and reconciliation math."],["CAM reconciliation", "/marketing/cam-reconciliation", "Understand the annual CAM true-up."],["Tenant-first CAM checklist", "/marketing/cam-audit-checklist", "Work through documents and questions."]].map(([title, href, description]) => <Link key={href} href={href} className="rounded-2xl border border-[#d4e5d8] bg-white p-6 hover:border-[#087055]"><strong className="text-xl">{title} ↗</strong><p className="mt-3 text-sm leading-6 text-[#53675d]">{description}</p></Link>)}</div></div></section>
+      <section className="bg-[#102c25] px-6 py-20 text-white"><div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your lease is the starting point</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">See the terms that apply to you.</h2><p className="mt-4 max-w-2xl text-[#d6e5dc]">Upload your lease for a free preview of extracted terms and initial questions. Add an annual statement when available for billing checks.</p></div><Link href="/app/step-1-upload" className="shrink-0 rounded-xl bg-[#a9e9be] px-6 py-4 font-semibold text-[#102c25]">Start free preview ↗</Link></div></section>
     </main>
   );
 }

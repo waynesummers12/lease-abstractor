@@ -34,7 +34,7 @@ const sections: Section[] = [
       {
         title: "NNN Calculation Examples",
         description:
-          "Real-world examples of how NNN charges are calculated and where errors commonly occur.",
+          "Illustrative NNN calculations for tenant share, admin fees, and the year-end true-up.",
         href: "/marketing/nnn-calculation-examples",
       },
       {
