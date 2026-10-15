@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { authenticatedPortfolioFetch } from "@/lib/portfolioFetch";
 import type { FollowUpTask } from "@/lib/reportFollowups";
+import ReportFeedback from "@/components/ReportFeedback";
 
 type Audit = {
   id: string;
@@ -121,6 +122,7 @@ export default function PortfolioAuditPage() {
               })}</div></div>;
             })}
           </section>
+          <ReportFeedback auditId={id} />
         </>}
       </div>
     </main>
