@@ -1,178 +1,170 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+const pageUrl = "https://www.saveonlease.com/marketing/triple-net-lease-vs-gross";
+
 export const metadata: Metadata = {
-  title: "Triple Net Lease vs Gross Lease: Key Differences for Tenants",
+  title: "Triple Net vs. Gross Lease: What Tenants Should Compare",
   description:
-    "Triple net lease vs gross lease explained. Learn how NNN and gross leases differ, who pays operating expenses, and where commercial tenants face overcharge risk.",
-  alternates: {
-    canonical: "https://www.saveonlease.com/marketing/triple-net-lease-vs-gross",
+    "Compare triple net and gross commercial leases, including who pays operating costs, how expenses can change, and which terms tenants should check.",
+  alternates: { canonical: pageUrl },
+  openGraph: {
+    title: "Triple Net vs. Gross Lease | SaveOnLease",
+    description: "A practical side-by-side guide to operating costs in NNN and gross leases.",
+    url: pageUrl,
+    siteName: "SaveOnLease",
+    type: "article",
   },
 };
 
+const comparison = [
+  { label: "Starting payment", nnn: "Base rent plus separately billed expense shares", gross: "Rent that typically includes some operating costs" },
+  { label: "Taxes, insurance, CAM", nnn: "Often charged to the tenant under lease terms", gross: "Often included in rent, subject to lease adjustments" },
+  { label: "Annual changes", nnn: "Expense estimates and actual costs may change", gross: "Rent or expense adjustments may still apply" },
+  { label: "What to review", nnn: "Expense definitions, share, caps, and reconciliation", gross: "Base year, expense stops, escalation, and exclusions" },
+];
+
+const questions = [
+  { number: "01", title: "Which costs are included?", detail: "Find the lease's exact definition of rent and operating expenses. A label like “gross” or “NNN” does not replace the written terms." },
+  { number: "02", title: "How can charges change?", detail: "Check annual estimates, reconciliation, base-year provisions, expense stops, and rent increases." },
+  { number: "03", title: "What limits apply?", detail: "Look for exclusions, caps, fee limits, gross-up rules, and treatment of capital costs." },
+  { number: "04", title: "How do you verify a bill?", detail: "Read the notice window and records-access terms, then compare the statement with invoices and allocation schedules." },
+];
+
+const related = [
+  { title: "Triple net leases", text: "Understand taxes, insurance, CAM, and how an NNN bill is built.", href: "/marketing/triple-net-lease" },
+  { title: "CAM reconciliation", text: "See how estimates and actual expenses are compared each year.", href: "/marketing/cam-reconciliation" },
+  { title: "Audit window deadlines", text: "Find the review and notice terms that apply to your lease.", href: "/marketing/audit-window-deadlines" },
+];
+
 export default function TripleNetLeaseVsGrossPage() {
   return (
-    <main className="mx-auto max-w-4xl px-6 py-16 space-y-12">
-      {/* HERO */}
-      <section className="space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-          Triple Net Lease vs Gross Lease: What’s the Difference?
-        </h1>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          When comparing a <strong>triple net lease vs gross lease</strong>,
-          the key difference is who pays operating expenses.
-        </p>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          In a gross lease, most property expenses are included in the rent.
-          In a triple net (NNN) lease, tenants pay base rent plus property
-          taxes, insurance, and common area maintenance (CAM).
-        </p>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          Tenants comparing a triple net lease vs gross lease are often deciding
-          between predictable rent and variable operating expense exposure.
-        </p>
-
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
-        >
-          Upload Your Lease (Free Preview)
-        </Link>
-      </section>
-
-      {/* SIDE-BY-SIDE COMPARISON */}
-      <section className="space-y-8 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Side‑by‑Side Comparison
-        </h2>
-
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="space-y-4">
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">Triple Net (NNN) Lease</h3>
-            <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-              <li>Tenant pays base rent</li>
-              <li>Tenant pays property taxes</li>
-              <li>Tenant pays insurance</li>
-              <li>Tenant pays CAM expenses</li>
-              <li>Costs fluctuate annually</li>
-            </ul>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:gap-16">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Commercial lease comparison</p>
+            <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Triple net or gross? <span className="text-[#a9e9be]">Follow the costs.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">
+              The difference is how a lease assigns and adjusts property operating costs. Compare the total payment, the terms behind it, and what can change after signing.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#comparison" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Compare the structures ↓</a>
+              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link>
+            </div>
           </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">Gross Lease</h3>
-            <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-              <li>Tenant pays one all‑inclusive rent</li>
-              <li>Landlord covers most operating expenses</li>
-              <li>Costs are more predictable</li>
-              <li>Less direct expense transparency</li>
-            </ul>
+          <div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The short version</p>
+            <div className="mt-6 space-y-4">
+              <div className="rounded-xl border border-white/20 bg-white/10 p-5">
+                <h2 className="text-lg font-semibold text-white">Triple net (NNN)</h2>
+                <p className="mt-2 text-sm leading-6 text-[#d9e9df]">Base rent, plus separately defined shares of taxes, insurance, and CAM.</p>
+              </div>
+              <div className="rounded-xl border border-white/20 bg-white/10 p-5">
+                <h2 className="text-lg font-semibold text-white">Gross</h2>
+                <p className="mt-2 text-sm leading-6 text-[#d9e9df]">Rent typically includes some operating costs; adjustments may still be allowed.</p>
+              </div>
+            </div>
+            <p className="mt-5 text-xs leading-6 text-[#d9e9df]">The signed lease, not its label, defines the actual payment obligations.</p>
           </div>
         </div>
       </section>
 
-      {/* FINANCIAL IMPACT */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Financial Impact for Tenants
-        </h2>
-
-        <p>
-          In a triple net lease, operating expenses are charged in addition
-          to base rent. The amount depends on taxes, insurance, and CAM budgets.
-        </p>
-
-        <p>
-          Without proper caps or audit rights, tenants may face rising costs
-          that were not fully anticipated at signing.
-        </p>
-
-        <p>
-          Many disputes arise during{" "}
-          <Link
-            href="/marketing/cam-reconciliation"
-            className="underline hover:text-black"
-          >
-            CAM reconciliation
-          </Link>{" "}
-          when annual expenses are finalized.
-        </p>
+      <section id="comparison" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Side by side</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">What changes between the two?</h2>
+          <p className="mt-5 text-base leading-8 text-[#516073]">These are common patterns. Modified gross, base-year, and expense-stop clauses can make a gross lease look different from a fully inclusive rent arrangement.</p>
+        </div>
+        <div className="mt-9 overflow-hidden rounded-[26px] border border-[#dbe6dc] bg-white shadow-sm">
+          <div className="hidden grid-cols-[.7fr_1fr_1fr] gap-6 bg-[#e9f4ec] px-6 py-5 text-sm font-bold text-[#102c25] md:grid">
+            <span>Compare</span><span>Triple net (NNN)</span><span>Gross</span>
+          </div>
+          {comparison.map((row) => (
+            <div key={row.label} className="grid gap-3 border-t border-[#e3ebe4] px-6 py-5 text-sm leading-6 md:grid-cols-[.7fr_1fr_1fr] md:gap-6">
+              <h3 className="font-semibold text-[#102c25]">{row.label}</h3>
+              <p className="text-[#516073]"><span className="font-semibold text-[#006d57] md:hidden">NNN: </span>{row.nnn}</p>
+              <p className="text-[#516073]"><span className="font-semibold text-[#006d57] md:hidden">Gross: </span>{row.gross}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* WHERE RISK OCCURS */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Where Overcharge Risk Appears
-        </h2>
-
-        <ul className="list-disc pl-6 space-y-2 marker:text-green-600">
-          <li>Improper allocation of shared expenses</li>
-          <li>Capital improvements billed as operating costs</li>
-          <li>Administrative markups on CAM</li>
-          <li>Charges exceeding lease‑defined caps</li>
-        </ul>
-
-        <p>
-          Understanding the difference between a triple net lease and gross
-          lease helps tenants evaluate risk — but reviewing the actual lease
-          language is what protects you.
-        </p>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-14">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Look beyond base rent</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Compare the total occupancy cost.</h2>
+            <p className="mt-5 text-base leading-8 text-[#516073]">A lower base rent does not always mean a lower total payment. In an NNN lease, the tax, insurance, and CAM components can move with actual costs. In a gross lease, read the rent adjustment language before assuming the payment stays fixed.</p>
+            <p className="mt-4 text-sm leading-7 text-[#516073]">The illustration shows how to add NNN components. It does not say a gross lease would cost the same amount.</p>
+          </div>
+          <div className="rounded-[26px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-9">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Illustrative NNN cost</p>
+            <div className="mt-6 grid gap-3 text-sm text-[#425b50]">
+              {[["Base rent", "$25 / sq ft"], ["Taxes", "$4 / sq ft"], ["Insurance", "$1 / sq ft"], ["CAM", "$6 / sq ft"]].map(([title, amount]) => (
+                <div key={title} className="flex justify-between gap-4 rounded-xl border border-[#cfe1d3] bg-white px-5 py-4"><span>{title}</span><span className="font-semibold text-[#102c25]">{amount}</span></div>
+              ))}
+              <div className="flex justify-between gap-4 rounded-xl bg-[#102c25] px-5 py-4 font-semibold text-white"><span>Total</span><span>$36 / sq ft</span></div>
+            </div>
+            <p className="mt-5 text-xs leading-6 text-[#516073]">For 5,000 sq ft, that is $180,000 per year in this arithmetic example. Actual terms and costs vary.</p>
+          </div>
+        </div>
       </section>
 
-      {/* INTERNAL LINKS */}
-      <section className="space-y-6 text-lg text-gray-700 leading-relaxed">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Related Guides
-        </h2>
-
-        <ul className="space-y-3">
-          <li>
-            <Link
-              href="/marketing/triple-net-lease"
-              className="underline hover:text-black"
-            >
-              What Is a Triple Net Lease?
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/triple-net-lease-meaning"
-              className="underline hover:text-black"
-            >
-              Triple Net Lease Meaning Explained
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/marketing/audit-window-deadlines"
-              className="underline hover:text-black"
-            >
-              Audit Window Deadlines
-            </Link>
-          </li>
-        </ul>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Read the actual terms</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Four questions for either lease.</h2>
+          <p className="mt-5 text-base leading-8 text-[#516073]">The lease&apos;s expense language matters more than the shorthand name on the cover page.</p>
+        </div>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {questions.map((item) => (
+            <div key={item.number} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span>
+              <h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#516073]">{item.detail}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="border-t pt-10 space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Unsure Which Lease Structure You Signed?
-        </h2>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Annual statements</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">If you receive a reconciliation, review it.</h2>
+            <p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Compare the billed categories, allocation, credits, and any lease limits. A difference worth questioning needs supporting records before it becomes a verified error.</p>
+          </div>
+          <Link href="/marketing/cam-reconciliation-checklist" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Use the reconciliation checklist ↗</Link>
+        </div>
+      </section>
 
-        <p className="text-lg text-gray-700 leading-relaxed">
-          Many tenants do not realize how expense pass‑through language affects
-          their total occupancy costs. A quick lease review can identify risk
-          before reconciliation deadlines close.
-        </p>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Keep learning</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Explore related guides.</h2>
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {related.map((item) => (
+            <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm">
+              <h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p>
+              <Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="inline-flex rounded-xl bg-black px-8 py-4 text-sm font-medium text-white hover:bg-gray-800 transition"
-        >
-          Review My Lease
-        </Link>
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Find the expense terms in your lease.</h2>
+            <p className="mt-4 text-base leading-8 text-[#d9e9df]">Start with a free lease preview to see the extracted terms and initial checks. Add an annual statement if you have one, then decide whether the full report is useful.</p>
+          </div>
+          <Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link>
+        </div>
       </section>
     </main>
   );
