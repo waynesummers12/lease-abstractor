@@ -133,13 +133,14 @@ export default function UploadLeasePage() {
       <p className="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
         Start with your signed commercial lease. Add an annual CAM or NNN statement to check readable charges, calculations, and lease terms together. You can preview the results before deciding whether to buy the full report.
       </p>
+      <a href="#upload-documents" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-900">I have my lease · Go to upload ↓</a>
     </div>
 
     <section aria-labelledby="document-checklist-title" className="mx-auto mt-10 max-w-5xl rounded-[28px] border border-[#d9e7dc] bg-[#f3f8f3] p-5 sm:p-8">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Before you upload</p>
-          <h2 id="document-checklist-title" className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Bring the lease. Add the bill if you have it.</h2>
+          <h2 id="document-checklist-title" className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">What to have ready.</h2>
         </div>
         <p className="text-sm font-semibold text-emerald-900">Only the lease is required</p>
       </div>
@@ -166,10 +167,10 @@ export default function UploadLeasePage() {
       <p className="mt-5 text-sm leading-6 text-[#456654]">A flagged item is a question to verify against the signed documents and source records. <Link href="/marketing/pricing" className="font-semibold text-emerald-800 underline underline-offset-4">See the free preview and full report side by side →</Link></p>
     </section>
 
-    <div className="mx-auto mt-8 max-w-3xl rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
+    <div id="upload-documents" className="mx-auto mt-8 max-w-3xl scroll-mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2 · Add your documents</p>
-        <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Start with the lease. Add the bill if you have it.</h2>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Choose your files.</h2>
         <p className="mt-2 text-sm text-slate-600">Use your signed lease, including amendments. A prior SaveOnLease report is not the source document. The annual statement and supporting PDFs are optional and can also be added on the preview page.</p>
       </div>
       <UploadForm
