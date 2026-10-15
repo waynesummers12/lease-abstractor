@@ -17,7 +17,7 @@ export default function NNNCalculationExamplesPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.06fr_.94fr]">
           <div>
             <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-[#a9e9be]">Learn the math</p>
-            <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.055em] md:text-7xl">NNN calculations, <span className="text-[#a9e9be]">step by step.</span></h1>
+            <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.055em] text-white md:text-7xl">NNN calculations, <span className="text-[#a9e9be]">step by step.</span></h1>
             <p className="mt-7 max-w-2xl text-lg leading-8 text-[#d6e5dc]">See how a property expense pool becomes a tenant charge, how an admin fee changes the total, and how monthly estimates reconcile at year end.</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <a href="#example" className="rounded-xl bg-[#a9e9be] px-6 py-3 font-semibold text-[#102c25]">Walk through the example ↓</a>
@@ -69,7 +69,7 @@ export default function NNNCalculationExamplesPage() {
       </section>
 
       <section className="bg-[#e9f2eb] px-6 py-20"><div className="mx-auto max-w-6xl"><p className={eyebrow}>Keep learning</p><h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]">The calculation is only the beginning.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[["CAM vs. NNN", "/marketing/cam-vs-nnn", "See which costs sit inside the NNN total."],["Pro rata share", "/marketing/pro-rata-share-explained", "Understand the percentage applied to a cost pool."],["NNN reconciliation", "/marketing/nnn-reconciliation", "Compare estimates with annual actuals."]].map(([title, href, description]) => <Link key={href} href={href} className="rounded-2xl border border-[#d4e5d8] bg-white p-6 hover:border-[#087055]"><strong className="text-xl">{title} ↗</strong><p className="mt-3 text-sm leading-6 text-[#53675d]">{description}</p></Link>)}</div></div></section>
-      <section className="bg-[#102c25] px-6 py-20 text-white"><div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Review your own lease</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em]">Bring the terms into focus.</h2><p className="mt-4 max-w-2xl text-[#d6e5dc]">Start with a free lease preview. Add an annual statement if available to see initial checks before deciding on a full report.</p></div><Link href="/app/step-1-upload" className="shrink-0 rounded-xl bg-[#a9e9be] px-6 py-4 font-semibold text-[#102c25]">Start free preview ↗</Link></div></section>
+      <section className="bg-[#102c25] px-6 py-20 text-white"><div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Review your own lease</p><h2 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-white">Bring the terms into focus.</h2><p className="mt-4 max-w-2xl text-[#d6e5dc]">Start with a free lease preview. Add an annual statement if available to see initial checks before deciding on a full report.</p></div><Link href="/app/step-1-upload" className="shrink-0 rounded-xl bg-[#a9e9be] px-6 py-4 font-semibold text-[#102c25]">Start free preview ↗</Link></div></section>
     </main>
   );
 }
