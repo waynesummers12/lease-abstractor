@@ -1,104 +1,53 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+const pageUrl = "https://www.saveonlease.com/marketing/lease-score-explained";
+
+export const metadata: Metadata = {
   title: "Lease Score Explained",
-  description:
-    "Understand how Lease Score evaluates CAM / NNN risk, escalation limits, and audit rights to show how tenant-favorable a commercial lease really is.",
+  description: "What can a commercial lease score tell you? Learn which CAM and NNN terms deserve review, and why a number cannot prove an overcharge.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "Lease Score Explained | SaveOnLease", description: "A practical guide to the lease terms behind CAM and NNN review questions.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
+const guideNav = [
+  { href: "/marketing/learn", label: "All guides" },
+  { href: pageUrl, label: "Lease score" },
+  { href: "/marketing/cam-expense-caps", label: "Expense caps" },
+  { href: "/marketing/audit-window-deadlines", label: "Audit deadlines" },
+];
+
+const reviewAreas = [
+  { number: "01", title: "Which costs can pass through?", detail: "Read the CAM and NNN definitions, exclusions, and rules for capital projects. A category name alone does not establish that a charge is permitted.", source: "Lease definitions · exclusions · amendments" },
+  { number: "02", title: "How is your share calculated?", detail: "Find the allocation method and the area figures it uses. Different expense pools may have different shares or denominators.", source: "Share clause · area schedule · statement" },
+  { number: "03", title: "What limits apply?", detail: "Check caps, base years, administration fees, and amortization language. A limit may apply only to certain expenses or years.", source: "Cap clause · fee language · calculation records" },
+  { number: "04", title: "When and how can you ask?", detail: "Notice, records access, and audit provisions may each have their own trigger, time period, recipient, and delivery method.", source: "Review rights · notices clause · delivery evidence" },
+];
+
+const faqs = [
+  { question: "Does SaveOnLease give every lease a numerical score?", answer: "No. The current review surfaces lease terms and questions to verify. It does not assign a universal numerical grade to every lease." },
+  { question: "Does a broad CAM clause mean I was overcharged?", answer: "No. The clause tells you what to investigate. The annual statement, invoices, allocation schedules, payment history, and the full signed agreement are needed to evaluate a particular bill." },
+  { question: "Is a lease with fewer protections automatically a bad deal?", answer: "No. Lease terms are negotiated alongside rent and other business terms. This guide helps identify questions, not judge the entire transaction." },
+  { question: "Can the free preview calculate a refund?", answer: "No. The free preview can show extracted lease terms and initial checks. Any dollar comparison depends on readable statements and enough supporting information; it is not a verified refund." },
+];
+
 export default function LeaseScorePage() {
-  return (
-    <main className="mx-auto max-w-4xl px-6 py-24">
-      {/* ---------- HERO ---------- */}
-      <section className="text-center">
-  <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-    Lease Score Explained — How We Evaluate CAM / NNN Risk
-  </h1>
-  <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-    This guide explains how Lease Score evaluates CAM / NNN risk, escalation limits, 
-    and audit rights to determine how tenant-favorable your commercial lease really is.
-  </p>
-</section>
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
 
-      {/* ---------- WHAT IT IS ---------- */}
-      <section className="mt-20 rounded-xl border bg-white p-8 shadow-sm">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">What Is Lease Score?</h2>
-        <p className="mt-4 text-gray-700">
-          Lease Score is a tenant-first assessment that evaluates the lease
-          provisions most likely to affect your total occupancy cost — not just
-          rent, but how CAM and NNN expenses are defined, limited, and enforced.
-        </p>
-        <p className="mt-4 text-gray-700">
-          It reflects how commercial leases are typically interpreted during
-          audits and disputes, based on real-world reconciliation outcomes.
-        </p>
-      </section>
+  return <main className="bg-[#f5f7f3] text-[#17243a]">
+    <nav aria-label="Lease review guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{guideNav.map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
 
-      {/* ---------- SCORE BREAKDOWN ---------- */}
-      <section className="mt-16 grid gap-6 md:grid-cols-3">
-        {/* LOW */}
-        <div className="rounded-xl border border-green-200 bg-green-50 p-6">
-          <h3 className="font-light tracking-tight text-green-900">Low Risk Lease</h3>
-          <p className="mt-2 text-sm text-green-900">
-            Strong tenant protections with defined CAM limits, excluded capital
-            expenses, and enforceable audit rights. These leases typically limit
-            unexpected cost increases.
-          </p>
-        </div>
+    <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24"><div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" /><div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Lease score explained</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Look beyond a score. <span className="text-[#a9e9be]">Know what the lease says.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">A single number cannot tell you whether a CAM or NNN bill is correct. The useful questions live in the lease language, the annual statement, and the records behind each charge.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#review-areas" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">See what to check ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div><div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">A more useful review</p><div className="mt-6 space-y-3">{[["01", "Find the clause", "What does the signed lease allow or limit?"], ["02", "Match the bill", "What did the statement actually charge?"], ["03", "Request support", "Which records can confirm the calculation?"]].map(([number, title, detail]) => <div key={number} className="flex gap-4 rounded-xl border border-white/20 bg-white/10 p-4"><span className="font-bold text-[#a9e9be]">{number}</span><div><p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p></div></div>)}</div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">SaveOnLease surfaces review items; it does not certify a bill or assign a universal numerical lease grade.</p></div></div></section>
 
-        {/* MEDIUM */}
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6">
-          <h3 className="font-light tracking-tight text-amber-900">Medium Risk Lease</h3>
-          <p className="mt-2 text-sm text-amber-900">
-            Some tenant protections exist, but key terms are ambiguous or
-            partially uncapped. These leases often require proactive monitoring
-            to prevent overcharges.
-          </p>
-        </div>
+    <section id="review-areas" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">What drives the questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Four places to start in your lease.</h2><p className="mt-5 text-base leading-8 text-[#516073]">These terms can change the questions worth asking about a CAM or NNN statement. Their effect depends on the exact agreement and billing records.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2">{reviewAreas.map((area) => <article key={area.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7"><span className="inline-flex h-9 w-9 items-center justify-center self-start rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{area.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{area.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{area.detail}</p><p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">Check: {area.source}</p></article>)}</div></section>
 
-        {/* HIGH */}
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-          <h3 className="font-light tracking-tight text-red-900">High Risk Lease</h3>
-          <p className="mt-2 text-sm text-red-900">
-            Limited tenant protections with broadly defined or uncapped CAM /
-            NNN charges. These leases are most likely to produce recoverable
-            overcharges if audited promptly.
-          </p>
-        </div>
-      </section>
+    <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">An example, not a grade</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">A flagged term becomes a question to verify.</h2><p className="mt-5 text-base leading-8 text-[#516073]">Imagine a lease limits increases in some controllable operating costs. The statement shows an increase. That is a reason to check which expenses fall under the cap and how the landlord calculated it.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">The increase alone does not show a breach or a recoverable amount. The lease definition, year-by-year figures, and supporting ledger matter.</p><Link href="/marketing/cam-expense-caps" className="mt-6 inline-flex text-sm font-semibold text-[#006d57] underline underline-offset-4">Read about CAM expense caps ↗</Link></div><div className="overflow-hidden rounded-[28px] border border-[#dbe6dc] bg-[#f9fbf8] shadow-xl shadow-[#102c25]/10"><div className="bg-[#102c25] px-6 py-5 text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be] sm:px-8">Illustrative review card</div><div className="space-y-3 p-6 sm:p-8">{[["Lease term", "Some controllable costs have an annual increase limit."], ["Statement observation", "The billed CAM total rose from the prior year."], ["Question to ask", "Which costs are subject to the limit, and how was it applied?"], ["Records to request", "Category ledger, prior-year reconciliation, and cap worksheet."]].map(([label, detail]) => <div key={label} className="rounded-xl border border-[#dbe6dc] bg-white px-5 py-4"><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#006d57]">{label}</p><p className="mt-2 text-sm leading-6 text-[#324b40]">{detail}</p></div>)}<p className="pt-2 text-xs leading-6 text-[#516073]">This example is fictional. Your signed lease and documents control the actual analysis.</p></div></div></div></section>
 
-      {/* ---------- WHY IT MATTERS ---------- */}
-      <section className="mt-20 rounded-xl border bg-gray-50 p-8">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">Why Lease Score Matters</h2>
-        <p className="mt-4 text-gray-700">
-          Most CAM / NNN disputes are governed by strict audit windows —
-          typically <strong>30–120 days</strong> after reconciliation. Lease
-          Score helps tenants quickly understand their exposure so they can act
-          before recovery rights expire.
-        </p>
-        <p className="mt-4 text-gray-700">
-          A higher-risk score doesn’t mean a lease is “bad” — it means timing,
-          documentation, and audit strategy matter more.
-        </p>
-      </section>
+    <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="grid gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">What the product provides</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Specific findings beat a generic number.</h2><p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">The free preview shows extracted lease details and initial topics to check. If you add a readable annual statement, it can surface billing questions. A paid PDF organizes page references, conditional comparisons, and records to request when the documents support them.</p></div><Link href="/marketing/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">See what is included ↗</Link></div></section>
 
-      {/* ---------- CTA ---------- */}
-      <section className="mt-20 rounded-2xl bg-black px-8 py-12 text-center text-white">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Want to know your Lease Score?
-        </h2>
-        <p className="mx-auto mt-3 max-w-xl text-gray-300">
-          Upload your commercial lease and receive a tenant-first CAM & NNN audit
-          with clear questions, risk indicators, and conditional bill comparisons when the documents support them.
-        </p>
+    <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Read the result with context.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></div></section>
 
-        <Link
-          href="/app/step-1-upload"
-          className="mt-6 inline-block rounded-lg bg-white px-6 py-3 text-sm font-medium text-black hover:bg-gray-200"
-        >
-          Run CAM & NNN Audit (Free Preview)
-        </Link>
-      </section>
-    </main>
-  );
+    <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Start with your own lease language.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">Upload a readable signed lease for a free preview. Add your annual CAM or NNN statement if you have one, and see the initial questions before deciding whether to buy the full report.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+  </main>;
 }

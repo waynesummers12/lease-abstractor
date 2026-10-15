@@ -298,7 +298,7 @@ const sections: Section[] = [
       {
         title: "Lease Score Explained",
         description:
-          "How tenant lease scoring identifies financial risk, exposure levels, and negotiation leverage.",
+          "Look beyond a score to the CAM and NNN terms, billing questions, and records that matter.",
         href: "/marketing/lease-score-explained",
       },
       {
