@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 
 type Props = {
   onUpload: (lease: File, statement?: File, supporting?: File[]) => void;
@@ -53,5 +54,9 @@ export default function UploadForm({ onUpload, loading }: Props) {
 
     {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
     <button type="submit" disabled={loading} className="min-h-12 w-full rounded-xl bg-[#102b25] px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{loading ? "Preparing your preview and reviewing documents…" : statement ? "Review lease + annual statement →" : "Preview lease terms for free →"}</button>
+    <aside aria-label="Your document privacy" className="rounded-xl border border-[#d9e7dc] bg-[#f3f8f3] px-4 py-4 text-sm leading-6 text-slate-700 sm:px-5">
+      <p className="font-semibold text-[#102b25]">Your documents stay private.</p>
+      <p className="mt-1">We use your files to prepare your preview and report. They are stored with restricted access so you can return to your results. You can request deletion of your documents and results at <a href="mailto:audits@saveonlease.com?subject=Data%20deletion%20request" className="font-semibold text-emerald-800 underline underline-offset-4">audits@saveonlease.com</a>. <Link href="/marketing/privacy" className="font-semibold text-emerald-800 underline underline-offset-4">Read our privacy policy →</Link></p>
+    </aside>
   </form>;
 }
