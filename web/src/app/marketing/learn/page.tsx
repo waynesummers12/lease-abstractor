@@ -58,7 +58,7 @@ const sections: Section[] = [
       {
         title: "NNN Lease Explained",
         description:
-          "A complete overview of NNN leases, including tax, insurance, and CAM obligations and how financial risk shifts to tenants.",
+          "How base rent, taxes, insurance, and CAM may fit together under your signed agreement.",
         href: "/marketing/nnn-lease",
       },
     ],
@@ -69,7 +69,7 @@ const sections: Section[] = [
       {
         title: "Audit Rights Explained",
         description:
-          "A complete overview of audit rights for commercial tenants covering CAM, NNN, tax, and insurance charges.",
+          "Read the records-access, objection, and audit procedures in your own lease.",
         href: "/marketing/audit-rights",
       },
       {
@@ -98,7 +98,7 @@ const sections: Section[] = [
       {
         title: "CAM Reconciliation Statement Explained",
         description:
-          "Understand what a CAM reconciliation statement is, how landlords calculate it, and the most common errors tenants uncover during reconciliation reviews.",
+          "Trace annual cost categories, tenant share, estimates paid, and the year-end balance.",
         href: "/marketing/cam-reconciliation-statement",
       },
       {
@@ -134,7 +134,7 @@ const sections: Section[] = [
       {
         title: "CAM Charges Explained",
         description:
-          "What CAM charges include, how they are structured, and which items are frequently disputed by commercial tenants.",
+          "Break a CAM bill into expense categories, allocation, fees, limits, and credits.",
         href: "/marketing/cam-charges",
       },
       {
@@ -158,7 +158,7 @@ const sections: Section[] = [
       {
         title: "CAM in Commercial Real Estate",
         description:
-          "How CAM structures operate specifically in commercial properties and where billing mistakes occur.",
+          "Follow shared property costs from vendor invoices to the tenant's annual charge.",
         href: "/marketing/cam-commercial-real-estate",
       },
       {
@@ -187,7 +187,7 @@ const sections: Section[] = [
       {
         title: "NNN Insurance Charges Explained",
         description:
-          "How insurance costs are allocated in NNN leases and when they are challengeable.",
+          "Compare insurance coverage, premiums, allocation, and the lease's pass-through language.",
         href: "/marketing/nnn-insurance-charges-explained",
       },
       {
@@ -210,7 +210,7 @@ const sections: Section[] = [
       {
         title: "CAM / NNN Overcharges Explained",
         description:
-          "Understand how CAM and NNN overcharges happen and why many tenants unknowingly overpay.",
+          "Separate the total billed from a specific, document-supported discrepancy.",
         href: "/marketing/cam-nnn-overcharges",
       },
       {
@@ -220,15 +220,15 @@ const sections: Section[] = [
         href: "/marketing/non-allowable-cam-nnn-expenses",
       },
       {
-        title: "Real CAM / NNN Overcharge Examples",
+        title: "CAM / NNN Billing Examples",
         description:
-          "Actual examples of CAM and NNN overcharges and how they were identified.",
+          "Fictional examples showing how to turn a surprising charge into a records question.",
         href: "/marketing/real-cam-nnn-overcharge-examples",
       },
       {
         title: "Lease Overcharge Explained",
         description:
-          "How commercial lease overcharges happen and how tenants identify billing mistakes before audit deadlines.",
+          "Use lease terms, statements, and records to investigate a possible billing discrepancy.",
         href: "/marketing/lease-overcharge",
       },
       {
@@ -257,7 +257,7 @@ const sections: Section[] = [
       {
         title: "Burger Restaurant Lease Audit Hub",
         description:
-          "Complete resource center for burger franchisees and multi-unit operators reviewing CAM, NNN, audit rights, reconciliation risks, and occupancy exposure.",
+          "Organize each restaurant location's lease, annual statement, CAM, NNN, and review terms.",
         href: "/marketing/burger-lease-hub",
       },
       {
@@ -274,19 +274,19 @@ const sections: Section[] = [
       {
   title: "Commercial Lease Checklist",
   description:
-    "A structured tenant-first checklist used to review CAM charges, NNN expenses, reconciliation statements, and audit window exposure in commercial leases.",
+    "A tenant-first checklist for CAM, NNN, annual statements, and lease-specific review steps.",
   href: "/marketing/commercial-lease-checklist",
 },
 {
   title: "Commercial Lease Checklist PDF",
   description:
-    "Download the structured commercial lease review checklist used by tenants to identify CAM charges, NNN expenses, reconciliation errors, and audit window exposure.",
+    "Download the free tenant-first worksheet for organizing CAM, NNN, and lease review questions.",
   href: "/marketing/commercial-lease-checklist-pdf",
 },
       {
         title: "Commercial Lease Audit Explained",
         description:
-          "How commercial lease audits work and how tenants identify financial exposure before audit windows close.",
+          "Connect lease definitions, annual billing, allocation, and notice terms to the records behind them.",
         href: "/marketing/commercial-lease-audit",
       },
       {
