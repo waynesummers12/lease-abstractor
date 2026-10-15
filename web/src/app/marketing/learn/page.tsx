@@ -1,6 +1,7 @@
 "use client";
 // src/app/marketing/learn/page.tsx
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 type Article = {
@@ -367,90 +368,63 @@ export default function LearnPage() {
       </section>
 
       {/* Featured Resource */}
-      <section className="rounded-3xl border-2 border-black bg-white p-12 text-center space-y-6 shadow-md">
-        <p className="text-xs uppercase tracking-widest text-gray-500">
-          Complimentary Download
-        </p>
-        <div className="flex justify-center">
-          <span className="inline-block rounded-full bg-black px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-            Most Downloaded Tenant Checklist
-          </span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl font-light tracking-tight">
-          The Tenant‑First CAM Audit Checklist
-        </h2>
-
-        <p className="mx-auto max-w-3xl text-lg text-gray-700 leading-relaxed">
-          A 25‑point structured review framework used to identify administrative
-          fee overapplication, capital misclassification, pro rata allocation
-          errors, expense volatility risks, and audit window exposure before
-          dispute deadlines expire.
-        </p>
-
-        <div className="pt-6 space-y-6">
-          <form
-            onSubmit={handleSubmit}
-            className="mx-auto flex max-w-xl flex-col sm:flex-row items-center gap-4"
-          >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email to download the checklist"
-              className="w-full rounded-xl border border-gray-300 px-5 py-4 text-sm focus:border-black focus:outline-none"
-            />
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className="inline-flex items-center gap-2 rounded-xl bg-black px-8 py-4 text-sm font-semibold text-white hover:bg-gray-800 transition disabled:opacity-50"
-            >
-              {/* PDF Icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-4 w-4"
-              >
-                <path d="M6 2a2 2 0 0 0-2 2v16l4-4h10a2 2 0 0 0 2-2V8l-6-6H6z" />
-              </svg>
-              Get Checklist →
-            </button>
-          </form>
-          <p className="flex items-center justify-center gap-1 text-xs text-gray-500 -mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-3 w-3 opacity-70"
-            >
-              <path d="M6 2a2 2 0 0 0-2 2v16l4-4h10a2 2 0 0 0 2-2V8l-6-6H6z" />
-            </svg>
-            Free PDF Download
-          </p>
-          {status === "success" && (
-            <p className="text-sm text-green-600">
-              Checklist sent. Check your inbox.
+      <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] text-white shadow-[0_24px_70px_rgba(16,44,37,0.16)]">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-44 h-[430px] w-[430px] rounded-full border border-white/10" />
+        <div className="relative grid gap-10 p-7 sm:p-10 lg:grid-cols-[1.12fr_.88fr] lg:items-center lg:gap-14 lg:p-14">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Free tenant field guide</p>
+            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+              Make your next CAM question count.
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-8 text-[#d9e9df]">
+              The Tenant-First CAM Audit Checklist gives you 25 practical checks across fees,
+              capital costs, tenant share, expenses, trends, and review rights.
             </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-red-600">
-              Something went wrong. Please try again.
-            </p>
-          )}
-
-          <p className="text-xs text-gray-500">
-            Secure. Confidential. No spam. We only send practical tenant-focused resources.
-          </p>
-
-          <div className="flex justify-center pt-2">
-            <Link
-              href="/marketing/cam-audit-checklist"
-              className="text-sm underline hover:text-black"
-            >
-              Or view the full online guide →
+            <div className="mt-7 flex flex-wrap gap-2 text-xs font-semibold text-[#d9e9df]">
+              {["8-page PDF", "Working worksheet", "Records request draft"].map((item) => (
+                <span key={item} className="rounded-full border border-white/20 bg-white/10 px-3 py-2">{item}</span>
+              ))}
+            </div>
+            <form onSubmit={handleSubmit} className="mt-9 max-w-xl">
+              <label htmlFor="checklist-email" className="block text-sm font-semibold text-white">Send the checklist to your inbox</label>
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="checklist-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  autoComplete="email"
+                  className="min-h-12 w-full rounded-xl border border-white/30 bg-white px-4 text-sm text-[#102c25] outline-none focus:border-[#a9e9be] focus:ring-2 focus:ring-[#a9e9be]"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] hover:bg-white disabled:opacity-60"
+                >
+                  {status === "loading" ? "Sending…" : "Get the free PDF ↗"}
+                </button>
+              </div>
+            </form>
+            {status === "success" && (
+              <p role="status" className="mt-4 text-sm text-[#a9e9be]">
+                Sent. You can also <a href="/assets/Tenant-First-CAM-Audit-Checklistv1.pdf" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-4">open your checklist now ↗</a>.
+              </p>
+            )}
+            {status === "error" && (
+              <p role="alert" className="mt-4 text-sm text-[#ffd6d6]">We couldn&apos;t send the email. Please try again.</p>
+            )}
+            <p className="mt-4 text-xs text-[#b9d1c2]">The guide is educational. Your lease and billing records determine what applies.</p>
+            <Link href="/marketing/cam-audit-checklist" className="mt-6 inline-flex text-sm font-semibold text-white underline underline-offset-4 hover:text-[#a9e9be]">
+              Explore the online checklist ↗
             </Link>
+          </div>
+          <div className="mx-auto w-full max-w-[390px] rounded-[25px] border border-white/20 bg-white/10 p-4 shadow-2xl shadow-black/20 sm:p-5">
+            <div className="overflow-hidden rounded-[15px] bg-white shadow-lg">
+              <Image src="/assets/tenant-first-cam-checklist-cover.png" alt="Cover of the eight-page Tenant-First CAM Audit Checklist" width={1044} height={1350} sizes="(max-width: 1024px) 80vw, 390px" className="h-auto w-full" />
+            </div>
+            <p className="mt-3 text-center text-xs text-[#d9e9df]">See the actual guide you will receive</p>
           </div>
         </div>
       </section>
@@ -527,8 +501,8 @@ export default function LearnPage() {
           Why This Matters Financially
         </h3>
         <p className="text-gray-700 leading-relaxed">
-          Even small CAM allocation errors can cost tenants $5,000–$50,000+ annually.
-          Because CAM and NNN charges recur every year, unnoticed errors compound over time.
+          A small allocation or classification difference can recur across statement years.
+          The financial effect depends on your lease, billed amounts, and supporting records.
         </p>
         <p className="text-gray-700 leading-relaxed">
           Reviewing your lease before{" "}
