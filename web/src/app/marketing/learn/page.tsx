@@ -304,7 +304,7 @@ const sections: Section[] = [
       {
         title: "Audit Window Language Explained",
         description:
-          "How audit window clauses are written in leases and how subtle language impacts tenant rights.",
+          "Read the trigger, required action, period, and delivery rules in your own lease.",
         href: "/marketing/audit-window-language",
       },
     ],
