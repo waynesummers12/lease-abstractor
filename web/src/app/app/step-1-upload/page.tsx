@@ -19,11 +19,12 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import UploadForm from "./UploadForm";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { trackFunnel } from "@/lib/funnelAnalytics";
 
 export default function UploadLeasePage() {
   const router = useRouter();
@@ -33,15 +34,21 @@ export default function UploadLeasePage() {
   const [uploading, setUploading] = useState(false);
   const [recoverAuditId, setRecoverAuditId] = useState<string | null>(null);
 
+  useEffect(() => {
+    trackFunnel("free_preview_started");
+  }, []);
+
   async function handleUpload(file: File, statement?: File, supporting: File[] = []) {
     setError(null);
     setRecoverAuditId(null);
     setUploading(true);
+    trackFunnel("upload_submitted", { includes_statement: Boolean(statement) });
 
     const auditId = crypto.randomUUID();
     const objectPath = `leases/${auditId}.pdf`; // ✅ REQUIRED
 
     let leaseReady = false;
+    let stage = "create_audit";
     try {
       // 1️⃣ Create audit row
       const portfolioLeaseId = new URLSearchParams(window.location.search).get("portfolioLeaseId");
@@ -67,6 +74,7 @@ export default function UploadLeasePage() {
       formData.append("auditId", auditId);
       formData.append("objectPath", objectPath);
 
+      stage = "lease_analysis";
       const ingestRes = await fetch(
         `${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`,
         {
@@ -84,10 +92,12 @@ export default function UploadLeasePage() {
         throw new Error(typeof result?.error === "string" ? result.error : "We couldn't analyze this PDF. Please try another copy of the lease.");
       }
       leaseReady = true;
+      trackFunnel("lease_uploaded", { includes_statement: Boolean(statement) });
 
       // The lease must be analyzed first. The existing reconciliation endpoint
       // then saves the optional statement and records on this same audit.
       if (statement) {
+        stage = "statement_analysis";
         const documents = new FormData();
         documents.append("files", statement);
         for (const support of supporting) documents.append("files", support);
@@ -103,12 +113,12 @@ export default function UploadLeasePage() {
       }
 
       // 3️⃣ Redirect (working path)
-      window.gtag?.("event", "lease_uploaded", { audit_id: auditId });
       router.push(`/app/step-3-review?auditId=${auditId}`);
     } catch (err: unknown) {
       console.error("Upload failed:", err);
       const errorMessage = err instanceof Error ? err.message : "Upload failed. Please try again.";
       setError(errorMessage);
+      trackFunnel("lease_upload_failed", { stage });
       if (leaseReady) setRecoverAuditId(auditId);
     } finally {
       // 🔥 ALWAYS reset state
@@ -139,13 +149,13 @@ export default function UploadLeasePage() {
         <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
       )}
       {recoverAuditId && <Link href={`/app/step-3-review?auditId=${recoverAuditId}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">Your lease preview is ready. Continue and add the statement there →</Link>}
-      <p className="mt-5 text-center text-sm text-slate-600">No credit card needed for the preview.</p>
+      <p className="mt-5 text-center text-sm text-slate-600">No credit card needed now. Review the free preview before choosing the $49.99 report.</p>
     </div>
 
     <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-sm text-slate-700 sm:grid-cols-3">
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">1. Upload</span><br />Choose the lease and, if available, an annual statement.</div>
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">2. Preview</span><br />Review extracted terms and any statement checks.</div>
-      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Buy the full PDF report only if it’s useful to you.</div>
+      <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">3. Decide</span><br />Pay $49.99 once for the full PDF only if it’s useful to you.</div>
     </div>
     <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-slate-600">The review flags questions to verify; it does not certify an overcharge or a refund. <Link href="/marketing/how-it-works" className="font-semibold text-emerald-800 underline underline-offset-4">See what the full report includes →</Link></p>
   </main>

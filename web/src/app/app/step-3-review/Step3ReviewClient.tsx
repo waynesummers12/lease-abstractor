@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { waitForAnalysis } from "../step-2-analysis/analysis.wait";
 import { useAuth } from "@/app/providers/AuthProvider";
+import { trackFunnel } from "@/lib/funnelAnalytics";
 
 type Analysis = {
   reconciliation?: { statementName: string; supportNames: string[]; checks: Array<{ label: string; result: string; status: string }> } | null;
@@ -46,6 +47,8 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
   const [documentBusy, setDocumentBusy] = useState(false);
   const [documentError, setDocumentError] = useState<string | null>(null);
   const [pendingDocuments, setPendingDocuments] = useState(false);
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const hasFiredLeaseUploaded = useRef(false);
 
@@ -66,14 +69,9 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
 
   // GA4: fire once when the preview is shown.
   useEffect(() => {
-    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
-
-    if (typeof window !== "undefined" && gtag) {
-      if (analysis && !hasFiredLeaseUploaded.current) {
-        hasFiredLeaseUploaded.current = true;
-
-        gtag("event", "lease_preview_viewed", { audit_id: auditId });
-      }
+    if (analysis && !hasFiredLeaseUploaded.current) {
+      hasFiredLeaseUploaded.current = true;
+      trackFunnel("lease_preview_viewed", { includes_statement: Boolean(analysis.reconciliation) });
     }
   }, [analysis, auditId]);
 
@@ -85,6 +83,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     }
     setDocumentError(null);
     setDocumentBusy(true);
+    trackFunnel("statement_analysis_started", { support_count: supportFiles.length });
     try {
       if (supportFiles.length > 4) throw new Error("Choose up to four supporting PDFs.");
       if ([statement, ...supportFiles].some((file) => file.size > 10 * 1024 * 1024) || [statement, ...supportFiles].reduce((sum, file) => sum + file.size, 0) > 29 * 1024 * 1024) throw new Error("Each PDF must be under 10 MB and all PDFs together under 29 MB.");
@@ -99,29 +98,40 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       if (!response.ok) throw new Error(result.error || "Document analysis failed");
       setAnalysis((current) => current ? { ...current, reconciliation: result.reconciliation } : current);
       setPendingDocuments(false);
+      trackFunnel("statement_analysis_completed", { support_count: supportFiles.length });
     } catch (error) {
       setDocumentError(error instanceof Error ? error.message : "Document analysis failed");
+      trackFunnel("statement_analysis_failed");
     } finally {
       setDocumentBusy(false);
     }
   }
 
   async function beginCheckout() {
-    if (!auditId) return;
-    const res = await fetch("/api/audit-checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
-      },
-      body: JSON.stringify({ auditId }),
-    });
-    const data = await res.json();
-    if (data?.url) {
-      window.gtag?.("event", "begin_checkout", { currency: "USD", value: 49.99, audit_id: auditId });
-      window.location.href = data.url;
-    } else {
-      alert("Failed to start checkout");
+    if (!auditId || checkoutBusy) return;
+    setCheckoutError(null);
+    setCheckoutBusy(true);
+    trackFunnel("checkout_clicked", { includes_statement: Boolean(analysis?.reconciliation) });
+    try {
+      const res = await fetch("/api/audit-checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({ auditId }),
+      });
+      const data = await res.json().catch(() => null);
+      if (res.ok && typeof data?.url === "string") {
+        trackFunnel("begin_checkout", { currency: "USD", value: 49.99 });
+        window.location.href = data.url;
+      } else {
+        throw new Error("Checkout could not open. Please try again.");
+      }
+    } catch {
+      setCheckoutError("Checkout could not open. Please try again.");
+      trackFunnel("checkout_start_failed");
+      setCheckoutBusy(false);
     }
   }
 
@@ -218,7 +228,7 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Steps 2 and 3 · Optional before payment</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Optional · Before checkout</p>
         <h2 className="mt-2 text-xl font-semibold text-slate-950">Add your annual statement and supporting records</h2>
         <p className="mt-2 text-sm text-slate-600">We can compare a text-readable CAM or NNN statement with the lease and check visible arithmetic. Add up to four supporting PDFs. The report will label what remains unverified.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -241,13 +251,14 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       <div>
         <button
           type="button"
-          disabled={documentBusy}
+          disabled={documentBusy || checkoutBusy}
           onClick={pendingDocuments ? analyzeDocuments : beginCheckout}
           className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
         >
-          {documentBusy ? "Analyzing selected documents…" : pendingDocuments ? "Analyze selected documents →" : "Unlock your report · $49.99"}
+          {documentBusy ? "Analyzing selected documents…" : checkoutBusy ? "Opening secure checkout…" : pendingDocuments ? "Analyze selected documents →" : "Unlock your report · $49.99"}
         </button>
         {documentError && <p role="alert" className="mt-3 text-center text-sm text-red-700">{documentError}</p>}
+        {checkoutError && <p role="alert" className="mt-3 text-center text-sm text-red-700">{checkoutError}</p>}
         <p className="mt-2 text-center text-xs text-slate-500">
           Secure one-time checkout. Your PDF is prepared after payment.
         </p>

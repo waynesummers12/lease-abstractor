@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CancelTracking from "./CancelTracking";
 
 export default async function CancelPage({
   searchParams,
@@ -10,6 +11,7 @@ export default async function CancelPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-32 text-center">
+      {auditId && <CancelTracking />}
       <h1 className="mb-4 text-3xl font-semibold">
         Audit Not Completed
       </h1>

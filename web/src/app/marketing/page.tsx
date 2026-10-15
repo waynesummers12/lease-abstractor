@@ -30,6 +30,12 @@ export default function MarketingHomePage() {
         <p className="mt-5 text-sm text-slate-500">$49.99 one-time for the paid report, with or without a statement. A potential discrepancy still needs supporting records and verification.</p>
       </section>
 
+      <section aria-label="From preview to report" className="border-y border-[#dce5dc] bg-[#f4f8f3] px-5 py-8 sm:px-8">
+        <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
+          {[{ step: "01 · Start free", title: "Upload your lease", detail: "Add a signed, readable lease. An annual statement is optional." }, { step: "02 · See the preview", title: "Review the first questions", detail: "Check extracted terms and any visible statement findings before paying." }, { step: "03 · Decide", title: "Unlock the full report", detail: "Pay $49.99 once only if you want the page-referenced PDF." }].map((item) => <div key={item.step} className="rounded-2xl border border-[#dce5dc] bg-white p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">{item.step}</p><h2 className="mt-2 text-lg font-semibold text-[#102b25]">{item.title}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{item.detail}</p></div>)}
+        </div>
+      </section>
+
       <section className="border-y border-slate-200 bg-slate-50 py-16">
         <div className="mx-auto grid max-w-6xl gap-6 px-5 sm:px-8 lg:grid-cols-2">
           <article className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
