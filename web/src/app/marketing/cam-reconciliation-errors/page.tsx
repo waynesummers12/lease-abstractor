@@ -1,316 +1,192 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import styles from "../CamGuide.module.css";
-import CamGuideNav from "../CamGuideNav";
+import type { Metadata } from "next";
+
+const pageUrl = "https://www.saveonlease.com/marketing/cam-reconciliation-errors";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.saveonlease.com"),
-  title:
-    "CAM Reconciliation Errors | Common Area Maintenance Audit Guide for Tenants",
-  description:
-    "Learn the most common CAM reconciliation errors in commercial leases, how overcharges happen, and how tenants can identify billing violations before audit windows close.",
-  alternates: {
-    canonical:
-      "https://www.saveonlease.com/marketing/cam-reconciliation-errors",
-  },
+  title: "CAM Reconciliation Errors to Check",
+  description: "Review six CAM reconciliation questions about expense categories, tenant share, capital work, fees, duplicates, and payment credits.",
+  alternates: { canonical: pageUrl },
   openGraph: {
-    title:
-      "CAM Reconciliation Errors | Common Area Maintenance Audit Guide",
-    description:
-      "Discover the most common CAM reconciliation errors in NNN leases and how tenants can dispute overcharges before deadlines expire.",
-    url: "https://www.saveonlease.com/marketing/cam-reconciliation-errors",
+    title: "CAM Reconciliation Errors to Check | SaveOnLease",
+    description: "A practical, document-based guide to checking an annual CAM statement.",
+    url: pageUrl,
     siteName: "SaveOnLease",
     type: "article",
   },
 };
 
+const guides = [
+  { href: "/marketing/cam-reconciliation", label: "Reconciliation" },
+  { href: pageUrl, label: "Errors" },
+  { href: "/marketing/cam-expense-caps", label: "Expense caps" },
+  { href: "/marketing/cam-admin-page", label: "Admin fees" },
+];
+
+const questions = [
+  { number: "01", title: "Is the tenant share right?", detail: "Compare premises area, the denominator, and any separate cost pool or vacancy rule with the signed lease.", evidence: "Lease formula · area schedule · statement share" },
+  { number: "02", title: "Does each category belong?", detail: "Match billed categories to the CAM definition, exclusions, caps, and any special treatment of utilities or services.", evidence: "Lease definition · category ledger" },
+  { number: "03", title: "How was capital work treated?", detail: "Ask whether a replacement or improvement is allowed, whether amortization applies, and what project records support it.", evidence: "Lease clause · invoice · amortization schedule" },
+  { number: "04", title: "Were fees calculated as agreed?", detail: "Check the administrative or management rate, the fee base, and whether other charges cover similar services.", evidence: "Fee clause · calculation · ledger" },
+  { number: "05", title: "Does a charge appear twice?", detail: "Trace similar descriptions across CAM, tax, insurance, and other lines before deciding whether the same cost was billed twice.", evidence: "Detail ledger · invoices · billing categories" },
+  { number: "06", title: "Were all payments credited?", detail: "Compare monthly estimates and prior credits with the amounts deducted in the year-end true-up.", evidence: "Payment history · statement credits" },
+];
+
+const reviewSteps = [
+  { title: "Mark the line", detail: "Write down the charge, page, amount, and why it needs an explanation." },
+  { title: "Find the clause", detail: "Locate the signed lease language that defines the category or calculation." },
+  { title: "Ask for support", detail: "Request the underlying detail through the lease's records-access procedure." },
+];
+
+const faqs = [
+  { question: "Does an unusual CAM charge prove an error?", answer: "No. It identifies a question. The lease language, calculation, and supporting records determine whether the charge was handled correctly." },
+  { question: "Can capital work ever appear in CAM?", answer: "Possibly. The answer depends on the signed lease, the nature of the work, and any conditions such as amortization or exclusions." },
+  { question: "How can I check for duplicate billing?", answer: "Compare the general ledger and invoices with the categories on the reconciliation. Similar labels alone do not prove the same cost was charged twice." },
+  { question: "When should I request records?", answer: "Read the lease's notice and records-access provisions promptly after receiving the statement. Timing and delivery requirements vary." },
+];
+
+const related = [
+  { title: "CAM reconciliation", text: "Understand the full annual true-up before checking line items.", href: "/marketing/cam-reconciliation" },
+  { title: "CAM admin fees", text: "Examine the fee rate, calculation base, and tenant share.", href: "/marketing/cam-admin-page" },
+  { title: "CAM audit checklist", text: "Use a structured review of the lease, statement, and records.", href: "/marketing/cam-audit-checklist" },
+];
+
 export default function CamReconciliationErrorsPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
+
   return (
-    <main className={`${styles.guide} space-y-16`}>
-      <CamGuideNav current="/marketing/cam-reconciliation-errors" />
-      {/* HERO */}
-      <section className="space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-light tracking-tight">
-          CAM Reconciliation Errors Tenants Should Watch For
-        </h1>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="CAM guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4">
+        <div className="mx-auto flex max-w-6xl flex-wrap gap-2">
+          {guides.map((item) => (
+            <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>
+          ))}
+        </div>
+      </nav>
 
-        <p className="text-lg text-gray-700 leading-relaxed">
-          CAM reconciliation errors are one of the most common sources of
-          overcharges in commercial leases. Under a
-          <Link
-            href="/marketing/triple-net-lease"
-            className="underline hover:text-black"
-          >
-            triple net (NNN) lease
-          </Link>
-          , annual Common Area Maintenance (CAM) true‑ups can materially impact
-          your total occupancy cost.
-        </p>
-
-        <p className="text-lg text-gray-700 leading-relaxed">
-          If you do not review your reconciliation carefully — and within your
-          <Link
-            href="/marketing/nnn-audit-rights"
-            className="underline hover:text-black"
-          >
-            audit rights window
-          </Link>
-          — you may permanently lose the ability to challenge improper charges.
-        </p>
-      </section>
-
-      {/* HOW ERRORS HAPPEN */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          How CAM Reconciliation Errors Happen
-        </h2>
-
-        <p className="text-gray-700 leading-relaxed">
-          CAM reconciliation compares estimated monthly CAM payments against
-          actual expenses incurred during the year. Errors typically occur
-          because of allocation mistakes, lease interpretation issues, or
-          structural billing practices that favor the landlord.
-        </p>
-
-        <p className="text-gray-700 leading-relaxed">
-          In many cases, overcharges are not obvious — they are embedded within
-          pro‑rata calculations, capital pass‑throughs, or administrative fee
-          layering.
-        </p>
-      </section>
-
-      {/* COMMON ERRORS */}
-      <section className="space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Most Common CAM Reconciliation Errors
-        </h2>
-
-        <div className="space-y-6 text-gray-700 leading-relaxed">
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
           <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              1. Incorrect Pro‑Rata Share Calculations
-            </h3>
-            <p>
-              Your pro‑rata share determines what percentage of total CAM you
-              pay. Miscalculations often stem from incorrect building square
-              footage assumptions or improper vacancy allocations.
-              See
-              <Link
-                href="/marketing/pro-rata-share-explained"
-                className="underline hover:text-black"
-              >
-                pro‑rata share explained
-              </Link>
-              .
-            </p>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">A sharper CAM review</p>
+            <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Six questions hiding in a <span className="text-[#a9e9be]">year-end statement.</span></h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">A CAM reconciliation can leave important details behind a single total. Use your signed lease, the statement, and supporting records to test the allocation and each category before calling something an error.</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#six-checks" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Explore the six checks ↓</a>
+              <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link>
+            </div>
           </div>
-
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              2. Capital Expenditures Passed Through as Operating Expenses
-            </h3>
-            <p>
-              Landlords may include capital improvements (roof replacements,
-              structural upgrades, parking lot reconstruction) inside CAM.
-              Many leases prohibit this unless amortized properly.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              3. Management & Administrative Fee Overages
-            </h3>
-            <p>
-              Administrative fees are often capped or narrowly defined. CAM
-              statements frequently exceed negotiated caps or apply fees to
-              ineligible expense categories.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              4. Vacancy Allocation Errors
-            </h3>
-            <p>
-              In multi‑tenant buildings, vacant space should not increase the
-              financial burden on active tenants beyond lease allowances.
-              Improper vacancy allocation can significantly inflate charges.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              5. Duplicate Charges Across CAM & NNN Categories
-            </h3>
-            <p>
-              Expenses may be double‑counted under CAM and property tax or
-              insurance line items. Careful reconciliation review is required
-              to detect these overlaps.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-lg sm:text-xl font-light tracking-tight">
-              6. Charges Outside Lease‑Defined Allowable Categories
-            </h3>
-            <p>
-              Some leases narrowly define allowable CAM expenses. Billing for
-              non‑allowable categories violates the lease agreement.
-            </p>
+          <div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The evidence chain</p>
+            <div className="mt-6 space-y-3">
+              {[["01 / The lease", "What is permitted, excluded, or limited?"], ["02 / The statement", "What was charged and how was it allocated?"], ["03 / The records", "What supports the amount and calculation?"]].map(([title, detail]) => (
+                <div key={title} className="rounded-xl border border-white/20 bg-white/10 p-4">
+                  <p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-5 text-xs leading-6 text-[#d9e9df]">A question is a reason to verify a charge, not proof of an overpayment.</p>
           </div>
         </div>
       </section>
 
-      {/* FINANCIAL IMPACT */}
-      <section className="space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Financial Impact of CAM Reconciliation Errors
-        </h2>
-
-        <p className="text-gray-700 leading-relaxed">
-          Even small percentage misallocations can translate into thousands —
-          or tens of thousands — of dollars over multi‑year lease terms.
-          Tenants often focus on base rent negotiations while overlooking CAM
-          structure risk.
-        </p>
-
-        <p className="text-gray-700 leading-relaxed">
-          A formal
-          <Link
-            href="/marketing/commercial-lease-audit"
-            className="underline hover:text-black"
-          >
-            commercial lease audit
-          </Link>
-          can identify cap violations, improper expense pass‑throughs, and
-          allocation discrepancies before dispute windows expire.
-        </p>
-
-        <div className="mt-6 rounded-lg border bg-white p-6 text-sm text-gray-700">
-          <p className="mb-3 font-medium">Related CAM & NNN Guides:</p>
-          <ul className="list-disc ml-6 space-y-2">
-            <li>
-              <Link href="/marketing/cam-reconciliation" className="underline hover:text-black">
-                Complete CAM Reconciliation Guide
-              </Link>
-              {' '}– Understand how annual true‑ups are calculated and where structural risk hides.
-            </li>
-            <li>
-              <Link href="/marketing/nnn-audit-rights" className="underline hover:text-black">
-                NNN Audit Rights Explained
-              </Link>
-              {' '}– Review your dispute window and procedural requirements before it closes.
-            </li>
-            <li>
-              <Link href="/marketing/cam-audit-checklist" className="underline hover:text-black">
-                CAM Audit Checklist
-              </Link>
-              {' '}– Step‑by‑step checklist for reviewing reconciliation statements.
-            </li>
-            <li>
-              <Link href="/marketing/triple-net-lease" className="underline hover:text-black">
-                Triple Net Lease (NNN) Overview
-              </Link>
-              {' '}– See how CAM fits into the broader NNN cost structure.
-            </li>
-          </ul>
+      <section id="six-checks" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Where to look</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Turn vague concerns into specific checks.</h2>
+          <p className="mt-5 text-base leading-8 text-[#516073]">These issues are worth examining, but the answer is lease-specific. Each card shows the records that can help resolve the question.</p>
+        </div>
+        <div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {questions.map((item) => (
+            <article key={item.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7">
+              <span className="inline-flex h-9 w-9 items-center justify-center self-start rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span>
+              <h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3>
+              <p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.detail}</p>
+              <p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">{item.evidence}</p>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-gray-50 p-8 rounded-xl space-y-4">
-        <h2 className="text-2xl sm:text-3xl font-light tracking-tight">
-          Review Your CAM Reconciliation Before It’s Too Late
-        </h2>
-
-        <p className="text-gray-700 leading-relaxed">
-          Upload your lease and reconciliation documents to identify potential
-          CAM and NNN overcharges before your audit window closes.
-        </p>
-
-        <Link
-          href="/app/step-1-upload"
-          className="inline-block mt-4 px-6 py-3 bg-black text-white rounded-lg hover:opacity-90 transition"
-        >
-          Upload Your Lease
-        </Link>
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-14">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">From concern to answer</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Keep every question traceable.</h2>
+            <p className="mt-5 text-base leading-8 text-[#516073]">A precise question is easier to investigate than a general claim that CAM is too high. Keep the statement page, lease section, requested records, and response together.</p>
+          </div>
+          <div className="rounded-[26px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-9">
+            <div className="space-y-3">
+              {reviewSteps.map((step) => (
+                <div key={step.title} className="rounded-xl border border-[#cfe1d3] bg-white p-5">
+                  <h3 className="font-semibold text-[#102c25]">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[#516073]">{step.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
-      {/* ARTICLE SCHEMA */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: "CAM Reconciliation Errors Tenants Should Watch For",
-            description:
-              "Common CAM reconciliation errors in commercial leases, how overcharges occur, and how tenants can dispute improper Common Area Maintenance charges.",
-            author: {
-              "@type": "Organization",
-              name: "SaveOnLease"
-            },
-            publisher: {
-              "@type": "Organization",
-              name: "SaveOnLease",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://www.saveonlease.com/logo.png"
-              }
-            },
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": "https://www.saveonlease.com/marketing/cam-reconciliation-errors"
-            },
-            articleSection: ["Commercial Real Estate", "CAM", "NNN Lease"],
-            datePublished: "2026-02-01",
-            dateModified: "2026-02-22"
-          })
-        }}
-      />
-      {/* FAQ SCHEMA */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "What is a CAM reconciliation error?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "A CAM reconciliation error occurs when a landlord miscalculates or improperly allocates Common Area Maintenance expenses in a commercial lease, resulting in overcharges to tenants."
-                }
-              },
-              {
-                "@type": "Question",
-                name: "Can tenants dispute CAM reconciliation charges?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Yes. Most commercial leases include audit rights allowing tenants to review and dispute CAM reconciliation charges within a specific time window."
-                }
-              },
-              {
-                "@type": "Question",
-                name: "What are common CAM overcharges?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Common CAM overcharges include capital improvements passed through as operating expenses, inflated administrative fees, incorrect pro-rata share calculations, and duplicate billing."
-                }
-              },
-              {
-                "@type": "Question",
-                name: "How long do tenants have to audit CAM charges?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Audit windows vary by lease, but tenants typically have 6–12 months after receiving a reconciliation statement to initiate a dispute."
-                }
-              }
-            ]
-          })
-        }}
-      />
+
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="grid gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Review the timing</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Check your lease&apos;s notice procedure.</h2>
+            <p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Records-access and objection periods vary. Read the signed clause soon after the statement arrives, and keep proof of any request you send.</p>
+          </div>
+          <Link href="/marketing/nnn-audit-rights" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Understand audit rights ↗</Link>
+        </div>
+      </section>
+
+      <section className="bg-white px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Continue the review</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Related guides.</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {related.map((item) => (
+              <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6">
+                <h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p>
+                <Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before drawing a conclusion.</h2>
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
+          {faqs.map((faq) => (
+            <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3>
+              <p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Read your lease beside the CAM statement.</h2>
+            <p className="mt-4 text-base leading-8 text-[#d9e9df]">Start with a free lease preview. Add an annual statement if you have one, then review the initial questions before deciding whether a full report is useful.</p>
+          </div>
+          <Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link>
+        </div>
+      </section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </main>
   );
 }
