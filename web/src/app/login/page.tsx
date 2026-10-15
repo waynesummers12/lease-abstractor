@@ -125,7 +125,7 @@ export default function LoginPage() {
 
         <section className="flex items-center px-6 py-16 sm:px-12 lg:px-16" aria-labelledby="sign-in-title">
           <div className="mx-auto w-full max-w-md">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Returning users</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Account access</p>
             <h2 id="sign-in-title" className="mt-3 text-4xl font-semibold tracking-tight text-[#102b25]">Sign in to your account.</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">Use Google or sign in with your email and password. If you previously used an email link, set a password once to return without requesting a link each time.</p>
             <button type="button" onClick={handleGoogleLogin} disabled={loading !== null} className="mt-9 flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border border-[#cbd9cd] bg-white px-5 font-semibold text-[#172820] shadow-sm transition hover:border-emerald-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">
