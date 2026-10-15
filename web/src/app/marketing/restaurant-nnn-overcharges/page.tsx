@@ -1,159 +1,63 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import styles from "../RetailGuide.module.css";
-import RetailGuideNav from "../RetailGuideNav";
+
+const pageUrl = "https://www.saveonlease.com/marketing/restaurant-nnn-overcharges";
 
 export const metadata: Metadata = {
-  title: "Restaurant NNN Charges: What to Check on Your CAM Statement",
-  description:
-    "A practical checklist for restaurant tenants reviewing NNN charges, CAM allocations, shared services, fee calculations, and payment credits.",
-  alternates: {
-    canonical: "https://www.saveonlease.com/marketing/restaurant-nnn-overcharges",
-  },
+  title: "Restaurant NNN Charges to Check",
+  description: "Review restaurant CAM and NNN statements with lease-specific questions about tenant share, shared services, fees, capital work, and payment credits.",
+  alternates: { canonical: pageUrl },
+  openGraph: { title: "Restaurant NNN Charges to Check | SaveOnLease", description: "A document-based guide to restaurant CAM and NNN questions.", url: pageUrl, siteName: "SaveOnLease", type: "article" },
 };
 
+const retailNav = [
+  { href: "/marketing/retail-lease-hub", label: "Retail hub" },
+  { href: "/marketing/franchise-cam-audit", label: "Franchise CAM" },
+  { href: pageUrl, label: "Restaurant NNN" },
+];
+
+const checks = [
+  { number: "01", title: "Tenant share", question: "Does the statement use the area and cost pool your lease requires?", records: "Lease share clause · rentable-area schedule · allocation worksheet" },
+  { number: "02", title: "Shared services", question: "Are trash, grease service, parking, delivery areas, or utilities assigned as the lease provides?", records: "Service invoices · cost-pool detail · allocation method" },
+  { number: "03", title: "Administrative fees", question: "Is the rate applied to the correct base, within any lease limit, and free of overlapping charges?", records: "Fee calculation · expense base · management invoices" },
+  { number: "04", title: "Capital projects", question: "How does the lease treat roof, paving, HVAC, or equipment work and any amortization?", records: "Project scope · invoice · in-service date · amortization schedule" },
+  { number: "05", title: "Payments and credits", question: "Do the monthly estimates and other credits appear in the annual true-up?", records: "Payment ledger · prior-year credits · annual reconciliation" },
+];
+
+const faqs = [
+  { question: "Does a higher NNN bill prove an overcharge?", answer: "No. A higher bill is a reason to compare the annual statement with the signed lease, payment history, and supporting records. The increase alone does not establish an error." },
+  { question: "Are restaurant-specific services always shared?", answer: "No. Whether a service is shared, separately billed, or excluded depends on the lease and the work actually performed. Ask for the invoice and allocation detail." },
+  { question: "Is the annual balance a recoverable amount?", answer: "No. The balance is the amount shown after charges and credits. It is not an overcharge unless the underlying terms and records support a correction." },
+  { question: "Will a report preserve my audit rights?", answer: "No. Read the lease's notice and records-access procedure and send any required request to the proper recipient before its deadline." },
+];
+
 export default function RestaurantNNNOverchargesPage() {
+  const faqJsonLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) };
+
   return (
-    <main className={`${styles.guide} bg-white text-slate-900`}>
-      <RetailGuideNav current="/marketing/restaurant-nnn-overcharges" />
-      <section className="bg-slate-950 px-6 py-16 text-white sm:py-20">
-        <div className="mx-auto max-w-5xl">
-          <p className="text-sm font-semibold uppercase tracking-widest text-emerald-300">
-            Restaurant lease guide
-          </p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">
-            Restaurant NNN charges: what to check on your CAM statement
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg text-slate-200">
-            A restaurant&apos;s annual NNN bill may include property taxes,
-            insurance, and shared operating costs. A higher bill is not
-            automatically an overcharge. Compare the statement with your
-            lease and payment records to find figures that need an explanation.
-          </p>
-          <Link
-            href="/app/step-1-upload"
-            className="mt-8 inline-block rounded-lg bg-emerald-400 px-6 py-3 font-semibold text-slate-950 hover:bg-emerald-300"
-          >
-            Upload your lease for a free preview
-          </Link>
+    <main className="bg-[#f5f7f3] text-[#17243a]">
+      <nav aria-label="Retail and franchise guides" className="border-b border-[#dbe6dc] bg-white px-6 py-4"><div className="mx-auto flex max-w-6xl flex-wrap gap-2">{retailNav.map((item) => <Link key={item.href} href={item.href} aria-current={item.href === pageUrl ? "page" : undefined} className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${item.href === pageUrl ? "border-[#102c25] bg-[#102c25] text-white" : "border-[#dbe6dc] bg-white text-[#36554a] hover:border-[#006d57] hover:text-[#006d57]"}`}>{item.label}</Link>)}</div></nav>
+
+      <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+        <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
+          <div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Restaurant lease guide</p><h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Know what is behind your <span className="text-[#a9e9be]">NNN bill.</span></h1><p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">Taxes, insurance, and shared operating costs can reach your restaurant through an annual reconciliation. Follow each charge from the statement back to the lease and the records that support it.</p><div className="mt-8 flex flex-wrap gap-3"><a href="#checks" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Explore the five checks ↓</a><Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition hover:bg-white/10">Preview your lease ↗</Link></div></div>
+          <div className="rounded-[26px] border border-white/20 bg-white/10 p-6 shadow-2xl shadow-black/20 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a9e9be]">The three-input review</p><div className="mt-6 space-y-3">{[["01", "Lease and amendments", "Which costs, shares, caps, and review rules apply?"], ["02", "Annual statement", "What year, cost pool, charges, and credits are shown?"], ["03", "Payment history", "Which estimates and other credits were already paid?"]].map(([number, title, detail]) => <div key={number} className="flex gap-4 rounded-xl border border-white/20 bg-white/10 p-4"><span className="text-sm font-bold text-[#a9e9be]">{number}</span><div><p className="font-semibold text-white">{title}</p><p className="mt-1 text-sm leading-6 text-[#d9e9df]">{detail}</p></div></div>)}</div><p className="mt-5 text-xs leading-6 text-[#d9e9df]">A higher bill is a question to investigate, not proof of an overcharge.</p></div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl space-y-14 px-6 py-16">
-        <section className="space-y-4">
-          <h2 className="text-3xl font-semibold">First, identify the three inputs</h2>
-          <ol className="list-decimal space-y-3 pl-6 text-slate-700">
-            <li>
-              <strong>Lease and amendments:</strong> Find the allowed expense
-              categories, exclusions, tenant share, caps, and review procedure.
-            </li>
-            <li>
-              <strong>Annual reconciliation:</strong> Note the year, cost pool,
-              your share, each category, and any balance or credit.
-            </li>
-            <li>
-              <strong>Payment ledger:</strong> Add the monthly estimates and
-              other credits paid during the same period.
-            </li>
-          </ol>
-          <p className="text-slate-700">
-            If NNN terms are new to you, start with our{" "}
-            <Link href="/marketing/triple-net-lease" className="text-emerald-800 underline">
-              triple net lease explanation
-            </Link>
-            .
-          </p>
-        </section>
+      <section id="checks" className="scroll-mt-28 mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Five restaurant billing questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Look past the category name.</h2><p className="mt-5 text-base leading-8 text-[#516073]">These are questions to verify, not a list of charges that are automatically disallowed. Keep the lease term and requested record beside each one.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{checks.map((item) => <article key={item.number} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm sm:p-7"><span className="inline-flex h-9 w-9 items-center justify-center self-start rounded-lg bg-[#e5f5eb] text-sm font-bold text-[#006d57]">{item.number}</span><h3 className="mt-5 text-xl font-semibold tracking-tight text-[#102c25]">{item.title}</h3><p className="mt-4 flex-1 text-sm leading-7 text-[#516073]">{item.question}</p><p className="mt-5 border-t border-[#e0e9e1] pt-4 text-xs font-semibold leading-6 text-[#006d57]">{item.records}</p></article>)}<div className="flex flex-col justify-center rounded-2xl border border-[#a5c9ae] bg-[#e9f4ec] p-6 sm:p-7"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#006d57]">Keep the distinction clear</p><h3 className="mt-4 text-xl font-semibold tracking-tight text-[#102c25]">A charge is not a finding.</h3><p className="mt-3 text-sm leading-7 text-[#425b50]">An invoice, ledger, or allocation schedule may be needed before you can determine whether an amount follows your agreement.</p></div></div></section>
 
-        <section className="space-y-5">
-          <h2 className="text-3xl font-semibold">Five restaurant billing questions</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {[
-              {
-                title: "Is the tenant share correct?",
-                text: "Compare your rentable area, the property's denominator, and any separate cost pools with the lease and area schedule.",
-              },
-              {
-                title: "Are shared services allocated consistently?",
-                text: "Check whether trash, grease service, delivery areas, parking, or utilities are charged to all tenants or only the spaces that use them, as the lease provides.",
-              },
-              {
-                title: "Are fees calculated on the right base?",
-                text: "Compare management and administrative fee rates and bases with any lease limits. Ask for the calculation behind a lump-sum fee.",
-              },
-              {
-                title: "How were capital projects treated?",
-                text: "Check roof, paving, HVAC, or equipment projects against the lease's capital cost and amortization language before classifying a charge as improper.",
-              },
-              {
-                title: "Were all payments credited?",
-                text: "Reconcile twelve monthly estimates, prior-year credits, and any direct reimbursements to the annual statement.",
-              },
-            ].map(({ title, text }) => (
-              <article key={title} className="rounded-xl border border-slate-200 p-5">
-                <h3 className="text-lg font-semibold">{title}</h3>
-                <p className="mt-2 text-slate-700">{text}</p>
-              </article>
-            ))}
-          </div>
-          <p className="text-slate-700">
-            These are checks, not claims that a particular charge is
-            disallowed. An invoice, ledger, or allocation schedule may be
-            needed to resolve the question.
-          </p>
-        </section>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">See the math</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">A balance is not an overcharge.</h2><p className="mt-5 text-base leading-8 text-[#516073]">This illustrative true-up shows how a balance can appear. The next task is to verify the cost pool, tenant share, and credits against the lease and records.</p><p className="mt-5 border-l-4 border-[#006d57] pl-5 text-sm leading-7 text-[#36554a]">Illustrative arithmetic only. It does not describe a real property or establish a recoverable amount.</p></div><div className="overflow-hidden rounded-[28px] border border-[#dbe6dc] bg-[#f9fbf8] shadow-xl shadow-[#102c25]/10"><div className="bg-[#102c25] px-6 py-5 text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be] sm:px-8">Illustrative annual true-up</div><div className="space-y-4 p-6 sm:p-8"><div className="flex items-center justify-between gap-4 border-b border-[#dbe6dc] pb-4 text-sm"><span>Allocated expense pool</span><strong className="text-[#102c25]">$300,000</strong></div><div className="flex items-center justify-between gap-4 border-b border-[#dbe6dc] pb-4 text-sm"><span>Illustrative tenant share</span><strong className="text-[#102c25]">× 5%</strong></div><div className="flex items-center justify-between gap-4 border-b border-[#dbe6dc] pb-4 text-sm"><span>Calculated share</span><strong className="text-[#102c25]">$15,000</strong></div><div className="flex items-center justify-between gap-4 border-b border-[#dbe6dc] pb-4 text-sm"><span>Estimated payments credited</span><strong className="text-[#102c25]">− $12,000</strong></div><div className="flex items-center justify-between gap-4 rounded-xl bg-[#e5f5eb] px-5 py-4"><span className="font-semibold text-[#102c25]">Statement balance</span><strong className="text-2xl text-[#006d57]">$3,000</strong></div><p className="text-xs leading-6 text-[#516073]">Verify every input. The $3,000 balance is not a proven overcharge.</p></div></div></div></section>
 
-        <section className="space-y-4">
-          <h2 className="text-3xl font-semibold">A simple reconciliation example</h2>
-          <p className="text-slate-700">
-            Suppose a statement shows $300,000 of allocated expenses and a
-            5% tenant share. That produces $15,000 before adjustments. If
-            $12,000 in estimated payments were credited, the visible balance
-            is $3,000. Next, verify whether the $300,000 cost pool, 5% share,
-            and $12,000 credit match the lease and records. The $3,000 is a
-            balance in this example, not a proven overcharge.
-          </p>
-        </section>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><div className="grid gap-8 rounded-[28px] border border-[#cfe1d3] bg-[#e9f4ec] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12"><div className="max-w-3xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">When a line does not match</p><h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#102c25] sm:text-3xl">Record the question. Check the review procedure.</h2><p className="mt-4 text-sm leading-7 text-[#425b50] sm:text-base">Note the statement year, line item, amount, and lease clause. Request the particular invoice, area schedule, fee calculation, or payment ledger needed to check it. A report does not send a notice or preserve rights for you.</p></div><Link href="/marketing/nnn-audit-rights" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#102c25] px-6 text-center text-sm font-semibold text-white transition hover:bg-[#1e4b3c]">Understand audit rights ↗</Link></div></section>
 
-        <section className="space-y-4">
-          <h2 className="text-3xl font-semibold">What to do when a line does not match</h2>
-          <p className="text-slate-700">
-            Record the statement year, line item, amount, and lease clause.
-            Request the particular invoice, area schedule, fee calculation,
-            or payment ledger needed to check it. Follow the lease&apos;s
-            instructions for who receives a request or objection and when.
-            A report does not send a notice or preserve rights for you.
-          </p>
-          <p className="text-slate-700">
-            Use the{" "}
-            <Link href="/marketing/cam-audit-checklist" className="text-emerald-800 underline">
-              CAM review checklist
-            </Link>{" "}
-            to organize your work. Multi-location operators can also compare
-            lease language and statement formats across sites using the{" "}
-            <Link href="/marketing/franchise-cam-audit" className="text-emerald-800 underline">
-              franchise CAM guide
-            </Link>
-            .
-          </p>
-        </section>
+      <section className="bg-white px-6 py-16 sm:py-20"><div className="mx-auto max-w-6xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Continue learning</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Keep the right guide close.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[{ title: "Triple net lease basics", text: "Understand taxes, insurance, and common-area costs.", href: "/marketing/triple-net-lease" }, { title: "CAM review checklist", text: "Organize the terms, figures, and records to request.", href: "/marketing/cam-audit-checklist" }, { title: "Franchise CAM", text: "Compare questions across locations without treating leases as identical.", href: "/marketing/franchise-cam-audit" }].map((item) => <div key={item.href} className="flex flex-col rounded-2xl border border-[#dbe6dc] bg-[#f9fbf8] p-6"><h3 className="text-xl font-semibold text-[#102c25]">{item.title}</h3><p className="mt-3 flex-1 text-sm leading-7 text-[#516073]">{item.text}</p><Link href={item.href} className="mt-5 text-sm font-semibold text-[#006d57] underline underline-offset-4 hover:text-[#102c25]">Read the guide ↗</Link></div>)}</div></div></section>
 
-        <section className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
-          <h2 className="text-3xl font-semibold">Review your restaurant lease and statement</h2>
-          <p className="mt-3 text-slate-700">
-            Start with a free lease preview. You can add an annual CAM or NNN
-            statement and up to four supporting PDFs before checkout. The
-            $49.99 report compares readable billing details with extracted
-            lease terms and labels what still needs verification.
-          </p>
-          <Link
-            href="/app/step-1-upload"
-            className="mt-5 inline-block rounded-lg bg-emerald-700 px-6 py-3 font-semibold text-white hover:bg-emerald-800"
-          >
-            Start your free preview
-          </Link>
-        </section>
-      </div>
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#006d57]">Common questions</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#102c25] sm:text-4xl">Before you draw a conclusion.</h2><div className="mt-8 grid gap-4 md:grid-cols-2">{faqs.map((faq) => <div key={faq.question} className="rounded-2xl border border-[#dbe6dc] bg-white p-6 shadow-sm"><h3 className="text-lg font-semibold text-[#102c25]">{faq.question}</h3><p className="mt-3 text-sm leading-7 text-[#516073]">{faq.answer}</p></div>)}</div></section>
+
+      <section className="bg-[#102c25] px-6 py-16 text-white sm:py-20"><div className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12"><div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your next step</p><h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Start with your lease and statement.</h2><p className="mt-4 text-base leading-8 text-[#d9e9df]">Begin with a free lease preview. Add an annual statement and supporting PDFs if you have them, then review the initial questions before deciding whether a full report is useful.</p></div><Link href="/app/step-1-upload" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#a9e9be] px-6 text-sm font-bold text-[#102c25] transition hover:bg-white">Start a free lease preview ↗</Link></div></section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </main>
   );
 }
