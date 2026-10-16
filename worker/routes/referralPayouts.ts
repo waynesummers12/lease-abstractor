@@ -2,6 +2,7 @@ import { Router } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import Stripe from "npm:stripe@20.2.0";
 import { supabase } from "../lib/supabase.ts";
 import { processReferralPayouts } from "../utils/processReferralPayouts.ts";
+import { processOwnerPayout } from "../utils/processOwnerPayout.ts";
 
 const router = new Router({ prefix: "/referral-payouts" });
 const key = Deno.env.get("STRIPE_SECRET_KEY");
@@ -106,16 +107,22 @@ router.post("/onboard", async (ctx) => {
 });
 
 router.post("/run", async (ctx) => {
-  if (!stripe || Deno.env.get("REFERRAL_PAYOUTS_ENABLED") !== "true") {
+  if (!stripe || Deno.env.get("REFERRAL_PAYOUTS_ENABLED") !== "true" ||
+      Deno.env.get("REFERRAL_OWNER_SWEEP_ENABLED") !== "true") {
     ctx.response.status = 503;
     ctx.response.body = { error: "Automatic referral payouts are not enabled." };
     return;
   }
   try {
     await verifiedPlatform();
-    const result = await processReferralPayouts(stripe);
-    ctx.response.status = result.failed ? 500 : 200;
-    ctx.response.body = result;
+    const settings = await stripe.balanceSettings.retrieve();
+    if (settings.payments.payouts?.schedule?.interval !== "manual") {
+      throw new Error("Automatic Stripe payouts would spend the referral reserve");
+    }
+    const referrals = await processReferralPayouts(stripe);
+    const ownerPayout = await processOwnerPayout(stripe);
+    ctx.response.status = referrals.failed ? 500 : 200;
+    ctx.response.body = { ...referrals, ownerPayout };
   } catch (error) {
     console.error("Referral payout run failed", error);
     ctx.response.status = 500;
