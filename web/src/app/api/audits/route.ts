@@ -38,6 +38,9 @@ export async function POST(req: Request) {
     }
     const capability = await auditCapability(auditId);
     if (!capability) return NextResponse.json({ error: "Audit access is unavailable" }, { status: 503 });
+    const cookieRef = req.headers.get("cookie")?.split(";").map((part) => part.trim())
+      .find((part) => part.startsWith("ref="))?.slice(4) ?? "";
+    const referrerCode = /^[a-z0-9_-]{1,48}$/i.test(cookieRef) ? cookieRef.toLowerCase() : null;
 
     if (req.headers.has("authorization")) {
       const access = await portfolioAccess(req);
@@ -51,6 +54,7 @@ export async function POST(req: Request) {
       const { error } = await access.db.from("lease_audits").insert({
         id: auditId, audit_pdf_path: objectPath, status: "uploaded",
         user_id: access.userId, portfolio_lease_id: portfolioLeaseId || null,
+        referrer_code: referrerCode,
       });
       if (error) return NextResponse.json({ error: "Failed to create audit" }, { status: 500 });
       return setAuditCookie(NextResponse.json({ success: true, auditId, capability },
@@ -68,7 +72,7 @@ export async function POST(req: Request) {
           "Content-Type": "application/json",
           "X-Audit-Proxy-Proof": proof,
         },
-        body: JSON.stringify({ auditId, objectPath }),
+        body: JSON.stringify({ auditId, objectPath, referrerCode }),
         cache: "no-store",
       }
     );

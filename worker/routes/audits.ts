@@ -32,7 +32,7 @@ const router = new Router();
 router.post("/audits", async (ctx) => {
   try {
     const body = await ctx.request.body().value;
-    const { auditId, objectPath } = body ?? {};
+    const { auditId, objectPath, referrerCode } = body ?? {};
 
     if (!auditId || !objectPath) {
       ctx.response.status = 400;
@@ -47,6 +47,8 @@ router.post("/audits", async (ctx) => {
       audit_pdf_path: objectPath, // ✅ FIXED
       status: "uploaded",
       created_at: new Date().toISOString(),
+      referrer_code: typeof referrerCode === "string" && /^[a-z0-9_-]{1,48}$/.test(referrerCode)
+        ? referrerCode : null,
     });
 
     if (error) {
