@@ -73,7 +73,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="border-t border-[#dce5dc] bg-white px-6 py-16"><div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">We&apos;re here to help</p><h2 className="mt-3 text-2xl font-semibold text-[#102b25] sm:text-3xl">Not sure which topic fits?</h2><p className="mt-3 text-slate-600">Send us a note in your own words and we&apos;ll take it from there.</p></div><a href="mailto:audits@saveonlease.com?subject=Question%20for%20SaveOnLease" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-900">Write to SaveOnLease ↗</a></div></section>
+      <section className="border-t border-[#dce5dc] bg-white px-6 py-16"><div className="mx-auto flex max-w-6xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">We&apos;re here to help</p><h2 className="mt-3 text-2xl font-semibold text-[#102b25] sm:text-3xl">Not sure which topic fits?</h2><p className="mt-3 text-slate-600">Send us a note in your own words and we&apos;ll take it from there.</p></div><a href="mailto:audits@saveonlease.com?subject=Question%20for%20SaveOnLease" className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-900">Email us ↗</a></div></section>
     </main>
   );
 }
