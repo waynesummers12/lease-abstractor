@@ -20,6 +20,10 @@ export default function ReferralPage() {
   const [copied, setCopied] = useState<"link" | "message" | null>(null);
   const [copyFailed, setCopyFailed] = useState(false);
   const [registeredCodes, setRegisteredCodes] = useState<string[]>([]);
+  const [monthlyEmailByCode, setMonthlyEmailByCode] = useState<Record<string, boolean>>({});
+  const [monthlyEmailOptIn, setMonthlyEmailOptIn] = useState(false);
+  const [preferenceSaving, setPreferenceSaving] = useState(false);
+  const [preferenceNotice, setPreferenceNotice] = useState("");
   const [registeredAccount, setRegisteredAccount] = useState<string | null>(null);
   const [registrationLoading, setRegistrationLoading] = useState(false);
   const [registrationError, setRegistrationError] = useState("");
@@ -37,11 +41,14 @@ export default function ReferralPage() {
   }, []);
 
   useEffect(() => {
+    setRegisteredCodes([]);
+    setMonthlyEmailByCode({});
+    setRegisteredAccount(null);
     if (!session?.access_token) return;
     let active = true;
     fetch("/api/referral-partners", { headers: { Authorization: `Bearer ${session.access_token}` }, cache: "no-store" })
       .then(async (response) => { if (!response.ok) throw new Error("Could not load your registered codes."); return response.json(); })
-      .then((result) => { if (active) { setRegisteredCodes((result.codes ?? []).filter((item: { status: string }) => item.status === "active").map((item: { code: string }) => item.code)); setRegisteredAccount(session.user.id); } })
+      .then((result) => { if (active) { const codes = (result.codes ?? []).filter((item: { status: string }) => item.status === "active") as { code: string; monthly_email_enabled: boolean }[]; setRegisteredCodes(codes.map((item) => item.code)); setMonthlyEmailByCode(Object.fromEntries(codes.map((item) => [item.code, item.monthly_email_enabled]))); setRegisteredAccount(session.user.id); } })
       .catch(() => { if (active) { setRegisteredAccount(null); setRegistrationError("Could not load your registered codes. Please refresh the page."); } });
     return () => { active = false; };
   }, [session?.access_token, session?.user.id]);
@@ -54,16 +61,37 @@ export default function ReferralPage() {
       const response = await fetch("/api/referral-partners", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, monthlyEmailEnabled: monthlyEmailOptIn }),
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "Could not register this code.");
       setRegisteredCodes((previous) => previous.includes(code) ? previous : [...previous, code]);
+      setMonthlyEmailByCode((previous) => ({ ...previous, [code]: monthlyEmailOptIn }));
       setRegisteredAccount(session.user.id);
     } catch (error) {
       setRegistrationError(error instanceof Error ? error.message : "Could not register this code.");
     } finally {
       setRegistrationLoading(false);
+    }
+  }
+
+  async function changeMonthlyEmail(enabled: boolean) {
+    setPreferenceNotice("");
+    if (!isRegistered || !session?.access_token) { setMonthlyEmailOptIn(enabled); return; }
+    setPreferenceSaving(true);
+    try {
+      const response = await fetch("/api/referral-partners", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ code, monthlyEmailEnabled: enabled }),
+      });
+      if (!response.ok) throw new Error("Could not save your email preference. Please try again.");
+      setMonthlyEmailByCode((previous) => ({ ...previous, [code]: enabled }));
+      setPreferenceNotice(enabled ? "Monthly email summaries are on." : "Monthly email summaries are off.");
+    } catch (error) {
+      setPreferenceNotice(error instanceof Error ? error.message : "Could not save your email preference.");
+    } finally {
+      setPreferenceSaving(false);
     }
   }
 
@@ -123,7 +151,7 @@ export default function ReferralPage() {
           <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">Your next step</p><h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Make a link you can actually use.</h2><p className="mt-5 leading-8 text-slate-600">Choose a short code that identifies you or your firm. Sign in once to register it to your account, then share your link. Your account email becomes your referral contact.</p><p className="mt-5 text-sm text-slate-500">Use letters, numbers, hyphens, or underscores. Avoid private information in a public link.</p></div>
           <div className="rounded-3xl border border-[#dce5dc] bg-[#f8faf7] p-6 shadow-sm sm:p-8">
             <label htmlFor="partner-code" className="block text-sm font-semibold">Your referral code</label>
-            <input id="partner-code" type="text" autoComplete="off" maxLength={48} value={name} onChange={(event) => { setName(event.target.value); setRegistrationError(""); }} placeholder="e.g. northstar-advisors" className="mt-3 w-full rounded-xl border border-[#cbd8cd] bg-white px-4 py-3 text-base outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+            <input id="partner-code" type="text" autoComplete="off" maxLength={48} value={name} onChange={(event) => { setName(event.target.value); setRegistrationError(""); setPreferenceNotice(""); }} placeholder="e.g. northstar-advisors" className="mt-3 w-full rounded-xl border border-[#cbd8cd] bg-white px-4 py-3 text-base outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
             {referralLink ? (
               <div role="status" className="mt-5 flex items-start gap-4 rounded-2xl border border-emerald-300 bg-[#102b25] p-5 text-white shadow-lg shadow-emerald-950/15 sm:p-6">
                 <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#a8edbf] text-2xl font-bold text-[#102b25]">✓</span>
@@ -131,6 +159,8 @@ export default function ReferralPage() {
               </div>
             ) : <p className="mt-3 text-sm text-slate-500">Enter a code to create your referral link and message.</p>}
             {code && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><p className="font-semibold text-[#17392c]">{isRegistered ? "✓ This code is registered to you" : "Register this code to your account"}</p><p className="mt-2 text-sm leading-6 text-slate-600">{isRegistered ? `We will use ${session?.user.email ?? "your account email"} to contact you about reporting and payment.` : authLoading ? "Checking your account…" : session ? `Register instantly with ${session.user.email ?? "your account"}. No email to us is needed.` : "Sign in with Google, a password, or an email link. You will return here with your code ready to register."}</p>{!isRegistered && !authLoading && (session ? <button type="button" onClick={registerCode} disabled={registrationLoading} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{registrationLoading ? "Registering…" : "Register my code"}</button> : <Link href={returnToRegistration} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Sign in to register ↗</Link>)}{registrationError && <p role="alert" className="mt-3 text-sm font-semibold text-red-700">{registrationError}</p>}</div>}
+            {code && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><p className="font-semibold text-[#17392c]">{isRegistered ? "✓ This code is registered to you" : "Register this code to your account"}</p><p className="mt-2 text-sm leading-6 text-slate-600">{isRegistered ? `Your account email is ${session?.user.email ?? "on file"}.` : authLoading ? "Checking your account…" : session ? `Register instantly with ${session.user.email ?? "your account"}. No email to us is needed.` : "Sign in with Google, a password, or an email link. You will return here with your code ready to register."}</p>{!isRegistered && !authLoading && (session ? <button type="button" onClick={registerCode} disabled={registrationLoading} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{registrationLoading ? "Registering…" : "Register my code"}</button> : <Link href={returnToRegistration} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Sign in to register ↗</Link>)}{registrationError && <p role="alert" className="mt-3 text-sm font-semibold text-red-700">{registrationError}</p>}</div>}
+            {code && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><label className="flex cursor-pointer items-start gap-3"><input type="checkbox" checked={isRegistered ? monthlyEmailByCode[code] ?? false : monthlyEmailOptIn} disabled={preferenceSaving} onChange={(event) => changeMonthlyEmail(event.target.checked)} className="mt-1 h-4 w-4 accent-emerald-800" /><span><strong className="block text-sm text-[#17392c]">Email me a monthly referral summary</strong><span className="mt-1 block text-sm leading-6 text-slate-600">After each month ends, receive counts of analyzed leases and paid reports, plus commissions earned for this code. You can turn this off here anytime.</span></span></label>{preferenceSaving && <p role="status" className="mt-3 text-sm text-slate-600">Saving your preference…</p>}{preferenceNotice && <p role="status" className="mt-3 text-sm font-semibold text-emerald-800">{preferenceNotice}</p>}</div>}
             <div className="mt-7 rounded-2xl border border-[#dce5dc] bg-white p-4"><p className="text-xs font-bold uppercase tracking-[0.13em] text-slate-500">Your shareable link</p><p className="mt-2 break-all font-mono text-sm text-[#17392c]">{referralLink || "www.saveonlease.com/app/step-1-upload?ref=your-code"}</p><p className="mt-2 text-xs text-slate-500">This takes your client straight to the free lease preview upload.</p></div>
             <div className="mt-4 overflow-hidden rounded-2xl border border-[#b9cebd] bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dce5dc] bg-[#eaf5ec] px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">{isRegistered ? "Ready to share" : "Message preview"}</p><p className="mt-1 font-semibold text-[#17392c]">Preview your intro message</p></div><div className="flex flex-wrap gap-2">{isRegistered ? <><a href={emailShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Email message ↗</a><a href={textShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Text message ↗</a></> : <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-800">Register to share</span>}</div></div><div className="p-5"><p className="text-sm leading-6 text-slate-600">This is exactly what Copy intro message will copy. Personalize it after pasting.</p><p className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-[#dce5dc] bg-[#f8faf7] p-5 text-sm leading-6 text-[#17392c]">{referralLink ? message : "Enter a referral code above to preview your message with its link."}</p></div></div>
             <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={!isRegistered} onClick={() => copy(referralLink, "link")} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40">{copied === "link" ? "Link copied" : "Copy link"}</button><button type="button" disabled={!isRegistered} onClick={() => copy(message, "message")} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#b9cebd] bg-white px-5 py-3 text-sm font-semibold text-[#17392c] transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40">{copied === "message" ? "Message copied" : "Copy intro message"}</button></div>
@@ -142,7 +172,7 @@ export default function ReferralPage() {
                 <li><strong>1. Register your code here.</strong> Sign in, enter your code above, and select <strong>Register my code</strong>. We attach it to your account immediately. There is no registration email to send.</li>
                 <li><strong>2. Share your link.</strong> Once you see <strong>Ready to share</strong>, copy your link or intro message. When a tenant opens the link, we save your code in their browser for 30 days and carry it through checkout.</li>
                 <li><strong>3. We record a paid referral.</strong> Our private report counts referred leases that reach analysis and paid reports by code and month. A paid report with your code attached earns a 20% commission; a free preview alone does not.</li>
-                <li><strong>4. We coordinate payment.</strong> We use the email on your account to contact you about referral totals and payout details. Payment is handled by our team; it is not automatic yet.</li>
+                <li><strong>4. Get a monthly summary if you opt in.</strong> After each month ends, we email analyzed lease counts, paid reports, and commissions earned for your code. You can change this preference above. Our team coordinates payouts separately; the email is a report, not a payment confirmation.</li>
               </ol>
               <p className="mt-5 text-sm leading-6 text-[#456654]">Have a code with earlier activity or a payment question? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Email us ↗</a></p>
             </div>

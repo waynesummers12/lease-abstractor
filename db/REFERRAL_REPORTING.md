@@ -54,5 +54,18 @@ After a payout is actually sent, mark the matching rows `paid = true` in the
 from `commission_unpaid_usd` to `commission_marked_paid_usd`. Do not mark them
 paid when merely scheduling or preparing a payout.
 
-This report does not send emails or payments automatically. Review the numbers
-and confirm reporting and payout timing with each partner by email.
+## Monthly partner emails
+
+Partners may opt in on `/marketing/referral` when they register a code or later
+change the checkbox for that code. The `referral-monthly-emails` Vercel cron runs
+at 16:00 UTC on days 1–5 of each month. It reads the previous UTC month's
+`referral_monthly_report` and emails each opted-in active partner the number of
+analyzed leases, paid reports, and commission earned. A month with no activity
+still produces a zero-activity summary. The account's current email address is
+used, and no lease or customer details are included.
+
+`public.referral_monthly_email_deliveries` records one delivery per code and
+month so cron retries do not ordinarily duplicate emails. The job also uses a
+Resend idempotency key. If delivery fails, inspect the Vercel function logs and
+this table. The automated email is a report only: staff must still reconcile
+commissions and arrange payouts, then mark paid referrals in Supabase.
