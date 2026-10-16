@@ -13,6 +13,7 @@ import downloadAuditPdfRoutes from "./routes/downloadAuditPdf.ts";
 import portfolioLeasesRoutes from "./routes/portfolioleases.ts";
 import portfolioBoardPdfRoutes from "./routes/portfolioBoardPdf.ts";
 import reconcileRoutes from "./routes/reconcile.ts";
+import referralPayoutRoutes from "./routes/referralPayouts.ts";
 
 const app = new Application();
 
@@ -54,7 +55,8 @@ app.use(async (ctx, next) => {
   const protectedRoute = path.startsWith("/auditById/") ||
     path.startsWith("/downloadAuditPdf/") ||
     (path === "/audits" && ctx.request.method === "POST") ||
-    path === "/checkout/create" || path === "/checkout/recover" || path === "/audit/generate-pdf";
+    path === "/checkout/create" || path === "/checkout/recover" || path === "/audit/generate-pdf" ||
+    path.startsWith("/referral-payouts/");
   if (protectedRoute) {
     const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!secret) {
@@ -106,6 +108,9 @@ app.use(auditPdfRoutes.allowedMethods());
 
 app.use(reconcileRoutes.routes());
 app.use(reconcileRoutes.allowedMethods());
+
+app.use(referralPayoutRoutes.routes());
+app.use(referralPayoutRoutes.allowedMethods());
 
 app.use(portfolioLeasesRoutes.routes());
 app.use(portfolioLeasesRoutes.allowedMethods());

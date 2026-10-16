@@ -82,7 +82,7 @@ export async function GET(request: Request) {
         from: "SaveOnLease <audit@saveonlease.com>",
         to: userResult.user.email,
         subject: `Your SaveOnLease referral summary — ${label}`,
-        text: `Your ${label} referral summary for code ${partner.code}\n\nLeases that reached analysis: ${analyzed}\nPaid reports: ${paid}\nCommission earned on those reports: $${earned}\nOf that month's commission, marked paid: $${markedPaid}\nOf that month's commission, not yet marked paid: $${unpaid}\n\nA free preview does not earn a commission. These amounts reflect our recorded purchases for ${label}; they are not a payment confirmation. Our team coordinates payouts separately.\n\nManage your monthly email preference: https://www.saveonlease.com/marketing/referral#create-link\nQuestions? Email audits@saveonlease.com.`,
+        text: `Your ${label} referral summary for code ${partner.code}\n\nLeases that reached analysis: ${analyzed}\nPaid reports: ${paid}\nCommission earned on those reports: $${earned}\nOf that month's commission, marked paid: $${markedPaid}\nOf that month's commission, awaiting payment: $${unpaid}\n\nA free preview does not earn a commission. These figures reflect recorded purchases for ${label}, not a bank payment confirmation. Refunds or disputes may change the final amount. If Stripe payout setup is not yet available, we will coordinate payment directly.\n\nManage your monthly email preference: https://www.saveonlease.com/marketing/referral#create-link\nQuestions? Email audits@saveonlease.com.`,
       }, { idempotencyKey: `referral-summary/${partner.code}/${month}` });
       if (sendError) throw sendError;
       const { error: saveError } = await db.from("referral_monthly_email_deliveries")

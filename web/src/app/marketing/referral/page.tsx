@@ -38,6 +38,9 @@ export default function ReferralPage() {
   const [registrationLoading, setRegistrationLoading] = useState(false);
   const [codesLoading, setCodesLoading] = useState(false);
   const [registrationError, setRegistrationError] = useState("");
+  const [payoutState, setPayoutState] = useState<"loading" | "needs_setup" | "needs_details" | "ready" | "unavailable">("loading");
+  const [payoutBusy, setPayoutBusy] = useState(false);
+  const [payoutError, setPayoutError] = useState("");
   const code = cleanCode(name);
   const isRegistered = code !== "" && registeredAccount === session?.user.id && registeredCodes.includes(code);
   const referralLink = code ? `https://www.saveonlease.com/app/step-1-upload?ref=${encodeURIComponent(code)}` : "";
@@ -89,6 +92,34 @@ export default function ReferralPage() {
     })();
     return () => { active = false; };
   }, [session?.access_token, session?.user.id]);
+
+  useEffect(() => {
+    if (!isRegistered || !session?.access_token) return;
+    let active = true;
+    fetch("/api/referral-payouts", { headers: { Authorization: `Bearer ${session.access_token}` }, cache: "no-store" })
+      .then(async (response) => {
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Could not check payout setup.");
+        if (active) setPayoutState(result.state);
+      })
+      .catch((error) => { if (active) { setPayoutState("unavailable"); setPayoutError(error instanceof Error ? error.message : "Could not check payout setup."); } });
+    return () => { active = false; };
+  }, [isRegistered, session?.access_token]);
+
+  async function setUpPayouts() {
+    if (!session?.access_token || payoutBusy) return;
+    setPayoutBusy(true);
+    setPayoutError("");
+    try {
+      const response = await fetch("/api/referral-payouts", { method: "POST", headers: { Authorization: `Bearer ${session.access_token}` } });
+      const result = await response.json();
+      if (!response.ok || !result.url) throw new Error(result.error || "Could not open payout setup.");
+      window.location.assign(result.url);
+    } catch (error) {
+      setPayoutError(error instanceof Error ? error.message : "Could not open payout setup.");
+      setPayoutBusy(false);
+    }
+  }
 
   async function registerCode() {
     if (!session?.access_token || registrationLoading) return;
@@ -191,6 +222,7 @@ export default function ReferralPage() {
             )}
             {code && !isRegistered && <div id="activate-link" className="mt-4 scroll-mt-28 rounded-2xl border border-[#b9cebd] bg-white p-5"><p className="font-semibold text-[#17392c]">Finish setting up this link</p><p className="mt-2 text-sm leading-6 text-slate-600">{authLoading || codesLoading ? "Checking your account…" : session ? "Connect this link to your account so purchases are credited to you." : "Sign in once and we will connect this link to your account automatically."}</p>{!authLoading && !codesLoading && (session ? <button type="button" onClick={registerCode} disabled={registrationLoading} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{registrationLoading ? "Setting up…" : "Finish setup"}</button> : <Link href={returnToRegistration} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Sign in to finish ↗</Link>)}{registrationError && <p role="alert" className="mt-3 text-sm font-semibold text-red-700">{registrationError}</p>}</div>}
             {isRegistered && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><label className="flex cursor-pointer items-start gap-3"><input type="checkbox" checked={monthlyEmailByCode[code] ?? false} disabled={preferenceSaving} onChange={(event) => changeMonthlyEmail(event.target.checked)} className="mt-1 h-4 w-4 accent-emerald-800" /><span><strong className="block text-sm text-[#17392c]">Email me a monthly referral summary</strong><span className="mt-1 block text-sm leading-6 text-slate-600">After each month ends, receive counts of analyzed leases and paid reports, plus commissions earned for this code. You can turn this off here anytime.</span></span></label>{preferenceSaving && <p role="status" className="mt-3 text-sm text-slate-600">Saving your preference…</p>}{preferenceNotice && <p role="status" className="mt-3 text-sm font-semibold text-emerald-800">{preferenceNotice}</p>}</div>}
+            {isRegistered && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">Commission payments</p><h3 className="mt-2 text-xl font-semibold text-[#17392c]">{payoutState === "ready" ? "Stripe payout details complete" : payoutState === "unavailable" ? "Payout setup is coming soon" : "Set up automatic payouts"}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{payoutState === "ready" ? "Stripe has your payout details. Eligible commissions transfer after a 30-day review period; Stripe then pays your bank on its schedule." : payoutState === "loading" ? "Checking payout availability…" : payoutState === "unavailable" ? "Your referral link still works and paid referrals are recorded. We will contact you about payment until self-service payouts are available." : "Complete Stripe’s secure payment setup once. You can share your referral link now; commissions wait until your payout details are ready."}</p>{(payoutState === "needs_setup" || payoutState === "needs_details") && <button type="button" onClick={setUpPayouts} disabled={payoutBusy} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{payoutBusy ? "Opening Stripe…" : payoutState === "needs_details" ? "Finish Stripe setup ↗" : "Set up payments with Stripe ↗"}</button>}{payoutError && <p role="alert" className="mt-3 text-sm font-semibold text-red-700">{payoutError}</p>}</div>}
             {code && <div className="mt-7 rounded-2xl border border-[#dce5dc] bg-white p-4"><p className="text-xs font-bold uppercase tracking-[0.13em] text-slate-500">{isRegistered ? "Your referral link" : "Link preview"}</p><p className="mt-2 break-all font-mono text-sm text-[#17392c]">{referralLink}</p><p className="mt-2 text-xs text-slate-500">{isRegistered ? "This takes your client straight to the free lease preview upload." : "Finish setup above before sharing so purchases can be credited to you."}</p></div>}
             {code && <div className="mt-4 overflow-hidden rounded-2xl border border-[#b9cebd] bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dce5dc] bg-[#eaf5ec] px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">{isRegistered ? "Ready to share" : "Message preview"}</p><p className="mt-1 font-semibold text-[#17392c]">Preview your intro message</p></div><div className="flex flex-wrap gap-2">{isRegistered ? <><a href={emailShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Email message ↗</a><a href={textShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Text message ↗</a></> : <a href="#activate-link" className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-800 underline underline-offset-2">Finish setup above ↑</a>}</div></div><div className="p-5"><p className="text-sm leading-6 text-slate-600">{isRegistered ? "This is exactly what Copy intro message will copy. Personalize it after pasting." : "Preview the message here. Finish setup above to unlock copying and sharing."}</p><p className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-[#dce5dc] bg-[#f8faf7] p-5 text-sm leading-6 text-[#17392c]">{message}</p></div></div>}
             {code && <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={!isRegistered} onClick={() => copy(referralLink, "link")} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40">{copied === "link" ? "Link copied" : "Copy link"}</button><button type="button" disabled={!isRegistered} onClick={() => copy(message, "message")} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#b9cebd] bg-white px-5 py-3 text-sm font-semibold text-[#17392c] transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40">{copied === "message" ? "Message copied" : "Copy intro message"}</button></div>}
@@ -202,7 +234,7 @@ export default function ReferralPage() {
                 <li><strong>1. Get your link.</strong> Sign in and we generate it for you. It is connected to your account automatically—no code selection or email to our team.</li>
                 <li><strong>2. Share your link.</strong> Once you see <strong>Ready to share</strong>, copy your link or intro message. When a tenant opens the link, we save your code in their browser for 30 days and carry it through checkout.</li>
                 <li><strong>3. We record a paid referral.</strong> Our private report counts referred leases that reach analysis and paid reports by code and month. A paid report with your code attached earns a 20% commission; a free preview alone does not.</li>
-                <li><strong>4. Get a monthly summary if you opt in.</strong> After each month ends, we email analyzed lease counts, paid reports, and commissions earned for your link. You can change this preference once your link is ready. Our team coordinates payouts separately; the email is a report, not a payment confirmation.</li>
+                <li><strong>4. Receive your commission.</strong> We record each qualifying sale. When Stripe payout setup becomes available, complete it once; eligible commissions then transfer after a 30-day review period. Until then, we coordinate payment directly. You can opt in above for monthly activity summaries.</li>
               </ol>
               <p className="mt-5 text-sm leading-6 text-[#456654]">Have a code with earlier activity or a payment question? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Email us ↗</a></p>
             </div>
