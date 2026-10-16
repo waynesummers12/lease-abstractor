@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-export async function portfolioAccess(req: Request): Promise<{ db: SupabaseClient; userId: string } | null> {
+export async function portfolioAccess(req: Request): Promise<{ db: SupabaseClient; userId: string; email: string | null; displayName: string | null } | null> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -14,5 +14,7 @@ export async function portfolioAccess(req: Request): Promise<{ db: SupabaseClien
   return {
     db: createClient(url, service, { auth: { autoRefreshToken: false, persistSession: false } }),
     userId: user.id,
+    email: user.email ?? null,
+    displayName: typeof user.user_metadata?.full_name === "string" ? user.user_metadata.full_name : null,
   };
 }

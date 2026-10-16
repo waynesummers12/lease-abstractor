@@ -6,7 +6,16 @@ import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/app/providers/AuthProvider";
 
-const dashboardRedirect = () => `${window.location.origin}/auth/callback`;
+const signInDestination = () => {
+  const requested = new URLSearchParams(window.location.search).get("next");
+  return requested?.startsWith("/") && !requested.startsWith("//")
+    ? requested : "/product/app/dashboard";
+};
+const dashboardRedirect = () => {
+  const next = signInDestination();
+  const callback = `${window.location.origin}/auth/callback`;
+  return next === "/product/app/dashboard" ? callback : `${callback}?next=${encodeURIComponent(next)}`;
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,7 +48,7 @@ export default function LoginPage() {
             : error.message,
         });
       } else {
-        setNotice({ kind: "success", text: `We sent a secure sign-in link to ${email.trim()}. Open it to continue to your dashboard.` });
+        setNotice({ kind: "success", text: `We sent a secure sign-in link to ${email.trim()}. Open it to continue.` });
       }
     } catch {
       setNotice({ kind: "error", text: "We couldn’t send the link right now. Please try again." });
@@ -57,7 +66,7 @@ export default function LoginPage() {
       if (error) {
         setNotice({ kind: "error", text: "That email and password didn’t match. You can reset your password or use an email link." });
       } else {
-        router.replace("/product/app/dashboard");
+        router.replace(signInDestination());
       }
     } catch {
       setNotice({ kind: "error", text: "We couldn’t sign you in right now. Please try again." });
@@ -74,7 +83,7 @@ export default function LoginPage() {
     setLoading("reset");
     setNotice(null);
     try {
-      const redirectTo = `${dashboardRedirect()}?next=${encodeURIComponent("/auth/set-password")}`;
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent("/auth/set-password")}`;
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
       if (error) throw error;
       setNotice({ kind: "success", text: "If this email has an account, we’ll send a link to set its password. After that, you can sign in directly." });
@@ -158,7 +167,7 @@ export default function LoginPage() {
               <button type="button" onClick={handlePasswordReset} disabled={loading !== null} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "reset" ? "Sending…" : "Set or reset password"}</button>
             </div>
             {notice && <p role="status" aria-live="polite" className={`mt-6 rounded-xl border px-4 py-3 text-sm leading-6 ${notice.kind === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-950" : "border-red-200 bg-red-50 text-red-800"}`}>{notice.text}</p>}
-            {!authLoading && session && <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href="/product/app/dashboard" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Open your dashboard ↗</Link></div>}
+            {!authLoading && session && <div className="mt-8 rounded-xl border border-[#d7e1d8] bg-white px-5 py-4 text-sm leading-7 text-slate-600">Already signed in? <Link href={signInDestination()} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Continue ↗</Link></div>}
             <div className="mt-8 border-t border-[#d7e1d8] pt-6 text-sm leading-7 text-slate-600">Need a hand getting in? <Link href="/marketing/contact" className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950">Contact SaveOnLease ↗</Link></div>
           </div>
         </section>

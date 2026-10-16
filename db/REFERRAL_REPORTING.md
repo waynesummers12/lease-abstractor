@@ -4,20 +4,27 @@ Open the SaveOnLease `leases` project in Supabase and use the SQL Editor.
 The report views and partner registry are private to database administrators and
 the service role. They are not available to signed-in customers.
 
-## Register a partner after receiving their email
+## Partner registration
 
-Use the Table Editor on `public.referral_partners`, or run:
+Partners sign in on `/marketing/referral` and select **Register my code**. The
+site stores the code with their account ID and email in `public.referral_partners`.
+The primary key prevents two accounts from registering the same code.
+
+For a legacy code that already has activity, confirm ownership before linking
+it manually in the Table Editor or SQL Editor. New self-registration blocks
+codes with earlier activity to prevent someone else claiming past referrals.
+For a manually verified legacy code, use:
 
 ```sql
-insert into public.referral_partners (code, contact_name, contact_email)
-values ('partner-code', 'Partner name', 'partner@example.com')
+insert into public.referral_partners (code, contact_name, contact_email, user_id)
+values ('partner-code', 'Partner name', 'partner@example.com', 'verified-user-uuid')
 on conflict (code) do update
 set contact_name = excluded.contact_name,
-    contact_email = excluded.contact_email;
+    contact_email = excluded.contact_email,
+    user_id = excluded.user_id;
 ```
 
-The referral page only **generates** a link; it does not register a partner.
-Check that the requested code is not already assigned before confirming it.
+Check that the requested code is not already assigned before a manual change.
 
 ## Monthly report
 

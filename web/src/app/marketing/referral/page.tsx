@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/app/providers/AuthProvider";
 
 const cleanCode = (value: string) => value.trim().toLowerCase()
   .replace(/[^a-z0-9_-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 48);
@@ -14,14 +15,57 @@ const steps = [
 ];
 
 export default function ReferralPage() {
+  const { session, loading: authLoading } = useAuth();
   const [name, setName] = useState("");
   const [copied, setCopied] = useState<"link" | "message" | null>(null);
   const [copyFailed, setCopyFailed] = useState(false);
+  const [registeredCodes, setRegisteredCodes] = useState<string[]>([]);
+  const [registeredAccount, setRegisteredAccount] = useState<string | null>(null);
+  const [registrationLoading, setRegistrationLoading] = useState(false);
+  const [registrationError, setRegistrationError] = useState("");
   const code = cleanCode(name);
+  const isRegistered = code !== "" && registeredAccount === session?.user.id && registeredCodes.includes(code);
   const referralLink = code ? `https://www.saveonlease.com/app/step-1-upload?ref=${encodeURIComponent(code)}` : "";
+  const returnToRegistration = `/login?next=${encodeURIComponent(`/marketing/referral?code=${encodeURIComponent(code)}#create-link`)}`;
   const message = `Hi,\n\nIf you're looking at a commercial lease or this year's CAM or NNN statement, this may help. SaveOnLease starts with a free preview of lease terms worth checking. You can add your annual statement, and the optional $49.99 report brings the questions, source pages, and records to request into one place.\n\nTake a look here: ${referralLink}\n\nThe report points to items to verify; it doesn't claim a confirmed overcharge.`;
   const emailShareLink = `mailto:?subject=${encodeURIComponent("A lease review tool you may find useful")}&body=${encodeURIComponent(message)}`;
   const textShareLink = `sms:?body=${encodeURIComponent(message)}`;
+
+  useEffect(() => {
+    const requestedCode = new URLSearchParams(window.location.search).get("code");
+    if (requestedCode) setName(cleanCode(requestedCode));
+  }, []);
+
+  useEffect(() => {
+    if (!session?.access_token) return;
+    let active = true;
+    fetch("/api/referral-partners", { headers: { Authorization: `Bearer ${session.access_token}` }, cache: "no-store" })
+      .then(async (response) => { if (!response.ok) throw new Error("Could not load your registered codes."); return response.json(); })
+      .then((result) => { if (active) { setRegisteredCodes((result.codes ?? []).filter((item: { status: string }) => item.status === "active").map((item: { code: string }) => item.code)); setRegisteredAccount(session.user.id); } })
+      .catch(() => { if (active) { setRegisteredAccount(null); setRegistrationError("Could not load your registered codes. Please refresh the page."); } });
+    return () => { active = false; };
+  }, [session?.access_token, session?.user.id]);
+
+  async function registerCode() {
+    if (!code || !session?.access_token || registrationLoading) return;
+    setRegistrationLoading(true);
+    setRegistrationError("");
+    try {
+      const response = await fetch("/api/referral-partners", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ code }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Could not register this code.");
+      setRegisteredCodes((previous) => previous.includes(code) ? previous : [...previous, code]);
+      setRegisteredAccount(session.user.id);
+    } catch (error) {
+      setRegistrationError(error instanceof Error ? error.message : "Could not register this code.");
+    } finally {
+      setRegistrationLoading(false);
+    }
+  }
 
   async function copy(text: string, kind: "link" | "message") {
     if (!text) return;
@@ -76,22 +120,23 @@ export default function ReferralPage() {
 
       <section id="create-link" className="scroll-mt-28 border-y border-[#dce5dc] bg-white">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
-          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">Your next step</p><h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Make a link you can actually use.</h2><p className="mt-5 leading-8 text-slate-600">Choose a short code that identifies you or your firm. Then email us that code so we can connect it to your contact and payment details before you share it.</p><p className="mt-5 text-sm text-slate-500">Use letters, numbers, hyphens, or underscores. Avoid private information in a public link.</p></div>
+          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">Your next step</p><h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Make a link you can actually use.</h2><p className="mt-5 leading-8 text-slate-600">Choose a short code that identifies you or your firm. Sign in once to register it to your account, then share your link. Your account email becomes your referral contact.</p><p className="mt-5 text-sm text-slate-500">Use letters, numbers, hyphens, or underscores. Avoid private information in a public link.</p></div>
           <div className="rounded-3xl border border-[#dce5dc] bg-[#f8faf7] p-6 shadow-sm sm:p-8">
             <label htmlFor="partner-code" className="block text-sm font-semibold">Your referral code</label>
-            <input id="partner-code" type="text" autoComplete="off" maxLength={48} value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. northstar-advisors" className="mt-3 w-full rounded-xl border border-[#cbd8cd] bg-white px-4 py-3 text-base outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
+            <input id="partner-code" type="text" autoComplete="off" maxLength={48} value={name} onChange={(event) => { setName(event.target.value); setRegistrationError(""); }} placeholder="e.g. northstar-advisors" className="mt-3 w-full rounded-xl border border-[#cbd8cd] bg-white px-4 py-3 text-base outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-200" />
             {referralLink ? (
               <div role="status" className="mt-5 flex items-start gap-4 rounded-2xl border border-emerald-300 bg-[#102b25] p-5 text-white shadow-lg shadow-emerald-950/15 sm:p-6">
                 <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#a8edbf] text-2xl font-bold text-[#102b25]">✓</span>
-                <div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">Link created</p><p className="mt-1 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">Your link is ready!</p><p className="mt-2 text-sm leading-6 text-slate-200">One more step for payment: email us your code so we can register it to you. Then share the link below.</p></div>
+                <div><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">{isRegistered ? "Code registered" : "Link created"}</p><p className="mt-1 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">{isRegistered ? "Ready to share!" : "Register your code next"}</p><p className="mt-2 text-sm leading-6 text-slate-200">{isRegistered ? "Your code is attached to your account. Use the link or message below to introduce a tenant." : "Your link is created. Register the code to your account below before you share it."}</p></div>
               </div>
             ) : <p className="mt-3 text-sm text-slate-500">Enter a code to create your referral link and message.</p>}
+            {code && <div className="mt-4 rounded-2xl border border-[#b9cebd] bg-white p-5"><p className="font-semibold text-[#17392c]">{isRegistered ? "✓ This code is registered to you" : "Register this code to your account"}</p><p className="mt-2 text-sm leading-6 text-slate-600">{isRegistered ? `We will use ${session?.user.email ?? "your account email"} to contact you about reporting and payment.` : authLoading ? "Checking your account…" : session ? `Register instantly with ${session.user.email ?? "your account"}. No email to us is needed.` : "Sign in with Google, a password, or an email link. You will return here with your code ready to register."}</p>{!isRegistered && !authLoading && (session ? <button type="button" onClick={registerCode} disabled={registrationLoading} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900 disabled:opacity-60">{registrationLoading ? "Registering…" : "Register my code"}</button> : <Link href={returnToRegistration} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Sign in to register ↗</Link>)}{registrationError && <p role="alert" className="mt-3 text-sm font-semibold text-red-700">{registrationError}</p>}</div>}
             <div className="mt-7 rounded-2xl border border-[#dce5dc] bg-white p-4"><p className="text-xs font-bold uppercase tracking-[0.13em] text-slate-500">Your shareable link</p><p className="mt-2 break-all font-mono text-sm text-[#17392c]">{referralLink || "www.saveonlease.com/app/step-1-upload?ref=your-code"}</p><p className="mt-2 text-xs text-slate-500">This takes your client straight to the free lease preview upload.</p></div>
-            <div className="mt-4 overflow-hidden rounded-2xl border border-[#b9cebd] bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dce5dc] bg-[#eaf5ec] px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">Ready to share</p><p className="mt-1 font-semibold text-[#17392c]">Preview your intro message</p></div><div className="flex flex-wrap gap-2">{referralLink ? <><a href={emailShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Email message ↗</a><a href={textShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Text message ↗</a></> : <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-800">Enter a code to share</span>}</div></div><div className="p-5"><p className="text-sm leading-6 text-slate-600">This is exactly what Copy intro message will copy. Personalize it after pasting.</p><p className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-[#dce5dc] bg-[#f8faf7] p-5 text-sm leading-6 text-[#17392c]">{referralLink ? message : "Enter a referral code above to preview your message with its link."}</p></div></div>
-            <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={!referralLink} onClick={() => copy(referralLink, "link")} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40">{copied === "link" ? "Link copied" : "Copy link"}</button><button type="button" disabled={!referralLink} onClick={() => copy(message, "message")} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#b9cebd] bg-white px-5 py-3 text-sm font-semibold text-[#17392c] transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40">{copied === "message" ? "Message copied" : "Copy intro message"}</button></div>
+            <div className="mt-4 overflow-hidden rounded-2xl border border-[#b9cebd] bg-white shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dce5dc] bg-[#eaf5ec] px-5 py-4"><div><p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-800">{isRegistered ? "Ready to share" : "Message preview"}</p><p className="mt-1 font-semibold text-[#17392c]">Preview your intro message</p></div><div className="flex flex-wrap gap-2">{isRegistered ? <><a href={emailShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Email message ↗</a><a href={textShareLink} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-800 shadow-sm hover:bg-emerald-50">Text message ↗</a></> : <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-800">Register to share</span>}</div></div><div className="p-5"><p className="text-sm leading-6 text-slate-600">This is exactly what Copy intro message will copy. Personalize it after pasting.</p><p className="mt-4 whitespace-pre-wrap break-words rounded-xl border border-[#dce5dc] bg-[#f8faf7] p-5 text-sm leading-6 text-[#17392c]">{referralLink ? message : "Enter a referral code above to preview your message with its link."}</p></div></div>
+            <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={!isRegistered} onClick={() => copy(referralLink, "link")} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40">{copied === "link" ? "Link copied" : "Copy link"}</button><button type="button" disabled={!isRegistered} onClick={() => copy(message, "message")} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#b9cebd] bg-white px-5 py-3 text-sm font-semibold text-[#17392c] transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40">{copied === "message" ? "Message copied" : "Copy intro message"}</button></div>
             <p aria-live="polite" className={`mt-3 text-sm font-semibold ${copyFailed ? "text-red-700" : "text-emerald-800"}`}>{copyFailed ? "Could not copy. Please select and copy the text above." : copied === "message" ? "Intro message copied. Paste it into an email or text and personalize it before sending." : copied === "link" ? "Referral link copied. Paste it wherever you want to share it." : ""}</p>
-            {referralLink && <a href={referralLink} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-emerald-800 underline underline-offset-4">See where your clients start ↗</a>}
-            <div className="mt-7 rounded-2xl border border-[#b9cebd] bg-[#eef6ee] p-5 sm:p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">How tracking and payment work</p><ol className="mt-4 space-y-4 text-sm leading-6 text-[#17392c]"><li><strong>1. Register your code.</strong> Email it to us with your contact details. We will connect the code to you in our system; creating the link alone does not register you for payment.</li><li><strong>2. Share your link.</strong> When someone opens it, we save your code in their browser for 30 days and carry it through checkout.</li><li><strong>3. We track previews and purchases.</strong> Our private monthly report counts referred leases that reach analysis. If someone buys a report with your code attached, we also record the sale and calculate a 20% commission. A free preview alone does not earn a commission.</li><li><strong>4. Review totals and arrange payment.</strong> The report shows analyzed leases, paid reports, and commissions by code and month. We will confirm your reporting and payout schedule when we register your code, then share your totals and arrange payment directly. Partner emails and payments are handled by our team.</li></ol><a href={`mailto:audits@saveonlease.com?subject=${encodeURIComponent("Register my SaveOnLease referral code")}&body=${encodeURIComponent(`Hi SaveOnLease, I would like to register my referral code: ${code || "[my code]"}. Please confirm how paid referrals are reported and when commissions are paid.`)}`} className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-900">Email us to register your code ↗</a></div>
+            {isRegistered && <a href={referralLink} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-emerald-800 underline underline-offset-4">See where your clients start ↗</a>}
+            <div className="mt-7 rounded-2xl border border-[#b9cebd] bg-[#eef6ee] p-5 sm:p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">How tracking and payment work</p><ol className="mt-4 space-y-4 text-sm leading-6 text-[#17392c]"><li><strong>1. Register your code.</strong> Sign in, choose a code, and select Register my code. We attach it to your account and email address immediately.</li><li><strong>2. Share your link.</strong> When someone opens it, we save your code in their browser for 30 days and carry it through checkout.</li><li><strong>3. We track previews and purchases.</strong> Our private monthly report counts referred leases that reach analysis. If someone buys a report with your code attached, we also record the sale and calculate a 20% commission. A free preview alone does not earn a commission.</li><li><strong>4. Review totals and arrange payment.</strong> The report shows analyzed leases, paid reports, and commissions by code and month. We use your account email to coordinate reporting and payout details directly; payments are not automatic yet.</li></ol><p className="mt-5 text-sm leading-6 text-[#456654]">No email is needed to register your code. Questions about a previous code or payment? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Contact us ↗</a></p></div>
           </div>
         </div>
       </section>
