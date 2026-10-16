@@ -7,6 +7,14 @@ const router = new Router({ prefix: "/referral-payouts" });
 const key = Deno.env.get("STRIPE_SECRET_KEY");
 const stripe = key ? new Stripe(key) : null;
 const site = (Deno.env.get("PUBLIC_APP_URL") ?? "https://www.saveonlease.com").replace(/\/$/, "");
+const EXPECTED_PLATFORM_ID = "acct_1SqSLSFxGdzqfZ9b";
+
+async function verifiedPlatform() {
+  if (!stripe || !key || !/^(sk|rk)_live_/.test(key)) throw new Error("Live Stripe is not configured");
+  const account = await stripe.accounts.retrieve();
+  if (account.id !== EXPECTED_PLATFORM_ID) throw new Error("Payment account mismatch");
+  return account;
+}
 
 async function partnerFor(userId: string) {
   const { data, error } = await supabase.from("referral_partners")
@@ -35,8 +43,8 @@ router.get("/status", async (ctx) => {
     const partner = await partnerFor(userId);
     if (!partner || partner.status !== "active") { ctx.response.status = 404; return; }
     if (!stripe || Deno.env.get("REFERRAL_PAYOUTS_ENABLED") !== "true") { ctx.response.body = { configured: false, state: "unavailable" }; return; }
+    const platform = await verifiedPlatform();
     if (!partner.stripe_account_id) { ctx.response.body = { configured: true, state: "needs_setup" }; return; }
-    const platform = await stripe.accounts.retrieve();
     if (partner.stripe_platform_account_id !== platform.id) {
       ctx.response.status = 503;
       ctx.response.body = { error: "Payment account mismatch. Payouts are paused." };
@@ -59,7 +67,7 @@ router.post("/onboard", async (ctx) => {
   try {
     const partner = await partnerFor(userId);
     if (!partner || partner.status !== "active") { ctx.response.status = 404; return; }
-    const platform = await stripe.accounts.retrieve();
+    const platform = await verifiedPlatform();
     let accountId = partner.stripe_account_id as string | null;
     if (accountId && partner.stripe_platform_account_id !== platform.id) throw new Error("Payment account mismatch");
     if (!accountId) {
@@ -104,6 +112,7 @@ router.post("/run", async (ctx) => {
     return;
   }
   try {
+    await verifiedPlatform();
     const result = await processReferralPayouts(stripe);
     ctx.response.status = result.failed ? 500 : 200;
     ctx.response.body = result;
