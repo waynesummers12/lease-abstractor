@@ -19,7 +19,7 @@ export async function fulfillPaidCheckout(
   }
 
   const { data: audit, error: readError } = await supabase.from("lease_audits")
-    .select("id,status,analysis,stripe_session_id,audit_pdf_path,email_sent")
+    .select("id,status,analysis,stripe_session_id,audit_pdf_path,email_sent,paid_at")
     .eq("id", auditId).single();
   if (readError || !audit) throw readError ?? new Error("Audit not found");
   if (audit.stripe_session_id && audit.stripe_session_id !== session.id) {
@@ -27,7 +27,7 @@ export async function fulfillPaidCheckout(
   }
   const paymentFields = {
     stripe_session_id: session.id,
-    ...(options.recordPaidAt === false ? {} : { paid_at: new Date().toISOString() }),
+    ...(options.recordPaidAt === false ? {} : { paid_at: audit.paid_at ?? new Date().toISOString() }),
     amount_paid: session.amount_total,
     currency: session.currency,
   };
@@ -41,6 +41,13 @@ export async function fulfillPaidCheckout(
     if (fileError && String(fileError.statusCode) !== "404") throw fileError;
     if (file) {
       if (audit.stripe_session_id === session.id) {
+        if (!audit.paid_at && options.recordPaidAt !== false) {
+          const { error } = await supabase.from("lease_audits")
+            .update({ paid_at: new Date().toISOString() })
+            .eq("id", auditId).eq("stripe_session_id", session.id).is("paid_at", null);
+          if (error) throw error;
+        }
+        await recordReferral(session, auditId);
         await deliverReportEmail(session, auditId, audit.audit_pdf_path, audit.email_sent, options);
         return;
       }
@@ -49,6 +56,7 @@ export async function fulfillPaidCheckout(
         : query.is("stripe_session_id", null);
       const { data, error } = await query.select("id").maybeSingle();
       if (error || !data) throw error ?? new Error("Completed audit payment was not recorded");
+      await recordReferral(session, auditId);
       await deliverReportEmail(session, auditId, audit.audit_pdf_path, audit.email_sent, options);
       return;
     }
@@ -69,6 +77,7 @@ export async function fulfillPaidCheckout(
     : paymentQuery.is("stripe_session_id", null);
   const { data: recorded, error: paymentError } = await paymentQuery.select("id").maybeSingle();
   if (paymentError || !recorded) throw paymentError ?? new Error("Payment was not recorded");
+  await recordReferral(session, auditId);
 
   const normalized = normalizeAuditForSuccess(audit.analysis);
   if (!normalized) throw new Error("Paid audit analysis could not be normalized");
@@ -102,18 +111,19 @@ export async function fulfillPaidCheckout(
     return;
   }
 
-  // Delivery and referral tracking are secondary to granting report access.
-  const referrer = session.metadata?.referrer_code;
-  if (referrer && referrer !== "none") {
-    const amountPaid = (session.amount_total ?? 0) / 100;
-    const { error } = await supabase.from("referrals").insert({
-      audit_id: auditId, referrer_code: referrer,
-      amount_paid: amountPaid, commission: amountPaid * 0.2,
-    });
-    if (error) console.error("Referral recording failed", { auditId, error });
-  }
-
   await deliverReportEmail(session, auditId, objectPath, false, options);
+}
+
+async function recordReferral(session: Stripe.Checkout.Session, auditId: string) {
+  const referrer = session.metadata?.referrer_code;
+  if (!referrer || referrer === "none") return;
+  const amountPaid = (session.amount_total ?? 0) / 100;
+  const { error } = await supabase.from("referrals").insert({
+    audit_id: auditId, referrer_code: referrer,
+    amount_paid: amountPaid, commission: amountPaid * 0.2,
+  });
+  // Stripe may retry the webhook or the success page may recover the same sale.
+  if (error && error.code !== "23505") throw error;
 }
 
 async function deliverReportEmail(
