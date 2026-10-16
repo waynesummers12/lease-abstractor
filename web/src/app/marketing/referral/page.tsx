@@ -234,7 +234,7 @@ export default function ReferralPage() {
                 <li><strong>1. Get your link.</strong> Sign in and we generate it for you. It is connected to your account automatically—no code selection or email to our team.</li>
                 <li><strong>2. Share your link.</strong> Once you see <strong>Ready to share</strong>, copy your link or intro message. When a tenant opens the link, we save your code in their browser for 30 days and carry it through checkout.</li>
                 <li><strong>3. We record a paid referral.</strong> Our private report counts referred leases that reach analysis and paid reports by code and month. A paid report with your code attached earns a 20% commission; a free preview alone does not.</li>
-                <li><strong>4. Receive your commission.</strong> We record each qualifying sale. When Stripe payout setup becomes available, complete it once; eligible commissions then transfer after a 30-day review period. Until then, we coordinate payment directly. You can opt in above for monthly activity summaries.</li>
+                <li><strong>4. Receive your commission.</strong> Set up payments with Stripe once using the button above. We record each qualifying sale and transfer eligible commissions after a 30-day review period, once your Stripe account is ready. You can opt in above for monthly activity summaries.</li>
               </ol>
               <p className="mt-5 text-sm leading-6 text-[#456654]">Have a code with earlier activity or a payment question? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Email us ↗</a></p>
             </div>
