@@ -161,7 +161,7 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
-              <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "password" ? "Signing in…" : "Sign in to dashboard"}</button>
+              <button type="submit" disabled={loading !== null} className="mt-4 flex min-h-14 w-full items-center justify-center rounded-xl bg-[#102b25] px-5 font-semibold text-white transition hover:bg-emerald-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:opacity-60">{loading === "password" ? "Signing in…" : "Sign in"}</button>
             </form>
             <div className="mt-5 flex flex-wrap justify-between gap-x-5 gap-y-3 text-sm">
               <button type="button" onClick={handlePasswordReset} disabled={loading !== null} className="font-semibold text-emerald-800 underline underline-offset-4 hover:text-emerald-950 disabled:opacity-60">{loading === "reset" ? "Sending…" : "Set or reset password"}</button>

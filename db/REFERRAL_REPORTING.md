@@ -6,9 +6,12 @@ the service role. They are not available to signed-in customers.
 
 ## Partner registration
 
-Partners sign in on `/marketing/referral` and select **Register my code**. The
-site stores the code with their account ID and email in `public.referral_partners`.
-The primary key prevents two accounts from registering the same code.
+Partners choose **Get my referral link** on `/marketing/referral` and sign in.
+The site generates a unique link, attaches it to their account, and shows it
+ready to share. Returning partners see the same link. No owner action is needed
+for normal signup. The code and account email are stored in
+`public.referral_partners`. The primary key prevents two accounts from using
+the same code, and a unique index permits one link per account.
 
 For a legacy code that already has activity, confirm ownership before linking
 it manually in the Table Editor or SQL Editor. New self-registration blocks
@@ -56,8 +59,8 @@ paid when merely scheduling or preparing a payout.
 
 ## Monthly partner emails
 
-Partners may opt in on `/marketing/referral` when they register a code or later
-change the checkbox for that code. The `referral-monthly-emails` Vercel cron runs
+Partners may opt in on `/marketing/referral` after their link is ready and later
+change the checkbox for that link. The `referral-monthly-emails` Vercel cron runs
 at 16:00 UTC on days 1–5 of each month. It reads the previous UTC month's
 `referral_monthly_report` and emails each opted-in active partner the number of
 analyzed leases, paid reports, and commission earned. A month with no activity

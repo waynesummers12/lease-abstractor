@@ -57,7 +57,7 @@ export default function AuthCallback() {
         ) : (
           <>
             <h1 className="text-2xl font-semibold text-[#102b25]">Signing you in…</h1>
-            <p className="mt-4 text-sm text-slate-600">You’ll be taken to your dashboard in a moment.</p>
+            <p className="mt-4 text-sm text-slate-600">You’ll be taken back in a moment.</p>
           </>
         )}
       </div>

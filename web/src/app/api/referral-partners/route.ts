@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { randomBytes } from "node:crypto";
 import { portfolioAccess } from "@/lib/server/portfolioAccess";
 
 export const dynamic = "force-dynamic";
@@ -20,13 +21,53 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const access = await portfolioAccess(req);
-  if (!access?.email) return NextResponse.json({ error: "Sign in with an email address to register your code." }, { status: 401 });
+  if (!access?.email) return NextResponse.json({ error: "Sign in with an email address to get your referral link." }, { status: 401 });
 
   const body = await req.json().catch(() => ({}));
   const code = typeof body?.code === "string" ? body.code.trim() : "";
   const monthlyEmailEnabled = body?.monthlyEmailEnabled === true;
+  if (!code) {
+    const { data: owned, error: ownedError } = await access.db.from("referral_partners")
+      .select("code,status,monthly_email_enabled")
+      .eq("user_id", access.userId)
+      .order("registered_at", { ascending: true }).limit(1).maybeSingle();
+    if (ownedError) return NextResponse.json({ error: "Could not check your referral link." }, { status: 500 });
+    if (owned) {
+      if (owned.status !== "active") return NextResponse.json({ error: "Your referral link is paused. Contact us for help." }, { status: 409 });
+      return NextResponse.json({ code: owned.code, registered: true, monthlyEmailEnabled: owned.monthly_email_enabled }, { headers: privateHeaders });
+    }
+
+    const contactName = (access.displayName?.trim() || access.email.split("@")[0]).slice(0, 100);
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const generated = `sol-${randomBytes(6).toString("hex")}`;
+      const [purchase, preview] = await Promise.all([
+        access.db.from("referrals").select("id").eq("referrer_code", generated).limit(1),
+        access.db.from("lease_audits").select("id").eq("referrer_code", generated).limit(1),
+      ]);
+      if (purchase.error || preview.error) return NextResponse.json({ error: "Could not check your referral link." }, { status: 500 });
+      if (purchase.data?.length || preview.data?.length) continue;
+      const { error } = await access.db.from("referral_partners").insert({
+        code: generated, user_id: access.userId, contact_name: contactName,
+        contact_email: access.email, status: "active", monthly_email_enabled: monthlyEmailEnabled,
+      });
+      if (!error) return NextResponse.json({ code: generated, registered: true, monthlyEmailEnabled }, { status: 201, headers: privateHeaders });
+      if (error.code !== "23505") return NextResponse.json({ error: "Could not create your referral link. Please try again." }, { status: 500 });
+      const { data: concurrent } = await access.db.from("referral_partners")
+        .select("code,status,monthly_email_enabled").eq("user_id", access.userId).limit(1).maybeSingle();
+      if (concurrent?.status === "active") return NextResponse.json({ code: concurrent.code, registered: true, monthlyEmailEnabled: concurrent.monthly_email_enabled }, { headers: privateHeaders });
+      if (concurrent) return NextResponse.json({ error: "Your referral link is paused. Contact us for help." }, { status: 409 });
+    }
+    return NextResponse.json({ error: "Could not create a unique referral link. Please try again." }, { status: 503 });
+  }
   if (!validCode.test(code) || code === "none") {
     return NextResponse.json({ error: "Use 1–48 lowercase letters, numbers, hyphens, or underscores." }, { status: 400 });
+  }
+
+  const { data: ownedCode, error: ownerError } = await access.db.from("referral_partners")
+    .select("code").eq("user_id", access.userId).limit(1).maybeSingle();
+  if (ownerError) return NextResponse.json({ error: "Could not check your existing referral link." }, { status: 500 });
+  if (ownedCode && ownedCode.code !== code) {
+    return NextResponse.json({ error: "Your account already has a referral link. Use that link to keep all referrals together." }, { status: 409 });
   }
 
   const { data: existing, error: readError } = await access.db.from("referral_partners")
