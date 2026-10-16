@@ -9,7 +9,7 @@ const cleanCode = (value: string) => value.trim().toLowerCase()
   .replace(/[^a-z0-9_-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 48);
 
 const steps = [
-  { n: "01", title: "Share your link", body: "Send it to a tenant who could use a clearer view of their CAM or NNN charges." },
+  { n: "01", title: "Register and share", body: "Sign in, register a code to your account, then send your link to a tenant." },
   { n: "02", title: "They review their lease", body: "Your client starts with a free lease preview and can add an annual statement and supporting records." },
   { n: "03", title: "Earn when they buy", body: "If they purchase the $49.99 report through your referral, the purchase is recorded with your code." },
 ];
@@ -136,7 +136,16 @@ export default function ReferralPage() {
             <div className="mt-5 flex flex-wrap gap-3"><button type="button" disabled={!isRegistered} onClick={() => copy(referralLink, "link")} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:opacity-40">{copied === "link" ? "Link copied" : "Copy link"}</button><button type="button" disabled={!isRegistered} onClick={() => copy(message, "message")} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#b9cebd] bg-white px-5 py-3 text-sm font-semibold text-[#17392c] transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40">{copied === "message" ? "Message copied" : "Copy intro message"}</button></div>
             <p aria-live="polite" className={`mt-3 text-sm font-semibold ${copyFailed ? "text-red-700" : "text-emerald-800"}`}>{copyFailed ? "Could not copy. Please select and copy the text above." : copied === "message" ? "Intro message copied. Paste it into an email or text and personalize it before sending." : copied === "link" ? "Referral link copied. Paste it wherever you want to share it." : ""}</p>
             {isRegistered && <a href={referralLink} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm font-semibold text-emerald-800 underline underline-offset-4">See where your clients start ↗</a>}
-            <div className="mt-7 rounded-2xl border border-[#b9cebd] bg-[#eef6ee] p-5 sm:p-6"><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">How tracking and payment work</p><ol className="mt-4 space-y-4 text-sm leading-6 text-[#17392c]"><li><strong>1. Register your code.</strong> Sign in, choose a code, and select Register my code. We attach it to your account and email address immediately.</li><li><strong>2. Share your link.</strong> When someone opens it, we save your code in their browser for 30 days and carry it through checkout.</li><li><strong>3. We track previews and purchases.</strong> Our private monthly report counts referred leases that reach analysis. If someone buys a report with your code attached, we also record the sale and calculate a 20% commission. A free preview alone does not earn a commission.</li><li><strong>4. Review totals and arrange payment.</strong> The report shows analyzed leases, paid reports, and commissions by code and month. We use your account email to coordinate reporting and payout details directly; payments are not automatic yet.</li></ol><p className="mt-5 text-sm leading-6 text-[#456654]">No email is needed to register your code. Questions about a previous code or payment? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Contact us ↗</a></p></div>
+            <div className="mt-7 rounded-2xl border border-[#b9cebd] bg-[#eef6ee] p-5 sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">How your referrals are tracked</p>
+              <ol className="mt-4 space-y-4 text-sm leading-6 text-[#17392c]">
+                <li><strong>1. Register your code here.</strong> Sign in, enter your code above, and select <strong>Register my code</strong>. We attach it to your account immediately. There is no registration email to send.</li>
+                <li><strong>2. Share your link.</strong> Once you see <strong>Ready to share</strong>, copy your link or intro message. When a tenant opens the link, we save your code in their browser for 30 days and carry it through checkout.</li>
+                <li><strong>3. We record a paid referral.</strong> Our private report counts referred leases that reach analysis and paid reports by code and month. A paid report with your code attached earns a 20% commission; a free preview alone does not.</li>
+                <li><strong>4. We coordinate payment.</strong> We use the email on your account to contact you about referral totals and payout details. Payment is handled by our team; it is not automatic yet.</li>
+              </ol>
+              <p className="mt-5 text-sm leading-6 text-[#456654]">Have a code with earlier activity or a payment question? <a href="mailto:audits@saveonlease.com?subject=SaveOnLease%20referral%20question" className="font-semibold text-emerald-800 underline underline-offset-4">Email us ↗</a></p>
+            </div>
           </div>
         </div>
       </section>
