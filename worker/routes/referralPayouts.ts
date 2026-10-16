@@ -75,6 +75,7 @@ router.post("/onboard", async (ctx) => {
       const account = await stripe.v2.core.accounts.create({
         contact_email: partner.contact_email,
         display_name: partner.contact_name,
+        identity: { country: "US" },
         dashboard: "express",
         defaults: { responsibilities: { fees_collector: "application", losses_collector: "application" } },
         configuration: { recipient: { capabilities: { stripe_balance: { stripe_transfers: { requested: true } } } } },
