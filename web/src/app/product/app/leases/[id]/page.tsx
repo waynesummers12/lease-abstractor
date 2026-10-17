@@ -55,6 +55,10 @@ export default function LeaseDetailPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [leaseId]);
+
+  useEffect(() => {
     async function fetchLease() {
       try {
         const res = await portfolioFetch();
