@@ -187,7 +187,7 @@ export default function ReferralPage() {
             </div>
             <p className="mt-5 text-sm text-slate-300">20% applies when a referred customer purchases a report.</p>
           </div>
-          <div className="relative z-10 rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/20 backdrop-blur-sm sm:p-6" aria-label="Referral process overview">
+          <div className="relative z-10 origin-center transform-gpu rounded-[2rem] border border-white/15 bg-white/10 p-4 shadow-2xl shadow-black/20 backdrop-blur-sm transition-transform duration-300 ease-out hover:z-30 hover:scale-[1.06] lg:origin-right lg:hover:scale-[1.1] motion-reduce:transition-none motion-reduce:hover:scale-100 sm:p-6" aria-label="Referral process overview">
             <div className="rounded-[1.4rem] bg-white p-6 text-[#14251f] shadow-xl sm:p-8">
               <div className="flex items-center justify-between border-b border-slate-200 pb-5">
                 <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">A simple introduction</p><p className="mt-1 text-lg font-semibold">From your link to a clearer report</p></div>
