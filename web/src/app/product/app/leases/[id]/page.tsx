@@ -123,6 +123,9 @@ export default function LeaseDetailPage() {
 
   const daysUntil = calculateDaysUntil(lease.renewalDate);
   const riskScore = calculateRiskScore(daysUntil);
+  const dashboardReturnHref = /^(?:1sample-commercial-lease|📄\s*sample complex commercial lease)$/i.test(lease.propertyName.trim())
+    ? "/product/app/dashboard#sample-leases"
+    : "/product/app/dashboard#leases";
 
   async function handleSave() {
     if (!lease) return;
@@ -167,7 +170,7 @@ export default function LeaseDetailPage() {
         throw new Error("Failed to delete lease");
       }
 
-      router.push("/product/app/dashboard#leases");
+      router.push(dashboardReturnHref);
     } catch (err) {
       console.error("Delete failed:", err);
     }
@@ -198,7 +201,7 @@ export default function LeaseDetailPage() {
         </div>
 
         <Link
-          href="/product/app/dashboard#leases"
+          href={dashboardReturnHref}
           className="text-sm text-gray-600 hover:underline"
         >
           Back to Dashboard

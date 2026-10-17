@@ -167,6 +167,15 @@ export default function DashboardPage() {
 
   const realLeases = useMemo(() => leases.filter((lease) => !isSampleLease(lease)), [leases]);
   const sampleLeases = useMemo(() => leases.filter(isSampleLease), [leases]);
+
+  useEffect(() => {
+    if (loading || sampleLeases.length === 0 || window.location.hash !== "#sample-leases") return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("sample-leases")?.scrollIntoView({ block: "start" });
+      setShowSamples(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [loading, sampleLeases.length]);
   const datedLeases = useMemo(() => realLeases.map((lease) => ({
     lease,
     days: daysUntilSavedDate(lease.renewal_date),
@@ -425,7 +434,7 @@ export default function DashboardPage() {
         </div>
 
         {sampleLeases.length > 0 && (
-          <section className="mt-6 rounded-[24px] border border-[#dce5df] bg-[#edf2ed] p-5 sm:p-7">
+          <section id="sample-leases" className="mt-6 scroll-mt-32 rounded-[24px] border border-[#dce5df] bg-[#edf2ed] p-5 sm:p-7">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#6b7d72]">Sample data</p>
