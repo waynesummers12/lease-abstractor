@@ -90,7 +90,7 @@ export default function PortfolioAuditPage() {
   return (
     <main className="min-h-screen bg-[#f5f7f3] pb-24 text-[#102c25]">
       <div className="mx-auto max-w-6xl px-5 pt-10 sm:px-8">
-        <Link href="/product/app/dashboard#reports" className="text-sm font-semibold text-[#087055] underline underline-offset-4">← Back to reports</Link>
+        <a href="/product/app/dashboard#reports" className="text-sm font-semibold text-[#087055] underline underline-offset-4">← Back to reports</a>
         {loadState === "loading" && <p className="mt-10" role="status">Loading your report workspace…</p>}
         {loadState === "error" && <p className="mt-10 rounded-xl bg-red-50 p-5 text-red-800" role="alert">{error}</p>}
         {audit && <>
