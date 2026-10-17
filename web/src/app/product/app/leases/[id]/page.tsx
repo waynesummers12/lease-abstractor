@@ -114,13 +114,15 @@ export default function LeaseDetailPage() {
   if (!lease) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-16">
-        <p className="text-gray-600 mb-4">Lease not found.</p>
-        <button
-          onClick={() => router.push("/product/app/dashboard#leases")}
-          className="text-blue-600 underline"
-        >
-          Back to Leases
-        </button>
+        <p className="text-gray-600 mb-4">This lease is no longer in your dashboard. It may have been removed.</p>
+        <div className="flex flex-wrap gap-6">
+          <Link href="/product/app/dashboard#leases" className="text-blue-600 underline">
+            View your leases
+          </Link>
+          <Link href="/product/app/dashboard#sample-leases" className="text-blue-600 underline">
+            View sample leases
+          </Link>
+        </div>
       </div>
     );
   }
@@ -158,7 +160,7 @@ export default function LeaseDetailPage() {
     if (!lease) return;
 
     const confirmed = window.confirm(
-      "Are you sure you want to delete this lease? This action cannot be undone."
+      "Remove this lease from your dashboard?"
     );
 
     if (!confirmed) return;
@@ -174,7 +176,7 @@ export default function LeaseDetailPage() {
         throw new Error("Failed to delete lease");
       }
 
-      router.push(dashboardReturnHref);
+      router.replace(dashboardReturnHref);
     } catch (err) {
       console.error("Delete failed:", err);
     }
