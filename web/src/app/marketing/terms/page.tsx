@@ -27,7 +27,7 @@ export default function TermsPage() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-20 h-[380px] w-[380px] rounded-full border border-white/10" />
       <div className="relative mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a8edbf]">SaveOnLease / Legal</p>
-        <h1 className="mt-5 max-w-3xl text-5xl font-semibold leading-[1.07] tracking-tight sm:text-6xl">Terms of <span className="text-[#a8edbf]">Service.</span></h1>
+        <h1 className="mt-5 max-w-3xl text-5xl font-semibold leading-[1.07] tracking-tight text-white sm:text-6xl">Terms of <span className="text-[#a8edbf]">Service.</span></h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d9e9df]">These Terms of Service govern your use of SaveOnLease. By using the site or uploading a lease, you agree to these terms.</p>
         <p className="mt-8 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-[#e5f3e9]">Last updated October 5, 2026</p>
       </div>
