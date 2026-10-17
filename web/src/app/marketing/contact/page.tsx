@@ -38,7 +38,7 @@ export default function ContactPage() {
         <div aria-hidden="true" className="pointer-events-none absolute -right-36 -top-44 h-[36rem] w-[36rem] rounded-full border border-white/10" />
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-[26rem] w-[26rem] rounded-full border border-white/10" />
         <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
-          <div>
+          <div className="lg:-translate-y-8">
             <p className="inline-flex items-center gap-2 rounded-full border border-[#a8edbf]/35 bg-[#a8edbf]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#b8f0ca]"><span className="h-2 w-2 rounded-full bg-[#a8edbf]" /> Contact SaveOnLease</p>
             <h1 className="mt-7 max-w-2xl text-5xl font-semibold leading-[1.06] tracking-tight text-white sm:text-6xl">A real question deserves <span className="text-[#a8edbf]">a clear answer.</span></h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-200">Whether you&apos;re reviewing a report, sorting out an account issue, or exploring a partnership, tell us what you need. We&apos;ll help you find the next step.</p>
