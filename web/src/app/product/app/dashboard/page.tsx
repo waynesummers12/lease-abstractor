@@ -396,13 +396,13 @@ export default function DashboardPage() {
             {visibleAudits.length ? (
               <div className="mt-6 divide-y divide-[#e9eee9]">
                 {visibleAudits.map((audit) => (
-                  <Link key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
+                  <a key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
                     <div>
                       <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
                       <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}{audit.followup_dates?.["first:deadline"] ? ` · Saved review date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
                     </div>
                     <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Report &amp; follow-up <Arrow /></span>
-                  </Link>
+                  </a>
                 ))}
               </div>
             ) : (
