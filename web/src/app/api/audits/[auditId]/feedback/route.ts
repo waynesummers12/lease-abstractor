@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { canReadAudit } from "@/lib/server/auditAccess";
+import { portfolioAccess } from "@/lib/server/portfolioAccess";
 
 export const dynamic = "force-dynamic";
 type Context = { params: Promise<{ auditId: string }> };
@@ -33,7 +34,22 @@ export async function GET(req: Request, context: Context) {
     const { data, error } = await db.from("report_feedback")
       .select("useful_question,next_action,note,updated_at").eq("audit_id", auditId).maybeSingle();
     if (error) throw error;
-    return NextResponse.json({ feedback: data }, { headers: privateHeaders });
+    const [{ data: claim, error: claimError }, { count, error: countError }, { data: audit, error: auditError }] = await Promise.all([
+      db.from("feedback_gift_card_claims").select("id").eq("audit_id", auditId).maybeSingle(),
+      db.from("feedback_gift_card_claims").select("id", { count: "exact", head: true }),
+      db.from("lease_audits").select("amount_paid,email,user_id").eq("id", auditId).single(),
+    ]);
+    if (claimError || countError || auditError) throw claimError ?? countError ?? auditError;
+    const access = await portfolioAccess(req);
+    const recipientEmail = audit.email || (audit.user_id === access?.userId ? access?.email : null);
+    const { data: priorClaim, error: priorClaimError } = recipientEmail
+      ? await db.from("feedback_gift_card_claims").select("audit_id").eq("recipient_email", recipientEmail.trim().toLowerCase()).maybeSingle()
+      : { data: null, error: null };
+    if (priorClaimError) throw priorClaimError;
+    return NextResponse.json({ feedback: data, rewardClaimed: Boolean(claim),
+      claimedOnAnotherReport: Boolean(priorClaim && priorClaim.audit_id !== auditId),
+      promotionSpotsRemaining: Math.max(0, 50 - (count ?? 0)),
+      offerAvailable: Boolean((audit.amount_paid ?? 0) > 0 && recipientEmail) }, { headers: privateHeaders });
   } catch {
     return NextResponse.json({ error: "Unable to load feedback" }, { status: 500, headers: privateHeaders });
   }
@@ -57,7 +73,19 @@ export async function PUT(req: Request, context: Context) {
         note: body.note.trim(), updated_at: new Date().toISOString() }, { onConflict: "audit_id" })
       .select("useful_question,next_action,note,updated_at").single();
     if (error) throw error;
-    return NextResponse.json({ feedback: data }, { headers: privateHeaders });
+    let rewardStatus = "needs_note";
+    if (data.note.length >= 10) {
+      const { data: audit, error: auditError } = await db.from("lease_audits").select("email,user_id").eq("id", auditId).single();
+      if (auditError) throw auditError;
+      const access = await portfolioAccess(req);
+      const { data: result, error: rewardError } = await db.rpc("reserve_feedback_gift_card", {
+        p_audit_id: auditId,
+        p_email: audit.email || (audit.user_id === access?.userId ? access?.email : null) || "",
+      });
+      rewardStatus = rewardError ? "unavailable" : String(result);
+      if (rewardError) console.error("Could not reserve feedback gift card:", rewardError);
+    }
+    return NextResponse.json({ feedback: data, rewardStatus }, { headers: privateHeaders });
   } catch {
     return NextResponse.json({ error: "Unable to save feedback" }, { status: 500, headers: privateHeaders });
   }

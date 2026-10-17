@@ -6,6 +6,7 @@ import { useAuth } from "@/app/providers/AuthProvider";
 type UsefulAnswer = "yes" | "no" | "not_sure" | "";
 type NextAction = "not_yet" | "reviewing" | "requested_records" | "contacted_landlord" | "resolved" | "other";
 type Feedback = { useful_question: Exclude<UsefulAnswer, "">; next_action: NextAction; note: string };
+type Offer = { rewardClaimed: boolean; claimedOnAnotherReport: boolean; promotionSpotsRemaining: number; offerAvailable: boolean };
 
 const answers: { value: Exclude<UsefulAnswer, "">; label: string }[] = [
   { value: "yes", label: "Yes" }, { value: "no", label: "No" }, { value: "not_sure", label: "Not sure yet" },
@@ -28,6 +29,8 @@ export default function ReportFeedback({ auditId }: { auditId: string }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [offer, setOffer] = useState<Offer | null>(null);
+  const [rewardStatus, setRewardStatus] = useState<string | null>(null);
 
   useEffect(() => {
     if (authLoading) return;
@@ -37,7 +40,8 @@ export default function ReportFeedback({ auditId }: { auditId: string }) {
       cache: "no-store", signal: controller.signal,
     }).then(async (response) => {
       if (!response.ok) throw new Error("Could not load your response. Please try again later.");
-      const result = await response.json() as { feedback: Feedback | null };
+      const result = await response.json() as { feedback: Feedback | null } & Offer;
+      if (!controller.signal.aborted) setOffer({ rewardClaimed: result.rewardClaimed, claimedOnAnotherReport: result.claimedOnAnotherReport, promotionSpotsRemaining: result.promotionSpotsRemaining, offerAvailable: result.offerAvailable });
       if (!controller.signal.aborted && result.feedback) {
         setUseful(result.feedback.useful_question);
         setAction(result.feedback.next_action);
@@ -63,6 +67,10 @@ export default function ReportFeedback({ auditId }: { auditId: string }) {
         body: JSON.stringify({ usefulQuestion: useful, nextAction: action, note }),
       });
       if (!response.ok) throw new Error("Could not save your response. Please try again.");
+      const result = await response.json() as { rewardStatus: string };
+      setRewardStatus(result.rewardStatus);
+      if (result.rewardStatus === "reserved") setOffer((current) => current ? { ...current, rewardClaimed: true, promotionSpotsRemaining: Math.max(0, current.promotionSpotsRemaining - (current.rewardClaimed ? 0 : 1)) } : current);
+      if (result.rewardStatus === "full") setOffer((current) => current ? { ...current, promotionSpotsRemaining: 0 } : current);
       setSaved(true);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not save your response.");
@@ -84,9 +92,15 @@ export default function ReportFeedback({ auditId }: { auditId: string }) {
           <div className="mt-3 flex flex-wrap gap-3">{answers.map((answer) => <label key={answer.value} className={`inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium ${useful === answer.value ? "border-[#087055] bg-[#e3f1e8] text-[#102820]" : "border-[#cbded0] text-[#53675d]"}`}><input type="radio" name={`useful-${auditId}`} value={answer.value} checked={useful === answer.value} onChange={() => { setUseful(answer.value); setSaved(false); }} />{answer.label}</label>)}</div>
         </fieldset>
         <div><label htmlFor={`feedback-action-${auditId}`} className="text-sm font-semibold text-[#102820]">What have you done next?</label><select id={`feedback-action-${auditId}`} value={action} onChange={(event) => { setAction(event.target.value as NextAction); setSaved(false); }} className="mt-2 block w-full max-w-lg rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm text-[#102820]">{actions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
-        <div><label htmlFor={`feedback-note-${auditId}`} className="text-sm font-semibold text-[#102820]">What could we improve? <span className="font-normal text-[#53675d]">Optional</span></label><textarea id={`feedback-note-${auditId}`} rows={3} maxLength={500} value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); }} placeholder="Tell us what was clear, confusing, or missing." className="mt-2 block w-full rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm text-[#102820]" /></div>
+        <div><label htmlFor={`feedback-note-${auditId}`} className="text-sm font-semibold text-[#102820]">What worked or what could we improve? <span className="font-normal text-[#53675d]">Write at least 10 characters for the gift card offer</span></label><textarea id={`feedback-note-${auditId}`} rows={3} maxLength={500} value={note} onChange={(event) => { setNote(event.target.value); setSaved(false); setRewardStatus(null); }} placeholder="Tell us what was clear, confusing, or missing." className="mt-2 block w-full rounded-xl border border-[#cbded0] bg-white px-4 py-3 text-sm text-[#102820]" /></div>
         <div className="flex flex-wrap items-center gap-4"><button type="submit" disabled={!useful || saving} className="min-h-11 rounded-xl bg-[#102c25] px-6 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50">{saving ? "Saving…" : saved ? "Update feedback" : "Send feedback"}</button>{saved && <span role="status" className="text-sm font-medium text-[#087055]">Saved. Thank you.</span>}</div>
         {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+        {offer?.offerAvailable && <div className="rounded-2xl border border-[#b8d9c2] bg-[#edf7ef] p-5 text-[#153e31]">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#087055]">A thank-you for early customers</p>
+          <h3 className="mt-2 text-xl font-semibold">$50 Starbucks gift card for the first 50</h3>
+          <p className="mt-2 text-sm leading-6">The first 50 paid customers who answer all three feedback questions, including a written note of at least 10 characters, will receive a $50 Starbucks gift card by email. One gift card per customer. Honest answers of any kind qualify.</p>
+          <p className="mt-3 text-sm font-semibold" role="status">{offer.rewardClaimed || rewardStatus === "reserved" ? "Your gift card is reserved. We’ll email it after confirming eligibility." : offer.claimedOnAnotherReport || rewardStatus === "already_claimed" ? "A gift card has already been reserved for this customer." : offer.promotionSpotsRemaining === 0 || rewardStatus === "full" ? "The first 50 spots have been filled. Thank you for your feedback." : rewardStatus === "needs_note" ? "Feedback saved. Add a written note of at least 10 characters to qualify while spots remain." : rewardStatus === "unavailable" ? "Feedback saved, but we couldn’t confirm gift card eligibility yet. Please try again." : `${offer.promotionSpotsRemaining} of 50 spots remain.`}</p>
+        </div>}
       </form>}
   </section>;
 }
