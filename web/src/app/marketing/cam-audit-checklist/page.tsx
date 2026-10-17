@@ -91,7 +91,7 @@ export default function CamAuditChecklistPage() {
       <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
         <div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-36 h-[560px] w-[560px] rounded-full border border-white/10" />
         <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
-          <div>
+          <div className="lg:self-start">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Free tenant field guide</p>
             <h1 className="mt-5 max-w-2xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
               A clearer way to review your <span className="text-[#a9e9be]">CAM charges.</span>

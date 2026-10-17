@@ -74,7 +74,7 @@ export default function NnnAuditRightsPage() {
       <section className="relative overflow-hidden bg-[#102c25] px-6 py-16 text-white sm:py-20 lg:py-24">
         <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
         <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:gap-16">
-          <div>
+          <div className="lg:self-start lg:pt-6">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Your lease sets the process</p>
             <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">Know what to request. <span className="text-[#a9e9be]">Know when to act.</span></h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-[#d9e9df] sm:text-lg">NNN audit and records-access provisions can help you examine taxes, insurance, and CAM charges. The signed lease tells you which records you may review, how to give notice, and which dates matter.</p>
