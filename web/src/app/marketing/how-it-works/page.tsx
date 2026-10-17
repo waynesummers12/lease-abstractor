@@ -28,7 +28,7 @@ export default function HowItWorksPage() {
     <main className="bg-[#f7f8f5] text-[#172820]">
       <section className="overflow-hidden bg-[#102b25] text-white">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
-          <div>
+          <div className="lg:self-start lg:pt-8">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a8edbf]">How SaveOnLease works</p>
             <h1 className="mt-5 text-5xl font-semibold leading-[1.07] tracking-tight text-white sm:text-6xl">From a lease and a bill to <span className="text-[#a8edbf]">clearer next steps.</span></h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-200">Begin with a free lease preview. Add an annual CAM or NNN statement and supporting PDFs if you have them. The $49.99 report brings the terms, calculations, questions, and source pages together.</p>
