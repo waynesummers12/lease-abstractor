@@ -28,6 +28,10 @@ export default function MarketingHomePage() {
             Have a CAM statement? See what is included
           </Link>
         </div>
+        <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-700 sm:text-lg">
+          <span className="font-semibold text-slate-950">Received your annual CAM or NNN statement?</span>{" "}
+          Upload it with your signed lease to see which charges and calculations are worth checking. Start with a free preview.
+        </p>
         <p className="mt-5 text-sm text-slate-500">$49.99 one-time for the paid report, with or without a statement. A potential discrepancy still needs supporting records and verification.</p>
       </section>
 
