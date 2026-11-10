@@ -267,6 +267,24 @@ const sections: Section[] = [
           "Portfolio-level CAM and NNN audit strategies for franchisees and multi-location operators.",
         href: "/marketing/franchise-cam-audit",
       },
+      {
+        title: "Burger Franchise Lease Overcharges",
+        description:
+          "Review the lease terms and records behind a restaurant location's disputed charges.",
+        href: "/marketing/burger-franchise-lease-overcharges",
+      },
+      {
+        title: "Retail Lease Reconciliation Help",
+        description:
+          "Find the documents and questions to use when reviewing a retail CAM or NNN statement.",
+        href: "/marketing/retail-lease-reconciliation-help",
+      },
+      {
+        title: "Medical Office Lease Review Hub",
+        description:
+          "Explore CAM and NNN review questions for medical practice leases.",
+        href: "/marketing/medical-hub",
+      },
     ],
   },
   {

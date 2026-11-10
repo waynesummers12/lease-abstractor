@@ -1,11 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import styles from "../RetailGuide.module.css";
 import RetailGuideNav from "../RetailGuideNav";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Burger Restaurant Lease Audit Rights | CAM & NNN Dispute Guide",
   description:
     "Understand audit rights in burger restaurant leases. Learn how franchisees and multi-unit operators can challenge CAM and NNN overcharges before deadlines expire.",
+  alternates: {
+    canonical: "https://www.saveonlease.com/marketing/burger-restaurant-lease-audit-rights",
+  },
 };
 
 export default function BurgerRestaurantLeaseAuditRightsPage() {

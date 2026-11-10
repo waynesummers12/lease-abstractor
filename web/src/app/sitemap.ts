@@ -67,7 +67,6 @@ const marketingPaths = [
   "/marketing/privacy",
   "/marketing/pro-rata-share-explained",
   "/marketing/real-cam-nnn-overcharge-examples",
-  "/marketing/reconciliation-pilot",
   "/marketing/referral",
   "/marketing/restaurant-nnn-overcharges",
   "/marketing/retail-lease-hub",
