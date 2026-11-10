@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 
 export default async function HomePage({
@@ -36,5 +36,5 @@ export default async function HomePage({
   }
 
   // If not logged in → marketing site
-  redirect("/marketing");
+  permanentRedirect("/marketing");
 }
