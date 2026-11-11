@@ -43,7 +43,7 @@ export default function ReferralPage() {
   const [payoutError, setPayoutError] = useState("");
   const code = cleanCode(name);
   const isRegistered = code !== "" && registeredAccount === session?.user.id && registeredCodes.includes(code);
-  const referralLink = code ? `https://www.saveonlease.com/app/step-1-upload?ref=${encodeURIComponent(code)}` : "";
+  const referralLink = code ? `https://www.saveonlease.com/app/step-1-upload?ref=${encodeURIComponent(code)}&utm_source=partner&utm_medium=referral&utm_campaign=partner_referral` : "";
   const returnToRegistration = `/login?next=${encodeURIComponent(`/marketing/referral?start=1${code ? `&code=${encodeURIComponent(code)}` : ""}#create-link`)}`;
   const message = `Hi,\n\nIf you're looking at a commercial lease or this year's CAM or NNN statement, this may help. SaveOnLease starts with a free preview of lease terms worth checking. You can add your annual statement, and the optional $49.99 report brings the questions, source pages, and records to request into one place.\n\nTake a look here: ${referralLink}\n\nThe report points to items to verify; it doesn't claim a confirmed overcharge.`;
   const emailShareLink = `mailto:?subject=${encodeURIComponent("A lease review tool you may find useful")}&body=${encodeURIComponent(message)}`;
