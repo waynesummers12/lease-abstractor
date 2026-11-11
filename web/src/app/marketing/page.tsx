@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import AnnualStatementEntry from "@/components/AnnualStatementEntry";
 
 export const metadata: Metadata = {
-  title: "Commercial Lease Expense Review",
-  description: "Review CAM and NNN terms in your lease, then add an annual statement and supporting records for an automated review.",
+  title: "Review CAM and NNN Charges Against Your Commercial Lease",
+  description: "Upload a commercial lease for a free preview. Add your annual CAM or NNN statement to see billing questions, then decide whether to buy the $49.99 full report.",
   alternates: { canonical: "https://www.saveonlease.com/marketing" },
 };
 
@@ -24,9 +24,9 @@ export default function MarketingHomePage() {
           <Link href="/app/step-1-upload" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-slate-950 px-7 py-3 text-sm font-semibold text-white hover:bg-slate-800">
             Upload a lease for a free preview
           </Link>
-          <Link href="/marketing/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-7 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-50">
-            Have a CAM statement? See what is included
-          </Link>
+          <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white px-7 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-50">
+            See a sample report ↗
+          </a>
         </div>
         <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-700 sm:text-lg">
           <span className="font-semibold text-slate-950">Received your annual CAM or NNN statement?</span>{" "}

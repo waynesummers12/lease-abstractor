@@ -41,8 +41,9 @@ export default function UploadForm({ onUpload, loading }: Props) {
       </label>
     </div>
 
-    <div className="rounded-2xl border border-slate-200 bg-[#f8faf8] p-5 sm:p-6">
-      <div className="flex items-center gap-3"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-white">2</span><div><p className="font-semibold text-slate-950">Annual CAM or NNN statement</p><p className="text-xs text-slate-600">Optional · Compare the landlord&apos;s bill against your lease</p></div></div>
+    <details className="group rounded-2xl border border-slate-200 bg-[#f8faf8] p-5 sm:p-6">
+      <summary className="flex cursor-pointer list-none items-center gap-3 [&::-webkit-details-marker]:hidden"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-white">2</span><span className="flex-1"><span className="block font-semibold text-slate-950">Have an annual CAM or NNN statement?</span><span className="block text-xs text-slate-600">Optional · Add it now or after the free preview</span></span><span aria-hidden="true" className="text-xl text-slate-600 group-open:rotate-180">⌄</span></summary>
+      <p className="mt-4 text-sm leading-6 text-slate-600">Adding your landlord&apos;s annual bill can reveal questions about expense lines, your share, arithmetic, and credits.</p>
       <label className="mt-5 block text-sm font-semibold text-slate-800">Annual statement PDF
         <input type="file" accept="application/pdf,.pdf" disabled={loading} onChange={(event) => { setStatement(event.target.files?.[0] ?? null); setSupporting([]); setError(null); }} className="mt-2 block w-full rounded-lg border border-slate-300 bg-white p-3 text-sm font-normal text-slate-700 file:mr-4 file:rounded-md file:border-0 file:bg-emerald-100 file:px-3 file:py-2 file:font-semibold file:text-emerald-900" />
       </label>
@@ -50,7 +51,7 @@ export default function UploadForm({ onUpload, loading }: Props) {
         <input key={statement?.name ?? "no-statement"} type="file" accept="application/pdf,.pdf" multiple disabled={loading || !statement} onChange={(event) => { setSupporting(Array.from(event.target.files ?? [])); setError(null); }} className="mt-2 block w-full rounded-lg border border-slate-300 bg-white p-3 text-sm font-normal text-slate-700 file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:font-semibold file:text-slate-800 disabled:opacity-50" />
       </label>
       <p className="mt-3 text-xs leading-5 text-slate-500">Examples: occupancy schedules, invoices, or payment records. Each billing PDF must be under 10 MB. You can add these later on the preview page instead.</p>
-    </div>
+    </details>
 
     {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>}
     <button type="submit" disabled={loading} className="min-h-12 w-full rounded-xl bg-[#102b25] px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-60">{loading ? "Preparing your preview and reviewing documents…" : statement ? "Review lease + annual statement →" : "Preview lease terms for free →"}</button>

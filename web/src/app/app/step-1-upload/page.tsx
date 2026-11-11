@@ -129,20 +129,38 @@ export default function UploadLeasePage() {
     }
   }
   return (
-  <main className="mx-auto max-w-5xl px-4 pb-16 pt-10 sm:px-6 sm:pt-16">
+  <main className="mx-auto max-w-5xl px-4 pb-16 pt-8 sm:px-6 sm:pt-12">
     <div className="mx-auto max-w-3xl text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">Free lease preview</p>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">See how your CAM and NNN bill compares with your lease.</h1>
-      <p className="mx-auto mt-5 max-w-2xl text-base text-slate-600 sm:text-lg">
-        Start with your signed commercial lease. Add an annual CAM or NNN statement to check readable charges, calculations, and lease terms together. You can preview the results before deciding whether to buy the full report.
+      <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">Check your lease for CAM and NNN questions.</h1>
+      <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
+        Upload a signed lease. Add an annual statement if you have one. Preview the results free; the full report is $49.99.
       </p>
-      <a href="#upload-documents" className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#102b25] px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-900">I have my lease · Go to upload ↓</a>
+      <p className="mt-3 text-sm font-medium text-emerald-900">No account or credit card required to start.</p>
+      <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">See a fictional sample report before uploading ↗</a>
+    </div>
+
+    <div id="upload-documents" className="mx-auto mt-8 max-w-3xl scroll-mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2 · Add your documents</p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Choose your files.</h2>
+        <p className="mt-2 text-sm text-slate-600">Start with your signed lease PDF. Your statement and supporting files are optional and can be added after the free preview.</p>
+      </div>
+      <UploadForm
+        onUpload={handleUpload}
+        loading={uploading}
+      />
+      {error && (
+        <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
+      )}
+      {recoverAuditId && <Link href={`/app/step-3-review?auditId=${recoverAuditId}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">Your lease preview is ready. Continue and add the statement there →</Link>}
+      <p className="mt-5 text-center text-sm text-slate-600">No credit card needed now. Review the free preview before choosing the $49.99 report.</p>
     </div>
 
     <section aria-labelledby="document-checklist-title" className="mx-auto mt-10 max-w-5xl rounded-[28px] border border-[#d9e7dc] bg-[#f3f8f3] p-5 sm:p-8">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Before you upload</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Document guide</p>
           <h2 id="document-checklist-title" className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">What to have ready.</h2>
         </div>
         <p className="text-sm font-semibold text-emerald-900">Only the lease is required</p>
@@ -169,23 +187,6 @@ export default function UploadLeasePage() {
       </div>
       <p className="mt-5 text-sm leading-6 text-[#456654]">A flagged item is a question to verify against the signed documents and source records. <Link href="/marketing/pricing" className="font-semibold text-emerald-800 underline underline-offset-4">See the free preview and full report side by side →</Link></p>
     </section>
-
-    <div id="upload-documents" className="mx-auto mt-8 max-w-3xl scroll-mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
-      <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 1 of 2 · Add your documents</p>
-        <h2 className="mt-2 text-2xl font-semibold text-slate-950 sm:text-3xl">Choose your files.</h2>
-        <p className="mt-2 text-sm text-slate-600">Use your signed lease, including amendments. A prior SaveOnLease report is not the source document. The annual statement and supporting PDFs are optional and can also be added on the preview page.</p>
-      </div>
-      <UploadForm
-        onUpload={handleUpload}
-        loading={uploading}
-      />
-      {error && (
-        <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p>
-      )}
-      {recoverAuditId && <Link href={`/app/step-3-review?auditId=${recoverAuditId}`} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">Your lease preview is ready. Continue and add the statement there →</Link>}
-      <p className="mt-5 text-center text-sm text-slate-600">No credit card needed now. Review the free preview before choosing the $49.99 report.</p>
-    </div>
 
     <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-sm text-slate-700 sm:grid-cols-3">
       <div className="rounded-xl bg-slate-50 p-4"><span className="font-semibold">1. Upload</span><br />Choose the lease and, if available, an annual statement.</div>
