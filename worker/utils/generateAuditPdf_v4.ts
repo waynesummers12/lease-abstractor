@@ -533,21 +533,25 @@ export async function generateAuditPdfV4(analysis: AuditAnalysis): Promise<Uint8
   page.drawRectangle({ x: MARGIN, y: y - 31, width: CONTENT, height: 31, color: NAVY });
   headers.forEach((h, i) => page.drawText(h, { x: cols[i] + 6, y: y - 20, size: 7.5, font: bold, color: WHITE }));
   y -= 31;
+  const drawWorksheetCell = (text: string, x: number, width: number, rowTop: number) => {
+    const cellLines = wrap(text, font, 8, width - 12).slice(0, 2);
+    const firstBaseline = rowTop - 20 + (cellLines.length - 1) * 5;
+    cellLines.forEach((line, index) => page.drawText(line, {
+      x: x + 6, y: firstBaseline - index * 10, size: 8, font, color: NAVY,
+    }));
+  };
   for (let i = 0; i < (analysis.reconciliation ? selectedRows.length : 5); i++) {
     ensure(42);
     page.drawRectangle({ x: MARGIN, y: y - 36, width: CONTENT, height: 36, color: i % 2 ? WHITE : LIGHT });
     cols.slice(1, 4).forEach((x) => page.drawLine({ start: { x, y }, end: { x, y: y - 36 }, thickness: 0.5, color: MUTED }));
     if (selectedRows[i]) {
       const entry = selectedRows[i];
-      const rowLabel = wrap(entry.category, font, 8, cols[1] - cols[0] - 12);
-      rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
-      page.drawText(money(entry.amountBilled), { x: cols[1] + 6, y: y - 20, size: 8, font, color: NAVY });
-      wrap(entry.leaseBasis, font, 8, cols[3] - cols[2] - 12).slice(0, 2).forEach((line, j) =>
-        page.drawText(line, { x: cols[2] + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
-      page.drawText(entry.difference, { x: cols[3] + 6, y: y - 20, size: 8, font, color: NAVY });
+      drawWorksheetCell(entry.category, cols[0], cols[1] - cols[0], y);
+      drawWorksheetCell(money(entry.amountBilled), cols[1], cols[2] - cols[1], y);
+      drawWorksheetCell(entry.leaseBasis, cols[2], cols[3] - cols[2], y);
+      drawWorksheetCell(entry.difference, cols[3], cols[4] - cols[3], y);
     } else if (accountingItems[i] && !analysis.reconciliation) {
-      const rowLabel = wrap(reviewItem(accountingItems[i].flag).title, font, 8, cols[1] - cols[0] - 12);
-      rowLabel.slice(0, 2).forEach((line, j) => page.drawText(line, { x: MARGIN + 6, y: y - 13 - j * 10, size: 8, font, color: NAVY }));
+      drawWorksheetCell(reviewItem(accountingItems[i].flag).title, cols[0], cols[1] - cols[0], y);
     }
     y -= 36;
   }
