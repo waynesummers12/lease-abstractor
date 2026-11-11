@@ -37,7 +37,7 @@ function Loading() {
       </h1>
 
       <p className="text-gray-600 mb-4">
-        We’re estimating potential savings and identifying key risk areas before your full audit…
+        We’re reading your lease terms and preparing questions to check against your CAM or NNN bill…
       </p>
 
       <div className="text-xs text-gray-500">

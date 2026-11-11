@@ -20,15 +20,11 @@ type Analysis = {
   teaser_summary?: {
     headline_flags?: string[];
   } | null;
+  health?: {
+    flags?: Array<{ code: string; label: string; recommendation: string }> | null;
+  } | null;
 
 };
-
-function reviewLabel(label: string) {
-  if (/management|admin/i.test(label)) return "Management or administrative fee language to verify";
-  if (/capital/i.test(label)) return "Capital expense language to verify";
-  if (/pro.rata|allocation/i.test(label)) return "Pro-rata allocation language to verify";
-  return "Lease term to verify in the original document";
-}
 
 export default function Step3ReviewClient() {
   const searchParams = useSearchParams();
@@ -194,13 +190,21 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
     );
   }
 
+  const reviewItems = analysis.health?.flags?.slice(0, 3).map((flag) => ({
+    title: flag.label,
+    nextStep: flag.recommendation,
+  })) ?? analysis.teaser_summary?.headline_flags?.slice(0, 3).map((flag) => ({
+    title: flag,
+    nextStep: "Compare this lease language with your annual CAM or NNN statement and source records.",
+  })) ?? [];
+
   return (
-    <main className="mx-auto max-w-4xl space-y-6 px-4 py-10 sm:px-6 sm:py-16">
+    <main className="mx-auto max-w-4xl space-y-6 px-4 pb-28 pt-10 sm:px-6 sm:py-16">
       <div className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Step 2 of 2 · Free preview</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Your lease{analysis.reconciliation ? " + statement" : ""} preview</h1>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{reviewItems.length ? `${reviewItems.length} lease ${reviewItems.length === 1 ? "item" : "items"} worth checking` : "Your lease review is ready"}</h1>
         <p className="mt-3 text-slate-600">
-          Review the terms and {analysis.reconciliation ? "statement checks" : "topics"} we found. You can decide whether a full report is worth it.
+          {analysis.tenant ? `${analysis.tenant}: ` : ""}Here is what the preview found. The full report connects the lease language, source pages, and next questions in a PDF you can use.
         </p>
       </div>
 
@@ -208,17 +212,16 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
       <section className="space-y-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-8">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Free preview</p>
-          <h2 className="mt-2 text-xl font-semibold text-emerald-950">Lease terms{analysis.reconciliation ? " and statement checks" : ""} ready for review</h2>
-          <p className="mt-2 text-sm text-emerald-900">{analysis.reconciliation ? "We compared readable statement details with the lease. Review the checks below and verify any flagged items with supporting records." : "We found lease language to check against your CAM/NNN billing records. An uploaded lease alone cannot establish an overcharge or a recoverable dollar amount."}</p>
+          <h2 className="mt-2 text-xl font-semibold text-emerald-950">A starting point for your next billing review</h2>
+          <p className="mt-2 text-sm text-emerald-900">{analysis.reconciliation ? "We compared readable statement details with the lease. These are questions to verify with supporting records." : "We found lease language that may matter when you review a CAM or NNN bill. The lease alone cannot show whether you were overcharged."}</p>
         </div>
-        {analysis.teaser_summary?.headline_flags && analysis.teaser_summary.headline_flags.length > 0 && (
-          <div className="rounded-lg border border-emerald-200 bg-white p-4">
-            <p className="text-sm font-semibold text-emerald-950">Potential review items</p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-emerald-900">
-              {analysis.teaser_summary.headline_flags.slice(0, 3).map((flag, index) => <li key={index}>{reviewLabel(flag)}</li>)}
-            </ul>
-          </div>
-        )}
+        {reviewItems.length > 0 && <div className="grid gap-3 sm:grid-cols-2">
+          {reviewItems.map((item, index) => <article key={`${item.title}-${index}`} className="rounded-xl border border-emerald-200 bg-white p-5">
+            <p className="text-xs font-bold uppercase tracking-[0.15em] text-emerald-700">Review lead {index + 1}</p>
+            <h3 className="mt-2 text-base font-semibold text-emerald-950">{item.title}</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{item.nextStep}</p>
+          </article>)}
+        </div>}
         <dl className="grid gap-4 border-t border-emerald-200 pt-4 text-sm sm:grid-cols-2">
           <div><dt className="font-medium text-emerald-800">Tenant</dt><dd>{analysis.tenant || "Not identified"}</dd></div>
           <div><dt className="font-medium text-emerald-800">Landlord</dt><dd>{analysis.landlord || "Not identified"}</dd></div>
@@ -227,16 +230,49 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         </dl>
       </section>
 
+      <section aria-labelledby="unlock-title" className="overflow-hidden rounded-3xl border border-[#b9d5c1] bg-white shadow-xl shadow-emerald-950/10">
+        <div className="bg-[#102c25] px-5 py-6 text-white sm:px-8 sm:py-8">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a9e9be]">Your next step</p>
+          <h2 id="unlock-title" className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{reviewItems.length ? "Turn these review leads into a plan." : "Get a plan for reviewing your lease."}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#d9e9df] sm:text-base">Get a page-referenced PDF with the relevant lease terms, prioritized questions, records to request, and a billing worksheet. {analysis.reconciliation ? "Your analyzed annual statement is included." : "You can add your annual statement first at no extra cost."}</p>
+          <button type="button" disabled={documentBusy || checkoutBusy} onClick={pendingDocuments ? analyzeDocuments : beginCheckout} className="mt-5 hidden min-h-12 rounded-xl bg-[#a9e9be] px-6 py-3 text-sm font-bold text-[#102c25] transition hover:bg-white disabled:opacity-60 sm:inline-flex sm:items-center sm:justify-center">{documentBusy ? "Analyzing selected documents…" : checkoutBusy ? "Opening secure checkout…" : pendingDocuments ? "Analyze selected documents first →" : "Get my full report · $49.99 →"}</button>
+        </div>
+        <div className="grid gap-6 p-5 sm:p-8 md:grid-cols-[1fr_220px] md:items-start">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">Inside your full report</p>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-700">
+              <li><span className="mr-2 font-bold text-emerald-700">✓</span>Relevant lease clauses with source pages and next questions</li>
+              <li><span className="mr-2 font-bold text-emerald-700">✓</span>Notice or audit deadlines to verify against your signed documents</li>
+              <li><span className="mr-2 font-bold text-emerald-700">✓</span>Records request draft and billing worksheet to guide follow-up</li>
+              {analysis.reconciliation && <li><span className="mr-2 font-bold text-emerald-700">✓</span>Checks from your uploaded annual statement</li>}
+            </ul>
+          </div>
+          <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="block rounded-xl border border-slate-200 bg-[#f7faf6] p-3 text-center transition hover:border-emerald-500">
+            <Image src="/sample/lease-and-statement-review-preview.png" alt="First page of a fictional sample report" width={992} height={1403} className="mx-auto h-40 w-auto rounded border border-slate-200 shadow-sm" />
+            <span className="mt-3 block text-sm font-semibold text-emerald-800 underline underline-offset-4">View fictional sample PDF ↗</span>
+          </a>
+        </div>
+        <div className="border-t border-slate-200 bg-[#f5f9f5] px-5 py-6 sm:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div><p className="text-2xl font-bold text-slate-950">$49.99 <span className="text-sm font-medium text-slate-600">once</span></p><p className="mt-1 text-xs text-slate-600">No subscription · Secure checkout · PDF prepared after payment</p></div>
+            <button type="button" disabled={documentBusy || checkoutBusy} onClick={pendingDocuments ? analyzeDocuments : beginCheckout} className="min-h-12 rounded-xl bg-[#102c25] px-7 py-3 text-center text-sm font-bold text-white transition hover:bg-[#1e4b3c] disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800">{documentBusy ? "Analyzing selected documents…" : checkoutBusy ? "Opening secure checkout…" : pendingDocuments ? "Analyze selected documents first →" : "Get my full report · $49.99 →"}</button>
+          </div>
+          {documentError && <p role="alert" className="mt-3 text-sm text-red-700">{documentError}</p>}
+          {checkoutError && <p role="alert" className="mt-3 text-sm text-red-700">{checkoutError}</p>}
+          <p className="mt-4 text-xs leading-5 text-slate-600">The preview identifies questions, not verified overcharges or guaranteed savings. Your report reflects the readable files supplied before checkout.</p>
+        </div>
+      </section>
+
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-emerald-800">Optional · Before checkout</p>
         <h2 className="mt-2 text-xl font-semibold text-slate-950">Add your annual statement and supporting records</h2>
         <p className="mt-2 text-sm text-slate-600">We can compare a text-readable CAM or NNN statement with the lease and check visible arithmetic. Add up to four supporting PDFs. The report will label what remains unverified.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <label className="text-sm font-medium text-slate-800">Annual statement PDF
-            <input type="file" accept="application/pdf,.pdf" onChange={(event) => { const nextStatement = event.target.files?.[0] ?? null; setStatement(nextStatement); setPendingDocuments(Boolean(nextStatement) || supportFiles.length > 0); }} className="mt-2 block w-full text-sm" />
+            <input type="file" accept="application/pdf,.pdf" onChange={(event) => { const nextStatement = event.target.files?.[0] ?? null; setStatement(nextStatement); if (!nextStatement) setSupportFiles([]); setPendingDocuments(Boolean(nextStatement)); }} className="mt-2 block w-full text-sm" />
           </label>
           <label className="text-sm font-medium text-slate-800">Supporting PDFs (up to four)
-            <input type="file" accept="application/pdf,.pdf" multiple onChange={(event) => { const nextFiles = Array.from(event.target.files ?? []); setSupportFiles(nextFiles); setPendingDocuments(Boolean(statement) || nextFiles.length > 0); }} className="mt-2 block w-full text-sm" />
+            <input type="file" accept="application/pdf,.pdf" multiple disabled={!statement} onChange={(event) => { const nextFiles = Array.from(event.target.files ?? []); setSupportFiles(nextFiles); setPendingDocuments(Boolean(statement)); }} className="mt-2 block w-full text-sm disabled:opacity-50" />
           </label>
         </div>
         <button type="button" disabled={!statement || documentBusy} onClick={analyzeDocuments} className="mt-5 min-h-11 rounded-lg bg-emerald-900 px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">{documentBusy ? "Reviewing documents…" : "Analyze documents"}</button>
@@ -248,82 +284,8 @@ function AuditReviewClient({ auditId }: { auditId: string | null }) {
         <p className="mt-4 text-xs text-slate-500">You may continue with only the lease. Add all documents before checkout; the paid PDF reflects the files saved at purchase.</p>
       </section>
 
-      <div>
-        <button
-          type="button"
-          disabled={documentBusy || checkoutBusy}
-          onClick={pendingDocuments ? analyzeDocuments : beginCheckout}
-          className="min-h-12 w-full rounded-xl bg-black px-5 py-3 text-center font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-        >
-          {documentBusy ? "Analyzing selected documents…" : checkoutBusy ? "Opening secure checkout…" : pendingDocuments ? "Analyze selected documents →" : "Unlock your report · $49.99"}
-        </button>
-        {documentError && <p role="alert" className="mt-3 text-center text-sm text-red-700">{documentError}</p>}
-        {checkoutError && <p role="alert" className="mt-3 text-center text-sm text-red-700">{checkoutError}</p>}
-        <p className="mt-2 text-center text-xs text-slate-500">
-          Secure one-time checkout. Your PDF is prepared after payment.
-        </p>
-      </div>
-
-      {/* ---------- UNLOCK FULL AUDIT EXPLANATION ---------- */}
-      <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-        <h2 className="text-xl font-semibold text-slate-950">
-          Lease Expense Review{analysis.reconciliation ? " + Statement" : ""} · $49.99 one-time
-        </h2>
-        <p className="text-sm font-medium text-slate-600">
-          Check your lease for any notice or audit deadlines before deciding what to do next.
-        </p>
-
-        <p className="text-gray-700">
-          The paid report summarizes lease language and, when added above, checks statement arithmetic and documents to verify before asserting an overcharge.
-        </p>
-
-        <p className="text-sm text-gray-600">
-          One-time payment. No subscriptions. No auto-renewals.
-        </p>
-        <p className="text-xs text-gray-500">
-          If no meaningful issues are found, you’ll still receive a complete audit report for your records.
-        </p>
-
-        <section className="overflow-hidden rounded-2xl border-2 border-emerald-700 bg-emerald-50 shadow-sm" aria-labelledby="sample-report-heading">
-          <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_220px]">
-            <div className="p-5 sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-emerald-800">See the report format</p>
-              <h3 id="sample-report-heading" className="mt-2 text-xl font-semibold text-slate-950">Preview the report before paying</h3>
-              <p className="mt-3 text-sm leading-relaxed text-slate-700">Explore an 11-page report generated from fictional lease and statement documents. It shows prioritized questions, conditional calculations, a worksheet, and records to request. Your report will reflect your own files.</p>
-              <a
-                href="/sample/lease-and-statement-review-sample.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 inline-flex min-h-12 items-center justify-center rounded-lg bg-emerald-900 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-900"
-              >
-                Open the full sample report (PDF) ↗
-              </a>
-              <p className="mt-3 text-xs text-slate-600">Fictional demonstration · Review leads are not verified overcharges</p>
-            </div>
-            <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full sample lease and statement report PDF" className="block border-t border-emerald-200 bg-white p-4 md:border-l md:border-t-0">
-              <Image src="/sample/lease-and-statement-review-preview.png" alt="First page of the fictional lease and statement report" width={992} height={1403} className="mx-auto h-64 w-auto rounded border border-slate-200 shadow-md md:h-72" />
-            </a>
-          </div>
-        </section>
-
-        <ul className="list-disc list-inside space-y-2 text-gray-700">
-          <li>
-            Audit windows are often time-limited
-          </li>
-          <li>
-            Issue-by-issue screening findings and practical verification steps
-          </li>
-          <li>
-            No dollar recovery claim without billing records
-          </li>
-          <li>
-            A report you can share with an attorney,
-            accountant, or landlord
-          </li>
-          <li>
-            A secure, downloadable PDF for your records
-          </li>
-        </ul>
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-emerald-200 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_rgba(16,44,37,0.12)] backdrop-blur sm:hidden">
+        <button type="button" disabled={documentBusy || checkoutBusy} onClick={pendingDocuments ? analyzeDocuments : beginCheckout} className="min-h-12 w-full rounded-xl bg-[#102c25] px-5 py-3 text-sm font-bold text-white disabled:opacity-60">{documentBusy ? "Analyzing documents…" : checkoutBusy ? "Opening checkout…" : pendingDocuments ? "Analyze selected documents →" : "Get my full report · $49.99 →"}</button>
       </div>
 
     </main>
