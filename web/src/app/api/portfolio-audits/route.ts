@@ -7,10 +7,20 @@ const privateHeaders = { "Cache-Control": "private, no-store" };
 export async function GET(req: Request) {
   const access = await portfolioAccess(req);
   if (!access) return NextResponse.json({ error: "Authentication required" }, { status: 401 });
-  const { data, error } = await access.db.from("lease_audits")
+  const leaseId = new URL(req.url).searchParams.get("leaseId");
+  if (leaseId) {
+    const { data: lease } = await access.db.from("portfolio_leases")
+      .select("id").eq("id", leaseId).eq("user_id", access.userId)
+      .is("deleted_at", null).maybeSingle();
+    if (!lease) return NextResponse.json({ error: "Lease not found" }, { status: 404 });
+  }
+  let query = access.db.from("lease_audits")
     .select("id,status,created_at,completed_at,portfolio_lease_id,analysis")
-    .eq("user_id", access.userId).eq("status", "complete")
-    .order("completed_at", { ascending: false });
+    .eq("user_id", access.userId)
+    .order("created_at", { ascending: false });
+  query = leaseId ? query.eq("portfolio_lease_id", leaseId).in("status", ["analyzed", "complete"])
+    : query.eq("status", "complete");
+  const { data, error } = await query;
   if (error) return NextResponse.json({ error: "Failed to load audits" }, { status: 500 });
   const { data: dates, error: datesError } = await access.db.from("report_followups")
     .select("audit_id,item_key,due_date")

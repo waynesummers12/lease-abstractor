@@ -6,6 +6,7 @@ import { authenticatedPortfolioFetch } from "@/lib/portfolioFetch";
 
 type Audit = {
   id: string;
+  status: string;
   completed_at: string | null;
   portfolio_lease_id: string | null;
   analysis: { tenant?: string | null; property_name?: string | null } | null;
@@ -21,7 +22,7 @@ export function PortfolioAuditList({ leaseId, leases = [] }: {
 
   useEffect(() => {
     let active = true;
-    authenticatedPortfolioFetch("/api/portfolio-audits")
+    authenticatedPortfolioFetch(leaseId ? `/api/portfolio-audits?leaseId=${encodeURIComponent(leaseId)}` : "/api/portfolio-audits")
       .then(async (res) => {
         if (!res.ok) throw new Error("Unable to load completed audits");
         return res.json();
@@ -30,7 +31,7 @@ export function PortfolioAuditList({ leaseId, leases = [] }: {
       .catch(() => { if (active) setError("Unable to load completed audits."); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, []);
+  }, [leaseId]);
 
   async function linkAudit(auditId: string, portfolioLeaseId: string) {
     if (!portfolioLeaseId) return;
@@ -52,17 +53,17 @@ export function PortfolioAuditList({ leaseId, leases = [] }: {
   const visible = leaseId ? audits.filter((audit) => audit.portfolio_lease_id === leaseId) : audits;
   return (
     <section className="rounded-lg border bg-white p-6">
-      <h2 className="mb-2 text-lg font-semibold">Completed audits</h2>
-      <p className="mb-4 text-sm text-gray-600">Reports from audits you ran while signed in.</p>
+      <h2 className="mb-2 text-lg font-semibold">{leaseId ? "Lease reviews" : "Completed audits"}</h2>
+      <p className="mb-4 text-sm text-gray-600">{leaseId ? "Open your free preview or a purchased report for this lease." : "Reports from audits you ran while signed in."}</p>
       {loading ? <p className="text-sm text-gray-500">Loading audits...</p> :
         error ? <p className="text-sm text-red-700">{error}</p> :
-        visible.length === 0 ? <p className="text-sm text-gray-500">No completed audits here yet.</p> :
+        visible.length === 0 ? <p className="text-sm text-gray-500">{leaseId ? "No free preview or purchased report for this lease yet." : "No completed audits here yet."}</p> :
         <ul className="divide-y">
           {visible.map((audit) => (
             <li key={audit.id} className="flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
               <div>
                 <p className="font-medium">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease audit"}</p>
-                <p className="text-gray-500">Completed {audit.completed_at ? new Date(audit.completed_at).toLocaleDateString() : "recently"}</p>
+                <p className="text-gray-500">{audit.status === "complete" ? `Completed ${audit.completed_at ? new Date(audit.completed_at).toLocaleDateString() : "recently"}` : "Free preview ready"}</p>
               </div>
               <div className="flex items-center gap-3">
                 {!leaseId && !audit.portfolio_lease_id && leases.length > 0 && (
@@ -75,7 +76,7 @@ export function PortfolioAuditList({ leaseId, leases = [] }: {
                 {!leaseId && audit.portfolio_lease_id && (
                   <Link className="underline" href={`/product/app/leases/${encodeURIComponent(audit.portfolio_lease_id)}`}>View lease</Link>
                 )}
-                <Link className="font-medium underline" href={`/product/app/audits/${encodeURIComponent(audit.id)}`}>View report</Link>
+                <Link className="font-medium underline" href={audit.status === "complete" ? `/product/app/audits/${encodeURIComponent(audit.id)}` : `/app/step-3-review?auditId=${encodeURIComponent(audit.id)}`}>{audit.status === "complete" ? "View report" : "Open free preview"}</Link>
               </div>
             </li>
           ))}

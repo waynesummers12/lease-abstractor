@@ -1,5 +1,7 @@
 type FunnelEvent =
   | "free_preview_started"
+  | "portfolio_lease_saved"
+  | "portfolio_preview_started"
   | "upload_submitted"
   | "lease_uploaded"
   | "lease_upload_failed"

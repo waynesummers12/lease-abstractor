@@ -51,6 +51,7 @@ export async function POST(req: Request) {
       square_footage,
       lease_type,
       renewal_date,
+      renewal_reminders_enabled,
     } = body ?? {};
 
     if (typeof property_name !== "string" || !property_name.trim()) {
@@ -72,6 +73,7 @@ export async function POST(req: Request) {
             : null,
           lease_type: lease_type || null,
           renewal_date: renewal_date || null,
+          renewal_reminders_enabled: renewal_reminders_enabled === true && Boolean(renewal_date),
         },
       ])
       .select()
@@ -141,6 +143,7 @@ export async function PATCH(req: Request) {
       squareFeet,
       leaseType,
       renewalDate,
+      renewalRemindersEnabled,
     } = body ?? {};
 
     if (typeof id !== "string" || !id) {
@@ -153,15 +156,19 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Property name is required" }, { status: 400 });
     }
 
+    const updates = {
+      property_name: propertyName.trim(),
+      landlord: landlord || null,
+      square_feet: squareFeet ? Number(squareFeet) : null,
+      lease_type: leaseType || null,
+      renewal_date: renewalDate || null,
+      ...(typeof renewalRemindersEnabled === "boolean"
+        ? { renewal_reminders_enabled: renewalRemindersEnabled && Boolean(renewalDate) }
+        : {}),
+    };
     const { data, error } = await db
       .from("portfolio_leases")
-      .update({
-        property_name: propertyName.trim(),
-        landlord: landlord || null,
-        square_feet: squareFeet ? Number(squareFeet) : null,
-        lease_type: leaseType || null,
-        renewal_date: renewalDate || null,
-      })
+      .update(updates)
       .eq("id", id)
       .eq("user_id", userId)
       .is("deleted_at", null)

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { authenticatedPortfolioFetch, portfolioFetch } from "@/lib/portfolioFetch";
+import { trackFunnel } from "@/lib/funnelAnalytics";
 
 export default function AddLeasePage() {
   const { session, loading: authLoading } = useAuth();
@@ -12,6 +13,7 @@ export default function AddLeasePage() {
   const router = useRouter();
 
   const [fileName, setFileName] = useState<string | null>(null);
+  const [leaseFile, setLeaseFile] = useState<File | null>(null);
   const [extracting, setExtracting] = useState(false);
   const [extractionNote, setExtractionNote] = useState<string | null>(null);
   const uploadSequence = useRef(0);
@@ -22,10 +24,12 @@ export default function AddLeasePage() {
     squareFeet: "",
     leaseType: "",
     renewalDate: "",
+    renewalRemindersEnabled: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [savedLeaseId, setSavedLeaseId] = useState<string | null>(null);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,10 +43,11 @@ export default function AddLeasePage() {
     const sequence = ++uploadSequence.current;
 
     setFileName(file.name);
+    setLeaseFile(null);
     setExtracting(true);
     setError(null);
     setExtractionNote(null);
-    setForm({ propertyName: "", landlord: "", squareFeet: "", leaseType: "", renewalDate: "" });
+    setForm({ propertyName: "", landlord: "", squareFeet: "", leaseType: "", renewalDate: "", renewalRemindersEnabled: false });
 
     try {
       const formData = new FormData();
@@ -59,6 +64,7 @@ export default function AddLeasePage() {
         throw new Error(data.error || "Extraction failed");
       }
       if (sequence !== uploadSequence.current) return;
+      setLeaseFile(file);
 
       setForm({
         propertyName: data.metadata?.propertyName || "",
@@ -68,11 +74,13 @@ export default function AddLeasePage() {
           : "",
         leaseType: data.metadata?.leaseType || "",
         renewalDate: data.metadata?.renewalDate || "",
+        renewalRemindersEnabled: false,
       });
       const found = Object.values(data.metadata ?? {}).filter(Boolean).length;
       setExtractionNote(`Read ${data.pageCount} PDF page${data.pageCount === 1 ? "" : "s"} and suggested ${found} field${found === 1 ? "" : "s"}. Review every field before saving.`);
     } catch (err) {
       if (sequence !== uploadSequence.current) return;
+      setLeaseFile(null);
       console.error("Extraction error:", err);
       setError(err instanceof Error ? err.message : "Could not read this PDF. Enter details manually.");
     } finally {
@@ -97,6 +105,7 @@ export default function AddLeasePage() {
             : null,
           lease_type: form.leaseType,
           renewal_date: form.renewalDate || null,
+          renewal_reminders_enabled: form.renewalRemindersEnabled && Boolean(form.renewalDate),
         }),
       });
 
@@ -105,8 +114,41 @@ export default function AddLeasePage() {
       if (!res.ok) {
         throw new Error(data.error || "Failed to save lease");
       }
-
-      // Redirect to leases page after successful save
+      setSavedLeaseId(data.lease.id);
+      trackFunnel("portfolio_lease_saved", { has_pdf: Boolean(leaseFile), has_renewal_date: Boolean(form.renewalDate) });
+      if (leaseFile && data.lease?.id) {
+        try {
+          const auditId = crypto.randomUUID();
+          const objectPath = `leases/${auditId}.pdf`;
+          const createRes = await authenticatedPortfolioFetch("/api/audits", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ auditId, objectPath, portfolioLeaseId: data.lease.id }),
+          });
+          const created = await createRes.json();
+          if (!createRes.ok || typeof created.capability !== "string") throw new Error("Could not start the free preview");
+          const documents = new FormData();
+          documents.append("file", leaseFile);
+          documents.append("auditId", auditId);
+          documents.append("objectPath", objectPath);
+          const ingestRes = await fetch(`${process.env.NEXT_PUBLIC_WORKER_URL}/ingest/lease/pdf`, {
+            method: "POST",
+            headers: {
+              "X-Lease-Worker-Key": process.env.NEXT_PUBLIC_WORKER_KEY!,
+              "X-Audit-Capability": created.capability,
+            },
+            body: documents,
+          });
+          if (!ingestRes.ok) throw new Error("Could not analyze the lease PDF");
+          trackFunnel("portfolio_preview_started");
+          router.push(`/app/step-3-review?auditId=${auditId}`);
+          return;
+        } catch (previewError) {
+          console.error("Portfolio preview failed:", previewError);
+          setError("Your lease was saved, but its free preview could not open. Open the saved lease to try again.");
+          setLoading(false);
+          return;
+        }
+      }
       router.push("/product/app/dashboard#leases");
     } catch (err: unknown) {
       const message =
@@ -166,16 +208,7 @@ export default function AddLeasePage() {
             )}
           </label>
           <div className="mt-4 text-xs text-gray-400">
-            The PDF is read for field suggestions and is not saved to your portfolio.
-          </div>
-          <div className="mt-2 text-xs text-gray-400">
-            Need deeper analysis?
-            <Link
-              href="/app/step-1-upload"
-              className="ml-1 text-gray-600 hover:underline"
-            >
-              Run full audit →
-            </Link>
+            After you save, we securely keep the PDF with your lease and open its free preview.
           </div>
         </div>
 
@@ -253,24 +286,32 @@ export default function AddLeasePage() {
             </div>
           </div>
 
+          <label className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
+            <input type="checkbox" checked={form.renewalRemindersEnabled} disabled={!form.renewalDate}
+              onChange={(event) => setForm((current) => ({ ...current, renewalRemindersEnabled: event.target.checked }))}
+              className="mt-1 h-4 w-4" />
+            <span>Email me reminders before this saved renewal date. I can change this later. I will check the signed lease for any earlier notice deadline.</span>
+          </label>
+
           {error && (
             <div className="text-sm text-red-600 font-medium">
               {error}
+              {savedLeaseId && <Link href={`/product/app/leases/${encodeURIComponent(savedLeaseId)}`} className="ml-2 underline">Open saved lease →</Link>}
             </div>
           )}
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
             <button
               type="submit"
-              disabled={loading || extracting}
-              className="bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
+              disabled={loading || extracting || Boolean(savedLeaseId)}
+              className="min-h-11 bg-black text-white rounded px-4 py-2 text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
             >
-              {loading ? "Saving..." : extracting ? "Reading PDF..." : "Add Lease (Free)"}
+              {loading ? "Saving and opening preview..." : extracting ? "Reading PDF..." : leaseFile ? "Save lease and preview free" : "Add Lease (Free)"}
             </button>
 
             <Link
               href="/product/app/dashboard"
-              className="text-sm text-gray-600 hover:underline"
+              className="min-h-11 inline-flex items-center justify-center text-sm text-gray-600 hover:underline"
             >
               Cancel
             </Link>

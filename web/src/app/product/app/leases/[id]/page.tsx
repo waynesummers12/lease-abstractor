@@ -14,6 +14,7 @@ interface Lease {
   squareFeet?: number;
   leaseType?: string;
   renewalDate?: string;
+  renewalRemindersEnabled?: boolean;
 }
 
 interface PortfolioLeaseRow {
@@ -23,6 +24,7 @@ interface PortfolioLeaseRow {
   square_feet: number | null;
   lease_type: string | null;
   renewal_date: string | null;
+  renewal_reminders_enabled: boolean;
 }
 
 function calculateDaysUntil(date?: string) {
@@ -74,6 +76,7 @@ export default function LeaseDetailPage() {
             squareFeet: found.square_feet ?? undefined,
             leaseType: found.lease_type ?? undefined,
             renewalDate: found.renewal_date ?? undefined,
+            renewalRemindersEnabled: found.renewal_reminders_enabled,
           } : null);
         }
       } catch (err) {
@@ -184,7 +187,7 @@ export default function LeaseDetailPage() {
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 space-y-10">
-      <div className="flex items-start justify-between gap-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div>
           <div className="flex gap-3 mb-3">
             <button
@@ -219,11 +222,13 @@ export default function LeaseDetailPage() {
         <div className="grid md:grid-cols-3 gap-6 text-sm">
           <div>
             <div className="text-gray-500">Renewal Date</div>
-            <div className="font-medium">
+            {editing ? <input type="date" value={lease.renewalDate || ""}
+              onChange={(event) => setLease({ ...lease, renewalDate: event.target.value, renewalRemindersEnabled: event.target.value ? lease.renewalRemindersEnabled : false })}
+              className="rounded border px-2 py-1 text-sm" /> : <div className="font-medium">
               {lease.renewalDate
                 ? new Date(lease.renewalDate).toLocaleDateString()
                 : "Not set"}
-            </div>
+            </div>}
           </div>
           <div>
             <div className="text-gray-500">Days Until Renewal</div>
@@ -241,6 +246,9 @@ export default function LeaseDetailPage() {
             )}
           </div>
         </div>
+        {editing ? <label className="mt-6 flex items-center gap-3 text-sm"><input type="checkbox" checked={Boolean(lease.renewalRemindersEnabled)} disabled={!lease.renewalDate}
+          onChange={(event) => setLease({ ...lease, renewalRemindersEnabled: event.target.checked })} />Email me renewal reminders</label>
+          : <p className="mt-5 text-sm text-gray-600">Email reminders: {lease.renewalRemindersEnabled ? "On" : "Off"}. These dates do not replace notice deadlines in your signed lease.</p>}
       </div>
 
       <div className="border rounded-lg p-6 bg-white">
@@ -315,7 +323,7 @@ export default function LeaseDetailPage() {
             href={`/app/step-1-upload?portfolioLeaseId=${encodeURIComponent(lease.id)}`}
             className="inline-block bg-black text-white px-5 py-3 rounded-md text-sm font-medium hover:bg-gray-800"
           >
-            Run Audit (Free Preview)
+            Start another free lease preview
           </Link>
           <div className="mt-3 text-xs text-gray-500">
             Managing another lease?
