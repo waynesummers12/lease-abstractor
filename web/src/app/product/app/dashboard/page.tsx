@@ -51,12 +51,12 @@ function GuestDashboardOverview() {
   const [activeView, setActiveView] = useState<"overview" | "portfolio">("overview");
   const screenshots = {
     overview: { src: "/dashboard/lease-command-center.png", width: 1640, height: 1308, alt: "Actual SaveOnLease dashboard showing a saved lease, next step, portfolio counts, and lease activity", title: "Know your next step.", description: "See lease counts, missing dates, and the property that needs attention." },
-    portfolio: { src: "/dashboard/lease-list-and-renewals.png", width: 1650, height: 1321, alt: "Actual SaveOnLease dashboard showing the searchable lease list, twelve-month renewal outlook, and completed reports area", title: "Find leases and see what is ahead.", description: "Search saved leases, review the renewal outlook, and return to completed reports in the same workspace." },
+    portfolio: { src: "/dashboard/lease-list-and-renewals.png", width: 1650, height: 1321, alt: "SaveOnLease dashboard showing a lease list and renewal dates", title: "Find leases and see what is ahead.", description: "Search saved leases and see their renewal dates in your workspace." },
   };
   const activeScreenshot = screenshots[activeView];
   const features = [
     { number: "01", title: "Keep every lease in one place", description: "Save each property, landlord, lease type, square footage, and renewal date. Search your leases when you need a specific record." },
-    { number: "02", title: "See what needs attention", description: "View lease counts, upcoming saved renewal dates, missing dates, and a twelve-month renewal outlook in one workspace." },
+    { number: "02", title: "See what needs attention", description: "View lease counts, upcoming saved renewal dates, and missing dates in one workspace." },
     { number: "03", title: "Take your list with you", description: "Export your saved lease list as a CSV when you need to review or share your portfolio outside SaveOnLease." },
     { number: "04", title: "Reopen finished lease reviews", description: "Return to a completed lease review to see its findings, available PDF report, and follow-up questions." },
   ];
@@ -219,21 +219,24 @@ export default function DashboardPage() {
     window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
   }
 
-  const months = useMemo(() => {
-    const now = new Date();
-    return Array.from({ length: 12 }, (_, index) => {
-      const date = new Date(now.getFullYear(), now.getMonth() + index, 1);
-      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      const leases = datedLeases.filter(({ lease }) => lease.renewal_date?.slice(0, 7) === key);
-      return {
-        key,
-        label: date.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
-        leases,
-      };
-    });
-  }, [datedLeases]);
-  const activeMonths = months.filter((month) => month.leases.length > 0);
-  const datesInOutlook = activeMonths.reduce((total, month) => total + month.leases.length, 0);
+  const leaseGroups = useMemo(() => {
+    const groups = new Map<string, { label: string; leases: typeof visibleLeases }>();
+    for (const item of visibleLeases) {
+      const { renewal_date: renewalDate } = item.lease;
+      const key = item.days === null ? "missing" : item.days < 0 ? "past" : renewalDate!.slice(0, 7);
+      const date = renewalDate ? new Date(`${renewalDate.slice(0, 7)}-01T12:00:00`) : null;
+      const label = key === "missing" ? "Date needed" : key === "past" ? "Past saved dates" : date!.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+      if (!groups.has(key)) groups.set(key, { label, leases: [] });
+      groups.get(key)!.leases.push(item);
+    }
+    return [...groups.entries()].sort(([a], [b]) => {
+      if (a === "past") return -1;
+      if (b === "past") return 1;
+      if (a === "missing") return 1;
+      if (b === "missing") return -1;
+      return a.localeCompare(b);
+    }).map(([key, group]) => ({ key, ...group }));
+  }, [visibleLeases]);
 
   if (authLoading) {
     return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
@@ -324,13 +327,13 @@ export default function DashboardPage() {
           ))}
         </section>
 
-        <div className="mt-8 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
+        <div className="mt-8">
           <section id="leases" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
                 <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your leases</h2>
-                <p className="mt-2 text-sm text-[#60736a]">Renewal dates are reminders. Check each lease for separate notice and audit deadlines.</p>
+                <p className="mt-2 text-sm text-[#60736a]">Find every lease and see its saved renewal date in one place. Dates are reminders; check each lease for separate notice and audit deadlines.</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link href="/product/app/add-lease" className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652] hover:bg-[#f5faf5]">Add lease</Link>
@@ -348,58 +351,32 @@ export default function DashboardPage() {
               <div className="mt-7">
                 <label htmlFor="lease-search" className="block text-xs font-semibold text-[#526b5d]">Find a lease</label>
                 <input id="lease-search" type="search" value={leaseQuery} onChange={(event) => setLeaseQuery(event.target.value)} placeholder="Search property, landlord, or lease type" className="mt-2 w-full rounded-xl border border-[#d8e5d9] px-4 py-3 text-sm outline-none focus:border-[#0c6652] focus:ring-2 focus:ring-[#c4e7d0]" />
-                <p className="mt-3 text-xs text-[#6e8076]">{visibleLeases.length} of {realLeases.length} real {realLeases.length === 1 ? "lease" : "leases"} shown · {urgent} within 90 days</p>
-                <div className="mt-4 divide-y divide-[#e9eee9]">
-                {visibleLeases.map(({ lease, days }) => (
-                  <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 hover:text-[#0c6652]">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold">{lease.property_name || "Unnamed lease"}</p>
-                      <p className="mt-1 text-xs text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
+                <p className="mt-3 text-xs text-[#6e8076]">{visibleLeases.length} of {realLeases.length} real {realLeases.length === 1 ? "lease" : "leases"} shown · {urgent} within 90 days · {needsDates} missing {needsDates === 1 ? "a date" : "dates"}</p>
+                <div id="renewal-outlook" className="mt-5 space-y-5">
+                  {leaseGroups.map((group) => (
+                    <div key={group.key} className="overflow-hidden rounded-2xl border border-[#dce8de]">
+                      <div className="flex flex-wrap items-center justify-between gap-2 bg-[#f7faf7] px-4 py-3">
+                        <h3 className="text-sm font-semibold text-[#174b3a]">{group.label}</h3>
+                        <span className="text-xs text-[#60736a]">{group.leases.length} {group.leases.length === 1 ? "lease" : "leases"}</span>
+                      </div>
+                      <div className="divide-y divide-[#e9eee9]">
+                        {group.leases.map(({ lease, days }) => (
+                          <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex flex-wrap items-center justify-between gap-3 px-4 py-4 hover:bg-[#f8fbf8]">
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
+                              <p className="mt-1 text-xs text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
+                            </div>
+                            <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days >= 0 && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                    <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
-                  </Link>
-                ))}
-                {visibleLeases.length === 0 && <p className="py-5 text-sm text-[#6e8076]">No leases match that search.</p>}
+                  ))}
+                  {visibleLeases.length === 0 && <p className="py-5 text-sm text-[#6e8076]">No leases match that search.</p>}
                 </div>
               </div>
             )}
-            {needsDates > 0 && <p className="mt-4 rounded-xl bg-[#fff8ec] px-4 py-3 text-xs text-[#806043]">{needsDates} {needsDates === 1 ? "lease needs" : "leases need"} a saved renewal date to appear on the timeline.</p>}
-          </section>
-
-          <section id="renewal-outlook" aria-labelledby="renewal-outlook-title" className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Next twelve months</p>
-            <h2 id="renewal-outlook-title" className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Saved renewal dates</h2>
-            <p className="mt-2 text-sm leading-6 text-[#60736a]">See which leases have a saved date each month. Open a lease to confirm its renewal terms and any earlier notice deadline.</p>
-            <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
-              <span className="rounded-full bg-[#e7f5eb] px-3 py-2 text-[#145f49]">{datesInOutlook} {datesInOutlook === 1 ? "lease" : "leases"} in the next 12 months</span>
-              {needsDates > 0 && <a href="#leases" className="rounded-full bg-[#fff5e8] px-3 py-2 text-[#825436] hover:underline">{needsDates} missing {needsDates === 1 ? "a date" : "dates"} ↗</a>}
-            </div>
-            {activeMonths.length > 0 ? (
-              <div className="mt-6 space-y-4">
-                {activeMonths.map((month) => (
-                  <div key={month.key} className="overflow-hidden rounded-2xl border border-[#dce8de] bg-[#f8fbf8]">
-                    <div className="flex items-center justify-between border-b border-[#e3ece4] px-4 py-3">
-                      <h3 className="text-sm font-semibold text-[#174b3a]">{month.label}</h3>
-                      <span className="text-xs text-[#60736a]">{month.leases.length} {month.leases.length === 1 ? "lease" : "leases"}</span>
-                    </div>
-                    <div className="divide-y divide-[#e3ece4]">
-                      {month.leases.map(({ lease, days }) => (
-                        <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex min-w-0 items-start justify-between gap-3 bg-white px-4 py-3.5 hover:bg-[#f0f8f2]">
-                          <div className="min-w-0">
-                            <p className="text-sm font-semibold leading-5 group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
-                            <p className="mt-1 text-xs text-[#61766a]">Saved date: {dateLabel(lease.renewal_date)}</p>
-                          </div>
-                          <span className="shrink-0 text-xs font-semibold text-[#0c6652]">{days !== null && days >= 0 && days <= 90 ? `${days}d · ` : ""}View ↗</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="mt-6 rounded-2xl bg-[#f8fbf8] px-5 py-6 text-sm text-[#526b5d]">No saved renewal dates fall in the next 12 months. Add or check a date in your lease list to build this outlook.</div>
-            )}
-            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">This is a schedule of dates saved in your workspace, not a notice-deadline calculator. Check the signed lease before taking action.</p>
+            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">Saved renewal dates are reminders, not calculated notice deadlines. Confirm the signed lease before taking action.</p>
             {realLeases.length > 0 && <div className="mt-5 border-t border-[#e8eee8] pt-5"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#61766a]">By lease type</p><div className="mt-3 flex flex-wrap gap-2">{Object.entries(leaseTypes).sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => <span key={type} className="rounded-full bg-[#f0f6f0] px-3 py-1.5 text-xs text-[#245746]">{type}: {count}</span>)}</div></div>}
           </section>
         </div>
