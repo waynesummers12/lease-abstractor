@@ -381,7 +381,24 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(300px,0.85fr)]">
+        <div className="mt-6 space-y-6">
+          <section className="rounded-[24px] bg-[#e4f2e8] p-5 sm:p-7">
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Make the most of your review</p>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em]">From lease terms to better questions.</h2>
+            <ol className="mt-7 space-y-5">
+              {[
+                ["01", "Start with the lease", "See extracted terms in a free preview."],
+                ["02", "Add the annual statement", "Compare visible charges and calculations."],
+                ["03", "Keep the evidence together", "Return to reports and source pages here."],
+              ].map(([number, title, description]) => (
+                <li key={number} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/75 text-xs font-bold text-[#0d7459]">{number}</span>
+                  <div><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-[#526b5d]">{description}</p></div>
+                </li>
+              ))}
+            </ol>
+            <Link href="/marketing/how-it-works" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">See how it works <Arrow /></Link>
+          </section>
           <section id="reports" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
@@ -410,24 +427,6 @@ export default function DashboardPage() {
                 <Link href="/app/step-1-upload" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Start a preview <Arrow /></Link>
               </div>
             )}
-          </section>
-
-          <section className="rounded-[24px] bg-[#e4f2e8] p-5 sm:p-7">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Make the most of your review</p>
-            <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em]">From lease terms to better questions.</h2>
-            <ol className="mt-7 space-y-5">
-              {[
-                ["01", "Start with the lease", "See extracted terms in a free preview."],
-                ["02", "Add the annual statement", "Compare visible charges and calculations."],
-                ["03", "Keep the evidence together", "Return to reports and source pages here."],
-              ].map(([number, title, description]) => (
-                <li key={number} className="flex gap-4">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/75 text-xs font-bold text-[#0d7459]">{number}</span>
-                  <div><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-[#526b5d]">{description}</p></div>
-                </li>
-              ))}
-            </ol>
-            <Link href="/marketing/how-it-works" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">See how it works <Arrow /></Link>
           </section>
         </div>
 
