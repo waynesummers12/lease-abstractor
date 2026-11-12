@@ -311,18 +311,18 @@ export default function DashboardPage() {
           <p className="mt-4 text-xs text-[#526b5d]">Dates are saved by you for reference. Check the signed lease, statement receipt, and notice requirements; no automatic alerts are sent.</p>
         </section>}
 
-        <section aria-label="Workspace overview" className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <section aria-label="Workspace overview" className="mt-7 grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#e1e8e0] bg-white shadow-[0_8px_28px_rgba(16,44,37,0.04)] lg:grid-cols-4">
           {[
-            { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
-            { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Based on saved renewal dates", accent: "#b46c2a" },
-            { label: "Missing renewal dates", value: leaseError ? "—" : String(needsDates), detail: "Add dates to complete your outlook", accent: "#a65d48" },
-            { label: "Finished lease reviews", value: auditError ? "—" : String(audits.length), detail: "Open findings and follow-up", accent: "#5264a5" },
-          ].map((item) => (
-            <div key={item.label} className="rounded-2xl border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-6">
-              <div className="mb-7 h-1 w-10 rounded-full" style={{ background: item.accent }} />
-              <p className="text-[11px] font-bold uppercase tracking-[0.17em] text-[#64776c]">{item.label}</p>
-              <p className="mt-2 text-4xl font-semibold tracking-[-0.05em]">{item.value}</p>
-              <p className="mt-2 text-xs text-[#65776e]">{item.detail}</p>
+            { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes samples", accent: "#0c6652" },
+            { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Saved renewal dates", accent: "#b46c2a" },
+            { label: "Missing dates", value: leaseError ? "—" : String(needsDates), detail: "Need a renewal date", accent: "#a65d48" },
+            { label: "Finished reviews", value: auditError ? "—" : String(audits.length), detail: "Reports and follow-up", accent: "#5264a5" },
+          ].map((item, index) => (
+            <div key={item.label} className={`border-[#e8eee8] px-4 py-4 sm:px-5 lg:border-b-0 ${index % 2 === 0 ? "border-r" : ""} ${index < 2 ? "border-b" : ""} ${index < 3 ? "lg:border-r" : "lg:border-r-0"}`}>
+              <div className="mb-3 h-1 w-8 rounded-full" style={{ background: item.accent }} />
+              <p className="text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-[#64776c]">{item.label}</p>
+              <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">{item.value}</p>
+              <p className="mt-1 text-[11px] leading-4 text-[#65776e]">{item.detail}</p>
             </div>
           ))}
         </section>
