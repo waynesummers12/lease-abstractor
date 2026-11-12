@@ -223,15 +223,17 @@ export default function DashboardPage() {
     const now = new Date();
     return Array.from({ length: 12 }, (_, index) => {
       const date = new Date(now.getFullYear(), now.getMonth() + index, 1);
-      const count = realLeases.filter((lease) => {
-        if (!lease.renewal_date) return false;
-        const saved = lease.renewal_date.slice(0, 7);
-        const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-        return saved === month;
-      }).length;
-      return { label: date.toLocaleDateString(undefined, { month: "short" }), count };
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+      const leases = datedLeases.filter(({ lease }) => lease.renewal_date?.slice(0, 7) === key);
+      return {
+        key,
+        label: date.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
+        leases,
+      };
     });
-  }, [realLeases]);
+  }, [datedLeases]);
+  const activeMonths = months.filter((month) => month.leases.length > 0);
+  const datesInOutlook = activeMonths.reduce((total, month) => total + month.leases.length, 0);
 
   if (authLoading) {
     return <div className="min-h-[70vh] bg-[#f5f7f3] px-6 py-20 text-center text-sm text-[#53665e]">Preparing your workspace…</div>;
@@ -364,22 +366,40 @@ export default function DashboardPage() {
             {needsDates > 0 && <p className="mt-4 rounded-xl bg-[#fff8ec] px-4 py-3 text-xs text-[#806043]">{needsDates} {needsDates === 1 ? "lease needs" : "leases need"} a saved renewal date to appear on the timeline.</p>}
           </section>
 
-          <section className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+          <section id="renewal-outlook" aria-labelledby="renewal-outlook-title" className="rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Next twelve months</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Renewal outlook</h2>
-            <p className="mt-2 text-sm leading-6 text-[#60736a]">A simple view of the renewal dates you saved.</p>
-            <div className="mt-7 grid grid-cols-6 gap-2">
-              {months.map((month) => (
-                <div key={month.label} className="text-center">
-                  <div className="flex h-28 flex-col items-center justify-end rounded-xl bg-[#f0f4ef] p-2">
-                    <span className="mb-2 text-sm font-semibold">{month.count || "·"}</span>
-                    <div className={`w-full rounded-md ${month.count ? "bg-[#1a8a68]" : "bg-[#d8e5d9]"}`} style={{ height: `${month.count ? Math.min(18 + month.count * 12, 68) : 4}px` }} />
-                  </div>
-                  <span className="mt-2 block text-[10px] font-semibold uppercase text-[#6a7d72]">{month.label}</span>
-                </div>
-              ))}
+            <h2 id="renewal-outlook-title" className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Saved renewal dates</h2>
+            <p className="mt-2 text-sm leading-6 text-[#60736a]">See which leases have a saved date each month. Open a lease to confirm its renewal terms and any earlier notice deadline.</p>
+            <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
+              <span className="rounded-full bg-[#e7f5eb] px-3 py-2 text-[#145f49]">{datesInOutlook} {datesInOutlook === 1 ? "lease" : "leases"} in the next 12 months</span>
+              {needsDates > 0 && <a href="#leases" className="rounded-full bg-[#fff5e8] px-3 py-2 text-[#825436] hover:underline">{needsDates} missing {needsDates === 1 ? "a date" : "dates"} ↗</a>}
             </div>
-            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">This chart uses saved renewal dates only; it does not calculate notice deadlines or potential savings.</p>
+            {activeMonths.length > 0 ? (
+              <div className="mt-6 space-y-4">
+                {activeMonths.map((month) => (
+                  <div key={month.key} className="overflow-hidden rounded-2xl border border-[#dce8de] bg-[#f8fbf8]">
+                    <div className="flex items-center justify-between border-b border-[#e3ece4] px-4 py-3">
+                      <h3 className="text-sm font-semibold text-[#174b3a]">{month.label}</h3>
+                      <span className="text-xs text-[#60736a]">{month.leases.length} {month.leases.length === 1 ? "lease" : "leases"}</span>
+                    </div>
+                    <div className="divide-y divide-[#e3ece4]">
+                      {month.leases.map(({ lease, days }) => (
+                        <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex min-w-0 items-start justify-between gap-3 bg-white px-4 py-3.5 hover:bg-[#f0f8f2]">
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold leading-5 group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
+                            <p className="mt-1 text-xs text-[#61766a]">Saved date: {dateLabel(lease.renewal_date)}</p>
+                          </div>
+                          <span className="shrink-0 text-xs font-semibold text-[#0c6652]">{days !== null && days >= 0 && days <= 90 ? `${days}d · ` : ""}View ↗</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-6 rounded-2xl bg-[#f8fbf8] px-5 py-6 text-sm text-[#526b5d]">No saved renewal dates fall in the next 12 months. Add or check a date in your lease list to build this outlook.</div>
+            )}
+            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">This is a schedule of dates saved in your workspace, not a notice-deadline calculator. Check the signed lease before taking action.</p>
             {realLeases.length > 0 && <div className="mt-5 border-t border-[#e8eee8] pt-5"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#61766a]">By lease type</p><div className="mt-3 flex flex-wrap gap-2">{Object.entries(leaseTypes).sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => <span key={type} className="rounded-full bg-[#f0f6f0] px-3 py-1.5 text-xs text-[#245746]">{type}: {count}</span>)}</div></div>}
           </section>
         </div>
