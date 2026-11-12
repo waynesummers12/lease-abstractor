@@ -58,7 +58,7 @@ function GuestDashboardOverview() {
     { number: "01", title: "Keep every lease in one place", description: "Save each property, landlord, lease type, square footage, and renewal date. Search your leases when you need a specific record." },
     { number: "02", title: "See what needs attention", description: "View lease counts, upcoming saved renewal dates, missing dates, and a twelve-month renewal outlook in one workspace." },
     { number: "03", title: "Take your list with you", description: "Export your saved lease list as a CSV when you need to review or share your portfolio outside SaveOnLease." },
-    { number: "04", title: "Return to completed reports", description: "Find the reviews you created while signed in and reopen their questions and available PDF reports." },
+    { number: "04", title: "Reopen finished lease reviews", description: "Return to a completed lease review to see its findings, available PDF report, and follow-up questions." },
   ];
 
   return (
@@ -313,7 +313,7 @@ export default function DashboardPage() {
             { label: "Your leases", value: leaseError ? "—" : String(realLeases.length), detail: "Excludes sample records", accent: "#0c6652" },
             { label: "Within 180 days", value: leaseError ? "—" : String(upcoming.length), detail: "Based on saved renewal dates", accent: "#b46c2a" },
             { label: "Missing renewal dates", value: leaseError ? "—" : String(needsDates), detail: "Add dates to complete your outlook", accent: "#a65d48" },
-            { label: "Completed reports", value: auditError ? "—" : String(audits.length), detail: "Created while signed in", accent: "#5264a5" },
+            { label: "Finished lease reviews", value: auditError ? "—" : String(audits.length), detail: "Open findings and follow-up", accent: "#5264a5" },
           ].map((item) => (
             <div key={item.label} className="rounded-2xl border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-6">
               <div className="mb-7 h-1 w-10 rounded-full" style={{ background: item.accent }} />
@@ -408,8 +408,9 @@ export default function DashboardPage() {
           <section id="reports" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Your work</p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Completed reports</h2>
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease review reports</p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your finished lease reviews</h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#60736a]">These are reviews you completed while signed in. Open one to revisit its findings, available PDF report, and follow-up questions. Your saved lease records are listed above.</p>
               </div>
               {sortedAudits.length > 5 && <button type="button" onClick={() => setShowAllReports((value) => !value)} className="text-sm font-semibold text-[#0c6652] hover:underline">{showAllReports ? "Show recent" : `Show all ${sortedAudits.length}`}</button>}
             </div>
@@ -419,16 +420,16 @@ export default function DashboardPage() {
                   <a key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
                     <div>
                       <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
-                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Report available"}{audit.followup_dates?.["first:deadline"] ? ` · Saved review date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
+                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Review completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Review completed"}{audit.followup_dates?.["first:deadline"] ? ` · Saved follow-up date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
                     </div>
-                    <span className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Report &amp; follow-up <Arrow /></span>
+                    <span className="shrink-0 rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Open review <Arrow /></span>
                   </a>
                 ))}
               </div>
             ) : (
               <div className="mt-6 rounded-2xl bg-[#f7faf6] p-6">
-                <p className="text-sm font-semibold">Your reports will appear here.</p>
-                <p className="mt-2 text-sm leading-6 text-[#64776c]">Reports created while signed in appear here. Start with a free lease preview, then add an annual statement and supporting PDFs if you have them.</p>
+                <p className="text-sm font-semibold">No finished lease reviews yet.</p>
+                <p className="mt-2 text-sm leading-6 text-[#64776c]">After you complete a lease review while signed in, you can reopen its findings and follow-up questions here. Start with a free lease preview; an annual statement and supporting PDFs are optional.</p>
                 <Link href="/app/step-1-upload" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Start a preview <Arrow /></Link>
               </div>
             )}
