@@ -6,6 +6,7 @@ import Link from "next/link";
 import { portfolioFetch } from "@/lib/portfolioFetch";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { PortfolioAuditList } from "@/components/PortfolioAuditList";
+import LeaseActions from "./LeaseActions";
 
 interface Lease {
   id: string;
@@ -304,6 +305,8 @@ export default function LeaseDetailPage() {
           </div>
         )}
       </div>
+
+      <LeaseActions leaseId={lease.id} />
 
       <PortfolioAuditList leaseId={lease.id} />
 

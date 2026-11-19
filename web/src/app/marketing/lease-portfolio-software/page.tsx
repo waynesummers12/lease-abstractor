@@ -1,59 +1,54 @@
+import Link from "next/link";
+
 export default function LeasePortfolioSoftwarePage() {
   return (
     <main className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">
-        Lease Portfolio Management Software
-      </h1>
+      <h1 className="text-4xl sm:text-5xl font-light tracking-tight mb-4">Know what each lease needs next.</h1>
 
       <p className="text-gray-600 mb-8">
-        SaveOnLease helps companies manage and analyze commercial leases across
-        multiple locations. Detect CAM overcharges, track escalation clauses,
-        and identify negotiation opportunities across your entire lease
-        portfolio.
+        Keep your saved leases, renewal dates, and next steps together. Assign an owner and a date to each task, then see open work across your portfolio.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
         <div className="border rounded-lg p-6">
           <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
-            Portfolio Risk Detection
+            See the dates you saved
           </h2>
           <p className="text-sm text-gray-600">
-            Automatically identify leases with high financial exposure,
-            unfavorable clauses, or abnormal cost increases.
+            Find leases by property and view upcoming renewal dates. Leases without a saved date stay visible so you can complete the record.
           </p>
         </div>
 
         <div className="border rounded-lg p-6">
           <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
-            CAM & NNN Cost Monitoring
+            Track the next action
           </h2>
           <p className="text-sm text-gray-600">
-            Track common area maintenance and triple-net expenses across all
-            properties to uncover unusual increases or hidden fees.
+            Add a task to a lease, name the person responsible, set a date if known, and mark the work complete. Note the lease page or document that prompted it.
           </p>
         </div>
 
         <div className="border rounded-lg p-6">
           <h2 className="text-lg sm:text-xl font-light tracking-tight mb-2">
-            AI Lease Analysis
+            Keep the evidence close
           </h2>
           <p className="text-sm text-gray-600">
-            Upload leases and receive automated insights about escalation
-            clauses, cost exposures, and negotiation opportunities.
+            Return to saved lease details and any completed review when you need the terms, findings, or follow-up questions.
           </p>
         </div>
 
       </div>
 
       <div className="mt-12">
-        <a
-          href="/app/step-1-upload"
+        <Link
+          href="/product/app/dashboard"
           className="bg-black text-white px-6 py-3 rounded-md inline-block"
         >
-          Upload Lease to Analyze
-        </a>
+          Open your lease dashboard
+        </Link>
       </div>
+      <p className="mt-8 max-w-3xl text-sm leading-6 text-gray-500">Tasks and dates are entered by your team. SaveOnLease does not calculate notice deadlines or send task reminders; confirm requirements against the signed lease before acting.</p>
     </main>
   );
 }

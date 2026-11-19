@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { daysUntilSavedDate } from "@/lib/portfolioAlerts";
+import { actionDateLabel, actionTiming, type PortfolioLeaseAction } from "@/lib/portfolioLeaseActions";
 
 type Lease = {
   id: string;
@@ -127,9 +128,11 @@ export default function DashboardPage() {
   const accessToken = session?.access_token;
   const [leases, setLeases] = useState<Lease[]>([]);
   const [audits, setAudits] = useState<Audit[]>([]);
+  const [actions, setActions] = useState<PortfolioLeaseAction[]>([]);
   const [loading, setLoading] = useState(true);
   const [leaseError, setLeaseError] = useState(false);
   const [auditError, setAuditError] = useState(false);
+  const [actionError, setActionError] = useState(false);
   const [showSamples, setShowSamples] = useState(false);
   const [showAllReports, setShowAllReports] = useState(false);
   const [leaseQuery, setLeaseQuery] = useState("");
@@ -145,7 +148,8 @@ export default function DashboardPage() {
     Promise.allSettled([
       request("/api/portfolio-leases"),
       request("/api/portfolio-audits"),
-    ]).then(async ([leaseResult, auditResult]) => {
+      request("/api/portfolio-lease-actions"),
+    ]).then(async ([leaseResult, auditResult, actionResult]) => {
       if (!active) return;
       if (leaseResult.status === "fulfilled" && leaseResult.value.ok) {
         const data = await leaseResult.value.json().catch(() => null);
@@ -158,6 +162,12 @@ export default function DashboardPage() {
         if (active && Array.isArray(data?.audits)) { setAudits(data.audits); setAuditError(false); }
         else if (active) setAuditError(true);
       } else setAuditError(true);
+
+      if (actionResult.status === "fulfilled" && actionResult.value.ok) {
+        const data = await actionResult.value.json().catch(() => null);
+        if (active && Array.isArray(data?.actions)) { setActions(data.actions); setActionError(false); }
+        else if (active) setActionError(true);
+      } else if (active) setActionError(true);
     }).finally(() => {
       if (active) setLoading(false);
     });
@@ -167,6 +177,18 @@ export default function DashboardPage() {
 
   const realLeases = useMemo(() => leases.filter((lease) => !isSampleLease(lease)), [leases]);
   const sampleLeases = useMemo(() => leases.filter(isSampleLease), [leases]);
+  const openActions = useMemo(() => {
+    const realLeaseIds = new Set(realLeases.map((lease) => lease.id));
+    return actions.filter((action) => !action.completed_at && realLeaseIds.has(action.lease_id))
+      .sort((a, b) => (a.due_date ?? "9999-12-31").localeCompare(b.due_date ?? "9999-12-31") || a.created_at.localeCompare(b.created_at));
+  }, [actions, realLeases]);
+  const nextAction = openActions[0];
+  const actionLeaseNames = useMemo(() => new Map(realLeases.map((lease) => [lease.id, lease.property_name || "Unnamed lease"])), [realLeases]);
+  const nextActionByLease = useMemo(() => {
+    const next = new Map<string, PortfolioLeaseAction>();
+    for (const action of openActions) if (!next.has(action.lease_id)) next.set(action.lease_id, action);
+    return next;
+  }, [openActions]);
 
   useEffect(() => {
     if (loading || sampleLeases.length === 0 || window.location.hash !== "#sample-leases") return;
@@ -207,8 +229,9 @@ export default function DashboardPage() {
       return `"${guarded.replaceAll('"', '""')}"`;
     };
     const rows = [
-      ["Property", "Landlord", "Lease type", "Square feet", "Renewal date"],
-      ...realLeases.map((lease) => [lease.property_name, lease.landlord, lease.lease_type, lease.square_feet, lease.renewal_date]),
+      ["Property", "Landlord", "Lease type", "Square feet", "Renewal date", "Next action", "Action owner", "Action date"],
+      ...realLeases.map((lease) => [lease.property_name, lease.landlord, lease.lease_type, lease.square_feet, lease.renewal_date,
+        nextActionByLease.get(lease.id)?.title ?? null, nextActionByLease.get(lease.id)?.owner_name ?? null, nextActionByLease.get(lease.id)?.due_date ?? null]),
     ];
     const blob = new Blob(["\uFEFF", rows.map((row) => row.map(safeCell).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -280,10 +303,12 @@ export default function DashboardPage() {
             <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm sm:p-6">
               <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#a9e9be]">Your next useful step</p>
               <h2 className="mt-4 text-xl font-semibold leading-snug text-white">
-                {nextLease ? nextLease.lease.property_name || "Review your saved lease" : audits.length > 0 ? "Return to your latest report" : "Add your first real lease"}
+                {nextAction ? nextAction.title : nextLease ? nextLease.lease.property_name || "Review your saved lease" : audits.length > 0 ? "Return to your latest report" : "Add your first real lease"}
               </h2>
               <p className="mt-3 text-sm leading-6 text-[#d9e9df]">
-                {nextLease
+                {nextAction
+                  ? `${actionLeaseNames.get(nextAction.lease_id)} · Handled by ${nextAction.owner_name} · ${actionDateLabel(nextAction.due_date)}. Check the signed lease before acting.`
+                  : nextLease
                   ? nextLease.days === null
                     ? "Add a renewal date so this lease can appear in your timeline."
                     : `Saved renewal date: ${dateLabel(nextLease.lease.renewal_date)}. Confirm any notice deadlines in the lease.`
@@ -291,14 +316,14 @@ export default function DashboardPage() {
                     ? "Your completed review is ready whenever you need to revisit its questions and source pages."
                     : "Save the property and its renewal date to create a useful workspace."}
               </p>
-              <Link href={nextLease ? `/product/app/leases/${encodeURIComponent(nextLease.lease.id)}` : audits.length > 0 ? `/product/app/audits/${encodeURIComponent(sortedAudits[0]?.id ?? audits[0].id)}` : "/product/app/add-lease"} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#a9e9be] hover:underline">
-                {nextLease ? "Open lease details" : audits.length > 0 ? "View latest report" : "Add a lease"} <Arrow diagonal />
+              <Link href={nextAction ? `/product/app/leases/${encodeURIComponent(nextAction.lease_id)}#actions` : nextLease ? `/product/app/leases/${encodeURIComponent(nextLease.lease.id)}` : audits.length > 0 ? `/product/app/audits/${encodeURIComponent(sortedAudits[0]?.id ?? audits[0].id)}` : "/product/app/add-lease"} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#a9e9be] hover:underline">
+                {nextAction ? "Open action" : nextLease ? "Open lease details" : audits.length > 0 ? "View latest report" : "Add a lease"} <Arrow diagonal />
               </Link>
             </div>
           </div>
         </section>
 
-        {(leaseError || auditError) && (
+        {(leaseError || auditError || actionError) && (
           <div role="alert" className="mt-6 rounded-2xl border border-[#e4c9aa] bg-[#fff8ec] px-5 py-4 text-sm text-[#684d2f]">
             Some workspace information could not be loaded. Refresh the page to try again.
           </div>
@@ -326,6 +351,19 @@ export default function DashboardPage() {
             </div>
           ))}
         </section>
+
+        {realLeases.length > 0 && <section id="actions" className="mt-7 scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Across your leases</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your lease action board</h2>
+          <p className="mt-2 text-sm text-[#60736a]">See what needs doing across your leases, who is handling it, and the date to check. Open a lease to save the source page and update a step.</p>
+          {actionError ? <p className="mt-5 text-sm text-[#8b3f1a]">Next steps could not load. Refresh to try again.</p> : openActions.length === 0 ? <p className="mt-5 rounded-xl bg-[#f7faf7] px-4 py-5 text-sm text-[#60736a]">No next steps saved yet. Open a lease to add what needs doing, who is handling it, and when.</p> : <div className="mt-5 divide-y divide-[#e9eee9]">
+            {openActions.slice(0, 5).map((action) => <Link key={action.id} href={`/product/app/leases/${encodeURIComponent(action.lease_id)}#actions`} className="flex flex-wrap items-center justify-between gap-3 py-4 hover:text-[#0c6652]">
+              <div><p className="text-sm font-semibold">{action.title}</p><p className="mt-1 text-xs text-[#60736a]">{actionLeaseNames.get(action.lease_id)} · {action.owner_name} · {actionDateLabel(action.due_date)}</p></div>
+              <span className="text-xs font-semibold text-[#99612c]">{actionTiming(action.due_date)} <Arrow /></span>
+            </Link>)}
+          </div>}
+          {openActions.length > 5 && <p className="mt-4 text-xs text-[#60736a]">Showing the next 5 of {openActions.length} open steps.</p>}
+        </section>}
 
         <div className="mt-8">
           <section id="leases" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
@@ -365,6 +403,9 @@ export default function DashboardPage() {
                             <div className="min-w-0">
                               <p className="text-sm font-semibold group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
                               <p className="mt-1 text-xs text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
+                              <p className="mt-1 text-xs text-[#0c6652]">{nextActionByLease.has(lease.id)
+                                ? `Next: ${nextActionByLease.get(lease.id)!.title} · ${nextActionByLease.get(lease.id)!.owner_name} · ${actionDateLabel(nextActionByLease.get(lease.id)!.due_date)}`
+                                : "Next step not saved"}</p>
                             </div>
                             <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days >= 0 && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
                           </Link>
