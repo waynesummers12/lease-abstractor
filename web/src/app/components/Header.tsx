@@ -39,7 +39,7 @@ export default function Header() {
           <span className="text-lg font-medium">SaveOnLease</span>
         </Link>
 
-        <nav className="relative ml-4 hidden items-center gap-6 whitespace-nowrap text-sm xl:flex">
+        <nav className="relative ml-4 hidden items-center gap-4 whitespace-nowrap text-sm xl:flex">
           <Link href="/marketing/what-we-find" className={`${navLinkClass} transition-colors`}>
             What We Find
           </Link>
@@ -56,7 +56,7 @@ export default function Header() {
           <Link href="/marketing/contact" className={`${navLinkClass} transition-colors`}>
             Contact
           </Link>
-          <div className="mx-3 h-5 w-px bg-white/20" />
+          <div className="mx-2 h-5 w-px bg-white/20" />
 
           {/* =============================
               NOT LOGGED IN
@@ -72,7 +72,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/app/step-1-upload"
-                className="rounded-full bg-white px-5 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
+                className="rounded-full bg-white px-4 py-2 font-semibold text-black hover:bg-gray-200 shadow-md hover:shadow-lg transition-all ml-2"
               >
                 Run Audit (Free Preview)
               </Link>
@@ -89,7 +89,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/app/step-1-upload"
-                className="ml-2 rounded-full bg-white px-5 py-2 font-semibold text-black shadow-md transition-all hover:bg-gray-200 hover:shadow-lg"
+                className="ml-2 rounded-full bg-white px-4 py-2 font-semibold text-black shadow-md transition-all hover:bg-gray-200 hover:shadow-lg"
               >
                 Start Free Preview
               </Link>
