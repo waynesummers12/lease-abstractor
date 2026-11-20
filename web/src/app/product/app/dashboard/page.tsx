@@ -369,13 +369,13 @@ export default function DashboardPage() {
           <section id="leases" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your leases</h2>
-                <p className="mt-2 text-sm text-[#60736a]">Find every lease and see its saved renewal date in one place. Dates are reminders; check each lease for separate notice and audit deadlines.</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">Your leases</h2>
+                <p className="mt-3 max-w-4xl text-base leading-7 text-[#60736a]">Find every lease and see its saved renewal date in one place. Dates are reminders; check each lease for separate notice and audit deadlines.</p>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Link href="/product/app/add-lease" className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652] hover:bg-[#f5faf5]">Add lease</Link>
-                <button type="button" onClick={downloadLeasesCsv} disabled={realLeases.length === 0} className="rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652] hover:bg-[#f5faf5] disabled:cursor-not-allowed disabled:opacity-50">Export CSV</button>
+                <Link href="/product/app/add-lease" className="rounded-lg border border-[#d8e5d9] px-4 py-2 text-sm font-semibold text-[#0c6652] hover:bg-[#f5faf5]">Add lease</Link>
+                <button type="button" onClick={downloadLeasesCsv} disabled={realLeases.length === 0} className="rounded-lg border border-[#d8e5d9] px-4 py-2 text-sm font-semibold text-[#0c6652] hover:bg-[#f5faf5] disabled:cursor-not-allowed disabled:opacity-50">Export CSV</button>
               </div>
             </div>
             {realLeases.length === 0 ? (
@@ -387,27 +387,27 @@ export default function DashboardPage() {
               </div>
             ) : (
               <div className="mt-7">
-                <label htmlFor="lease-search" className="block text-xs font-semibold text-[#526b5d]">Find a lease</label>
-                <input id="lease-search" type="search" value={leaseQuery} onChange={(event) => setLeaseQuery(event.target.value)} placeholder="Search property, landlord, or lease type" className="mt-2 w-full rounded-xl border border-[#d8e5d9] px-4 py-3 text-sm outline-none focus:border-[#0c6652] focus:ring-2 focus:ring-[#c4e7d0]" />
-                <p className="mt-3 text-xs text-[#6e8076]">{visibleLeases.length} of {realLeases.length} real {realLeases.length === 1 ? "lease" : "leases"} shown · {urgent} within 90 days · {needsDates} missing {needsDates === 1 ? "a date" : "dates"}</p>
+                <label htmlFor="lease-search" className="block text-sm font-semibold text-[#526b5d]">Find a lease</label>
+                <input id="lease-search" type="search" value={leaseQuery} onChange={(event) => setLeaseQuery(event.target.value)} placeholder="Search property, landlord, or lease type" className="mt-2 w-full rounded-xl border border-[#d8e5d9] px-4 py-3 text-base outline-none focus:border-[#0c6652] focus:ring-2 focus:ring-[#c4e7d0]" />
+                <p className="mt-3 text-sm text-[#6e8076]">{visibleLeases.length} of {realLeases.length} real {realLeases.length === 1 ? "lease" : "leases"} shown · {urgent} within 90 days · {needsDates} missing {needsDates === 1 ? "a date" : "dates"}</p>
                 <div id="renewal-outlook" className="mt-5 space-y-5">
                   {leaseGroups.map((group) => (
                     <div key={group.key} className="overflow-hidden rounded-2xl border border-[#dce8de]">
                       <div className="flex flex-wrap items-center justify-between gap-2 bg-[#f7faf7] px-4 py-3">
-                        <h3 className="text-sm font-semibold text-[#174b3a]">{group.label}</h3>
-                        <span className="text-xs text-[#60736a]">{group.leases.length} {group.leases.length === 1 ? "lease" : "leases"}</span>
+                        <h3 className="text-lg font-semibold text-[#174b3a]">{group.label}</h3>
+                        <span className="text-sm text-[#60736a]">{group.leases.length} {group.leases.length === 1 ? "lease" : "leases"}</span>
                       </div>
                       <div className="divide-y divide-[#e9eee9]">
                         {group.leases.map(({ lease, days }) => (
                           <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="group flex flex-wrap items-center justify-between gap-3 px-4 py-4 hover:bg-[#f8fbf8]">
                             <div className="min-w-0">
-                              <p className="text-sm font-semibold group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
-                              <p className="mt-1 text-xs text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
-                              <p className="mt-1 text-xs text-[#0c6652]">{nextActionByLease.has(lease.id)
+                              <p className="text-lg font-semibold group-hover:text-[#0c6652]">{lease.property_name || "Unnamed lease"}</p>
+                              <p className="mt-1 text-base text-[#697b71]">{lease.lease_type || "Lease type not saved"} · {dateLabel(lease.renewal_date)}</p>
+                              <p className="mt-1 text-sm text-[#0c6652]">{nextActionByLease.has(lease.id)
                                 ? `Next: ${nextActionByLease.get(lease.id)!.title} · ${nextActionByLease.get(lease.id)!.owner_name} · ${actionDateLabel(nextActionByLease.get(lease.id)!.due_date)}`
                                 : "Next step not saved"}</p>
                             </div>
-                            <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${days !== null && days >= 0 && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
+                            <span className={`rounded-full px-3 py-1.5 text-sm font-semibold ${days !== null && days >= 0 && days <= 90 ? "bg-[#fff0e6] text-[#985020]" : "bg-[#edf6ee] text-[#176d51]"}`}>{timingLabel(days)} <Arrow /></span>
                           </Link>
                         ))}
                       </div>
