@@ -41,7 +41,7 @@ export default function MedicalOvercharges() {
     ]
   };
   return (
-    <main className={`${styles.guide} space-y-20`}>
+    <main className={`${styles.guide} space-y-12`}>
       <MedicalGuideNav current="/marketing/medical-practice-lease-overcharges" />
 
       {/* HERO */}

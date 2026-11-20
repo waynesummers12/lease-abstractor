@@ -42,7 +42,7 @@ export default function CAMSpikesMedical() {
     ]
   };
   return (
-    <main className={`${styles.guide} space-y-20`}>
+    <main className={`${styles.guide} space-y-12`}>
       <MedicalGuideNav current="/marketing/medical-office-cam-spikes" />
 
       {/* HERO */}

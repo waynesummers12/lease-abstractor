@@ -42,7 +42,7 @@ export default function MedicalChecklist() {
     ]
   };
     return (
-    <main className={`${styles.guide} space-y-24`}>
+    <main className={`${styles.guide} space-y-12`}>
       <MedicalGuideNav current="/marketing/medical-office-lease-audit-checklist" />
 
       {/* HERO */}
