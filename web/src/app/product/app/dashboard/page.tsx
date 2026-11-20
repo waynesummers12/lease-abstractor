@@ -68,7 +68,7 @@ function GuestDashboardOverview() {
         <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] px-6 py-12 text-white shadow-[0_22px_70px_rgba(16,44,37,0.16)] sm:px-12 sm:py-16">
           <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-52 h-[520px] w-[520px] rounded-full border border-white/10" />
           <div className="relative max-w-3xl">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Dashboard Leases · Free</p>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#a9e9be]">Lease Command Center · Free</p>
             <h1 className="mt-5 text-4xl font-semibold leading-tight tracking-tight text-white sm:text-6xl">Your lease command center, <span className="text-[#a9e9be]">all in one place.</span></h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#d9e9df]">Manage the lease details and dates you save across your properties. See what is coming up, find a lease quickly, and return to your completed reviews.</p>
             <div className="mt-9 flex flex-wrap gap-3">
