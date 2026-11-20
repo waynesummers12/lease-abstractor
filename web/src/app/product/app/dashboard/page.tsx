@@ -274,9 +274,9 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-[#f5f7f3] text-[#122c25]">
       <div className="mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12 lg:py-12">
-        <div className="mb-7 flex flex-wrap items-center justify-between gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#557466]">
+        <div className="mb-7 flex flex-wrap items-center justify-between gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#557466]">
           <span>SaveOnLease / Your workspace</span>
-          <span className="rounded-full border border-[#d4e5d9] bg-white px-3 py-1.5 text-[10px] tracking-[0.12em]">Your documents, your next steps</span>
+          <span className="rounded-full border border-[#d4e5d9] bg-white px-3 py-1.5 text-xs tracking-[0.12em]">Your documents, your next steps</span>
         </div>
 
         <section className="relative overflow-hidden rounded-[30px] bg-[#102c25] px-6 py-8 text-white shadow-[0_22px_70px_rgba(16,44,37,0.16)] sm:px-10 sm:py-11 lg:px-14">
@@ -284,7 +284,7 @@ export default function DashboardPage() {
           <div aria-hidden="true" className="pointer-events-none absolute right-10 -top-32 h-[440px] w-[440px] rounded-full border border-white/10" />
           <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] lg:items-end">
             <div>
-              <p className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[#a9e9be]">Your lease command center</p>
+              <p className="mb-5 text-sm font-bold uppercase tracking-[0.24em] text-[#a9e9be]">Your lease command center</p>
               <h1 className="max-w-[800px] text-4xl font-semibold leading-[1.06] tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
                 Know what&apos;s next for <span className="text-[#a9e9be]">every lease.</span>
               </h1>
@@ -301,11 +301,11 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-5 backdrop-blur-sm sm:p-6">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#a9e9be]">Your next useful step</p>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#a9e9be]">Your next useful step</p>
               <h2 className="mt-4 text-xl font-semibold leading-snug text-white">
                 {nextAction ? nextAction.title : nextLease ? nextLease.lease.property_name || "Review your saved lease" : audits.length > 0 ? "Return to your latest report" : "Add your first real lease"}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-[#d9e9df]">
+              <p className="mt-3 text-base leading-7 text-[#d9e9df]">
                 {nextAction
                   ? `${actionLeaseNames.get(nextAction.lease_id)} · Handled by ${nextAction.owner_name} · ${actionDateLabel(nextAction.due_date)}. Check the signed lease before acting.`
                   : nextLease
@@ -330,10 +330,10 @@ export default function DashboardPage() {
         )}
 
         {savedReportDates.length > 0 && <section className="mt-7 rounded-[24px] border border-[#cbded0] bg-[#e4f2e8] p-5 sm:p-7" aria-labelledby="report-dates-title">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Dates you saved</p>
-          <h2 id="report-dates-title" className="mt-2 text-2xl font-semibold">Keep this year&apos;s review moving.</h2>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#0d7459]">Dates you saved</p>
+          <h2 id="report-dates-title" className="mt-2 text-3xl font-semibold">Keep this year&apos;s review moving.</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">{savedReportDates.slice(0, 4).map((item) => <Link key={`${item.auditId}-${item.label}`} href={`/product/app/audits/${encodeURIComponent(item.auditId)}`} className="rounded-xl bg-white p-4 text-sm hover:text-[#087055]"><span className="block font-semibold">{item.label}</span><span className="mt-1 block text-[#60736a]">{dateLabel(item.date)} · Open follow-up →</span></Link>)}</div>
-          <p className="mt-4 text-xs text-[#526b5d]">Dates are saved by you for reference. Check the signed lease, statement receipt, and notice requirements; no automatic alerts are sent.</p>
+          <p className="mt-4 text-base leading-7 text-[#526b5d]">Dates are saved by you for reference. Check the signed lease, statement receipt, and notice requirements; no automatic alerts are sent.</p>
         </section>}
 
         <section aria-label="Workspace overview" className="mt-7 grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#e1e8e0] bg-white shadow-[0_8px_28px_rgba(16,44,37,0.04)] lg:grid-cols-4">
@@ -345,31 +345,31 @@ export default function DashboardPage() {
           ].map((item, index) => (
             <div key={item.label} className={`border-[#e8eee8] px-4 py-4 sm:px-5 lg:border-b-0 ${index % 2 === 0 ? "border-r" : ""} ${index < 2 ? "border-b" : ""} ${index < 3 ? "lg:border-r" : "lg:border-r-0"}`}>
               <div className="mb-3 h-1 w-8 rounded-full" style={{ background: item.accent }} />
-              <p className="text-[10px] font-bold uppercase leading-4 tracking-[0.12em] text-[#64776c]">{item.label}</p>
-              <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">{item.value}</p>
-              <p className="mt-1 text-[11px] leading-4 text-[#65776e]">{item.detail}</p>
+              <p className="text-sm font-bold uppercase leading-4 tracking-[0.12em] text-[#64776c]">{item.label}</p>
+              <p className="mt-1 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{item.value}</p>
+              <p className="mt-1 text-sm leading-5 text-[#65776e]">{item.detail}</p>
             </div>
           ))}
         </section>
 
         {realLeases.length > 0 && <section id="actions" className="mt-7 scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Across your leases</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your lease action board</h2>
-          <p className="mt-2 text-sm text-[#60736a]">See what needs doing across your leases, who is handling it, and the date to check. Open a lease to save the source page and update a step.</p>
-          {actionError ? <p className="mt-5 text-sm text-[#8b3f1a]">Next steps could not load. Refresh to try again.</p> : openActions.length === 0 ? <p className="mt-5 rounded-xl bg-[#f7faf7] px-4 py-5 text-sm text-[#60736a]">No next steps saved yet. Open a lease to add what needs doing, who is handling it, and when.</p> : <div className="mt-5 divide-y divide-[#e9eee9]">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#0d7459]">Across your leases</p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">Your lease action board</h2>
+          <p className="mt-2 text-base leading-7 text-[#60736a]">See what needs doing across your leases, who is handling it, and the date to check. Open a lease to save the source page and update a step.</p>
+          {actionError ? <p className="mt-5 text-sm text-[#8b3f1a]">Next steps could not load. Refresh to try again.</p> : openActions.length === 0 ? <p className="mt-5 rounded-xl bg-[#f7faf7] px-4 py-5 text-base leading-7 text-[#60736a]">No next steps saved yet. Open a lease to add what needs doing, who is handling it, and when.</p> : <div className="mt-5 divide-y divide-[#e9eee9]">
             {openActions.slice(0, 5).map((action) => <Link key={action.id} href={`/product/app/leases/${encodeURIComponent(action.lease_id)}#actions`} className="flex flex-wrap items-center justify-between gap-3 py-4 hover:text-[#0c6652]">
-              <div><p className="text-sm font-semibold">{action.title}</p><p className="mt-1 text-xs text-[#60736a]">{actionLeaseNames.get(action.lease_id)} · {action.owner_name} · {actionDateLabel(action.due_date)}</p></div>
-              <span className="text-xs font-semibold text-[#99612c]">{actionTiming(action.due_date)} <Arrow /></span>
+              <div><p className="text-lg font-semibold">{action.title}</p><p className="mt-1 text-base leading-7 text-[#60736a]">{actionLeaseNames.get(action.lease_id)} · {action.owner_name} · {actionDateLabel(action.due_date)}</p></div>
+              <span className="text-sm font-semibold text-[#99612c]">{actionTiming(action.due_date)} <Arrow /></span>
             </Link>)}
           </div>}
-          {openActions.length > 5 && <p className="mt-4 text-xs text-[#60736a]">Showing the next 5 of {openActions.length} open steps.</p>}
+          {openActions.length > 5 && <p className="mt-4 text-base leading-7 text-[#60736a]">Showing the next 5 of {openActions.length} open steps.</p>}
         </section>}
 
         <div className="mt-8">
           <section id="leases" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease activity</p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">Your leases</h2>
                 <p className="mt-3 max-w-4xl text-base leading-7 text-[#60736a]">Find every lease and see its saved renewal date in one place. Dates are reminders; check each lease for separate notice and audit deadlines.</p>
               </div>
@@ -382,7 +382,7 @@ export default function DashboardPage() {
               <div className="mt-7 rounded-2xl border border-dashed border-[#cbded0] bg-[#f8fbf7] px-6 py-10">
                 <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#e0f4e6] text-xl text-[#0d7459]" aria-hidden="true">⌁</div>
                 <h3 className="text-xl font-semibold">A clean start for your real leases.</h3>
-                <p className="mt-2 max-w-xl text-sm leading-6 text-[#61766a]">Add a property and its saved renewal date. Your timeline and reminders will fill in as you build your portfolio.</p>
+                <p className="mt-2 max-w-xl text-base leading-7 text-[#61766a]">Add a property and its saved renewal date. Your timeline and reminders will fill in as you build your portfolio.</p>
                 <Link href="/product/app/add-lease" className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#102c25] px-4 py-3 text-sm font-semibold text-white hover:bg-[#195040]">Add your first lease <Arrow /></Link>
               </div>
             ) : (
@@ -395,7 +395,7 @@ export default function DashboardPage() {
                     <div key={group.key} className="overflow-hidden rounded-2xl border border-[#dce8de]">
                       <div className="flex flex-wrap items-center justify-between gap-2 bg-[#f7faf7] px-4 py-3">
                         <h3 className="text-lg font-semibold text-[#174b3a]">{group.label}</h3>
-                        <span className="text-sm text-[#60736a]">{group.leases.length} {group.leases.length === 1 ? "lease" : "leases"}</span>
+                        <span className="text-base leading-7 text-[#60736a]">{group.leases.length} {group.leases.length === 1 ? "lease" : "leases"}</span>
                       </div>
                       <div className="divide-y divide-[#e9eee9]">
                         {group.leases.map(({ lease, days }) => (
@@ -417,54 +417,58 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
-            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-xs leading-5 text-[#6e8076]">Saved renewal dates are reminders, not calculated notice deadlines. Confirm the signed lease before taking action.</p>
-            {realLeases.length > 0 && <div className="mt-5 border-t border-[#e8eee8] pt-5"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#61766a]">By lease type</p><div className="mt-3 flex flex-wrap gap-2">{Object.entries(leaseTypes).sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => <span key={type} className="rounded-full bg-[#f0f6f0] px-3 py-1.5 text-xs text-[#245746]">{type}: {count}</span>)}</div></div>}
+            <p className="mt-6 border-t border-[#e8eee8] pt-4 text-sm leading-6 text-[#6e8076]">Saved renewal dates are reminders, not calculated notice deadlines. Confirm the signed lease before taking action.</p>
+            {realLeases.length > 0 && <div className="mt-5 border-t border-[#e8eee8] pt-5"><p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#61766a]">By lease type</p><div className="mt-3 flex flex-wrap gap-2">{Object.entries(leaseTypes).sort(([a], [b]) => a.localeCompare(b)).map(([type, count]) => <span key={type} className="rounded-full bg-[#f0f6f0] px-3 py-1.5 text-sm text-[#245746]">{type}: {count}</span>)}</div></div>}
           </section>
         </div>
 
         <div className="mt-6 space-y-6">
-          <section className="rounded-[24px] bg-[#e4f2e8] p-5 sm:p-7">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Make the most of your review</p>
-            <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.03em]">From lease terms to better questions.</h2>
-            <ol className="mt-7 space-y-5">
-              {[
-                ["01", "Start with the lease", "See extracted terms in a free preview."],
-                ["02", "Add the annual statement", "Compare visible charges and calculations."],
-                ["03", "Keep the evidence together", "Return to reports and source pages here."],
-              ].map(([number, title, description]) => (
-                <li key={number} className="flex gap-4">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/75 text-xs font-bold text-[#0d7459]">{number}</span>
-                  <div><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-[#526b5d]">{description}</p></div>
-                </li>
-              ))}
-            </ol>
-            <Link href="/marketing/how-it-works" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">See how it works <Arrow /></Link>
+          <section className="rounded-[24px] bg-[#e4f2e8] p-5 sm:p-7 lg:p-9">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+              <div>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#0d7459]">Make the most of your review</p>
+                <h2 className="mt-3 max-w-xl text-3xl font-semibold leading-tight tracking-[-0.03em]">From lease terms to better questions.</h2>
+                <Link href="/marketing/how-it-works" className="mt-6 inline-flex items-center gap-2 text-base font-semibold text-[#0c6652] hover:underline">See how it works <Arrow /></Link>
+              </div>
+              <ol className="grid gap-5 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4">
+                {[
+                  ["01", "Start with the lease", "See extracted terms in a free preview."],
+                  ["02", "Add the annual statement", "Compare visible charges and calculations."],
+                  ["03", "Keep the evidence together", "Return to reports and source pages here."],
+                ].map(([number, title, description]) => (
+                  <li key={number} className="flex gap-4">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/75 text-sm font-bold text-[#0d7459]">{number}</span>
+                    <div><p className="text-lg font-semibold">{title}</p><p className="mt-1 text-base leading-7 text-[#526b5d]">{description}</p></div>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </section>
           <section id="reports" className="scroll-mt-32 rounded-[24px] border border-[#e1e8e0] bg-white p-5 shadow-[0_8px_28px_rgba(16,44,37,0.04)] sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease review reports</p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em]">Your finished lease reviews</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[#60736a]">These are reviews you completed while signed in. Open one to revisit its findings, available PDF report, and follow-up questions. Your saved lease records are listed above.</p>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#0d7459]">Lease review reports</p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">Your finished lease reviews</h2>
+                <p className="mt-2 max-w-2xl text-base leading-7 text-[#60736a]">These are reviews you completed while signed in. Open one to revisit its findings, available PDF report, and follow-up questions. Your saved lease records are listed above.</p>
               </div>
               {sortedAudits.length > 5 && <button type="button" onClick={() => setShowAllReports((value) => !value)} className="text-sm font-semibold text-[#0c6652] hover:underline">{showAllReports ? "Show recent" : `Show all ${sortedAudits.length}`}</button>}
             </div>
             {visibleAudits.length ? (
               <div className="mt-6 divide-y divide-[#e9eee9]">
                 {visibleAudits.map((audit) => (
-                  <a key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex items-center justify-between gap-4 py-4 first:pt-0">
+                  <a key={audit.id} href={`/product/app/audits/${encodeURIComponent(audit.id)}`} className="group flex flex-wrap items-center justify-between gap-4 py-4 first:pt-0">
                     <div>
-                      <p className="text-sm font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
-                      <p className="mt-1 text-xs text-[#6e8076]">{audit.completed_at ? `Review completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Review completed"}{audit.followup_dates?.["first:deadline"] ? ` · Saved follow-up date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
+                      <p className="text-lg font-semibold group-hover:text-[#0c6652]">{audit.analysis?.property_name || audit.analysis?.tenant || "Lease review"}</p>
+                      <p className="mt-1 text-sm text-[#6e8076]">{audit.completed_at ? `Review completed ${new Date(audit.completed_at).toLocaleDateString()}` : "Review completed"}{audit.followup_dates?.["first:deadline"] ? ` · Saved follow-up date ${dateLabel(audit.followup_dates["first:deadline"])}` : ""}</p>
                     </div>
-                    <span className="shrink-0 rounded-lg border border-[#d8e5d9] px-3 py-2 text-xs font-semibold text-[#0c6652]">Open review <Arrow /></span>
+                    <span className="shrink-0 rounded-lg border border-[#d8e5d9] px-3 py-2 text-sm font-semibold text-[#0c6652]">Open review <Arrow /></span>
                   </a>
                 ))}
               </div>
             ) : (
               <div className="mt-6 rounded-2xl bg-[#f7faf6] p-6">
                 <p className="text-sm font-semibold">No finished lease reviews yet.</p>
-                <p className="mt-2 text-sm leading-6 text-[#64776c]">After you complete a lease review while signed in, you can reopen its findings and follow-up questions here. Start with a free lease preview; an annual statement and supporting PDFs are optional.</p>
+                <p className="mt-2 text-base leading-7 text-[#64776c]">After you complete a lease review while signed in, you can reopen its findings and follow-up questions here. Start with a free lease preview; an annual statement and supporting PDFs are optional.</p>
                 <Link href="/app/step-1-upload" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6652] hover:underline">Start a preview <Arrow /></Link>
               </div>
             )}
@@ -475,9 +479,9 @@ export default function DashboardPage() {
           <section id="sample-leases" className="mt-6 scroll-mt-32 rounded-[24px] border border-[#dce5df] bg-[#edf2ed] p-5 sm:p-7">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#6b7d72]">Sample data</p>
-                <h2 className="mt-2 text-lg font-semibold">{sampleLeases.length} example lease records</h2>
-                <p className="mt-1 text-sm text-[#5c6e62]">These are kept out of your lease counts and renewal outlook.</p>
+                <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#6b7d72]">Sample data</p>
+                <h2 className="mt-2 text-2xl font-semibold">{sampleLeases.length} example lease records</h2>
+                <p className="mt-1 text-base leading-7 text-[#5c6e62]">These are kept out of your lease counts and renewal outlook.</p>
               </div>
               <button type="button" onClick={() => setShowSamples((value) => !value)} className="rounded-lg border border-[#cbd9ce] bg-white px-4 py-2 text-sm font-semibold hover:bg-[#f9fcf9]" aria-expanded={showSamples}>
                 {showSamples ? "Hide examples" : "Show examples"} <span aria-hidden="true">{showSamples ? "↑" : "↓"}</span>
@@ -486,7 +490,7 @@ export default function DashboardPage() {
             {showSamples && (
               <div className="mt-5 grid gap-2 sm:grid-cols-2">
                 {sampleLeases.map((lease) => (
-                  <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="flex items-center justify-between rounded-xl bg-white px-4 py-3 text-xs font-medium hover:text-[#0c6652]">
+                  <Link key={lease.id} href={`/product/app/leases/${encodeURIComponent(lease.id)}`} className="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 text-sm font-medium hover:text-[#0c6652]">
                     <span className="truncate">{lease.property_name || "Sample lease"}</span><Arrow />
                   </Link>
                 ))}
