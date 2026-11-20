@@ -15,7 +15,10 @@ export const metadata: Metadata = {
   description:
     "Review CAM and NNN charges against your commercial lease, with document-backed questions and conditional bill comparisons where records allow.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico?v=2", sizes: "any" },
+      { url: "/favicon-96x96.png?v=2", type: "image/png", sizes: "96x96" },
+    ],
     apple: "/apple-touch-icon.png",
   },
 };
