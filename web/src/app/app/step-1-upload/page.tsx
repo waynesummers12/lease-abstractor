@@ -134,11 +134,30 @@ export default function UploadLeasePage() {
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-800">Free lease preview</p>
       <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-5xl">Check your lease for CAM and NNN questions.</h1>
       <p className="mx-auto mt-4 max-w-2xl text-base text-slate-600 sm:text-lg">
-        Upload a signed lease. Add an annual statement if you have one. Preview the results free; the full report is $49.99.
+        Upload a signed lease to see its key terms and initial questions for free. Add an annual CAM or NNN statement if you have one.
       </p>
       <p className="mt-3 text-sm font-medium text-emerald-900">No account or credit card required to start.</p>
-      <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-emerald-800 underline underline-offset-4">See a fictional sample report before uploading ↗</a>
     </div>
+
+    <section aria-labelledby="full-report-title" className="mx-auto mt-8 max-w-3xl overflow-hidden rounded-3xl bg-[#102b25] p-6 text-white shadow-xl shadow-emerald-950/10 sm:p-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a8edbf]">Optional after your free preview</p>
+          <h2 id="full-report-title" className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">The full report gives you a plan to verify.</h2>
+        </div>
+        <p className="shrink-0 rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-xl font-semibold">$49.99 <span className="text-sm font-normal text-slate-200">once</span></p>
+      </div>
+      <ul className="mt-6 grid gap-x-7 gap-y-3 border-t border-white/20 pt-6 text-sm leading-6 text-slate-100 sm:grid-cols-2">
+        <li><span aria-hidden className="mr-2 text-[#a8edbf]">✓</span>Prioritized questions and first actions</li>
+        <li><span aria-hidden className="mr-2 text-[#a8edbf]">✓</span>Lease terms and deadlines with page references</li>
+        <li><span aria-hidden className="mr-2 text-[#a8edbf]">✓</span>Statement checks and conditional calculations when you provide readable billing documents</li>
+        <li><span aria-hidden className="mr-2 text-[#a8edbf]">✓</span>Records checklist, request draft, and downloadable PDF</li>
+      </ul>
+      <div className="mt-6 flex flex-col gap-2 border-t border-white/20 pt-5 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+        <p className="text-sm leading-6 text-slate-200">See the free results first. Buy only if the deeper review would help.</p>
+        <a href="/sample/lease-and-statement-review-sample.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 shrink-0 items-center font-semibold text-[#a8edbf] underline underline-offset-4 hover:text-white">Explore a fictional sample report</a>
+      </div>
+    </section>
 
     <div id="upload-documents" className="mx-auto mt-8 max-w-3xl scroll-mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-900/5 sm:p-8">
       <div className="mb-6">
