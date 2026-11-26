@@ -143,9 +143,9 @@ export default function UploadLeasePage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#a8edbf]">Optional after your free preview</p>
-          <h2 id="full-report-title" className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">The full report gives you a plan to verify.</h2>
+          <h2 id="full-report-title" className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">The full report gives you a plan to verify.</h2>
         </div>
-        <p className="shrink-0 rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-xl font-semibold">$49.99 <span className="text-sm font-normal text-slate-200">once</span></p>
+        <p className="shrink-0 rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-xl font-semibold text-white">$49.99 <span className="text-sm font-normal text-slate-200">once</span></p>
       </div>
       <ul className="mt-6 grid gap-x-7 gap-y-3 border-t border-white/20 pt-6 text-sm leading-6 text-slate-100 sm:grid-cols-2">
         <li><span aria-hidden className="mr-2 text-[#a8edbf]">✓</span>Prioritized questions and first actions</li>
